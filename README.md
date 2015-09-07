@@ -169,10 +169,10 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
  and/or recursively below the given directories.
 
  Input Options
-   --extract-with=<cmd>      This option is only needed if cloc is unable
+   --extract-with=CMD        This option is only needed if cloc is unable
                              to figure out how to extract the contents of
                              the input file(s) by itself.
-                             Use <cmd> to extract binary archive files (e.g.:
+                             Use CMD to extract binary archive files (e.g.:
                              .tar.gz, .zip, .Z).  Use the literal '>FILE<' as
                              a stand-in for the actual file(s) to be
                              extracted.  For example, to count lines of code
@@ -186,8 +186,8 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                                --extract-with="\"c:\Program Files\WinZip\WinZip32.exe\" -e -o >FILE<
 ; ."
                              (if WinZip is installed there).
-   --list-file=<file>        Take the list of file and/or directory names to
-                             process from <file>, which has one file/directory
+   --list-file=FILE          Take the list of file and/or directory names to
+                             process from FILE, which has one file/directory
                              name per line.  Only exact matches are counted;
                              relative path names will be resolved starting from 
                              the directory where cloc is invoked.  
@@ -202,28 +202,28 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
    --by-file                 Report results for every source file encountered.
    --by-file-by-lang         Report results for every source file encountered
                              in addition to reporting by language.
-   --count-and-diff <set1> <set2>    
+   --count-and-diff SET1 SET2    
                              First perform direct code counts of source file(s)
-                             of <set1> and <set2> separately, then perform a diff 
+                             of SET1 and SET2 separately, then perform a diff 
                              of these.  Inputs may be pairs of files, directories, 
                              or archives.  See also --diff, --diff-alignment,
                              --diff-timeout, --ignore-case, --ignore-whitespace.
-                                --diff <set1> <set2>      Compute differences in code and comments between
-                             source file(s) of <set1> and <set2>.  The inputs
+   --diff SET1 SET2          Compute differences in code and comments between
+                             source file(s) in SET1 and SET2.  The inputs
                              may be pairs of files, directories, or archives.
                              Use --diff-alignment to generate a list showing
                              which file pairs where compared.  See also
                              --count-and-diff, --diff-alignment, --diff-timeout, 
                              --ignore-case, --ignore-whitespace.
-   --diff-timeout <N>        Ignore files which take more than <N> seconds
+   --diff-timeout N          Ignore files which take more than N seconds
                              to process.  Default is 10 seconds.
                              (Large files with many repeated lines can cause 
                              Algorithm::Diff::sdiff() to take hours.)
    --follow-links            [Unix only] Follow symbolic links to directories
                              (sym links to files are always followed).
-   --force-lang=<lang>[,<ext>]
-                             Process all files that have a <ext> extension
-                             with the counter for language <lang>.  For
+   --force-lang=LANG[,EXT]
+                             Process all files that have a EXT extension
+                             with the counter for language LANG.  For
                              example, to count all .f files with the
                              Fortran 90 counter (which expects files to
                              end with .f90) instead of the default Fortran 77
@@ -234,7 +234,7 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              specified multiple times (but that is only
                              useful when <ext> is given each time).
                              See also --script-lang, --lang-no-ext.
-   --force-lang-def=<file>   Load language processing filters from <file>,
+   --force-lang-def=FILE     Load language processing filters from FILE,
                              then use these filters instead of the built-in
                              filters.  Note:  languages which map to the same 
                              file extension (for example:
@@ -250,14 +250,14 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
    --ignore-case             Ignore changes in case; consider upper- and lower-
                              case letters equivalent when comparing files with
                              --diff.  See also --ignore-whitespace.
-   --lang-no-ext=<lang>      Count files without extensions using the <lang>
+   --lang-no-ext=LANG        Count files without extensions using the LANG
                              counter.  This option overrides internal logic
                              for files without extensions (where such files
                              are checked against known scripting languages
                              by examining the first line for #!).  See also
                              --force-lang, --script-lang.
-   --max-file-size=<MB>      Skip files larger than <MB> megabytes when
-                             traversing directories.  By default, <MB>=100.
+   --max-file-size=MB        Skip files larger than MB megabytes when
+                             traversing directories.  By default, MB=100.
                              cloc's memory requirement is roughly twenty times 
                              larger than the largest file so running with 
                              files larger than 100 MB on a computer with less 
