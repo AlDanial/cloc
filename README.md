@@ -268,15 +268,15 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              This is usually a bad idea and should only be
                              attempted with text files that have embedded
                              binary data.
-   --read-lang-def=<file>    Load new language processing filters from <file>
+   --read-lang-def=FILE      Load new language processing filters from FILE
                              and merge them with those already known to cloc.  
                              If <file> defines a language cloc already knows 
                              about, cloc's definition will take precedence.  
                              Use --force-lang-def to over-ride cloc's 
                              definitions (see also --write-lang-def ).
-   --script-lang=<lang>,<s>  Process all files that invoke <s> as a #!
+   --script-lang=LANG,S      Process all files that invoke S as a #!
                              scripting language with the counter for language
-                             <lang>.  For example, files that begin with
+                             LANG.  For example, files that begin with
                                 #!/usr/local/bin/perl5.8.8
                              will be counted with the Perl counter by using
                                 --script-lang=Perl,perl5.8.8
@@ -285,7 +285,7 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              must have the right case.  This option can be
                              specified multiple times.  See also --force-lang,
                              --lang-no-ext.
-   --sdir=<dir>              Use <dir> as the scratch directory instead of
+   --sdir=DIR                Use DIR as the scratch directory instead of
                              letting File::Temp chose the location.  Files
                              written to this location are not removed at
                              the end of the run (as they are with File::Temp).
@@ -293,15 +293,150 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              a performance boost at the expense of counting
                              files with identical contents multiple times
                              (if such duplicates exist).
-   --stdin-name=<file>       Give a file name to use to determine the language
+   --stdin-name=FILE         Give a file name to use to determine the language
                              for standard input.
-   --strip-comments=<ext>    For each file processed, write to the current
+   --strip-comments=EXT      For each file processed, write to the current
                              directory a version of the file which has blank
                              lines and comments removed.  The name of each
                              stripped file is the original file name with
-                             .<ext> appended to it.  It is written to the
+                             .EXT appended to it.  It is written to the
                              current directory unless --original-dir is on.
    --original-dir            [Only effective in combination with
                              --strip-comments]  Write the stripped files
                              to the same directory as the original files.
+                                
+   --sum-reports             Input arguments are report files previously
+                             created with the --report-file option.  Makes
+                             a cumulative set of results containing the
+                             sum of data from the individual report files.
+   --unix                    Override the operating system autodetection
+                             logic and run in UNIX mode.  See also
+                             --windows, --show-os.
+   --windows                 Override the operating system autodetection
+                             logic and run in Microsoft Windows mode.
+                             See also --unix, --show-os.
+
+ Filter Options
+   --exclude-dir=D1[,D2,]  Exclude the given comma separated directories
+                             D1, D2, D3, et cetera, from being scanned.  For
+                             example  --exclude-dir=.cache,test  will skip
+                             all files that have /.cache/ or /test/ as part
+                             of their path.
+                             Directories named .bzr, .cvs, .hg, .git, and
+                             .svn are always excluded.
+   --exclude-ext=EXT1[,EXT2[...]]
+                             Do not count files having the given file name
+                             extensions.
+   --exclude-lang=L1[,L2,]   Exclude the given comma separated languages
+                             L1, L2, L3, et cetera, from being counted.
+   --exclude-list-file=FILE  Ignore files and/or directories whose names
+                             appear in FILE.  FILE should have one file
+                             name per line.  Only exact matches are ignored;
+                             relative path names will be resolved starting from 
+                             the directory where cloc is invoked.  
+                             See also --list-file.
+   --include-lang=L1[,L2,]   Count only the given comma separated languages
+                             L1, L2, L3, et cetera.
+   --match-d=REGEX           Only count files in directories matching the Perl
+                             regex.  For example
+                               --match-d='/(src|include)/'
+                             only counts files in directories containing
+                             /src/ or /include/.
+   --not-match-d=REGEX       Count all files except those in directories
+                             matching the Perl regex.
+   --match-f=REGEX           Only count files whose basenames match the Perl
+                             regex.  For example
+                               --match-f='^[Ww]idget'
+                             only counts files that start with Widget or widget.
+   --not-match-f=REGEX       Count all files except those whose basenames
+                             match the Perl regex.
+   --skip-archive=REGEX      Ignore files that end with the given Perl regular
+                             expression.  For example, if given
+                               --skip-archive='(zip|tar(.(gz|Z|bz2|xz|7z))?)'
+                             the code will skip files that end with .zip,
+                             .tar, .tar.gz, .tar.Z, .tar.bz2, .tar.xz, and
+                             .tar.7z.
+                             
+   --skip-win-hidden         On Windows, ignore hidden files.
+
+ Debug Options
+   --categorized=FILE        Save names of categorized files to FILE.
+   --counted=FILE            Save names of processed source files to FILE.
+   --explain=<lang>          Print the filters used to remove comments for
+                             language LANG and exit.  In some cases the 
+                             filters refer to Perl subroutines rather than
+                             regular expressions.  An examination of the
+                             source code may be needed for further explanation.
+   --diff-alignment=FILE     Write to FILE a list of files and file pairs
+                             showing which files were added, removed, and/or
+                             compared during a run with --diff.  This switch
+                             forces the --diff mode on.
+   --help                    Print this usage information and exit.
+   --found=FILE              Save names of every file found to FILE.
+   --ignored=FILE            Save names of ignored files and the reason they
+                             were ignored to FILE.
+   --print-filter-stages     Print processed source code before and after 
+                             each filter is applied.
+   --show-ext[=EXT]          Print information about all known (or just the
+                             given) file extensions and exit.
+   --show-lang[=LANG]        Print information about all known (or just the
+                             given) languages and exit.
+   --show-os                 Print the value of the operating system mode
+                             and exit.  See also --unix, --windows.
+   -v[=N]                    Verbose switch (optional numeric value).
+   --version                 Print the version of this program and exit.
+   --write-lang-def=FILE     Writes to FILE the language processing filters
+                             then exits.  Useful as a first step to creating
+                             custom language definitions (see also
+                             --force-lang-def, --read-lang-def).
+
+ Output Options
+   --3                       Print third-generation language output.
+                             (This option can cause report summation to fail
+                             if some reports were produced with this option
+                             while others were produced without it.)
+   --by-percent  X           Instead of comment and blank line counts, show 
+                             these values as percentages based on the value 
+                             of X in the denominator:
+                                X = 'c'   -> # lines of code
+                                X = 'cm'  -> # lines of code + comments
+                                X = 'cb'  -> # lines of code + blanks
+                                X = 'cmb' -> # lines of code + comments + blanks
+                             For example, if using method 'c' and your code
+                             has twice as many lines of comments as lines 
+                             of code, the value in the comment column will 
+                             be 200%.  The code column remains a line count.
+   --csv                     Write the results as comma separated values.
+   --csv-delimiter=<C>       Use the character <C> as the delimiter for comma
+                             separated files instead of ,.  This switch forces
+   --out=<file>              Synonym for --report-file=<file>.
+                             --csv to be on.
+   --progress-rate=<n>       Show progress update after every <n> files are
+                             processed (default <n>=100).  Set <n> to 0 to
+                             suppress progress output (useful when redirecting
+                             output to STDOUT).
+   --quiet                   Suppress all information messages except for
+                             the final report.
+   --report-file=FILE        Write the results to FILE instead of STDOUT.
+   --sql=FILE                Write results as SQL create and insert statements
+                             which can be read by a database program such as
+                             SQLite.  If FILE is -, output is sent to STDOUT.
+   --sql-append              Append SQL insert statements to the file specified
+                             by --sql and do not generate table creation
+                             statements.  Only valid with the --sql option.
+   --sql-project=NAME        Use NAME as the project identifier for the
+                             current run.  Only valid with the --sql option.
+   --sql-style=STYLE         Write SQL statements in the given style instead
+                             of the default SQLite format.  Currently, the 
+                             only style option is Oracle.
+   --sum-one                 For plain text reports, show the SUM: output line
+                             even if only one input file is processed.
+   --xml                     Write the results in XML.
+   --xsl=<file>              Reference <file> as an XSL stylesheet within
+                             the XML output.  If <file> is 1 (numeric one),
+                             writes a default stylesheet, cloc.xsl (or
+                             cloc-diff.xsl if --diff is also given).
+                             This switch forces --xml on.
+   --yaml                    Write the results in YAML.
+
 </pre>
