@@ -40,9 +40,9 @@ September 2015.
 
 [Translations: [Bulgarian](http://www.ajoft.com/wpaper/aj-cloc.html), [Polish](http://www.trevister.com/blog/cloc.html), [Russian](http://carrrsmag.com/blog/cloc.html), [Serbo-Croatian](http://science.webhostinggeeks.com/cloc), [Slovakian](http://jbs24.com/blog/cloc-grof-riadkov-kodu/) [Ukrainian](http://blog.kudoybook.com/cloc/) ]
 
-cloc counts blank lines, comment lines, and physical lines of source code in many programming languages. Given two versions of a code base, cloc can compute differences in blank, comment, and source lines. It is written entirely in Perl with no dependencies outside the standard distribution of Perl v5.6 and higher (code from some external modules is embedded within cloc) and so is quite portable. cloc is known to run on many flavors of Linux, FreeBSD, NetBSD, OpenBSD, Mac OS X, AIX, HP-UX, Solaris, IRIX, z/OS, and Windows. (To run the Perl source version of cloc on Windows one needs ActiveState Perl 5.6.1 or higher, Strawberry Perl, Cygwin, or MobaXTerm with the Perl plug-in installed. Alternatively one can use the Windows binary of cloc generated with PAR::Packer to run on Windows computers that have neither Perl nor Cygwin.)
+cloc counts blank lines, comment lines, and physical lines of source code in [many programming languages](#Languages). Given two versions of a code base, cloc can compute differences in blank, comment, and source lines. It is written entirely in Perl with no dependencies outside the standard distribution of Perl v5.6 and higher (code from some external modules is [embedded within cloc](http://cloc.sourceforge.net/index.html#regexp_common)) and so is quite portable. cloc is known to run on many flavors of Linux, FreeBSD, NetBSD, OpenBSD, Mac OS X, AIX, HP-UX, Solaris, IRIX, z/OS, and Windows. (To run the Perl source version of cloc on Windows one needs [ActiveState Perl](http://www.activestate.com/activeperl) 5.6.1 or higher, [Strawberry Perl](http://strawberryperl.com/), [Cygwin](http://www.cygwin.com/), or [MobaXTerm](http://mobaxterm.mobatek.net/) with the Perl plug-in installed. Alternatively one can use the Windows binary of cloc generated with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm) to run on Windows computers that have neither Perl nor Cygwin.)
 
-cloc contains code from David Wheeler's SLOCCount, Damian Conway and Abigail's Perl module Regexp::Common, Sean M. Burke's Perl module Win32::Autoglob, and Tye McQueen's Perl module Algorithm::Diff. Language scale factors were derived from Mayes Consulting, LLC web site http://softwareestimator.com/IndustryData2.htm.
+cloc contains code from David Wheeler's [SLOCCount](http://www.dwheeler.com/sloccount/), Damian Conway and Abigail's Perl module [Regexp::Common](http://search.cpan.org/%7Eabigail/Regexp-Common-2.120/lib/Regexp/Common.pm), Sean M. Burke's Perl module [Win32::Autoglob](http://search.cpan.org/%7Esburke/Win32-Autoglob-1.01/Autoglob.pm), and Tye McQueen's Perl module [Algorithm::Diff](http://search.cpan.org/%7Etyemq/Algorithm-Diff-1.1902/lib/Algorithm/Diff.pm).  Language scale factors were derived from Mayes Consulting, LLC web site http://softwareestimator.com/IndustryData2.htm.
 
 ## Install via package manager
 Depending your operating system, one of these installation methods may work for you:
@@ -114,3 +114,53 @@ p::Common.
 Windows executables of cloc versions 1.60 and earlier, created with perl2exe as noted above, are about 1.6 MB, while newer versions, created with <tt>PAR::Packer</tt>, are 11 MB. Why are the newer executables so much larger? My theory is that perl2exe uses smarter tree pruning logic than <tt>PAR::Packer</tt>, but that's pure speculation.
 
 #### Create your own executable
+If you have access to perl2exe, you can use it to create a tight Windows executable. See lines 84-87 in the cloc source code for a minor code modification that is necessary when using perl2exe.
+
+Otherwise, to build a Windows executable with <tt>pp</tt> from <tt>PAR::Packer</tt>, first install a Windows-based Perl distribution (for example Strawberry Perl or ActivePerl) following their instructions. Next, open a command prompt, aka a DOS window and install the PAR::Packer module. Finally, invoke the newly installed <tt>pp</tt> command with the cloc souce code to create an <tt>.exe</tt> file:
+
+<pre>C:> perl -MCPAN -e shell
+cpan> install PAR::Packer
+cpan> exit
+C:> pp cloc-1.64.pl
+</pre>
+
+A variation on the above is if you installed the portable version of Strawberry Perl, you will need to run <tt>portableshell.bat</tt> first to properly set up your environment. The Strawberry Perl derived executable on the SourceForge download area was created with the portable version on a Windows 7 computer.
+
+# [Basic Use![^](up.gif)](#___top "click to go to top of document")
+
+cloc is a command line program that takes file, directory, and/or archive names as inputs. Here's an example of running cloc against the Perl v5.10.0 source distribution:
+<pre>  
+_prompt>_ cloc perl-5.10.0.tar.gz
+    4076 text files.
+    3883 unique files.                                          
+    1521 files ignored.
+
+http://cloc.sourceforge.net v 1.50  T=12.0 s (209.2 files/s, 70472.1 lines/s)
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Perl                          2052         110356         130018         292281
+C                              135          18718          22862         140483
+C/C++ Header                   147           7650          12093          44042
+Bourne Shell                   116           3402           5789          36882
+Lisp                             1            684           2242           7515
+make                             7            498            473           2044
+C++                             10            312            277           2000
+XML                             26            231              0           1972
+yacc                             2            128             97           1549
+YAML                             2              2              0            489
+DOS Batch                       11             85             50            322
+HTML                             1             19              2             98
+-------------------------------------------------------------------------------
+SUM:                          2510         142085         173903         529677
+-------------------------------------------------------------------------------
+
+</pre>
+
+To run cloc on Windows computers, one must first open up a command (aka DOS) window and invoke cloc.exe from the command line there.
+
+# [Options![^](up.gif)](#___top "click to go to top of document")
+
+<pre>  
+_prompt>_ cloc
+</pre>
