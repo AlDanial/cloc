@@ -19,22 +19,18 @@ September 2015.
 *   [How it Works](#How_it_works)
 *   [Advanced Use](#Advanced_Use)
     *   [Remove Comments from Source Code](#strip_comments)
-    *   [Work with C ompressed Archives](#compressed_arch)
+    *   [Work with Compressed Archives](#compressed_arch)
     *   [Differences](#diff)
     *   [Create Custom Language Definitions](#custom_lang)
     *   [Combine Reports](#combine_reports)
     *   [SQL](#sql)
-    *   [Third Generat ion Language Scale Factors](#scale_factors)
+    *   [Third Generation Language Scale Factors](#scale_factors)
 *   [Limitations](#Limitations)
-*   [How to Re quest Support for Additional Languages](#AdditionalLanguages)
+*   [How to Request Support for Additional Languages](#AdditionalLanguages)
 *   [Author](#Author)
 *   [Acknowledgments](#Acknowledgments)
 *   [Copyright](#Copyright)
 *   [License](#License)
-
-</div>
-
-</div>
 
 [Overview![^](up.gif)](#___top "click to go to top of document")
 
@@ -163,4 +159,149 @@ To run cloc on Windows computers, one must first open up a command (aka DOS) win
 
 <pre>  
 _prompt>_ cloc
+</pre>
+
+<pre>
+Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
+
+ Count, or compute differences of, physical lines of source code in the
+ given files (may be archives such as compressed tarballs or zip files)
+ and/or recursively below the given directories.
+
+ Input Options
+   --extract-with=<cmd>      This option is only needed if cloc is unable
+                             to figure out how to extract the contents of
+                             the input file(s) by itself.
+                             Use <cmd> to extract binary archive files (e.g.:
+                             .tar.gz, .zip, .Z).  Use the literal '>FILE<' as
+                             a stand-in for the actual file(s) to be
+                             extracted.  For example, to count lines of code
+                             in the input files
+                                gcc-4.2.tar.gz  perl-5.8.8.tar.gz
+                             on Unix use
+                               --extract-with='gzip -dc >FILE< | tar xf -'
+                             or, if you have GNU tar,
+                               --extract-with='tar zxf >FILE<'
+                             and on Windows use, for example:
+                               --extract-with="\"c:\Program Files\WinZip\WinZip32.exe\" -e -o >FILE<
+; ."
+                             (if WinZip is installed there).
+   --list-file=<file>        Take the list of file and/or directory names to
+                             process from <file>, which has one file/directory
+                             name per line.  Only exact matches are counted;
+                             relative path names will be resolved starting from 
+                             the directory where cloc is invoked.  
+                             See also --exclude-list-file.
+   --unicode                 Check binary files to see if they contain Unicode
+                             expanded ASCII text.  This causes performance to
+                             drop noticably.
+
+ Processing Options
+   --autoconf                Count .in files (as processed by GNU autoconf) of
+                             recognized languages.
+   --by-file                 Report results for every source file encountered.
+   --by-file-by-lang         Report results for every source file encountered
+                             in addition to reporting by language.
+   --count-and-diff <set1> <set2>    
+                             First perform direct code counts of source file(s)
+                             of <set1> and <set2> separately, then perform a diff 
+                             of these.  Inputs may be pairs of files, directories, 
+                             or archives.  See also --diff, --diff-alignment,
+                             --diff-timeout, --ignore-case, --ignore-whitespace.
+                                --diff <set1> <set2>      Compute differences in code and comments between
+                             source file(s) of <set1> and <set2>.  The inputs
+                             may be pairs of files, directories, or archives.
+                             Use --diff-alignment to generate a list showing
+                             which file pairs where compared.  See also
+                             --count-and-diff, --diff-alignment, --diff-timeout, 
+                             --ignore-case, --ignore-whitespace.
+   --diff-timeout <N>        Ignore files which take more than <N> seconds
+                             to process.  Default is 10 seconds.
+                             (Large files with many repeated lines can cause 
+                             Algorithm::Diff::sdiff() to take hours.)
+   --follow-links            [Unix only] Follow symbolic links to directories
+                             (sym links to files are always followed).
+   --force-lang=<lang>[,<ext>]
+                             Process all files that have a <ext> extension
+                             with the counter for language <lang>.  For
+                             example, to count all .f files with the
+                             Fortran 90 counter (which expects files to
+                             end with .f90) instead of the default Fortran 77
+                             counter, use
+                               --force-lang="Fortran 90",f
+                             If <ext> is omitted, every file will be counted
+                             with the <lang> counter.  This option can be
+                             specified multiple times (but that is only
+                             useful when <ext> is given each time).
+                             See also --script-lang, --lang-no-ext.
+   --force-lang-def=<file>   Load language processing filters from <file>,
+                             then use these filters instead of the built-in
+                             filters.  Note:  languages which map to the same 
+                             file extension (for example:
+                             MATLAB/Objective C/MUMPS/Mercury;  Pascal/PHP; 
+                             Lisp/OpenCL; Lisp/Julia; Perl/Prolog) will be 
+                             ignored as these require additional processing 
+                             that is not expressed in language definition 
+                             files.  Use --read-lang-def to define new 
+                             language filters without replacing built-in 
+                             filters (see also --write-lang-def).
+   --ignore-whitespace       Ignore horizontal white space when comparing files
+                             with --diff.  See also --ignore-case.
+   --ignore-case             Ignore changes in case; consider upper- and lower-
+                             case letters equivalent when comparing files with
+                             --diff.  See also --ignore-whitespace.
+   --lang-no-ext=<lang>      Count files without extensions using the <lang>
+                             counter.  This option overrides internal logic
+                             for files without extensions (where such files
+                             are checked against known scripting languages
+                             by examining the first line for #!).  See also
+                             --force-lang, --script-lang.
+   --max-file-size=<MB>      Skip files larger than <MB> megabytes when
+                             traversing directories.  By default, <MB>=100.
+                             cloc's memory requirement is roughly twenty times 
+                             larger than the largest file so running with 
+                             files larger than 100 MB on a computer with less 
+                             than 2 GB of memory will cause problems.  
+                             Note:  this check does not apply to files 
+                             explicitly passed as command line arguments.
+   --read-binary-files       Process binary files in addition to text files.
+                             This is usually a bad idea and should only be
+                             attempted with text files that have embedded
+                             binary data.
+   --read-lang-def=<file>    Load new language processing filters from <file>
+                             and merge them with those already known to cloc.  
+                             If <file> defines a language cloc already knows 
+                             about, cloc's definition will take precedence.  
+                             Use --force-lang-def to over-ride cloc's 
+                             definitions (see also --write-lang-def ).
+   --script-lang=<lang>,<s>  Process all files that invoke <s> as a #!
+                             scripting language with the counter for language
+                             <lang>.  For example, files that begin with
+                                #!/usr/local/bin/perl5.8.8
+                             will be counted with the Perl counter by using
+                                --script-lang=Perl,perl5.8.8
+                             The language name is case insensitive but the
+                             name of the script language executable, <s>,
+                             must have the right case.  This option can be
+                             specified multiple times.  See also --force-lang,
+                             --lang-no-ext.
+   --sdir=<dir>              Use <dir> as the scratch directory instead of
+                             letting File::Temp chose the location.  Files
+                             written to this location are not removed at
+                             the end of the run (as they are with File::Temp).
+   --skip-uniqueness         Skip the file uniqueness check.  This will give
+                             a performance boost at the expense of counting
+                             files with identical contents multiple times
+                             (if such duplicates exist).
+   --stdin-name=<file>       Give a file name to use to determine the language
+                             for standard input.
+   --strip-comments=<ext>    For each file processed, write to the current
+                             directory a version of the file which has blank
+                             lines and comments removed.  The name of each
+                             stripped file is the original file name with
+                             .<ext> appended to it.  It is written to the
+                             current directory unless --original-dir is on.
+   --original-dir            [Only effective in combination with
+                             --strip-comments]  Write the stripped files
+                             to the same directory as the original files.
 </pre>
