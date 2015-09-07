@@ -30,7 +30,7 @@
 #
 # 1}}}
 my $VERSION = "1.65";  # odd number == beta; even number == stable
-my $URL     = "http://cloc.sourceforge.net";
+my $URL     = "https://github.com/AlDanial/cloc";
 require 5.006;
 # use modules                                  {{{1
 use warnings;
