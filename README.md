@@ -281,7 +281,7 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              will be counted with the Perl counter by using
                                 --script-lang=Perl,perl5.8.8
                              The language name is case insensitive but the
-                             name of the script language executable, <s>,
+                             name of the script language executable, S,
                              must have the right case.  This option can be
                              specified multiple times.  See also --force-lang,
                              --lang-no-ext.
@@ -407,12 +407,12 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              of code, the value in the comment column will 
                              be 200%.  The code column remains a line count.
    --csv                     Write the results as comma separated values.
-   --csv-delimiter=<C>       Use the character <C> as the delimiter for comma
+   --csv-delimiter=C         Use the character C as the delimiter for comma
                              separated files instead of ,.  This switch forces
-   --out=<file>              Synonym for --report-file=<file>.
+   --out=FILE                Synonym for --report-file=FILE.
                              --csv to be on.
-   --progress-rate=<n>       Show progress update after every <n> files are
-                             processed (default <n>=100).  Set <n> to 0 to
+   --progress-rate=N         Show progress update after every N files are
+                             processed (default N=100).  Set N to 0 to
                              suppress progress output (useful when redirecting
                              output to STDOUT).
    --quiet                   Suppress all information messages except for
@@ -432,8 +432,8 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
    --sum-one                 For plain text reports, show the SUM: output line
                              even if only one input file is processed.
    --xml                     Write the results in XML.
-   --xsl=<file>              Reference <file> as an XSL stylesheet within
-                             the XML output.  If <file> is 1 (numeric one),
+   --xsl=FILE                Reference FILE as an XSL stylesheet within
+                             the XML output.  If FILE is 1 (numeric one),
                              writes a default stylesheet, cloc.xsl (or
                              cloc-diff.xsl if --diff is also given).
                              This switch forces --xml on.
