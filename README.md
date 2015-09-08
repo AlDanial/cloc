@@ -1,11 +1,14 @@
 # cloc
+Count Lines of Code
+
+* * *
 cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.
 
-Originally hosted at http://cloc.sourceforge.net/, cloc began the transition to github in
-September 2015.
+Originally hosted at http://cloc.sourceforge.net/, cloc began the
+transition to github in September 2015.
 
 *   [Overview](#Overview)
-*   [Download]
+*   [Download](https://github.com/AlDanial/cloc/releases/latest)
     *   [npm, apt-get, yum, pacman, pkg, port](#apt-get)
     *   [Stable release](#Stable)
     *   [Development version](#Dev)
@@ -32,15 +35,37 @@ September 2015.
 *   [Copyright](#Copyright)
 *   [License](#License)
 
-[Overview![^](up.gif)](#___top "click to go to top of document")
+[Overview![^](up.gif)]<a name="Overview"></a>(#___top "click to go to top of document")
 
-[Translations: [Bulgarian](http://www.ajoft.com/wpaper/aj-cloc.html), [Polish](http://www.trevister.com/blog/cloc.html), [Russian](http://carrrsmag.com/blog/cloc.html), [Serbo-Croatian](http://science.webhostinggeeks.com/cloc), [Slovakian](http://jbs24.com/blog/cloc-grof-riadkov-kodu/) [Ukrainian](http://blog.kudoybook.com/cloc/) ]
+[Translations: 
+[Bulgarian](http://www.ajoft.com/wpaper/aj-cloc.html), 
+[Polish](http://www.trevister.com/blog/cloc.html), 
+[Russian](http://carrrsmag.com/blog/cloc.html), 
+[Serbo-Croatian](http://science.webhostinggeeks.com/cloc), 
+[Slovakian](http://jbs24.com/blog/cloc-grof-riadkov-kodu/), 
+[Ukrainian](http://blog.kudoybook.com/cloc/) ]
 
-cloc counts blank lines, comment lines, and physical lines of source code in [many programming languages](#Languages). Given two versions of a code base, cloc can compute differences in blank, comment, and source lines. It is written entirely in Perl with no dependencies outside the standard distribution of Perl v5.6 and higher (code from some external modules is [embedded within cloc](http://cloc.sourceforge.net/index.html#regexp_common)) and so is quite portable. cloc is known to run on many flavors of Linux, FreeBSD, NetBSD, OpenBSD, Mac OS X, AIX, HP-UX, Solaris, IRIX, z/OS, and Windows. (To run the Perl source version of cloc on Windows one needs [ActiveState Perl](http://www.activestate.com/activeperl) 5.6.1 or higher, [Strawberry Perl](http://strawberryperl.com/), [Cygwin](http://www.cygwin.com/), or [MobaXTerm](http://mobaxterm.mobatek.net/) with the Perl plug-in installed. Alternatively one can use the Windows binary of cloc generated with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm) to run on Windows computers that have neither Perl nor Cygwin.)
+cloc counts blank lines, comment lines, and physical lines of source
+code in [many programming languages](#Languages). Given two versions of
+a code base, cloc can compute differences in blank, comment, and source
+lines. It is written entirely in Perl with no dependencies outside the
+standard distribution of Perl v5.6 and higher (code from some external
+modules is [embedded within
+cloc](https://github.com/AlDanial/cloc#regexp_common)) and so is
+quite portable. cloc is known to run on many flavors of Linux, FreeBSD,
+NetBSD, OpenBSD, Mac OS X, AIX, HP-UX, Solaris, IRIX, z/OS, and Windows.
+(To run the Perl source version of cloc on Windows one needs
+[ActiveState Perl](http://www.activestate.com/activeperl) 5.6.1 or
+higher, [Strawberry Perl](http://strawberryperl.com/),
+[Cygwin](http://www.cygwin.com/), or
+[MobaXTerm](http://mobaxterm.mobatek.net/) with the Perl plug-in
+installed. Alternatively one can use the Windows binary of cloc
+generated with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-
+1.019/lib/pp.pm) to run on Windows computers that have neither Perl nor Cygwin.)
 
 cloc contains code from David Wheeler's [SLOCCount](http://www.dwheeler.com/sloccount/), Damian Conway and Abigail's Perl module [Regexp::Common](http://search.cpan.org/%7Eabigail/Regexp-Common-2.120/lib/Regexp/Common.pm), Sean M. Burke's Perl module [Win32::Autoglob](http://search.cpan.org/%7Esburke/Win32-Autoglob-1.01/Autoglob.pm), and Tye McQueen's Perl module [Algorithm::Diff](http://search.cpan.org/%7Etyemq/Algorithm-Diff-1.1902/lib/Algorithm/Diff.pm).  Language scale factors were derived from Mayes Consulting, LLC web site http://softwareestimator.com/IndustryData2.htm.
 
-## Install via package manager
+## Install via package manager<a name="apt-get"></a>
 Depending your operating system, one of these installation methods may work for you:
  
     npm install -g cloc                    # https://www.npmjs.com/package/cloc
@@ -49,12 +74,25 @@ Depending your operating system, one of these installation methods may work for 
     sudo pacman -S cloc                    # Arch
     sudo pkg install cloc                  # FreeBSD
     sudo port install cloc                 # Mac OS X with MacPorts
+
+## Stable release<a name="Stable"></a>
+https://github.com/AlDanial/cloc/releases/latest
+
+## Development version<a name="Dev"></a>
+https://github.com/AlDanial/cloc/raw/master/cloc
     
 # [License![^](up.gif)](#___top "click to go to top of document")
+<a name="License"></a>
 
-cloc is licensed under the [GNU General Public License, v 2](http://www.gnu.org/licenses/gpl-2.0.html) , excluding portions which are copied from other sources. Code copied from the Regexp::Common, Win32::Autoglob, and Algorithm::Diff Perl modules is subject to the [Artistic L icense](http://www.opensource.org/licenses/artistic-license-2.0.php).
+cloc is licensed under the [GNU General Public License, v 2]
+(http://www.gnu.org/licenses/gpl-2.0.html), excluding portions which 
+are copied from other sources. Code
+copied from the Regexp::Common, Win32::Autoglob, and Algorithm::Diff
+Perl modules is subject to the 
+[Artistic L icense](http://www.opensource.org/licenses/artistic-license-2.0.php).
 
 # [Why Use cloc?![^](up.gif)](#___top "click to go to top of document")
+<a name="why_use"></a>
 
 cloc has many features that make it easy to use, thorough, extensible, and portable:
 
@@ -69,6 +107,7 @@ cloc has many features that make it easy to use, thorough, extensible, and porta
 9.  Runs on Linux, FreeBSD, NetBSD, OpenBSD, Mac OS X, AIX, HP-UX, Solaris, IRIX, and z/OS systems that have Perl 5.6 or higher. The source version runs on Windows with either ActiveState Perl, Strawberry Perl, Cygwin, or MobaXTerm+Perl plugin. Alternatively on Windows one can run the Windows binary which has no dependencies.
 
 # [Other Counters![^](up.gif)](#___top "click to go to top of document")
+<a name="Other_Counters"></a>
 
 If cloc does not suit your needs here are other freely available counters to consider:
 
@@ -94,6 +133,7 @@ Additionally, cloc will use Digest::MD5 to validate uniqueness among input files
 The Windows binary is built on a computer that has both Regexp::Common and Digest::MD5 installed locally.
 
 # [Building a Windows Executable![^](up.gif)](#___top "click to go to top of document")
+<a name="building_exe"></a>
 
 The default Windows download, <tt>cloc-1.64.exe</tt>, was built with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm) on a Windows 7 computer with [Strawberry Perl](http://strawberryperl.com/). Windows executables of cloc versions 1.60 and earlier were built with [perl2exe](http://www.indigostar.com/perl2exe.htm) on a 32 bit Windows XP computer. A small modification was made to the cloc source code before passing it to perl2exe; lines 87 and 88 were uncommented:
 
@@ -120,45 +160,52 @@ cpan> exit
 C:> pp cloc-1.64.pl
 </pre>
 
-A variation on the above is if you installed the portable version of Strawberry Perl, you will need to run <tt>portableshell.bat</tt> first to properly set up your environment. The Strawberry Perl derived executable on the SourceForge download area was created with the portable version on a Windows 7 computer.
+A variation on the above is if you installed the portable version of Strawberry Perl, you will need to run <tt>portableshell.bat</tt> first to properly set up your environment. The Strawberry Perl derived executable on the GitHub download area was created with the portable version on a Windows 7 computer.
 
 # [Basic Use![^](up.gif)](#___top "click to go to top of document")
+<a name="Basic_Use"></a>
 
 cloc is a command line program that takes file, directory, and/or archive names as inputs. Here's an example of running cloc against the Perl v5.10.0 source distribution:
 <pre>  
-_prompt>_ cloc perl-5.10.0.tar.gz
-    4076 text files.
-    3883 unique files.                                          
-    1521 files ignored.
+prompt> cloc perl-5.22.0.tar.gz
+    5605 text files.
+    5386 unique files.                                          
+    2176 files ignored.
 
-http://cloc.sourceforge.net v 1.50  T=12.0 s (209.2 files/s, 70472.1 lines/s)
--------------------------------------------------------------------------------
-Language                     files          blank        comment           code
--------------------------------------------------------------------------------
-Perl                          2052         110356         130018         292281
-C                              135          18718          22862         140483
-C/C++ Header                   147           7650          12093          44042
-Bourne Shell                   116           3402           5789          36882
-Lisp                             1            684           2242           7515
-make                             7            498            473           2044
-C++                             10            312            277           2000
-XML                             26            231              0           1972
-yacc                             2            128             97           1549
-YAML                             2              2              0            489
-DOS Batch                       11             85             50            322
-HTML                             1             19              2             98
--------------------------------------------------------------------------------
-SUM:                          2510         142085         173903         529677
--------------------------------------------------------------------------------
+https://github.com/AlDanial/cloc v 1.65  T=25.49 s (134.7 files/s, 51980.3 lines/s)
+-----------------------------------------------------------------------------------
+Language                         files          blank        comment           code
+-----------------------------------------------------------------------------------
+Perl                              2892         136396         184362         536445
+C                                  130          24676          33684         155648
+C/C++ Header                       148           9766          16569         147858
+Bourne Shell                       112           4044           6796          42668
+Pascal                               8            458           1603           8592
+XML                                 33            142              0           2410
+YAML                                49             20             15           2078
+C++                                 10            313            277           2033
+make                                 4            426            488           1986
+Prolog                              12            438              2           1146
+JSON                                14              1              0           1037
+yacc                                 1             85             76            998
+Windows Message File                 1            102             11            489
+DOS Batch                           14             92             41            389
+Windows Resource File                3             10              0             85
+D                                    1              5              7              8
+Lisp                                 2              0              3              4
+-----------------------------------------------------------------------------------
+SUM:                              3434         176974         243934         903874
+-----------------------------------------------------------------------------------
 
 </pre>
 
 To run cloc on Windows computers, one must first open up a command (aka DOS) window and invoke cloc.exe from the command line there.
 
 # [Options![^](up.gif)](#___top "click to go to top of document")
+<a name="Options"></a>
 
 <pre>  
-_prompt>_ cloc
+prompt> cloc
 </pre>
 
 <pre>
