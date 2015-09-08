@@ -1,8 +1,8 @@
-<center> <font size="14">cloc</font> </center>
-<center> Count Lines of Code </center>
+<a name="___top"></a>
+# cloc
+Count Lines of Code
 
 * * *
-<a name="___top"></a>
 cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.
 
 Originally hosted at http://cloc.sourceforge.net/, cloc began the
@@ -34,7 +34,6 @@ transition to github in September 2015.
 *   [Author](#Author)
 *   [Acknowledgments](#Acknowledgments)
 *   [Copyright](#Copyright)
-*   [License](#License)
 
 <a name="Overview"></a>
 # [Overview![^](up.gif)](#___top "click to go to top of document")
@@ -720,7 +719,6 @@ Languages with file extension collisions are difficult to customize with
 identify languages with common extensions. In this situation one must
 modify the cloc source code.
 
-
 <a name="How_it_works"></a>
 # [How It Works![^](up.gif)](#___top "click to go to top of document")
 
@@ -762,7 +760,7 @@ A more detailed description:
     for known programming languages. For each of these files:
 
     1.  Read the entire file into memory.
-    2.  Count the number of lines (= L<sub>original)</sub>.
+    2.  Count the number of lines (= L<sub>original</sub>).
     3.  Remove blank lines, then count again (= L<sub>non_blank</sub>).
     4.  Loop over the comment filters defined for this language. (For
         example, C++ has two filters: (1) remove lines that start with
@@ -778,3 +776,106 @@ The options modify the algorithm slightly. The `--read-lang-def` option
 for example allows the user to read definitions of comment filters,
 known file extensions, and known scripting languages from a file. The
 code for this option is processed between Steps 2 and 3.
+
+<a name="Advanced_Use"></a>
+# [Advanced Use![^](up.gif)](#___top "click to go to top of document")
+
+<a name="strip_comments"></a>
+##  [Remove Comments from Source Code](#___top "click to go to top of document")
+
+How can you tell if cloc correctly identifies comments? One way to
+convince yourself cloc is doing the right thing is to use its 
+`--strip-comments` option to remove comments and blank lines from files, then
+compare the stripped-down files to originals.
+
+Let's try this out with the SQLite amalgamation, a C file containing all
+code needed to build the SQLite library along with a header file:
+
+<pre>
+prompt> tar zxf sqlite-amalgamation-3.5.6.tar.gz 
+prompt> cd sqlite-3.5.6/
+prompt> cloc --strip-comments=nc sqlite.c
+       1 text file.
+       1 unique file.                              
+Wrote sqlite3.c.nc
+       0 files ignored.
+
+http://cloc.sourceforge.net v 1.03  T=1.0 s (1.0 files/s, 82895.0 lines/s)
+-------------------------------------------------------------------------------
+Language          files     blank   comment      code    scale   3rd gen. equiv
+-------------------------------------------------------------------------------
+C                     1      5167     26827     50901 x   0.77 =       39193.77
+-------------------------------------------------------------------------------
+</pre>
+
+The extention argument given to --strip-comments is arbitrary; here nc was used as an abbreviation for "no comments".
+
+cloc removed over 31,000 lines from the file:
+
+<pre>
+prompt> wc -l sqlite3.c sqlite3.c.nc 
+  82895 sqlite3.c
+  50901 sqlite3.c.nc
+ 133796 total
+prompt> echo "82895 - 50901" | bc
+31994
+</pre>
+
+We can now compare the orignial file, sqlite3.c and the one stripped of
+comments, sqlite3.c.nc with tools like diff or vimdiff and see what
+exactly cloc considered comments and blank lines. A rigorous proof that
+the stripped-down file contains the same C code as the original is to
+compile these files and compare checksums of the resulting object files.
+
+First, the original source file:
+
+<pre>
+prompt> gcc -c sqlite3.c
+prompt> md5sum sqlite3.o
+cce5f1a2ea27c7e44b2e1047e2588b49  sqlite3.o
+</pre>
+
+Next, the version without comments:
+
+<pre>
+prompt> mv sqlite3.c.nc sqlite3.c
+prompt> gcc -c sqlite3.c
+prompt> md5sum sqlite3.o
+cce5f1a2ea27c7e44b2e1047e2588b49  sqlite3.o
+</pre>
+
+cloc removed over 31,000 lines of comments and blanks but did not modify the source code in any significant way since the resulting object file matches the original. 
+
+<a name="compressed_arch"></a>
+##  [Work with Compressed Archives](#___top "click to go to top of document")
+
+<a name="diff"></a>
+##  [Differences](#___top "click to go to top of document")
+
+<a name="custom_lang"></a>
+##  [Create Custom Language Definitions](#___top "click to go to top of document")
+
+<a name="combine_reports"></a>
+##  [Combine Reports](#___top "click to go to top of document")
+
+<a name="sql"></a>
+##  [SQL](#___top "click to go to top of document")
+
+<a name="scale_factors"></a>
+##  [Third Generation Language Scale Factors](#___top "click to go to top of document")
+
+<a name="Limitations"></a>
+#   [Limitations](#___top "click to go to top of document")
+
+<a name="AdditionalLanguages"></a>
+#   [How to Request Support for Additional Languages](#___top "click to go to top of document")
+
+<a name="Author"></a>
+#   [Author](#___top "click to go to top of document")
+
+<a name="Acknowledgments"></a>
+#   [Acknowledgments](#___top "click to go to top of document")
+
+<a name="Copyright"></a>
+#   [Copyright](#___top "click to go to top of document")
+
