@@ -266,15 +266,15 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              to figure out how to extract the contents of
                              the input file(s) by itself.
                              Use CMD to extract binary archive files (e.g.:
-                             .tar.gz, .zip, .Z).  Use the literal '>FILE<' as
+                             .tar.gz, .zip, .Z).  Use the literal '&gt;FILE&lt' as
                              a stand-in for the actual file(s) to be
                              extracted.  For example, to count lines of code
                              in the input files
                                 gcc-4.2.tar.gz  perl-5.8.8.tar.gz
                              on Unix use
-                               --extract-with='gzip -dc >FILE< | tar xf -'
+                               --extract-with='gzip -dc &gt;FILE&lt | tar xf -'
                              or, if you have GNU tar,
-                               --extract-with='tar zxf >FILE<'
+                               --extract-with='tar zxf &gt;FILE&lt'
                              and on Windows use, for example:
                                --extract-with="\"c:\Program Files\WinZip\WinZip32.exe\" -e -o >FILE<
 ; ."
@@ -874,7 +874,7 @@ Additionally, with newer versions of WinZip, the
 is needed for correct operation; in this case one would invoke cloc with
 something like<br>
 <pre>
- --extract-with="\"c:\Program Files\WinZip\wzunzip\" -e -o FILE ."
+ --extract-with="\"c:\Program Files\WinZip\wzunzip\" -e -o &gt;FILE&lt ."
  </code>
 </pre> (ref. [http://sourceforge.net/projects/cloc/forums/forum/600963/topic/4021070?message=8938196](forum post)).
 
@@ -927,8 +927,10 @@ source code and comments between two versions of a file, directory,
 or archive.  Differences reveal much more than absolute code
 counts of two file versions.  For example, say a source file
 has 100 lines and its developer delivers a newer version with
-102 lines.  Did he add two comment lines, or delete seventeen source
-lines and add fourteen source lines and five comment lines, or did he
+102 lines.  Did the developer add two comment lines, 
+or delete seventeen source
+lines and add fourteen source lines and five comment lines, or did 
+the developer
 do a complete rewrite, discarding all 100 original lines and
 adding 102 lines of all new source?  The diff option tells how
 many lines of source were added, removed, modified or stayed
@@ -954,9 +956,9 @@ To see how cloc aligns files between the two archives, use the
 cloc --diff-aligment=align.txt gcc-4.4.0.tar.bz2  gcc-4.5.0.tar.bz2
 </pre>
 to produce the file `align.txt` which shows the file pairs as well
-as files added and deleted.  The symbols == and != before each
-file pair indicate if the files are identical (==)
-or if they have different content (!=).
+as files added and deleted.  The symbols `==` and `!=` before each
+file pair indicate if the files are identical (`==`)
+or if they have different content (`!=`).
 
 Here's sample output showing the difference between the Python 2.6.6 and 2.7
 releases:
@@ -1098,25 +1100,86 @@ SUM:
  removed                       2             66             60            796
 ---------------------------------------------------------------------
 </pre>
-Two errors occurred.
-The first was a timeout on computing diffs of the file
-`Python-X/Mac/Modules/qt/_Qtmodule.c`.
+A pair of errors occurred.
+The first pair was caused by timing out when computing diffs of the file
+`Python-X/Mac/Modules/qt/_Qtmodule.c` in each Python version.
 This file has > 26,000 lines of C code and takes more than
 10 seconds--the default maximum duration for diff'ing a 
-single file--on my slow computer.  This error can be
+single file--on my slow computer.  (Note:  this refers to
+performing differences with
+the `sdiff()` function in the Perl `Algorithm::Diff` module,
+not the command line `diff` utility.)  This error can be
 overcome by raising the time to, say, 20 seconds
 with `--diff-timeout 20`.
 
-The second error is more problematic.  The file
+The second error is more problematic.  The files
 `Python-X/Mac/Modules/qd/qdsupport.py` 
-includes a Python docstring (text between pairs of triple quotes) that
-contain C comments.  cloc treats docstrings as comments and handles them
+include Python docstring (text between pairs of triple quotes)
+containing C comments.  cloc treats docstrings as comments and handles them
 by first converting them to C comments, then using the C comment removing
 regular expression.  Nested C comments yield erroneous results however.
 
 [](1}}})
 <a name="custom_lang"></a> []({{{1)
 ##  [Create Custom Language Definitions![^](up.gif)](#___top "click to go to top of document")
+cloc can write its language comment definitions to a file or can read
+comment definitions from a file, overriding the built-in definitions.
+This can be useful when you want to use cloc to count lines of a
+language not yet included, to change association of file extensions
+to languages, or to modify the way existing languages are counted.
+
+The easiest way to create a custom language definition file is to
+make cloc write its definitions to a file, then modify that file:
+<pre><i>Unix&gt;</i> cloc --write-lang-def=my_definitions.txt
+</pre>
+creates the file `my_definitions.txt` which can be modified
+then read back in with either the `--read-lang-def` or
+`--force-lang-def` option.  The difference between the options is
+former merges language definitions from the given file in with
+cloc's internal definitions with cloc'taking precedence
+if there are overlaps.  The `--force-lang-def` option, on the
+other hand, replaces cloc's definitions completely.
+This option has a disadvantage in preventing cloc from counting
+<a class="u" href="#extcollision" name="extcollision">
+languages whose extensions map to multiple languages
+</a> as these languages require additional logic that is not easily
+expressed in a definitions file.
+<pre><i>Unix&gt;</i> cloc --read-lang-def=my_definitions.txt  <i>file1 file2 dir1 ...</i>
+</pre>
+
+Each language entry has four parts:
+* The language name starting in column 1.
+* One or more comment *filters* starting in column 5.
+* One or more filename extensions starting in column 5.
+* A 3rd generation scale factor starting in column 5.  
+  This entry must be provided
+  but its value is not important
+  unless you want to compare your language to a hypothetical
+  third generation programming language.
+
+A filter defines a method to remove comment text from the source file.
+For example the entry for C++ looks like this
+<pre>C++
+    filter remove_matches ^\s*//
+    filter call_regexp_common C
+    extension C
+    extension cc
+    extension cpp
+    extension cxx
+    extension pcc
+    3rd_gen_scale 1.51
+</pre>
+C++ has two filters:  first, remove lines that start with optional
+whitespace and are followed by `//`.
+Next, remove all C comments.  C comments are difficult to express
+as regular expressions so a call is made to Regexp::Common to get the
+appropriate regular expression to match C comments which are then removed.
+
+A more complete discussion of the different filter options may appear
+here in the future.  The output of cloc's
+`--write-lang-def` option should provide enough examples
+for motivated individuals to modify or extend cloc's language definitions.
+
 [](1}}})
 <a name="combine_reports"></a> []({{{1)
 ##  [Combine Reports![^](up.gif)](#___top "click to go to top of document")
