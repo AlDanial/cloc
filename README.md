@@ -1,12 +1,12 @@
 <a name="___top"></a>
 # cloc
-Count Lines of Code
+*Count Lines of Code*
 
 * * *
 cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.
 
 Hosted at http://cloc.sourceforge.net/ since August 2006, cloc began the
-transition to github in September 2015.
+transition to GitHub in September 2015.
 
 *   [Overview](#Overview)
 *   [Download](https://github.com/AlDanial/cloc/releases/latest)
@@ -38,7 +38,7 @@ transition to github in September 2015.
 <a name="Overview"></a>      []({{{1)
 # [Overview![^](up.gif)](#___top "click to go to top of document")
 
-[Translations: 
+[Translations of this page: 
 [Bulgarian](http://www.ajoft.com/wpaper/aj-cloc.html), 
 [Polish](http://www.trevister.com/blog/cloc.html), 
 [Russian](http://carrrsmag.com/blog/cloc.html), 
@@ -75,8 +75,7 @@ and Tye McQueen's Perl module
 Language scale factors were derived from Mayes Consulting, LLC web site 
 http://softwareestimator.com/IndustryData2.htm.
 [](1}}})
-
-<a name="apt-get"></a>
+<a name="apt-get"></a> []({{{1)
 ## Install via package manager
 Depending your operating system, one of these installation methods may work for you:
  
@@ -86,16 +85,16 @@ Depending your operating system, one of these installation methods may work for 
     sudo pacman -S cloc                    # Arch
     sudo pkg install cloc                  # FreeBSD
     sudo port install cloc                 # Mac OS X with MacPorts
-
-<a name="Stable"></a>
+[](1}}})
+<a name="Stable"></a> []({{{1)
 ## Stable release
 https://github.com/AlDanial/cloc/releases/latest
 
 <a name="Dev"></a>
 ## Development version
 https://github.com/AlDanial/cloc/raw/master/cloc
-    
-<a name="License"></a>
+[](1}}})
+<a name="License"></a> []({{{1)
 # [License![^](up.gif)](#___top "click to go to top of document")
 
 cloc is licensed under the [GNU General Public License, v 2]
@@ -104,8 +103,8 @@ are copied from other sources. Code
 copied from the Regexp::Common, Win32::Autoglob, and Algorithm::Diff
 Perl modules is subject to the 
 [Artistic L icense](http://www.opensource.org/licenses/artistic-license-2.0.php).
-
-<a name="why_use"></a>
+[](1}}})
+<a name="why_use"></a> []({{{1)
 # [Why Use cloc?![^](up.gif)](#___top "click to go to top of document")
 
 cloc has many features that make it easy to use, thorough, extensible, and portable:
@@ -119,8 +118,8 @@ cloc has many features that make it easy to use, thorough, extensible, and porta
 7.  Handles file and directory names with spaces and other unusual characters.
 8.  Has no dependencies outside the standard Perl distribution.
 9.  Runs on Linux, FreeBSD, NetBSD, OpenBSD, Mac OS X, AIX, HP-UX, Solaris, IRIX, and z/OS systems that have Perl 5.6 or higher. The source version runs on Windows with either ActiveState Perl, Strawberry Perl, Cygwin, or MobaXTerm+Perl plugin. Alternatively on Windows one can run the Windows binary which has no dependencies.
-
-<a name="Other_Counters"></a>
+[](1}}})
+<a name="Other_Counters"></a> []({{{1)
 # [Other Counters![^](up.gif)](#___top "click to go to top of document")
 
 If cloc does not suit your needs here are other freely available counters to consider:
@@ -136,8 +135,8 @@ Other references:
 
 *   QSM's [directory](http://www.qsm.com/CodeCounters.html) of code counting tools.
 *   The [Wikipe dia entry](http://en.wikipedia.org/wiki/Source_lines_of_code) for source code line counts.
-
-# <a name="regexp_common">Regexp::Common, Digest::MD5, Win32::Autoglob, Algori thm::Diff</a>
+[](1}}})
+# <a name="regexp_common">Regexp::Common, Digest::MD5, Win32::Autoglob, Algori thm::Diff</a> []({{{1)
 
 Although cloc does not need Perl modules outside those found in the
 standard distribution, cloc does rely on a few external modules. Code
@@ -160,8 +159,8 @@ found the file uniqueness check is skipped.
 
 The Windows binary is built on a computer that has both Regexp::Common
 and Digest::MD5 installed locally.
-
-<a name="building_exe"></a>
+[](1}}})
+<a name="building_exe"></a> []({{{1)
 # [Building a Windows Executable![^](up.gif)](#___top "click to go to top of document")
 
 The default Windows download, <tt>cloc-1.64.exe</tt>, was built with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm) 
@@ -173,12 +172,11 @@ Windows executables of cloc versions
 XP computer. A small modification was made to the cloc source code
 before passing it to perl2exe; lines 87 and 88 were uncommented:
 
-<pre><font color="gray">85</font>  # Uncomment next two lines when building Windows e
-xecutable with perl2exe
-<font color="gray">86</font>  # or if running on a system that already has Regex
-p::Common. 
-<font color="gray">87</font>  <font color="red">#use Regexp::Common;
-<font color="gray">88</font>  #$HAVE_Rexexp_Common = 1;</font>
+<pre>
+<font color="gray">85</font>  # Uncomment next two lines when building Windows executable with perl2exe
+<font color="gray">86</font>  # or if running on a system that already has Regexp::Common. 
+<font color="gray">87</font>  <font color="red">#use Regexp::Common;</font>
+<font color="gray">88</font>  <font color="red">#$HAVE_Rexexp_Common = 1;</font>
 </pre>
 
 #### Why is the Windows executable so large?
@@ -208,8 +206,8 @@ C:> pp cloc-1.64.pl
 </pre>
 
 A variation on the above is if you installed the portable version of Strawberry Perl, you will need to run <tt>portableshell.bat</tt> first to properly set up your environment. The Strawberry Perl derived executable on the GitHub download area was created with the portable version on a Windows 7 computer.
-
-<a name="Basic_Use"></a>
+[](1}}})
+<a name="Basic_Use"></a> []({{{1)
 # [Basic Use![^](up.gif)](#___top "click to go to top of document")
 
 cloc is a command line program that takes file, directory, and/or
@@ -250,8 +248,8 @@ SUM:                              3434         176974         243934         903
 </pre>
 
 To run cloc on Windows computers, one must first open up a command (aka DOS) window and invoke cloc.exe from the command line there.
-
-<a name="Options"></a>
+[](1}}})
+<a name="Options"></a> []({{{1)
 # [Options![^](up.gif)](#___top "click to go to top of document")
 
 <pre>  
@@ -535,8 +533,8 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
    --yaml                    Write the results in YAML.
 
 </pre>
-
-<a name="Languages"></a>
+[](1}}})
+<a name="Languages"></a> []({{{1)
 # [Recognized Languages![^](up.gif)](#___top "click to go to top of document")
 
 <pre>  
@@ -728,8 +726,8 @@ Languages with file extension collisions are difficult to customize with
 `--read-lang-def` or `--force-lang-def` as they have no mechanism to
 identify languages with common extensions. In this situation one must
 modify the cloc source code.
-
-<a name="How_it_works"></a>
+[](1}}})
+<a name="How_it_works"></a> []({{{1)
 # [How It Works![^](up.gif)](#___top "click to go to top of document")
 
 cloc's method of operation resembles SLOCCount's: First, create a list
@@ -786,11 +784,11 @@ The options modify the algorithm slightly. The `--read-lang-def` option
 for example allows the user to read definitions of comment filters,
 known file extensions, and known scripting languages from a file. The
 code for this option is processed between Steps 2 and 3.
-
-<a name="Advanced_Use"></a>
+[](1}}})
+<a name="Advanced_Use"></a> []({{{1)
 # [Advanced Use![^](up.gif)](#___top "click to go to top of document")
-
-<a name="strip_comments"></a>
+[](1}}})
+<a name="strip_comments"></a> []({{{1)
 ##  [Remove Comments from Source Code![^](up.gif)](#___top "click to go to top of document")
 
 How can you tell if cloc correctly identifies comments? One way to
@@ -855,8 +853,8 @@ cce5f1a2ea27c7e44b2e1047e2588b49  sqlite3.o
 </pre>
 
 cloc removed over 31,000 lines of comments and blanks but did not modify the source code in any significant way since the resulting object file matches the original. 
-
-<a name="compressed_arch"></a>
+[](1}}})
+<a name="compressed_arch"></a> []({{{1)
 ##  [Work with Compressed Archives![^](up.gif)](#___top "click to go to top of document")
 Versions of cloc before v1.07 required an
  `--extract-with=CMD` option to tell cloc how
@@ -865,6 +863,7 @@ attempted automatically.  At the moment the automatic extraction method works
 reasonably well on Unix-type OS's for the following file types:
 `.tar.gz`,
 `.tar.bz2`, 
+`.tar.xz`, 
 `.tgz`,
 `.zip`,
 `.ear`.
@@ -891,33 +890,255 @@ with a single compressed archive (after all, if you're going to type
 the extraction command anyway why not just manually expand the archive?)
 this option is handy for working with several archives at once.
 
-<a name="diff"></a>
+For example, say you have the following source tarballs on a Unix machine<br>
+
+    perl-5.8.5.tar.gz
+    Python-2.4.2.tar.gz
+
+and you want to count all the code within them.  The command would be
+<pre>
+cloc --extract-with='gzip -dc &gt;FILE&lt; | tar xf -' perl-5.8.5.tar.gz Python-2.4.2.tar.gz
+</pre>
+If that Unix machine has GNU tar (which can uncompress and extract in
+one step) the command can be shortened to
+<pre>
+cloc --extract-with='tar zxf &gt;FILE&lt;' perl-5.8.5.tar.gz Python-2.4.2.tar.gz
+</pre>
+On a Windows computer with WinZip installed in 
+`c:\Program Files\WinZip` the command would look like
+<pre>
+cloc.exe --extract-with="\"c:\Program Files\WinZip\WinZip32.exe\" -e -o &gt;FILE&lt; ." perl-5.8.5.tar.gz Python-2.4.2.tar.gz
+</pre>
+Java `.ear` files are Zip files that contain additional Zip
+files.  cloc can handle nested compressed archives without
+difficulty--provided all such files are compressed and archived in the
+same way.  Examples of counting a
+Java `.ear` file in Unix and Windows:
+<pre>
+<i>Unix&gt;</i> cloc --extract-with="unzip -d . &gt;FILE&lt; " Project.ear
+<i>DOS&gt;</i> cloc.exe --extract-with="\"c:\Program Files\WinZip\WinZip32.exe\" -e -o &gt;FILE&lt; ." Project.ear
+</pre>
+
+[](1}}})
+<a name="diff"></a> []({{{1)
 ##  [Differences](#___top "click to go to top of document")
+The `--diff` switch allows one to measure the relative change in
+source code and comments between two versions of a file, directory,
+or archive.  Differences reveal much more than absolute code
+counts of two file versions.  For example, say a source file
+has 100 lines and its developer delivers a newer version with
+102 lines.  Did he add two comment lines, or delete seventeen source
+lines and add fourteen source lines and five comment lines, or did he
+do a complete rewrite, discarding all 100 original lines and
+adding 102 lines of all new source?  The diff option tells how
+many lines of source were added, removed, modified or stayed
+the same, and how many lines of comments were added, removed,
+modified or stayed the same.
 
-<a name="custom_lang"></a>
+In addition to file pairs, one can give cloc pairs of
+directories, or pairs of file archives, or a file archive
+and a directory.  cloc will try to align 
+file pairs within the directories or archives and compare diffs
+for each pair.  For example, to see what changed between
+GCC 4.4.0 and 4.5.0 one could do
+<pre>
+cloc --diff gcc-4.4.0.tar.bz2  gcc-4.5.0.tar.bz2
+</pre>
+
+Be prepared to wait a while for the results though; the `--diff`
+option runs much more slowly than an absolute code count.
+
+To see how cloc aligns files between the two archives, use the
+`--diff-alignment` option
+<pre>
+cloc --diff-aligment=align.txt gcc-4.4.0.tar.bz2  gcc-4.5.0.tar.bz2
+</pre>
+to produce the file `align.txt` which shows the file pairs as well
+as files added and deleted.  The symbols == and != before each
+file pair indicate if the files are identical (==)
+or if they have different content (!=).
+
+Here's sample output showing the difference between the Python 2.6.6 and 2.7
+releases:
+<pre><i>prompt&gt;</i> cloc --diff Python-2.7.9.tgz Python-2.7.10.tar.xz
+    4315 text files.
+    4313 text files.s
+    2173 files ignored.                                         
+
+4 errors:
+Diff error, exceeded timeout:  /tmp/8ToGAnB9Y1/Python-2.7.9/Mac/Modules/qt/_Qtmodule.c
+Diff error, exceeded timeout:  /tmp/M6ldvsGaoq/Python-2.7.10/Mac/Modules/qt/_Qtmodule.c
+Diff error (quoted comments?):  /tmp/8ToGAnB9Y1/Python-2.7.9/Mac/Modules/qd/qdsupport.py
+Diff error (quoted comments?):  /tmp/M6ldvsGaoq/Python-2.7.10/Mac/Modules/qd/qdsupport.py
+
+https://github.com/AlDanial/cloc v 1.65  T=298.59 s (0.0 files/s, 0.0 lines/s)
+-----------------------------------------------------------------------------
+Language                   files          blank        comment           code
+-----------------------------------------------------------------------------
+Visual Basic
+ same                          2              0              1             12
+ modified                      0              0              0              0
+ added                         0              0              0              0
+ removed                       0              0              0              0
+make
+ same                         11              0            340           2952
+ modified                      1              0              0              1
+ added                         0              0              0              0
+ removed                       0              0              0              0
+diff
+ same                          1              0             87            105
+ modified                      0              0              0              0
+ added                         0              0              0              0
+ removed                       0              0              0              0
+CSS
+ same                          0              0             19            327
+ modified                      1              0              0              1
+ added                         0              0              0              0
+ removed                       0              0              0              0
+Objective C
+ same                          7              0             61            635
+ modified                      0              0              0              0
+ added                         0              0              0              0
+ removed                       0              0              0              0
+NAnt script
+ same                          2              0              0             30
+ modified                      0              0              0              0
+ added                         0              0              0              0
+ removed                       0              0              0              0
+XML
+ same                          3              0              2             72
+ modified                      1              0              0              1
+ added                         0              0              0              1
+ removed                       0              1              0              0
+Windows Resource File
+ same                          3              0             56            206
+ modified                      1              0              0              1
+ added                         0              0              0              0
+ removed                       0              0              0              0
+Expect
+ same                          6              0            161            565
+ modified                      0              0              0              0
+ added                         0              0              0              0
+ removed                       0              0              0              0
+HTML
+ same                         14              0             11           2344
+ modified                      0              0              0              0
+ added                         0              0              0              0
+ removed                       0              0              0              0
+vim script
+ same                          1              0              7            106
+ modified                      0              0              0              0
+ added                         0              0              0              0
+ removed                       0              0              0              0
+C++
+ same                          2              0             18            128
+ modified                      0              0              0              0
+ added                         0              0              0              0
+ removed                       0              0              0              0
+Windows Module Definition
+ same                          7              0            187           2080
+ modified                      2              0              0              0
+ added                         0              0              0              1
+ removed                       0              1              0              2
+Prolog
+ same                          1              0              0             24
+ modified                      0              0              0              0
+ added                         0              0              0              0
+ removed                       0              0              0              0
+Javascript
+ same                          3              0             49            229
+ modified                      0              0              0              0
+ added                         0              0              0              0
+ removed                       0              0              0              0
+Assembly
+ same                         51              0           6794          12298
+ modified                      0              0              0              0
+ added                         0              0              0              0
+ removed                       0              0              0              0
+Bourne Shell
+ same                         41              0           7698          45024
+ modified                      1              0              0              3
+ added                         0             13              2             64
+ removed                       0              0              0              0
+DOS Batch
+ same                         29              0            107            494
+ modified                      1              0              0              9
+ added                         0              1              0              3
+ removed                       0              0              0              0
+MSBuild script
+ same                         77              0              3          38910
+ modified                      0              0              0              0
+ added                         0              0              0              0
+ removed                       0              0              0              0
+Python
+ same                       1947              0         109012         430335
+ modified                    192              0             94            950
+ added                         2            323            283           2532
+ removed                       2             55             58            646
+m4
+ same                         18              0            191          15352
+ modified                      1              0              0              2
+ added                         1             31              0            205
+ removed                       0              0              0              0
+C
+ same                        505              0          37439         347837
+ modified                     45              0             13            218
+ added                         0             90             33            795
+ removed                       0              9              2            148
+C/C++ Header
+ same                        255              0          10361          66635
+ modified                      5              0              5              7
+ added                         0              1              3            300
+ removed                       0              0              0              0
+---------------------------------------------------------------------
+SUM:
+ same                       2986              0         172604         966700
+ modified                    251              0            112           1193
+ added                         3            459            321           3901
+ removed                       2             66             60            796
+---------------------------------------------------------------------
+</pre>
+Two errors occurred.
+The first was a timeout on computing diffs of the file
+`Python-X/Mac/Modules/qt/_Qtmodule.c`.
+This file has > 26,000 lines of C code and takes more than
+10 seconds--the default maximum duration for diff'ing a 
+single file--on my slow computer.  This error can be
+overcome by raising the time to, say, 20 seconds
+with `--diff-timeout 20`.
+
+The second error is more problematic.  The file
+`Python-X/Mac/Modules/qd/qdsupport.py` 
+includes a Python docstring (text between pairs of triple quotes) that
+contain C comments.  cloc treats docstrings as comments and handles them
+by first converting them to C comments, then using the C comment removing
+regular expression.  Nested C comments yield erroneous results however.
+
+[](1}}})
+<a name="custom_lang"></a> []({{{1)
 ##  [Create Custom Language Definitions![^](up.gif)](#___top "click to go to top of document")
-
-<a name="combine_reports"></a>
+[](1}}})
+<a name="combine_reports"></a> []({{{1)
 ##  [Combine Reports![^](up.gif)](#___top "click to go to top of document")
-
-<a name="sql"></a>
+[](1}}})
+<a name="sql"></a> []({{{1)
 ##  [SQL![^](up.gif)](#___top "click to go to top of document")
-
-<a name="scale_factors"></a>
+[](1}}})
+<a name="scale_factors"></a> []({{{1)
 ##  [Third Generation Language Scale Factors![^](up.gif)](#___top "click to go to top of document")
-
-<a name="Limitations"></a>
+[](1}}})
+<a name="Limitations"></a> []({{{1)
 #   [Limitations![^](up.gif)](#___top "click to go to top of document")
-
-<a name="AdditionalLanguages"></a>
+[](1}}})
+<a name="AdditionalLanguages"></a> []({{{1)
 #   [How to Request Support for Additional Languages![^](up.gif)](#___top "click to go to top of document")
-
-<a name="Author"></a>
+[](1}}})
+<a name="Author"></a> []({{{1)
 #   [Author![^](up.gif)](#___top "click to go to top of document")
-
-<a name="Acknowledgments"></a>
+[](1}}})
+<a name="Acknowledgments"></a> []({{{1)
 #   [Acknowledgments![^](up.gif)](#___top "click to go to top of document")
-
-<a name="Copyright"></a>
+[](1}}})
+<a name="Copyright"></a> []({{{1)
 #   [Copyright![^](up.gif)](#___top "click to go to top of document")
-
+[](1}}})
