@@ -5,7 +5,7 @@ Count Lines of Code
 * * *
 cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.
 
-Originally hosted at http://cloc.sourceforge.net/, cloc began the
+Hosted at http://cloc.sourceforge.net/ since August 2006, cloc began the
 transition to github in September 2015.
 
 *   [Overview](#Overview)
@@ -35,7 +35,7 @@ transition to github in September 2015.
 *   [Acknowledgments](#Acknowledgments)
 *   [Copyright](#Copyright)
 
-<a name="Overview"></a>
+<a name="Overview"></a>      []({{{1)
 # [Overview![^](up.gif)](#___top "click to go to top of document")
 
 [Translations: 
@@ -64,7 +64,17 @@ installed. Alternatively one can use the Windows binary of cloc
 generated with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-
 1.019/lib/pp.pm) to run on Windows computers that have neither Perl nor Cygwin.)
 
-cloc contains code from David Wheeler's [SLOCCount](http://www.dwheeler.com/sloccount/), Damian Conway and Abigail's Perl module [Regexp::Common](http://search.cpan.org/%7Eabigail/Regexp-Common-2.120/lib/Regexp/Common.pm), Sean M. Burke's Perl module [Win32::Autoglob](http://search.cpan.org/%7Esburke/Win32-Autoglob-1.01/Autoglob.pm), and Tye McQueen's Perl module [Algorithm::Diff](http://search.cpan.org/%7Etyemq/Algorithm-Diff-1.1902/lib/Algorithm/Diff.pm).  Language scale factors were derived from Mayes Consulting, LLC web site http://softwareestimator.com/IndustryData2.htm.
+cloc contains code from David Wheeler's 
+[SLOCCount](http://www.dwheeler.com/sloccount/), 
+Damian Conway and Abigail's Perl module 
+[Regexp::Common](http://search.cpan.org/%7Eabigail/Regexp-Common-2.120/lib/Regexp/Common.pm), 
+Sean M. Burke's Perl module 
+[Win32::Autoglob](http://search.cpan.org/%7Esburke/Win32-Autoglob-1.01/Autoglob.pm), 
+and Tye McQueen's Perl module 
+[Algorithm::Diff](http://search.cpan.org/%7Etyemq/Algorithm-Diff-1.1902/lib/Algorithm/Diff.pm).  
+Language scale factors were derived from Mayes Consulting, LLC web site 
+http://softwareestimator.com/IndustryData2.htm.
+[](1}}})
 
 <a name="apt-get"></a>
 ## Install via package manager
@@ -781,7 +791,7 @@ code for this option is processed between Steps 2 and 3.
 # [Advanced Use![^](up.gif)](#___top "click to go to top of document")
 
 <a name="strip_comments"></a>
-##  [Remove Comments from Source Code](#___top "click to go to top of document")
+##  [Remove Comments from Source Code![^](up.gif)](#___top "click to go to top of document")
 
 How can you tell if cloc correctly identifies comments? One way to
 convince yourself cloc is doing the right thing is to use its 
@@ -847,35 +857,67 @@ cce5f1a2ea27c7e44b2e1047e2588b49  sqlite3.o
 cloc removed over 31,000 lines of comments and blanks but did not modify the source code in any significant way since the resulting object file matches the original. 
 
 <a name="compressed_arch"></a>
-##  [Work with Compressed Archives](#___top "click to go to top of document")
+##  [Work with Compressed Archives![^](up.gif)](#___top "click to go to top of document")
+Versions of cloc before v1.07 required an
+ `--extract-with=CMD` option to tell cloc how
+to expand an archive file.  Beginning with v1.07 this is extraction is
+attempted automatically.  At the moment the automatic extraction method works
+reasonably well on Unix-type OS's for the following file types:
+`.tar.gz`,
+`.tar.bz2`, 
+`.tgz`,
+`.zip`,
+`.ear`.
+Some of these extensions work on Windows if one has WinZip installed
+in the default location (`C:\Program Files\WinZip\WinZip32.exe`).
+Additionally, with newer versions of WinZip, the
+[http://www.winzip.com/downcl.htm](command line add-on)
+is needed for correct operation; in this case one would invoke cloc with
+something like<br>
+<pre>
+ --extract-with="\"c:\Program Files\WinZip\wzunzip\" -e -o FILE ."
+ </code>
+</pre> (ref. [http://sourceforge.net/projects/cloc/forums/forum/600963/topic/4021070?message=8938196](forum post)).
+
+In situations where the automatic extraction fails, one can try the
+`--extract-with=CMD`
+option to count lines of code within tar files, Zip files, or
+other compressed archives for which one has an extraction tool.
+cloc takes the user-provided extraction command and expands the archive
+to a temporary directory (created with File::Temp),
+counts the lines of code in the temporary directory,
+then removes that directory.  While not especially helpful when dealing
+with a single compressed archive (after all, if you're going to type
+the extraction command anyway why not just manually expand the archive?)
+this option is handy for working with several archives at once.
 
 <a name="diff"></a>
 ##  [Differences](#___top "click to go to top of document")
 
 <a name="custom_lang"></a>
-##  [Create Custom Language Definitions](#___top "click to go to top of document")
+##  [Create Custom Language Definitions![^](up.gif)](#___top "click to go to top of document")
 
 <a name="combine_reports"></a>
-##  [Combine Reports](#___top "click to go to top of document")
+##  [Combine Reports![^](up.gif)](#___top "click to go to top of document")
 
 <a name="sql"></a>
-##  [SQL](#___top "click to go to top of document")
+##  [SQL![^](up.gif)](#___top "click to go to top of document")
 
 <a name="scale_factors"></a>
-##  [Third Generation Language Scale Factors](#___top "click to go to top of document")
+##  [Third Generation Language Scale Factors![^](up.gif)](#___top "click to go to top of document")
 
 <a name="Limitations"></a>
-#   [Limitations](#___top "click to go to top of document")
+#   [Limitations![^](up.gif)](#___top "click to go to top of document")
 
 <a name="AdditionalLanguages"></a>
-#   [How to Request Support for Additional Languages](#___top "click to go to top of document")
+#   [How to Request Support for Additional Languages![^](up.gif)](#___top "click to go to top of document")
 
 <a name="Author"></a>
-#   [Author](#___top "click to go to top of document")
+#   [Author![^](up.gif)](#___top "click to go to top of document")
 
 <a name="Acknowledgments"></a>
-#   [Acknowledgments](#___top "click to go to top of document")
+#   [Acknowledgments![^](up.gif)](#___top "click to go to top of document")
 
 <a name="Copyright"></a>
-#   [Copyright](#___top "click to go to top of document")
+#   [Copyright![^](up.gif)](#___top "click to go to top of document")
 
