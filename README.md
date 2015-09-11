@@ -1183,6 +1183,250 @@ for motivated individuals to modify or extend cloc's language definitions.
 [](1}}})
 <a name="combine_reports"></a> []({{{1)
 ##  [Combine Reports![^](up.gif)](#___top "click to go to top of document")
+
+If you manage multiple software projects you might be interested in
+seeing line counts by project, not just by language.
+Say you manage three software projects called MySQL, PostgreSQL, and SQLite.
+The teams responsible for each of these projects run cloc on their
+source code and provide you with the output.
+For example MySQL team does
+><pre>cloc --report-file=mysql-5.1.42.txt mysql-5.1.42.tar.gz
+</pre>
+and provides you with the file `mysql-5.1.42.txt`.
+The contents of the three files you get are
+<pre><i>Unix&gt;</i> cat mysql-5.1.42.txt
+http://cloc.sourceforge.net v 1.50  T=26.0 s (108.1 files/s, 65774.5 lines/s)
+--------------------------------------------------------------------------------
+Language                      files          blank        comment           code
+--------------------------------------------------------------------------------
+C++                             615          93609         110909         521041
+C                               642          83179          82424         393602
+C/C++ Header                   1065          33980          77633         142779
+Bourne Shell                    178          14892          11437          74525
+Perl                             60           7634           4667          22703
+m4                               13           1220            394          10497
+make                            119            914           1855           4447
+XML                              27            564             23           4107
+SQL                              18            517            209           3433
+Assembly                         12            161              0           1304
+yacc                              2            167             40           1048
+lex                               2            332            113            879
+Teamcenter def                   43             85            219            701
+Javascript                        3             70            140            427
+Pascal                            2              0            436            377
+HTML                              1              7              0            250
+Bourne Again Shell                1              6              1             48
+DOS Batch                         8             23             73             36
+--------------------------------------------------------------------------------
+SUM:                           2811         237360         290573        1182204
+--------------------------------------------------------------------------------
+<i>Unix&gt;</i> cat sqlite-3.6.22.txt
+http://cloc.sourceforge.net v 1.50  T=3.0 s (4.7 files/s, 53833.7 lines/s)
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+C                                2           7459          37993          68944
+Bourne Shell                     7           3344           4522          25849
+m4                               2            754             20           6557
+C/C++ Header                     2            155           4808           1077
+make                             1              6              0             13
+-------------------------------------------------------------------------------
+SUM:                            14          11718          47343         102440
+-------------------------------------------------------------------------------
+
+<i>Unix&gt;</i> cat postgresql-8.4.2.txt
+http://cloc.sourceforge.net v 1.50  T=16.0 s (129.1 files/s, 64474.9 lines/s)
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+C                              923         102324         167390         563865
+C/C++ Header                   556           9180          22723          40990
+Bourne Shell                    51           3692           3245          28486
+SQL                            260           8246           5645          25862
+yacc                             6           2667           2126          22825
+Perl                            36            782            696           4894
+lex                              8            708           1525           3638
+make                           180           1215           1385           3453
+m4                              12            199             25           1431
+Teamcenter def                  13              4              0           1104
+HTML                             2             94              1            410
+DOS Batch                        7             53             22            188
+XSLT                             5             41             30            111
+Assembly                         3             17              0            105
+D                                1             14             14             65
+CSS                              1             16              7             44
+sed                              1              1              7             15
+Python                           1              5              1             12
+-------------------------------------------------------------------------------
+SUM:                          2066         129258         204842         697498
+-------------------------------------------------------------------------------
+</pre>
+
+While these three files are interesting, you also want to see
+the combined counts from all projects.
+That can be done with cloc's <code>--sum_reports</code>
+option:
+<pre><i>Unix&gt;</i> cloc --sum-reports --report_file=databases mysql-5.1.42.txt  postgresql-8.4.2.txt  sqlite-3.6.22.txt
+Wrote databases.lang
+Wrote databases.file
+</pre>
+The report combination produces two output files, one for sums by
+programming language (<code>databases.lang</code>) and one by project 
+(`databases.file`).
+Their contents are
+<pre><i>Unix&gt;</i> cat databases.lang
+http://cloc.sourceforge.net v 1.50
+--------------------------------------------------------------------------------
+Language                      files          blank        comment           code
+--------------------------------------------------------------------------------
+C                              1567         192962         287807        1026411
+C++                             615          93609         110909         521041
+C/C++ Header                   1623          43315         105164         184846
+Bourne Shell                    236          21928          19204         128860
+SQL                             278           8763           5854          29295
+Perl                             96           8416           5363          27597
+yacc                              8           2834           2166          23873
+m4                               27           2173            439          18485
+make                            300           2135           3240           7913
+lex                              10           1040           1638           4517
+XML                              27            564             23           4107
+Teamcenter def                   56             89            219           1805
+Assembly                         15            178              0           1409
+HTML                              3            101              1            660
+Javascript                        3             70            140            427
+Pascal                            2              0            436            377
+DOS Batch                        15             76             95            224
+XSLT                              5             41             30            111
+D                                 1             14             14             65
+Bourne Again Shell                1              6              1             48
+CSS                               1             16              7             44
+sed                               1              1              7             15
+Python                            1              5              1             12
+--------------------------------------------------------------------------------
+SUM:                           4891         378336         542758        1982142
+--------------------------------------------------------------------------------
+
+<i>Unix&gt;</i> cat databases.file
+----------------------------------------------------------------------------------
+Report File                     files          blank        comment           code
+----------------------------------------------------------------------------------
+mysql-5.1.42.txt                 2811         237360         290573        1182204
+postgresql-8.4.2.txt             2066         129258         204842         697498
+sqlite-3.6.22.txt                  14          11718          47343         102440
+----------------------------------------------------------------------------------
+SUM:                             4891         378336         542758        1982142
+----------------------------------------------------------------------------------
+
+</pre>
+
+Report files themselves can be summed together.  Say you also manage
+development of Perl and Python and you want to keep track
+of those line counts separately from your database projects.  First
+create reports for Perl and Python separately:
+<pre>cloc --report-file=perl-5.10.0.txt perl-5.10.0.tar.gz
+cloc --report-file=python-2.6.4.txt Python-2.6.4.tar.bz2
+</pre>
+then sum these together with
+<pre><i>Unix&gt;</i> cloc --sum-reports --report_file=script_lang perl-5.10.0.txt python-2.6.4.txt
+Wrote script_lang.lang
+Wrote script_lang.file
+
+<i>Unix&gt;</i> cat script_lang.lang
+http://cloc.sourceforge.net v 1.50
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+C                              518          61871          52705         473034
+Python                        1965          76022          95289         365716
+Perl                          2052         110356         130018         292281
+C/C++ Header                   381          13762          21402         102276
+Bourne Shell                   149           9376          11665          81508
+Lisp                             2           1154           2745          10448
+Assembly                        38           1616           1712           9755
+m4                               3            825             34           7124
+make                            16            954            804           4829
+HTML                            25            516             13           3010
+Teamcenter def                   9            170            162           2075
+XML                             28            288              0           2034
+C++                             10            312            277           2000
+yacc                             2            128             97           1549
+DOS Batch                       42            175            152            746
+Objective C                      7            102             70            635
+YAML                             2              2              0            489
+CSS                              1             94             19            308
+vim script                       1             36              7            105
+Expect                           1              0              0             60
+NAnt scripts                     2              1              0             30
+Visual Basic                     2              1              1             12
+-------------------------------------------------------------------------------
+SUM:                          5256         277761         317172        1360024
+-------------------------------------------------------------------------------
+
+<i>Unix&gt;</i> cat script_lang.file
+-------------------------------------------------------------------------------
+Report File                  files          blank        comment           code
+-------------------------------------------------------------------------------
+python-2.6.4.txt              2746         135676         143269         830347
+perl-5.10.0.txt               2510         142085         173903         529677
+-------------------------------------------------------------------------------
+SUM:                          5256         277761         317172        1360024
+-------------------------------------------------------------------------------
+
+</pre>
+Finally, combine the combination files:
+<pre><i>Unix&gt;</i> cloc --sum-reports --report_file=everything databases.lang script_lang.lang
+Wrote everything.lang
+Wrote everything.file
+
+<i>Unix&gt;</i> cat everything.lang
+http://cloc.sourceforge.net v 1.50
+--------------------------------------------------------------------------------
+Language                      files          blank        comment           code
+--------------------------------------------------------------------------------
+C                              2085         254833         340512        1499445
+C++                             625          93921         111186         523041
+Python                         1966          76027          95290         365728
+Perl                           2148         118772         135381         319878
+C/C++ Header                   2004          57077         126566         287122
+Bourne Shell                    385          31304          30869         210368
+SQL                             278           8763           5854          29295
+m4                               30           2998            473          25609
+yacc                             10           2962           2263          25422
+make                            316           3089           4044          12742
+Assembly                         53           1794           1712          11164
+Lisp                              2           1154           2745          10448
+XML                              55            852             23           6141
+lex                              10           1040           1638           4517
+Teamcenter def                   65            259            381           3880
+HTML                             28            617             14           3670
+DOS Batch                        57            251            247            970
+Objective C                       7            102             70            635
+YAML                              2              2              0            489
+Javascript                        3             70            140            427
+Pascal                            2              0            436            377
+CSS                               2            110             26            352
+XSLT                              5             41             30            111
+vim script                        1             36              7            105
+D                                 1             14             14             65
+Expect                            1              0              0             60
+Bourne Again Shell                1              6              1             48
+NAnt scripts                      2              1              0             30
+sed                               1              1              7             15
+Visual Basic                      2              1              1             12
+--------------------------------------------------------------------------------
+SUM:                          10147         656097         859930        3342166
+--------------------------------------------------------------------------------
+
+<i>Unix&gt;</i> cat everything.file
+-------------------------------------------------------------------------------
+Report File                  files          blank        comment           code
+-------------------------------------------------------------------------------
+databases.lang                4891         378336         542758        1982142
+script_lang.lang              5256         277761         317172        1360024
+-------------------------------------------------------------------------------
+SUM:                         10147         656097         859930        3342166
+-------------------------------------------------------------------------------
+
 [](1}}})
 <a name="sql"></a> []({{{1)
 ##  [SQL![^](up.gif)](#___top "click to go to top of document")
