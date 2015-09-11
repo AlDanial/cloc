@@ -1190,11 +1190,14 @@ Say you manage three software projects called MySQL, PostgreSQL, and SQLite.
 The teams responsible for each of these projects run cloc on their
 source code and provide you with the output.
 For example MySQL team does
-><pre>cloc --report-file=mysql-5.1.42.txt mysql-5.1.42.tar.gz
-</pre>
+
+<pre>cloc --report-file=mysql-5.1.42.txt mysql-5.1.42.tar.gz</pre>
+
 and provides you with the file `mysql-5.1.42.txt`.
 The contents of the three files you get are
-<pre><i>Unix&gt;</i> cat mysql-5.1.42.txt
+
+<pre>
+<i>Unix&gt;</i> cat mysql-5.1.42.txt
 http://cloc.sourceforge.net v 1.50  T=26.0 s (108.1 files/s, 65774.5 lines/s)
 --------------------------------------------------------------------------------
 Language                      files          blank        comment           code
@@ -1220,6 +1223,7 @@ DOS Batch                         8             23             73             36
 --------------------------------------------------------------------------------
 SUM:                           2811         237360         290573        1182204
 --------------------------------------------------------------------------------
+
 <i>Unix&gt;</i> cat sqlite-3.6.22.txt
 http://cloc.sourceforge.net v 1.50  T=3.0 s (4.7 files/s, 53833.7 lines/s)
 -------------------------------------------------------------------------------
@@ -1264,14 +1268,16 @@ SUM:                          2066         129258         204842         697498
 
 While these three files are interesting, you also want to see
 the combined counts from all projects.
-That can be done with cloc's <code>--sum_reports</code>
+That can be done with cloc's `--sum_reports`
 option:
+
 <pre><i>Unix&gt;</i> cloc --sum-reports --report_file=databases mysql-5.1.42.txt  postgresql-8.4.2.txt  sqlite-3.6.22.txt
 Wrote databases.lang
 Wrote databases.file
 </pre>
+
 The report combination produces two output files, one for sums by
-programming language (<code>databases.lang</code>) and one by project 
+programming language (`databases.lang`) and one by project 
 (`databases.file`).
 Their contents are
 <pre><i>Unix&gt;</i> cat databases.lang
@@ -1323,11 +1329,15 @@ Report files themselves can be summed together.  Say you also manage
 development of Perl and Python and you want to keep track
 of those line counts separately from your database projects.  First
 create reports for Perl and Python separately:
+
 <pre>cloc --report-file=perl-5.10.0.txt perl-5.10.0.tar.gz
 cloc --report-file=python-2.6.4.txt Python-2.6.4.tar.bz2
 </pre>
+
 then sum these together with
-<pre><i>Unix&gt;</i> cloc --sum-reports --report_file=script_lang perl-5.10.0.txt python-2.6.4.txt
+
+<pre>
+<i>Unix&gt;</i> cloc --sum-reports --report_file=script_lang perl-5.10.0.txt python-2.6.4.txt
 Wrote script_lang.lang
 Wrote script_lang.file
 
@@ -1373,8 +1383,11 @@ SUM:                          5256         277761         317172        1360024
 -------------------------------------------------------------------------------
 
 </pre>
+
 Finally, combine the combination files:
-<pre><i>Unix&gt;</i> cloc --sum-reports --report_file=everything databases.lang script_lang.lang
+
+<pre>
+<i>Unix&gt;</i> cloc --sum-reports --report_file=everything databases.lang script_lang.lang
 Wrote everything.lang
 Wrote everything.file
 
@@ -1426,6 +1439,7 @@ script_lang.lang              5256         277761         317172        1360024
 -------------------------------------------------------------------------------
 SUM:                         10147         656097         859930        3342166
 -------------------------------------------------------------------------------
+</pre>
 
 [](1}}})
 <a name="sql"></a> []({{{1)
