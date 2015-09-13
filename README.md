@@ -197,7 +197,7 @@ Otherwise, to build a Windows executable with <tt>pp</tt> from
 (for example Strawberry Perl or ActivePerl) following their
 instructions. Next, open a command prompt, aka a DOS window and install
 the PAR::Packer module. Finally, invoke the newly installed <tt>pp</tt>
-command with the cloc souce code to create an <tt>.exe</tt> file:
+command with the cloc source code to create an <tt>.exe</tt> file:
 
 <pre>C:> perl -MCPAN -e shell
 cpan> install PAR::Packer
@@ -816,7 +816,7 @@ C                     1      5167     26827     50901 x   0.77 =       39193.77
 -------------------------------------------------------------------------------
 </pre>
 
-The extention argument given to --strip-comments is arbitrary; here nc was used as an abbreviation for "no comments".
+The extension argument given to --strip-comments is arbitrary; here nc was used as an abbreviation for "no comments".
 
 cloc removed over 31,000 lines from the file:
 
@@ -829,7 +829,7 @@ prompt> echo "82895 - 50901" | bc
 31994
 </pre>
 
-We can now compare the orignial file, sqlite3.c and the one stripped of
+We can now compare the original file, sqlite3.c and the one stripped of
 comments, sqlite3.c.nc with tools like diff or vimdiff and see what
 exactly cloc considered comments and blank lines. A rigorous proof that
 the stripped-down file contains the same C code as the original is to

@@ -728,7 +728,7 @@ if ($opt_lang_no_ext and !defined $Filters_by_Language{$opt_lang_no_ext}) {
 check_scale_existence(\%Filters_by_Language, \%Language_by_Extension,
                       \%Scale_Factor);
 
-# Process command line provided extention-to-language mapping overrides.
+# Process command line provided extension-to-language mapping overrides.
 # Make a hash of known languages in lower case for easier matching.
 my %Recognized_Language_lc = (); # key = language name in lc, value = true name
 foreach my $language (keys %Filters_by_Language) {
@@ -3585,7 +3585,7 @@ sub classify_file {                          # {{{1
       foreach my $extension (@extension_list) {
         if ($Not_Code_Extension{$extension} and 
            !$Forced_Extension{$extension}) {
-           # If .1 (for example) is an extention that would ordinarily be
+           # If .1 (for example) is an extension that would ordinarily be
            # ignored but the user has insisted this be counted with the
            # --force-lang option, then go ahead and count it.
             $rh_ignored->{$full_file} = 
