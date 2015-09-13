@@ -5005,6 +5005,8 @@ sub set_constants {                          # {{{1
             'octave'   => 'Octave'                ,
             'perl5'    => 'Perl'                  ,
             'perl'     => 'Perl'                  ,
+            'php'      => 'PHP'                   ,
+            'php5'     => 'PHP'                   ,
             'python'   => 'Python'                ,
             'python2.6'=> 'Python'                ,
             'python2.7'=> 'Python'                ,
