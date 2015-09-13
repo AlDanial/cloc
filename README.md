@@ -40,10 +40,10 @@ transition to GitHub in September 2015.
 
 [Translations of this page: 
 [Bulgarian](http://www.ajoft.com/wpaper/aj-cloc.html), 
-[Polish](http://www.trevister.com/blog/cloc.html), 
+[]( [Polish](http://www.trevister.com/blog/cloc.html), ) 
 [Russian](http://carrrsmag.com/blog/cloc.html), 
 [Serbo-Croatian](http://science.webhostinggeeks.com/cloc), 
-[Slovakian](http://jbs24.com/blog/cloc-grof-riadkov-kodu/), 
+[]( [Slovakian](http://jbs24.com/blog/cloc-grof-riadkov-kodu/), )
 [Ukrainian](http://blog.kudoybook.com/cloc/) ]
 
 cloc counts blank lines, comment lines, and physical lines of source
