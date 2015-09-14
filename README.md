@@ -1444,6 +1444,69 @@ SUM:                         10147         656097         859930        3342166
 [](1}}})
 <a name="sql"></a> []({{{1)
 ##  [SQL![^](up.gif)](#___top "click to go to top of document")
+Cloc can write results in the form of SQL table create and insert
+statements for use
+with relational database programs such as SQLite, MySQL, 
+PostgreSQL, Oracle, or Microsoft SQL.  
+Once the code count information is in a database,
+the information can be interrogated and displayed in interesting ways.
+
+A database created from cloc SQL output has two tables, 
+*metadata* and *t*:  
+
+Table *metadata*:
+
+|Field     | Type |
+|----------|------|
+|timestamp | text |
+|project   | text |
+|elapsed_s | text |
+
+Table *t*:
+
+|Field       | Type   |
+|------------|--------|
+| project    |text    |
+| language   |text    |
+| file       |text    |
+| nBlank     |integer |
+| nComment   |integer |
+| nCode      |integer |
+| nScaled    |real    |
+
+The *metadata* table contains information about when the cloc run
+was made.  The `--sql-append` switch allows one to combine
+many runs in a single database; each run adds a
+row to the metadata table.
+The code count information resides in table *t*.
+
+Let's repeat the code count examples of Perl, Python, SQLite, MySQL and
+PostgreSQL tarballs shown in the 
+[Combine Reports](#combine_reports)
+example above, this time
+using the SQL output options and the
+[SQLite](http://www.sqlite.org/)
+database engine.
+
+The `--sql` switch tells cloc to generate output in the form
+of SQL table `create` and `insert` commands.  The switch takes
+an argument of a file name to write these SQL statements into, or,
+if the argument is 1 (numeric one), streams output to STDOUT.
+Since the SQLite command line program, `sqlite3`, can read
+commands from STDIN, we can dispense with storing SQL statements to
+a file and use `--sql 1` to pipe data directly into the
+SQLite executable:
+
+<pre>
+cloc --sql 1 --sql-project mysql mysql-5.1.42.tar.gz    | sqlite3 code.db
+</pre>
+
+The `--sql-project mysql` part is optional; there's no need
+to specify a project name when working with just one code base.  However,
+since we'll be adding code counts from four other tarballs, we'll only
+be able to identify data by input source if we supply a
+project name for each run.
+
 [](1}}})
 <a name="scale_factors"></a> []({{{1)
 ##  [Third Generation Language Scale Factors![^](up.gif)](#___top "click to go to top of document")
