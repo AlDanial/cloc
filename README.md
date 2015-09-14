@@ -1186,84 +1186,104 @@ for motivated individuals to modify or extend cloc's language definitions.
 
 If you manage multiple software projects you might be interested in
 seeing line counts by project, not just by language.
-Say you manage three software projects called MySQL, PostgreSQL, and SQLite.
+Say you manage three software projects called MariaDB, PostgreSQL, and SQLite.
 The teams responsible for each of these projects run cloc on their
 source code and provide you with the output.
-For example MySQL team does
+For example MariaDB team does
 
-<pre>cloc --report-file=mysql-5.1.42.txt mysql-5.1.42.tar.gz</pre>
+<pre>cloc --out mariadb-10.1.txt mariadb-server-10.1.zip</pre>
 
-and provides you with the file `mysql-5.1.42.txt`.
+and provides you with the file `mariadb-10.1.txt`.
 The contents of the three files you get are
 
 <pre>
-<i>Unix&gt;</i> cat mysql-5.1.42.txt
-http://cloc.sourceforge.net v 1.50  T=26.0 s (108.1 files/s, 65774.5 lines/s)
---------------------------------------------------------------------------------
-Language                      files          blank        comment           code
---------------------------------------------------------------------------------
-C++                             615          93609         110909         521041
-C                               642          83179          82424         393602
-C/C++ Header                   1065          33980          77633         142779
-Bourne Shell                    178          14892          11437          74525
-Perl                             60           7634           4667          22703
-m4                               13           1220            394          10497
-make                            119            914           1855           4447
-XML                              27            564             23           4107
-SQL                              18            517            209           3433
-Assembly                         12            161              0           1304
-yacc                              2            167             40           1048
-lex                               2            332            113            879
-Teamcenter def                   43             85            219            701
-Javascript                        3             70            140            427
-Pascal                            2              0            436            377
-HTML                              1              7              0            250
-Bourne Again Shell                1              6              1             48
-DOS Batch                         8             23             73             36
---------------------------------------------------------------------------------
-SUM:                           2811         237360         290573        1182204
---------------------------------------------------------------------------------
+<i>Unix&gt;</i> cat mariadb-10.1.txt
+https://github.com/AlDanial/cloc v 1.65  T=45.36 s (110.5 files/s, 66411.4 lines/s)
+-----------------------------------------------------------------------------------
+Language                         files          blank        comment           code
+-----------------------------------------------------------------------------------
+C++                               1613         225338         290077         983026
+C                                  853          62442          73017         715018
+C/C++ Header                      1327          48300         114577         209394
+Bourne Shell                       256          10224          10810          61943
+Perl                               147          10342           8305          35562
+Pascal                             107           4907           5237          32541
+HTML                                56            195              6          16489
+Javascript                           5           3309           3019          15540
+m4                                  30           1599            359          14215
+CMake                              190           1919           4097          12206
+XML                                 35            648             56           5210
+Ruby                                59            619            184           4998
+Puppet                              10              0              1           3848
+make                               134            724            360           3631
+SQL                                 23            306            377           3405
+Python                              34            371            122           2545
+Bourne Again Shell                  27            299            380           1604
+Windows Module Definition           37             27             13           1211
+lex                                  4            394            166            991
+yacc                                 2            152             64            810
+DOS Batch                           19             89             82            700
+Prolog                               1              9             40            448
+RobotFramework                       1              0              0            441
+CSS                                  2             33            155            393
+JSON                                 5              0              0            359
+dtrace                               9             59            179            306
+Windows Resource File               10             61             89            250
+Assembly                             2             70            284            237
+WiX source                           1             18             10            155
+Visual Basic                         6              0              0             88
+YAML                                 2              4              4             65
+PHP                                  1             11              2             24
+SKILL                                1              8             15             16
+sed                                  2              0              0             16
+Windows Message File                 1              2              8              6
+diff                                 1              1              4              4
+D                                    1              4             11              4
+-----------------------------------------------------------------------------------
+SUM:                              5014         372484         512110        2127699
+-----------------------------------------------------------------------------------
 
-<i>Unix&gt;</i> cat sqlite-3.6.22.txt
-http://cloc.sourceforge.net v 1.50  T=3.0 s (4.7 files/s, 53833.7 lines/s)
+<i>Unix&gt;</i> cat sqlite-3081101.txt
+https://github.com/AlDanial/cloc v 1.65  T=1.22 s (3.3 files/s, 143783.6 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-C                                2           7459          37993          68944
-Bourne Shell                     7           3344           4522          25849
-m4                               2            754             20           6557
-C/C++ Header                     2            155           4808           1077
-make                             1              6              0             13
+C                                2          11059          53924         101454
+C/C++ Header                     2            211           6630           1546
 -------------------------------------------------------------------------------
-SUM:                            14          11718          47343         102440
+SUM:                             4          11270          60554         103000
 -------------------------------------------------------------------------------
 
-<i>Unix&gt;</i> cat postgresql-8.4.2.txt
-http://cloc.sourceforge.net v 1.50  T=16.0 s (129.1 files/s, 64474.9 lines/s)
--------------------------------------------------------------------------------
-Language                     files          blank        comment           code
--------------------------------------------------------------------------------
-C                              923         102324         167390         563865
-C/C++ Header                   556           9180          22723          40990
-Bourne Shell                    51           3692           3245          28486
-SQL                            260           8246           5645          25862
-yacc                             6           2667           2126          22825
-Perl                            36            782            696           4894
-lex                              8            708           1525           3638
-make                           180           1215           1385           3453
-m4                              12            199             25           1431
-Teamcenter def                  13              4              0           1104
-HTML                             2             94              1            410
-DOS Batch                        7             53             22            188
-XSLT                             5             41             30            111
-Assembly                         3             17              0            105
-D                                1             14             14             65
-CSS                              1             16              7             44
-sed                              1              1              7             15
-Python                           1              5              1             12
--------------------------------------------------------------------------------
-SUM:                          2066         129258         204842         697498
--------------------------------------------------------------------------------
+<i>Unix&gt;</i> cat postgresql-9.4.4.txt
+https://github.com/AlDanial/cloc v 1.65  T=22.46 s (172.0 files/s, 96721.6 lines/s)
+-----------------------------------------------------------------------------------
+Language                         files          blank        comment           code
+-----------------------------------------------------------------------------------
+HTML                              1254           3725              0         785991
+C                                 1139         139289         244045         736519
+C/C++ Header                       667          12277          32488          57014
+SQL                                410          13400           8745          51926
+yacc                                 8           3163           2669          28491
+Bourne Shell                        41           2647           2440          17170
+Perl                                81           1702           1308           9456
+lex                                  9            792           1631           4285
+make                               205           1525           1554           4114
+m4                                  12            218             25           1642
+Windows Module Definition           13              4             17           1152
+XSLT                                 5             76             55            294
+DOS Batch                            7             29             30             92
+CSS                                  1             20              7             69
+Assembly                             3             17             38             69
+D                                    1             14             14             66
+Windows Resource File                3              4              0             62
+Lisp                                 1              1              1             16
+sed                                  1              1              7             15
+Python                               1              5              0             13
+Bourne Again Shell                   1              8              6             10
+Windows Message File                 1              0              0              5
+-----------------------------------------------------------------------------------
+SUM:                              3864         178917         295080        1698471
+-----------------------------------------------------------------------------------
 </pre>
 
 While these three files are interesting, you also want to see
@@ -1271,7 +1291,8 @@ the combined counts from all projects.
 That can be done with cloc's `--sum_reports`
 option:
 
-<pre><i>Unix&gt;</i> cloc --sum-reports --report_file=databases mysql-5.1.42.txt  postgresql-8.4.2.txt  sqlite-3.6.22.txt
+<pre>
+<i>Unix&gt;</i> cloc --sum-reports --out=databases mariadb-10.1.txt  sqlite-3081101.txt  postgresql-9.4.4.txt
 Wrote databases.lang
 Wrote databases.file
 </pre>
@@ -1281,48 +1302,63 @@ programming language (`databases.lang`) and one by project
 (`databases.file`).
 Their contents are
 <pre><i>Unix&gt;</i> cat databases.lang
-http://cloc.sourceforge.net v 1.50
+https://github.com/AlDanial/cloc v 1.65
 --------------------------------------------------------------------------------
 Language                      files          blank        comment           code
 --------------------------------------------------------------------------------
-C                              1567         192962         287807        1026411
-C++                             615          93609         110909         521041
-C/C++ Header                   1623          43315         105164         184846
-Bourne Shell                    236          21928          19204         128860
-SQL                             278           8763           5854          29295
-Perl                             96           8416           5363          27597
-yacc                              8           2834           2166          23873
-m4                               27           2173            439          18485
-make                            300           2135           3240           7913
-lex                              10           1040           1638           4517
-XML                              27            564             23           4107
-Teamcenter def                   56             89            219           1805
-Assembly                         15            178              0           1409
-HTML                              3            101              1            660
-Javascript                        3             70            140            427
-Pascal                            2              0            436            377
-DOS Batch                        15             76             95            224
-XSLT                              5             41             30            111
-D                                 1             14             14             65
-Bourne Again Shell                1              6              1             48
-CSS                               1             16              7             44
-sed                               1              1              7             15
-Python                            1              5              1             12
+C                              1994         212790         370986        1552991
+C++                            1613         225338         290077         983026
+HTML                           1310           3920              6         802480
+C/C++ Header                   1996          60788         153695         267954
+Bourne Shell                    297          12871          13250          79113
+SQL                             433          13706           9122          55331
+Perl                            228          12044           9613          45018
+Pascal                          107           4907           5237          32541
+yacc                             10           3315           2733          29301
+m4                               42           1817            384          15857
+Javascript                        5           3309           3019          15540
+CMake                           190           1919           4097          12206
+make                            339           2249           1914           7745
+lex                              13           1186           1797           5276
+XML                              35            648             56           5210
+Ruby                             59            619            184           4998
+Puppet                           10              0              1           3848
+Python                           35            376            122           2558
+Windows Module Definition        50             31             30           2363
+Bourne Again Shell               28            307            386           1614
+DOS Batch                        26            118            112            792
+CSS                               3             53            162            462
+Prolog                            1              9             40            448
+RobotFramework                    1              0              0            441
+JSON                              5              0              0            359
+Windows Resource File            13             65             89            312
+Assembly                          5             87            322            306
+dtrace                            9             59            179            306
+XSLT                              5             76             55            294
+WiX source                        1             18             10            155
+Visual Basic                      6              0              0             88
+D                                 2             18             25             70
+YAML                              2              4              4             65
+sed                               3              1              7             31
+PHP                               1             11              2             24
+SKILL                             1              8             15             16
+Lisp                              1              1              1             16
+Windows Message File              2              2              8             11
+diff                              1              1              4              4
 --------------------------------------------------------------------------------
-SUM:                           4891         378336         542758        1982142
+SUM:                           8882         562671         867744        3929170
 --------------------------------------------------------------------------------
 
 <i>Unix&gt;</i> cat databases.file
 ----------------------------------------------------------------------------------
-Report File                     files          blank        comment           code
+File                            files          blank        comment           code
 ----------------------------------------------------------------------------------
-mysql-5.1.42.txt                 2811         237360         290573        1182204
-postgresql-8.4.2.txt             2066         129258         204842         697498
-sqlite-3.6.22.txt                  14          11718          47343         102440
+mariadb-10.1.txt                 5014         372484         512110        2127699
+postgresql-9.4.4.txt             3864         178917         295080        1698471
+sqlite-3081101.txt                  4          11270          60554         103000
 ----------------------------------------------------------------------------------
-SUM:                             4891         378336         542758        1982142
+SUM:                             8882         562671         867744        3929170
 ----------------------------------------------------------------------------------
-
 </pre>
 
 Report files themselves can be summed together.  Say you also manage
@@ -1330,58 +1366,68 @@ development of Perl and Python and you want to keep track
 of those line counts separately from your database projects.  First
 create reports for Perl and Python separately:
 
-<pre>cloc --report-file=perl-5.10.0.txt perl-5.10.0.tar.gz
-cloc --report-file=python-2.6.4.txt Python-2.6.4.tar.bz2
+<pre>
+cloc --out perl-5.22.0.txt   perl-5.22.0.tar.gz
+cloc --out python-2.7.10.txt Python-2.7.10.tar.xz
 </pre>
 
 then sum these together with
 
 <pre>
-<i>Unix&gt;</i> cloc --sum-reports --report_file=script_lang perl-5.10.0.txt python-2.6.4.txt
+<i>Unix&gt;</i> cloc --sum-reports --out script_lang perl-5.22.0.txt python-2.7.10.txt
 Wrote script_lang.lang
 Wrote script_lang.file
 
 <i>Unix&gt;</i> cat script_lang.lang
-http://cloc.sourceforge.net v 1.50
+https://github.com/AlDanial/cloc v 1.65
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-C                              518          61871          52705         473034
-Python                        1965          76022          95289         365716
-Perl                          2052         110356         130018         292281
-C/C++ Header                   381          13762          21402         102276
-Bourne Shell                   149           9376          11665          81508
-Lisp                             2           1154           2745          10448
-Assembly                        38           1616           1712           9755
-m4                               3            825             34           7124
-make                            16            954            804           4829
-HTML                            25            516             13           3010
-Teamcenter def                   9            170            162           2075
-XML                             28            288              0           2034
-C++                             10            312            277           2000
-yacc                             2            128             97           1549
-DOS Batch                       42            175            152            746
-Objective C                      7            102             70            635
-YAML                             2              2              0            489
-CSS                              1             94             19            308
-vim script                       1             36              7            105
-Expect                           1              0              0             60
-NAnt scripts                     2              1              0             30
+Perl                          2892         136396         184362         536445
+C                              680          75566          71211         531203
+Python                        2141          89642         109524         434015
+C/C++ Header                   408          16433          26938         214800
+Bourne Shell                   154          11088          14496          87759
+MSBuild script                  77              0              3          38910
+m4                              20           1604            191          15559
+Assembly                        51           3775           6794          12298
+Pascal                           8            458           1603           8592
+make                            16            897            828           4939
+XML                             37            198              2           2484
+HTML                            14            393             11           2344
+C++                             12            338            295           2161
+Windows Module Definition        9            171            187           2081
+YAML                            49             20             15           2078
+Prolog                          12            438              2           1146
+JSON                            14              1              0           1037
+yacc                             1             85             76            998
+DOS Batch                       44            199            148            895
+Objective C                      7             98             61            635
+Expect                           6            104            161            565
+Windows Message File             1            102             11            489
+CSS                              1             98             19            328
+Windows Resource File            7             55             56            292
+Javascript                       3             31             49            229
+vim script                       1             36              7            106
+diff                             1             17             87            105
+NAnt script                      2              1              0             30
+IDL                              1              0              0             24
 Visual Basic                     2              1              1             12
+D                                1              5              7              8
+Lisp                             2              0              3              4
 -------------------------------------------------------------------------------
-SUM:                          5256         277761         317172        1360024
+SUM:                          6674         338250         417148        1902571
 -------------------------------------------------------------------------------
 
 <i>Unix&gt;</i> cat script_lang.file
 -------------------------------------------------------------------------------
-Report File                  files          blank        comment           code
+File                         files          blank        comment           code
 -------------------------------------------------------------------------------
-python-2.6.4.txt              2746         135676         143269         830347
-perl-5.10.0.txt               2510         142085         173903         529677
+python-2.7.10.txt             3240         161276         173214         998697
+perl-5.22.0.txt               3434         176974         243934         903874
 -------------------------------------------------------------------------------
-SUM:                          5256         277761         317172        1360024
+SUM:                          6674         338250         417148        1902571
 -------------------------------------------------------------------------------
-
 </pre>
 
 Finally, combine the combination files:
@@ -1392,52 +1438,67 @@ Wrote everything.lang
 Wrote everything.file
 
 <i>Unix&gt;</i> cat everything.lang
-http://cloc.sourceforge.net v 1.50
---------------------------------------------------------------------------------
-Language                      files          blank        comment           code
---------------------------------------------------------------------------------
-C                              2085         254833         340512        1499445
-C++                             625          93921         111186         523041
-Python                         1966          76027          95290         365728
-Perl                           2148         118772         135381         319878
-C/C++ Header                   2004          57077         126566         287122
-Bourne Shell                    385          31304          30869         210368
-SQL                             278           8763           5854          29295
-m4                               30           2998            473          25609
-yacc                             10           2962           2263          25422
-make                            316           3089           4044          12742
-Assembly                         53           1794           1712          11164
-Lisp                              2           1154           2745          10448
-XML                              55            852             23           6141
-lex                              10           1040           1638           4517
-Teamcenter def                   65            259            381           3880
-HTML                             28            617             14           3670
-DOS Batch                        57            251            247            970
-Objective C                       7            102             70            635
-YAML                              2              2              0            489
-Javascript                        3             70            140            427
-Pascal                            2              0            436            377
-CSS                               2            110             26            352
-XSLT                              5             41             30            111
-vim script                        1             36              7            105
-D                                 1             14             14             65
-Expect                            1              0              0             60
-Bourne Again Shell                1              6              1             48
-NAnt scripts                      2              1              0             30
-sed                               1              1              7             15
-Visual Basic                      2              1              1             12
---------------------------------------------------------------------------------
-SUM:                          10147         656097         859930        3342166
---------------------------------------------------------------------------------
+https://github.com/AlDanial/cloc v 1.65
+---------------------------------------------------------------------------------
+Language                       files          blank        comment           code
+---------------------------------------------------------------------------------
+C                               2674         288356         442197        2084194
+C++                             1625         225676         290372         985187
+HTML                            1324           4313             17         804824
+Perl                            3120         148440         193975         581463
+C/C++ Header                    2404          77221         180633         482754
+Python                          2176          90018         109646         436573
+Bourne Shell                     451          23959          27746         166872
+SQL                              433          13706           9122          55331
+Pascal                           115           5365           6840          41133
+MSBuild script                    77              0              3          38910
+m4                                62           3421            575          31416
+yacc                              11           3400           2809          30299
+Javascript                         8           3340           3068          15769
+make                             355           3146           2742          12684
+Assembly                          56           3862           7116          12604
+CMake                            190           1919           4097          12206
+XML                               72            846             58           7694
+lex                               13           1186           1797           5276
+Ruby                              59            619            184           4998
+Windows Module Definition         59            202            217           4444
+Puppet                            10              0              1           3848
+YAML                              51             24             19           2143
+DOS Batch                         70            317            260           1687
+Bourne Again Shell                28            307            386           1614
+Prolog                            13            447             42           1594
+JSON                              19              1              0           1396
+CSS                                4            151            181            790
+Objective C                        7             98             61            635
+Windows Resource File             20            120            145            604
+Expect                             6            104            161            565
+Windows Message File               3            104             19            500
+RobotFramework                     1              0              0            441
+dtrace                             9             59            179            306
+XSLT                               5             76             55            294
+WiX source                         1             18             10            155
+diff                               2             18             91            109
+vim script                         1             36              7            106
+Visual Basic                       8              1              1            100
+D                                  3             23             32             78
+sed                                3              1              7             31
+NAnt script                        2              1              0             30
+IDL                                1              0              0             24
+PHP                                1             11              2             24
+Lisp                               3              1              4             20
+SKILL                              1              8             15             16
+---------------------------------------------------------------------------------
+SUM:                           15556         900921        1284892        5831741
+---------------------------------------------------------------------------------
 
 <i>Unix&gt;</i> cat everything.file
 -------------------------------------------------------------------------------
-Report File                  files          blank        comment           code
+File                         files          blank        comment           code
 -------------------------------------------------------------------------------
-databases.lang                4891         378336         542758        1982142
-script_lang.lang              5256         277761         317172        1360024
+databases.lang                8882         562671         867744        3929170
+script_lang.lang              6674         338250         417148        1902571
 -------------------------------------------------------------------------------
-SUM:                         10147         656097         859930        3342166
+SUM:                         15556         900921        1284892        5831741
 -------------------------------------------------------------------------------
 </pre>
 
@@ -1452,9 +1513,9 @@ Once the code count information is in a database,
 the information can be interrogated and displayed in interesting ways.
 
 A database created from cloc SQL output has two tables, 
-*metadata* and *t*:  
+**metadata** and **t**:  
 
-Table *metadata*:
+Table **metadata**:
 
 |Field     | Type |
 |----------|------|
@@ -1462,7 +1523,7 @@ Table *metadata*:
 |project   | text |
 |elapsed_s | text |
 
-Table *t*:
+Table **t**:
 
 |Field       | Type   |
 |------------|--------|
@@ -1474,11 +1535,11 @@ Table *t*:
 | nCode      |integer |
 | nScaled    |real    |
 
-The *metadata* table contains information about when the cloc run
+The **metadata** table contains information about when the cloc run
 was made.  The `--sql-append` switch allows one to combine
 many runs in a single database; each run adds a
 row to the metadata table.
-The code count information resides in table *t*.
+The code count information resides in table **t**.
 
 Let's repeat the code count examples of Perl, Python, SQLite, MySQL and
 PostgreSQL tarballs shown in the 
@@ -1498,7 +1559,7 @@ a file and use `--sql 1` to pipe data directly into the
 SQLite executable:
 
 <pre>
-cloc --sql 1 --sql-project mysql mysql-5.1.42.tar.gz    | sqlite3 code.db
+cloc --sql 1 --sql-project mariadb mariadb-server-10.1.zip | sqlite3 code.db
 </pre>
 
 The `--sql-project mysql` part is optional; there's no need
