@@ -1562,11 +1562,35 @@ SQLite executable:
 cloc --sql 1 --sql-project mariadb mariadb-server-10.1.zip | sqlite3 code.db
 </pre>
 
-The `--sql-project mysql` part is optional; there's no need
+The `--sql-project mariadb` part is optional; there's no need
 to specify a project name when working with just one code base.  However,
 since we'll be adding code counts from four other tarballs, we'll only
 be able to identify data by input source if we supply a
 project name for each run.
+
+Now that we have a database we will need to pass in the `--sql-append` 
+switch to tell cloc not to wipe out this database but instead add more data: 
+
+<pre>
+cloc --sql 1 --sql-project postgresql --sql-append postgresql-9.4.4.tar.bz2        | sqlite3 code.db
+cloc --sql 1 --sql-project sqlite     --sql-append sqlite-amalgamation-3081101.zip | sqlite3 code.db
+cloc --sql 1 --sql-project python     --sql-append Python-2.7.10.tar.xz            | sqlite3 code.db
+cloc --sql 1 --sql-project perl       --sql-append perl-5.22.0.tar.gz              | sqlite3 code.db
+</pre>
+
+Now the fun begins--we have a database, `code.db`, with lots of 
+information about the five projects and can query it 
+for all manner of interesting facts.
+
+**Which is the longest file over all projects?**
+
+<pre>
+<i>Unix&gt;</i> sqlite3 code.db 'select project,file,nBlank+nComment+nCode as nL from t where nL = (select max(nBlank+nComment+nCode) from t)'
+
+sqlite|sqlite-amalgamation-3081101/sqlite3.c|161623
+</pre>
+
+
 
 [](1}}})
 <a name="scale_factors"></a> []({{{1)
