@@ -43,7 +43,7 @@ transition to GitHub in September 2015.
 []( [Polish](http://www.trevister.com/blog/cloc.html), ) 
 [Russian](http://carrrsmag.com/blog/cloc.html), 
 [Serbo-Croatian](http://science.webhostinggeeks.com/cloc), 
-[]( [Slovakian](http://jbs24.com/blog/cloc-grof-riadkov-kodu/), )
+[Slovakian](http://newknowledgez.com/cloc.html),
 [Ukrainian](http://blog.kudoybook.com/cloc/) ]
 
 cloc counts blank lines, comment lines, and physical lines of source
