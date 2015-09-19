@@ -39,6 +39,7 @@ transition to GitHub in September 2015.
 # [Overview![^](up.gif)](#___top "click to go to top of document")
 
 [Translations of this page: 
+[Belarussian](http://www.besteonderdelen.nl/blog/?p=5426), 
 [Bulgarian](http://www.ajoft.com/wpaper/aj-cloc.html), 
 []( [Polish](http://www.trevister.com/blog/cloc.html), ) 
 [Russian](http://carrrsmag.com/blog/cloc.html), 
