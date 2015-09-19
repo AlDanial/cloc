@@ -1,0 +1,60 @@
+#!/usr/bin/env perl
+use warnings;
+use strict;
+#
+# Pretty printer for from sqlite3 output.
+# Assumes column headers are enabled with
+#   .header on
+# in ~/.sqliterc
+# al.danial@gmail.com  March 2010
+#
+# This program reads input from STDIN and writes to STDOUT.  A typical
+# invocation looks like this:
+#   sqlite3 code.db 'select project,file,nCode from t' | sqlite_formatter
+
+my $sqlite_separator = '\|';
+
+my @lines = ();
+
+# ingest all lines
+while (<>) {
+    chomp;
+    push @lines, $_;
+}
+
+# split on |, the default sqlite3 output separator
+my @column_width = ();
+my $nCols        =  0;
+my @data         = ();  # $data[$row][$column] = SQLite result
+for (my $row = 0; $row < scalar @lines; $row++) {
+    my @cols = split($sqlite_separator, $lines[$row]);
+    $nCols =  scalar @cols;
+    for (my $col = 0; $col < $nCols; $col++) {
+        $data[$row][$col] = $cols[$col];
+        $column_width[$col] = 0 unless defined $column_width[$col];
+        $column_width[$col] = length($cols[$col]) if
+            $column_width[$col] < length($cols[$col]);
+    }
+}
+
+# write the results
+my $format_str = "";
+for (my $row = 0; $row < scalar @data; $row++) {
+    # insert a separator row 
+    if ($row == 1) {
+        for (my $col = 0; $col < $nCols; $col++) {
+            print '_' x $column_width[$col], " ";
+        }
+        print "\n";
+    }
+    for (my $col = 0; $col < $nCols; $col++) {
+        if ($data[$row][$col] =~ /^[-]?\d+$/) {
+            # an integer, align to right
+            $format_str = "%" . $column_width[$col] . "d ";
+        } else {
+            $format_str = "%-" . $column_width[$col] . "s ";
+        } # could use something for floating point numbers too...
+        printf $format_str, $data[$row][$col];
+    }
+    print "\n";
+}

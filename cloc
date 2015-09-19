@@ -728,7 +728,7 @@ if ($opt_lang_no_ext and !defined $Filters_by_Language{$opt_lang_no_ext}) {
 check_scale_existence(\%Filters_by_Language, \%Language_by_Extension,
                       \%Scale_Factor);
 
-# Process command line provided extention-to-language mapping overrides.
+# Process command line provided extension-to-language mapping overrides.
 # Make a hash of known languages in lower case for easier matching.
 my %Recognized_Language_lc = (); # key = language name in lc, value = true name
 foreach my $language (keys %Filters_by_Language) {
@@ -2890,7 +2890,7 @@ sub generate_report {                        # {{{1
         }
 
         if (!$opt_by_file_by_lang or $ALREADY_SHOWED_XML_SECTION) {
-    	    push @results, "</results>";
+            push @results, "</results>";
         } else {
             $ALREADY_SHOWED_XML_SECTION = 1;
         }
@@ -3465,9 +3465,9 @@ sub files {                                  # {{{1
     # See also find_preprocessor() which prunes undesired directories.
 
     my $Dir = cwd(); # not $File::Find::dir which just gives relative path
-	if ($opt_match_f    ) {	return unless /$opt_match_f/;     }
-    if ($opt_not_match_f) {	return if     /$opt_not_match_f/; }
-	if ($opt_match_d    ) {	return unless $Dir =~ m{$opt_match_d}     }
+    if ($opt_match_f    ) { return unless /$opt_match_f/;     }
+    if ($opt_not_match_f) { return if     /$opt_not_match_f/; }
+    if ($opt_match_d    ) { return unless $Dir =~ m{$opt_match_d}     }
 
     my $nBytes = -s $_ ;
     if (!$nBytes) {
@@ -3585,7 +3585,7 @@ sub classify_file {                          # {{{1
       foreach my $extension (@extension_list) {
         if ($Not_Code_Extension{$extension} and 
            !$Forced_Extension{$extension}) {
-           # If .1 (for example) is an extention that would ordinarily be
+           # If .1 (for example) is an extension that would ordinarily be
            # ignored but the user has insisted this be counted with the
            # --force-lang option, then go ahead and count it.
             $rh_ignored->{$full_file} = 
@@ -4898,8 +4898,8 @@ sub set_constants {                          # {{{1
             'rs'          => 'Rust'                  ,
             's'           => 'Assembly'              ,
             'S'           => 'Assembly'              ,
-			'SCA'         => 'Visual Fox Pro'        ,
-			'sca'         => 'Visual Fox Pro'        ,			
+            'SCA'         => 'Visual Fox Pro'        ,
+            'sca'         => 'Visual Fox Pro'        ,
             'scala'       => 'Scala'                 ,
             'sbl'         => 'Softbridge Basic'      ,
             'SBL'         => 'Softbridge Basic'      ,
@@ -5005,6 +5005,8 @@ sub set_constants {                          # {{{1
             'octave'   => 'Octave'                ,
             'perl5'    => 'Perl'                  ,
             'perl'     => 'Perl'                  ,
+            'php'      => 'PHP'                   ,
+            'php5'     => 'PHP'                   ,
             'python'   => 'Python'                ,
             'python2.6'=> 'Python'                ,
             'python2.7'=> 'Python'                ,
@@ -5600,9 +5602,9 @@ sub set_constants {                          # {{{1
                             ],
     'Visual Fox Pro'     =>  [
                                 [ 'remove_matches'      , '^\s*\*' ],
-								[ 'remove_inline'       , '\*.*$'  ],
+                                [ 'remove_inline'       , '\*.*$'  ],
                                 [ 'remove_matches'      , '^\s*&&' ],
-								[ 'remove_inline'       , '&&.*$'  ],								
+                                [ 'remove_inline'       , '&&.*$'  ],
                             ],
     'Softbridge Basic'   => [   [ 'remove_above'        , '^\s*Attribute\s+VB_Name\s+=' ],               
                                 [ 'remove_matches'      , '^\s*Attribute\s+'],
@@ -6469,7 +6471,7 @@ sub set_constants {                          # {{{1
     'visual basic dos'             =>   2.00,
     'visual c++'                   =>   2.35,
     'visual cobol'                 =>   4.00,
-	'Visual Fox Pro'               =>   4.00, # Visual Fox Pro is not available in the language gearing ratios listed at Mayes Consulting web site
+    'Visual Fox Pro'               =>   4.00, # Visual Fox Pro is not available in the language gearing ratios listed at Mayes Consulting web site
     'visual objects'               =>   5.00,
     'visualage'                    =>   3.81,
     'Visualforce Component'        =>   1.9 ,
@@ -9831,7 +9833,7 @@ EO_XSL
           table-layout: auto;
           border-collapse: collapse;
           empty-cells: show;
-		  margin: 1em;
+          margin: 1em;
         }
         td, th {
           padding: 4px;
@@ -9853,10 +9855,10 @@ EO_DIFF_XSL
 
     if ($opt_by_file) {
         $XSL_DIFF.= <<'EO_DIFF_XSL'; # {{{2
-		<table>
+        <table>
           <thead>
-		  <tr><th colspan="4">Same</th>
-		  </tr>
+          <tr><th colspan="4">Same</th>
+          </tr>
             <tr>
               <th>File</th>
               <th>Blank</th>
@@ -9875,11 +9877,11 @@ EO_DIFF_XSL
           </xsl:for-each>            
           </tbody>
         </table>
-		
-		<table>
+        
+        <table>
           <thead>
-		  <tr><th colspan="4">Modified</th>
-		  </tr>
+          <tr><th colspan="4">Modified</th>
+          </tr>
             <tr>
               <th>File</th>
               <th>Blank</th>
@@ -9898,11 +9900,11 @@ EO_DIFF_XSL
           </xsl:for-each>            
           </tbody>
         </table>
-		
-		<table>
+        
+        <table>
           <thead>
-		  <tr><th colspan="4">Added</th>
-		  </tr>
+          <tr><th colspan="4">Added</th>
+          </tr>
             <tr>
               <th>File</th>
               <th>Blank</th>
@@ -9921,11 +9923,11 @@ EO_DIFF_XSL
           </xsl:for-each>            
           </tbody>
         </table>
-		
-		<table>
+        
+        <table>
           <thead>
-		  <tr><th colspan="4">Removed</th>
-		  </tr>
+          <tr><th colspan="4">Removed</th>
+          </tr>
             <tr>
               <th>File</th>
               <th>Blank</th>
@@ -9950,10 +9952,10 @@ EO_DIFF_XSL
 
     if (!$opt_by_file or $opt_by_file_by_lang) {
         $XSL_DIFF.= <<'EO_DIFF_XSL'; # {{{2
-		<table>
+        <table>
           <thead>
-		  <tr><th colspan="5">Same</th>
-		  </tr>
+          <tr><th colspan="5">Same</th>
+          </tr>
             <tr>
               <th>Language</th>
               <th>Files</th>
@@ -9974,11 +9976,11 @@ EO_DIFF_XSL
           </xsl:for-each>            
           </tbody>
         </table>
-		
-		<table>
+        
+        <table>
           <thead>
-		  <tr><th colspan="5">Modified</th>
-		  </tr>
+          <tr><th colspan="5">Modified</th>
+          </tr>
             <tr>
               <th>Language</th>
               <th>Files</th>
@@ -9999,11 +10001,11 @@ EO_DIFF_XSL
           </xsl:for-each>            
           </tbody>
         </table>
-		
-		<table>
+        
+        <table>
           <thead>
-		  <tr><th colspan="5">Added</th>
-		  </tr>
+          <tr><th colspan="5">Added</th>
+          </tr>
             <tr>
               <th>Language</th>
               <th>Files</th>
@@ -10024,11 +10026,11 @@ EO_DIFF_XSL
           </xsl:for-each>            
           </tbody>
         </table>
-		
-		<table>
+        
+        <table>
           <thead>
-		  <tr><th colspan="5">Removed</th>
-		  </tr>
+          <tr><th colspan="5">Removed</th>
+          </tr>
             <tr>
               <th>Language</th>
               <th>Files</th>
