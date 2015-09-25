@@ -18,6 +18,8 @@ my @lines = ();
 
 # ingest all lines
 while (<>) {
+    next if /^\s*$/;  # skip blank
+    next if /^--\s+/; # skip comments
     chomp;
     push @lines, $_;
 }
