@@ -38,9 +38,16 @@ transition to GitHub in September 2015.
 <a name="Quick_Start"></a>      []({{{1)
 # [Quick Start![^](up.gif)](#___top "click to go to top of document")
 
-Step 1:  download cloc (several methods, see below)
-Step 2:  open a terminal
-Step 3:  invoke cloc to count your source files, directories, archives, etc:
+Step 1:  Download cloc (several methods, see below).
+
+Step 2:  Open a terminal (`cmd.exe` on Windows).
+
+Step 3:  Invoke cloc to count your source files, directories, or archives.
+The executable name differs depending on whether you use the 
+development source version (`cloc`), source for a
+released version (`cloc-1.64.pl`) or a Windows executable
+(`cloc-1.64.exe`).  On this page, `cloc` is the generic term
+used to refer to any of these.
 
 **a file**
 <pre>
@@ -76,7 +83,8 @@ SUM:                            13           4779           6907          31308
 </pre>
 
 **an archive**
-We'll pull cloc's source code zip file from GitHub, then count the contents:
+
+We'll pull cloc's source zip file from GitHub, then count the contents:
 <pre>
 prompt> wget https://github.com/AlDanial/cloc/archive/master.zip
 
@@ -237,25 +245,55 @@ before passing it to perl2exe; lines 87 and 88 were uncommented:
 <font color="gray">88</font>  <font color="red">#$HAVE_Rexexp_Common = 1;</font>
 </pre>
 
+#### Is the Windows executable safe to run?  Does it have malware?
+
+Ideally, no one would need the Windows executable because they
+have a Perl interpreter installed on their machines and can
+run the cloc source file.
+On centrally-managed corporate Windows machines, however, this
+this may be difficult or impossible.
+
+The Windows executable distributed with cloc 
+(currently the 1.64 exe is only at SourceForge,
+http://sourceforge.net/projects/cloc/files/cloc/v1.64/)
+is provided as
+a best-effort of a virus and malware-free `.exe`.
+You are encouraged to run your own virus scanners against the
+executable and also check sites such 
+https://www.virustotal.com/ .
+If you provide an executables MD5 or SHA256 checksum, you can
+get a direct link to their report for an executable (if it
+exists).
+For example, the cloc 1.64 MD5 sum is 616a87f8e95d30b65348a037b4da34eb
+and its report can be found at
+https://www.virustotal.com/latest-scan/616a87f8e95d30b65348a037b4da34eb
+Alternatively, you can uploade `.exe`s to the site.
+
 #### Why is the Windows executable so large?
 
 Windows executables of cloc versions 1.60 and earlier, created with
 perl2exe as noted above, are about 1.6 MB, while newer versions, created
-with <tt>PAR::Packer</tt>, are 11 MB. Why are the newer executables so
+with `PAR::Packer`, are 11 MB. Why are the newer executables so
 much larger? My theory is that perl2exe uses smarter tree pruning logic
-than <tt>PAR::Packer</tt>, but that's pure speculation.
+than `PAR::Packer`, but that's pure speculation.
 
 #### Create your own executable
-If you have access to perl2exe, you can use it to create a tight Windows
-executable. See lines 84-87 in the cloc source code for a minor code
-modification that is necessary when using perl2exe.
+The most robust option for creating a Windows executable of
+cloc is to use [ActiveState's Perl Development Kit](http://www.activestate.com/perl-dev-kit).
+It includes a utlity, `perlapp`, which can build stand-alone
+Windows, Mac, and Linux binaries of Perl source code.
 
-Otherwise, to build a Windows executable with <tt>pp</tt> from
-<tt>PAR::Packer</tt>, first install a Windows-based Perl distribution
+[perl2exe](http://www.indigostar.com/perl2exe.php)
+will also do the trick.  If you do have `perl2exe, modify lines 
+84-87 in the cloc source code for a minor code
+modification that is necessary to make a cloc Windows executable.
+
+Otherwise, to build a Windows executable with `pp` from
+`PAR::Packer`, first install a Windows-based Perl distribution
 (for example Strawberry Perl or ActivePerl) following their
 instructions. Next, open a command prompt, aka a DOS window and install
-the PAR::Packer module. Finally, invoke the newly installed <tt>pp</tt>
-command with the cloc source code to create an <tt>.exe</tt> file:
+the PAR::Packer module. Finally, invoke the newly installed `pp`
+command with the cloc source code to create an `.exe` file:
 
 <pre>C:> perl -MCPAN -e shell
 cpan> install PAR::Packer
@@ -263,7 +301,12 @@ cpan> exit
 C:> pp cloc-1.64.pl
 </pre>
 
-A variation on the above is if you installed the portable version of Strawberry Perl, you will need to run <tt>portableshell.bat</tt> first to properly set up your environment. The Strawberry Perl derived executable on the GitHub download area was created with the portable version on a Windows 7 computer.
+A variation on the above is if you installed the portable version of
+Strawberry Perl, you will need to run `portableshell.bat` first
+to properly set up your environment. The Strawberry Perl derived
+executable on the GitHub download area was created with the portable
+version on a Windows 7 computer.
+
 [](1}}})
 <a name="Basic_Use"></a> []({{{1)
 # [Basic Use![^](up.gif)](#___top "click to go to top of document")
