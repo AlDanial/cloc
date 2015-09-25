@@ -266,7 +266,7 @@ get a direct link to their report for an executable (if it
 exists).
 For example, the cloc 1.64 MD5 sum is 616a87f8e95d30b65348a037b4da34eb
 and its report can be found at
-https://www.virustotal.com/latest-scan/616a87f8e95d30b65348a037b4da34eb
+https://www.virustotal.com/latest-scan/616a87f8e95d30b65348a037b4da34eb .
 Alternatively, you can uploade `.exe`s to the site.
 
 #### Why is the Windows executable so large?
@@ -2005,7 +2005,8 @@ The following are known problems:
 
 <ol>
 <li>  Lines containing both source code and comments are counted as lines of code.
-</li><li>  Comment markers within strings or
+</li>
+<li>  Comment markers within strings or
 <a href="http://www.faqs.org/docs/abs/HTML/here-docs.html">here-documents</a>
 are treated as actual comment markers and not string literals.
 For example the following lines of C code
@@ -2025,8 +2026,9 @@ xxxxxxx     ");
 where `xxxxxxx` represents cloc's view of commented text.
 Therefore cloc counts the five lines as two lines of C code and three
 lines of comments (lines with both code and comment are counted as code).
-</li><li>  Lua long comments are not recognized.
-</li></ol>
+</li>
+<li>  Lua long comments are not recognized.  </li>
+</ol>
 
 [](1}}})
 <a name="AdditionalLanguages"></a> []({{{1)
@@ -2038,9 +2040,9 @@ requesting support for your language.  Include this information:
 <ol>
 <li> File extensions associated with the language.  If the language does
 not rely on file extensions and instead works with fixed file names or
-with `#!` style program invocations, explain what those are.
-<li> A description of how comments are defined.
-<li> Links to sample code.
+with `#!` style program invocations, explain what those are.</li>
+<li> A description of how comments are defined.</li>
+<li> Links to sample code.</li>
 </ol>
 
 [](1}}})
