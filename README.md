@@ -31,7 +31,6 @@ transition to GitHub in September 2015.
     *   [Third Generation Language Scale Factors](#scale_factors)
 *   [Limitations](#Limitations)
 *   [How to Request Support for Additional Languages](#AdditionalLanguages)
-*   [Author](#Author)
 *   [Acknowledgments](#Acknowledgments)
 *   [Copyright](#Copyright)
 
@@ -1909,28 +1908,146 @@ The following are known problems:
 <a href="http://www.faqs.org/docs/abs/HTML/here-docs.html">here-documents</a>
 are treated as actual comment markers and not string literals.
 For example the following lines of C code
-<pre>printf(" <font color="red">/* ");
-for (i = 0; i &lt; 100; i++) {
+<pre>printf(" /* ");
+for (i = 0; i < 100; i++) {
     a += i;
 }
-printf(" */</font> ");
+printf(" */ ");
 </pre>
-appear to cloc as two lines of C code (the lines with black text) and three
-lines of comments (the lines which have only red text--lines with both
-black and red text are treated as code).
+look to cloc like this:
+<pre>printf(" xxxxxxx
+xxxxxxx
+xxxxxxx
+xxxxxxx
+xxxxxxx     ");
+</pre>
+where `xxxxxxx` represents cloc's view of commented text.
+Therefore cloc counts the five lines as two lines of C code and three
+lines of comments (lines with both code and comment are counted as code).
 </li><li>  Lua long comments are not recognized.
 </li></ol>
 
 [](1}}})
 <a name="AdditionalLanguages"></a> []({{{1)
 #   [How to Request Support for Additional Languages![^](up.gif)](#___top "click to go to top of document")
-[](1}}})
-<a name="Author"></a> []({{{1)
-#   [Author![^](up.gif)](#___top "click to go to top of document")
+
+If cloc does not recognize a language you are interested in counting,
+create a [GitHub issue](https://github.com/AlDanial/cloc/issues)
+requesting support for your language.  Include this information:
+<ol>
+<li> File extensions associated with the language.  If the language does
+not rely on file extensions and instead works with fixed file names or
+with `#!` style program invocations, explain what those are.
+<li> A description of how comments are defined.
+<li> Links to sample code.
+</ol>
+
 [](1}}})
 <a name="Acknowledgments"></a> []({{{1)
 #   [Acknowledgments![^](up.gif)](#___top "click to go to top of document")
+Wolfram Rösler provided most of the code examples in the test suite.
+These examples come from his [Hello World collection](http://www.roesler-ac.de/wolfram/hello.htm).
+
+Ismet Kursunoglu found errors with the MUMPS counter and provided
+access to a computer with a large body of MUMPS code to test cloc.
+
+Tod Huggins gave helpful suggestions for the Visual Basic filters.
+
+Anton Demichev found a flaw with the JSP counter in cloc v0.76
+and wrote the XML ouput generator for the `--xml` option.
+
+Reuben Thomas pointed out that ISO C99 allows `//` as a comment
+marker, provided code for the `--no3` and `--stdin-name`
+options, counting the m4 language,
+and suggested several user-interface enhancements.
+
+Michael Bello provided code for the `--opt-match-f`,
+`--opt-not-match-f`,
+`--opt-match-d`, and `--opt-not-match-d`
+options.
+
+Mahboob Hussain inspired the `--original-dir` and
+`--skip-uniqueness` options, found a
+bug in the duplicate file detection logic and improved the JSP filter.
+
+Randy Sharo found and fixed an uninitialized variable bug for shell
+scripts having only one line.
+
+Steven Baker found and fixed a problem with the YAML output generator.
+
+Greg Toth provided code to improve blank line detection in COBOL.
+
+Joel Oliveira provided code to let `--exclude-list-file` handle
+directory name exclusion.
+
+Blazej Kroll provided code to produce an XSLT file, `cloc-diff.xsl`,
+when producing XML output for the `--diff` option.
+
+Denis Silakov enhanced the code which generates `cloc.xsl` when
+using `--by-file` and `--by-file-by-lang` options, and
+provided an XSL file that works with `--diff` output.
+
+Andy (awalshe@sf.net) provided code to fix several bugs:
+correct output of `--counted`
+so that only files that are used in the code count appear and
+that results are shown by language rather than file name;
+allow `--diff` output from multiple runs to be summed
+together with `--sum-reports`.
+
+Jari Aalto created the initial version of `cloc.1.pod` and
+maintains the Debian package for cloc.
+
+Mikkel Christiansen (mikkels@gmail.com) provided counter definitions
+for Clojure and ClojureScript.
+
+Vera Djuraskovic from [Webhostinggeeks.com](http://webhostinggeeks.com/)
+provided the
+[Serbo-Croatian](http://science.webhostinggeeks.com/cloc)
+translation.
+
+Gill Ajoft of [Ajoft Softwares](http://www.ajoft.com)
+provided the
+[Bulgarian](http://www.ajoft.com/wpaper/aj-cloc.html)
+translation.
+
+The
+[Knowledge Team](http://newknowledgez.com/)
+provided the
+[Slovakian](http://newknowledgez.com/cloc.html) translation.
+
+Erik Gooven Arellano Casillas provided an update to the MXML counter to
+recognize Actionscript comments.
+
+[Gianluca Casati](http://g14n.info) created the
+[cloc CPAN package](https://metacpan.org/pod/App::cloc).
+
+Mary Stefanova provided the
+[Polish](http://www.trevister.com/blog/cloc.html)
+translation.
+
+Ryan Lindeman implemented the `--by-percent` feature.
+
+Kent C. Dodds, [@kentcdodds](https://twitter.com/kentcdodd),
+created and maintains the npm package of cloc.
+
+[Anna Litwinka](http://carrrsmag.com) provided the
+[Russian](http://carrrsmag.com/blog/cloc.html)
+translation.
+
+[Viktoria Parnak](http://kudoybook.com)
+provided the
+[Ukrainian](http://blog.kudoybook.com/cloc/)
+translation.
+
+Natalie Harmann provided the
+[Belarussian](http://www.besteonderdelen.nl/blog/?p=5426)
+translation.
+
+The development of cloc was partially funded by the Northrop Grumman
+Corporation.
+
 [](1}}})
 <a name="Copyright"></a> []({{{1)
 #   [Copyright![^](up.gif)](#___top "click to go to top of document")
+Copyright (c) 2006-2015, [Al Danial](https://github.com/AlDanial)
 [](1}}})
