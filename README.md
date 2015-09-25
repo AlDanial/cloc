@@ -8,6 +8,7 @@ cloc counts blank lines, comment lines, and physical lines of source code in man
 Hosted at http://cloc.sourceforge.net/ since August 2006, cloc began the
 transition to GitHub in September 2015.
 
+*   [Quick Start](#Quick_Start)
 *   [Overview](#Overview)
 *   [Download](https://github.com/AlDanial/cloc/releases/latest)
     *   [npm, apt-get, yum, pacman, pkg, port](#apt-get)
@@ -34,6 +35,63 @@ transition to GitHub in September 2015.
 *   [Acknowledgments](#Acknowledgments)
 *   [Copyright](#Copyright)
 
+<a name="Quick_Start"></a>      []({{{1)
+# [Quick Start![^](up.gif)](#___top "click to go to top of document")
+
+Step 1:  download cloc (several methods, see below)
+Step 2:  open a terminal
+Step 3:  invoke cloc to count your source files, directories, archives, etc:
+
+**a file**
+<pre>
+prompt> cloc hello.c
+       1 text file.
+       1 unique file.                              
+       0 files ignored.
+
+https://github.com/AlDanial/cloc v 1.65  T=0.04 s (28.3 files/s, 340.0 lines/s)
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+C                                1              0              7              5
+-------------------------------------------------------------------------------
+</pre>
+
+**a directory**
+<pre>
+prompt> cloc gcc-5.2.0/gcc/c
+      16 text files.
+      15 unique files.                              
+       3 files ignored.
+
+https://github.com/AlDanial/cloc v 1.65  T=0.23 s (57.1 files/s, 188914.0 lines/s)
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+C                               10           4680           6621          30812
+C/C++ Header                     3             99            286            496
+-------------------------------------------------------------------------------
+SUM:                            13           4779           6907          31308
+-------------------------------------------------------------------------------
+</pre>
+
+**an archive**
+We'll pull cloc's source code zip file from GitHub, then count the contents:
+<pre>
+prompt> wget https://github.com/AlDanial/cloc/archive/master.zip
+
+prompt> cloc master.zip
+https://github.com/AlDanial/cloc v 1.65  T=0.07 s (26.8 files/s, 141370.3 lines/s)
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Perl                             2            725           1103           8713
+-------------------------------------------------------------------------------
+SUM:                             2            725           1103           8713
+-------------------------------------------------------------------------------
+</pre>
+
+[](1}}})
 <a name="Overview"></a>      []({{{1)
 # [Overview![^](up.gif)](#___top "click to go to top of document")
 
