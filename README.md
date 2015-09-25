@@ -1591,7 +1591,79 @@ for all manner of interesting facts.
 sqlite|sqlite-amalgamation-3081101/sqlite3.c|161623
 </pre>
 
+`sqlite3`'s default output format leaves a bit to be desired. 
+We can add an option to the program's rc file, 
+`~/.sqliterc`, to show column headers:
+<pre>
+  .header on
+</pre>
+One might be tempted to also include
+<pre>
+  .mode column
+</pre>
+in `~/.sqliterc` but this causes problems when the output has more than
+one row since the widths of entries in the first row govern the maximum
+width for all subsequent rows. Often this leads to truncated output--not
+at all desireable. One option is to write a custom SQLite output
+formatter such as `sqlite_formatter`, included with cloc. 
 
+To use it, simply pass `sqlite3`'s STDOUT into `sqlite_formatter`
+via a pipe:
+
+<pre>
+prompt> sqlite3 code.db 'select project,file,nBlank+nComment+nCode as nL from t where nL = (select max(nBlank+nComment+nCode) from t)' | ./sqlite_formatter
+  <font color="darkgreen">
+  -- Loading resources from ~/.sqliterc
+  Project File                                  nL     
+  _______ _____________________________________ ______ 
+  sqlite  sqlite-amalgamation-3081101/sqlite3.c 161623 
+  </font>
+</pre>
+
+If the "Project File" line doesn't appear, add `.header on` to your
+`~/.sqliterc` file as explained above.
+
+
+**What is the longest file over all projects?**
+
+<pre>
+prompt> sqlite3 code.db 'select project,file,nBlank+nComment+nCode as nL from t where nL = (select max(nBlank+nComment+nCode) from t)' | sqlite_formatter
+Project File                                  nL     
+_______ _____________________________________ ______ 
+sqlite  sqlite-amalgamation-3081101/sqlite3.c 161623 
+</pre>
+
+**What is the longest file in each project?**
+
+<pre>
+sqlite3 code.db sqlite3 code.db 'select project,file,max(nBlank+nComment+nCode) as nL from t group by project order by nL;' | sqlite_formatter
+</pre>
+
+**Which files in each project have the most code lines?**
+
+<pre>
+sqlite3 code.db 'select project,file,max(nCode) as nL from t group by project order by nL desc;' | sqlite_formatter
+</pre>
+
+**Which C source files with more than 300 lines have a comment ratio below 1%?**
+
+<pre>
+sqlite3 code.db 'select project, language, file, nCode, nComment, (100.0*nComment)/(nComment+nCode) as comment_ratio from t
+   where language="C" and nCode &gt; 300 and comment_ratio &lt; 1 order by comment_ratio;' | sqlite_formatter
+</pre>
+
+**What are the ten longest files (based on code lines) that have no comments at all?  Exclude header and YAML files.**
+
+<pre>
+sqlite3 code.db 'select project, file, nCode from t where nComment = 0 and language not in ("C/C++ Header", "YAML") order by nCode desc limit 10;' | sqlite_formatter
+</pre>
+
+**What are the most popular languages (in terms of lines
+of code) in each project?**
+
+<pre>
+sqlite3 code.db 'select project, language, sum(nCode) as SumCode from t group by project,language order by project,SumCode desc;' | sqlite_formatter
+</pre>
 
 [](1}}})
 <a name="scale_factors"></a> []({{{1)
