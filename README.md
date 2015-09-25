@@ -1875,9 +1875,52 @@ sqlite     C/C++ Header                 1546
 [](1}}})
 <a name="scale_factors"></a> []({{{1)
 ##  [Third Generation Language Scale Factors![^](up.gif)](#___top "click to go to top of document")
+
+cloc versions before 1.50 by default computed, for the provided inputs, a
+rough estimate of how many lines of code would be needed to write the
+same code in a hypothetical third-generation computer language.
+To produce this output one must now use the `--3` switch.
+
+Scale factors were derived from the 2006 version of language gearing ratios
+listed at Mayes Consulting web site, 
+[http://softwareestimator.com/IndustryData2.htm](http://softwareestimator.com/IndustryData2.htm), using this equation:
+
+cloc scale factor for language X = 3rd generation default gearing ratio / language X gearing ratio
+
+For example, cloc 3rd generation scale factor for DOS Batch = 80 / 128 = 0.625.
+
+The biggest flaw with this approach is that gearing ratios are defined
+for logical lines of source code not physical lines (which cloc counts).
+The values in cloc's 'scale' and '3rd gen. equiv.' columns should be
+taken with a large grain of salt.
+
 [](1}}})
 <a name="Limitations"></a> []({{{1)
 #   [Limitations![^](up.gif)](#___top "click to go to top of document")
+Identifying comments within source code is trickier than one might expect.
+Many languages would need a complete parser to be counted correctly.
+cloc does not attempt to parse any of
+the languages it aims to count and therefore is an imperfect tool.
+The following are known problems:
+
+<ol>
+<li>  Lines containing both source code and comments are counted as lines of code.
+</li><li>  Comment markers within strings or
+<a href="http://www.faqs.org/docs/abs/HTML/here-docs.html">here-documents</a>
+are treated as actual comment markers and not string literals.
+For example the following lines of C code
+<pre>printf(" <font color="red">/* ");
+for (i = 0; i &lt; 100; i++) {
+    a += i;
+}
+printf(" */</font> ");
+</pre>
+appear to cloc as two lines of C code (the lines with black text) and three
+lines of comments (the lines which have only red text--lines with both
+black and red text are treated as code).
+</li><li>  Lua long comments are not recognized.
+</li></ol>
+
 [](1}}})
 <a name="AdditionalLanguages"></a> []({{{1)
 #   [How to Request Support for Additional Languages![^](up.gif)](#___top "click to go to top of document")
