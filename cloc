@@ -4763,6 +4763,7 @@ sub set_constants {                          # {{{1
             'ec'          => 'C'                     ,
             'ecpp'        => 'ECPP'                  ,
             'el'          => 'Lisp'                  ,
+            'elm'         => 'Elm'                   , 
             'exs'         => 'Elixir'                ,
             'ex'          => 'Elixir'                ,
             'erb'         => 'ERB'                   ,
@@ -5202,6 +5203,7 @@ sub set_constants {                          # {{{1
                                   '<#'    , '#>'     ,             ],
                                 [ 'call_regexp_common'  , 'HTML'   ], 
                             ],
+    'Elm'                => [   [ 'remove_haskell_comments', '>filename<' ], ],
     'ERB'                => [   
                                 [ 'remove_between_general', '<%#', '%>' ],
                             ],
@@ -6066,6 +6068,7 @@ sub set_constants {                          # {{{1
     'edscheme 3.4'                 =>   1.51,
     'eiffel'                       =>   3.81,
     'Elixir'                       =>   2.11,
+    'Elm'                          =>   2.50,
     'enform'                       =>   1.74,
     'englishbased default'         =>   1.51,
     'ensemble'                     =>   2.76,
