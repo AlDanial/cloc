@@ -305,6 +305,12 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              relative path names will be resolved starting from 
                              the directory where cloc is invoked.  
                              See also --list-file.
+   --fullpath                Modifies the behavior of --match-f or 
+                             --not-match-f to include the file's path
+                             in the regex, not just the file's basename.
+                             (This does not expand each file to include its
+                             absolute path, instead it uses as much of
+                             the path as is passed in to cloc.)
    --include-lang=<L1>[,L2,] Count only the given comma separated languages
                              L1, L2, L3, et cetera.
    --match-d=<regex>         Only count files in directories matching the Perl
@@ -318,8 +324,12 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              regex.  For example
                                --match-f='^[Ww]idget'
                              only counts files that start with Widget or widget.
+                             Add --fullpath to include parent directories
+                             in the regex instead of just the basename.
    --not-match-f=<regex>     Count all files except those whose basenames
-                             match the Perl regex.
+                             match the Perl regex.  Add --fullpath to include 
+                             parent directories in the regex instead of just 
+                             the basename.
    --skip-archive=<regex>    Ignore files that end with the given Perl regular
                              expression.  For example, if given
                                --skip-archive='(zip|tar(\.(gz|Z|bz2|xz|7z))?)'
@@ -462,6 +472,7 @@ my (
     $opt_yaml                 ,
     $opt_csv                  ,
     $opt_csv_delimiter        ,
+    $opt_fullpath             ,
     $opt_match_f              ,
     $opt_not_match_f          ,
     $opt_match_d              ,
@@ -535,6 +546,7 @@ my $getopt_success = GetOptions(
    "yaml"                                    => \$opt_yaml                ,
    "csv"                                     => \$opt_csv                 ,
    "csv_delimeter|csv-delimiter=s"           => \$opt_csv_delimiter       ,
+   "fullpath"                                => \$opt_fullpath            ,
    "match_f|match-f=s"                       => \$opt_match_f             ,
    "not_match_f|not-match-f=s"               => \$opt_not_match_f         ,
    "match_d|match-d=s"                       => \$opt_match_d             ,
@@ -3465,8 +3477,19 @@ sub files {                                  # {{{1
     # See also find_preprocessor() which prunes undesired directories.
 
     my $Dir = cwd(); # not $File::Find::dir which just gives relative path
-    if ($opt_match_f    ) { return unless /$opt_match_f/;     }
-    if ($opt_not_match_f) { return if     /$opt_not_match_f/; }
+    if ($opt_fullpath) {
+        # look at as much of the path as is known
+        if ($opt_match_f    ) { 
+            return unless $File::Find::name =~ m{$opt_match_f};     
+        }
+        if ($opt_not_match_f) { 
+            return if     $File::Find::name =~ m{$opt_not_match_f}; 
+        }
+    } else {
+        # only look at the basename 
+        if ($opt_match_f    ) { return unless /$opt_match_f/;     }
+        if ($opt_not_match_f) { return if     /$opt_not_match_f/; }
+    }
     if ($opt_match_d    ) { return unless $Dir =~ m{$opt_match_d}     }
 
     my $nBytes = -s $_ ;
