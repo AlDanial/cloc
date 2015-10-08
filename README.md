@@ -32,6 +32,7 @@ transition to GitHub in September 2015.
     *   [Third Generation Language Scale Factors](#scale_factors)
 *   [Limitations](#Limitations)
 *   [How to Request Support for Additional Languages](#AdditionalLanguages)
+*   [Features Currently in Development](#in_progress)
 *   [Acknowledgments](#Acknowledgments)
 *   [Copyright](#Copyright)
 
@@ -2044,6 +2045,20 @@ with `#!` style program invocations, explain what those are.</li>
 <li> A description of how comments are defined.</li>
 <li> Links to sample code.</li>
 </ol>
+
+[](1}}})
+<a name="in_progress"></a> []({{{1)
+##  [Features Currently in Development![^](up.gif)](#___top "click to go to top of document")
+
+Here, in no particular order and with no promise of future delivery, are
+features and capabilities currently in development:
+<ol>
+<li> skip files defined in `.gitignore` </li>
+<li> produce Markdown output wit `--md`</li>
+<li> produce reStructuredText output with `--rst`</li>
+</ol>
+
+Pull requests for these features will receive extra consideration.
 
 [](1}}})
 <a name="Acknowledgments"></a> []({{{1)
