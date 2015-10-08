@@ -2056,6 +2056,7 @@ features and capabilities currently in development:
 <li> skip files defined in `.gitignore` </li>
 <li> produce Markdown output wit `--md`</li>
 <li> produce reStructuredText output with `--rst`</li>
+<li> count code (e.g. Javascript) embedded in HTML files </li>
 </ol>
 
 Pull requests for these features will receive extra consideration.
