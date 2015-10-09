@@ -388,8 +388,8 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
    --csv                     Write the results as comma separated values.
    --csv-delimiter=<C>       Use the character <C> as the delimiter for comma
                              separated files instead of ,.  This switch forces
+   --md                      Write the results as Markdown-formatted text.
    --out=<file>              Synonym for --report-file=<file>.
-                             --csv to be on.
    --progress-rate=<n>       Show progress update after every <n> files are
                              processed (default <n>=100).  Set <n> to 0 to
                              suppress progress output (useful when redirecting
@@ -473,6 +473,7 @@ my (
     $opt_csv                  ,
     $opt_csv_delimiter        ,
     $opt_fullpath             ,
+    $opt_md                   ,
     $opt_match_f              ,
     $opt_not_match_f          ,
     $opt_match_d              ,
@@ -546,6 +547,7 @@ my $getopt_success = GetOptions(
    "yaml"                                    => \$opt_yaml                ,
    "csv"                                     => \$opt_csv                 ,
    "csv_delimeter|csv-delimiter=s"           => \$opt_csv_delimiter       ,
+   "md"                                      => \$opt_md                  ,
    "fullpath"                                => \$opt_fullpath            ,
    "match_f|match-f=s"                       => \$opt_match_f             ,
    "not_match_f|not-match-f=s"               => \$opt_not_match_f         ,
@@ -1827,7 +1829,7 @@ sub diff_report     {                        # {{{1
     if ($opt_xml or $opt_yaml) {
         print "<- diff_report\n" if $opt_v > 2;
         return diff_xml_yaml_report(@_) 
-    } elsif ($opt_csv) {
+    } elsif ($opt_csv or $opt_md) {
         print "<- diff_report\n" if $opt_v > 2;
         return diff_csv_report(@_) 
     }
@@ -2554,7 +2556,7 @@ sub output_header   {                        # {{{1
         }
     } elsif ($opt_yaml) {
         push @R, "---\n# $header_line";
-    } elsif ($opt_csv) {
+    } elsif ($opt_csv or $opt_md) {
         # append the header to the end of the column headers
         # to keep the output a bit cleaner from a spreadsheet
         # perspective
@@ -2582,6 +2584,7 @@ sub generate_report {                        # {{{1
     print "-> generate_report\n" if $opt_v > 2;
     my $DELIM = ",";
        $DELIM = $opt_csv_delimiter if defined $opt_csv_delimiter;
+       $DELIM = "|" if defined $opt_md;
 
     my @results       = ();
     
@@ -2707,10 +2710,27 @@ sub generate_report {                        # {{{1
             "scale"         ,
             "3rd gen. equiv"
               if $opt_3;
-        push @results, $data_line;
-        push @results, $hyphen_line;
+        if ($opt_md) {
+            my @col_header  = ();
+            if ($data_line =~ m{\s%}) {
+                $data_line =~ s{\s%}{_%}g;
+                foreach my $w ( split(' ', $data_line) ) {
+                    $w =~ s{_%}{ %};
+                    push @col_header, $w;
+                }
+            } else {
+                @col_header = split(' ', $data_line);
+            }
+            my @col_hyphens    = ( '-------:') x scalar(@col_header);
+               $col_hyphens[0] =   ':-------'; # first column left justified
+            push @results, join("|", @col_header );
+            push @results, join("|", @col_hyphens);
+        } else {
+            push @results, $data_line;
+            push @results, $hyphen_line;
+        }
     }
-    if ($opt_csv) {
+    if ($opt_csv)  {
         my $header2;
         if ($BY_FILE) {
             $header2 = "language${DELIM}filename";
@@ -2818,8 +2838,10 @@ sub generate_report {                        # {{{1
                             $rhh_count->{$lang_or_file}{'code'}   ,
                             $rhh_count->{$lang_or_file}{'comment'},
                             $rhh_count->{$lang_or_file}{'blank'}  );
-              push @results,"  blank: "   . sprintf("%3.2f", $rhh_count->{$lang_or_file}{'blank'} / $DEN * 100);
-              push @results,"  comment: " . sprintf("%3.2f", $rhh_count->{$lang_or_file}{'comment'} / $DEN * 100);
+              push @results,"  blank_pct: "   . 
+                sprintf("%3.2f", $rhh_count->{$lang_or_file}{'blank'} / $DEN * 100);
+              push @results,"  comment_pct: " . 
+                sprintf("%3.2f", $rhh_count->{$lang_or_file}{'comment'} / $DEN * 100);
               push @results,"  code: "    . $rhh_count->{$lang_or_file}{'code'}   ;
             } else {
               push @results,"  blank: "   . $rhh_count->{$lang_or_file}{'blank'}  ;
@@ -2832,24 +2854,37 @@ sub generate_report {                        # {{{1
                 push @results, "  scaled: " . $scaled;
                 push @results, "  factor: " . $factor;
             }
-        } elsif ($opt_csv) {
+        } elsif ($opt_csv or $opt_md) {
             my $extra_3 = "";
                $extra_3 = "${DELIM}$factor${DELIM}$scaled" if $opt_3;
             my $first_column = undef;
             my $clean_name   = $lang_or_file;
-            if ($BY_FILE) { 
-                $first_column = $rhh_count->{$lang_or_file}{'lang'};
-                $clean_name   = rm_leading_tempdir($lang_or_file, \%TEMP_DIR);
+            my $str;
+            if ($opt_csv) {
+                if ($BY_FILE) {
+                    $first_column = $rhh_count->{$lang_or_file}{'lang'};
+                    $clean_name   = rm_leading_tempdir($lang_or_file, \%TEMP_DIR);
+                } else {
+                    $first_column = $rhh_count->{$lang_or_file}{'nFiles'};
+                }
+                $str = $first_column   . ${DELIM} .
+                       $clean_name     . ${DELIM};
             } else {
-                $first_column = $rhh_count->{$lang_or_file}{'nFiles'};
+                if ($BY_FILE) {
+                    $first_column = $rhh_count->{$lang_or_file}{'lang'};
+                    $clean_name   = rm_leading_tempdir($lang_or_file, \%TEMP_DIR);
+                    $str = $clean_name . ${DELIM};
+                } else {
+                    $first_column = $rhh_count->{$lang_or_file}{'nFiles'};
+                    $str = $clean_name     . ${DELIM} .
+                           $first_column   . ${DELIM};
+                }
             }
-            my $str = $first_column                         . ${DELIM} .
-                      $clean_name                           . ${DELIM};
-            if ($opt_by_percent) { 
+            if ($opt_by_percent) {
               my $DEN = compute_denominator($opt_by_percent               ,
-                            $rhh_count->{$lang_or_file}{'code'}{'code'}   ,
-                            $rhh_count->{$lang_or_file}{'code'}{'comment'},
-                            $rhh_count->{$lang_or_file}{'code'}{'blank'}  );
+                            $rhh_count->{$lang_or_file}{'code'}   ,
+                            $rhh_count->{$lang_or_file}{'comment'},
+                            $rhh_count->{$lang_or_file}{'blank'}  );
               $str .= sprintf("%3.2f", $rhh_count->{$lang_or_file}{'blank'}   / $DEN * 100) . ${DELIM} .
                       sprintf("%3.2f", $rhh_count->{$lang_or_file}{'comment'} / $DEN * 100) . ${DELIM} .
                       $rhh_count->{$lang_or_file}{'code'};
@@ -2860,6 +2895,7 @@ sub generate_report {                        # {{{1
             }
             $str .= $extra_3;
             push @results, $str;
+
         } else {
             push @results, $data_line;
         }
@@ -2924,7 +2960,7 @@ sub generate_report {                        # {{{1
             push @results, "  scaled: " . $sum_scaled;
             push @results, "  factor: " . $avg_scale ;
         }
-    } elsif ($opt_csv) {
+    } elsif ($opt_csv or $opt_md) {
         # do nothing
     } else {
 
