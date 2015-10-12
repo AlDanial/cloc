@@ -5031,6 +5031,9 @@ sub set_constants {                          # {{{1
             'vbs'         => 'Visual Basic'          ,
             'VBS'         => 'Visual Basic'          ,
             'webinfo'     => 'ASP.Net'               ,
+            'xmi'         => 'XMI'                   ,
+            'XMI'         => 'XMI'                   ,
+            'xml'         => 'XML'                   ,
             'xml'         => 'XML'                   ,
             'XML'         => 'XML'                   ,
             'mxml'        => 'MXML'                  ,
@@ -5798,7 +5801,11 @@ sub set_constants {                          # {{{1
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
                             ],
-    'XML'                => [   
+    'XMI'                => [
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ], 
+                            ],
+    'XML'                => [
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ], 
                             ],
@@ -6206,6 +6213,7 @@ sub set_constants {                          # {{{1
     'Haml'                         =>   2.50,
     'Handlebars'                   =>   2.50,
     'HTML'                         =>   1.90,
+    'XMI'                          =>   1.90,
     'XML'                          =>   1.90,
     'MXML'                         =>   1.90,
     'XSLT'                         =>   1.90,
