@@ -4922,6 +4922,7 @@ sub set_constants {                          # {{{1
             'vbproj'      => 'MSBuild script'        ,
             'mps'         => 'MUMPS'                 ,
             'mth'         => 'Teamcenter mth'        ,
+            'n'           => 'Nemerle'               ,
             'oscript'     => 'LiveLink OScript'      ,
             'pad'         => 'Ada'                   , # Oracle Ada preprocessor
             'page'        => 'Visualforce Page'      ,
@@ -5442,6 +5443,11 @@ sub set_constants {                          # {{{1
     'Modula3'            => [   [ 'call_regexp_common'  , 'Pascal' ], ],
         # Modula 3 comments are (* ... *) so applying the Pascal filter
         # which also treats { ... } as a comment is not really correct.
+    'Nemerle'            => [
+                                [ 'remove_matches'      , '^\s*//' ],
+                                [ 'remove_inline'       , '//.*$'  ],
+                                [ 'call_regexp_common'  , 'C'      ],
+                            ],
     'Objective C'        => [   
                                 [ 'remove_matches'      , '^\s*//' ],
                                 [ 'call_regexp_common'  , 'C'      ], 
@@ -6332,6 +6338,7 @@ sub set_constants {                          # {{{1
     'natural 2'                    =>   1.74,
     'natural construct'            =>   3.20,
     'natural language'             =>   0.03,
+    'Nemerle'                      =>   2.50,
     'netron/cap'                   =>   4.21,
     'nexpert'                      =>   1.63,
     'nial'                         =>   1.63,
