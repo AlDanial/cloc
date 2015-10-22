@@ -5017,6 +5017,7 @@ sub set_constants {                          # {{{1
             'trigger'     => 'Apex Trigger'          ,
             'ts'          => 'TypeScript'            ,
             'tss'         => 'Titanium Style Sheet'  ,
+            'ui'          => 'Qt'                    ,
             'vala'        => 'Vala'                  ,
             'vapi'        => 'Vala Header'           ,
             'vhd'         => 'VHDL'                  ,
@@ -5555,6 +5556,10 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*//' ], 
                                 [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_inline'       , '//.*$'  ], 
+                            ],
+    'Qt'                 => [
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ], 
                             ],
     'Qt Project'         => [   
                                 [ 'remove_matches'      , '^\s*#'  ], 
@@ -6413,6 +6418,7 @@ sub set_constants {                          # {{{1
     'qbe'                          =>   6.15,
     'qmf'                          =>   5.33,
     'QML'                          =>   1.25,
+    'Qt'                           =>   2.00,
     'Qt Project'                   =>   1.00,
     'qnial'                        =>   1.63,
     'quattro'                      =>  13.33,
