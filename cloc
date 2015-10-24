@@ -4793,6 +4793,7 @@ sub set_constants {                          # {{{1
             'cl'          => 'Lisp/OpenCL'           ,
             'clj'         => 'Clojure'               ,
             'cljs'        => 'ClojureScript'         ,
+            'cljc'        => 'ClojureC'              ,
             'cls'         => 'Visual Basic'          , # also Apex Class
             'CMakeLists.txt' => 'CMake'              ,
             'cmake'       => 'CMake'                 ,
@@ -5193,6 +5194,7 @@ sub set_constants {                          # {{{1
                             ],
     'Clojure'            => [   [ 'remove_matches'      , '^\s*;'  ], ],
     'ClojureScript'      => [   [ 'remove_matches'      , '^\s*;'  ], ],
+    'ClojureC'           => [   [ 'remove_matches'      , '^\s*;'  ], ],
     'CMake'              => [   
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ], 
@@ -6091,6 +6093,7 @@ sub set_constants {                          # {{{1
     'clos'                         =>   3.81,
     'Clojure'                      =>   1.25,
     'ClojureScript'                =>   1.25,
+    'ClojureC'                     =>   1.25,
     'clout'                        =>   2.00,
     'CMake'                        =>   1.00,
     'cms2'                         =>   0.75,
