@@ -4894,6 +4894,7 @@ sub set_constants {                          # {{{1
             'ksc'         => 'Kermit'                ,
             'ksh'         => 'Korn Shell'            ,
             'kt'          => 'Kotlin'                ,
+            'kts'         => 'Kotlin'                ,
             'lhs'         => 'Haskell'               ,
             'l'           => 'lex'                   ,
             'less'        => 'LESS'                  ,
