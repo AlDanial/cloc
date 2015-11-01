@@ -363,6 +363,7 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
    --show-os                 Print the value of the operating system mode
                              and exit.  See also --unix, --windows.
    -v[=<n>]                  Verbose switch (optional numeric value).
+   -verbose[=<n>]            Long form of -v.
    --version                 Print the version of this program and exit.
    --write-lang-def=<file>   Writes to <file> the language processing filters
                              then exits.  Useful as a first step to creating
@@ -537,7 +538,7 @@ my $getopt_success = GetOptions(
    "unicode"                                 => \$opt_unicode             ,
    "no3"                                     => \$opt_no3                 ,  # ignored
    "3"                                       => \$opt_3                   ,
-   "v:i"                                     => \$opt_v                   ,
+   "v|verbose:i"                             => \$opt_v                   ,
    "version"                                 => \$opt_version             ,
    "write_lang_def|write-lang-def=s"         => \$opt_write_lang_def      ,
    "xml"                                     => \$opt_xml                 ,
@@ -3712,6 +3713,10 @@ sub classify_file {                          # {{{1
                     return 'D';
                 }
             } elsif ($Language_by_Extension{$extension} eq 'Smarty') {
+                if ($extension eq "smarty") {
+                    # unambiguous -- if ends with .smarty, is Smarty
+                    return $Language_by_Extension{$extension};
+                }
                 # Smarty extension .tpl is generic; make sure the
                 # file at least roughly resembles PHP.  Alternatively,
                 # if the user forces the issue, do the count.
