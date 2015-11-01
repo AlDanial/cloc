@@ -5024,6 +5024,7 @@ sub set_constants {                          # {{{1
             'trigger'     => 'Apex Trigger'          ,
             'ts'          => 'TypeScript'            ,
             'tss'         => 'Titanium Style Sheet'  ,
+            'twig'        => 'Twig'                  ,
             'ui'          => 'Qt'                    ,
             'vala'        => 'Vala'                  ,
             'vapi'        => 'Vala Header'           ,
@@ -5684,6 +5685,9 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*//' ], 
                                 [ 'remove_inline'       , '//.*$'  ], 
                                 [ 'remove_between_regex', '/[^/]', '[^/]/' ],
+                            ],
+    'Twig'               => [
+                                [ 'remove_between_general', '{#', '#}' ],
                             ],
     'TypeScript'         => [   
                                 [ 'remove_matches'      , '^\s*//' ], 
@@ -6547,6 +6551,7 @@ sub set_constants {                          # {{{1
     'turing'                       =>   1.00,
     'tutor'                        =>   1.51,
     'twaice'                       =>   1.63,
+    'Twig'                         =>   2.00,
     'TypeScript'                   =>   2.00,
     'ucsd pascal'                  =>   0.88,
     'ufo/ims'                      =>   2.22,
