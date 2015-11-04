@@ -8805,6 +8805,66 @@ sub pascal_or_puppet {                       # {{{1
     }
 
 } # 1}}}
+sub Forth_or_Fortran {                         # {{{1
+    my ($file        , # in
+        $rh_Err      , # in   hash of error codes
+        $raa_errors  , # out
+       ) = @_;
+
+    print "-> Forth_or_Fortran\n" if $opt_v > 2;
+
+    my $lang = undef;
+    my $IN = new IO::File $file, "r";
+    if (!defined $IN) {
+        push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
+        return $lang;
+    }
+    my $forth_points = 0;
+    my $fortran_points = 0;
+    while (<$IN>) {
+        ++$forth_points if  /^:\s/;
+        ++$fortran_points if  /^([c*][^a-z]|      (subroutine|program)\s|\s*!)/;
+    }
+    $IN->close;
+    if ($forth_points > $fortran_points) {
+        $lang = "Forth";
+    } else {
+        $lang = "Fortran";
+    }
+
+    print "<- Forth_or_Fortran\n" if $opt_v > 2;
+    return $lang;
+} # 1}}}
+sub Forth_or_Fsharp {                         # {{{1
+    my ($file        , # in
+        $rh_Err      , # in   hash of error codes
+        $raa_errors  , # out
+       ) = @_;
+
+    print "-> Forth_or_Fsharp\n" if $opt_v > 2;
+
+    my $lang = undef;
+    my $IN = new IO::File $file, "r";
+    if (!defined $IN) {
+        push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
+        return $lang;
+    }
+    my $forth_points = 0;
+    my $fsharp_points = 0;
+    while (<$IN>) {
+        ++$forth_points if  /^:\s/;
+        ++$fsharp_points if  /^\s*(#light|import|let|module|namespace|open|type)/;
+    }
+    $IN->close;
+    if ($forth_points > $fsharp_points) {
+        $lang = "Forth";
+    } else {
+        $lang = "F#";
+    }
+
+    print "<- Forth_or_Fsharp\n" if $opt_v > 2;
+    return $lang;
+} # 1}}}
 sub html_colored_text {                      # {{{1
     # http://www.pagetutor.com/pagetutor/makapage/pics/net216-2.gif
     my ($color, $text) = @_;
