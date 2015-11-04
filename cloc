@@ -4206,8 +4206,11 @@ sub remove_matches {                         # {{{1
 
     my @save_lines = ();
     foreach (@{$ra_lines}) {
-#chomp; print "remove_matches [$pattern] [$_]\n";
-        next if m{$pattern}i;
+#chomp;
+#print "remove_matches [$pattern] [$_]\n";
+#       next if m{$pattern}i;
+        s{$pattern}{}i;
+        next unless /\S/; # at least one non space
         push @save_lines, $_;
     }
 
