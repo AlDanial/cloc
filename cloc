@@ -5183,20 +5183,20 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , ';.*$'   ],
                             ],
     'awk'                => [   
-                                [ 'remove_matches'      , '^\s*#'  ], 
-                                [ 'remove_inline'       , '#.*$'   ],
+                                [ 'remove_matches'      , '^\s*#.*$' ],
+                                [ 'remove_inline'       , '#.*$'     ],
                             ], 
     'bc'                 => [   
                                 [ 'remove_matches'      , '^\s*#'  ], 
                                 [ 'remove_inline'       , '#.*$'   ],
                             ], 
     'Bourne Again Shell' => [   
-                                [ 'remove_matches'      , '^\s*#'  ], 
-                                [ 'remove_inline'       , '#.*$'   ],
+                                [ 'remove_matches'      , '^\s*#.*$' ], 
+                                [ 'remove_inline'       , '#.*$'     ],
                             ], 
     'Bourne Shell'       => [   
-                                [ 'remove_matches'      , '^\s*#'  ], 
-                                [ 'remove_inline'       , '#.*$'   ],
+                                [ 'remove_matches'      , '^\s*#.*$' ], 
+                                [ 'remove_inline'       , '#.*$'     ],
                             ], 
     'C'                  => [   
                                 [ 'remove_matches'      , '^\s*//' ], # C99
