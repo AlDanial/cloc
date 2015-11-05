@@ -5321,9 +5321,9 @@ sub set_constants {                          # {{{1
                             ], 
     'Focus'              => [   [ 'remove_matches'      , '^\s*\-\*'  ], ],
     'Forth'              => [
-                                [ 'remove_matches'       , '\\\\.*$'  ],
-                                [ 'remove_matches'       , '\(.*?\)'  ],
-                                [ 'remove_between_general', '(*', '*)' ],
+                                [ 'remove_matches'       , '(^|\s)\\\\\s.*$'  ],
+                                [ 'remove_matches'       , '(^|\s)\(\s.*?\)'  ],
+                                [ 'remove_between_general', '(*', '*)'        ],
                             ],
     'Fortran 77'         => [   
                                 [ 'remove_f77_comments' ,          ], 
