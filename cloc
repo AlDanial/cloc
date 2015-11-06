@@ -3295,7 +3295,8 @@ sub print_language_info {                    # {{{1
 } # 1}}}
 sub print_language_filters {                 # {{{1
     my ($language,) = @_;
-    if (!@{$Filters_by_Language{$language}}) {
+    if (!$Filters_by_Language{$language} or
+        !@{$Filters_by_Language{$language}}) {
         warn "Unknown language: $language\n";
         warn "Use --show-lang to list all defined languages.\n";
         return;
@@ -5081,6 +5082,7 @@ sub set_constants {                          # {{{1
             'y'           => 'yacc'                  ,
             'yaml'        => 'YAML'                  ,
             'yml'         => 'YAML'                  ,
+            'zsh'         => 'zsh'                   ,
             );
 # 1}}}
 %{$rh_Language_by_Script}    = (             # {{{1
@@ -5116,6 +5118,7 @@ sub set_constants {                          # {{{1
             'tclsh'    => 'Tcl/Tk'                ,
             'tcsh'     => 'C Shell'               ,
             'wish'     => 'Tcl/Tk'                ,
+            'zsh'      => 'zsh'                   ,
             );
 # 1}}}
 %{$rh_Language_by_File}      = (             # {{{1
@@ -5845,11 +5848,11 @@ sub set_constants {                          # {{{1
                             ],
     'XMI'                => [
                                 [ 'remove_html_comments',          ],
-                                [ 'call_regexp_common'  , 'HTML'   ], 
+                                [ 'call_regexp_common'  , 'HTML'   ],
                             ],
     'XML'                => [
                                 [ 'remove_html_comments',          ],
-                                [ 'call_regexp_common'  , 'HTML'   ], 
+                                [ 'call_regexp_common'  , 'HTML'   ],
                             ],
     'XQuery'             => [
                                 [ 'remove_between_general', '(:', ':)' ],
@@ -5862,6 +5865,10 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
     'MSBuild script'    => [   [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
+    'zsh'                => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
     );
 # 1}}}
 %{$rh_EOL_continuation_re} = (               # {{{1
@@ -5913,6 +5920,7 @@ sub set_constants {                          # {{{1
     'lex'                =>     '\\\\$'         ,
     'Vala'               =>     '\\\\$'         ,
     'Vala Header'        =>     '\\\\$'         ,
+    'zsh'                =>     '\\\\$'         ,
     );
 # 1}}}
 %{$rh_Not_Code_Extension}    = (             # {{{1
@@ -6499,6 +6507,7 @@ sub set_constants {                          # {{{1
     'Bourne Shell'                 =>   3.81,
     'Bourne Again Shell'           =>   3.81,
     'ksh'                          =>   3.81,
+    'zsh'                          =>   3.81,
     'C Shell'                      =>   3.81,
     'siebel tools '                =>   6.15,
     'SAS'                          =>   1.5 ,
