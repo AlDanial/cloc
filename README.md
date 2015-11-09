@@ -152,6 +152,7 @@ Depending your operating system, one of these installation methods may work for 
     sudo pacman -S cloc                    # Arch
     sudo pkg install cloc                  # FreeBSD
     sudo port install cloc                 # Mac OS X with MacPorts
+    brew install cloc                      # Mac OS X with Homebrew
 [](1}}})
 <a name="Stable"></a> []({{{1)
 ## Stable release
