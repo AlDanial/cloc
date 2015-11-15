@@ -2647,7 +2647,7 @@ sub generate_report {                        # {{{1
 
     my $hyphen_line = sprintf "%s", '-' x (79 + $column_1_offset);
        $hyphen_line = sprintf "%s", '-' x (68 + $column_1_offset) 
-            if (!$opt_3) and (68 + $column_1_offset) > 79;
+            if (!$opt_sum_reports) and (!$opt_3) and (68 + $column_1_offset) > 79;
     my $data_line  = "";
     my $first_column;
     my $BY_LANGUAGE = 0;
@@ -8634,7 +8634,7 @@ sub Perl_or_Prolog {                         # {{{1
     print "<- Perl_or_Prolog\n" if $opt_v > 2;
     return $lang;
 } # 1}}}
-sub IDL_or_QtProject {                         # {{{1
+sub IDL_or_QtProject {                       # {{{1
     # also Prolog
     my ($file        , # in
         $rh_Err      , # in   hash of error codes
@@ -8805,7 +8805,7 @@ sub pascal_or_puppet {                       # {{{1
     }
 
 } # 1}}}
-sub Forth_or_Fortran {                         # {{{1
+sub Forth_or_Fortran {                       # {{{1
     my ($file        , # in
         $rh_Err      , # in   hash of error codes
         $raa_errors  , # out
@@ -8835,7 +8835,7 @@ sub Forth_or_Fortran {                         # {{{1
     print "<- Forth_or_Fortran\n" if $opt_v > 2;
     return $lang;
 } # 1}}}
-sub Forth_or_Fsharp {                         # {{{1
+sub Forth_or_Fsharp {                        # {{{1
     my ($file        , # in
         $rh_Err      , # in   hash of error codes
         $raa_errors  , # out
