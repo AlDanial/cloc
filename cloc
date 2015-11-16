@@ -1463,7 +1463,6 @@ foreach (my $F = 0; $F < scalar @fh - 1; $F++) {
             }
         }
 #print Dumper("comment diffs:", \@diff_LL, \@diff_LR);
-#die; here=  need to save original line number in diff result for html display
 
         # step 5: compute difference in blank lines (kind of pointless)
         next if $Lang_L eq '(unknown)' or 
@@ -3038,6 +3037,7 @@ sub write_lang_def {                         # {{{1
                 $language eq "D/dtrace"                 or
                 $language eq "IDL/Qt Project/Prolog"    or
                 $language eq "Fortran 77/Forth"         or
+                $language eq "F#/Forth"                 or
                 $language eq "(unknown)";
         printf $OUT "%s\n", $language;
         foreach my $filter (@{$rhaa_Filters_by_Language->{$language}}) {
@@ -3279,12 +3279,20 @@ sub print_language_info {                    # {{{1
         push @{$extensions{'D'}}       , "d";
         push @{$extensions{'dtrace'}}  , "d";
         delete $extensions{'D/dtrace'};
-    } elsif ($language =~ /^(Fortran 77|Forth)$/) {
-        push @{$extensions{'Fortran 77'}}, "f";
+    } elsif ($language =~ /^Forth$/) {
+        push @{$extensions{'Forth'}}     , "fs";
         push @{$extensions{'Forth'}}     , "f";
-        push @{$extensions{'Fortran 77'}}, "for";
         push @{$extensions{'Forth'}}     , "for";
         delete $extensions{'Fortran 77/Forth'};
+        delete $extensions{'F#/Forth'};
+    } elsif ($language =~ /^Fortran 77$/) {
+        push @{$extensions{'Fortran 77'}}, "f";
+        push @{$extensions{'Fortran 77'}}, "for";
+        push @{$extensions{'F#'}}        , "fs";
+        delete $extensions{'Fortran 77/Forth'};
+    } elsif ($language =~ /^F#$/) {
+        push @{$extensions{'F#'}}        , "fs";
+        delete $extensions{'F#/Forth'};
     } elsif ($language =~ /^(Ant)$/i) {
         push @{$extensions{'Ant'}}  , "build.xml";
         delete $extensions{'Ant/XML'};
@@ -4884,7 +4892,7 @@ sub set_constants {                          # {{{1
             'fmt'         => 'Oracle Forms'          ,
             'focexec'     => 'Focus'                 ,
             'frm'         => 'Visual Basic'          ,
-            'fs'          => 'F#'                    ,
+            'fs'          => 'F#/Forth'              ,
             'fsi'         => 'F#'                    ,
             'gnumakefile' => 'make'                  ,
             'Gnumakefile' => 'make'                  ,
@@ -5352,6 +5360,7 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '\!.*$'  ],
                             ],
     'Fortran 77/Forth'   => [ [ 'die' ,          ], ], # never called
+    'F#/Forth'           => [ [ 'die' ,          ], ], # never called
     'Fortran 90'         => [   
                                 [ 'remove_f77_comments' ,          ],
                                 [ 'remove_f90_comments' ,          ], 
@@ -6722,6 +6731,7 @@ sub check_scale_existence {                  # {{{1
         "IDL/Qt Project/Prolog"             => 1,
         "D/dtrace"                          => 1,
         "Fortran 77/Forth"                  => 1,
+        "F#/Forth"                          => 1,
     );
     my $OK = 1;
     foreach my $language (sort keys %{$rhaa_Filters_by_Language}) {
