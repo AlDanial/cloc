@@ -4841,6 +4841,7 @@ sub set_constants {                          # {{{1
             'cpp'         => 'C++'                   ,
             'cs'          => 'C#'                    ,
             'csh'         => 'C Shell'               ,
+            'cson'        => 'CSON'                  ,
             'css'         => "CSS"                   ,
             'ctl'         => 'Visual Basic'          ,
             'cu'          => 'CUDA'                  ,
@@ -5287,6 +5288,10 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'Crystal Reports'    => [   [ 'remove_matches'      , '^\s*//' ], ],
+    'CSON'               => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
     'D/dtrace'           => [ [ 'die' ,          ], ], # never called
     'D'                  => [
                                 [ 'remove_matches'      , '^\s*//' ],
@@ -6194,6 +6199,7 @@ sub set_constants {                          # {{{1
     'cpl'                          =>   0.50,
     'Crystal Reports'              =>   4.00,
     'csl'                          =>   1.63,
+    'CSON'                         =>   2.50,
     'csp'                          =>   1.51,
     'cssl'                         =>   1.74,
     'CSS'                          => 1.0,
