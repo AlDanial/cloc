@@ -5059,6 +5059,7 @@ sub set_constants {                          # {{{1
             'spc.sql'     => 'SQL Stored Procedure'  ,
             'udf.sql'     => 'SQL Stored Procedure'  ,
             'data.sql'    => 'SQL Data'              ,
+            'styl'        => 'Stylus'                ,
             'v'           => 'Verilog-SystemVerilog' ,
             'sv'          => 'Verilog-SystemVerilog' ,
             'svh'         => 'Verilog-SystemVerilog' ,
@@ -5721,6 +5722,11 @@ sub set_constants {                          # {{{1
     'Standard ML'        => [
                                 [ 'remove_between_general', '(*', '*)' ],
                             ],
+    'Stylus'             => [
+                                [ 'remove_matches'      , '^\s*//' ],
+                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'remove_inline'       , '//.*$'  ],
+                            ],
     'Swift'              => [
                                 [ 'remove_matches'      , '^\s*//' ],
                                 [ 'call_regexp_common'  , 'C'      ],
@@ -5960,6 +5966,7 @@ sub set_constants {                          # {{{1
     'C Shell'            =>     '\\\\$'         ,
     'Kermit'             =>     '\\\\$'         ,
     'Korn Shell'         =>     '\\\\$'         ,
+    'Stylus'             =>     '\\\\$'         ,
     'Tcl/Tk'             =>     '\\\\$'         ,
     'TypeScript'         =>     '\\\\$'         ,
     'lex'                =>     '\\\\$'         ,
@@ -6206,7 +6213,7 @@ sub set_constants {                          # {{{1
     'CSON'                         =>   2.50,
     'csp'                          =>   1.51,
     'cssl'                         =>   1.74,
-    'CSS'                          => 1.0,
+    'CSS'                          =>   1.0,
     'culprit'                      =>   1.57,
     'CUDA'                         =>   1.00,
     'cxpert'                       =>   1.63,
@@ -6592,6 +6599,7 @@ sub set_constants {                          # {{{1
     'stress'                       =>   1.13,
     'strongly typed default'       =>   0.88,
     'style'                        =>   1.74,
+    'Stylus'                       =>   1.48,
     'superbase 1.3'                =>   2.22,
     'surpass'                      =>  13.33,
     'Swift'                        =>   2.50,
@@ -7104,7 +7112,7 @@ my @generic = (
      from_to   => [['<?_c', '_c?>']],
     },
 
-    {languages => [qw /C++/, 'C#', qw /AspectJ Cg ECMAScript FPL Java JavaScript/],
+    {languages => [qw /C++/, 'C#', qw /AspectJ Cg ECMAScript FPL Java JavaScript Stylus/],
      to_eol    => ['//'],
      from_to   => [[qw {/* */}]]},
 
