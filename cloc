@@ -7,8 +7,8 @@
 #   - SLOCCount v2.26
 #     http://www.dwheeler.com/sloccount/
 #     by David Wheeler.
-#   - Regexp::Common v2.120
-#     http://search.cpan.org/~abigail/Regexp-Common-2.120/lib/Regexp/Common.pm
+#   - Regexp::Common v2013031301
+#     http://search.cpan.org/~abigail/Regexp-Common-2013031301/lib/Regexp/Common.pm
 #     by Damian Conway and Abigail.
 #   - Win32::Autoglob
 #     http://search.cpan.org/~sburke/Win32-Autoglob-1.01/Autoglob.pm
@@ -6784,9 +6784,8 @@ sub check_scale_existence {                  # {{{1
 } # 1}}}
 sub Install_Regexp_Common {                  # {{{1
     # Installs portions of Damian Conway's & Abigail's Regexp::Common
-    # module, v2.120, into a temporary directory for the duration of
-    # this run.
-
+    # module, version 2013031301 into a temporary directory for the
+    # duration of this run.
     my %Regexp_Common_Contents = ();
 $Regexp_Common_Contents{'Common'} = <<'EOCommon'; # {{{2
 package Regexp::Common;
@@ -6794,11 +6793,22 @@ package Regexp::Common;
 use 5.00473;
 use strict;
 
-local $^W = 1;
+BEGIN {
+    # This makes sure 'use warnings' doesn't bomb out on 5.005_*;
+    # warnings won't be enabled on those old versions though.
+    # Since all other files use this file, we can use 'use warnings'
+    # elsewhere as well, but *AFTER* 'use Regexp::Common'.
+    if ($] < 5.006) {
+        $INC {"warnings.pm"} = 1;
+        no strict 'refs';
+        *{"warnings::unimport"} = sub {0};
+    }
+}
 
+use warnings;
 use vars qw /$VERSION %RE %sub_interface $AUTOLOAD/;
 
-($VERSION) = q $Revision: 2.120 $ =~ /([\d.]+)/;
+$VERSION = '2013031301';
 
 
 sub _croak {
@@ -6828,13 +6838,10 @@ sub FETCH {
     return bless ref($self)->new(@$self, $extra), ref($self);
 }
 
-# Modification for cloc:  only need a few modules from Regexp::Common.
 my %imports = map {$_ => "Regexp::Common::$_"}
-              qw /balanced comment delimited /;
-#my %imports = map {$_ => "Regexp::Common::$_"}
-#              qw /balanced CC     comment   delimited lingua list
-#                  net      number profanity SEN       URI    whitespace
-#                  zip/;
+              qw /balanced CC     comment   delimited lingua list
+                  net      number profanity SEN       URI    whitespace
+                  zip/;
 
 sub import {
     shift;  # Shift off the class.
@@ -7036,8 +7043,6 @@ sub subs {
 package Regexp::Common::Entry;
 # use Carp;
 
-local $^W = 1;
-
 use overload
     q{""} => sub {
         my ($self) = @_;
@@ -7056,25 +7061,30 @@ sub _clone_with {
     my ($self, $args, $flags) = @_;
     bless { %$self, args=>$args, flags=>$flags }, ref $self;
 }
-#
-#    Copyright (c) 2001 - 2005, Damian Conway and Abigail. All Rights
-#  Reserved. This module is free software. It may be used, redistributed
-#      and/or modified under the terms of the Perl Artistic License
-#            (see http://www.perl.com/perl/misc/Artistic.html)
+
+1;
+# 
+# This software is Copyright (c) 2001 - 2011, Damian Conway and Abigail.
+# 
+# This module is free software, and maybe used under any of the following
+# licenses:
+# 
+#  1) The Perl Artistic License.     See the file COPYRIGHT.AL.
+#  2) The Perl Artistic License 2.0. See the file COPYRIGHT.AL2.
+#  3) The BSD Licence.               See the file COPYRIGHT.BSD.
+#  4) The MIT Licence.               See the file COPYRIGHT.MIT.
 EOCommon
 # 2}}}
 $Regexp_Common_Contents{'Common/comment'} = <<'EOC';   # {{{2
-# $Id: comment.pm,v 2.116 2005/03/16 00:00:02 abigail Exp $
-
 package Regexp::Common::comment;
 
-use strict;
-local $^W = 1;
-
 use Regexp::Common qw /pattern clean no_defaults/;
-use vars qw /$VERSION/;
 
-($VERSION) = q $Revision: 2.116 $ =~ /[\d.]+/g;
+use strict;
+use warnings;
+
+use vars qw /$VERSION/;
+$VERSION = '2010010201';
 
 my @generic = (
     {languages => [qw /ABC Forth/],
@@ -7096,7 +7106,8 @@ my @generic = (
     {languages => [qw {ALPACA B C C-- LPC PL/I}],
      from_to   => [[qw {/* */}]]},
 
-    {languages => [qw /awk fvwm2 Icon mutt Perl Python QML R Ruby shell Tcl/],
+    {languages => [qw /awk fvwm2 Icon m4 mutt Perl Python QML
+                       R Ruby shell Tcl/],
      to_eol    => ['#']},
 
     {languages => [[BASIC => 'mvEnterprise']],
@@ -7105,7 +7116,7 @@ my @generic = (
     {languages => [qw /Befunge-98 Funge-98 Shelta/],
      id        => [';']},
 
-    {languages => ['beta-Juliet', 'Crystal Report', 'Portia'],
+    {languages => ['beta-Juliet', 'Crystal Report', 'Portia', 'Ubercode'],
      to_eol    => ['//']},
 
     {languages => ['BML'],
@@ -7137,13 +7148,16 @@ my @generic = (
     {languages => [qw /J/],
      to_eol    => ['NB[.]']},
 
+    {languages => [qw /JavaDoc/],
+     from_to   => [[qw {/** */}]]},
+
     {languages => [qw /Nickle/],
      to_eol    => ['#'],
      from_to   => [[qw {/* */}]]},
 
     {languages => [qw /Oberon/],
      from_to   => [[qw /(* *)/]]},
-
+     
     {languages => [[qw /Pascal Delphi/], [qw /Pascal Free/], [qw /Pascal GPC/]],
      to_eol    => ['//'],
      from_to   => [[qw !{ }!], [qw !(* *)!]]},
@@ -7184,6 +7198,9 @@ my @generic = (
 
     {languages => [qw /*W/],
      from_to   => [[qw {|| !!}]]},
+
+    {languages => [qw /ZZT-OOP/],
+     to_eol    => ["'"]},
 );
 
 my @plain_or_nested = (
@@ -7192,6 +7209,8 @@ my @plain_or_nested = (
    [Haskell      =>  "-{2,}",     "{-"  => "-}"],
    [Hugo         =>  "!(?!\\\\)", "!\\" => "\\!"],
    [SLIDE        =>  "#",         "(*"  => "*)"],
+  ['Modula-2'    =>  undef,       "(*"  => "*)"],
+  ['Modula-3'    =>  undef,       "(*"  => "*)"],
 );
 
 #
@@ -7210,7 +7229,6 @@ sub combine      {
 sub to_eol  ($)  {"(?k:(?k:$_[0])(?k:[^\\n]*)(?k:\\n))"}
 sub id      ($)  {"(?k:(?k:$_[0])(?k:[^$_[0]]*)(?k:$_[0]))"}  # One char only!
 sub from_to      {
-    local $^W = 1;
     my ($begin, $end) = @_;
 
     my $qb  = quotemeta $begin;
@@ -7224,7 +7242,6 @@ sub from_to      {
 
 my $count = 0;
 sub nested {
-    local $^W = 1;
     my ($begin, $end) = @_;
 
     $count ++;
@@ -7285,9 +7302,9 @@ foreach my $group (@generic) {
                 ;
     }
 }
+                
 
-
-
+    
 #
 # Other languages.
 #
@@ -7295,7 +7312,7 @@ foreach my $group (@generic) {
 # http://www.pascal-central.com/docs/iso10206.txt
 pattern name    => [qw /comment Pascal/],
         create  => '(?k:' . '(?k:[{]|[(][*])'
-                          . '(?k:[^}*]*(?:[*][^)][^}*]*)*)'
+                          . '(?k:[^}*]*(?:[*](?![)])[^}*]*)*)'
                           . '(?k:[}]|[*][)])'
                           . ')'
         ;
@@ -7347,10 +7364,11 @@ pattern name    => [qw /comment Squeak/],
 @Regexp::Common::comment::scores = (1,  3,  3,  2,  1,  4,  2,  4,  1,  8,
                                     5,  1,  3,  1,  1,  3, 10,  1,  1,  1,
                                     1,  4,  4,  8,  4, 10);
+{
+my ($s, $x);
 pattern name    =>  [qw /comment Beatnik/],
         create  =>  sub {
             use re 'eval';
-            my ($s, $x);
             my $re = qr {\b([A-Za-z]+)\b
                          (?(?{($s, $x) = (0, lc $^N);
                               $s += $Regexp::Common::comment::scores
@@ -7360,6 +7378,7 @@ pattern name    =>  [qw /comment Beatnik/],
         },
         version  => 5.008,
         ;
+}
 
 
 # http://www.cray.com/craydoc/manuals/007-3692-005/html-007-3692-005/
@@ -7380,37 +7399,26 @@ pattern name    =>  [qw /comment COBOL/],
         ;
 
 1;
-#
-#    Copyright (c) 2001 - 2003, Damian Conway. All Rights Reserved.
-#      This module is free software. It may be used, redistributed
-#     and/or modified under the terms of the Perl Artistic License
-#           (see http://www.perl.com/perl/misc/Artistic.html)
 EOC
 # 2}}}
 $Regexp_Common_Contents{'Common/balanced'} = <<'EOB';   # {{{2
 package Regexp::Common::balanced; {
 
-use strict;
-local $^W = 1;
-
-use vars qw /$VERSION/;
-($VERSION) = q $Revision: 2.101 $ =~ /[\d.]+/g;
-
 use Regexp::Common qw /pattern clean no_defaults/;
 
+use strict;
+use warnings;
+
+use vars qw /$VERSION/;
+$VERSION = '2013030901';
+
 my %closer = ( '{'=>'}', '('=>')', '['=>']', '<'=>'>' );
-my $count = -1;
 my %cache;
 
 sub nested {
-    local $^W = 1;
     my ($start, $finish) = @_;
 
-    return $Regexp::Common::balanced [$cache {$start} {$finish}]
-            if exists $cache {$start} {$finish};
-
-    $count ++;
-    my $r = '(??{$Regexp::Common::balanced ['. $count . ']})';
+    return $cache {$start} {$finish} if exists $cache {$start} {$finish};
 
     my @starts   = map {s/\\(.)/$1/g; $_} grep {length}
                         $start  =~ /([^|\\]+|\\.)+/gs;
@@ -7432,24 +7440,21 @@ sub nested {
         my $tb  = quotemeta substr $begin => 1;
         my $te  = quotemeta substr $end   => 1;
 
-        use re 'eval';
-
         my $add;
         if ($fb eq $fe) {
             push @re =>
-                   qr /(?:$qb(?:(?>[^$fb]+)|$fb(?!$tb)(?!$te)|$r)*$qe)/;
+                   qq /(?:$qb(?:(?>[^$fb]+)|$fb(?!$tb)(?!$te)|(?-1))*$qe)/;
         }
         else {
             my   @clauses =  "(?>[^$fb$fe]+)";
             push @clauses => "$fb(?!$tb)" if length $tb;
             push @clauses => "$fe(?!$te)" if length $te;
-            push @clauses =>  $r;
-            push @re      =>  qr /(?:$qb(?:@clauses)*$qe)/;
+            push @clauses => "(?-1)";
+            push @re      =>  qq /(?:$qb(?:@clauses)*$qe)/;
         }
     }
 
-    $cache {$start} {$finish} = $count;
-    $Regexp::Common::balanced [$count] = qr/@re/;
+    $cache {$start} {$finish} = qr /(@re)/;
 }
 
 
@@ -7464,34 +7469,35 @@ pattern name    => [qw /balanced -parens=() -begin= -end=/],
                 $flag -> {-begin} = join "|" => @open;
                 $flag -> {-end}   = join "|" => @close;
             }
-            my $pat = nested @$flag {qw /-begin -end/};
-            return exists $flag -> {-keep} ? qr /($pat)/ : $pat;
+            return nested @$flag {qw /-begin -end/};
         },
-        version => 5.006,
+        version => 5.010,
         ;
 
 }
 
 1;
-#
-#     Copyright (c) 2001 - 2003, Damian Conway. All Rights Reserved.
-#       This module is free software. It may be used, redistributed
-#      and/or modified under the terms of the Perl Artistic License
-#            (see http://www.perl.com/perl/misc/Artistic.html)
+# This software is Copyright (c) 2001 - 2013, Damian Conway and Abigail.
+# 
+# This module is free software, and maybe used under any of the following
+# licenses:
+# 
+#  1) The Perl Artistic License.     See the file COPYRIGHT.AL.
+#  2) The Perl Artistic License 2.0. See the file COPYRIGHT.AL2.
+#  3) The BSD Licence.               See the file COPYRIGHT.BSD.
+#  4) The MIT Licence.               See the file COPYRIGHT.MIT.
 EOB
 # 2}}}
-$Regexp_Common_Contents{'Common/delimited'} = <<'EOD';   # {{{2
-# $Id: delimited.pm,v 2.104 2005/03/16 00:22:45 abigail Exp $
-
+$Regexp_Common_Contents{'Common/delimited'} = <<'EOD';   # {{{3
 package Regexp::Common::delimited;
 
-use strict;
-local $^W = 1;
-
 use Regexp::Common qw /pattern clean no_defaults/;
-use vars qw /$VERSION/;
 
-($VERSION) = q $Revision: 2.104 $ =~ /[\d.]+/g;
+use strict;
+use warnings;
+
+use vars qw /$VERSION/;
+$VERSION = '2010010201';
 
 sub gen_delimited {
 
@@ -7542,11 +7548,15 @@ pattern name   => [qw( quoted -esc=\\ )],
 
 
 1;
-#
-#     Copyright (c) 2001 - 2003, Damian Conway. All Rights Reserved.
-#       This module is free software. It may be used, redistributed
-#      and/or modified under the terms of the Perl Artistic License
-#            (see http://www.perl.com/perl/misc/Artistic.html)
+# This software is Copyright (c) 2001 - 2009, Damian Conway and Abigail.
+# 
+# This module is free software, and maybe used under any of the following
+# licenses:
+# 
+#  1) The Perl Artistic License.     See the file COPYRIGHT.AL.
+#  2) The Perl Artistic License 2.0. See the file COPYRIGHT.AL2.
+#  3) The BSD Licence.               See the file COPYRIGHT.BSD.
+#  4) The MIT Licence.               See the file COPYRIGHT.MIT.
 EOD
 # 2}}}
     my $problems        = 0;
@@ -8450,7 +8460,7 @@ EOAlgDiff
 } # 1}}}
 sub call_regexp_common {                     # {{{1
     my ($ra_lines, $language ) = @_;
-    print "-> call_regexp_common\n" if $opt_v > 2;
+    print "-> call_regexp_common for $language\n" if $opt_v > 2;
 
     Install_Regexp_Common() unless $HAVE_Rexexp_Common;
 
@@ -8472,7 +8482,6 @@ sub call_regexp_common {                     # {{{1
     # a bogus use of %RE to avoid:
     # Name "main::RE" used only once: possible typo at cloc line xx.
     print scalar keys %RE if $opt_v < -20;
-#?#print "$all_lines\n";
     print "<- call_regexp_common\n" if $opt_v > 2;
     return split("\n", $all_lines);
 } # 1}}}
