@@ -4162,9 +4162,18 @@ sub rm_comments {                            # {{{1
             shift   @args;
             unshift @args, $file;
         }
+#use Data::Dumper;
+#print "\ncall_string=", Dumper($call_string);
+#print "args=\n";
+#print Dumper(\@args);
+#print "lines before=\n";
+#print Dumper(\@lines);
 
         no strict 'refs';
         @lines = &{$subroutine}(\@lines, @args);   # apply filter...
+
+#print "lines after=\n";
+#print Dumper(\@lines);
 
         print_lines($file, "After $subroutine(@args)", \@lines)
             if $opt_print_filter_stages;
@@ -5238,18 +5247,18 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
     'C'                  => [
-                                [ 'remove_matches'      , '^\s*//' ], # C99
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+#                               [ 'remove_matches'      , '^\s*//' ], # C99
                                 [ 'remove_inline'       , '//.*$'  ], # C99
                             ],
     'C++'                => [
-                                [ 'remove_matches'      , '^\s*//' ],
+                                [ 'call_regexp_common'  , 'C++'      ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
-                                [ 'call_regexp_common'  , 'C'      ],
                             ],
     'C/C++ Header'       => [
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_matches'      , '^\s*//' ],
-                                [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'Clojure'            => [   [ 'remove_matches'      , '^\s*;'  ], ],
@@ -5260,9 +5269,9 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
     'CUDA'               => [
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
-                                [ 'call_regexp_common'  , 'C'      ],
                             ],
     'Cython'             => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -8464,7 +8473,20 @@ sub call_regexp_common {                     # {{{1
 
     Install_Regexp_Common() unless $HAVE_Rexexp_Common;
 
-    my $all_lines = join("", @{$ra_lines});
+    my $all_lines = undef;
+    if ($language eq "C++") { # Regexp::Common's C++ comment regex is multi-line
+#       $all_lines = join("\n", @{$ra_lines});
+        $all_lines = "";
+        foreach (@{$ra_lines}) {
+            if (m/\\$/) {  # line ends with a continuation marker
+                $all_lines .= $_;
+            } else {
+                $all_lines .= "$_\n";
+            }
+        }
+    } else {
+        $all_lines = join(""  , @{$ra_lines});
+    }
 
     no strict 'vars';
     # otherwise get:
