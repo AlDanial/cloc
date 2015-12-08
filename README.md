@@ -202,7 +202,7 @@ If cloc does not suit your needs here are other freely available counters to con
 Other references:
 
 *   QSM's [directory](http://www.qsm.com/CodeCounters.html) of code counting tools.
-*   The [Wikipe dia entry](http://en.wikipedia.org/wiki/Source_lines_of_code) for source code line counts.
+*   The [Wikipedia entry](http://en.wikipedia.org/wiki/Source_lines_of_code) for source code line counts.
 [](1}}})
 # <a name="regexp_common">Regexp::Common, Digest::MD5, Win32::Autoglob, Algori thm::Diff</a> []({{{1)
 
