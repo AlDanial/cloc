@@ -4943,7 +4943,7 @@ sub set_constants {                          # {{{1
             'java'        => 'Java'                  ,
             'jcl'         => 'JCL'                   , # IBM Job Control Lang.
             'jl'          => 'Lisp/Julia'            ,
-            'js'          => 'Javascript'            ,
+            'js'          => 'JavaScript'            ,
             'jsf'         => 'JavaServer Faces'      ,
             'xhtml'       => 'JavaServer Faces'      ,
             'json'        => 'JSON'                  ,
@@ -5471,7 +5471,7 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
-    'Javascript'         => [
+    'JavaScript'         => [
                                 [ 'remove_matches'      , '^\s*//' ],
                                 [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_inline'       , '//.*$'  ],
@@ -5951,7 +5951,7 @@ sub set_constants {                          # {{{1
     'Go'                 =>     '\\\\$'         ,
     'IDL'                =>     '\$\\$'         ,
     'Java'               =>     '\\\\$'         ,
-    'Javascript'         =>     '\\\\$'         ,
+    'JavaScript'         =>     '\\\\$'         ,
     'LESS'               =>     '\\\\$'         ,
     'Lua'                =>     '\\\\$'         ,
     'make'               =>     '\\\\$'         ,
@@ -6371,7 +6371,7 @@ sub set_constants {                          # {{{1
     'j2ee'                         =>   1.60,
     'janus'                        =>   1.13,
     'Java'                         =>   1.36,
-    'Javascript'                   =>   1.48,
+    'JavaScript'                   =>   1.48,
     'JavaServer Faces'             =>   1.5 ,
     'JSON'                         =>   2.50,
     'JSP'                          =>   1.48,
