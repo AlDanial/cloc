@@ -37,7 +37,7 @@ transition to GitHub in September 2015.
 *   [Copyright](#Copyright)
 
 <a name="Quick_Start"></a>      []({{{1)
-# [Quick Start![^](up.gif)](#___top "click to go to top of document")
+# [Quick Start &#9650;](#___top "click to go to top of document")
 
 Step 1:  Download cloc (several methods, see below).
 
@@ -102,7 +102,7 @@ SUM:                             2            725           1103           8713
 
 [](1}}})
 <a name="Overview"></a>      []({{{1)
-# [Overview![^](up.gif)](#___top "click to go to top of document")
+# [Overview &#9650;](#___top "click to go to top of document")
 
 [Translations of this page: 
 [Belarussian](http://www.besteonderdelen.nl/blog/?p=5426), 
@@ -163,7 +163,7 @@ https://github.com/AlDanial/cloc/releases/latest
 https://github.com/AlDanial/cloc/raw/master/cloc
 [](1}}})
 <a name="License"></a> []({{{1)
-# [License![^](up.gif)](#___top "click to go to top of document")
+# [License &#9650;](#___top "click to go to top of document")
 
 cloc is licensed under the [GNU General Public License, v 2]
 (http://www.gnu.org/licenses/gpl-2.0.html), excluding portions which 
@@ -173,7 +173,7 @@ Perl modules is subject to the
 [Artistic L icense](http://www.opensource.org/licenses/artistic-license-2.0.php).
 [](1}}})
 <a name="why_use"></a> []({{{1)
-# [Why Use cloc?![^](up.gif)](#___top "click to go to top of document")
+# [Why Use cloc? &#9650;](#___top "click to go to top of document")
 
 cloc has many features that make it easy to use, thorough, extensible, and portable:
 
@@ -188,7 +188,7 @@ cloc has many features that make it easy to use, thorough, extensible, and porta
 9.  Runs on Linux, FreeBSD, NetBSD, OpenBSD, Mac OS X, AIX, HP-UX, Solaris, IRIX, and z/OS systems that have Perl 5.6 or higher. The source version runs on Windows with either ActiveState Perl, Strawberry Perl, Cygwin, or MobaXTerm+Perl plugin. Alternatively on Windows one can run the Windows binary which has no dependencies.
 [](1}}})
 <a name="Other_Counters"></a> []({{{1)
-# [Other Counters![^](up.gif)](#___top "click to go to top of document")
+# [Other Counters &#9650;](#___top "click to go to top of document")
 
 If cloc does not suit your needs here are other freely available counters to consider:
 
@@ -229,7 +229,7 @@ The Windows binary is built on a computer that has both Regexp::Common
 and Digest::MD5 installed locally.
 [](1}}})
 <a name="building_exe"></a> []({{{1)
-# [Building a Windows Executable![^](up.gif)](#___top "click to go to top of document")
+# [Building a Windows Executable &#9650;](#___top "click to go to top of document")
 
 The default Windows download, <tt>cloc-1.64.exe</tt>, was built with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm) 
 on a Windows 7 computer with 
@@ -311,7 +311,7 @@ version on a Windows 7 computer.
 
 [](1}}})
 <a name="Basic_Use"></a> []({{{1)
-# [Basic Use![^](up.gif)](#___top "click to go to top of document")
+# [Basic Use &#9650;](#___top "click to go to top of document")
 
 cloc is a command line program that takes file, directory, and/or
 archive names as inputs. Here's an example of running cloc against the
@@ -353,7 +353,7 @@ SUM:                              3434         176974         243934         903
 To run cloc on Windows computers, one must first open up a command (aka DOS) window and invoke cloc.exe from the command line there.
 [](1}}})
 <a name="Options"></a> []({{{1)
-# [Options![^](up.gif)](#___top "click to go to top of document")
+# [Options &#9650;](#___top "click to go to top of document")
 
 <pre>  
 prompt> cloc
@@ -638,7 +638,7 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
 </pre>
 [](1}}})
 <a name="Languages"></a> []({{{1)
-# [Recognized Languages![^](up.gif)](#___top "click to go to top of document")
+# [Recognized Languages &#9650;](#___top "click to go to top of document")
 
 <pre>  
 prompt> cloc --show-lang
@@ -831,7 +831,7 @@ identify languages with common extensions. In this situation one must
 modify the cloc source code.
 [](1}}})
 <a name="How_it_works"></a> []({{{1)
-# [How It Works![^](up.gif)](#___top "click to go to top of document")
+# [How It Works &#9650;](#___top "click to go to top of document")
 
 cloc's method of operation resembles SLOCCount's: First, create a list
 of files to consider. Next, attempt to determine whether or not found
@@ -889,10 +889,10 @@ known file extensions, and known scripting languages from a file. The
 code for this option is processed between Steps 2 and 3.
 [](1}}})
 <a name="Advanced_Use"></a> []({{{1)
-# [Advanced Use![^](up.gif)](#___top "click to go to top of document")
+# [Advanced Use &#9650;](#___top "click to go to top of document")
 [](1}}})
 <a name="strip_comments"></a> []({{{1)
-##  [Remove Comments from Source Code![^](up.gif)](#___top "click to go to top of document")
+##  [Remove Comments from Source Code &#9650;](#___top "click to go to top of document")
 
 How can you tell if cloc correctly identifies comments? One way to
 convince yourself cloc is doing the right thing is to use its 
@@ -958,7 +958,7 @@ cce5f1a2ea27c7e44b2e1047e2588b49  sqlite3.o
 cloc removed over 31,000 lines of comments and blanks but did not modify the source code in any significant way since the resulting object file matches the original. 
 [](1}}})
 <a name="compressed_arch"></a> []({{{1)
-##  [Work with Compressed Archives![^](up.gif)](#___top "click to go to top of document")
+##  [Work with Compressed Archives &#9650;](#___top "click to go to top of document")
 Versions of cloc before v1.07 required an
  `--extract-with=CMD` option to tell cloc how
 to expand an archive file.  Beginning with v1.07 this is extraction is
@@ -1224,7 +1224,7 @@ regular expression.  Nested C comments yield erroneous results however.
 
 [](1}}})
 <a name="custom_lang"></a> []({{{1)
-##  [Create Custom Language Definitions![^](up.gif)](#___top "click to go to top of document")
+##  [Create Custom Language Definitions &#9650;](#___top "click to go to top of document")
 cloc can write its language comment definitions to a file or can read
 comment definitions from a file, overriding the built-in definitions.
 This can be useful when you want to use cloc to count lines of a
@@ -1285,7 +1285,7 @@ for motivated individuals to modify or extend cloc's language definitions.
 
 [](1}}})
 <a name="combine_reports"></a> []({{{1)
-##  [Combine Reports![^](up.gif)](#___top "click to go to top of document")
+##  [Combine Reports &#9650;](#___top "click to go to top of document")
 
 If you manage multiple software projects you might be interested in
 seeing line counts by project, not just by language.
@@ -1607,7 +1607,7 @@ SUM:                         15556         900921        1284892        5831741
 
 [](1}}})
 <a name="sql"></a> []({{{1)
-##  [SQL![^](up.gif)](#___top "click to go to top of document")
+##  [SQL &#9650;](#___top "click to go to top of document")
 Cloc can write results in the form of SQL table create and insert
 statements for use
 with relational database programs such as SQLite, MySQL, 
@@ -1976,7 +1976,7 @@ sqlite     C/C++ Header                 1546
 
 [](1}}})
 <a name="scale_factors"></a> []({{{1)
-##  [Third Generation Language Scale Factors![^](up.gif)](#___top "click to go to top of document")
+##  [Third Generation Language Scale Factors &#9650;](#___top "click to go to top of document")
 
 cloc versions before 1.50 by default computed, for the provided inputs, a
 rough estimate of how many lines of code would be needed to write the
@@ -1998,7 +1998,7 @@ taken with a large grain of salt.
 
 [](1}}})
 <a name="Limitations"></a> []({{{1)
-#   [Limitations![^](up.gif)](#___top "click to go to top of document")
+#   [Limitations &#9650;](#___top "click to go to top of document")
 Identifying comments within source code is trickier than one might expect.
 Many languages would need a complete parser to be counted correctly.
 cloc does not attempt to parse any of
@@ -2034,7 +2034,7 @@ lines of comments (lines with both code and comment are counted as code).
 
 [](1}}})
 <a name="AdditionalLanguages"></a> []({{{1)
-#   [How to Request Support for Additional Languages![^](up.gif)](#___top "click to go to top of document")
+#   [How to Request Support for Additional Languages &#9650;](#___top "click to go to top of document")
 
 If cloc does not recognize a language you are interested in counting,
 create a [GitHub issue](https://github.com/AlDanial/cloc/issues)
@@ -2049,7 +2049,7 @@ with `#!` style program invocations, explain what those are.</li>
 
 [](1}}})
 <a name="in_progress"></a> []({{{1)
-##  [Features Currently in Development![^](up.gif)](#___top "click to go to top of document")
+##  [Features Currently in Development &#9650;](#___top "click to go to top of document")
 
 Here, in no particular order and with no promise of future delivery, are
 features and capabilities currently in development:
@@ -2064,7 +2064,7 @@ Pull requests for these features will receive extra consideration.
 
 [](1}}})
 <a name="Acknowledgments"></a> []({{{1)
-#   [Acknowledgments![^](up.gif)](#___top "click to go to top of document")
+#   [Acknowledgments &#9650;](#___top "click to go to top of document")
 Wolfram Rösler provided most of the code examples in the test suite.
 These examples come from his [Hello World collection](http://www.roesler-ac.de/wolfram/hello.htm).
 
@@ -2171,6 +2171,6 @@ Corporation.
 
 [](1}}})
 <a name="Copyright"></a> []({{{1)
-#   [Copyright![^](up.gif)](#___top "click to go to top of document")
+#   [Copyright &#9650;](#___top "click to go to top of document")
 Copyright (c) 2006-2015, [Al Danial](https://github.com/AlDanial)
 [](1}}})
