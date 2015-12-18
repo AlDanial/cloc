@@ -4162,9 +4162,18 @@ sub rm_comments {                            # {{{1
             shift   @args;
             unshift @args, $file;
         }
+#use Data::Dumper;
+#print "\ncall_string=", Dumper($call_string);
+#print "args=\n";
+#print Dumper(\@args);
+#print "lines before=\n";
+#print Dumper(\@lines);
 
         no strict 'refs';
         @lines = &{$subroutine}(\@lines, @args);   # apply filter...
+
+#print "lines after=\n";
+#print Dumper(\@lines);
 
         print_lines($file, "After $subroutine(@args)", \@lines)
             if $opt_print_filter_stages;
@@ -4934,7 +4943,7 @@ sub set_constants {                          # {{{1
             'java'        => 'Java'                  ,
             'jcl'         => 'JCL'                   , # IBM Job Control Lang.
             'jl'          => 'Lisp/Julia'            ,
-            'js'          => 'Javascript'            ,
+            'js'          => 'JavaScript'            ,
             'jsf'         => 'JavaServer Faces'      ,
             'xhtml'       => 'JavaServer Faces'      ,
             'json'        => 'JSON'                  ,
@@ -5168,8 +5177,8 @@ sub set_constants {                          # {{{1
     '(unknown)'          => [ ],
     'ABAP'               => [   [ 'remove_matches'      , '^\*'    ], ],
     'ActionScript'       => [
-                                [ 'remove_matches'      , '^\s*//' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                             ],
 
     'ASP'                => [   [ 'remove_matches'      , '^\s*\47'], ],  # \47 = '
@@ -5186,29 +5195,26 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'HTML'   ],
                             ],
     'Apex Trigger'       => [
-                                [ 'remove_matches'      , '^\s*//' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'Arduino Sketch'     => [   # same as C
-                                [ 'remove_matches'      , '^\s*//' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'AspectJ'            => [
-                                [ 'remove_matches'      , '^\s*//' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'Assembly'           => [
-                                [ 'remove_matches'      , '^\s*//' ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_matches'      , '^\s*;'  ],
                                 [ 'remove_matches'      , '^\s*\@' ],
                                 [ 'remove_matches'      , '^\s*\|' ],
                                 [ 'remove_matches'      , '^\s*!'  ],
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_matches'      , '^\s*--' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                                 [ 'remove_inline'       , ';.*$'   ],
                                 [ 'remove_inline'       , '\@.*$'  ],
@@ -5238,18 +5244,18 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
     'C'                  => [
-                                [ 'remove_matches'      , '^\s*//' ], # C99
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+#                               [ 'remove_matches'      , '^\s*//' ], # C99
                                 [ 'remove_inline'       , '//.*$'  ], # C99
                             ],
     'C++'                => [
-                                [ 'remove_matches'      , '^\s*//' ],
+                                [ 'call_regexp_common'  , 'C++'      ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
-                                [ 'call_regexp_common'  , 'C'      ],
                             ],
     'C/C++ Header'       => [
-                                [ 'remove_matches'      , '^\s*//' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'Clojure'            => [   [ 'remove_matches'      , '^\s*;'  ], ],
@@ -5260,9 +5266,9 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
     'CUDA'               => [
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
-                                [ 'call_regexp_common'  , 'C'      ],
                             ],
     'Cython'             => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -5271,8 +5277,8 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
     'C#'                 => [
-                                [ 'remove_matches'      , '^\s*//' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+#                               [ 'remove_matches'      , '^\s*//' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'CCS'                => [   [ 'call_regexp_common'  , 'C'      ], ],
@@ -5285,8 +5291,7 @@ sub set_constants {                          # {{{1
     'ColdFusion'         => [   [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
     'ColdFusion CFScript'=> [
-                                [ 'remove_matches'      , '^\s*//' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'Crystal Reports'    => [   [ 'remove_matches'      , '^\s*//' ], ],
@@ -5296,18 +5301,18 @@ sub set_constants {                          # {{{1
                             ],
     'D/dtrace'           => [ [ 'die' ,          ], ], # never called
     'D'                  => [
-                                [ 'remove_matches'      , '^\s*//' ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_between_general', '/+', '+/' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'DAL'                => [
                                 [ 'remove_between_general', '[', ']', ],
                             ],
     'Dart'               => [
-                                [ 'remove_matches'      , '^\s*//' ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     # diff is kind of weird: anything but a space in the first column
     # will count as code, with the exception of #, ---, +++.  Spaces
@@ -5324,9 +5329,9 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'HTML'   ],
                             ],
     'DOORS Extension Language' => [
-                                [ 'remove_matches'      , '^\s*//' ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'dtrace'             => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -5392,22 +5397,21 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*//' ],
                             ],
     'Go'                 => [
-                                [ 'remove_matches'      , '^\s*//' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
-                                [ 'call_regexp_common'  , 'C'      ],
                             ],
     'Grails'             => [
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
                                 [ 'remove_jsp_comments' ,          ],
-                                [ 'remove_matches'      , '^\s*//' ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'add_newlines'        ,          ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Groovy'             => [
-                                [ 'remove_matches'      , '^\s*//' ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Handlebars'         => [
                                 [ 'remove_between_general', '{{!--', '--}}' ],
@@ -5415,7 +5419,7 @@ sub set_constants {                          # {{{1
                                 [ 'remove_html_comments',          ],
                             ],
     'Harbour'            => [
-                                [ 'remove_matches'      , '^\s*//' ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_matches'      , '^\s*\&\&' ],
                                 [ 'remove_matches'      , '^\s*\*' ],
                                 [ 'remove_matches'      , '^\s*NOTE' ],
@@ -5423,12 +5427,12 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*Note' ],
                                 [ 'remove_inline'       , '//.*$'  ],
                                 [ 'remove_inline'       , '\&\&.*$' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'HLSL'               => [
-                                [ 'remove_matches'      , '^\s*//' ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Haml'               => [
                                 [ 'remove_haml_block'   ,          ],
@@ -5453,18 +5457,18 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C'      ],
                             ],
     'JavaServer Faces'   => [
-                                [ 'remove_matches'      , '^\s*//' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+#                               [ 'remove_matches'      , '^\s*//' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'Java'               => [
-                                [ 'remove_matches'      , '^\s*//' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+#                               [ 'remove_matches'      , '^\s*//' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
-    'Javascript'         => [
-                                [ 'remove_matches'      , '^\s*//' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+    'JavaScript'         => [
+#                               [ 'remove_matches'      , '^\s*//' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'JCL'                => [   [ 'remove_jcl_comments' ,          ], ],
@@ -5479,13 +5483,14 @@ sub set_constants {                          # {{{1
                                 [ 'remove_between_general', '#=', '=#' ],
                             ],
     'Kotlin'             => [
-                                [ 'remove_matches'      , '^\s*//' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
-                                [ 'remove_between_general', '/*', '*/' ],
+#                               [ 'remove_between_general', '/*', '*/' ],
                             ],
     'LESS'               => [
-                                [ 'remove_matches'      , '^\s*//' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+#                               [ 'remove_matches'      , '^\s*//' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'Lisp'               => [
@@ -5521,26 +5526,26 @@ sub set_constants {                          # {{{1
         # Modula 3 comments are (* ... *) so applying the Pascal filter
         # which also treats { ... } as a comment is not really correct.
     'Nemerle'            => [
-                                [ 'remove_matches'      , '^\s*//' ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Objective C'        => [
-                                [ 'remove_matches'      , '^\s*//' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+#                               [ 'remove_matches'      , '^\s*//' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'Objective C++'      => [
-                                [ 'remove_matches'      , '^\s*//' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+#                               [ 'remove_matches'      , '^\s*//' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'OCaml'              => [
                                 [ 'call_regexp_common'  , 'Pascal' ],
                             ],
     'OpenCL'             => [
-                                [ 'remove_matches'      , '^\s*//' ], # C99
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+#                               [ 'remove_matches'      , '^\s*//' ], # C99
                                 [ 'remove_inline'       , '//.*$'  ], # C99
                             ],
     'PHP/Pascal'               => [ [ 'die' ,          ], ], # never called
@@ -5595,9 +5600,9 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C'       ],
                             ],
     'PowerBuilder'       => [
-                                [ 'remove_matches'      , '^\s*//' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'PowerShell'         => [
                                 [ 'powershell_to_C'                ],
@@ -5611,9 +5616,9 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '(//|\%).*$' ],
                             ],
     'Protocol Buffers'   => [
-                                [ 'remove_matches'      , '^\s*//' ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Python'             => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -5623,14 +5628,14 @@ sub set_constants {                          # {{{1
                             ],
     'PHP'                => [
                                 [ 'remove_matches'      , '^\s*#'  ],
-                                [ 'remove_matches'      , '^\s*//' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+#                               [ 'remove_matches'      , '^\s*//' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '#.*$'   ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'QML'                => [
-                                [ 'remove_matches'      , '^\s*//' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+#                               [ 'remove_matches'      , '^\s*//' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'Qt'                 => [
@@ -5650,9 +5655,9 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , ';.*$'   ],
                             ],
     'Razor'              => [
-                                [ 'remove_matches'      , '^\s*//' ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_between_general', '@*', '*@' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'RobotFramework'     => [
@@ -5671,9 +5676,9 @@ sub set_constants {                          # {{{1
     'Ruby HTML'          => [   [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
     'Rust'               => [
-                                [ 'remove_matches'      , '^\s*//' ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'SAS'                => [
                                 [ 'call_regexp_common'  , 'C'      ],
@@ -5684,9 +5689,9 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'Scala'              => [
-                                [ 'remove_matches'      , '^\s*//' ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'SKILL'              => [
                                 [ 'call_regexp_common'  , 'C'      ],
@@ -5723,13 +5728,13 @@ sub set_constants {                          # {{{1
                                 [ 'remove_between_general', '(*', '*)' ],
                             ],
     'Stylus'             => [
-                                [ 'remove_matches'      , '^\s*//' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+#                               [ 'remove_matches'      , '^\s*//' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'Swift'              => [
-                                [ 'remove_matches'      , '^\s*//' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+#                               [ 'remove_matches'      , '^\s*//' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
 
@@ -5762,9 +5767,9 @@ sub set_constants {                          # {{{1
                                 [ 'remove_between_general', '{#', '#}' ],
                             ],
     'TypeScript'         => [
-                                [ 'remove_matches'      , '^\s*//' ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Unity-Prefab'       => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -5781,24 +5786,24 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*\47'], ],  # \47 = '
     # http://www.altium.com/files/learningguides/TR0114%20VHDL%20Language%20Reference.pdf
     'Vala'               => [
-                                [ 'remove_matches'      , '^\s*//' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+#                               [ 'remove_matches'      , '^\s*//' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'Vala Header'        => [
-                                [ 'remove_matches'      , '^\s*//' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+#                               [ 'remove_matches'      , '^\s*//' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'Verilog-SystemVerilog' => [
-                                [ 'remove_matches'      , '^\s*//' ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'VHDL'               => [
                                 [ 'remove_matches'      , '^\s*--' ],
-                                [ 'remove_matches'      , '^\s*//' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+#                               [ 'remove_matches'      , '^\s*//' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '--.*$'  ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
@@ -5831,8 +5836,8 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , ';.*$'  ],
                             ],
     'yacc'               => [
-                                [ 'call_regexp_common'  , 'C'      ],
-                                [ 'remove_matches'      , '^\s*//' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'YAML'               => [
@@ -5843,7 +5848,7 @@ sub set_constants {                          # {{{1
     'XAML'               => [   [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
     'xBase Header'       => [
-                                [ 'remove_matches'      , '^\s*//' ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_matches'      , '^\s*\&\&' ],
                                 [ 'remove_matches'      , '^\s*\*' ],
                                 [ 'remove_matches'      , '^\s*NOTE' ],
@@ -5851,10 +5856,10 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*Note' ],
                                 [ 'remove_inline'       , '//.*$'  ],
                                 [ 'remove_inline'       , '\&\&.*$' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'xBase'              => [
-                                [ 'remove_matches'      , '^\s*//' ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_matches'      , '^\s*\&\&' ],
                                 [ 'remove_matches'      , '^\s*\*' ],
                                 [ 'remove_matches'      , '^\s*NOTE' ],
@@ -5862,7 +5867,7 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*Note' ],
                                 [ 'remove_inline'       , '//.*$'  ],
                                 [ 'remove_inline'       , '\&\&.*$' ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'MXML'               => [
                                 [ 'remove_html_comments',          ],
@@ -5880,9 +5885,9 @@ sub set_constants {                          # {{{1
 #                                                         '^\s*;\s*\*/', ],
                             ],
     'Windows Resource File' => [
-                                [ 'remove_matches'      , '^\s*//' ],
+#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
-                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'WiX source'         => [
                                 [ 'remove_html_comments',          ],
@@ -5942,7 +5947,7 @@ sub set_constants {                          # {{{1
     'Go'                 =>     '\\\\$'         ,
     'IDL'                =>     '\$\\$'         ,
     'Java'               =>     '\\\\$'         ,
-    'Javascript'         =>     '\\\\$'         ,
+    'JavaScript'         =>     '\\\\$'         ,
     'LESS'               =>     '\\\\$'         ,
     'Lua'                =>     '\\\\$'         ,
     'make'               =>     '\\\\$'         ,
@@ -6362,7 +6367,7 @@ sub set_constants {                          # {{{1
     'j2ee'                         =>   1.60,
     'janus'                        =>   1.13,
     'Java'                         =>   1.36,
-    'Javascript'                   =>   1.48,
+    'JavaScript'                   =>   1.48,
     'JavaServer Faces'             =>   1.5 ,
     'JSON'                         =>   2.50,
     'JSP'                          =>   1.48,
@@ -8464,7 +8469,20 @@ sub call_regexp_common {                     # {{{1
 
     Install_Regexp_Common() unless $HAVE_Rexexp_Common;
 
-    my $all_lines = join("", @{$ra_lines});
+    my $all_lines = undef;
+    if ($language eq "C++") { # Regexp::Common's C++ comment regex is multi-line
+#       $all_lines = join("\n", @{$ra_lines});
+        $all_lines = "";
+        foreach (@{$ra_lines}) {
+            if (m/\\$/) {  # line ends with a continuation marker
+                $all_lines .= $_;
+            } else {
+                $all_lines .= "$_\n";
+            }
+        }
+    } else {
+        $all_lines = join(""  , @{$ra_lines});
+    }
 
     no strict 'vars';
     # otherwise get:
