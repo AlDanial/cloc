@@ -104,13 +104,14 @@ SUM:                             2            725           1103           8713
 <a name="Overview"></a>      []({{{1)
 # [Overview &#9650;](#___top "click to go to top of document")
 
-[Translations of this page: 
+[Translations:
 [Belarussian](http://www.besteonderdelen.nl/blog/?p=5426), 
 [Bulgarian](http://www.ajoft.com/wpaper/aj-cloc.html), 
 []( [Polish](http://www.trevister.com/blog/cloc.html), ) 
 [Russian](http://someblogscience.com/cloc.html), 
 [Serbo-Croatian](http://science.webhostinggeeks.com/cloc), 
 [Slovakian](http://newknowledgez.com/cloc.html),
+[Tamil](http://healthcareadministrationdegree.co/socialwork/aldanial-cloc/),
 [Ukrainian](http://blog.kudoybook.com/cloc/) ]
 
 cloc counts blank lines, comment lines, and physical lines of source
@@ -2164,6 +2165,11 @@ translation.
 
 Natalie Harmann provided the
 [Belarussian](http://www.besteonderdelen.nl/blog/?p=5426)
+translation.
+
+Nithyal at [Healthcare Administration Portal](http://healthcareadministrationdegree.co/)
+provided the
+[Tamil](http://healthcareadministrationdegree.co/socialwork/aldanial-cloc/)
 translation.
 
 The development of cloc was partially funded by the Northrop Grumman
