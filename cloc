@@ -4924,6 +4924,7 @@ sub set_constants {                          # {{{1
             'fsi'         => 'F#'                    ,
             'gnumakefile' => 'make'                  ,
             'Gnumakefile' => 'make'                  ,
+            'gd'          => 'GDScript'              ,
             'go'          => 'Go'                    ,
             'gsp'         => 'Grails'                ,
             'groovy'      => 'Groovy'                ,
@@ -5414,6 +5415,10 @@ sub set_constants {                          # {{{1
     'F#'                 => [
                                 [ 'call_regexp_common'  , 'Pascal' ],
                                 [ 'remove_matches'      , '^\s*//' ],
+                            ],
+    'GDScript'           => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
                             ],
     'Go'                 => [
                                 [ 'call_regexp_common'  , 'C++'    ],
@@ -6337,6 +6342,7 @@ sub set_constants {                          # {{{1
     'gpss'                         =>   1.74,
     'guest'                        =>   2.86,
     'guru'                         =>   1.63,
+    'GDScript'                     =>   2.50,
     'Go'                           =>   2.50,
     'Grails'                       =>   1.48,
     'Groovy'                       =>   4.10,
