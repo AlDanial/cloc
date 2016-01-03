@@ -4864,6 +4864,7 @@ sub set_constants {                          # {{{1
             'coffee'      => 'CoffeeScript'          ,
             'component'   => 'Visualforce Component' ,
             'cpp'         => 'C++'                   ,
+            'cr'          => 'Crystal'               ,
             'cs'          => 'C#'                    ,
             'csh'         => 'C Shell'               ,
             'cson'        => 'CSON'                  ,
@@ -5146,6 +5147,7 @@ sub set_constants {                          # {{{1
             'awk'      => 'awk'                   ,
             'bash'     => 'Bourne Again Shell'    ,
             'bc'       => 'bc'                    ,# calculator
+            'crystal'  => 'Crystal'               ,
             'csh'      => 'C Shell'               ,
             'dmd'      => 'D'                     ,
             'dtrace'   => 'dtrace'                ,
@@ -5165,6 +5167,7 @@ sub set_constants {                          # {{{1
             'python3'  => 'Python'                ,
             'python3.3'=> 'Python'                ,
             'python3.4'=> 'Python'                ,
+            'python3.5'=> 'Python'                ,
             'rexx'     => 'Rexx'                  ,
             'regina'   => 'Rexx'                  ,
             'ruby'     => 'Ruby'                  ,
@@ -5279,6 +5282,10 @@ sub set_constants {                          # {{{1
     'ClojureScript'      => [   [ 'remove_matches'      , '^\s*;'  ], ],
     'ClojureC'           => [   [ 'remove_matches'      , '^\s*;'  ], ],
     'CMake'              => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
+    'Crystal'            => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
@@ -6243,6 +6250,7 @@ sub set_constants {                          # {{{1
     'corvet'                       =>   4.21,
     'corvision'                    =>   5.33,
     'cpl'                          =>   0.50,
+    'Crystal'                      =>   2.50,
     'Crystal Reports'              =>   4.00,
     'csl'                          =>   1.63,
     'CSON'                         =>   2.50,
