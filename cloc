@@ -3029,15 +3029,16 @@ sub write_lang_def {                         # {{{1
 
     foreach my $language (sort keys %{$rhaa_Filters_by_Language}) {
         next if $language eq "MATLAB/Objective C/MUMPS/Mercury" or
-                $language eq "PHP/Pascal"               or
-                $language eq "Pascal/Puppet"            or
-                $language eq "Lisp/OpenCL"              or
-                $language eq "Lisp/Julia"               or
-                $language eq "Perl/Prolog"              or
-                $language eq "D/dtrace"                 or
-                $language eq "IDL/Qt Project/Prolog"    or
-                $language eq "Fortran 77/Forth"         or
-                $language eq "F#/Forth"                 or
+                $language eq "PHP/Pascal"                       or
+                $language eq "Pascal/Puppet"                    or
+                $language eq "Lisp/OpenCL"                      or
+                $language eq "Lisp/Julia"                       or
+                $language eq "Perl/Prolog"                      or
+                $language eq "D/dtrace"                         or
+                $language eq "IDL/Qt Project/Prolog"            or
+                $language eq "Fortran 77/Forth"                 or
+                $language eq "F#/Forth"                         or
+                $language eq "Verilog-SystemVerilog/Coq"        or
                 $language eq "(unknown)";
         printf $OUT "%s\n", $language;
         foreach my $filter (@{$rhaa_Filters_by_Language->{$language}}) {
@@ -3252,48 +3253,61 @@ sub print_language_info {                    # {{{1
     }
 
     # add exceptions (one file extension mapping to multiple languages)
-    if (!$language or
-        $language =~ /^(Objective C|MATLAB|MUMPS|Mercury)$/i) {
+    if (!$language or $language =~ /^(Objective C|MATLAB|MUMPS|Mercury)$/i) {
         push @{$extensions{'Objective C'}}, "m";
         push @{$extensions{'MATLAB'}}     , "m";
         push @{$extensions{'MUMPS'}}      , "m";
         delete $extensions{'MATLAB/Objective C/MUMPS/Mercury'};
-    } elsif ($language =~ /^(Lisp|OpenCL)$/i) {
+    }
+    if (!$language or $language =~ /^(Lisp|OpenCL)$/i) {
         push @{$extensions{'Lisp'}}  , "cl";
         push @{$extensions{'OpenCL'}}, "cl";
         delete $extensions{'Lisp/OpenCL'};
-    } elsif ($language =~ /^(Lisp|Julia)$/i) {
+    }
+    if (!$language or $language =~ /^(Lisp|Julia)$/i) {
         push @{$extensions{'Lisp'}}  , "jl";
         push @{$extensions{'Julia'}} , "jl";
         delete $extensions{'Lisp/Julia'};
-    } elsif ($language =~ /^(Perl|Prolog)$/i) {
+    }
+    if (!$language or $language =~ /^(Perl|Prolog)$/i) {
         push @{$extensions{'Perl'}}  , "pl";
         push @{$extensions{'Prolog'}}, "pl";
         delete $extensions{'Perl/Prolog'};
-    } elsif ($language =~ /^(IDL|Qt Project|Prolog)$/i) {
+    }
+    if (!$language or $language =~ /^(IDL|Qt Project|Prolog)$/i) {
         push @{$extensions{'IDL'}}       , "pro";
         push @{$extensions{'Qt Project'}}, "pro";
         push @{$extensions{'Prolog'}}    , "pro";
         delete $extensions{'IDL/Qt Project/Prolog'};
-    } elsif ($language =~ /^(D|dtrace)$/i) {
+    }
+    if (!$language or $language =~ /^(D|dtrace)$/i) {
         push @{$extensions{'D'}}       , "d";
         push @{$extensions{'dtrace'}}  , "d";
         delete $extensions{'D/dtrace'};
-    } elsif ($language =~ /^Forth$/) {
+    }
+    if (!$language or $language =~ /^Forth$/) {
         push @{$extensions{'Forth'}}     , "fs";
         push @{$extensions{'Forth'}}     , "f";
         push @{$extensions{'Forth'}}     , "for";
         delete $extensions{'Fortran 77/Forth'};
         delete $extensions{'F#/Forth'};
-    } elsif ($language =~ /^Fortran 77$/) {
+    }
+    if (!$language or $language =~ /^Fortran 77$/) {
         push @{$extensions{'Fortran 77'}}, "f";
         push @{$extensions{'Fortran 77'}}, "for";
         push @{$extensions{'F#'}}        , "fs";
         delete $extensions{'Fortran 77/Forth'};
-    } elsif ($language =~ /^F#$/) {
+    }
+    if (!$language or $language =~ /^F#$/) {
         push @{$extensions{'F#'}}        , "fs";
         delete $extensions{'F#/Forth'};
-    } elsif ($language =~ /^(Ant)$/i) {
+    }
+    if (!$language or $language =~ /^(Verilog-SystemVerilog|Coq)$/) {
+        push @{$extensions{'Coq'}}                   , "v";
+        push @{$extensions{'Verilog-SystemVerilog'}} , "v";
+        delete $extensions{'Verilog-SystemVerilog/Coq'};
+    }
+    if (!$language or $language =~ /^(Ant)$/i) {
         push @{$extensions{'Ant'}}  , "build.xml";
         delete $extensions{'Ant/XML'};
     }
@@ -3740,6 +3754,8 @@ sub classify_file {                          # {{{1
                 return Forth_or_Fortran($full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'F#/Forth') {
                 return Forth_or_Fsharp( $full_file, $rh_Err, $raa_errors);
+            } elsif ($Language_by_Extension{$extension} eq 'Verilog-SystemVerilog/Coq') {
+                return Verilog_or_Coq( $full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'Smarty') {
                 if ($extension eq "smarty") {
                     # unambiguous -- if ends with .smarty, is Smarty
@@ -5069,9 +5085,9 @@ sub set_constants {                          # {{{1
             'udf.sql'     => 'SQL Stored Procedure'  ,
             'data.sql'    => 'SQL Data'              ,
             'styl'        => 'Stylus'                ,
-            'v'           => 'Verilog-SystemVerilog' ,
             'sv'          => 'Verilog-SystemVerilog' ,
             'svh'         => 'Verilog-SystemVerilog' ,
+            'v'           => 'Verilog-SystemVerilog/Coq' ,
             'tcl'         => 'Tcl/Tk'                ,
             'tcsh'        => 'C Shell'               ,
             'tk'          => 'Tcl/Tk'                ,
@@ -5293,6 +5309,9 @@ sub set_constants {                          # {{{1
     'ColdFusion CFScript'=> [
                                 [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
+                            ],
+    'Coq'                => [
+                                [ 'remove_between_general', '(*', '*)' ],
                             ],
     'Crystal Reports'    => [   [ 'remove_matches'      , '^\s*//' ], ],
     'CSON'               => [
@@ -5795,6 +5814,7 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
+    'Verilog-SystemVerilog/Coq' => [ ['die'] ], # never called
     'Verilog-SystemVerilog' => [
 #                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
@@ -6209,6 +6229,7 @@ sub set_constants {                          # {{{1
     'concurrent pascal'            =>   1.00,
     'conniver'                     =>   1.25,
     'cool:gen/ief'                 =>   2.58,
+    'Coq'                          =>   5.00,
     'coral 66'                     =>   0.75,
     'corvet'                       =>   4.21,
     'corvision'                    =>   5.33,
@@ -6764,6 +6785,7 @@ sub check_scale_existence {                  # {{{1
         "D/dtrace"                          => 1,
         "Fortran 77/Forth"                  => 1,
         "F#/Forth"                          => 1,
+        "Verilog-SystemVerilog/Coq"         => 1,
     );
     my $OK = 1;
     foreach my $language (sort keys %{$rhaa_Filters_by_Language}) {
@@ -8948,6 +8970,37 @@ sub Forth_or_Fsharp {                        # {{{1
     }
 
     print "<- Forth_or_Fsharp\n" if $opt_v > 2;
+    return $lang;
+} # 1}}}
+sub Verilog_or_Coq {                         # {{{1
+    my ($file        , # in
+        $rh_Err      , # in   hash of error codes
+        $raa_errors  , # out
+       ) = @_;
+
+    print "-> Verilog_or_Coq\n" if $opt_v > 2;
+
+    my $lang = undef;
+    my $IN = new IO::File $file, "r";
+    if (!defined $IN) {
+        push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
+        return $lang;
+    }
+    my $coq_points     = 0;
+    my $verilog_points = 0;
+    while (<$IN>) {
+        ++$verilog_points if  /^\s*(module|begin|input|output|always)/;
+        ++$coq_points if /\b(Inductive|Fixpoint|Definition|
+                             Theorem|Lemma|Proof|Qed|forall)\b/x;
+    }
+    $IN->close;
+    if ($coq_points > $verilog_points) {
+        $lang = "Coq";
+    } else {
+        $lang = "Verilog-SystemVerilog";
+    }
+
+    print "<- Verilog_or_Coq\n" if $opt_v > 2;
     return $lang;
 } # 1}}}
 sub html_colored_text {                      # {{{1
