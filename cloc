@@ -4945,7 +4945,7 @@ sub set_constants {                          # {{{1
             'jl'          => 'Lisp/Julia'            ,
             'js'          => 'JavaScript'            ,
             'jsf'         => 'JavaServer Faces'      ,
-            'xhtml'       => 'JavaServer Faces'      ,
+            'xhtml'       => 'XHTML'                 ,
             'json'        => 'JSON'                  ,
             'jsp'         => 'JSP'                   , # Java server pages
             'jspf'        => 'JSP'                   , # Java server pages
@@ -5441,6 +5441,10 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*-#\s*\S+' ],
                             ],
     'HTML'               => [
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
+    'XHTML'               => [
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
                             ],
@@ -6324,6 +6328,7 @@ sub set_constants {                          # {{{1
     'Haml'                         =>   2.50,
     'Handlebars'                   =>   2.50,
     'HTML'                         =>   1.90,
+    'XHTML'                        =>   1.90,
     'XMI'                          =>   1.90,
     'XML'                          =>   1.90,
     'MXML'                         =>   1.90,
