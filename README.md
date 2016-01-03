@@ -110,6 +110,7 @@ SUM:                             2            725           1103           8713
 []( [Polish](http://www.trevister.com/blog/cloc.html), ) 
 [Russian](http://someblogscience.com/cloc.html), 
 [Serbo-Croatian](http://science.webhostinggeeks.com/cloc), 
+[Romanian](http://www.bildelestore.dk/blog/cloc-contele-de-linii-de-cod/),
 [Slovakian](http://newknowledgez.com/cloc.html),
 [Tamil](http://healthcareadministrationdegree.co/socialwork/aldanial-cloc/),
 [Ukrainian](http://blog.kudoybook.com/cloc/) ]
@@ -2170,6 +2171,11 @@ translation.
 Nithyal at [Healthcare Administration Portal](http://healthcareadministrationdegree.co/)
 provided the
 [Tamil](http://healthcareadministrationdegree.co/socialwork/aldanial-cloc/)
+translation.
+
+Patricia Motosan
+provided the
+[Romanian](http://www.bildelestore.dk/blog/cloc-contele-de-linii-de-cod/),
 translation.
 
 The development of cloc was partially funded by the Northrop Grumman
