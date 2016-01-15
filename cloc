@@ -389,6 +389,8 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
    --csv                     Write the results as comma separated values.
    --csv-delimiter=<C>       Use the character <C> as the delimiter for comma
                              separated files instead of ,.  This switch forces
+   --json                    Write the results as JavaScript Object Notation
+                             (JSON) formatted output.
    --md                      Write the results as Markdown-formatted text.
    --out=<file>              Synonym for --report-file=<file>.
    --progress-rate=<n>       Show progress update after every <n> files are
@@ -474,6 +476,7 @@ my (
     $opt_csv                  ,
     $opt_csv_delimiter        ,
     $opt_fullpath             ,
+    $opt_json                 ,
     $opt_md                   ,
     $opt_match_f              ,
     $opt_not_match_f          ,
@@ -548,6 +551,7 @@ my $getopt_success = GetOptions(
    "yaml"                                    => \$opt_yaml                ,
    "csv"                                     => \$opt_csv                 ,
    "csv_delimeter|csv-delimiter=s"           => \$opt_csv_delimiter       ,
+   "json"                                    => \$opt_json                ,
    "md"                                      => \$opt_md                  ,
    "fullpath"                                => \$opt_fullpath            ,
    "match_f|match-f=s"                       => \$opt_match_f             ,
@@ -626,7 +630,7 @@ if ($opt_count_diff) {
 }
 
 # Options defaults:
-$opt_quiet         =   1 if $opt_md and !defined $opt_report_file;
+$opt_quiet         =   1 if ($opt_md or $opt_json) and !defined $opt_report_file;
 $opt_progress_rate = 100 unless defined $opt_progress_rate;
 $opt_progress_rate =   0 if     defined $opt_quiet;
 if (!defined $opt_v) {
@@ -1823,6 +1827,26 @@ sub compute_denominator {                    # {{{1
     print "<- compute_denominator\n" if $opt_v > 2;
     return $den{ $method };
 } # 1}}}
+sub yaml_to_json_separators {                # {{{1
+    # YAML and JSON are closely related.  Their differences can be captured
+    # by trailing commas ($C), braces ($open_B, $close_B), and
+    # quotes around text ($Q).
+    my ($Q, $open_B, $close_B, $start, $C);
+    if ($opt_json) {
+       $C       = ',';
+       $Q       = '"';
+       $open_B  = '{';
+       $close_B = '}';
+       $start   = '{';
+    } else {
+       $C       = '';
+       $Q       = '' ;
+       $open_B  = '' ;
+       $close_B = '';
+       $start   = "---\n# $URL\n";
+    }
+    return ($Q, $open_B, $close_B, $start, $C);
+} # 1}}}
 sub diff_report     {                        # {{{1
     # returns an array of lines containing the results
     print "-> diff_report\n" if $opt_v > 2;
@@ -1898,6 +1922,7 @@ sub diff_report     {                        # {{{1
     my $Style = "txt";
        $Style = "xml" if $opt_xml ;
        $Style = "xml" if $opt_yaml;  # not a typo; just set to anything but txt
+       $Style = "xml" if $opt_json;  # not a typo; just set to anything but txt
        $Style = "xml" if $opt_csv ;  # not a typo; just set to anything but txt
 
     my $hyphen_line = sprintf "%s", '-' x (79 + $column_1_offset);
@@ -2036,9 +2061,9 @@ sub diff_report     {                        # {{{1
 
     return @results;
 } # 1}}}
-sub xml_or_yaml_header {                     # {{{1
+sub xml_yaml_or_json_header {                # {{{1
     my ($URL, $version, $elapsed_sec, $sum_files, $sum_lines, $by_file) = @_;
-    print "-> xml_or_yaml_header\n" if $opt_v > 2;
+    print "-> xml_yaml_or_json_header\n" if $opt_v > 2;
     my $header      = "";
     my $file_rate   = $sum_files/$elapsed_sec;
     my $line_rate   = $sum_lines/$elapsed_sec;
@@ -2071,29 +2096,30 @@ sub xml_or_yaml_header {                     # {{{1
         $header .= "\n$report_file"
             if $opt_report_file;
         $header .= "\n</header>";
-    } elsif ($opt_yaml) {
-        $header = "---\n# $URL
-header :
-  cloc_url           : http://cloc.sourceforge.net
-  cloc_version       : $version
-  elapsed_seconds    : $elapsed_sec
-  n_files            : $sum_files
-  n_lines            : $sum_lines
-  files_per_second   : $file_rate
-  lines_per_second   : $line_rate";
+    } elsif ($opt_yaml or $opt_json) {
+        my ($Q, $open_B, $close_B, $start, $C) = yaml_to_json_separators();
+        $header = "${start}${Q}header${Q} : $open_B
+  ${Q}cloc_url${Q}           : ${Q}$URL${Q}${C}
+  ${Q}cloc_version${Q}       : ${Q}$version${Q}${C}
+  ${Q}elapsed_seconds${Q}    : $elapsed_sec${C}
+  ${Q}n_files${Q}            : $sum_files${C}
+  ${Q}n_lines${Q}            : $sum_lines${C}
+  ${Q}files_per_second${Q}   : $file_rate${C}
+  ${Q}lines_per_second${Q}   : $line_rate";
         if ($opt_report_file) {
             if ($opt_sum_reports) {
                 if ($by_file) {
-                    $header .= "\n  report_file        : $opt_report_file.file"
+                    $header .= "$C\n  ${Q}report_file${Q}        : ${Q}$opt_report_file.file${Q}"
                 } else {
-                    $header .= "\n  report_file        : $opt_report_file.lang"
+                    $header .= "$C\n  ${Q}report_file${Q}        : ${Q}$opt_report_file.lang${Q}"
                 }
             } else {
-                $header .= "\n  report_file        : $opt_report_file";
+                $header .= "$C\n  ${Q}report_file${Q}        : ${Q}$opt_report_file${Q}";
             }
         }
+        $header .= "${close_B}${C}";
     }
-    print "<- xml_or_yaml_header\n" if $opt_v > 2;
+    print "<- xml_yaml_or_json_header\n" if $opt_v > 2;
     return $header;
 } # 1}}}
 sub diff_xml_yaml_report {                   # {{{1
@@ -2141,7 +2167,7 @@ sub diff_xml_yaml_report {                   # {{{1
 
     if (!$ALREADY_SHOWED_HEADER) {
         push @results,
-              xml_or_yaml_header($URL, $version, $elapsed_sec,
+              xml_yaml_or_json_header($URL, $version, $elapsed_sec,
                                  $sum_files, $sum_lines, $BY_FILE);
         $ALREADY_SHOWED_HEADER = 1;
     }
@@ -2149,7 +2175,7 @@ sub diff_xml_yaml_report {                   # {{{1
     foreach my $S (qw(same modified added removed)) {
         if ($opt_xml) {
             push @results, "  <$S>";
-        } elsif ($opt_yaml) {
+        } elsif ($opt_yaml or $opt_json) {
             push @results, "$S :";
         }
 ########foreach my $lang_or_file (keys %{$rhhh_count}) {
@@ -2643,6 +2669,7 @@ sub generate_report {                        # {{{1
     my $Style = "txt";
        $Style = "xml" if $opt_xml ;
        $Style = "xml" if $opt_yaml;  # not a typo; just set to anything but txt
+       $Style = "xml" if $opt_json;  # not a typo; just set to anything but txt
        $Style = "xml" if $opt_csv ;  # not a typo; just set to anything but txt
 
     my $hyphen_line = sprintf "%s", '-' x (79 + $column_1_offset);
@@ -2669,10 +2696,10 @@ sub generate_report {                        # {{{1
                         $elapsed_sec           ,
                         $sum_files/$elapsed_sec,
                         $sum_lines/$elapsed_sec) unless $opt_sum_reports;
-    if ($opt_xml or $opt_yaml) {
+    if ($opt_xml or $opt_yaml or $opt_json) {
         if (!$ALREADY_SHOWED_HEADER) {
-            push @results, xml_or_yaml_header($URL, $version, $elapsed_sec,
-                                              $sum_files, $sum_lines, $BY_FILE);
+            push @results, xml_yaml_or_json_header($URL, $version, $elapsed_sec,
+                                                   $sum_files, $sum_lines, $BY_FILE);
             $ALREADY_SHOWED_HEADER = 1 unless $opt_sum_reports;
             # --sum-reports yields two xml or yaml files, one by
             # language and one by report file, each of which needs a header
@@ -2731,6 +2758,7 @@ sub generate_report {                        # {{{1
             push @results, $hyphen_line;
         }
     }
+
     if ($opt_csv)  {
         my $header2;
         if ($BY_FILE) {
@@ -2830,30 +2858,34 @@ sub generate_report {                        # {{{1
             } else {
                 push @results, "  <language " . $data_line . "/>";
             }
-        } elsif ($opt_yaml) {
-            push @results,$lang_or_file . ":";
-            push @results,"  nFiles: "  .$rhh_count->{$lang_or_file}{'nFiles'}
+        } elsif ($opt_yaml or $opt_json) {
+            my ($Q, $open_B, $close_B, $start, $C) = yaml_to_json_separators();
+            push @results,"${Q}$lang_or_file${Q} :$open_B";
+            push @results,"  ${Q}nFiles${Q}: " . $rhh_count->{$lang_or_file}{'nFiles'} . $C
                 unless $BY_FILE;
             if ($opt_by_percent) {
               my $DEN = compute_denominator($opt_by_percent       ,
                             $rhh_count->{$lang_or_file}{'code'}   ,
                             $rhh_count->{$lang_or_file}{'comment'},
                             $rhh_count->{$lang_or_file}{'blank'}  );
-              push @results,"  blank_pct: "   .
-                sprintf("%3.2f", $rhh_count->{$lang_or_file}{'blank'} / $DEN * 100);
-              push @results,"  comment_pct: " .
-                sprintf("%3.2f", $rhh_count->{$lang_or_file}{'comment'} / $DEN * 100);
-              push @results,"  code: "    . $rhh_count->{$lang_or_file}{'code'}   ;
+              push @results,"  ${Q}blank_pct${Q}: "   .
+                sprintf("%3.2f", $rhh_count->{$lang_or_file}{'blank'} / $DEN * 100) . $C;
+              push @results,"  ${Q}comment_pct${Q}: " .
+                sprintf("%3.2f", $rhh_count->{$lang_or_file}{'comment'} / $DEN * 100) . $C;
+              push @results,"  ${Q}code${Q}: "    . $rhh_count->{$lang_or_file}{'code'}  . $C;
             } else {
-              push @results,"  blank: "   . $rhh_count->{$lang_or_file}{'blank'}  ;
-              push @results,"  comment: " . $rhh_count->{$lang_or_file}{'comment'};
-              push @results,"  code: "    . $rhh_count->{$lang_or_file}{'code'}   ;
+              push @results,"  ${Q}blank${Q}: "   . $rhh_count->{$lang_or_file}{'blank'}   . $C;
+              push @results,"  ${Q}comment${Q}: " . $rhh_count->{$lang_or_file}{'comment'} . $C;
+              push @results,"  ${Q}code${Q}: "    . $rhh_count->{$lang_or_file}{'code'}    . $C;
             }
-            push @results,"  language: ".$rhh_count->{$lang_or_file}{'lang'}
+            push @results,"  ${Q}language${Q}: "  . $Q . $rhh_count->{$lang_or_file}{'lang'} . $Q . $C
                 if $BY_FILE;
             if ($opt_3) {
-                push @results, "  scaled: " . $scaled;
-                push @results, "  factor: " . $factor;
+                push @results, "  ${Q}scaled${Q}: " . $scaled . $C;
+                push @results, "  ${Q}factor${Q}: " . $factor . $C;
+            }
+            if ($opt_json) { # replace the trailing comma with }, on the last line
+                $results[-1] =~ s/,\s*$/},/;
             }
         } elsif ($opt_csv or $opt_md) {
             my $extra_3 = "";
@@ -2943,23 +2975,27 @@ sub generate_report {                        # {{{1
         } else {
             $ALREADY_SHOWED_XML_SECTION = 1;
         }
-    } elsif ($opt_yaml) {
-        push @results, "SUM:";
+    } elsif ($opt_yaml or $opt_json) {
+        my ($Q, $open_B, $close_B, $start, $C) = yaml_to_json_separators();
+        push @results, "${Q}SUM${Q}: ${open_B}";
         if ($opt_by_percent) {
           my $DEN = compute_denominator($opt_by_percent    ,
                         $sum_code, $sum_comment, $sum_blank);
-          push @results, "  blank: "  . sprintf("%.2f", $sum_blank   / $DEN * 100);
-          push @results, "  comment: ". sprintf("%.2f", $sum_comment / $DEN * 100);
-          push @results, "  code: "   . $sum_code   ;
+          push @results, "  ${Q}blank${Q}: "  . sprintf("%.2f", $sum_blank   / $DEN * 100) . $C;
+          push @results, "  ${Q}comment${Q}: ". sprintf("%.2f", $sum_comment / $DEN * 100) . $C;
+          push @results, "  ${Q}code${Q}: "   . $sum_code    . $C;
         } else {
-          push @results, "  blank: "  . $sum_blank  ;
-          push @results, "  comment: ". $sum_comment;
-          push @results, "  code: "   . $sum_code   ;
+          push @results, "  ${Q}blank${Q}: "  . $sum_blank   . $C;
+          push @results, "  ${Q}comment${Q}: ". $sum_comment . $C;
+          push @results, "  ${Q}code${Q}: "   . $sum_code    . $C;
         }
-        push @results, "  nFiles: " . $sum_files  ;
+        push @results, "  ${Q}nFiles${Q}: " . $sum_files   . $C;
         if ($opt_3) {
-            push @results, "  scaled: " . $sum_scaled;
-            push @results, "  factor: " . $avg_scale ;
+            push @results, "  ${Q}scaled${Q}: " . $sum_scaled . $C;
+            push @results, "  ${Q}factor${Q}: " . $avg_scale  . $C;
+        }
+        if ($opt_json) {
+            $results[-1] =~ s/,\s*$/} }/;
         }
     } elsif ($opt_csv) {
         # do nothing
