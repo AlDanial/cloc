@@ -1,0 +1,30 @@
+Adjust prefix variables to install to other than system default:
+
+	make [-n] [prefix=/usr/local] install
+
+For more information, use:
+
+	make help
+
+
+Dependencies:
+
+cloc depends on two Perl modules, Algorithm::Diff and Regexp::Common.
+If cloc cannot find these at runtime, it will install portions of
+these modules embedded in the cloc source code to temporary directories, 
+then delete these temporary installations after the cloc run completes.  
+cloc will start more quickly if these modules are already installed on 
+the target system.  These commands will tell whether or not the modules 
+are installed:
+
+  perl -MAlgorithm::Diff -e 'print "$Algorithm::Diff::VERSION\n"'
+  perl -MRegexp::Common  -e 'print "$Regexp::Common::VERSION\n"'
+
+If a version number appears, the module in question is available.
+
+Additionally, cloc will look for the Digest::MD5 module to help
+identify duplicate files.  If this module is not available, 
+duplicate file checks are skipped.  To test for the existence
+of Digest::MD5 use
+
+  perl -MDigest::MD5     -e 'print "$Digest::MD5::VERSION\n"'

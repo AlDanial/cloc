@@ -1,0 +1,571 @@
+#   Copyright
+#
+#      Copyright (C) 2015 Al Danial <al.danial@gmail.com>.
+#      Copyright (C) 2010-2015 Jari Aalto <jari.aalto@cante.net>
+#
+#   License
+#
+#       This program is free software; you can redistribute it and/or modify
+#       it under the terms of the GNU General Public License as published by
+#       the Free Software Foundation; either version 2 of the License, or
+#       (at your option) any later version.
+#
+#       This program is distributed in the hope that it will be useful,
+#       but WITHOUT ANY WARRANTY; without even the implied warranty of
+#       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#       GNU General Public License for more details.
+#
+#       You should have received a copy of the GNU General Public License
+#       along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+#   Description
+#
+#       To learn what TOP LEVEL section to use in manual pages,
+#       see POSIX/Susv standard and "Utility Description Defaults" at
+#       http://www.opengroup.org/onlinepubs/009695399/utilities/xcu_chap01.html#tag_01_11
+#
+#       This is manual page in Perl POD format. Read more at
+#       http://perldoc.perl.org/perlpod.html or run command:
+#
+#           perldoc perlpod | less
+#
+#       To check the syntax:
+#
+#           podchecker *.pod
+#
+#       Create manual page with command:
+#
+#           pod2man PAGE.N.pod > PAGE.N
+
+=pod
+
+=head1 NAME
+
+cloc - Count, and compute differences of, lines of source code and comments.
+
+=head1 SYNOPSIS
+
+  cloc [options] <FILE|DIR> ...
+
+=head1 DESCRIPTION
+
+Count, or compute differences of, physical lines of source code in the 
+given files (may be archives such as compressed tarballs or zip files) 
+and/or recursively below the given directories.  It is
+written entirely in Perl, using only modules from the standard
+distribution.
+
+=head1 OPTIONS
+
+=head2 Input Options
+
+To count standard input, use the special filename B<->.
+
+=over 4
+
+=item B<--extract-with=CMD>
+
+This option is only needed if cloc is unable to figure out how to
+extract the contents of the input file(s) by itself. Use CMD to
+extract binary archive files (e.g.: .tar.gz, .zip, .Z). Use the
+literal 'E<gt>FILEE<lt>' as a stand-in for the actual file(s) to be
+extracted. For example, to count lines of code in the input files
+gcc-4.2.tar.gz perl-5.8.8.tar.gz on Unix use:
+
+    --extract-with='gzip -dc >FILE< | tar xf -
+
+or, if you have GNU tar:
+
+    --extract-with='tar zxf >FILE<'
+
+and on Windows, use, for example:
+
+    --extract-with="\"c:\Program Files\WinZip\WinZip32.exe\" -e -o >FILE<
+
+=item B<--list-file=FILE>
+
+Take the list of file and/or directory names to process from FILE
+which has one file/directory name per line. See also
+B<--exclude-list-file>
+
+=item B<--unicode>
+
+Check binary files to see if they contain Unicode expanded ASCII text.
+This causes performance to drop noticably.
+
+=back
+
+=head2 Processing Options
+
+=over 4
+
+=item B<--autoconf>
+
+Count .in files (as processed by GNU autoconf) of recognized languages.
+
+=item B<--by-file>
+
+Report results for every source file encountered.
+
+=item B<--by-file-by-lang>
+
+Report results for every source file encountered in addition to
+reporting by language.
+
+=item B<--count-and-diff SET1 SET2>
+
+First perform direct code counts of source file(s)
+of SET1 and SET2 separately, then perform a diff 
+of these.  Inputs may be pairs of files, directories, 
+or archives.  See also B<--diff>, B<--diff-alignment>, 
+B<--diff-timeout>, B<--ignore-case>, B<--ignore-whitespace>.
+
+=item B<--diff SET1 SET2>
+
+Compute differences in code and comments between source file(s) of 
+SET1 and SET2.  The inputs may be pairs of files, directories, or 
+archives.  Use B<--diff-alignment> to generate a list showing
+which file pairs where compared.  See also 
+B<--count-and-diff>, B<--diff-alignment>, B<--diff-timeout>, 
+B<--ignore-case>, B<--ignore-whitespace>.
+
+=item B<--diff-timeout N>
+
+Ignore files which take more than N seconds
+to process.  Default is 10 seconds.
+(Large files with many repeated lines can cause 
+Algorithm::Diff::sdiff() to take hours.)
+
+=item B<--follow-links>
+
+[Unix only] Follow symbolic links to directories (sym links to files 
+are always followed).
+
+=item B<--force-lang=LANG[,EXT]>
+
+Process all files that have a EXT extension with the counter for
+language LANG. For example, to count all .f files with the Fortran
+90 counter (which expects files to end with .f90) instead of the
+default Fortran 77 counter, use:
+
+	--force-lang="Fortran 90",f
+
+If EXT is omitted, every file will be counted with the LANG counter.
+This option can be specified multiple times (but that is only useful
+when EXT is given each time). See also B<--script-lang>,
+B<--lang-no-ext>.
+
+=item B<--force-lang-def=FILE>
+
+Load language processing filters from FILE,
+then use these filters instead of the built-in
+filters.  Note:  languages which map to the same 
+file extension (for example:
+MATLAB/Objective C/MUMPS;  Pascal/PHP; 
+Lisp/OpenCL) will be ignored as these require 
+additional processing that is not expressed in 
+language definition files.
+Use B<--read-lang-def> to define new language
+filters without replacing built-in filters
+(see also B<--write-lang-def>).
+
+=item B<--ignore-whitespace>
+
+Ignore horizontal white space when comparing files
+with B<--diff>.  See also B<--ignore-case>.
+
+=item B<--ignore-case>
+
+Ignore changes in case; consider upper- and lowercase letters equivalent 
+when comparing files with B<--diff>.  See also B<--ignore-whitespace>.
+
+=item B<--lang-no-ext=LANG>
+
+Count files without extensions using the LANG counter.  This option 
+overrides internal logic for files without extensions (where such files 
+are checked against known scripting languages by examining the first 
+line for C<#!>).  See also B<--force-lang>, B<--script-lang>.
+
+=item B<--max-file-size=MB>
+
+Skip files larger than C<MB> megabytes when
+traversing directories.  By default, C<MB>=100.
+cloc's memory requirement is roughly twenty times 
+larger than the largest file so running with 
+files larger than 100 MB on a computer with less 
+than 2 GB of memory will cause problems.  
+Note:  this check does not apply to files 
+explicitly passed as command line arguments.
+
+=item B<--read-binary-files>
+
+Process binary files in addition to text files. This is usually a bad
+idea and should only be attempted with text files that have embedded
+binary data.
+
+=item B<--read-lang-def=FILE>
+
+Load new language processing filters from FILE
+and merge them with those
+already known to cloc.  If FILE defines a
+language cloc already knows about, cloc's 
+definition will take precedence.  Use
+B<--force-lang-def> to over-ride cloc's definitions.
+(see also B<--write-lang-def>).
+
+=item B<--script-lang=LANG,S>
+
+Process all files that invoke C<S> as a C<#!> scripting language with the
+counter for language LANG. For example, files that begin with
+C<#!/usr/local/bin/perl5.8.8> will be counted with the Perl counter by
+using
+
+	--script-lang=Perl,perl5.8.8
+
+The language name is case insensitive but the name of the script
+language executable, C<S>, must have the right case. This option can be
+specified multiple times. See also B<--force-lang>.
+
+=item B<--sdir=DIR>
+
+Use DIR as the scratch directory instead of letting I<File::Temp> chose
+the location. Files written to this location are not removed at the
+end of the run (as they are with I<File::Temp>).
+
+=item B<--skip-uniqueness>
+
+Skip the file uniqueness check. This will give a performance boost at
+the expense of counting files with identical contents multiple times
+(if such duplicates exist).
+
+=item B<--stdin-name=FILE>
+
+Count lines streamed via I<STDIN> as if they came from a file named FILE.
+
+=item B<--strip-comments=EXT>
+
+For each file processed, write to the current directory a version of
+the file which has blank lines and comments removed. The name of each
+stripped file is the original file name with C<.EXT> appended to it.
+It is written to the current directory unless B<--original-dir> is on.
+
+=item B<--original-dir>
+
+Write the stripped files the same directory as the original files.
+Only effective in combination with B<--strip-comments>.
+
+=item B<--sum-reports>
+
+Input arguments are report files previously created with the
+B<--report-file> option. Makes a cumulative set of results containing
+the sum of data from the individual report files.
+
+=item B<--unix>
+
+Over-ride the operating system detection logic and run in UNIX
+mode.  See also B<--windows>, B<--show-os>.
+
+=item B<--windows>
+
+Over-ride the operating system detection logic and run in
+Microsoft Windows mode.  See also B<--unix>, B<--show-os>.
+
+=back
+
+=head2 Filter Options
+
+=over 4
+
+=item B<--exclude-dir=<dir>[,<dir> ...]>
+
+Exclude the given comma separated directories from being scanned. For
+example:
+
+	--exclude-dir=.cache,test
+
+will skip all files that match C</.cache/> or C</test/> as part of
+their path. Directories named C<.bzr>, C<.cvs>, C<.hg>, C<.git>,
+C<.hg>, and C<.svn> are always excluded.
+
+=item B<--exclude-ext=EXT1[,EXT2 ...]>
+
+Do not count files having the given file name extensions.
+
+=item B<--exclude-lang=L1[,L2 ...]>
+
+Exclude the given comma separated languages from being counted.
+
+=item B<--exclude-list-file=FILE>
+
+Ignore files whose names appear in FILE. FILE should have one entry
+per line.  Only exact matches are ignored;
+relative path names will be resolved starting from 
+the directory where cloc is invoked.  
+See also B<--list-file>.
+
+=item B<--include-lang=L1[,L2 ...]>
+
+Count only the given comma separated languages
+L1, L2, L3, et cetera.
+
+=item B<--match-d=REGEX>
+
+Only count files in directories matching the Perl regex.  For example
+
+     --match-d='/(src|include)/'
+
+only counts files in directory paths containing C</src/>
+or C</include/>.
+
+=item B<--not-match-d=REGEX>
+
+Count all files except in directories matching the Perl regex.
+
+=item B<--match-f=REGEX>
+
+Only count files whose basenames match the Perl regex. For example
+this only counts files at start with Widget or widget:
+
+     --match-f='^[Ww]idget'
+
+=item B<--not-match-f=REGEX>
+
+Count all files except those whose basenames match the Perl regex.
+
+=item B<--skip-archive=REGEX>
+
+Ignore files that end with the given Perl regular
+expression.  For example, if given
+  --skip-archive='(zip|tar(\.(gz|Z|bz2|xz|7z))?)'
+the code will skip files that end with .zip,
+.tar, .tar.gz, .tar.Z, .tar.bz2, .tar.xz, and
+.tar.7z.
+
+=item B<--skip-win-hidden>
+
+On Windows, ignore hidden files.
+
+=back
+
+=head2 Debug Options
+
+=over 4
+
+=item B<--categorized=FILE>
+
+Save names of categorized files to FILE.
+
+=item B<--counted=FILE>
+
+Save names of processed source files to FILE.
+
+=item B<--diff-alignment=FILE>
+
+Write to FILE a list of files and file pairs
+showing which files were added, removed, and/or
+compared during a run with B<--diff>.  This switch
+forces the B<--diff> mode on.
+
+=item B<--explain=LANG>
+
+Print the filters used to remove comments for
+language LANG and exit.  In some cases the 
+filters refer to Perl subroutines rather than
+regular expressions.  An examination of the
+source code may be needed for further explanation.
+
+=item B<--help>
+
+Print this usage information and exit.
+
+=item B<--found=FILE>
+
+Save names of every file found to FILE.
+
+=item B<--ignored=FILE>
+
+Save names of ignored files and the reason they were ignored to FILE.
+
+=item B<--print-filter-stages>
+
+Print to I<STDOUT> processed source code before and after each filter is
+applied.
+
+=item B<--show-ext[=EXT]>
+
+Print information about all known (or just the given) file extensions
+and exit.
+
+=item B<--show-lang[=LANG]>
+
+Print information about all known (or just the given) languages and
+exit.
+
+=item B<--show-os>
+
+Print the value of the operating system mode and exit.  See also
+B<--unix>, B<--windows>.
+
+=item B<-v[=<number>]>
+
+Turn on verbose with optional numeric value.
+
+=item B<--version>
+
+Print the version of this program and exit.
+
+=item B<--write-lang-def=FILE>
+
+Writes to FILE the language processing filters then exits. Useful as a
+first step to creating custom language definitions. See also
+B<--force-lang-def>, B<--read-lang-def>.
+
+=back
+
+=head2 Output Options
+
+=over 4
+
+=item B<--3>
+
+Print third-generation language output.  (This option can cause report 
+summation to fail if some reports were produced with this option while 
+others were produced without it.)
+
+=item B<--by-percent X>          
+
+Instead of comment and blank line counts, show 
+these values as percentages based on the
+value of X in the denominator:
+
+    X = 'c'   -> # lines of code
+    X = 'cm'  -> # lines of code + comments
+    X = 'cb'  -> # lines of code + blanks
+    X = 'cmb' -> # lines of code + comments + blanks
+
+For example, if using method 'c' and your code
+has twice as many lines of comments as lines 
+of code, the value in the comment column will 
+be 200%.  The code column remains a line count.
+
+=item B<--progress-rate=N>
+
+Show progress update after every N files are processed (default
+N=100). Set N to 0 to suppress progress output; useful when
+redirecting output to I<STDOUT>.
+
+=item B<--quiet>
+
+Suppress all information messages except for the final report.
+
+=item B<--report-file=FILE>
+
+Write the results to FILE instead of standard output.
+
+=item B<--out=FILE>
+
+Synonym for B<--report-file=FILE>.
+
+=item B<--csv>
+
+Write the results as comma separated values.
+
+=item B<--csv-delimiter=C>
+
+Use the character C as the delimiter for comma separated files 
+instead of ,.  This switch forces B<--csv> to be on.
+
+=item B<--sql=FILE>
+
+Write results as SQL CREATE and INSERT statements which can be read by
+a database program such as SQLite. If FILE is B<->, output is sent to
+I<STDOUT>.
+
+=item B<--sql-append>
+
+Append SQL insert statements to the file specified by B<--sql> and 
+do not generate table creation option.
+
+=item B<--sql-project=NAME>
+
+Use <name> as the project identifier for the current run. Only valid
+with the B<--sql> option.
+
+=item B<--sql-style=STYLE>       
+
+Write SQL statements in the given style instead of the default
+SQLite format.  Currently, the only style option is Oracle.
+
+=item B<--sum-one>
+
+For plain text reports, show the SUM: output line even if only 
+one input file is processed.
+
+=item B<--xml>
+
+Write the results in XML.
+
+=item B<--xsl[=FILE]>
+
+Reference FILE as an XSL stylesheet within the XML output. If FILE is
+not given, writes a default stylesheet, cloc.xsl. This switch forces
+B<--xml> to be on.
+
+=item B<--yaml>
+
+Write the results in YAML.
+
+=back
+
+=head1 EXAMPLES
+
+Count the lines of code in the Perl 5.10.0 compressed tar file
+on a UNIX-like operating system:
+
+  cloc perl-5.10.0.tar.gz
+
+Count the changes in files, code, and comments between Python
+releases 2.6.6 and 2.7:
+
+  cloc --diff Python-2.6.6.tar.bz  Python-2.7.tar.bz2
+
+To see how cloc aligns files for comparison between two code
+bases, use the B<--diff-alignment=FILE> option.  Here the
+alignment information is written to C<align.txt>:
+
+  cloc --diff-aligment=align.txt gcc-4.4.0.tar.bz2  gcc-4.5.0.tar.bz2
+
+Print the recognized languages
+
+  cloc --show-lang
+
+Remove comments from C<foo.c> and save the result in C<foo.c.nc>
+
+  cloc --strip-comments=nc foo.c
+
+Additional examples can be found at L<http://cloc.sourceforge.net>.
+
+=head1 ENVIRONMENT
+
+None.
+
+=head1 FILES
+
+None.
+
+=head1 SEE ALSO
+
+sloccount(1)
+
+=head1 AUTHORS
+
+The cloc program was written by Al Danial <al.danial@gmail.com> and
+is Copyright (C) 2006-2015 <al.danial@gmail.com>.
+
+The manual page was originally written by Jari Aalto <jari.aalto@cante.net>.
+
+Both the code and documentation is released under the GNU GPL version 2
+or (at your option) any later version. For more information about
+license, visit <http://www.gnu.org/copyleft/gpl.html>.
+
+=cut

@@ -1,0 +1,32 @@
+README: cloc - statistics utility to count lines of code
+----------------------------------------------------------------
+
+Count physical lines of source code in the given files (may be
+archives such as compressed tarballs or zip files) and/or recursively
+below the given directories.  Given two directories or archive
+files, it can compute differences of source code and comments
+between the code bases.
+
+Important files
+
+    COPYING         GPL v2 or later Licence
+    INSTALL         Install instructions
+    NEWS       	    Project change records
+
+Project details
+
+    Homepage
+      https://github.com/AlDanial/cloc
+
+    To report bugs
+      See Devel site
+
+    Source code repository
+      See Devel site
+
+    Depends
+      Perl (version 5.006 or newer). Uses only standard Perl libraries.
+      CPAN Algorithm::Diff
+      CPAN Regexp::Common
+
+End of file
