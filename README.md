@@ -607,6 +607,9 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
    --csv                     Write the results as comma separated values.
    --csv-delimiter=C         Use the character C as the delimiter for comma
                              separated files instead of ,.  This switch forces
+   --json                    Write the results as JavaScript Object Notation
+                             (JSON) formatted output.
+   --md                      Write the results as Markdown-formatted text.
    --out=FILE                Synonym for --report-file=FILE.
                              --csv to be on.
    --progress-rate=N         Show progress update after every N files are
@@ -2057,7 +2060,6 @@ Here, in no particular order and with no promise of future delivery, are
 features and capabilities currently in development:
 <ol>
 <li> skip files defined in `.gitignore` </li>
-<li> produce Markdown output wit `--md`</li>
 <li> produce reStructuredText output with `--rst`</li>
 <li> count code (e.g. Javascript) embedded in HTML files </li>
 </ol>
@@ -2184,5 +2186,5 @@ Corporation.
 [](1}}})
 <a name="Copyright"></a> []({{{1)
 #   [Copyright &#9650;](#___top "click to go to top of document")
-Copyright (c) 2006-2015, [Al Danial](https://github.com/AlDanial)
+Copyright (c) 2006-2016, [Al Danial](https://github.com/AlDanial)
 [](1}}})
