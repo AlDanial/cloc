@@ -1851,9 +1851,9 @@ sub diff_report     {                        # {{{1
     # returns an array of lines containing the results
     print "-> diff_report\n" if $opt_v > 2;
 
-    if ($opt_xml or $opt_yaml) {
+    if ($opt_xml or $opt_yaml or $opt_json) {
         print "<- diff_report\n" if $opt_v > 2;
-        return diff_xml_yaml_report(@_)
+        return diff_xml_yaml_json_report(@_)
     } elsif ($opt_csv or $opt_md) {
         print "<- diff_report\n" if $opt_v > 2;
         return diff_csv_report(@_)
@@ -2122,7 +2122,7 @@ sub xml_yaml_or_json_header {                # {{{1
     print "<- xml_yaml_or_json_header\n" if $opt_v > 2;
     return $header;
 } # 1}}}
-sub diff_xml_yaml_report {                   # {{{1
+sub diff_xml_yaml_json_report {              # {{{1
     # returns an array of lines containing the results
     my ($version    , # in
         $elapsed_sec, # in
@@ -2130,7 +2130,8 @@ sub diff_xml_yaml_report {                   # {{{1
         $rhhh_count , # in  count{TYPE}{nFiles|code|blank|comment}{a|m|r|s}
         $rh_scale   , # in
        ) = @_;
-    print "-> diff_xml_yaml_report\n" if $opt_v > 2;
+    print "-> diff_xml_yaml_json_report\n" if $opt_v > 2;
+    my ($Q, $open_B, $close_B, $start, $C) = yaml_to_json_separators();
 
 #print "diff_report: ", Dumper($rhhh_count), "\n";
     my @results       = ();
@@ -2176,12 +2177,8 @@ sub diff_xml_yaml_report {                   # {{{1
         if ($opt_xml) {
             push @results, "  <$S>";
         } elsif ($opt_yaml or $opt_json) {
-            push @results, "$S :";
+            push @results, "${Q}${S}${Q} : ${open_B}";
         }
-########foreach my $lang_or_file (keys %{$rhhh_count}) {
-########    $rhhh_count->{$lang_or_file}{'code'} = 0 unless
-########        defined $rhhh_count->{$lang_or_file}{'code'};
-########}
         foreach my $lang_or_file (sort {
                                      $rhhh_count->{$b}{'code'} <=>
                                      $rhhh_count->{$a}{'code'}
@@ -2222,14 +2219,14 @@ sub diff_xml_yaml_report {                   # {{{1
                   }
                 }
                 push @results, $L . "/>";
-            } elsif ($opt_yaml) {
+            } elsif ($opt_yaml or $opt_json) {
                 if ($BY_FILE) {
-                    push @results, sprintf "  - file : %s",
+                    push @results, sprintf "    ${Q}file${Q} : ${Q}%s${Q}${C}",
                                    rm_leading_tempdir($lang_or_file, \%TEMP_DIR);
-                    push @results, sprintf "    files_count : 1",
+                    push @results, sprintf "    ${Q}files_count${Q} : 1${C}",
                 } else {
-                    push @results, sprintf "  - language : %s", $lang_or_file;
-                    push @results, sprintf "    files_count : %d",
+                    push @results, sprintf "    ${Q}language${Q} : ${Q}%s${Q}${C}", $lang_or_file;
+                    push @results, sprintf "    ${Q}files_count${Q} : %d${C}",
                             $rhhh_count->{$lang_or_file}{'nFiles'}{$S};
                 }
                 if ($opt_by_percent) {
@@ -2239,19 +2236,19 @@ sub diff_xml_yaml_report {                   # {{{1
                         $rhhh_count->{$lang_or_file}{'blank'}{$S}  );
                     foreach my $T (qw(blank comment)) {
                         if ($rhhh_count->{$lang_or_file}{'code'}{$S} > 0) {
-                            push @results, sprintf "    %s : %.2f",
+                            push @results, sprintf "    ${Q}%s${Q} : %.2f${C}",
                                     $T, $rhhh_count->{$lang_or_file}{$T}{$S} / $DEN * 100;
                         } else {
-                            push @results, sprintf "    %s : 0.0", $T;
+                            push @results, sprintf "    ${Q}%s${Q} : 0.0${C}", $T;
                         }
                     }
                     foreach my $T (qw(code)) {
-                        push @results, sprintf "    %s : %d",
+                        push @results, sprintf "    ${Q}%s${Q} : %d${C}",
                                 $T, $rhhh_count->{$lang_or_file}{$T}{$S};
                     }
                 } else {
                     foreach my $T (qw(blank comment code)) {
-                        push @results, sprintf "    %s : %d",
+                        push @results, sprintf "    ${Q}%s${Q} : %d${C}",
                                 $T, $rhhh_count->{$lang_or_file}{$T}{$S};
                     }
                 }
@@ -2306,13 +2303,15 @@ sub diff_xml_yaml_report {                   # {{{1
                 }
             }
         }
+        $results[-1] =~ s/,\s*$/},/;   # close last set with  },  instead of ,
     }
+    $results[-1] =~ s/,\s*$/}/;   # close last set with  }  instead of ,
 
     if ($opt_xml) {
         push @results, "</diff_results>";
     }
     write_xsl_file() if $opt_xsl and $opt_xsl eq $CLOC_XSL;
-    print "<- diff_xml_yaml_report\n" if $opt_v > 2;
+    print "<- diff_xml_yaml_json_report\n" if $opt_v > 2;
     return @results;
 } # 1}}}
 sub diff_csv_report {                        # {{{1
