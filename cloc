@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 # cloc -- Count Lines of Code                  {{{1
-# Copyright (C) 2006-2015 Al Danial <al.danial@gmail.com>
+# Copyright (C) 2006-2016 Al Danial <al.danial@gmail.com>
 # First release August 2006
 #
 # Includes code from:
@@ -626,6 +626,7 @@ if ($opt_count_diff) {
 }
 
 # Options defaults:
+$opt_quiet         =   1 if $opt_md and !defined $opt_report_file;
 $opt_progress_rate = 100 unless defined $opt_progress_rate;
 $opt_progress_rate =   0 if     defined $opt_quiet;
 if (!defined $opt_v) {
@@ -2711,7 +2712,7 @@ sub generate_report {                        # {{{1
             "3rd gen. equiv"
               if $opt_3;
         if ($opt_md) {
-            my @col_header  = ();
+            my @col_header  = (); 
             if ($data_line =~ m{\s%}) {
                 $data_line =~ s{\s%}{_%}g;
                 foreach my $w ( split(' ', $data_line) ) {
@@ -2719,7 +2720,7 @@ sub generate_report {                        # {{{1
                     push @col_header, $w;
                 }
             } else {
-                @col_header = split(' ', $data_line);
+                push @col_header, split(' ', $data_line);
             }
             my @col_hyphens    = ( '-------:') x scalar(@col_header);
                $col_hyphens[0] =   ':-------'; # first column left justified
@@ -2960,7 +2961,7 @@ sub generate_report {                        # {{{1
             push @results, "  scaled: " . $sum_scaled;
             push @results, "  factor: " . $avg_scale ;
         }
-    } elsif ($opt_csv or $opt_md) {
+    } elsif ($opt_csv) {
         # do nothing
     } else {
 
@@ -2986,9 +2987,18 @@ sub generate_report {                        # {{{1
         $data_line .= sprintf $Format{'6'}{$Style},
             $avg_scale   ,
             $sum_scaled if $opt_3;
-        push @results, $hyphen_line if $sum_files > 1 or $opt_sum_one;
-        push @results, $data_line   if $sum_files > 1 or $opt_sum_one;
-        push @results, $hyphen_line;
+        if ($opt_md) {
+            my $n_cols = scalar(split(' ', $data_line));
+            $data_line =~ s/\s+/\|/g;
+            my @col_hyphens    = ( '--------') x $n_cols;
+            push @results, join("|", @col_hyphens);
+            push @results, $data_line   if $sum_files > 1 or $opt_sum_one;
+            unshift @results, ( "cloc|$header_line", "--- | ---", "", );
+        } else {
+            push @results, $hyphen_line if $sum_files > 1 or $opt_sum_one;
+            push @results, $data_line   if $sum_files > 1 or $opt_sum_one;
+            push @results, $hyphen_line;
+        }
     }
     write_xsl_file() if $opt_xsl and $opt_xsl eq $CLOC_XSL;
     print "<- generate_report\n" if $opt_v > 2;
