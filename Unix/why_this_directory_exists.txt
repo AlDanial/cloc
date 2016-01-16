@@ -1,0 +1,11 @@
+The contents of the cloc/Unix/ directory are intended for 
+cloc package maintainers on distributions such as Ubuntu,
+Debian, Fedora, Gentoo, Mint, SUSE, FreeBSD, Mac OSX.  It
+contains a version of cloc that is stripped of the 
+Rexexp::Common and Algorithm::Diff code and instead relies
+on the package definition to require these--as well as
+Digest::MD5--as dependencies.
+
+Also included is Perl "POD" documentation that can be used
+to create a man page:
+  pod2man cloc.1.pod > cloc.1
