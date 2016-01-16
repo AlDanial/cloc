@@ -700,7 +700,7 @@ Elm                        (elm)
 ERB                        (ERB, erb)
 Erlang                     (erl, hrl)
 Expect                     (exp)
-F#                         (fsi, fs, fs)
+F#                         (fsi, fs)
 Focus                      (focexec)
 Forth                      (4th, e4, f83, fb, forth, fpm, fr, frt, ft, fth, rx, fs, f, for)
 Fortran 77                 (F, F77, f77, FOR, FTN, ftn, pfo, f, for)
@@ -830,13 +830,15 @@ zsh                        (zsh)
 The above list can be customized by reading language definitions from a
 file with the `--read-lang-def` or `--force-lang-def` options.
 
-Eight file extensions map to multiple languages:
+These file extensions map to multiple languages:
 
 *   `.cl` files could be Lisp or OpenCL
+*   `.f` or `.for` files could be Fortran or Forth
+*   `.fs` files could be Forth or F#
 *   `.inc` files could be PHP or Pascal
 *   `.jl` files could be Lisp or Julia
 *   `.m` files could be MATLAB, Mercury, MUMPS, or Objective C
-*   `.p` files could be D or dtrace
+*   `.d` files could be D or dtrace
 *   `.pl` files could be Perl or Prolog
 *   `.pp` files could be Pascal or Puppet
 *   `.pro` files could be IDL, Prolog, or a Qt Project
