@@ -1,7 +1,7 @@
 #   Copyright
 #
-#      Copyright (C) 2015 Al Danial <al.danial@gmail.com>.
-#      Copyright (C) 2010-2015 Jari Aalto <jari.aalto@cante.net>
+#      Copyright (C) 2016 Al Danial <al.danial@gmail.com>.
+#      Copyright (C) 2010-2016 Jari Aalto <jari.aalto@cante.net>
 #
 #   License
 #
@@ -84,8 +84,12 @@ and on Windows, use, for example:
 
 =item B<--list-file=FILE>
 
-Take the list of file and/or directory names to process from FILE
-which has one file/directory name per line. See also
+Take the list of file and/or directory names to
+process from FILE, which has one file/directory
+name per line.  Only exact matches are counted;
+relative path names will be resolved starting from
+the directory where cloc is invoked.
+See also 
 B<--exclude-list-file>
 
 =item B<--unicode>
@@ -162,8 +166,8 @@ then use these filters instead of the built-in
 filters.  Note:  languages which map to the same 
 file extension (for example:
 MATLAB/Objective C/MUMPS;  Pascal/PHP; 
-Lisp/OpenCL) will be ignored as these require 
-additional processing that is not expressed in 
+Lisp/OpenCL; Lisp/Julia; Perl/Prolog) will be ignored as
+these require additional processing that is not expressed in 
 language definition files.
 Use B<--read-lang-def> to define new language
 filters without replacing built-in filters
@@ -276,7 +280,7 @@ Microsoft Windows mode.  See also B<--unix>, B<--show-os>.
 
 =over 4
 
-=item B<--exclude-dir=<dir>[,<dir> ...]>
+=item B<--exclude-dir=DIR1[,DIR2 ...]>
 
 Exclude the given comma separated directories from being scanned. For
 example:
@@ -296,12 +300,20 @@ Do not count files having the given file name extensions.
 Exclude the given comma separated languages from being counted.
 
 =item B<--exclude-list-file=FILE>
-
-Ignore files whose names appear in FILE. FILE should have one entry
-per line.  Only exact matches are ignored;
-relative path names will be resolved starting from 
-the directory where cloc is invoked.  
+Ignore files and/or directories whose names
+appear in FILE.  FILE should have one file
+name per line.  Only exact matches are ignored;
+relative path names will be resolved starting from
+the directory where cloc is invoked.
 See also B<--list-file>.
+
+=item B<--fullpath>
+Modifies the behavior of B<--match-f> or
+B<--not-match-f> to include the file's path
+in the regex, not just the file's basename.
+(This does not expand each file to include its
+absolute path, instead it uses as much of
+the path as is passed in to cloc.)
 
 =item B<--include-lang=L1[,L2 ...]>
 
@@ -406,9 +418,13 @@ exit.
 Print the value of the operating system mode and exit.  See also
 B<--unix>, B<--windows>.
 
-=item B<-v[=<number>]>
+=item B<-v[=N]>
 
 Turn on verbose with optional numeric value.
+
+=item B<--verbose[=N]>
+
+Long form of B<-v>.
 
 =item B<--version>
 
@@ -448,6 +464,27 @@ has twice as many lines of comments as lines
 of code, the value in the comment column will 
 be 200%.  The code column remains a line count.
 
+=item B<--csv>
+
+Write the results as comma separated values.
+
+=item B<--csv-delimiter=C>
+
+Use the character C as the delimiter for comma separated files 
+instead of ,.  This switch forces B<--csv> to be on.
+
+=item B<--json>
+
+Write the results in JavaScript Object Notation (JSON).
+
+=item B<--md>
+
+Write the results as Markdown-formatted text.
+
+=item B<--out=FILE>
+
+Synonym for B<--report-file=FILE>.
+
 =item B<--progress-rate=N>
 
 Show progress update after every N files are processed (default
@@ -461,19 +498,6 @@ Suppress all information messages except for the final report.
 =item B<--report-file=FILE>
 
 Write the results to FILE instead of standard output.
-
-=item B<--out=FILE>
-
-Synonym for B<--report-file=FILE>.
-
-=item B<--csv>
-
-Write the results as comma separated values.
-
-=item B<--csv-delimiter=C>
-
-Use the character C as the delimiter for comma separated files 
-instead of ,.  This switch forces B<--csv> to be on.
 
 =item B<--sql=FILE>
 
@@ -560,7 +584,7 @@ sloccount(1)
 =head1 AUTHORS
 
 The cloc program was written by Al Danial <al.danial@gmail.com> and
-is Copyright (C) 2006-2015 <al.danial@gmail.com>.
+is Copyright (C) 2006-2016 <al.danial@gmail.com>.
 
 The manual page was originally written by Jari Aalto <jari.aalto@cante.net>.
 
