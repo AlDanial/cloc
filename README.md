@@ -105,6 +105,7 @@ SUM:                             2            725           1103           8713
 # [Overview &#9650;](#___top "click to go to top of document")
 
 [Translations:
+[Arabic](http://www.garciniacambogiareviews.ca/translations/aldanial-cloc/),
 [Belarussian](http://www.besteonderdelen.nl/blog/?p=5426), 
 [Bulgarian](http://www.ajoft.com/wpaper/aj-cloc.html), 
 []( [Polish](http://www.trevister.com/blog/cloc.html), ) 
@@ -2198,6 +2199,10 @@ Patricia Motosan
 provided the
 [Romanian](http://www.bildelestore.dk/blog/cloc-contele-de-linii-de-cod/),
 translation.
+
+The [Garcinia Cambogia Review Team](http://www.garciniacambogiareviews.ca/)
+provided the
+[Arabic translation](http://www.garciniacambogiareviews.ca/translations/aldanial-cloc/).
 
 The development of cloc was partially funded by the Northrop Grumman
 Corporation.
