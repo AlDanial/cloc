@@ -2197,7 +2197,7 @@ translation.
 
 Patricia Motosan
 provided the
-[Romanian](http://www.bildelestore.dk/blog/cloc-contele-de-linii-de-cod/),
+[Romanian](http://www.bildelestore.dk/blog/cloc-contele-de-linii-de-cod/)
 translation.
 
 The [Garcinia Cambogia Review Team](http://www.garciniacambogiareviews.ca/)
