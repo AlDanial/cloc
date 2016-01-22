@@ -341,15 +341,15 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
  ${BB}Debug Options${NN}
    --categorized=<file>      Save names of categorized files to <file>.
    --counted=<file>          Save names of processed source files to <file>.
+   --diff-alignment=<file>   Write to <file> a list of files and file pairs
+                             showing which files were added, removed, and/or
+                             compared during a run with --diff.  This switch
+                             forces the --diff mode on.
    --explain=<lang>          Print the filters used to remove comments for
                              language <lang> and exit.  In some cases the
                              filters refer to Perl subroutines rather than
                              regular expressions.  An examination of the
                              source code may be needed for further explanation.
-   --diff-alignment=<file>   Write to <file> a list of files and file pairs
-                             showing which files were added, removed, and/or
-                             compared during a run with --diff.  This switch
-                             forces the --diff mode on.
    --help                    Print this usage information and exit.
    --found=<file>            Save names of every file found to <file>.
    --ignored=<file>          Save names of ignored files and the reason they
