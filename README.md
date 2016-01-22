@@ -272,7 +272,7 @@ exists).
 For example, the cloc 1.64 MD5 sum is 616a87f8e95d30b65348a037b4da34eb
 and its report can be found at
 https://www.virustotal.com/latest-scan/616a87f8e95d30b65348a037b4da34eb .
-Alternatively, you can uploade `.exe`s to the site.
+Alternatively, you can upload `.exe`s to the site.
 
 #### Why is the Windows executable so large?
 
@@ -285,7 +285,7 @@ than `PAR::Packer`, but that's pure speculation.
 #### Create your own executable
 The most robust option for creating a Windows executable of
 cloc is to use [ActiveState's Perl Development Kit](http://www.activestate.com/perl-dev-kit).
-It includes a utlity, `perlapp`, which can build stand-alone
+It includes a utility, `perlapp`, which can build stand-alone
 Windows, Mac, and Linux binaries of Perl source code.
 
 [perl2exe](http://www.indigostar.com/perl2exe.php)
@@ -393,7 +393,7 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              See also --exclude-list-file.
    --unicode                 Check binary files to see if they contain Unicode
                              expanded ASCII text.  This causes performance to
-                             drop noticably.
+                             drop noticeably.
 
  Processing Options
    --autoconf                Count .in files (as processed by GNU autoconf) of
@@ -1264,7 +1264,7 @@ creates the file `my_definitions.txt` which can be modified
 then read back in with either the `--read-lang-def` or
 `--force-lang-def` option.  The difference between the options is
 former merges language definitions from the given file in with
-cloc's internal definitions with cloc'taking precedence
+cloc's internal definitions with cloc's taking precedence
 if there are overlaps.  The `--force-lang-def` option, on the
 other hand, replaces cloc's definitions completely.
 This option has a disadvantage in preventing cloc from counting
@@ -1732,7 +1732,7 @@ One might be tempted to also include
 in `~/.sqliterc` but this causes problems when the output has more than
 one row since the widths of entries in the first row govern the maximum
 width for all subsequent rows. Often this leads to truncated output--not
-at all desireable. One option is to write a custom SQLite output
+at all desirable. One option is to write a custom SQLite output
 formatter such as `sqlite_formatter`, included with cloc. 
 
 To use it, simply pass `sqlite3`'s STDOUT into `sqlite_formatter`
@@ -2098,7 +2098,7 @@ access to a computer with a large body of MUMPS code to test cloc.
 Tod Huggins gave helpful suggestions for the Visual Basic filters.
 
 Anton Demichev found a flaw with the JSP counter in cloc v0.76
-and wrote the XML ouput generator for the `--xml` option.
+and wrote the XML output generator for the `--xml` option.
 
 Reuben Thomas pointed out that ISO C99 allows `//` as a comment
 marker, provided code for the `--no3` and `--stdin-name`

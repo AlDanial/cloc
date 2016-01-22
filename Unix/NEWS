@@ -358,7 +358,7 @@ New options and features:
 
     The new option --force-lang-def behaves exactly like --read-lang-def
     did in cloc versions 1.56 and earlier--it completely ignores
-    cloc's internal language definitions and repaces them with definitions
+    cloc's internal language definitions and replaces them with definitions
     in the given file.  However, one will no longer be able to count
     files with the extensions .m, .inc, or .cl.
 
