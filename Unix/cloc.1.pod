@@ -95,7 +95,7 @@ B<--exclude-list-file>
 =item B<--unicode>
 
 Check binary files to see if they contain Unicode expanded ASCII text.
-This causes performance to drop noticably.
+This causes performance to drop noticeably.
 
 =back
 
