@@ -5227,12 +5227,14 @@ sub set_constants {                          # {{{1
             );
 # 1}}}
 %{$rh_Language_by_File}      = (             # {{{1
+            'build.xml'      => 'Ant/XML'            ,
+            'CMakeLists.txt' => 'CMake'              ,
+            'Jamfile'        => 'Jam'                ,
+            'Jamrules'       => 'Jam'                ,
             'Makefile'       => 'make'               ,
             'makefile'       => 'make'               ,
             'gnumakefile'    => 'make'               ,
             'Gnumakefile'    => 'make'               ,
-            'CMakeLists.txt' => 'CMake'              ,
-            'build.xml'      => 'Ant/XML'            ,
             'pom.xml'        => 'Maven/XML'          ,
             'Rakefile'       => 'Ruby'               ,
             'rakefile'       => 'Ruby'               ,
@@ -5529,6 +5531,10 @@ sub set_constants {                          # {{{1
     'IDL/Qt Project/Prolog' => [ [ 'die' ,          ], ], # never called
     'InstallShield'      => [   [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
+    'Jam'                => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
     'JSP'                => [   [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
                                 [ 'remove_jsp_comments' ,          ],
@@ -6450,6 +6456,7 @@ sub set_constants {                          # {{{1
     'iqlisp'                       =>   1.38,
     'iqrp'                         =>   6.15,
     'j2ee'                         =>   1.60,
+    'Jam'                          =>   2.00,
     'janus'                        =>   1.13,
     'Java'                         =>   1.36,
     'JavaScript'                   =>   1.48,
