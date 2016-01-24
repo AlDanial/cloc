@@ -80,6 +80,7 @@ if (defined $Algorithm::Diff::VERSION) {
 }
 # print "2 HAVE_Algorith_Diff = $HAVE_Algorith_Diff\n";
 # test_alg_diff($ARGV[$#ARGV - 1], $ARGV[$#ARGV]); die;
+# die "Hre=$HAVE_Rexexp_Common  Had=$HAVE_Algorith_Diff";
 
 # Uncomment next two lines when building Windows executable with perl2exe
 # or if running on a system that already has Regexp::Common.
@@ -3865,7 +3866,7 @@ sub classify_file {                          # {{{1
             # returns (unknown)
         }
     }
-    print "<- classify_file($full_file)\n" if $opt_v > 2;
+    print "<- classify_file($full_file)=$language\n" if $opt_v > 2;
     return $language;
 } # 1}}}
 sub peek_at_first_line {                     # {{{1
@@ -5106,6 +5107,7 @@ sub set_constants {                          # {{{1
             'mat'         => 'Unity-Prefab'          ,
             'ps1'         => 'PowerShell'            ,
             'R'           => 'R'                     ,
+            'r'           => 'R'                     ,
             'rkt'         => 'Racket'                ,
             'rktl'        => 'Racket'                ,
             'ss'          => 'Racket'                ,
