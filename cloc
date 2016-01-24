@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "1.65";  # odd number == beta; even number == stable
+my $VERSION = "1.66";  # odd number == beta; even number == stable
 my $URL     = "https://github.com/AlDanial/cloc";
 require 5.006;
 # use modules                                  {{{1
