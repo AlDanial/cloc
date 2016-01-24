@@ -11,7 +11,7 @@ transition to GitHub in September 2015.
 *   [Quick Start](#Quick_Start)
 *   [Overview](#Overview)
 *   [Download](https://github.com/AlDanial/cloc/releases/latest)
-    *   [npm, apt-get, yum, pacman, pkg, port](#apt-get)
+    *   [npm, apt-get, yum, dnf, pacman, pkg, port](#apt-get)
     *   [Stable release](#Stable)
     *   [Development version](#Dev)
 *   [License](#License)
@@ -152,6 +152,7 @@ Depending your operating system, one of these installation methods may work for 
     npm install -g cloc                    # https://www.npmjs.com/package/cloc
     sudo apt-get install cloc              # Debian, Ubuntu
     sudo yum install cloc                  # Red Hat, Fedora
+    sudo dnf install cloc                  # Fedora 22 or later
     sudo pacman -S cloc                    # Arch
     sudo pkg install cloc                  # FreeBSD
     sudo port install cloc                 # Mac OS X with MacPorts
