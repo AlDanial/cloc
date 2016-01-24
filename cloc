@@ -2025,7 +2025,7 @@ sub diff_report     {                        # {{{1
             push @results, $line;
         }
     }
-    push @results, "-" x 79;
+    push @results, $hyphen_line;
     push @results, "SUM:";
     foreach my $S (qw(same modified added removed)) {
         my $indent = $spacing_1 - 2;
@@ -2055,7 +2055,7 @@ sub diff_report     {                        # {{{1
         }
         push @results, $line;
     }
-    push @results, "-" x 79;
+    push @results, $hyphen_line;
     write_xsl_file() if $opt_xsl and $opt_xsl eq $CLOC_XSL;
     print "<- diff_report\n" if $opt_v > 2;
 
