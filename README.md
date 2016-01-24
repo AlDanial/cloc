@@ -46,8 +46,8 @@ Step 2:  Open a terminal (`cmd.exe` on Windows).
 Step 3:  Invoke cloc to count your source files, directories, or archives.
 The executable name differs depending on whether you use the 
 development source version (`cloc`), source for a
-released version (`cloc-1.64.pl`) or a Windows executable
-(`cloc-1.64.exe`).  On this page, `cloc` is the generic term
+released version (`cloc-1.66.pl`) or a Windows executable
+(`cloc-1.66.exe`).  On this page, `cloc` is the generic term
 used to refer to any of these.
 
 **a file**
@@ -234,9 +234,12 @@ and Digest::MD5 installed locally.
 <a name="building_exe"></a> []({{{1)
 # [Building a Windows Executable &#9650;](#___top "click to go to top of document")
 
-The default Windows download, <tt>cloc-1.64.exe</tt>, was built with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm) 
-on a Windows 7 computer with 
-[Strawberry Perl](http://strawberryperl.com/). 
+The default Windows download, <tt>cloc-1.66.exe</tt>, was built with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm) 
+on a 32 bit Windows 7 VirtualBox image
+pulled from https://dev.windows.com/en-us/microsoft-edge/tools/vms/linux/
+and running on an Ubuntu 15.10 host.
+The virtual machine runs
+[Strawberry Perl](http://strawberryperl.com/) version 5.22.1.
 Windows executables of cloc versions
 1.60 and earlier were built with
 [perl2exe](http://www.indigostar.com/perl2exe.htm) on a 32 bit Windows
@@ -259,8 +262,6 @@ On centrally-managed corporate Windows machines, however, this
 this may be difficult or impossible.
 
 The Windows executable distributed with cloc 
-(currently the 1.64 exe is only at SourceForge,
-http://sourceforge.net/projects/cloc/files/cloc/v1.64/)
 is provided as
 a best-effort of a virus and malware-free `.exe`.
 You are encouraged to run your own virus scanners against the
@@ -269,17 +270,20 @@ https://www.virustotal.com/ .
 If you provide an executables MD5 or SHA256 checksum, you can
 get a direct link to their report for an executable (if it
 exists).
-For example, the cloc 1.64 MD5 sum is 616a87f8e95d30b65348a037b4da34eb
+For example, the cloc 1.66 SHA256 sum is 54d6662e59b04be793dd10fa5e5edf7747cf0c0cc32f71eb67a3cf8e7a171d81
 and its report can be found at
-https://www.virustotal.com/latest-scan/616a87f8e95d30b65348a037b4da34eb .
+https://www.virustotal.com/en/file/54d6662e59b04be793dd10fa5e5edf7747cf0c0cc32f71eb67a3cf8e7a171d81/analysis/1453601367/ .
 Alternatively, you can upload `.exe`s to the site.
 
 #### Why is the Windows executable so large?
 
 Windows executables of cloc versions 1.60 and earlier, created with
-perl2exe as noted above, are about 1.6 MB, while newer versions, created
-with `PAR::Packer`, are 11 MB. Why are the newer executables so
-much larger? My theory is that perl2exe uses smarter tree pruning logic
+perl2exe as noted above, are about 1.6 MB, while versions 1.62 and 1.54, created
+with `PAR::Packer`, are 11 MB. 
+Version 1.66, built with a newer version of `PAR::Packer`, is about 5.5 MB.
+Why are the `PAR::Packer`, executables so
+much larger than those built with perl2exe? My theory is that perl2exe 
+uses smarter tree pruning logic
 than `PAR::Packer`, but that's pure speculation.
 
 #### Create your own executable
@@ -301,13 +305,23 @@ the PAR::Packer module. Finally, invoke the newly installed `pp`
 command with the cloc source code to create an `.exe` file:
 
 <pre>C:> perl -MCPAN -e shell
+cpan> install Digest::MD5
+cpan> install Regexp::Common
+cpan> install Algorithm::Diff
 cpan> install PAR::Packer
 cpan> exit
-C:> pp cloc-1.64.pl
+C:> pp -M Digest::MD5 -c -x -o cloc-1.66.exe cloc
 </pre>
 
-A variation on the above is if you installed the portable version of
-Strawberry Perl, you will need to run `portableshell.bat` first
+Note!  The `cloc` source file in the `pp` command above comes from
+the Unix subdirectory of the cloc source distribution.  This source
+file is stripped of the internally-provided Regexp::Common and 
+Algorithm::Diff modules that you'll find in the `cloc-1.66.pl` file
+and instead expects these to come from the Perl environment on your
+machine.
+
+A variation on the instructions above is if you installed the portable 
+version of Strawberry Perl, you will need to run `portableshell.bat` first
 to properly set up your environment. The Strawberry Perl derived
 executable on the GitHub download area was created with the portable
 version on a Windows 7 computer.
