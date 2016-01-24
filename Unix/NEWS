@@ -1,6 +1,6 @@
                 Release Notes for cloc version 1.66
                    https://github.com/AlDanial/cloc
-                          January 27, 2016
+                          January 23, 2016
 
 New Languages:
     o AspectJ
@@ -12,7 +12,6 @@ New Languages:
     o Elm
     o Forth
     o GDScript
-    o Homebrew
     o Jam
     o Nemerle
     o PowerBuilder
@@ -68,6 +67,7 @@ Bug Fixes:
     o Force files ending with .smarty to be counted as Smarty (unless over-
       ridden by --force-lang=X).
     o Fix hash reference bug triggered with '--csv --by-percent' combination .
+    o Correctly recognize R files on Windows.
 
 ============================================================================
                 Release Notes for cloc version 1.64
