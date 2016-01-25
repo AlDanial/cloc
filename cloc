@@ -30,7 +30,7 @@
 #
 # 1}}}
 my $VERSION = "1.66";  # odd number == beta; even number == stable
-my $URL     = "https://github.com/AlDanial/cloc";
+my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.006;
 # use modules                                  {{{1
 use warnings;
