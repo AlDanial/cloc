@@ -306,21 +306,30 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              relative path names will be resolved starting from
                              the directory where cloc is invoked.
                              See also --list-file.
-   --fullpath                Modifies the behavior of --match-f or
-                             --not-match-f to include the file's path
+   --fullpath                Modifies the behavior of --match-f, --not-match-f,
+                             and --not-match-d to include the file's path
                              in the regex, not just the file's basename.
                              (This does not expand each file to include its
                              absolute path, instead it uses as much of
                              the path as is passed in to cloc.)
+                             Note:  --match-d always looks at the full
+                             path and therefore is unaffected by --fullpath.
    --include-lang=<L1>[,L2,] Count only the given comma separated languages
                              L1, L2, L3, et cetera.
    --match-d=<regex>         Only count files in directories matching the Perl
                              regex.  For example
                                --match-d='/(src|include)/'
                              only counts files in directories containing
-                             /src/ or /include/.
+                             /src/ or /include/.  Unlike --not-match-d,
+                             --match-f, and --not-match-f, --match-d always
+                             compares the fully qualified path against the regex.
    --not-match-d=<regex>     Count all files except those in directories
-                             matching the Perl regex.
+                             matching the Perl regex.  Only the trailing
+                             directory name is compared, for example, when
+                             counting in /usr/local/lib, only 'lib' is
+                             compared to the regex.
+                             Add --fullpath to compare parent directories to 
+                             the regex.
    --match-f=<regex>         Only count files whose basenames match the Perl
                              regex.  For example
                                --match-f='^[Ww]idget'
@@ -3581,12 +3590,17 @@ sub find_preprocessor {                      # {{{1
         if ($Exclude_Dir{$F_or_D}) {
             $Ignored{$File::Find::name} = "--exclude-dir=$Exclude_Dir{$F_or_D}";
         } elsif (-d $F_or_D) {
-            if ($opt_not_match_d and $F_or_D =~ m{$opt_not_match_d}) {
-                $Ignored{$File::Find::name} = "--not-match-d=$opt_not_match_d";
+            if ($opt_not_match_d) {
+                if ($opt_fullpath and $File::Find::name =~ m{$opt_not_match_d}) {
+                    $Ignored{$File::Find::name} = "--not-match-d=$opt_not_match_d";
+                } elsif ($F_or_D =~ m{$opt_not_match_d}) {
+                    $Ignored{$File::Find::name} = "--not-match-d (basename) =$opt_not_match_d";
+                } else {
+                    push @ok, $F_or_D;
+                }
             } else {
                 push @ok, $F_or_D;
             }
-
         } else {
             push @ok, $F_or_D;
         }
