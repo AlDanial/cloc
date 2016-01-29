@@ -291,10 +291,14 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
    --exclude-dir=<D1>[,D2,]  Exclude the given comma separated directories
                              D1, D2, D3, et cetera, from being scanned.  For
                              example  --exclude-dir=.cache,test  will skip
-                             all files that have /.cache/ or /test/ as part
-                             of their path.
+                             all files and subdirectories that have /.cache/ 
+                             or /test/ as their parent directory.
                              Directories named .bzr, .cvs, .hg, .git, and
                              .svn are always excluded.
+                             This option only works with individual directory
+                             names so including file path separators is not
+                             allowed.  Use --fullpath and --not-match-d=<regex>
+                             to supply a regex matching multiple subdirectories.
    --exclude-ext=<ext1>[,<ext2>[...]]
                              Do not count files having the given file name
                              extensions.
@@ -602,6 +606,7 @@ my %Exclude_Language = ();
 my %Exclude_Dir      = ();
    %Exclude_Dir      = map { $_ => 1 } split(/,/, $opt_exclude_dir )
         if $opt_exclude_dir ;
+die unless exclude_dir_validates(\%Exclude_Dir);
 my %Include_Language = ();
    %Include_Language = map { $_ => 1 } split(/,/, $opt_include_lang)
         if $opt_include_lang;
@@ -1709,6 +1714,20 @@ if ($opt_count_diff) {
     goto Top_of_Processing_Loop;
 }
 
+sub exclude_dir_validates {                  # {{{1
+    my ($rh_Exclude_Dir) = @_;
+    my $is_OK = 1;
+    foreach my $dir (keys %{$rh_Exclude_Dir}) {
+        if (($ON_WINDOWS and $dir =~ m{\\}) or ($dir =~ m{/})) {
+            $is_OK = 0;
+            warn "--exclude-dir '$dir' :  cannot specify directory paths\n";
+        }
+    }
+    if (!$is_OK) {
+        warn "Use '--fullpath --not-match-d=REGEX' instead\n";
+    }
+    return $is_OK;
+} # 1}}}
 sub process_exclude_list_file {              # {{{1
     my ($list_file      , # in
         $rh_exclude_dir , # out
@@ -3586,6 +3605,7 @@ sub find_preprocessor {                      # {{{1
     # Reject files/directories in cwd which are in the exclude list.
 
     my @ok = ();
+
     foreach my $F_or_D (@_) {  # pure file or directory name, no separators
         if ($Exclude_Dir{$F_or_D}) {
             $Ignored{$File::Find::name} = "--exclude-dir=$Exclude_Dir{$F_or_D}";
@@ -3605,6 +3625,7 @@ sub find_preprocessor {                      # {{{1
             push @ok, $F_or_D;
         }
     }
+
     return @ok;
 } # 1}}}
 sub files {                                  # {{{1
@@ -3676,7 +3697,7 @@ sub is_file {                                # {{{1
 } # 1}}}
 sub is_dir {                                 # {{{1
     # portable method to test if item is a directory
-    # (-d doesn't work in ActiveState Perl on Windows)
+    # (-d doesn't work in older versions of ActiveState Perl on Windows)
     my $item = shift @_;
 
     if ($ON_WINDOWS) {
