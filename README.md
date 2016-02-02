@@ -197,7 +197,7 @@ cloc has many features that make it easy to use, thorough, extensible, and porta
 If cloc does not suit your needs here are other freely available counters to consider:
 
 *   [Sonar](http://www.sonarsource.org/)
-*   [Ohcount](http://labs.ohloh.net/ohcount)
+*   [Ohcount](https://github.com/blackducksoftware/ohcount)
 *   [SLOCCount](http://www.dwheeler.com/sloccount/)
 *   [sclc](http://www.cmcrossroads.com/bradapp/clearperl/sclc.html)
 *   USC's [CODECOUNT](http://sunset.usc.edu/research/CODECOUNT/)
