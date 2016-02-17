@@ -3484,7 +3484,8 @@ sub make_file_list {                         # {{{1
         # populates global variable @file_list
         find({wanted     => \&files            ,
               preprocess => \&find_preprocessor,
-              follow     =>  $opt_follow_links }, $dir);
+              follow     =>  $opt_follow_links,
+	      no_chdir	 => 1 }, $dir);
     }
     $nFiles_Found = scalar @file_list;
     printf "%8d text file%s.\n", plural_form($nFiles_Found) unless $opt_quiet;
