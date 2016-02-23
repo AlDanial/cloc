@@ -5177,6 +5177,11 @@ sub set_constants {                          # {{{1
             'tk'          => 'Tcl/Tk'                ,
             'tpl'         => 'Smarty'                ,
             'trigger'     => 'Apex Trigger'          ,
+            'ttcn'        => 'TTCN'                  ,
+            'ttcn2'       => 'TTCN'                  ,
+            'ttcn3'       => 'TTCN'                  ,
+            'ttcnpp'      => 'TTCN'                  ,
+            'tpd'         => 'TITAN Project File Information',
             'ts'          => 'TypeScript'            ,
             'tss'         => 'Titanium Style Sheet'  ,
             'twig'        => 'Twig'                  ,
@@ -5889,6 +5894,14 @@ sub set_constants {                          # {{{1
     'Twig'               => [
                                 [ 'remove_between_general', '{#', '#}' ],
                             ],
+    'TTCN'               => [
+                                [ 'call_regexp_common'  , 'C++'      ],
+                                [ 'remove_inline'       , '//.*$'  ],
+                            ],
+    'TITAN Project File Information'               => [
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
     'TypeScript'         => [
 #                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
@@ -6097,6 +6110,7 @@ sub set_constants {                          # {{{1
     'Korn Shell'         =>     '\\\\$'         ,
     'Stylus'             =>     '\\\\$'         ,
     'Tcl/Tk'             =>     '\\\\$'         ,
+    'TTCN'               =>     '\\\\$'         ,
     'TypeScript'         =>     '\\\\$'         ,
     'lex'                =>     '\\\\$'         ,
     'Vala'               =>     '\\\\$'         ,
@@ -6770,6 +6784,8 @@ sub set_constants {                          # {{{1
     'tutor'                        =>   1.51,
     'twaice'                       =>   1.63,
     'Twig'                         =>   2.00,
+    'TTCN'                         =>   2.00,
+    'TITAN Project File Information' =>   1.90,
     'TypeScript'                   =>   2.00,
     'ucsd pascal'                  =>   0.88,
     'ufo/ims'                      =>   2.22,
