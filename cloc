@@ -164,6 +164,23 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              relative path names will be resolved starting from
                              the directory where cloc is invoked.
                              See also --exclude-list-file.
+   --vcs=<VCS>               Invoke a system call to <VCS> to obtain a list of
+                             files to work on.  If <VCS> is 'git', then will
+                             invoke 'git ls-files'.  If <VCS> is 'svn' then
+                             will invoke 'svn list -R'.  The primary benefit
+                             is that cloc will then skip files explicitly
+                             excluded by the versioning tool in question,
+                             ie, those in .gitignore or have the svn:ignore
+                             property.
+                             Alternatively <VCS> may be any system command
+                             that generates a list of files.
+                             Note:  cloc must be in a directory which can read
+                             the files as they are returned by <VCS>.  cloc will
+                             not download files from remote repositories.
+                             'svn list -R' may refer to a remote repository
+                             to obtain file names (and therefore may require
+                             authentication to the remote repository), but
+                             the files themselves must be local.
    --unicode                 Check binary files to see if they contain Unicode
                              expanded ASCII text.  This causes performance to
                              drop noticeably.
@@ -462,6 +479,7 @@ my (
     $opt_progress_rate        ,
     $opt_print_filter_stages  ,
     $opt_v                    ,
+    $opt_vcs                  ,
     $opt_version              ,
     $opt_exclude_lang         ,
     $opt_exclude_list_file    ,
@@ -556,6 +574,7 @@ my $getopt_success = GetOptions(
    "no3"                                     => \$opt_no3                 ,  # ignored
    "3"                                       => \$opt_3                   ,
    "v|verbose:i"                             => \$opt_v                   ,
+   "vcs=s"                                   => \$opt_vcs                 ,
    "version"                                 => \$opt_version             ,
    "write_lang_def|write-lang-def=s"         => \$opt_write_lang_def      ,
    "xml"                                     => \$opt_xml                 ,
@@ -683,12 +702,21 @@ if ($opt_by_percent and $opt_by_percent !~ m/^(c|cm|cb|cmb)$/i) {
 }
 $opt_by_percent = lc $opt_by_percent;
 
+if (defined $opt_vcs) {
+    if      ($opt_vcs eq "git") {
+        $opt_vcs = "git ls-files";
+    } elsif ($opt_vcs eq "svn") {
+        $opt_vcs = "svn list -R";
+    }
+}
+
 die $usage unless defined $opt_version         or
                   defined $opt_show_lang       or
                   defined $opt_show_ext        or
                   defined $opt_show_os         or
                   defined $opt_write_lang_def  or
                   defined $opt_list_file       or
+                  defined $opt_vcs             or
                   defined $opt_xsl             or
                   defined $opt_explain         or
                   scalar @ARGV >= 1;
@@ -889,6 +917,9 @@ if ($opt_sum_reports and $opt_diff) {
     if ($opt_list_file) { # read inputs from the list file
         my @list = read_list_file($opt_list_file);
         @results = combine_diffs(\@list);
+    } elsif ($opt_vcs) { # read inputs from the VCS generator
+        my @list = invoke_generator($opt_vcs);
+        @results = combine_diffs(\@list);
     } else { # get inputs from the command line
         @results = combine_diffs(\@ARGV);
     }
@@ -903,8 +934,14 @@ if ($opt_sum_reports) {
     my %Results = ();
     foreach my $type( "by language", "by report file" ) {
         my $found_lang = undef;
-        if ($opt_list_file) { # read inputs from the list file
-            my @list = read_list_file($opt_list_file);
+        if ($opt_list_file or $opt_vcs) {
+            # read inputs from the list file
+            my @list;
+            if ($opt_vcs) {
+                @list = invoke_generator($opt_vcs);
+            } else {
+                @list = read_list_file($opt_list_file);
+            }
             $found_lang = combine_results(\@list,
                                            $type,
                                           \%{$Results{ $type }},
@@ -1571,8 +1608,13 @@ if ($opt_by_file) {
 } else {
 # Step 4:  Separate code from non-code files.  {{{1
 my $fh = 0;
-if ($opt_list_file) {
-    my @list = read_list_file($opt_list_file);
+if ($opt_list_file or $opt_vcs) {
+    my @list;
+    if ($opt_vcs) {
+        @list = invoke_generator($opt_vcs);
+    } else {
+        @list = read_list_file($opt_list_file);
+    }
     $fh = make_file_list(\@list, \%Error_Codes, \@Errors, \%Ignored);
 } else {
     $fh = make_file_list(\@ARGV, \%Error_Codes, \@Errors, \%Ignored);
@@ -3533,6 +3575,21 @@ die  "make_file_list($file) undef lang" unless defined $language;
 
     return $fh;   # handle to the file containing the list of files to process
 }  # 1}}}
+sub invoke_generator {                       # {{{1
+    my ($generator,) = @_;
+    print "-> invoke_generator($generator)\n" if $opt_v > 2;
+    open(FH, "$generator |") or
+        die "Failed to pipe $generator: $!";
+    my @files = ();
+    while(<FH>) {
+        chomp;
+        print "VCS input:  $_\n" if $opt_v >= 2;
+        push @files, $_;
+    }
+    close(FH);
+    print "<- invoke_generator\n" if $opt_v > 2;
+    return @files;
+} # 1}}}
 sub remove_duplicate_files {                 # {{{1
     my ($fh                   , # in
         $rh_Language          , # out
