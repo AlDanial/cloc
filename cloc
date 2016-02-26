@@ -3052,7 +3052,9 @@ sub generate_report {                        # {{{1
             $avg_scale   ,
             $sum_scaled if $opt_3;
         if ($opt_md) {
-            my $n_cols = scalar(split(' ', $data_line));
+            my @words = split(' ', $data_line);
+            my $n_cols = scalar(@words);
+#           my $n_cols = scalar(split(' ', $data_line));  # deprecated
             $data_line =~ s/\s+/\|/g;
             my @col_hyphens    = ( '--------') x $n_cols;
             push @results, join("|", @col_hyphens);
