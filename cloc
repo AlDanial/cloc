@@ -3157,6 +3157,7 @@ sub write_lang_def {                         # {{{1
                 $language eq "Fortran 77/Forth"                 or
                 $language eq "F#/Forth"                         or
                 $language eq "Verilog-SystemVerilog/Coq"        or
+                $language eq "TypeScript/Qt Linguist"           or
                 $language eq "(unknown)";
         printf $OUT "%s\n", $language;
         foreach my $filter (@{$rhaa_Filters_by_Language->{$language}}) {
@@ -3424,6 +3425,11 @@ sub print_language_info {                    # {{{1
         push @{$extensions{'Coq'}}                   , "v";
         push @{$extensions{'Verilog-SystemVerilog'}} , "v";
         delete $extensions{'Verilog-SystemVerilog/Coq'};
+    }
+    if (!$language or $language =~ /^(TypeScript|Qt Linguist)$/) {
+        push @{$extensions{'TypeScript'}}  , "ts";
+        push @{$extensions{'Qt Linguist'}} , "ts";
+        delete $extensions{'TypeScript/Qt Linguist'};
     }
     if (!$language or $language =~ /^(Ant)$/i) {
         push @{$extensions{'Ant'}}  , "build.xml";
@@ -3916,6 +3922,8 @@ sub classify_file {                          # {{{1
                 } else {
                     return $language; # (unknown)
                 }
+            } elsif ($Language_by_Extension{$extension} eq 'TypeScript/Qt Linguist') {
+                return TypeScript_or_QtLinguist( $full_file, $rh_Err, $raa_errors);
             } else {
                 return $Language_by_Extension{$extension};
             }
@@ -5241,7 +5249,7 @@ sub set_constants {                          # {{{1
             'ttcn3'       => 'TTCN'                  ,
             'ttcnpp'      => 'TTCN'                  ,
             'tpd'         => 'TITAN Project File Information',
-            'ts'          => 'TypeScript'            ,
+            'ts'          => 'TypeScript/Qt Linguist',
             'tss'         => 'Titanium Style Sheet'  ,
             'twig'        => 'Twig'                  ,
             'ui'          => 'Qt'                    ,
@@ -5826,6 +5834,10 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'Qt'                 => [
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
+    'Qt Linguist'        => [
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
                             ],
@@ -6721,6 +6733,7 @@ sub set_constants {                          # {{{1
     'qmf'                          =>   5.33,
     'QML'                          =>   1.25,
     'Qt'                           =>   2.00,
+    'Qt Linguist'                  =>   1.00,
     'Qt Project'                   =>   1.00,
     'qnial'                        =>   1.63,
     'quattro'                      =>  13.33,
@@ -6969,6 +6982,7 @@ sub check_scale_existence {                  # {{{1
         "Fortran 77/Forth"                  => 1,
         "F#/Forth"                          => 1,
         "Verilog-SystemVerilog/Coq"         => 1,
+        "TypeScript/Qt Linguist"            => 1,
     );
     my $OK = 1;
     foreach my $language (sort keys %{$rhaa_Filters_by_Language}) {
@@ -9184,6 +9198,37 @@ sub Verilog_or_Coq {                         # {{{1
     }
 
     print "<- Verilog_or_Coq\n" if $opt_v > 2;
+    return $lang;
+} # 1}}}
+sub TypeScript_or_QtLinguist {               # {{{1
+    my ($file        , # in
+        $rh_Err      , # in   hash of error codes
+        $raa_errors  , # out
+       ) = @_;
+
+    print "-> TypeScript_or_QtLinguist\n" if $opt_v > 2;
+
+    my $lang = undef;
+    my $IN = new IO::File $file, "r";
+    if (!defined $IN) {
+        push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
+        return $lang;
+    }
+    my $tscript_points  = 0;
+    my $linguist_points = 0;
+    while (<$IN>) {
+        ++$linguist_points if m{\b</?(message|source|translation)>};
+        ++$tscript_points  if /^\s*(var|class|document)\b/;
+        ++$tscript_points  if /[;}]\s*$/;
+        ++$tscript_points  if m{^\s*//};
+    }
+    $IN->close;
+    if ($tscript_points > $linguist_points) {
+        $lang = "TypeScript";
+    } else {
+        $lang = "Qt Linguist";
+    }
+    print "<- TypeScript_or_QtLinguist\n" if $opt_v > 2;
     return $lang;
 } # 1}}}
 sub html_colored_text {                      # {{{1
