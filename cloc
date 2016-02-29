@@ -4990,6 +4990,7 @@ sub set_constants {                          # {{{1
             'CMD'         => 'DOS Batch'             ,
             'btm'         => 'DOS Batch'             ,
             'BTM'         => 'DOS Batch'             ,
+            'blade.php'   => 'Blade'                 ,
             'build.xml'   => 'Ant'                   ,
             'cbl'         => 'COBOL'                 ,
             'CBL'         => 'COBOL'                 ,
@@ -5410,6 +5411,10 @@ sub set_constants {                          # {{{1
     'bc'                 => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
+                            ],
+    'Blade'              => [
+                                [ 'remove_between_general', '{{--', '--}}' ],
+                                [ 'remove_html_comments',                  ],
                             ],
     'Bourne Again Shell' => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -6369,6 +6374,7 @@ sub set_constants {                          # {{{1
     'bc'                           =>   1.50,
     'berkeley pascal'              =>   0.88,
     'better basic'                 =>   0.88,
+    'Blade'                        =>   2.00,
     'bliss'                        =>   0.75,
     'bmsgen'                       =>   2.22,
     'boeingcalc'                   =>  13.33,
