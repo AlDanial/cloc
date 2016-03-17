@@ -5126,6 +5126,8 @@ sub set_constants {                          # {{{1
             'less'        => 'LESS'                  ,
             'lsp'         => 'Lisp'                  ,
             'lisp'        => 'Lisp'                  ,
+            'lgt'         => 'Logtalk'               ,
+            'logtalk'     => 'Logtalk'               ,
             'lua'         => 'Lua'                   ,
             'm3'          => 'Modula3'               ,
             'm4'          => 'm4'                    ,
@@ -5700,6 +5702,11 @@ sub set_constants {                          # {{{1
     'Lisp/OpenCL'        => [ [ 'die' ,          ], ], # never called
     'Lisp/Julia'         => [ [ 'die' ,          ], ], # never called
     'LiveLink OScript'   => [   [ 'remove_matches'      , '^\s*//' ], ],
+    'Logtalk'            => [  # same filters as Prolog
+                                [ 'remove_matches'      , '^\s*\%' ],
+                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'remove_inline'       , '(//|\%).*$' ],
+                            ],
 #   'Lua'                => [   [ 'call_regexp_common'  , 'lua'    ], ],
     'Lua'                => [   [ 'remove_matches'      , '^\s*\-\-' ], ],
     'make'               => [
@@ -6618,6 +6625,7 @@ sub set_constants {                          # {{{1
     'Lisp'                         =>   1.25,
     'LiveLink OScript'             =>   3.5 ,
     'loglisp'                      =>   1.38,
+    'Logtalk'                      =>   2.00,
     'loops'                        =>   3.81,
     'lotus 123 dos'                =>  13.33,
     'lotus macros'                 =>   0.75,
