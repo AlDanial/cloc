@@ -5112,6 +5112,7 @@ sub set_constants {                          # {{{1
             'jl'          => 'Lisp/Julia'            ,
             'js'          => 'JavaScript'            ,
             'jsf'         => 'JavaServer Faces'      ,
+            'jsx'         => 'JSX'                   ,
             'xhtml'       => 'XHTML'                 ,
             'json'        => 'JSON'                  ,
             'jsp'         => 'JSP'                   , # Java server pages
@@ -5673,6 +5674,11 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
+    'JSX'                => [
+#                               [ 'remove_matches'      , '^\s*//' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                                [ 'remove_inline'       , '//.*$'  ],
+                            ],
     'JCL'                => [   [ 'remove_jcl_comments' ,          ], ],
     'JSON'               => [   # ECMA-404, the JSON standard definition
                                 # makes no provision for JSON comments
@@ -6168,6 +6174,7 @@ sub set_constants {                          # {{{1
     'IDL'                =>     '\$\\$'         ,
     'Java'               =>     '\\\\$'         ,
     'JavaScript'         =>     '\\\\$'         ,
+    'JSX'                =>     '\\\\$'         ,
     'LESS'               =>     '\\\\$'         ,
     'Lua'                =>     '\\\\$'         ,
     'make'               =>     '\\\\$'         ,
@@ -6598,6 +6605,7 @@ sub set_constants {                          # {{{1
     'JavaServer Faces'             =>   1.5 ,
     'JSON'                         =>   2.50,
     'JSP'                          =>   1.48,
+    'JSX'                          =>   1.48,
     'Velocity Template Language'   =>   1.00,
     'JCL'                          =>   1.67,
     'joss'                         =>   0.75,
@@ -7361,7 +7369,7 @@ my @generic = (
      from_to   => [['<?_c', '_c?>']],
     },
 
-    {languages => [qw /C++/, 'C#', qw /AspectJ Cg ECMAScript FPL Java JavaScript Stylus/],
+    {languages => [qw /C++/, 'C#', qw /AspectJ Cg ECMAScript FPL Java JavaScript JSX Stylus/],
      to_eol    => ['//'],
      from_to   => [[qw {/* */}]]},
 
