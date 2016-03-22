@@ -9210,7 +9210,11 @@ sub Verilog_or_Coq {                         # {{{1
     while (<$IN>) {
         ++$verilog_points if  /^\s*(module|begin|input|output|always)/;
         ++$coq_points if /\b(Inductive|Fixpoint|Definition|
-                             Theorem|Lemma|Proof|Qed|forall)\b/x;
+                             Theorem|Lemma|Proof|Qed|forall|
+                             Section|Check|Notation|Variable|
+                             Goal|Fail|Require|Scheme|Module|Ltac|
+                             Set|Unset|Parameter|Coercion|Axiom|
+                             Locate|Type|Record|Existing|Class)\b/x;
     }
     $IN->close;
     if ($coq_points > $verilog_points) {
