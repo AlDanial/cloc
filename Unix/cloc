@@ -8831,7 +8831,7 @@ sub normalize_file_names {                   # {{{1
         }
         # Remove trailing / so it does not interfere with further regex code 
         # that does not expect it
-        $F_norm =~ s{/$}{}g;
+        $F_norm =~ s{/+$}{};
 
         $normalized{ $F_norm } = $F;
     }
