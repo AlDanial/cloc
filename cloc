@@ -10220,7 +10220,7 @@ sub read_list_file {                         # {{{1
     my $IN = new IO::File $file, "r";
     if (!defined $IN) {
         warn "Unable to read $file; ignoring.\n";
-        next;
+        return ();
     }
     my @entry = ();
     while (<$IN>) {
