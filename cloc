@@ -4766,16 +4766,16 @@ sub remove_html_comments {                   # {{{1
     print "<- remove_html_comments\n" if $opt_v > 2;
     return @save_lines;
 } # 1}}}
-sub remove_haml_block {                      # {{{1
+sub remove_intented_block {                  # {{{1
     # Haml block comments are defined by a silent comment marker like
     #    /
     # or
     #    -#
     # followed by indented text on subsequent lines.
     # http://haml.info/docs/yardoc/file.REFERENCE.html#comments
-    my ($ra_lines, ) = @_;
+    my ($ra_lines, $regex, ) = @_;
 
-    print "-> remove_haml_block\n" if $opt_v > 2;
+    print "-> remove_intented_block\n" if $opt_v > 2;
 
     my @save_lines = ();
     my $in_comment = 0;
@@ -4794,9 +4794,9 @@ sub remove_haml_block {                      # {{{1
                 # still in comments, don't use this line
                 next;
             }
-        } elsif ($line =~ m{^(\s*)(/|-#)\s*$}) {
+        } elsif ($line =~ m{$regex}) {
             if ($1) {
-                $in_comment = length $1 + 1; # number of leading spaces + 1
+                $in_comment = length($1) + 1; # number of leading spaces + 1
             } else {
                 $in_comment = 1;
             }
@@ -4806,8 +4806,28 @@ sub remove_haml_block {                      # {{{1
         push @save_lines, $line;
     }
 
-    print "<- remove_haml_block\n" if $opt_v > 2;
+    print "<- remove_intented_block\n" if $opt_v > 2;
     return @save_lines;
+} # 1}}}
+sub remove_haml_block {                      # {{{1
+    # Haml block comments are defined by a silent comment marker like
+    #    /
+    # or
+    #    -#
+    # followed by indented text on subsequent lines.
+    # http://haml.info/docs/yardoc/file.REFERENCE.html#comments
+    my ($ra_lines, ) = @_;
+
+    return remove_intented_block($ra_lines, '^(\s*)(/|-#)\s*$');
+
+} # 1}}}
+sub remove_pug_block {                       # {{{1
+    # Haml block comments are defined by a silent comment marker like
+    #    //
+    # followed by indented text on subsequent lines.
+    # http://jade-lang.com/reference/comments/
+    my ($ra_lines, ) = @_;
+    return remove_intented_block($ra_lines, '^(\s*)(//)\s*$');
 } # 1}}}
 sub add_newlines {                           # {{{1
     my ($ra_lines, ) = @_;
@@ -5207,6 +5227,7 @@ sub set_constants {                          # {{{1
             'srs'         => 'PowerBuilder'          ,
             'sru'         => 'PowerBuilder'          ,
             'srw'         => 'PowerBuilder'          ,
+            'pug'         => 'Pug'                   ,
             'purs'        => 'PureScript'            ,
             'prefab'      => 'Unity-Prefab'          ,
             'proto'       => 'Protocol Buffers'      ,
@@ -5832,6 +5853,11 @@ sub set_constants {                          # {{{1
 #                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
                                 [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'Pug'                => [
+                                [ 'remove_pug_block'    ,          ],
+                                [ 'remove_matches'      , '^\s*//' ],
+                                [ 'remove_inline'       , '//.*$'  ],
                             ],
     'Python'             => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -6748,6 +6774,7 @@ sub set_constants {                          # {{{1
     'prose'                        =>   0.75,
     'proteus'                      =>   0.75,
     'Protocol Buffers'             =>   2.00,
+    'Pug'                          =>   2.00,
     'Puppet'                       =>   2.00,
     'PureScript'                   =>   2.00,
     'qbasic'                       =>   1.38,
