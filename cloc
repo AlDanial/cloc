@@ -9130,6 +9130,12 @@ sub pascal_or_puppet {                       # {{{1
     my $puppet_points      = 0;
 
     while (<$IN>) {
+
+        if ( /^\s*\#\s+/ ) {
+                $puppet_points += .001;
+                next;
+        }
+
         ++$pascal_points if /\bprogram\s+[A-Za-z]/i;
         ++$pascal_points if /\bunit\s+[A-Za-z]/i;
         ++$pascal_points if /\bmodule\s+[A-Za-z]/i;
@@ -9137,14 +9143,26 @@ sub pascal_or_puppet {                       # {{{1
         ++$pascal_points if /\bfunction\b/i;
         ++$pascal_points if /^\s*interface\s+/i;
         ++$pascal_points if /^\s*implementation\s+/i;
-        ++$pascal_points if /\bbegin\b/i;
-        ++$pascal_points if /\bend\b/i;
+        ++$pascal_points if /^\s*uses\s+/i;
+        ++$pascal_points if /(?<!\:\:)\bbegin\b(?!\:\:)/i;
+        ++$pascal_points if /(?<!\:\:)\bend\b(?!\:\:)/i;
+        ++$pascal_points if /\:\=/;
+        ++$pascal_points if /\<\>/;
+        ++$pascal_points if /^\s*\{\$(I|INCLUDE)\s+.*\}/i;
+        ++$pascal_points if /writeln/;
 
-        ++$puppet_points if /^\s*class\s+/;
+        ++$puppet_points if /^\s*class\s+/ and not /class\s+operator\s+/;
         ++$puppet_points if /^\s*case\s+/;
         ++$puppet_points if /^\s*package\s+/;
         ++$puppet_points if /^\s*file\s+/;
+        ++$puppet_points if /^\s*include\s\w+/;
         ++$puppet_points if /^\s*service\s+/;
+        ++$puppet_points if /\s\$\w+\s*\=\s*\S/;
+        ++$puppet_points if /\S\s*\=\>\s*\S/;
+
+        # No need to process rest of file if language seems obvious.
+        last
+                if (abs ($pascal_points - $puppet_points ) > 20 );
     }
     $IN->close;
 
