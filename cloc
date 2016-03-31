@@ -5145,6 +5145,7 @@ sub set_constants {                          # {{{1
             'lhs'         => 'Haskell'               ,
             'l'           => 'lex'                   ,
             'less'        => 'LESS'                  ,
+            'liquid'      => 'liquid'                ,
             'lsp'         => 'Lisp'                  ,
             'lisp'        => 'Lisp'                  ,
             'lgt'         => 'Logtalk'               ,
@@ -5721,6 +5722,11 @@ sub set_constants {                          # {{{1
 #                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
+                            ],
+    'liquid'             => [
+                                [ 'remove_between_general', '{% comment %}', 
+                                                            '{% endcomment %}' ],
+                                [ 'remove_html_comments',          ],
                             ],
     'Lisp'               => [
                                 [ 'remove_matches'      , '^\s*;'  ],
@@ -6656,6 +6662,7 @@ sub set_constants {                          # {{{1
     'liana'                        =>   0.63,
     'lilith'                       =>   1.13,
     'linc ii'                      =>   5.71,
+    'liquid'                       =>   3.00,
     'Lisp'                         =>   1.25,
     'LiveLink OScript'             =>   3.5 ,
     'loglisp'                      =>   1.38,
