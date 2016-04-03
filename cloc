@@ -4829,6 +4829,13 @@ sub remove_pug_block {                       # {{{1
     my ($ra_lines, ) = @_;
     return remove_intented_block($ra_lines, '^(\s*)(//)\s*$');
 } # 1}}}
+#sub remove_slim_block {                       # {{{1
+#    # slim comments start with /
+#    # followed by indented text on subsequent lines.
+#    # http://www.rubydoc.info/gems/slim/frames
+#    my ($ra_lines, ) = @_;
+#    return remove_intented_block($ra_lines, '^(\s*)(/[^!])');
+#} # 1}}}
 sub add_newlines {                           # {{{1
     my ($ra_lines, ) = @_;
     print "-> add_newlines \n" if $opt_v > 2;
@@ -5300,6 +5307,7 @@ sub set_constants {                          # {{{1
             'xml'         => 'XML'                   ,
             'XML'         => 'XML'                   ,
             'mxml'        => 'MXML'                  ,
+            'xml.builder' => 'builder'               ,
             'build'       => 'NAnt script'           ,
             'vim'         => 'vim script'            ,
             'swift'       => 'Swift'                 ,
@@ -5448,6 +5456,9 @@ sub set_constants {                          # {{{1
     'Bourne Shell'       => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
+                            ],
+    'builder'            => [
+                                [ 'remove_matches'      , '^\s*xml_markup.comment!'  ],
                             ],
     'C'                  => [
                                 [ 'call_regexp_common'  , 'C++'    ],
@@ -6425,6 +6436,7 @@ sub set_constants {                          # {{{1
     'bmsgen'                       =>   2.22,
     'boeingcalc'                   =>  13.33,
     'bteq'                         =>   6.15,
+    'builder'                      =>   2.00,
     'C'                            =>   0.77,
     'c set 2'                      =>   0.88,
     'C#'                           =>   1.36,
