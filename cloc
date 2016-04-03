@@ -5876,7 +5876,7 @@ sub set_constants {                          # {{{1
 #                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '#.*$'   ],
-                                [ 'remove_inline'       , '//.*$'  ],
+#                               [ 'remove_inline'       , '//.*$'  ],
                             ],
     'QML'                => [
 #                               [ 'remove_matches'      , '^\s*//' ],
