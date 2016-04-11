@@ -3529,9 +3529,28 @@ sub make_file_list {                         # {{{1
             $rh_ignored->{$file_or_dir} = 'not file, not directory';
         }
     }
+
+    # apply exclusion rules to file names passed in on the command line
+    my @new_file_list = ();
+    foreach my $File (@file_list) {
+        my ($volume, $directories, $filename) = File::Spec->splitpath( $File );
+        foreach my $Sub_Dir ( File::Spec->splitdir($directories) ) {
+            if ($Exclude_Dir{$Sub_Dir}) {
+                $Ignored{$Sub_Dir} = "--exclude-dir=$Exclude_Dir{$Sub_Dir}";
+                next;
+            }
+        }
+        push @new_file_list, $File;
+    }
+    @file_list = @new_file_list;
+
     foreach my $dir (@dir_list) {
 #print "make_file_list dir=$dir\n";
         # populates global variable @file_list
+        if ($Exclude_Dir{$dir}) {
+            $Ignored{$dir} = "--exclude-dir=$Exclude_Dir{$dir}";
+            next;
+        }
         find({wanted     => \&files            ,
               preprocess => \&find_preprocessor,
               follow     =>  $opt_follow_links }, $dir);
