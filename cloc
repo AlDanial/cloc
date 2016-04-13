@@ -5280,7 +5280,7 @@ sub set_constants {                          # {{{1
             'sml'         => 'Standard ML'           ,
             'sig'         => 'Standard ML'           ,
             'fun'         => 'Standard ML'           ,
-            'html.slim'   => 'Slim'                  ,
+            'slim'        => 'Slim'                  ,
             'sql'         => 'SQL'                   ,
             'SQL'         => 'SQL'                   ,
             'sproc.sql'   => 'SQL Stored Procedure'  ,
