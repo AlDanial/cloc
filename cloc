@@ -227,12 +227,12 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              then use these filters instead of the built-in
                              filters.  Note:  languages which map to the same
                              file extension (for example:
-                             MATLAB/Objective C/MUMPS/Mercury;  Pascal/PHP;
-                             Lisp/OpenCL; Lisp/Julia; Perl/Prolog) will be
-                             ignored as these require additional processing
-                             that is not expressed in language definition
-                             files.  Use --read-lang-def to define new
-                             language filters without replacing built-in
+                             MATLAB/Mathematica/Objective C/MUMPS/Mercury;
+                             Pascal/PHP; Lisp/OpenCL; Lisp/Julia; Perl/Prolog)
+                             will be ignored as these require additional
+                             processing that is not expressed in language
+                             definition files.  Use --read-lang-def to define
+                             new language filters without replacing built-in
                              filters (see also --write-lang-def).
    --ignore-whitespace       Ignore horizontal white space when comparing files
                              with --diff.  See also --ignore-case.
@@ -3146,7 +3146,7 @@ sub write_lang_def {                         # {{{1
     die "Unable to write to $file\n" unless defined $OUT;
 
     foreach my $language (sort keys %{$rhaa_Filters_by_Language}) {
-        next if $language eq "MATLAB/Objective C/MUMPS/Mercury" or
+        next if $language eq "MATLAB/Mathematica/Objective C/MUMPS/Mercury" or
                 $language eq "PHP/Pascal"                       or
                 $language eq "Pascal/Puppet"                    or
                 $language eq "Lisp/OpenCL"                      or
@@ -3372,11 +3372,12 @@ sub print_language_info {                    # {{{1
     }
 
     # add exceptions (one file extension mapping to multiple languages)
-    if (!$language or $language =~ /^(Objective C|MATLAB|MUMPS|Mercury)$/i) {
+    if (!$language or $language =~ /^(Objective C|MATLAB|Mathematica|MUMPS|Mercury)$/i) {
         push @{$extensions{'Objective C'}}, "m";
         push @{$extensions{'MATLAB'}}     , "m";
+        push @{$extensions{'Mathematica'}}, "m";
         push @{$extensions{'MUMPS'}}      , "m";
-        delete $extensions{'MATLAB/Objective C/MUMPS/Mercury'};
+        delete $extensions{'MATLAB/Mathematica/Objective C/MUMPS/Mercury'};
     }
     if (!$language or $language =~ /^(Lisp|OpenCL)$/i) {
         push @{$extensions{'Lisp'}}  , "cl";
@@ -3857,7 +3858,7 @@ sub classify_file {                          # {{{1
         }
         if (defined $Language_by_Extension{$extension}) {
             if ($Language_by_Extension{$extension} eq
-                'MATLAB/Objective C/MUMPS/Mercury') {
+                'MATLAB/Mathematica/Objective C/MUMPS/Mercury') {
                 my $lang_M_or_O = "";
                 matlab_or_objective_C($full_file ,
                                       $rh_Err    ,
@@ -5190,7 +5191,7 @@ sub set_constants {                          # {{{1
             'mli'         => 'OCaml'                 ,
             'mly'         => 'OCaml'                 ,
             'mll'         => 'OCaml'                 ,
-            'm'           => 'MATLAB/Objective C/MUMPS/Mercury' ,
+            'm'           => 'MATLAB/Mathematica/Objective C/MUMPS/Mercury' ,
             'mm'          => 'Objective C++'         ,
             'mustache'    => 'Mustache'              ,
             'wdproj'      => 'MSBuild script'        ,
@@ -5781,6 +5782,9 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*%'  ],
                                 [ 'remove_inline'       , '%.*$'   ],
                             ],
+    'Mathematica'        => [
+                                [ 'remove_between_general', '(*', '*)' ],
+                            ],
     'Maven/XML'          => [
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
@@ -5820,7 +5824,7 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '//.*$'  ], # C99
                             ],
     'PHP/Pascal'               => [ [ 'die' ,          ], ], # never called
-    'MATLAB/Objective C/MUMPS/Mercury' => [ [ 'die' ,          ], ], # never called
+    'MATLAB/Mathematica/Objective C/MUMPS/Mercury' => [ [ 'die' ,          ], ], # never called
     'MUMPS'              => [   [ 'remove_matches'      , '^\s*;'  ], ],
     'Mustache'           => [
                                 [ 'remove_between_general', '{{!', '}}' ],
@@ -7022,6 +7026,7 @@ sub set_constants {                          # {{{1
     'lex'                          => 1.00,
     'Julia'                        => 4.00,
     'MATLAB'                       => 4.00,
+    'Mathematica'                  => 5.00,
     'Mercury'                      => 3.00,
     'Maven/XML'                    => 2.5,
     'IDL'                          => 3.80,
@@ -7036,9 +7041,6 @@ sub set_constants {                          # {{{1
     'sed'                          => 4.00,
     'Lua'                          => 4.00,
     'OpenCL'                       => 1.50,
-#   'Lisp/Julia'                   => 4.00,
-#   'Lisp/OpenCL'                  => 1.50,
-#   'MATLAB/Objective C/MUMPS/Mercury' => 3.00,
 );
 # 1}}}
 %{$rh_Known_Binary_Archives} = (             # {{{1
@@ -7066,7 +7068,7 @@ sub check_scale_existence {                  # {{{1
         "PHP/Pascal"                        => 1,
         "Lisp/OpenCL"                       => 1,
         "Lisp/Julia"                        => 1,
-        "MATLAB/Objective C/MUMPS/Mercury"  => 1,
+        "MATLAB/Mathematica/Objective C/MUMPS/Mercury"  => 1,
         "Pascal/Puppet"                     => 1,
         "Perl/Prolog"                       => 1,
         "IDL/Qt Project/Prolog"             => 1,
@@ -8821,7 +8823,7 @@ sub plural_form {                            # {{{1
     else         { return ($n, "s"); }
 } # 1}}}
 sub matlab_or_objective_C {                  # {{{1
-    # Decide if code is MATLAB, Objective C, MUMPS, or Mercury
+    # Decide if code is MATLAB, Mathematica, Objective C, MUMPS, or Mercury
     my ($file        , # in
         $rh_Err      , # in   hash of error codes
         $raa_errors  , # out
@@ -8847,6 +8849,10 @@ sub matlab_or_objective_C {                  # {{{1
     #
     # Mercury:
     #   any line that begins with :- immediately triggers this
+    #
+    # Mathematica:
+    #   (* .. *)
+    #   BeginPackage
 
     ${$rs_language} = "";
     my $IN = new IO::File $file, "r";
@@ -8858,6 +8864,7 @@ sub matlab_or_objective_C {                  # {{{1
     my $DEBUG              = 0;
 
     my $matlab_points      = 0;
+    my $mathematica_points = 0;
     my $objective_C_points = 0;
     my $mumps_points       = 0;
     my $mercury_points     = 0;
@@ -8869,66 +8876,73 @@ sub matlab_or_objective_C {                  # {{{1
         if      (m{^\s*/\*} or m {^\s*//}) {   #   /* or //
             $objective_C_points += 5;
             $matlab_points      -= 5;
-printf ".m:  /*|//  obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mumps_points, $mercury_points if $DEBUG;
+printf ".m:  /*|//  obj C=% 2d  matlab=% 2d  mathematica=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mathematica_points, $mumps_points, $mercury_points if $DEBUG;
         } elsif (m{^:-\s+}) {      # gotta be mercury
             $mercury_points = 1000;
             last;
         } elsif (m{\w+\s*=\s*\[}) {      # matrix assignment, very matlab
             $matlab_points += 5;
-printf ".m:  \\w=[   obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mumps_points, $mercury_points if $DEBUG;
+        }
+        if (m{\w+\[}) {      # function call by []
+            $mathematica_points += 2;
+printf ".m:  \\w=[   obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mathematica_points, $mumps_points, $mercury_points if $DEBUG;
         } elsif (m{^\s*\w+\s*=\s*}) {    # definitely not MUMPS
             --$mumps_points;
-printf ".m:  \\w=    obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mumps_points, $mercury_points if $DEBUG;
+printf ".m:  \\w=    obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mathematica_points, $mumps_points, $mercury_points if $DEBUG;
         } elsif (m{^\s*\.?(\w)\s+(\w)} and $1 !~ /\d/ and $2 !~ /\d/) {
             ++$mumps_points;
-printf ".m:  \\w \\w  obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mumps_points, $mercury_points if $DEBUG;
+printf ".m:  \\w \\w  obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mathematica_points, $mumps_points, $mercury_points if $DEBUG;
         } elsif (m{^\s*;}) {
             ++$mumps_points;
-printf ".m:  ;      obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mumps_points, $mercury_points if $DEBUG;
-        } elsif (m{^\s*#(include|import)}) {
+printf ".m:  ;      obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mathematica_points, $mumps_points, $mercury_points if $DEBUG;
+        }
+        if (m{^\s*#(include|import)}) {
             # Objective C without a doubt
             $objective_C_points = 1000;
             $matlab_points      = 0;
-printf ".m: #includ obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mumps_points, $mercury_points if $DEBUG;
+printf ".m: #includ obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mathematica_points, $mumps_points, $mercury_points if $DEBUG;
             $has_braces         = 2;
             last;
         } elsif (m{^\s*@(interface|implementation|protocol|public|protected|private|end)\s}o) {
             # Objective C without a doubt
             $objective_C_points = 1000;
             $matlab_points      = 0;
-printf ".m: keyword obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mumps_points, $mercury_points if $DEBUG;
+printf ".m: keyword obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mathematica_points, $mumps_points, $mercury_points if $DEBUG;
             last;
+        } elsif (m{^\s*BeginPackage}) {
+            $mathematica_points += 2;
         } elsif (m{^\s*\[}) {             #   line starts with [  -- very matlab
             $matlab_points += 5;
-printf ".m:  [      obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mumps_points, $mercury_points if $DEBUG;
+printf ".m:  [      obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mathematica_points, $mumps_points, $mercury_points if $DEBUG;
         } elsif (m{^\sK(ill)?\s+}) {
             $mumps_points  += 5;
-printf ".m:  Kill   obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mumps_points, $mercury_points if $DEBUG;
+printf ".m:  Kill   obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mathematica_points, $mumps_points, $mercury_points if $DEBUG;
         } elsif (m{^\s*function}) {
             --$objective_C_points;
             ++$matlab_points;
-printf ".m:  funct  obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mumps_points, $mercury_points if $DEBUG;
+printf ".m:  funct  obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mathematica_points, $mumps_points, $mercury_points if $DEBUG;
         } elsif (m{^\s*%}) {              #   %
             # matlab commented line
             --$objective_C_points;
             ++$matlab_points;
-printf ".m:  pcent  obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mumps_points, $mercury_points if $DEBUG;
+printf ".m:  pcent  obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mathematica_points, $mumps_points, $mercury_points if $DEBUG;
         }
     }
     $IN->close;
-printf "END LOOP    obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mumps_points, $mercury_points if $DEBUG;
+printf "END LOOP    obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mathematica_points, $mumps_points, $mercury_points if $DEBUG;
 
     # next heuristic is unreliable for small files
 #   $objective_C_points = -9.9e20 unless $has_braces >= 2;
 
     my %points = ( 'MATLAB'      => $matlab_points     ,
+                   'Mathematica' => $mathematica_points     ,
                    'MUMPS'       => $mumps_points      ,
                    'Objective C' => $objective_C_points,
                    'Mercury'     => $mercury_points    , );
 
     ${$rs_language} = (sort { $points{$b} <=> $points{$a}} keys %points)[0];
 
-    print "<- matlab_or_objective_C($file: matlab=$matlab_points, C=$objective_C_points, mumps=$mumps_points, mercury=$mercury_points) => ${$rs_language}\n"
+    print "<- matlab_or_objective_C($file: matlab=$matlab_points, mathematica=$mathematica_points, C=$objective_C_points, mumps=$mumps_points, mercury=$mercury_points) => ${$rs_language}\n"
         if $opt_v > 2;
 
 } # 1}}}
