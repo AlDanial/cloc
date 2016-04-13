@@ -4848,13 +4848,13 @@ sub remove_pug_block {                       # {{{1
     my ($ra_lines, ) = @_;
     return remove_intented_block($ra_lines, '^(\s*)(//)\s*$');
 } # 1}}}
-#sub remove_slim_block {                       # {{{1
-#    # slim comments start with /
-#    # followed by indented text on subsequent lines.
-#    # http://www.rubydoc.info/gems/slim/frames
-#    my ($ra_lines, ) = @_;
-#    return remove_intented_block($ra_lines, '^(\s*)(/[^!])');
-#} # 1}}}
+sub remove_slim_block {                       # {{{1
+    # slim comments start with /
+    # followed by indented text on subsequent lines.
+    # http://www.rubydoc.info/gems/slim/frames
+    my ($ra_lines, ) = @_;
+    return remove_intented_block($ra_lines, '^(\s*)(/[^!])');
+} # 1}}}
 sub add_newlines {                           # {{{1
     my ($ra_lines, ) = @_;
     print "-> add_newlines \n" if $opt_v > 2;
@@ -5280,6 +5280,7 @@ sub set_constants {                          # {{{1
             'sml'         => 'Standard ML'           ,
             'sig'         => 'Standard ML'           ,
             'fun'         => 'Standard ML'           ,
+            'html.slim'   => 'Slim'                  ,
             'sql'         => 'SQL'                   ,
             'SQL'         => 'SQL'                   ,
             'sproc.sql'   => 'SQL Stored Procedure'  ,
@@ -5971,6 +5972,9 @@ sub set_constants {                          # {{{1
 #                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
                                 [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'Slim'               => [
+                                [ 'remove_slim_block'   ,          ],
                             ],
     'SKILL'              => [
                                 [ 'call_regexp_common'  , 'C'      ],
@@ -6866,6 +6870,7 @@ sub set_constants {                          # {{{1
     'scheme'                       =>   1.51,
     'screen painter default'       =>  13.33,
     'sequal'                       =>   6.67,
+    'Slim'                         =>   3.00,
     'Bourne Shell'                 =>   3.81,
     'Bourne Again Shell'           =>   3.81,
     'ksh'                          =>   3.81,
