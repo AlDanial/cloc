@@ -5067,7 +5067,7 @@ sub set_constants {                          # {{{1
             'css'         => "CSS"                   ,
             'ctl'         => 'Visual Basic'          ,
             'cu'          => 'CUDA'                  ,
-            'cuh'         => 'CUDA'                  ,
+            'cuh'         => 'CUDA'                  , # CUDA header file
             'cxx'         => 'C++'                   ,
             'd'           => 'D/dtrace'              ,
 # in addition, .d can map to init.d files typically written as
