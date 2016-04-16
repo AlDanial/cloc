@@ -5183,6 +5183,7 @@ sub set_constants {                          # {{{1
             'm4'          => 'm4'                    ,
             'makefile'    => 'make'                  ,
             'Makefile'    => 'make'                  ,
+            'md'          => 'Markdown'              ,
             'mc'          => 'Windows Message File'  ,
             'met'         => 'Teamcenter met'        ,
             'mg'          => 'Modula3'               ,
@@ -5828,6 +5829,11 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '//.*$'  ], # C99
                             ],
     'PHP/Pascal'               => [ [ 'die' ,          ], ], # never called
+    'Markdown'           => [
+                                [ 'remove_between_regex',
+                                  '\[(comment|\/\/)?\]\s*:?\s*(<\s*>|#)?\s*\(.*?', '.*?\)' ],
+                                # http://stackoverflow.com/questions/4823468/comments-in-markdown
+                            ],
     'MATLAB/Mathematica/Objective C/MUMPS/Mercury' => [ [ 'die' ,          ], ], # never called
     'MUMPS'              => [   [ 'remove_matches'      , '^\s*;'  ], ],
     'Mustache'           => [
@@ -6730,6 +6736,7 @@ sub set_constants {                          # {{{1
     'mapper'                       =>   0.99,
     'mark iv'                      =>   2.00,
     'mark v'                       =>   2.22,
+    'Markdown'                     =>   1.00,
     'mathcad'                      =>  16.00,
     'Maven'                        =>   1.90,
     'mdl'                          =>   2.22,
