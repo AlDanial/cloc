@@ -3146,6 +3146,7 @@ sub write_lang_def {                         # {{{1
     die "Unable to write to $file\n" unless defined $OUT;
 
     foreach my $language (sort keys %{$rhaa_Filters_by_Language}) {
+        next if $language =~ /Brain/;
         next if $language eq "MATLAB/Mathematica/Objective C/MUMPS/Mercury" or
                 $language eq "PHP/Pascal"                       or
                 $language eq "Pascal/Puppet"                    or
@@ -3343,11 +3344,13 @@ sub print_extension_info {                   # {{{1
     if ($extension) {  # show information on this extension
         foreach my $ext (sort {lc $a cmp lc $b } keys %Language_by_Extension) {
             # Language_by_Extension{f}    = 'Fortran 77'
+            next if $Language_by_Extension{$ext} =~ /Brain/;
             printf "%-15s -> %s\n", $ext, $Language_by_Extension{$ext}
                 if $ext =~ m{$extension}i;
         }
     } else {           # show information on all  extensions
         foreach my $ext (sort {lc $a cmp lc $b } keys %Language_by_Extension) {
+            next if $Language_by_Extension{$ext} =~ /Brain/;
             # Language_by_Extension{f}    = 'Fortran 77'
             printf "%-15s -> %s\n", $ext, $Language_by_Extension{$ext};
         }
@@ -3446,6 +3449,7 @@ sub print_language_info {                    # {{{1
     } else {
         if (%extensions) {
             foreach my $lang (sort {lc $a cmp lc $b } keys %extensions) {
+                next if $lang =~ /Brain/;
                 if ($prefix) {
                     printf "%s %s\n", $prefix, join(", ", @{$extensions{$lang}});
                 } else {
@@ -4786,6 +4790,23 @@ sub remove_html_comments {                   # {{{1
     print "<- remove_html_comments\n" if $opt_v > 2;
     return @save_lines;
 } # 1}}}
+sub remove_bf_comments {                     # {{{1
+    my ($ra_lines, ) = @_;
+
+    print "-> remove_bf_comments\n" if $opt_v > 2;
+
+    my @save_lines = ();
+    my $in_comment = 0;
+    foreach (@{$ra_lines}) {
+
+        s/[^<>+-.,\[\]]+//g;
+        next if /^\s*$/;
+        push @save_lines, $_;
+    }
+
+    print "<- remove_bf_comments\n" if $opt_v > 2;
+    return @save_lines;
+} # 1}}}
 sub remove_intented_block {                  # {{{1
     # Haml block comments are defined by a silent comment marker like
     #    /
@@ -4849,7 +4870,7 @@ sub remove_pug_block {                       # {{{1
     my ($ra_lines, ) = @_;
     return remove_intented_block($ra_lines, '^(\s*)(//)\s*$');
 } # 1}}}
-sub remove_slim_block {                       # {{{1
+sub remove_slim_block {                      # {{{1
     # slim comments start with /
     # followed by indented text on subsequent lines.
     # http://www.rubydoc.info/gems/slim/frames
@@ -5039,6 +5060,8 @@ sub set_constants {                          # {{{1
             'BTM'         => 'DOS Batch'             ,
             'blade.php'   => 'Blade'                 ,
             'build.xml'   => 'Ant'                   ,
+            'b'           => 'Brainfuck'             ,
+            'bf'          => 'Brainfuck'             ,
             'cbl'         => 'COBOL'                 ,
             'CBL'         => 'COBOL'                 ,
             'c'           => 'C'                     ,
@@ -5482,6 +5505,10 @@ sub set_constants {                          # {{{1
     'Bourne Shell'       => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
+                            ],
+    'Brainfuck'          => [ # puerile name for a language
+#                               [ 'call_regexp_common'  , 'Brainfuck' ],  # inaccurate
+                                [ 'remove_bf_comments',               ],
                             ],
     'builder'            => [
                                 [ 'remove_matches'      , '^\s*xml_markup.comment!'  ],
@@ -6473,6 +6500,7 @@ sub set_constants {                          # {{{1
     'bmsgen'                       =>   2.22,
     'boeingcalc'                   =>  13.33,
     'bteq'                         =>   6.15,
+    'Brainfuck'                    =>   0.10,
     'builder'                      =>   2.00,
     'C'                            =>   0.77,
     'c set 2'                      =>   0.88,
