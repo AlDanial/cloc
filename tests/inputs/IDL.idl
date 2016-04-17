@@ -1,0 +1,3 @@
+; Hello World in IDL (Interactive Data Language)
+; from http://www.roesler-ac.de/wolfram/hello.htm
+print, "Hello World"

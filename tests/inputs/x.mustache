@@ -1,0 +1,23 @@
+abc
+     {{! INLINE }}
+{{/link}}
+
+  abc    {{! INLINE LEADING }}
+         {{! INLINE TRAILING }}  trailing
+  abc j  {{! INLINE BOTH }}  trailing
+
+  abc    {{!}}
+         {{!}}  trailing
+  abc j  {{!}}  trailing
+
+  abc    {{! STUFF
+  }}
+         {{! STUFF 
+         }}  trailing
+  abc j  {{! 
+   STUFF }}  trailing
+
+{{/items}} {{!
+STUFF
+  }} def
+{{#empty}}

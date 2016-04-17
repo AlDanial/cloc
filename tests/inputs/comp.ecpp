@@ -1,0 +1,176 @@
+<html>
+<head>
+ <style type="text/css">
+   p.example { background-color: #fcc;
+               font-family: monospace;
+               white-space: pre;; }
+   p.result { background-color: #ccc; }
+ </style>
+</head>
+<body>
+
+<h1>Calling subcomponents</h1>
+
+<p>
+<b>Ecpp</b>-pages can embed other pages. These embedded pages are called
+subcomponents. They come in 2 variants: local and external. Local
+subcomponents are defined inside another component with
+<b>&lt;%def&nbsp;<i>componentname</i>&gt;</b> and closed with
+<b>&lt;/def&gt;</b>. External subcomponents are normal components.
+</p>
+
+<p>
+A subcomponentcall starts with <b>&lt;&amp;</b> and ends with
+<b>&amp;&gt;</b>. Insert the componentname between these tags. If you omit the
+library-part of the component, the current library is used. If the
+componentname is a single word, ecpp looks for a local component, which is
+called if found. Otherwise it is a external componentcall.
+</p>
+
+<p>
+You can dynamically build componentnames, by putting a c++-expression inside
+brackets. This expression is evaluated on runtime and the resulting component
+is called. The expression can be of type (or convertable to)
+<b>std::string</b>, <b>tnt::Compident</b> or <b>tnt::Subcompident</b>.
+</p>
+
+<p>
+After the componentname you can add named parameters. Put a name followed by
+'=' and a value. The value is either a constant string or a expression. A
+expression must be bracketed. If you want to pass just the same parameters
+your current component received, put the single word <b>qparam</b> into the
+list (actually you can pass any <b>cxxtools::query_params</b>-variable).
+</p>
+
+<p>
+A special case are local components, which have c++-parameters. You can put a
+normal parameterlist just like in c++-functions after the defition
+(<b>&lt;%def&gt;</b>-block) after the componentname. The can only be called locally.
+</p>
+
+<h2>Just a local componentcall</h2>
+
+<p class="example">
+ &lt;&amp; localcomp param1="value1" &amp;&gt;
+</p>
+
+<p class="result">
+ <& localcomp param1="value1" &>
+</p>
+
+
+<h2> Another local componentcall. We pass a c++-parameter. </h2>
+<p class="example">
+ &lt;&amp; localcomp_p(5) &amp;&gt;
+</p>
+<p class="result">
+ <& localcomp_p(5) >
+</p>
+
+
+<h2>A external componentcall (localcomp "extcomp" does not exist)</h2>
+
+<p class="example">
+ &lt;&amp; subcomp param1="value1" &amp;&gt;
+</p>
+<p class="result">
+ <& subcomp param1="value1" &>
+</p>
+
+<h2> a external componentcall </h2>
+
+<p class="example">
+ &lt;&amp; extcomp@extlib param1="value1" &amp;&gt;
+</p>
+<p class="result">
+ <& extcomp@extlib param1="value1" &>
+</p>
+
+<h2> a external subcomponentcall </h2>
+
+<p class="example">
+ &lt;&amp; extcomp.subcomp@extlib param1="value1" &amp;&gt;
+</p>
+<p class="result">
+ <& extcomp.subcomp@extlib param1="value1" &>
+</p>
+
+<h2> compose componentname by expression </h2>
+<{
+  // define some variables here
+  std::string compname = "extcomp";
+  std::string libname = "extlib";
+}>
+<p class="example">
+ &lt;&amp; (compname + '@' + libname) param1="value1" &amp;&gt;
+</p>
+<p class="result">
+ <& (compname + '@' + libname) param1="value1" &>
+</p>
+
+<h2> call component by componentidentifier </h2>
+<p class="example">
+ &lt;&amp; (tnt::Compident(compname, libname)) param1="value1" &amp;&gt;
+</p>
+<p class="result">
+ <& (tnt::Compident(libname, compname)) param1="value1" &>
+</p>
+
+<h2> pass a expression as parameter </h2>
+<p class="example">
+ &lt;&amp; localcomp param1=(1+5) qparam param2="uhu"&amp;&gt;
+</p>
+<p class="result">
+ <& localcomp param1=(1+5) qparam param2="uhu"&>
+</p>
+
+<h2> pass multiple values with the same name as parameter </h2>
+<p class="example">
+ &lt;&amp; localcomp param3="value1" param3="value2"
+              param4="17" param4=(28) &amp;&gt;
+</p>
+ <& localcomp param3="value1" param3="value2"
+              param4="17" param4=(28) &>
+
+<%doc>
+<h2> call subcomponents in c++-blocks </h2>
+<p class="example">
+  callComp("extcomp@extlib", request, reply, qparam);
+</p>
+<p class="result">
+<{
+  callComp("extcomp@extlib", request, reply, qparam);
+}>
+</p>
+
+</body>
+</html>
+
+<%def localcomp>
+<%args>
+param1;
+param2;
+param3[];
+int param4[];
+</%args>
+   This is a local subcomponent.
+   We got a parameter <i>param1</i> with the value <b><$param1$></b>.
+% if (!param2.empty()) {
+   We got <i>param2</i> also. Its value is <b><$param2$></b>.
+% }
+  We got <$ param3.size() $> times "param3" and <$ param4.size() $> times
+  "param4".
+  The values of param3 are:
+  <{ std::copy(param3.begin(), param3.end(),
+       std::ostream_iterator<param3_type::value_type>(reply.out(), ", ")); }>.
+  The values of param4 are:
+  <{ std::copy(param4.begin(), param4.end(),
+       std::ostream_iterator<param4_type::value_type>(reply.out(), ", ")); }>.
+</%def>
+</%doc>
+
+<%def localcomp_p(int i)>
+This is a local subcomponent with parameter.
+We got a c++-integer-parameter with the value <b><$i$></b>.
+This component can only be called locally because of c++-parameters.
+</%def>

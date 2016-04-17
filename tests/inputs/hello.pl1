@@ -1,0 +1,12 @@
+/*
+ *   Compile:
+ *               gcc hello.c -o hello
+ *
+ *   Run:
+ *               hello
+ */
+main (int argc, char *argv[])
+{
+  printf("Hello.\n");
+~ printf("tilde line.\n");
+}

@@ -1,0 +1,305 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "Resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#ifndef APSTUDIO_INVOKED
+#include "TargetVer.h"
+#endif
+#include <winres.h>
+#include "StdRes.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (United States) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE
+BEGIN
+    "Resource.h\0"
+END
+
+2 TEXTINCLUDE
+BEGIN
+    "#ifndef APSTUDIO_INVOKED\r\n"
+    "#include ""TargetVer.h""\r\n"
+    "#endif\r\n"
+    "#include <winres.h>\r\n"
+    "#include ""StdRes.h""\r\0"
+END
+
+3 TEXTINCLUDE
+BEGIN
+    "#include ""Version.rc2""\r\n"
+    "#include ""Res\\ZosMsg.rc""\r\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AVI
+//
+
+IDV_CONNECT             AVI                     "Res\\Connect.avi"
+IDV_COPY_DATASET        AVI                     "Res\\CopyDataSet.avi"
+IDV_DOWNLOAD            AVI                     "Res\\Download.avi"
+IDV_FIND_FILE           AVI                     "Res\\FindFile.avi"
+IDV_UPLOAD              AVI                     "Res\\Upload.avi"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// REGISTRY
+//
+
+IDR_ZOSNET              REGISTRY                "Res\\ZosNet.rgs"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ZOSNETWORK          ICON                    "Res\\ZosNetwork.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_CHANGE_PASSWORD1 DIALOGEX 0, 0, 153, 74
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Change Password"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "New password:",IDC_STATIC,7,10,50,8
+    EDITTEXT        IDC_CHANGE_PASSWORD_NEW,85,7,60,14,ES_PASSWORD | ES_AUTOHSCROLL
+    LTEXT           "Confirm new password:",IDC_STATIC,7,32,76,8
+    EDITTEXT        IDC_CHANGE_PASSWORD_CONFIRM,85,29,60,14,ES_PASSWORD | ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,37,53,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,96,53,50,14
+END
+
+IDD_CHANGE_PASSWORD2 DIALOGEX 0, 0, 257, 74
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Change Password"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "New password:",IDC_STATIC,7,10,50,8
+    EDITTEXT        IDC_CHANGE_PASSWORD_NEW,85,7,165,14,ES_PASSWORD | ES_AUTOHSCROLL
+    LTEXT           "Confirm new password:",IDC_STATIC,7,32,76,8
+    EDITTEXT        IDC_CHANGE_PASSWORD_CONFIRM,85,29,165,14,ES_PASSWORD | ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,141,53,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,200,53,50,14
+END
+
+IDD_CONNECTING DIALOGEX 0, 0, 176, 143
+STYLE DS_SYSMODAL | DS_SETFONT | DS_MODALFRAME | DS_SETFOREGROUND | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_TOPMOST
+CAPTION "Connecting..."
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_CONNECTING_ANIMATE,"SysAnimate32",ACS_CENTER | ACS_TRANSPARENT | ACS_AUTOPLAY,7,7,162,48
+    LTEXT           "User:",IDC_STATIC,7,60,18,8
+    LTEXT           "userid",IDC_CONNECTING_USERID,43,60,126,8
+    LTEXT           "Server:",IDC_STATIC,7,74,25,8
+    LTEXT           "server",IDC_CONNECTING_SERVER,43,74,126,8
+    LTEXT           "Address:",IDC_STATIC,7,88,30,8
+    LTEXT           "ip.addr",IDC_CONNECTING_IPADDR,43,88,126,8
+    LTEXT           "Port:",IDC_STATIC,7,102,17,8
+    LTEXT           "port",IDC_CONNECTING_PORT,43,102,126,8
+    PUSHBUTTON      "Cancel",IDCANCEL,62,122,50,14
+END
+
+IDD_JOB_CARD DIALOGEX 0, 0, 353, 85
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Check In"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,235,64,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,297,64,50,14
+    LTEXT           "&Job card:",IDC_STATIC,7,4,103,8
+    EDITTEXT        IDC_JOB_CARD,7,16,339,42,ES_MULTILINE | ES_UPPERCASE | ES_AUTOHSCROLL | ES_WANTRETURN
+END
+
+IDD_LOGON1 DIALOGEX 0, 0, 247, 119
+STYLE DS_SYSMODAL | DS_SETFONT | DS_MODALFRAME | DS_SETFOREGROUND | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_TOPMOST | WS_EX_APPWINDOW
+CAPTION "Logon"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "User ID:",IDC_STATIC,7,10,28,8
+    EDITTEXT        IDC_LOGON_USERID,42,7,72,14,ES_UPPERCASE | ES_AUTOHSCROLL
+    LTEXT           "Password:",IDC_LABEL0,7,32,34,8
+    EDITTEXT        IDC_LOGON_PASSWORD,42,29,72,14,ES_PASSWORD | ES_AUTOHSCROLL
+    LTEXT           "Address:",IDC_STATIC,7,54,30,8
+    EDITTEXT        IDC_LOGON_IPADDR,42,51,72,14,ES_AUTOHSCROLL | ES_READONLY | NOT WS_TABSTOP
+    LTEXT           "Port:",IDC_STATIC,7,77,17,8
+    EDITTEXT        IDC_LOGON_PORT,41,74,72,14,ES_AUTOHSCROLL | ES_READONLY | NOT WS_TABSTOP
+    CONTROL         "Use Windows password",IDC_LOGON_WINDOWS_PASSWORD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,143,9,91,10
+    CONTROL         "Change password",IDC_LOGON_CHANGE_PASSWORD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,143,31,73,10
+    CONTROL         "Enable notify messages",IDC_LOGON_NOTIFY,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,143,53,91,10
+    CONTROL         "Validate code page ",IDC_LOGON_CHECK_CODE_PAGE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,143,76,79,10
+    DEFPUSHBUTTON   "OK",IDOK,123,98,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,190,98,50,14
+END
+
+IDD_LOGON2 DIALOGEX 0, 0, 297, 95
+STYLE DS_SYSMODAL | DS_SETFONT | DS_MODALFRAME | DS_SETFOREGROUND | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_TOPMOST | WS_EX_APPWINDOW
+CAPTION "Logon"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "User ID:",IDC_STATIC,7,10,28,8
+    EDITTEXT        IDC_LOGON_USERID,42,7,63,14,ES_UPPERCASE | ES_AUTOHSCROLL
+    LTEXT           "Address:",IDC_STATIC,117,10,30,8
+    EDITTEXT        IDC_LOGON_IPADDR,152,7,72,14,ES_AUTOHSCROLL | ES_READONLY | NOT WS_TABSTOP
+    LTEXT           "Port:",IDC_STATIC,235,10,17,8
+    EDITTEXT        IDC_LOGON_PORT,257,7,34,14,ES_AUTOHSCROLL | ES_READONLY | NOT WS_TABSTOP
+    LTEXT           "Password:",IDC_LABEL0,7,32,34,8
+    EDITTEXT        IDC_LOGON_PASSWORD,42,29,248,14,ES_PASSWORD | ES_AUTOHSCROLL
+    CONTROL         "Use Windows password",IDC_LOGON_WINDOWS_PASSWORD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,56,91,10
+    CONTROL         "Change password",IDC_LOGON_CHANGE_PASSWORD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,76,81,10
+    CONTROL         "Enable notify messages",IDC_LOGON_NOTIFY,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,117,56,91,10
+    CONTROL         "Validate code page ",IDC_LOGON_CHECK_CODE_PAGE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,117,76,79,10
+    DEFPUSHBUTTON   "OK",IDOK,240,54,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,240,74,50,14
+END
+
+IDD_PROGRESS DIALOGEX 0, 0, 204, 113
+STYLE DS_SYSMODAL | DS_SETFONT | DS_MODALFRAME | DS_SETFOREGROUND | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "Progress..."
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_PROGRESS_ANIMATE,"SysAnimate32",ACS_CENTER | ACS_TRANSPARENT | ACS_AUTOPLAY,7,7,190,48,WS_EX_TRANSPARENT
+    LTEXT           "text-0",IDC_PROGRESS_TEXT0,7,57,190,8
+    LTEXT           "text-1",IDC_PROGRESS_TEXT1,7,69,190,16
+    PUSHBUTTON      "Cancel",IDCANCEL,76,92,50,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_CHANGE_PASSWORD1, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 146
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 67
+    END
+
+    IDD_CHANGE_PASSWORD2, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 250
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 67
+    END
+
+    IDD_CONNECTING, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 169
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 136
+    END
+
+    IDD_JOB_CARD, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 346
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 78
+    END
+
+    IDD_LOGON1, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 240
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 112
+    END
+
+    IDD_LOGON2, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 290
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 88
+    END
+
+    IDD_PROGRESS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 197
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 106
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_FOLDER_USER_DATASETS "%s Prefix"
+    IDS_FOLDER_USER_JOBS    "%s Owner"
+    IDS_NETWORK_NAME        "Serena Network"
+    IDS_SERVICE_NAME        "ZosNet"
+    IDS_SYSTEM              "system"
+    IDS_TEST                "Test"
+    IDS_TITLE_CHECKING_IN   "Checking in..."
+    IDS_TITLE_CHECKING_OUT  "Checking out..."
+    IDS_TITLE_COPYING_DATASET "Copying data set..."
+    IDS_TITLE_DOWNLOADING   "Downloading..."
+    IDS_TITLE_LOGON         "Logon: %s"
+    IDS_TITLE_SEARCHING     "Searching..."
+    IDS_TITLE_TRANSFERRING_FILES "Transferring files..."
+    IDS_TITLE_UPLOADING     "Uploading..."
+    IDS_TITLE_VALIDATING_VERIONS "Validating versions..."
+END
+
+#endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#include "Version.rc2"
+#include "Res\ZosMsg.rc"
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

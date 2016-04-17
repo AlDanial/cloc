@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" creationComplete="init()">
+  <mx:Script>
+    import mx.controls.*;
+    import mx.rpc.events.*;
+    import mx.utils.ArrayUtil;
+
+    [Bindable]
+    public var recipes:Array;
+
+    public function init():void
+    {
+      getRecipes();
+    }
+    /*
+    this is a C Comment
+     */
+
+    public function onFault(event:FaultEvent):void
+    {
+      Alert.show(event.fault.faultString, "Error");
+    }
+
+    public function onViewsResult(event:ResultEvent):void
+    {
+      recipes = ArrayUtil.toArray(event.result);
+    }
+
+    public function getRecipes():void
+    {
+      views.getView("recipes_all", ['nid','title','body','changed']);
+    }
+
+    public function saveRecipe():void
+    {
+      var edit:Object;
+      if (recipes_select.selectedItem) {
+        edit = recipes_select.selectedItem;
+      }
+      else {
+        edit = new Object;
+      }
+
+      edit.type = "recipe";
+
+      edit.title = dish.text;
+      edit.body = recipe.text;
+
+      if (edit.title == "" || edit.body == "") {
+        Alert.show("Enter some content", "Error");
+      }
+
+      node.save(edit);
+      getRecipes();
+    }
+
+    public function onSaved(event:ResultEvent):void
+    {
+      Alert.show("Recipe was saved", "Saved");
+    }
+
+    public function newRecipe():void
+    {
+      recipes_select.selectedItem = undefined;
+
+      dish.text = "";
+      recipe.text = "";
+    }
+  </mx:Script>
+
+  <mx:RemoteObject showBusyCursor="true" destination="amfphp" source="views" id="views">
+    <mx:method name="getView" result="onViewsResult(event)" fault="onFault(event)" />
+  </mx:RemoteObject>
+
+  <mx:RemoteObject showBusyCursor="true" destination="amfphp" source="node" id="node">
+    <mx:method name="save" result="onSaved(event)" fault="onFault(event)" />
+  </mx:RemoteObject>
+
+  <mx:Panel width="500" height="400" layout="absolute" title="Recipes" horizontalCenter="0" verticalCenter="0">
+    <mx:DataGrid x="10" y="10" width="460" id="recipes_select" dataProvider="{recipes}" >
+      <mx:columns>
+        <mx:DataGridColumn headerText="NID" dataField="nid" width="40"/>
+        <mx:DataGridColumn headerText="Dish" dataField="title"/>
+      </mx:columns>
+    </mx:DataGrid>
+
+    <mx:Label x="10" y="160" text="Dish"/>
+
+    <mx:TextInput x="10" y="186" width="460" id="dish" text="{recipes_select.selectedItem.title}"/>
+    <!-- an
+    html comment -->
+
+    <mx:Label x="10" y="216" text="Recipe"/>
+
+    <mx:TextArea x="10" y="242" width="460" height="75" id="recipe" text="{recipes_select.selectedItem.body}"/>
+
+    <mx:Button x="416" y="328" label="Save" click="saveRecipe()"/>
+
+    <mx:Button x="420" y="158" label="New" click="newRecipe()"/>
+
+  </mx:Panel>
+</mx:Application>

@@ -1,0 +1,13 @@
+<div class="widget-test-holder"></div>
+<ul class="widget-test-items">
+  - @test.each do |test|
+    <li>
+      <a href="#{chamada.conteudo_url}">
+        - if test.midia and test.midia.add(params[:arg1]).present?
+          <img src="#{test.midia.add(params[:arg1])}" alt="#{strip_tags(test.title)}" />
+      </a>
+    </li>
+    /
+     this is a comment
+     block
+</ul>

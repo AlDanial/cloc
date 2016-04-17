@@ -1,0 +1,20 @@
+LIBRARY ZosNp
+; Bruce Engle
+
+EXPORTS
+    NPGetConnection             @12
+    NPGetCaps                   @13
+    NPGetUser                   @16
+    NPAddConnection             @17
+    NPCancelConnection          @18
+    NPOpenEnum                  @33
+    NPEnumResource              @34
+    NPCloseEnum                 @35
+    NPFormatNetworkName         @36
+    NPAddConnection3            @38
+    NPGetUniversalName          @40
+    NPGetResourceParent         @41
+    NPGetConnectionPerformance  @49
+    NPGetResourceInformation    @52
+    NPLogonNotify               @500
+    NPPasswordChangeNotify      @501

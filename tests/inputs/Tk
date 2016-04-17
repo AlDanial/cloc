@@ -1,0 +1,6 @@
+#!/usr/local/bin/wish -f
+# from http://www.roesler-ac.de/wolfram/hello.htm
+# Hello World in Tk
+
+label .l -text "Hello World!"
+pack .l

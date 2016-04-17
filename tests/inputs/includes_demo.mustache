@@ -1,0 +1,20 @@
+{{! https://github.com/mustache/mustache.github.com/archive/master.zip }}
+{% raw %}
+<h1>{{header}}</h1>
+{{#bug}}
+{{/bug}}
+
+{{#items}}
+  {{#first}}
+    <li><strong>{{name}}</strong></li>
+  {{/first}}
+  {{#link}}
+    <li><a href="{{url}}">{{name}}</a></li>
+  {{/link}}
+{{/items}} {{!
+stuff
+  }}
+{{#empty}}
+  <p>The list is empty.</p>
+{{/empty}}
+{% endraw %}
