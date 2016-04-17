@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.0049128532409668
+  n_files            : 1
+  n_lines            : 49
+  files_per_second   : 203.547704552072
+  lines_per_second   : 9973.83752305154
+  report_file        : robotframework.tsv.yaml
+RobotFramework :
+  nFiles: 1
+  blank: 9
+  comment: 5
+  code: 35
+SUM: 
+  blank: 9
+  comment: 5
+  code: 35
+  nFiles: 1

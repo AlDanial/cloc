@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.0047309398651123
+  n_files            : 1
+  n_lines            : 4
+  files_per_second   : 211.374489744494
+  lines_per_second   : 845.497958977977
+  report_file        : wokka.cbl.yaml
+COBOL :
+  nFiles: 1
+  blank: 1
+  comment: 1
+  code: 2
+SUM: 
+  blank: 1
+  comment: 1
+  code: 2
+  nFiles: 1

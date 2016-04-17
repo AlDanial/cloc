@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00602293014526367
+  n_files            : 1
+  n_lines            : 86
+  files_per_second   : 166.032143139894
+  lines_per_second   : 14278.7643100309
+  report_file        : verilog.sv.yaml
+Verilog-SystemVerilog :
+  nFiles: 1
+  blank: 4
+  comment: 20
+  code: 62
+SUM: 
+  blank: 4
+  comment: 20
+  code: 62
+  nFiles: 1

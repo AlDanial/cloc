@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00467109680175781
+  n_files            : 1
+  n_lines            : 7
+  files_per_second   : 214.082482645978
+  lines_per_second   : 1498.57737852185
+  report_file        : hello.f90.yaml
+Fortran 90 :
+  nFiles: 1
+  blank: 0
+  comment: 3
+  code: 4
+SUM: 
+  blank: 0
+  comment: 3
+  code: 4
+  nFiles: 1

@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00486397743225098
+  n_files            : 1
+  n_lines            : 10
+  files_per_second   : 205.593059163766
+  lines_per_second   : 2055.93059163766
+  report_file        : hello.f.yaml
+Fortran 77 :
+  nFiles: 1
+  blank: 0
+  comment: 6
+  code: 4
+SUM: 
+  blank: 0
+  comment: 6
+  code: 4
+  nFiles: 1

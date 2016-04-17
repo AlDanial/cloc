@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00506496429443359
+  n_files            : 1
+  n_lines            : 31
+  files_per_second   : 197.434758049332
+  lines_per_second   : 6120.47749952928
+  report_file        : Mathematica_1.m.yaml
+Mathematica :
+  nFiles: 1
+  blank: 12
+  comment: 8
+  code: 11
+SUM: 
+  blank: 12
+  comment: 8
+  code: 11
+  nFiles: 1

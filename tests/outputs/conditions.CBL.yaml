@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00464391708374023
+  n_files            : 1
+  n_lines            : 31
+  files_per_second   : 215.335455385563
+  lines_per_second   : 6675.39911695246
+  report_file        : conditions.CBL.yaml
+COBOL :
+  nFiles: 1
+  blank: 3
+  comment: 3
+  code: 25
+SUM: 
+  blank: 3
+  comment: 3
+  code: 25
+  nFiles: 1

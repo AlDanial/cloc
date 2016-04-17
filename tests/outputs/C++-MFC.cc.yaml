@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00526905059814453
+  n_files            : 1
+  n_lines            : 30
+  files_per_second   : 189.787511312217
+  lines_per_second   : 5693.62533936652
+  report_file        : C++-MFC.cc.yaml
+C++ :
+  nFiles: 1
+  blank: 5
+  comment: 3
+  code: 22
+SUM: 
+  blank: 5
+  comment: 3
+  code: 22
+  nFiles: 1

@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00597906112670898
+  n_files            : 1
+  n_lines            : 102
+  files_per_second   : 167.250338942499
+  lines_per_second   : 17059.5345721349
+  report_file        : drupal.mxml.yaml
+MXML :
+  nFiles: 1
+  blank: 23
+  comment: 5
+  code: 74
+SUM: 
+  blank: 23
+  comment: 5
+  code: 74
+  nFiles: 1

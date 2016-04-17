@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.0046839714050293
+  n_files            : 1
+  n_lines            : 12
+  files_per_second   : 213.494044589229
+  lines_per_second   : 2561.92853507075
+  report_file        : VisualBasic.Net.vba.yaml
+Visual Basic :
+  nFiles: 1
+  blank: 4
+  comment: 2
+  code: 6
+SUM: 
+  blank: 4
+  comment: 2
+  code: 6
+  nFiles: 1

@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00552105903625488
+  n_files            : 1
+  n_lines            : 55
+  files_per_second   : 181.124670725914
+  lines_per_second   : 9961.85688992529
+  report_file        : sharpsign.cl.yaml
+Lisp :
+  nFiles: 1
+  blank: 5
+  comment: 26
+  code: 24
+SUM: 
+  blank: 5
+  comment: 26
+  code: 24
+  nFiles: 1

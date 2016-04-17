@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00563406944274902
+  n_files            : 1
+  n_lines            : 61
+  files_per_second   : 177.491600016927
+  lines_per_second   : 10826.9876010325
+  report_file        : i18n_de.ts.yaml
+Qt Linguist :
+  nFiles: 1
+  blank: 0
+  comment: 4
+  code: 57
+SUM: 
+  blank: 0
+  comment: 4
+  code: 57
+  nFiles: 1

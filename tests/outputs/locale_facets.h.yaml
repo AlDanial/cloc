@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.0107300281524658
+  n_files            : 1
+  n_lines            : 1588
+  files_per_second   : 93.1964003999556
+  lines_per_second   : 147995.883835129
+  report_file        : locale_facets.h.yaml
+C/C++ Header :
+  nFiles: 1
+  blank: 191
+  comment: 780
+  code: 617
+SUM: 
+  blank: 191
+  comment: 780
+  code: 617
+  nFiles: 1

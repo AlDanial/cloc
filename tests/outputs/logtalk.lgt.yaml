@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00737118721008301
+  n_files            : 1
+  n_lines            : 484
+  files_per_second   : 135.663356729308
+  lines_per_second   : 65661.0646569848
+  report_file        : logtalk.lgt.yaml
+Logtalk :
+  nFiles: 1
+  blank: 59
+  comment: 57
+  code: 368
+SUM: 
+  blank: 59
+  comment: 57
+  code: 368
+  nFiles: 1

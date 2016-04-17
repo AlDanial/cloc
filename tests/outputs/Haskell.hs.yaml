@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00458288192749023
+  n_files            : 1
+  n_lines            : 6
+  files_per_second   : 218.203308708771
+  lines_per_second   : 1309.21985225263
+  report_file        : Haskell.hs.yaml
+Haskell :
+  nFiles: 1
+  blank: 1
+  comment: 2
+  code: 3
+SUM: 
+  blank: 1
+  comment: 2
+  code: 3
+  nFiles: 1

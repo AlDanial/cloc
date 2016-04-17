@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00542092323303223
+  n_files            : 1
+  n_lines            : 48
+  files_per_second   : 184.470422659102
+  lines_per_second   : 8854.58028763689
+  report_file        : Lanczos.m.yaml
+MATLAB :
+  nFiles: 1
+  blank: 0
+  comment: 0
+  code: 48
+SUM: 
+  blank: 0
+  comment: 0
+  code: 48
+  nFiles: 1

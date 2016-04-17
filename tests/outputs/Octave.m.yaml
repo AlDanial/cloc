@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00453019142150879
+  n_files            : 1
+  n_lines            : 3
+  files_per_second   : 220.741224146098
+  lines_per_second   : 662.223672438293
+  report_file        : Octave.m.yaml
+MATLAB :
+  nFiles: 1
+  blank: 0
+  comment: 1
+  code: 2
+SUM: 
+  blank: 0
+  comment: 1
+  code: 2
+  nFiles: 1

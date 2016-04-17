@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00699496269226074
+  n_files            : 1
+  n_lines            : 360
+  files_per_second   : 142.960019087222
+  lines_per_second   : 51465.6068713998
+  report_file        : ZosMsg.mc.yaml
+Windows Message File :
+  nFiles: 1
+  blank: 73
+  comment: 3
+  code: 284
+SUM: 
+  blank: 73
+  comment: 3
+  code: 284
+  nFiles: 1

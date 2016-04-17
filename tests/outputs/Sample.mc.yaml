@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00551509857177734
+  n_files            : 1
+  n_lines            : 86
+  files_per_second   : 181.320421926336
+  lines_per_second   : 15593.5562856649
+  report_file        : Sample.mc.yaml
+Windows Message File :
+  nFiles: 1
+  blank: 16
+  comment: 6
+  code: 64
+SUM: 
+  blank: 16
+  comment: 6
+  code: 64
+  nFiles: 1

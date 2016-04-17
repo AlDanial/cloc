@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00513315200805664
+  n_files            : 1
+  n_lines            : 11
+  files_per_second   : 194.812076172782
+  lines_per_second   : 2142.9328379006
+  report_file        : C-Ansi.c.yaml
+C :
+  nFiles: 1
+  blank: 2
+  comment: 2
+  code: 7
+SUM: 
+  blank: 2
+  comment: 2
+  code: 7
+  nFiles: 1

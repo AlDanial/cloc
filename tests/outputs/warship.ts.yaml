@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.0075831413269043
+  n_files            : 1
+  n_lines            : 393
+  files_per_second   : 131.871470791675
+  lines_per_second   : 51825.4880211281
+  report_file        : warship.ts.yaml
+TypeScript :
+  nFiles: 1
+  blank: 39
+  comment: 11
+  code: 343
+SUM: 
+  blank: 39
+  comment: 11
+  code: 343
+  nFiles: 1

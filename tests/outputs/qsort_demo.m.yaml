@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00562095642089844
+  n_files            : 1
+  n_lines            : 47
+  files_per_second   : 177.905666779776
+  lines_per_second   : 8361.56633864947
+  report_file        : qsort_demo.m.yaml
+Objective C :
+  nFiles: 1
+  blank: 11
+  comment: 11
+  code: 25
+SUM: 
+  blank: 11
+  comment: 11
+  code: 25
+  nFiles: 1

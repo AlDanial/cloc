@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00453805923461914
+  n_files            : 1
+  n_lines            : 5
+  files_per_second   : 220.358516339183
+  lines_per_second   : 1101.79258169591
+  report_file        : MSDOS.bat.yaml
+DOS Batch :
+  nFiles: 1
+  blank: 1
+  comment: 2
+  code: 2
+SUM: 
+  blank: 1
+  comment: 2
+  code: 2
+  nFiles: 1

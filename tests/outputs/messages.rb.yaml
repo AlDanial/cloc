@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00532007217407227
+  n_files            : 1
+  n_lines            : 152
+  files_per_second   : 187.967374742314
+  lines_per_second   : 28571.0409608318
+  report_file        : messages.rb.yaml
+Ruby :
+  nFiles: 1
+  blank: 11
+  comment: 30
+  code: 111
+SUM: 
+  blank: 11
+  comment: 30
+  code: 111
+  nFiles: 1

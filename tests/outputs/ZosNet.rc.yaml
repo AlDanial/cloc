@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00661182403564453
+  n_files            : 1
+  n_lines            : 305
+  files_per_second   : 151.244194432425
+  lines_per_second   : 46129.4793018895
+  report_file        : ZosNet.rc.yaml
+Windows Resource File :
+  nFiles: 1
+  blank: 42
+  comment: 45
+  code: 218
+SUM: 
+  blank: 42
+  comment: 45
+  code: 218
+  nFiles: 1

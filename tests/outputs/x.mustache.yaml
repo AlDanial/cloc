@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00459003448486328
+  n_files            : 1
+  n_lines            : 23
+  files_per_second   : 217.863286931228
+  lines_per_second   : 5010.85559941824
+  report_file        : x.mustache.yaml
+Mustache :
+  nFiles: 1
+  blank: 4
+  comment: 4
+  code: 15
+SUM: 
+  blank: 4
+  comment: 4
+  code: 15
+  nFiles: 1

@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00582504272460938
+  n_files            : 1
+  n_lines            : 259
+  files_per_second   : 171.672560576293
+  lines_per_second   : 44463.19318926
+  report_file        : acpclust.R.yaml
+R :
+  nFiles: 1
+  blank: 54
+  comment: 35
+  code: 170
+SUM: 
+  blank: 54
+  comment: 35
+  code: 170
+  nFiles: 1

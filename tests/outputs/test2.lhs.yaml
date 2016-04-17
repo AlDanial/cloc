@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.0049288272857666
+  n_files            : 1
+  n_lines            : 44
+  files_per_second   : 202.888018187975
+  lines_per_second   : 8927.07280027089
+  report_file        : test2.lhs.yaml
+Haskell :
+  nFiles: 1
+  blank: 12
+  comment: 11
+  code: 21
+SUM: 
+  blank: 12
+  comment: 11
+  code: 21
+  nFiles: 1

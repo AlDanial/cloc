@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00531911849975586
+  n_files            : 1
+  n_lines            : 8
+  files_per_second   : 188.001075750784
+  lines_per_second   : 1504.00860600628
+  report_file        : wokka.cs.yaml
+C# :
+  nFiles: 1
+  blank: 2
+  comment: 1
+  code: 5
+SUM: 
+  blank: 2
+  comment: 1
+  code: 5
+  nFiles: 1

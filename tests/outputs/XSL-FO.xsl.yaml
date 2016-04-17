@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00523900985717773
+  n_files            : 1
+  n_lines            : 15
+  files_per_second   : 190.875762264494
+  lines_per_second   : 2863.13643396742
+  report_file        : XSL-FO.xsl.yaml
+XSLT :
+  nFiles: 1
+  blank: 0
+  comment: 2
+  code: 13
+SUM: 
+  blank: 0
+  comment: 2
+  code: 13
+  nFiles: 1

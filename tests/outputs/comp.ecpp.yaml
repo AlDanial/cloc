@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00635004043579102
+  n_files            : 1
+  n_lines            : 176
+  files_per_second   : 157.479312157393
+  lines_per_second   : 27716.3589397011
+  report_file        : comp.ecpp.yaml
+ECPP :
+  nFiles: 1
+  blank: 26
+  comment: 34
+  code: 116
+SUM: 
+  blank: 26
+  comment: 34
+  code: 116
+  nFiles: 1

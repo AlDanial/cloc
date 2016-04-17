@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00447916984558105
+  n_files            : 1
+  n_lines            : 3
+  files_per_second   : 223.255655506467
+  lines_per_second   : 669.766966519402
+  report_file        : Mumps.mps.yaml
+MUMPS :
+  nFiles: 1
+  blank: 0
+  comment: 2
+  code: 1
+SUM: 
+  blank: 0
+  comment: 2
+  code: 1
+  nFiles: 1

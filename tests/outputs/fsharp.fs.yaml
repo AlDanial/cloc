@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00527405738830566
+  n_files            : 1
+  n_lines            : 23
+  files_per_second   : 189.60734144026
+  lines_per_second   : 4360.96885312599
+  report_file        : fsharp.fs.yaml
+F# :
+  nFiles: 1
+  blank: 3
+  comment: 6
+  code: 14
+SUM: 
+  blank: 3
+  comment: 6
+  code: 14
+  nFiles: 1

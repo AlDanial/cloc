@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00505900382995605
+  n_files            : 1
+  n_lines            : 9
+  files_per_second   : 197.667373580282
+  lines_per_second   : 1779.00636222254
+  report_file        : Pascal.pp.yaml
+Pascal :
+  nFiles: 1
+  blank: 1
+  comment: 4
+  code: 4
+SUM: 
+  blank: 1
+  comment: 4
+  code: 4
+  nFiles: 1

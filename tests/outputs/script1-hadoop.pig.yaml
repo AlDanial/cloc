@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00578999519348145
+  n_files            : 1
+  n_lines            : 74
+  files_per_second   : 172.711715050443
+  lines_per_second   : 12780.6669137328
+  report_file        : script1-hadoop.pig.yaml
+Pig Latin :
+  nFiles: 1
+  blank: 19
+  comment: 40
+  code: 15
+SUM: 
+  blank: 19
+  comment: 40
+  code: 15
+  nFiles: 1

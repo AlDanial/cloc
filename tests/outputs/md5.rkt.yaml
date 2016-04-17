@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00575590133666992
+  n_files            : 1
+  n_lines            : 438
+  files_per_second   : 173.734736144478
+  lines_per_second   : 76095.8144312816
+  report_file        : md5.rkt.yaml
+Racket :
+  nFiles: 1
+  blank: 32
+  comment: 159
+  code: 247
+SUM: 
+  blank: 32
+  comment: 159
+  code: 247
+  nFiles: 1

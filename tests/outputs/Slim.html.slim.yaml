@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00455117225646973
+  n_files            : 1
+  n_lines            : 13
+  files_per_second   : 219.723610456284
+  lines_per_second   : 2856.40693593169
+  report_file        : Slim.html.slim.yaml
+Slim :
+  nFiles: 1
+  blank: 0
+  comment: 3
+  code: 10
+SUM: 
+  blank: 0
+  comment: 3
+  code: 10
+  nFiles: 1

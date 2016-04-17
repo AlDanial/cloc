@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00537395477294922
+  n_files            : 1
+  n_lines            : 13
+  files_per_second   : 186.082697426797
+  lines_per_second   : 2419.07506654836
+  report_file        : Assembler-Intel.asm.yaml
+Assembly :
+  nFiles: 1
+  blank: 2
+  comment: 2
+  code: 9
+SUM: 
+  blank: 2
+  comment: 2
+  code: 9
+  nFiles: 1

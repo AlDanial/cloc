@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00471401214599609
+  n_files            : 1
+  n_lines            : 37
+  files_per_second   : 212.133522152539
+  lines_per_second   : 7848.94031964394
+  report_file        : master.blade.php.yaml
+Blade :
+  nFiles: 1
+  blank: 10
+  comment: 5
+  code: 22
+SUM: 
+  blank: 10
+  comment: 5
+  code: 22
+  nFiles: 1
