@@ -128,6 +128,7 @@ if ($ON_WINDOWS and $ENV{'SHELL'}) {
         $ON_WINDOWS = 1;  # MKS defines $SHELL but still acts like Windows
     }
 }
+my $HAVE_SLOCCOUNT_c_count = external_utility_exists("echo 'abc' | c_count");
 
 my $NN     = chr(27) . "[0m";  # normal
    $NN     = "" if $ON_WINDOWS or !(-t STDERR); # -t STDERR:  is it a terminal?
@@ -1694,11 +1695,20 @@ foreach my $file (sort keys %unique_source_file) {
         next;
     }
 
-    my ($all_line_count,
-        $blank_count   ,
-        $comment_count ,
-       ) = call_counter($file, $Language{$file}, \@Errors);
-    my $code_count = $all_line_count - $blank_count - $comment_count;
+    my ($all_line_count, $blank_count, $comment_count, $code_count);
+    if ($HAVE_SLOCCOUNT_c_count and ($Language{$file} eq 'C' or
+                                     $Language{$file} eq 'C++')) {
+        $code_count = `cat $file | c_count | head -n 1`;
+        $code_count = substr($code_count, 0, -2);
+        chomp ($blank_count     = `grep -Pcv '\\S' $file`);
+        chomp ($all_line_count  = `cat $file | wc -l`);
+        $comment_count = $all_line_count - $code_count - $blank_count;
+    } else {
+        ($all_line_count,
+         $blank_count   ,
+         $comment_count ,) = call_counter($file, $Language{$file}, \@Errors);
+        $code_count = $all_line_count - $blank_count - $comment_count;
+    }
     if ($opt_by_file) {
         $Results_by_File{$file}{'code'   } = $code_count     ;
         $Results_by_File{$file}{'blank'  } = $blank_count    ;
