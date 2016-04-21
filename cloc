@@ -254,6 +254,9 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              than 2 GB of memory will cause problems.
                              Note:  this check does not apply to files
                              explicitly passed as command line arguments.
+   --original-dir            [Only effective in combination with
+                             --strip-comments]  Write the stripped files
+                             to the same directory as the original files.
    --read-binary-files       Process binary files in addition to text files.
                              This is usually a bad idea and should only be
                              attempted with text files that have embedded
@@ -291,9 +294,6 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              stripped file is the original file name with
                              .<ext> appended to it.  It is written to the
                              current directory unless --original-dir is on.
-   --original-dir            [Only effective in combination with
-                             --strip-comments]  Write the stripped files
-                             to the same directory as the original files.
    --sum-reports             Input arguments are report files previously
                              created with the --report-file option.  Makes
                              a cumulative set of results containing the
@@ -301,6 +301,16 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
    --unix                    Override the operating system autodetection
                              logic and run in UNIX mode.  See also
                              --windows, --show-os.
+   --use-sloccount           If SLOCCount is installed, use its compiled
+                             executables c_count, java_count, pascal_count,
+                             php_count, and xml_count instead of cloc's
+                             counters.  SLOCCount's compiled counters are
+                             substantially faster than cloc's and give
+                             a noticable performance improvement when
+                             counting projects with large files.  However,
+                             these cloc-specific features will not be available:
+                             --diff, --count-and-diff, --strip-comments,
+                             --unicode.
    --windows                 Override the operating system autodetection
                              logic and run in Microsoft Windows mode.
                              See also --unix, --show-os.
@@ -537,6 +547,7 @@ my (
     $opt_show_os              ,
     $opt_skip_archive         ,
     $opt_max_file_size        ,   # in MB
+    $opt_use_sloccount        ,
    );
 my $getopt_success = GetOptions(
    "by_file|by-file"                         => \$opt_by_file             ,
@@ -614,6 +625,7 @@ my $getopt_success = GetOptions(
    "show_os|show-os"                         => \$opt_show_os             ,
    "skip_archive|skip-archive=s"             => \$opt_skip_archive        ,
    "max_file_size|max-file-size=i"           => \$opt_max_file_size       ,
+   "use_sloccount|use-sloccount"             => \$opt_use_sloccount       ,
   );
 $opt_by_file  = 1 if defined  $opt_by_file_by_lang;
 my $CLOC_XSL = "cloc.xsl"; # created with --xsl
@@ -650,6 +662,22 @@ $opt_csv               = 1  if $opt_csv_delimiter;
 $ON_WINDOWS            = 1  if $opt_force_on_windows;
 $ON_WINDOWS            = 0  if $opt_force_on_unix;
 $opt_max_file_size     = 100 unless $opt_max_file_size;
+if ($opt_use_sloccount) {
+    if (!$HAVE_SLOCCOUNT_c_count) {
+        warn "c_count could not be found; ignoring --use-sloccount\n";
+        $opt_use_sloccount = 0;
+    } else {
+        warn "Using c_count, php_count, xml_count, pascal_count from SLOCCount\n";
+        warn "--diff is disabled with --use-sloccount\n" if $opt_diff;
+        warn "--count-and-diff is disabled with --use-sloccount\n" if $opt_count_diff;
+        warn "--unicode is disabled with --use-sloccount\n" if $opt_unicode;
+        warn "--strip-comments is disabled with --use-sloccount\n" if $opt_strip_comments;
+        $opt_diff           = 0;
+        $opt_count_diff     = undef;
+        $opt_unicode        = 0;
+        $opt_strip_comments = 0;
+    }
+}
 
 my @COUNT_DIFF_ARGV        = undef;
 my $COUNT_DIFF_report_file = undef;
@@ -1696,12 +1724,23 @@ foreach my $file (sort keys %unique_source_file) {
     }
 
     my ($all_line_count, $blank_count, $comment_count, $code_count);
-    if ($HAVE_SLOCCOUNT_c_count and ($Language{$file} eq 'C' or
-                                     $Language{$file} eq 'C++')) {
-        $code_count = `cat $file | c_count | head -n 1`;
-        $code_count = substr($code_count, 0, -2);
+    if ($opt_use_sloccount and $Language{$file} =~ /^(C|C\+\+|XML|PHP|Pascal|Java)$/) {
         chomp ($blank_count     = `grep -Pcv '\\S' $file`);
         chomp ($all_line_count  = `cat $file | wc -l`);
+        if      ($Language{$file} =~ /^(C|C\+\+)$/) {
+            $code_count = `cat $file | c_count | head -n 1`;
+        } elsif ($Language{$file} eq "XML") {
+            $code_count = `cat $file | xml_count | head -n 1`;
+        } elsif ($Language{$file} eq "PHP") {
+            $code_count = `cat $file | php_count | head -n 1`;
+        } elsif ($Language{$file} eq "Pascal") {
+            $code_count = `cat $file | pascal_count | head -n 1`;
+        } elsif ($Language{$file} eq "Java") {
+            $code_count = `cat $file | java_count | head -n 1`;
+        } else {
+            die "SLOCCount match failure: file=[$file] lang=[$Language{$file}]";
+        }
+        $code_count = substr($code_count, 0, -2);
         $comment_count = $all_line_count - $code_count - $blank_count;
     } else {
         ($all_line_count,
@@ -2526,8 +2565,12 @@ sub generate_sql    {                        # {{{1
        ) = @_;
     print "-> generate_sql\n" if $opt_v > 2;
 
+if (defined $opt_sql_project) { print "defined\n"; } else { print "not defined\n"; }
+#print "generate_sql A [$opt_sql_project]\n";
     $opt_sql_project = cwd() unless defined $opt_sql_project;
+#print "generate_sql B [$opt_sql_project]\n";
     $opt_sql_project =~ s{/}{\\}g if $ON_WINDOWS;
+#print "generate_sql C [$opt_sql_project]\n";
 
     my $schema = undef;
     if ($opt_sql_style eq "oracle") {
