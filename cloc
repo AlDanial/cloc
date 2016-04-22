@@ -305,12 +305,11 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              executables c_count, java_count, pascal_count,
                              php_count, and xml_count instead of cloc's
                              counters.  SLOCCount's compiled counters are
-                             substantially faster than cloc's and give
-                             a noticable performance improvement when
-                             counting projects with large files.  However,
-                             these cloc-specific features will not be available:
-                             --diff, --count-and-diff, --strip-comments,
-                             --unicode.
+                             substantially faster than cloc's and may give
+                             a performance improvement when counting projects
+                             with large files.  However, these cloc-specific
+                             features will not be available: --diff,
+                             --count-and-diff, --strip-comments, --unicode.
    --windows                 Override the operating system autodetection
                              logic and run in Microsoft Windows mode.
                              See also --unix, --show-os.
