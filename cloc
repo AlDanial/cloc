@@ -5428,7 +5428,9 @@ sub set_constants {                          # {{{1
             'make'     => 'make'                  ,
             'octave'   => 'Octave'                ,
             'perl5'    => 'Perl'                  ,
+            'perl6'    => 'Perl'                  ,
             'perl'     => 'Perl'                  ,
+            'miniperl' => 'Perl'                  ,
             'php'      => 'PHP'                   ,
             'php5'     => 'PHP'                   ,
             'python'   => 'Python'                ,
@@ -9103,7 +9105,8 @@ sub Perl_or_Prolog {                         # {{{1
         ++$perl_points if  /({|})/;
         ++$perl_points if  /^\s*sub\s+/;
         ++$perl_points if  /\s*<<'/;  # start HERE block
-        ++$prolog_points if /\.\s*$/;
+        ++$perl_points if  /\$(\w+\->|[_!])/;
+        ++$prolog_points if !/\s*#/ and /\.\s*$/;
         ++$prolog_points if /:-/;
     }
     $IN->close;
