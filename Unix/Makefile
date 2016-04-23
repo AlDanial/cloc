@@ -92,8 +92,12 @@ test-perl:
 test-pod:
 	podchecker *.pod
 
+# Rule: test-code - Check that the counter works
+test-code:
+	t/00_C.t
+
 # Rule: test - Run tests
-test: test-perl test-pod
+test: test-perl test-pod test-code
 
 install-man: test-pod man
 	# install-man
