@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00589418411254883
+  n_files            : 1
+  n_lines            : 46
+  files_per_second   : 169.658765472049
+  lines_per_second   : 7804.30321171426
+  report_file        : tests/outputs/clusterConf.ttcn.yaml
+TTCN :
+  nFiles: 1
+  blank: 11
+  comment: 16
+  code: 19
+SUM: 
+  blank: 11
+  comment: 16
+  code: 19
+  nFiles: 1

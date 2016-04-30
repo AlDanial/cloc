@@ -338,6 +338,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/Tk',
                 },
                 {
+                    'name' => 'TTCN',
+                    'ref'  => '../tests/outputs/clusterConf.ttcn.yaml',
+                    'args' => '../tests/inputs/clusterConf.ttcn',
+                },
+                {
                     'name' => 'TypeScript 2',
                     'ref'  => '../tests/outputs/warship.ts.yaml',
                     'args' => '../tests/inputs/warship.ts',

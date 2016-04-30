@@ -1,0 +1,46 @@
+// http://www.wiley.com/legacy/wileychi/ttcn-3/supp/clusterConf.ttcn
+
+/* ------------------------------------------------------------
+ *
+ * $Id: clusterConf.ttcn,v 1.5 2005/02/10 07:33:55 deiss Exp $
+ * 
+ * @author Thomas Deiss
+ * @remark Copyright: Nokia, 2004, 2005
+ * 
+ * @remark DISCLAIMER: This TTCN-3 code is experimental code.
+ *       Its purpose is to highlight strengths and weaknesses of
+ *       TTCN-3, but it is not intended to be directly added to 
+ *       real test suites. The reader is strongly advised to check the code
+ *       whether it fits the readers purpose and adapt it accordingly.
+ *
+ * @desc This module contains type definitions for clusters of components.
+ */
+
+module clusterConf {
+
+  group g_ports {
+
+    type port AnyPort mixed {
+      inout all
+      }
+    
+  } // endgroup g_ports
+
+  group g_components {
+    
+    type component Server {
+      port AnyPort pt_servers
+      }
+
+    type component Supervisor {
+      port AnyPort pt_servers;
+      port AnyPort pt_cluster
+      }
+    
+    type component Worker {
+      port AnyPort pt_servers
+      }
+    
+  } // endgroup g_components
+
+} //endmodule clusterConf
