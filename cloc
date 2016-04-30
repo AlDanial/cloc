@@ -5267,6 +5267,7 @@ sub set_constants {                          # {{{1
             'jcl'         => 'JCL'                   , # IBM Job Control Lang.
             'jl'          => 'Lisp/Julia'            ,
             'js'          => 'JavaScript'            ,
+            'es6'         => 'JavaScript'            ,
             'jsf'         => 'JavaServer Faces'      ,
             'jsx'         => 'JSX'                   ,
             'xhtml'       => 'XHTML'                 ,
