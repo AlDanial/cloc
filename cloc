@@ -5296,6 +5296,7 @@ sub set_constants {                          # {{{1
             'mc'          => 'Windows Message File'  ,
             'met'         => 'Teamcenter met'        ,
             'mg'          => 'Modula3'               ,
+            'mk'          => 'make'                  ,
 #           'mli'         => 'ML'                    , # ML not implemented
 #           'ml'          => 'ML'                    ,
             'ml'          => 'OCaml'                 ,
@@ -7219,7 +7220,7 @@ sub check_scale_existence {                  # {{{1
         my $language = $rh_Language_by_Extension->{$ext};
         next if defined $extension_collisions{$language};
         next if $seen_it{$language};
-        if (!@{$rhaa_Filters_by_Language->{$language}}) {
+        if (!$rhaa_Filters_by_Language->{$language}) {
             $OK = 0;
             warn "Missing language filter for $language\n";
         }

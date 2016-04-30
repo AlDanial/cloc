@@ -183,6 +183,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/Makefile',
                 },
                 {
+                    'name' => 'Makefile 2',
+                    'ref'  => '../tests/outputs/mfile.mk.yaml',
+                    'args' => '../tests/inputs/mfile.mk',
+                },
+                {
                     'name' => 'Mathematica',
                     'ref'  => '../tests/outputs/Mathematica_1.m.yaml',
                     'args' => '../tests/inputs/Mathematica_1.m',
