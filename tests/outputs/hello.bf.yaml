@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00564002990722656
+  n_files            : 1
+  n_lines            : 28
+  files_per_second   : 177.304024349002
+  lines_per_second   : 4964.51268177207
+  report_file        : tests/output/bf.yaml
+Brainfuck :
+  nFiles: 1
+  blank: 1
+  comment: 3
+  code: 24
+SUM: 
+  blank: 1
+  comment: 3
+  code: 24
+  nFiles: 1
