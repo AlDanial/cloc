@@ -18,6 +18,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/master.blade.php',
                 },
                 {
+                    'name' => 'Brainfuck',
+                    'ref'  => '../tests/outputs/hello.bf.yaml',
+                    'args' => '../tests/inputs/hello.bf',
+                },
+                {
                     'name' => 'C# 2',
                     'ref'  => '../tests/outputs/wokka.cs.yaml',
                     'args' => '../tests/inputs/wokka.cs',
@@ -411,6 +416,10 @@ done_testing();
 sub load_yaml {
     my ($file, ) = @_;
     my %result = ();
+    if (!-r $file) {
+        warn "File not found: $file\n"; 
+        return %result;
+    }
     open IN, $file or return %result;
     my $section = undef;
     while (<IN>) {

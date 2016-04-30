@@ -1,0 +1,3 @@
+To run the tests:
+  cd ../Unix
+  make test
