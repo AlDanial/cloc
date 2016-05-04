@@ -153,6 +153,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/IDL.idl',
                 },
                 {
+                    'name' => 'INI',
+                    'ref'  => '../tests/outputs/wpedia.ini.yaml',
+                    'args' => '../tests/inputs/wpedia.ini',
+                },
+                {
                     'name' => 'Java',
                     'ref'  => '../tests/outputs/Java.java.yaml',
                     'args' => '../tests/inputs/Java.java',

@@ -5254,6 +5254,7 @@ sub set_constants {                          # {{{1
             'html'        => 'HTML'                  ,
             'i3'          => 'Modula3'               ,
             'idl'         => 'IDL'                   ,
+            'ini'         => 'INI'                   ,
             'ism'         => 'InstallShield'         ,
             'pro'         => 'IDL/Qt Project/Prolog' ,
             'ig'          => 'Modula3'               ,
@@ -5813,6 +5814,9 @@ sub set_constants {                          # {{{1
     'HTML'               => [
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
+    'INI'                => [
+                                [ 'remove_matches'      , '^\s*;'  ],
                             ],
     'XHTML'               => [
                                 [ 'remove_html_comments',          ],
@@ -6785,6 +6789,7 @@ sub set_constants {                          # {{{1
     'imprs'                        =>   2.00,
     'informix'                     =>   2.58,
     'ingres'                       =>   2.00,
+    'INI'                          =>   1.00,
     'inquire'                      =>   6.15,
     'insight2'                     =>   1.63,
     'install/1'                    =>   5.00,

@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00518488883972168
+  n_files            : 1
+  n_lines            : 12
+  files_per_second   : 192.868165724008
+  lines_per_second   : 2314.41798868809
+  report_file        : tests/outputs/wpedia.ini.yaml
+INI :
+  nFiles: 1
+  blank: 2
+  comment: 3
+  code: 7
+SUM: 
+  blank: 2
+  comment: 3
+  code: 7
+  nFiles: 1
