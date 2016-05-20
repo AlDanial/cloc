@@ -158,6 +158,11 @@ Depending your operating system, one of these installation methods may work for 
     sudo pkg install cloc                  # FreeBSD
     sudo port install cloc                 # Mac OS X with MacPorts
     brew install cloc                      # Mac OS X with Homebrew
+
+Note: I don't control any of these packages.
+If you encounter a bug in cloc using one of the above
+packages, try with cloc pulled from the latest stable release here
+on github (link follows below) before submitting a problem report.
 [](1}}})
 <a name="Stable"></a> []({{{1)
 ## Stable release
