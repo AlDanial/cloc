@@ -2,24 +2,36 @@
 use warnings;
 use strict;
 use Test::More;
-my @Tests = (   {
-                    'name' => 'exclude dir 1 (github issue #82)',
+use Cwd;
+my @Tests = (
+                {
+                    'name' => 'exclude dir 1 (baseline for github issue #82)',
                     'args' => '--exclude-dir cc ../tests/inputs/dd',
                     'ref'  => '../tests/outputs/exclude_dir_1.yaml',
                 },
-
+                {
+                    'name' => 'exclude dir 2 (github issue #82)',
+                    'cd'   => '../tests/inputs/dd',
+                    'args' => '--exclude-dir cc *',
+                    'ref'  => '../tests/outputs/exclude_dir_1.yaml',
+                },
             );
 
 my $Verbose = 0;
 
 my $results = 'results.yaml';
-my $Run = "../cloc --quiet --yaml --out $results ";
+my $work_dir = getcwd;
+my $cloc    = "$work_dir/../cloc";
+my $Run = "$cloc --quiet --yaml --out $results ";
 foreach my $t (@Tests) {
+    chdir($t->{'cd'}) if defined $t->{'cd'};
     print  $Run . $t->{'args'} if $Verbose;
     system($Run . $t->{'args'});
     ok(-e $results, $t->{'name'} . " created output");
-    my %ref  = load_yaml($t->{'ref'});
     my %this = load_yaml($results);
+    unlink $results;
+    chdir($work_dir) if defined $t->{'cd'};
+    my %ref  = load_yaml($t->{'ref'});
     is_deeply(\%ref, \%this, $t->{'name'} . " results match");
 }
 done_testing();
