@@ -95,6 +95,7 @@ test-pod:
 # Rule: test-code - Check that the counter works
 test-code:
 	t/00_C.t
+	t/01_opts.t
 
 # Rule: test - Run tests
 test: test-perl test-pod test-code
