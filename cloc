@@ -10430,6 +10430,8 @@ sub uncompress_archive_cmd {                 # {{{1
             $missing = "unzip";
         }
     } elsif ($archive_file =~ /\.deb$/i and !$ON_WINDOWS)    {
+        # only useful if the .deb contains source code--most
+        # .deb files just have compiled executables
         if (external_utility_exists("dpkg-deb")) {
             $extract_cmd = "dpkg-deb -x '$archive_file' .";
         } else {
