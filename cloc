@@ -10429,6 +10429,12 @@ sub uncompress_archive_cmd {                 # {{{1
         } else {
             $missing = "unzip";
         }
+    } elsif ($archive_file =~ /\.deb$/i and !$ON_WINDOWS)    {
+        if (external_utility_exists("dpkg-deb")) {
+            $extract_cmd = "dpkg-deb -x '$archive_file' .";
+        } else {
+            $missing = "dpkg-deb";
+        }
     } elsif ($ON_WINDOWS and $archive_file =~ /\.zip$/i) {
         # zip on Windows, guess default Winzip install location
         $extract_cmd = "";
