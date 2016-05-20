@@ -5,14 +5,20 @@ use Test::More;
 use Cwd;
 my @Tests = (
                 {
-                    'name' => 'exclude dir 1 (baseline for github issue #82)',
+                    'name' => '--exclude-dir 1 (baseline for github issue #82)',
                     'args' => '--exclude-dir cc ../tests/inputs/dd',
                     'ref'  => '../tests/outputs/exclude_dir_1.yaml',
                 },
                 {
-                    'name' => 'exclude dir 2 (github issue #82)',
+                    'name' => '--exclude-dir 2 (github issue #82)',
                     'cd'   => '../tests/inputs/dd',
                     'args' => '--exclude-dir cc *',
+                    'ref'  => '../tests/outputs/exclude_dir_1.yaml',
+                },
+                {
+                    'name' => '--not-match-d',
+                    'cd'   => '../tests/inputs/dd',
+                    'args' => '--not-match-d cc *',
                     'ref'  => '../tests/outputs/exclude_dir_1.yaml',
                 },
             );
