@@ -583,7 +583,7 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
  Debug Options
    --categorized=FILE        Save names of categorized files to FILE.
    --counted=FILE            Save names of processed source files to FILE.
-   --explain=<lang>          Print the filters used to remove comments for
+   --explain=LANG            Print the filters used to remove comments for
                              language LANG and exit.  In some cases the 
                              filters refer to Perl subroutines rather than
                              regular expressions.  An examination of the
