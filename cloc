@@ -5240,6 +5240,7 @@ sub set_constants {                          # {{{1
             'H'           => 'C/C++ Header'          ,
             'hh'          => 'C/C++ Header'          ,
             'hpp'         => 'C/C++ Header'          ,
+            'hxx'         => 'C/C++ Header'          ,
             'hb'          => 'Harbour'               ,
             'hrl'         => 'Erlang'                ,
             'hs'          => 'Haskell'               ,
