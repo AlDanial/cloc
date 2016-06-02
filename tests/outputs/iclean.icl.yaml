@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.0087277889251709
+  n_files            : 1
+  n_lines            : 98
+  files_per_second   : 114.576556396318
+  lines_per_second   : 11228.5025268391
+  report_file        : iclean.icl.yaml
+Clean :
+  nFiles: 1
+  blank: 10
+  comment: 30
+  code: 58
+SUM: 
+  blank: 10
+  comment: 30
+  code: 58
+  nFiles: 1

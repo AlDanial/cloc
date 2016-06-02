@@ -33,6 +33,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/locale_facets.h',
                 },
                 {
+                    'name' => 'Clean',
+                    'ref'  => '../tests/outputs/iclean.icl.yaml',
+                    'args' => '../tests/inputs/iclean.icl',
+                },
+                {
                     'name' => 'COBOL',
                     'ref'  => '../tests/outputs/conditions.CBL.yaml',
                     'args' => '../tests/inputs/conditions.CBL',

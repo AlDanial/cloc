@@ -5254,6 +5254,8 @@ sub set_constants {                          # {{{1
             'htm'         => 'HTML'                  ,
             'html'        => 'HTML'                  ,
             'i3'          => 'Modula3'               ,
+            'icl'         => 'Clean'                 ,
+            'dcl'         => 'Clean'                 ,
             'idl'         => 'IDL'                   ,
             'ini'         => 'INI'                   ,
             'ism'         => 'InstallShield'         ,
@@ -5610,13 +5612,17 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '//.*$'  ], # C99
                             ],
     'C++'                => [
-                                [ 'call_regexp_common'  , 'C++'      ],
+                                [ 'call_regexp_common'  , 'C++'    ],
 #                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'C/C++ Header'       => [
                                 [ 'call_regexp_common'  , 'C++'    ],
 #                               [ 'remove_matches'      , '^\s*//' ],
+                                [ 'remove_inline'       , '//.*$'  ],
+                            ],
+    'Clean'              => [
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'Clojure'            => [   [ 'remove_matches'      , '^\s*;'  ], ],
@@ -6614,6 +6620,7 @@ sub set_constants {                          # {{{1
     'cics'                         =>   1.74,
     'clarion'                      =>   1.38,
     'clascal'                      =>   1.00,
+    'Clean'                        =>   2.50,
     'cli'                          =>   2.50,
     'clipper'                      =>   2.05,
     'clipper db'                   =>   2.00,
@@ -6665,7 +6672,6 @@ sub set_constants {                          # {{{1
     'datatrieve'                   =>   4.00,
     'dbase iii'                    =>   2.00,
     'dbase iv'                     =>   1.54,
-    'dcl'                          =>   0.38,
     'diff'                         =>   1.00,
     'decision support default'     =>   2.22,
     'decrally'                     =>   2.00,
