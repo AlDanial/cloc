@@ -413,6 +413,23 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              relative path names will be resolved starting from 
                              the directory where cloc is invoked.  
                              See also --exclude-list-file.
+   --vcs=VCS                 Invoke a system call to VCS to obtain a list of
+                             files to work on.  If VCS is 'git', then will
+                             invoke 'git ls-files'.  If VCS is 'svn' then
+                             will invoke 'svn list -R'.  The primary benefit
+                             is that cloc will then skip files explicitly
+                             excluded by the versioning tool in question,
+                             ie, those in .gitignore or have the svn:ignore
+                             property.
+                             Alternatively VCS may be any system command
+                             that generates a list of files.
+                             Note:  cloc must be in a directory which can read
+                             the files as they are returned by VCS.  cloc will
+                             not download files from remote repositories.
+                             'svn list -R' may refer to a remote repository
+                             to obtain file names (and therefore may require
+                             authentication to the remote repository), but
+                             the files themselves must be local.
    --unicode                 Check binary files to see if they contain Unicode
                              expanded ASCII text.  This causes performance to
                              drop noticeably.
@@ -533,6 +550,15 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
    --unix                    Override the operating system autodetection
                              logic and run in UNIX mode.  See also
                              --windows, --show-os.
+   --use-sloccount           If SLOCCount is installed, use its compiled
+                             executables c_count, java_count, pascal_count,
+                             php_count, and xml_count instead of cloc's
+                             counters.  SLOCCount's compiled counters are
+                             substantially faster than cloc's and may give
+                             a performance improvement when counting projects
+                             with large files.  However, these cloc-specific
+                             features will not be available: --diff,
+                             --count-and-diff, --strip-comments, --unicode.
    --windows                 Override the operating system autodetection
                              logic and run in Microsoft Windows mode.
                              See also --unix, --show-os.
@@ -1019,7 +1045,8 @@ reasonably well on Unix-type OS's for the following file types:
 `.tar.xz`, 
 `.tgz`,
 `.zip`,
-`.ear`.
+`.ear`,
+`.deb`.
 Some of these extensions work on Windows if one has WinZip installed
 in the default location (`C:\Program Files\WinZip\WinZip32.exe`).
 Additionally, with newer versions of WinZip, the
