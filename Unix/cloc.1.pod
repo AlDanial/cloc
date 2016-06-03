@@ -92,6 +92,27 @@ the directory where cloc is invoked.
 See also 
 B<--exclude-list-file>
 
+=item B<--vcs=VCS>
+
+Invoke a system call to VCS to obtain a list of
+files to work on.  If VCS is 'git', then will
+invoke 'git ls-files'.  If VCS is 'svn' then
+will invoke 'svn list -R'.  The primary benefit
+is that cloc will then skip files explicitly
+excluded by the versioning tool in question,
+ie, those in .gitignore or have the svn:ignore
+property.
+Alternatively VCS may be any system command
+that generates a list of files.
+Note:  cloc must be in a directory which can read
+the files as they are returned by VCS.  cloc will
+not download files from remote repositories.
+'svn list -R' may refer to a remote repository
+to obtain file names (and therefore may require
+authentication to the remote repository), but
+the files themselves must be local.
+
+
 =item B<--unicode>
 
 Check binary files to see if they contain Unicode expanded ASCII text.
@@ -268,6 +289,18 @@ the sum of data from the individual report files.
 
 Over-ride the operating system detection logic and run in UNIX
 mode.  See also B<--windows>, B<--show-os>.
+
+=item B<--use-sloccount>
+
+If SLOCCount is installed, use its compiled
+executables c_count, java_count, pascal_count,
+php_count, and xml_count instead of cloc's
+counters.  SLOCCount's compiled counters are
+substantially faster than cloc's and may give
+a performance improvement when counting projects
+with large files.  However, these cloc-specific
+features will not be available: B<--diff>,
+B<--count-and-diff>, B<--strip-comments>, B<--unicode>.
 
 =item B<--windows>
 
