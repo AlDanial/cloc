@@ -46,8 +46,8 @@ Step 2:  Open a terminal (`cmd.exe` on Windows).
 Step 3:  Invoke cloc to count your source files, directories, or archives.
 The executable name differs depending on whether you use the 
 development source version (`cloc`), source for a
-released version (`cloc-1.66.pl`) or a Windows executable
-(`cloc-1.66.exe`).  On this page, `cloc` is the generic term
+released version (`cloc-1.68.pl`) or a Windows executable
+(`cloc-1.68.exe`).  On this page, `cloc` is the generic term
 used to refer to any of these.
 
 **a file**
@@ -242,11 +242,16 @@ and Digest::MD5 installed locally.
 <a name="building_exe"></a> []({{{1)
 # [Building a Windows Executable &#9650;](#___top "click to go to top of document")
 
-The default Windows download, <tt>cloc-1.66.exe</tt>, was built with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm) 
+The default Windows download, <tt>cloc-1.68.exe</tt>, was 
+built with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm) 
+and Strawberry Perl 5.24.0.1 
+on an Amazon Web Services t2.micro instance running 32 bit Microsoft Windows Server 2008.
+
+The <tt>cloc-1.66.exe</tt> executable was built with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm) 
 on a 32 bit Windows 7 VirtualBox image
 pulled from https://dev.windows.com/en-us/microsoft-edge/tools/vms/linux/
 and running on an Ubuntu 15.10 host.
-The virtual machine runs
+The virtual machine ran
 [Strawberry Perl](http://strawberryperl.com/) version 5.22.1.
 Windows executables of cloc versions
 1.60 and earlier were built with
@@ -312,13 +317,12 @@ instructions. Next, open a command prompt, aka a DOS window and install
 the PAR::Packer module. Finally, invoke the newly installed `pp`
 command with the cloc source code to create an `.exe` file:
 
-<pre>C:> perl -MCPAN -e shell
-cpan> install Digest::MD5
-cpan> install Regexp::Common
-cpan> install Algorithm::Diff
-cpan> install PAR::Packer
-cpan> exit
-C:> pp -M Digest::MD5 -c -x -o cloc-1.66.exe cloc
+<pre>
+C:> cpan -i Digest::MD5
+C:> cpan -i Regexp::Common
+C:> cpan -i Algorithm::Diff
+C:> cpan -i PAR::Packer
+C:> pp -M Digest::MD5 -c -x -o cloc-1.68.exe cloc
 </pre>
 
 Note!  The `cloc` source file in the `pp` command above comes from
