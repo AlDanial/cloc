@@ -153,6 +153,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/test.hs',
                 },
                 {
+                    'name' => 'Haxe',
+                    'ref'  => '../tests/outputs/Sys.hx.yaml',
+                    'args' => '../tests/inputs/Sys.hx',
+                },
+                {
                     'name' => 'IDL',
                     'ref'  => '../tests/outputs/IDL.idl.yaml',
                     'args' => '../tests/inputs/IDL.idl',

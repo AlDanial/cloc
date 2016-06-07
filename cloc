@@ -5254,6 +5254,7 @@ sub set_constants {                          # {{{1
             'haml'        => 'Haml'                  ,
             'handlebars'  => 'Handlebars'            ,
             'hbs'         => 'Handlebars'            ,
+            'hx'          => 'Haxe'                  ,
             'htm'         => 'HTML'                  ,
             'html'        => 'HTML'                  ,
             'i3'          => 'Modula3'               ,
@@ -5820,6 +5821,9 @@ sub set_constants {                          # {{{1
                                 [ 'remove_html_comments',          ],
                                 [ 'remove_matches'      , '^\s*/\s*\S+' ],
                                 [ 'remove_matches'      , '^\s*-#\s*\S+' ],
+                            ],
+    'Haxe'               => [
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'HTML'               => [
                                 [ 'remove_html_comments',          ],
@@ -6767,6 +6771,7 @@ sub set_constants {                          # {{{1
     'hp basic'                     =>   0.63,
     'Haml'                         =>   2.50,
     'Handlebars'                   =>   2.50,
+    'Haxe'                         =>   2.00,
     'HTML'                         =>   1.90,
     'XHTML'                        =>   1.90,
     'XMI'                          =>   1.90,
