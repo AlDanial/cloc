@@ -5224,6 +5224,7 @@ sub set_constants {                          # {{{1
             'F'           => 'Fortran 77'            ,
             'for'         => 'Fortran 77/Forth'      ,
             'FOR'         => 'Fortran 77'            ,
+            'ftl'         => 'Freemarker Template'   ,
             'ftn'         => 'Fortran 77'            ,
             'FTN'         => 'Fortran 77'            ,
             'fmt'         => 'Oracle Forms'          ,
@@ -5769,6 +5770,10 @@ sub set_constants {                          # {{{1
                                 [ 'remove_f77_comments' ,          ],
                                 [ 'remove_f90_comments' ,          ],
                                 [ 'remove_inline'       , '\!.*$'  ],
+                            ],
+    'Freemarker Template' => [
+                                [ 'remove_matches'      , '^\s*<#--[\s\S]*?-->' ],
+                                [ 'remove_inline'       , '<#--[\s\S]*?-->'     ],
                             ],
     'F#'                 => [
                                 [ 'call_regexp_common'  , 'Pascal' ],
@@ -6745,6 +6750,7 @@ sub set_constants {                          # {{{1
     'foxpro 1'                     =>   2.00,
     'foxpro 2.5'                   =>   2.35,
     'framework'                    =>  13.33,
+    'Freemarker Template'          =>   1.48,
     'F#'                           =>   2.50,
     'g2'                           =>   1.63,
     'gamma'                        =>   5.00,

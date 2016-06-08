@@ -123,6 +123,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/hello.f90',
                 },
                 {
+                    'name' => 'Freemarker Template',
+                    'ref'  => '../tests/outputs/FreemarkerTemplate.ftl.yaml',
+                    'args' => '../tests/inputs/FreemarkerTemplate.ftl',
+                },
+                {
                     'name' => 'F#',
                     'ref'  => '../tests/outputs/fsharp.fs.yaml',
                     'args' => '../tests/inputs/fsharp.fs',
