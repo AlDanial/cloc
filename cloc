@@ -5772,8 +5772,7 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '\!.*$'  ],
                             ],
     'Freemarker Template' => [
-                                [ 'remove_matches'      , '^\s*<#--[\s\S]*?-->' ],
-                                [ 'remove_inline'       , '<#--[\s\S]*?-->'     ],
+                                [ 'remove_between_general', '<#--', '-->' ],
                             ],
     'F#'                 => [
                                 [ 'call_regexp_common'  , 'Pascal' ],
