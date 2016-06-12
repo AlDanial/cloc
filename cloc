@@ -5000,6 +5000,31 @@ sub docstring_to_C {                         # {{{1
     print "<- docstring_to_C\n" if $opt_v > 2;
     return @{$ra_lines};
 } # 1}}}
+sub Forth_paren_to_C  {                      # {{{1
+    my ($ra_lines, ) = @_;
+    # Converts Forth comment parentheses to C comments.
+
+    print "-> Forth_paren_to_C()\n" if $opt_v > 2;
+
+    my $in_comment = 0;
+    foreach (@{$ra_lines}) {
+        while (/\s\(\s/ or ($in_comment and /\)/)) {
+            if (/\s\(\s.*?\)/) {
+                # in-line parenthesis comment; handle here
+                s/\s+\(\s+.*?\)//g;
+            } elsif (!$in_comment and /\s\(\s/) {
+                s{\s+\(\s+}{/*};
+                $in_comment = 1;
+            } elsif ($in_comment and /\)/) {
+                s{\)}{*/};
+                $in_comment = 0;
+            }
+        }
+    }
+
+    print "<- Forth_paren_to_C\n" if $opt_v > 2;
+    return @{$ra_lines};
+} # 1}}}
 sub powershell_to_C {                        # {{{1
     my ($ra_lines, ) = @_;
     # Converts PowerShell block comment markers to C comments.
@@ -5751,9 +5776,10 @@ sub set_constants {                          # {{{1
                             ],
     'Focus'              => [   [ 'remove_matches'      , '^\s*\-\*'  ], ],
     'Forth'              => [
-                                [ 'remove_matches'       , '(^|\s)\\\\\s.*$'  ],
-                                [ 'remove_matches'       , '(^|\s)\(\s.*?\)'  ],
-                                [ 'remove_between_general', '(*', '*)'        ],
+                                [ 'remove_matches'      , '^\s*\\\\.*$'  ],
+                                [ 'Forth_paren_to_C'                 ],
+                                [ 'call_regexp_common'  , 'C++'      ],
+                                [ 'remove_inline'       , '\\\\.*$'  ],
                             ],
     'Fortran 77'         => [
                                 [ 'remove_f77_comments' ,          ],
