@@ -280,13 +280,13 @@ a best-effort of a virus and malware-free `.exe`.
 You are encouraged to run your own virus scanners against the
 executable and also check sites such 
 https://www.virustotal.com/ .
-If you provide an executables MD5 or SHA256 checksum, you can
-get a direct link to their report for an executable (if it
-exists).
-For example, the cloc 1.66 SHA256 sum is 54d6662e59b04be793dd10fa5e5edf7747cf0c0cc32f71eb67a3cf8e7a171d81
-and its report can be found at
-https://www.virustotal.com/en/file/54d6662e59b04be793dd10fa5e5edf7747cf0c0cc32f71eb67a3cf8e7a171d81/analysis/1453601367/ .
-Alternatively, you can upload `.exe`s to the site.
+The entries for cloc 1.66 and 1.68 are:
+
+cloc 1.68 exe:
+https://www.virustotal.com/en/file/c484fc58615fc3b0d5569b9063ec1532980281c3155e4a19099b11ef1c24443b/analysis/
+
+cloc 1.66 exe: 
+https://www.virustotal.com/en/file/54d6662e59b04be793dd10fa5e5edf7747cf0c0cc32f71eb67a3cf8e7a171d81/analysis/1453601367/
 
 #### Why is the Windows executable so large?
 
