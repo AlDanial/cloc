@@ -181,7 +181,7 @@ cloc is licensed under the [GNU General Public License, v 2]
 are copied from other sources. Code
 copied from the Regexp::Common, Win32::Autoglob, and Algorithm::Diff
 Perl modules is subject to the 
-[Artistic L icense](http://www.opensource.org/licenses/artistic-license-2.0.php).
+[Artistic License](http://www.opensource.org/licenses/artistic-license-2.0.php).
 [](1}}})
 <a name="why_use"></a> []({{{1)
 # [Why Use cloc? &#9650;](#___top "click to go to top of document")
@@ -334,9 +334,7 @@ machine.
 
 A variation on the instructions above is if you installed the portable 
 version of Strawberry Perl, you will need to run `portableshell.bat` first
-to properly set up your environment. The Strawberry Perl derived
-executable on the GitHub download area was created with the portable
-version on a Windows 7 computer.
+to properly set up your environment.
 
 [](1}}})
 <a name="Basic_Use"></a> []({{{1)
@@ -2135,7 +2133,6 @@ with `#!` style program invocations, explain what those are.</li>
 Here, in no particular order and with no promise of future delivery, are
 features and capabilities currently in development:
 <ol>
-<li> skip files defined in `.gitignore` </li>
 <li> produce reStructuredText output with `--rst`</li>
 <li> count code (e.g. Javascript) embedded in HTML files </li>
 </ol>
