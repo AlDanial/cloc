@@ -322,7 +322,7 @@ example:
 
 will skip all files that match C</.cache/> or C</test/> as part of
 their path. Directories named C<.bzr>, C<.cvs>, C<.hg>, C<.git>,
-C<.hg>, and C<.svn> are always excluded.
+and C<.svn> are always excluded.
 
 =item B<--exclude-ext=EXT1[,EXT2 ...]>
 
