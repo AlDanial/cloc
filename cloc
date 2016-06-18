@@ -128,13 +128,6 @@ if ($ON_WINDOWS and $ENV{'SHELL'}) {
         $ON_WINDOWS = 1;  # MKS defines $SHELL but still acts like Windows
     }
 }
-my $HAVE_SLOCCOUNT_c_count = 0;
-if (!$ON_WINDOWS) {
-    # Debian based systems will hang if just doing
-    #  external_utility_exists("c_count")
-    # if c_count is in $PATH; c_count expects to have input.
-    $HAVE_SLOCCOUNT_c_count = external_utility_exists("c_count /bin/sh");
-}
 
 my $NN     = chr(27) . "[0m";  # normal
    $NN     = "" if $ON_WINDOWS or !(-t STDERR); # -t STDERR:  is it a terminal?
@@ -667,6 +660,14 @@ $opt_csv               = 1  if $opt_csv_delimiter;
 $ON_WINDOWS            = 1  if $opt_force_on_windows;
 $ON_WINDOWS            = 0  if $opt_force_on_unix;
 $opt_max_file_size     = 100 unless $opt_max_file_size;
+my $HAVE_SLOCCOUNT_c_count = 0;
+if (!$ON_WINDOWS and $opt_use_sloccount) {
+    # Only bother doing this kludgey test is user explicitly wants
+    # to use SLOCCount.  Debian based systems will hang if just doing
+    #  external_utility_exists("c_count")
+    # if c_count is in $PATH; c_count expects to have input.
+    $HAVE_SLOCCOUNT_c_count = external_utility_exists("c_count /bin/sh");
+}
 if ($opt_use_sloccount) {
     if (!$HAVE_SLOCCOUNT_c_count) {
         warn "c_count could not be found; ignoring --use-sloccount\n";
