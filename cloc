@@ -130,7 +130,10 @@ if ($ON_WINDOWS and $ENV{'SHELL'}) {
 }
 my $HAVE_SLOCCOUNT_c_count = 0;
 if (!$ON_WINDOWS) {
-    $HAVE_SLOCCOUNT_c_count = external_utility_exists("echo 'abc' | c_count");
+    # Debian based systems will hang if just doing
+    #  external_utility_exists("c_count")
+    # if c_count is in $PATH; c_count expects to have input.
+    $HAVE_SLOCCOUNT_c_count = external_utility_exists("c_count /bin/sh");
 }
 
 my $NN     = chr(27) . "[0m";  # normal
