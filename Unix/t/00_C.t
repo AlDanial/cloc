@@ -358,6 +358,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/Tk',
                 },
                 {
+                    'name' => 'TeX',
+                    'ref'  => '../tests/outputs/LaTeX.tex.yaml',
+                    'args' => '../tests/inputs/LaTeX.tex',
+                },
+                {
                     'name' => 'TTCN',
                     'ref'  => '../tests/outputs/clusterConf.ttcn.yaml',
                     'args' => '../tests/inputs/clusterConf.ttcn',

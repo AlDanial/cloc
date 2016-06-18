@@ -1,0 +1,205 @@
+% ftp://tug.ctan.org/tex-archive/macros/latex/base/sample2e.tex
+% This is a sample LaTeX input file.  (Version of 12 August 2004.)
+%
+% A '%' character causes TeX to ignore all remaining text on the line,
+% and is used for comments like this one.
+
+\documentclass{article}      % Specifies the document class
+
+                             % The preamble begins here.
+\title{An Example Document}  % Declares the document's title.
+\author{Leslie Lamport}      % Declares the author's name.
+\date{January 21, 1994}      % Deleting this command produces today's date.
+
+\newcommand{\ip}[2]{(#1, #2)}
+                             % Defines \ip{arg1}{arg2} to mean
+                             % (arg1, arg2).
+
+%\newcommand{\ip}[2]{\langle #1 | #2\rangle}
+                             % This is an alternative definition of
+                             % \ip that is commented out.
+
+\begin{document}             % End of preamble and beginning of text.
+
+\maketitle                   % Produces the title.
+
+This is an example input file.  Comparing it with
+the output it generates can show you how to
+produce a simple document of your own.
+
+\section{Ordinary Text}      % Produces section heading.  Lower-level
+                             % sections are begun with similar 
+                             % \subsection and \subsubsection commands.
+
+The ends  of words and sentences are marked 
+  by   spaces. It  doesn't matter how many 
+spaces    you type; one is as good as 100.  The
+end of   a line counts as a space.
+
+One   or more   blank lines denote the  end 
+of  a paragraph.  
+
+Since any number of consecutive spaces are treated
+like a single one, the formatting of the input
+file makes no difference to
+      \LaTeX,                % The \LaTeX command generates the LaTeX logo.
+but it makes a difference to you.  When you use
+\LaTeX, making your input file as easy to read 
+as possible will be a great help as you write 
+your document and when you change it.  This sample 
+file shows how you can add comments to your own input 
+file.
+
+Because printing is different from typewriting,
+there are a number of things that you have to do
+differently when preparing an input file than if
+you were just typing the document directly.
+Quotation marks like
+       ``this'' 
+have to be handled specially, as do quotes within
+quotes:
+       ``\,`this'            % \, separates the double and single quote.
+        is what I just 
+        wrote, not  `that'\,''.  
+
+Dashes come in three sizes: an 
+       intra-word 
+dash, a medium dash for number ranges like 
+       1--2, 
+and a punctuation 
+       dash---like 
+this.
+
+A sentence-ending space should be larger than the
+space between words within a sentence.  You
+sometimes have to type special commands in
+conjunction with punctuation characters to get
+this right, as in the following sentence.
+       Gnats, gnus, etc.\ all  % `\ ' makes an inter-word space.
+       begin with G\@.         % \@ marks end-of-sentence punctuation.
+You should check the spaces after periods when
+reading your output to make sure you haven't
+forgotten any special cases.  Generating an
+ellipsis
+       \ldots\               % `\ ' is needed after `\ldots' because TeX 
+                             % ignores spaces after command names like \ldots 
+                             % made from \ + letters.
+                             %
+                             % Note how a `%' character causes TeX to ignore 
+                             % the end of the input line, so these blank lines 
+                             % do not start a new paragraph.
+                             %
+with the right spacing around the periods requires
+a special command.
+
+\LaTeX\ interprets some common characters as
+commands, so you must type special commands to
+generate them.  These characters include the
+following:
+       \$ \& \% \# \{ and \}.
+
+In printing, text is usually emphasized with an
+       \emph{italic}  
+type style.  
+
+\begin{em}
+   A long segment of text can also be emphasized 
+   in this way.  Text within such a segment can be 
+   given \emph{additional} emphasis.
+\end{em}
+
+It is sometimes necessary to prevent \LaTeX\ from
+breaking a line where it might otherwise do so.
+This may be at a space, as between the ``Mr.''\ and
+``Jones'' in
+       ``Mr.~Jones'',        % ~ produces an unbreakable interword space.
+or within a word---especially when the word is a
+symbol like
+       \mbox{\emph{itemnum}} 
+that makes little sense when hyphenated across
+lines.
+
+Footnotes\footnote{This is an example of a footnote.}
+pose no problem.
+
+\LaTeX\ is good at typesetting mathematical formulas
+like
+       \( x-3y + z = 7 \) 
+or
+       \( a_{1} > x^{2n} + y^{2n} > x' \)
+or  
+       \( \ip{A}{B} = \sum_{i} a_{i} b_{i} \).
+The spaces you type in a formula are 
+ignored.  Remember that a letter like
+       $x$                   % $ ... $  and  \( ... \)  are equivalent
+is a formula when it denotes a mathematical
+symbol, and it should be typed as one.
+
+\section{Displayed Text}
+
+Text is displayed by indenting it from the left
+margin.  Quotations are commonly displayed.  There
+are short quotations
+\begin{quote}
+   This is a short quotation.  It consists of a 
+   single paragraph of text.  See how it is formatted.
+\end{quote}
+and longer ones.
+\begin{quotation}
+   This is a longer quotation.  It consists of two
+   paragraphs of text, neither of which are
+   particularly interesting.
+
+   This is the second paragraph of the quotation.  It
+   is just as dull as the first paragraph.
+\end{quotation}
+Another frequently-displayed structure is a list.
+The following is an example of an \emph{itemized}
+list.
+\begin{itemize}
+   \item This is the first item of an itemized list.
+         Each item in the list is marked with a ``tick''.
+         You don't have to worry about what kind of tick
+         mark is used.
+
+   \item This is the second item of the list.  It
+         contains another list nested inside it.  The inner
+         list is an \emph{enumerated} list.
+         \begin{enumerate}
+            \item This is the first item of an enumerated 
+                  list that is nested within the itemized list.
+
+            \item This is the second item of the inner list.  
+                  \LaTeX\ allows you to nest lists deeper than 
+                  you really should.
+         \end{enumerate}
+         This is the rest of the second item of the outer
+         list.  It is no more interesting than any other
+         part of the item.
+   \item This is the third item of the list.
+\end{itemize}
+You can even display poetry.
+\begin{verse}
+   There is an environment 
+    for verse \\             % The \\ command separates lines
+   Whose features some poets % within a stanza.
+   will curse.   
+
+                             % One or more blank lines separate stanzas.
+
+   For instead of making\\
+   Them do \emph{all} line breaking, \\
+   It allows them to put too many words on a line when they'd rather be 
+   forced to be terse.
+\end{verse}
+
+Mathematical formulas may also be displayed.  A
+displayed formula 
+is 
+one-line long; multiline
+formulas require special formatting instructions.
+   \[  \ip{\Gamma}{\psi'} = x'' + y^{2} + z_{i}^{n}\]
+Don't start a paragraph with a displayed equation,
+nor make one a paragraph by itself.
+
+\end{document}               % End of document.

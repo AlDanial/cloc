@@ -5449,6 +5449,11 @@ sub set_constants {                          # {{{1
             'tcl'         => 'Tcl/Tk'                ,
             'tcsh'        => 'C Shell'               ,
             'tk'          => 'Tcl/Tk'                ,
+            'tex'         => 'TeX'                   , # TeX, LaTex, MikTex, ..
+            'sty'         => 'TeX'                   ,
+#           'cls'         => 'TeX'                   ,
+            'dtx'         => 'TeX'                   ,
+            'bst'         => 'TeX'                   ,
             'tpl'         => 'Smarty'                ,
             'trigger'     => 'Apex Trigger'          ,
             'ttcn'        => 'TTCN'                  ,
@@ -6223,6 +6228,10 @@ sub set_constants {                          # {{{1
                             ],
     'Teamcenter met'     => [   [ 'call_regexp_common'  , 'C'      ], ],
     'Teamcenter mth'     => [   [ 'remove_matches'      , '^\s*#'  ], ],
+    'TeX'                => [
+                                [ 'remove_matches'      , '^\s*%'  ],
+                                [ 'remove_inline'       , '%.*$'   ],
+                            ],
     'Titanium Style Sheet'  => [
                                 [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
@@ -6505,7 +6514,6 @@ sub set_constants {                          # {{{1
    'sgml'    => 1,
    'so'      => 1,  # Dynamically-loaded object code.
    'Tag'     => 1,
-   'tex'     => 1,
    'text'    => 1,
    'tfm'     => 1,
    'tgz'     => 1,  # gzipped tarball
@@ -7113,6 +7121,7 @@ sub set_constants {                          # {{{1
     'Teamcenter def'               =>   1.00,
     'Teamcenter met'               =>   1.00,
     'Teamcenter mth'               =>   1.00,
+    'TeX'                          =>   1.50,
     'telon'                        =>   5.00,
     'tessaract'                    =>   2.00,
     'the twin'                     =>  13.33,

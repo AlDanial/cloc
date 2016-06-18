@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.69
+  elapsed_seconds    : 0.00532317161560059
+  n_files            : 1
+  n_lines            : 205
+  files_per_second   : 187.857929860707
+  lines_per_second   : 38510.8756214449
+  report_file        : tests/outputs/LaTex.tex.yaml
+TeX :
+  nFiles: 1
+  blank: 29
+  comment: 21
+  code: 155
+SUM: 
+  blank: 29
+  comment: 21
+  code: 155
+  nFiles: 1
