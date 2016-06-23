@@ -1,3 +1,4 @@
+# https://github.com/nim-lang/Nim/blob/devel/examples/statcsv.nim
 # Example program to show the parsecsv module
 # This program reads a CSV file and computes sum, mean, minimum, maximum and
 # the standard deviation of its columns.
@@ -44,10 +45,11 @@ stdout.write("\nMean")
 for i in 0..header.len-1:
   stdout.write("\t")
   stdout.write(res[i].mean)
+#[
 stdout.write("\nMin")
 for i in 0..header.len-1:
   stdout.write("\t")
-  stdout.write(res[i].min)
+  stdout.write(res[i].min) ]#
 stdout.write("\nMax")
 for i in 0..header.len-1:
   stdout.write("\t")
