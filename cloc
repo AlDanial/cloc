@@ -6014,9 +6014,10 @@ sub set_constants {                          # {{{1
                                 [ 'remove_between_general', '{{!', '}}' ],
                             ],
     'Nim'                => [
+                                [ 'remove_between_general', '#[', ']#' ],
                                 [ 'remove_matches'      , '^\s*#'  ],
-                                [ 'docstring_to_C'                 ],
-                                [ 'call_regexp_common'  , 'C'      ],
+#                               [ 'docstring_to_C'                 ],
+#                               [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
     'Octave'             => [
