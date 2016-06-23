@@ -5355,6 +5355,7 @@ sub set_constants {                          # {{{1
             'mps'         => 'MUMPS'                 ,
             'mth'         => 'Teamcenter mth'        ,
             'n'           => 'Nemerle'               ,
+            'nim'         => 'Nim'                   ,
             'oscript'     => 'LiveLink OScript'      ,
             'pad'         => 'Ada'                   , # Oracle Ada preprocessor
             'page'        => 'Visualforce Page'      ,
@@ -6011,6 +6012,12 @@ sub set_constants {                          # {{{1
     'MUMPS'              => [   [ 'remove_matches'      , '^\s*;'  ], ],
     'Mustache'           => [
                                 [ 'remove_between_general', '{{!', '}}' ],
+                            ],
+    'Nim'                => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'docstring_to_C'                 ],
+                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'remove_inline'       , '#.*$'   ],
                             ],
     'Octave'             => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -6946,6 +6953,7 @@ sub set_constants {                          # {{{1
     'netron/cap'                   =>   4.21,
     'nexpert'                      =>   1.63,
     'nial'                         =>   1.63,
+    'Nim'                          =>   2.00,
     'nomad2'                       =>   2.00,
     'nonprocedural default'        =>   2.22,
     'notes vip'                    =>   2.22,
