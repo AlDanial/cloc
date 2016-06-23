@@ -248,6 +248,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/drupal.mxml',
                 },
                 {
+                    'name' => 'Nim',
+                    'ref'  => '../tests/outputs/statcsv.nim.yaml',
+                    'args' => '../tests/inputs/statcsv.nim',
+                },
+                {
                     'name' => 'Objective C',
                     'ref'  => '../tests/outputs/qsort_demo.m.yaml',
                     'args' => '../tests/inputs/qsort_demo.m',
