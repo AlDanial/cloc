@@ -59,7 +59,10 @@ distribution.
 
 =head2 Input Options
 
-To count standard input, use the special filename B<->.
+To count standard input, use the special filename B<-> and either
+B<--stdin-name=FILE> to tell cloc the name of the file being
+piped in, or B<--force-lang=LANG> to apply the LANG counter to
+all input.
 
 =over 4
 
