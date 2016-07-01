@@ -23,7 +23,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "1.68";  # odd number == beta; even number == stable
+my $VERSION = "1.70";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.006;
 # use modules                                  {{{1
@@ -41,7 +41,6 @@ use POSIX "strftime";
 use Digest::MD5;
 my $HAVE_Digest_MD5 = 1;
 ### Digest::MD5 isn't in the standard distribution. Use it only if installed.
-##my $HAVE_Digest_MD5 = 0;
 ##eval "use Digest::MD5;";
 ##if (defined $Digest::MD5::VERSION) {
 ##    $HAVE_Digest_MD5 = 1;
@@ -52,13 +51,11 @@ my $HAVE_Digest_MD5 = 1;
 use Time::HiRes;
 my $HAVE_Time_HiRes = 1;
 ### Time::HiRes became standard with Perl 5.8
-##my $HAVE_Time_HiRes = 0;
 ##eval "use Time::HiRes;";
 ##$HAVE_Time_HiRes = 1 if defined $Time::HiRes::VERSION;
 
 use Regexp::Common;
 my $HAVE_Rexexp_Common = 1;
-##my $HAVE_Rexexp_Common;
 ### Regexp::Common isn't in the standard distribution.  It will
 ### be installed in a temp directory if necessary.
 ##BEGIN {
@@ -71,7 +68,6 @@ my $HAVE_Rexexp_Common = 1;
 
 use Algorithm::Diff qw ( sdiff ) ;
 my $HAVE_Algorith_Diff = 1;
-##my $HAVE_Algorith_Diff = 0;
 ### Algorithm::Diff isn't in the standard distribution.  It will
 ### be installed in a temp directory if necessary.
 ##eval "use Algorithm::Diff qw ( sdiff ) ";
@@ -129,10 +125,6 @@ if ($ON_WINDOWS and $ENV{'SHELL'}) {
     } else {
         $ON_WINDOWS = 1;  # MKS defines $SHELL but still acts like Windows
     }
-}
-my $HAVE_SLOCCOUNT_c_count = 0;
-if (!$ON_WINDOWS) {
-    $HAVE_SLOCCOUNT_c_count = external_utility_exists("echo 'abc' | c_count");
 }
 
 my $NN     = chr(27) . "[0m";  # normal
@@ -292,7 +284,8 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              files with identical contents multiple times
                              (if such duplicates exist).
    --stdin-name=<file>       Give a file name to use to determine the language
-                             for standard input.
+                             for standard input.  (Use - as the input name to
+                             receive source code via STDIN.)
    --strip-comments=<ext>    For each file processed, write to the current
                              directory a version of the file which has blank
                              lines and comments removed.  The name of each
@@ -666,6 +659,14 @@ $opt_csv               = 1  if $opt_csv_delimiter;
 $ON_WINDOWS            = 1  if $opt_force_on_windows;
 $ON_WINDOWS            = 0  if $opt_force_on_unix;
 $opt_max_file_size     = 100 unless $opt_max_file_size;
+my $HAVE_SLOCCOUNT_c_count = 0;
+if (!$ON_WINDOWS and $opt_use_sloccount) {
+    # Only bother doing this kludgey test is user explicitly wants
+    # to use SLOCCount.  Debian based systems will hang if just doing
+    #  external_utility_exists("c_count")
+    # if c_count is in $PATH; c_count expects to have input.
+    $HAVE_SLOCCOUNT_c_count = external_utility_exists("c_count /bin/sh");
+}
 if ($opt_use_sloccount) {
     if (!$HAVE_SLOCCOUNT_c_count) {
         warn "c_count could not be found; ignoring --use-sloccount\n";
@@ -5002,6 +5003,31 @@ sub docstring_to_C {                         # {{{1
     print "<- docstring_to_C\n" if $opt_v > 2;
     return @{$ra_lines};
 } # 1}}}
+sub Forth_paren_to_C  {                      # {{{1
+    my ($ra_lines, ) = @_;
+    # Converts Forth comment parentheses to C comments.
+
+    print "-> Forth_paren_to_C()\n" if $opt_v > 2;
+
+    my $in_comment = 0;
+    foreach (@{$ra_lines}) {
+        while (/\s\(\s/ or ($in_comment and /\)/)) {
+            if (/\s\(\s.*?\)/) {
+                # in-line parenthesis comment; handle here
+                s/\s+\(\s+.*?\)//g;
+            } elsif (!$in_comment and /\s\(\s/) {
+                s{\s+\(\s+}{/*};
+                $in_comment = 1;
+            } elsif ($in_comment and /\)/) {
+                s{\)}{*/};
+                $in_comment = 0;
+            }
+        }
+    }
+
+    print "<- Forth_paren_to_C\n" if $opt_v > 2;
+    return @{$ra_lines};
+} # 1}}}
 sub powershell_to_C {                        # {{{1
     my ($ra_lines, ) = @_;
     # Converts PowerShell block comment markers to C comments.
@@ -5226,6 +5252,7 @@ sub set_constants {                          # {{{1
             'F'           => 'Fortran 77'            ,
             'for'         => 'Fortran 77/Forth'      ,
             'FOR'         => 'Fortran 77'            ,
+            'ftl'         => 'Freemarker Template'   ,
             'ftn'         => 'Fortran 77'            ,
             'FTN'         => 'Fortran 77'            ,
             'fmt'         => 'Oracle Forms'          ,
@@ -5256,6 +5283,7 @@ sub set_constants {                          # {{{1
             'haml'        => 'Haml'                  ,
             'handlebars'  => 'Handlebars'            ,
             'hbs'         => 'Handlebars'            ,
+            'hx'          => 'Haxe'                  ,
             'htm'         => 'HTML'                  ,
             'html'        => 'HTML'                  ,
             'i3'          => 'Modula3'               ,
@@ -5326,6 +5354,7 @@ sub set_constants {                          # {{{1
             'mps'         => 'MUMPS'                 ,
             'mth'         => 'Teamcenter mth'        ,
             'n'           => 'Nemerle'               ,
+            'nim'         => 'Nim'                   ,
             'oscript'     => 'LiveLink OScript'      ,
             'pad'         => 'Ada'                   , # Oracle Ada preprocessor
             'page'        => 'Visualforce Page'      ,
@@ -5420,6 +5449,11 @@ sub set_constants {                          # {{{1
             'tcl'         => 'Tcl/Tk'                ,
             'tcsh'        => 'C Shell'               ,
             'tk'          => 'Tcl/Tk'                ,
+            'tex'         => 'TeX'                   , # TeX, LaTex, MikTex, ..
+            'sty'         => 'TeX'                   ,
+#           'cls'         => 'TeX'                   ,
+            'dtx'         => 'TeX'                   ,
+            'bst'         => 'TeX'                   ,
             'tpl'         => 'Smarty'                ,
             'trigger'     => 'Apex Trigger'          ,
             'ttcn'        => 'TTCN'                  ,
@@ -5751,9 +5785,10 @@ sub set_constants {                          # {{{1
                             ],
     'Focus'              => [   [ 'remove_matches'      , '^\s*\-\*'  ], ],
     'Forth'              => [
-                                [ 'remove_matches'       , '(^|\s)\\\\\s.*$'  ],
-                                [ 'remove_matches'       , '(^|\s)\(\s.*?\)'  ],
-                                [ 'remove_between_general', '(*', '*)'        ],
+                                [ 'remove_matches'      , '^\s*\\\\.*$'  ],
+                                [ 'Forth_paren_to_C'                 ],
+                                [ 'call_regexp_common'  , 'C++'      ],
+                                [ 'remove_inline'       , '\\\\.*$'  ],
                             ],
     'Fortran 77'         => [
                                 [ 'remove_f77_comments' ,          ],
@@ -5770,6 +5805,9 @@ sub set_constants {                          # {{{1
                                 [ 'remove_f77_comments' ,          ],
                                 [ 'remove_f90_comments' ,          ],
                                 [ 'remove_inline'       , '\!.*$'  ],
+                            ],
+    'Freemarker Template' => [
+                                [ 'remove_between_general', '<#--', '-->' ],
                             ],
     'F#'                 => [
                                 [ 'call_regexp_common'  , 'Pascal' ],
@@ -5822,6 +5860,9 @@ sub set_constants {                          # {{{1
                                 [ 'remove_html_comments',          ],
                                 [ 'remove_matches'      , '^\s*/\s*\S+' ],
                                 [ 'remove_matches'      , '^\s*-#\s*\S+' ],
+                            ],
+    'Haxe'               => [
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'HTML'               => [
                                 [ 'remove_html_comments',          ],
@@ -5970,6 +6011,13 @@ sub set_constants {                          # {{{1
     'MUMPS'              => [   [ 'remove_matches'      , '^\s*;'  ], ],
     'Mustache'           => [
                                 [ 'remove_between_general', '{{!', '}}' ],
+                            ],
+    'Nim'                => [
+                                [ 'remove_between_general', '#[', ']#' ],
+                                [ 'remove_matches'      , '^\s*#'  ],
+#                               [ 'docstring_to_C'                 ],
+#                               [ 'call_regexp_common'  , 'C'      ],
+                                [ 'remove_inline'       , '#.*$'   ],
                             ],
     'Octave'             => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -6187,6 +6235,10 @@ sub set_constants {                          # {{{1
                             ],
     'Teamcenter met'     => [   [ 'call_regexp_common'  , 'C'      ], ],
     'Teamcenter mth'     => [   [ 'remove_matches'      , '^\s*#'  ], ],
+    'TeX'                => [
+                                [ 'remove_matches'      , '^\s*%'  ],
+                                [ 'remove_inline'       , '%.*$'   ],
+                            ],
     'Titanium Style Sheet'  => [
                                 [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
@@ -6469,7 +6521,6 @@ sub set_constants {                          # {{{1
    'sgml'    => 1,
    'so'      => 1,  # Dynamically-loaded object code.
    'Tag'     => 1,
-   'tex'     => 1,
    'text'    => 1,
    'tfm'     => 1,
    'tgz'     => 1,  # gzipped tarball
@@ -6743,6 +6794,7 @@ sub set_constants {                          # {{{1
     'foxpro 1'                     =>   2.00,
     'foxpro 2.5'                   =>   2.35,
     'framework'                    =>  13.33,
+    'Freemarker Template'          =>   1.48,
     'F#'                           =>   2.50,
     'g2'                           =>   1.63,
     'gamma'                        =>   5.00,
@@ -6769,6 +6821,7 @@ sub set_constants {                          # {{{1
     'hp basic'                     =>   0.63,
     'Haml'                         =>   2.50,
     'Handlebars'                   =>   2.50,
+    'Haxe'                         =>   2.00,
     'HTML'                         =>   1.90,
     'XHTML'                        =>   1.90,
     'XMI'                          =>   1.90,
@@ -6900,6 +6953,7 @@ sub set_constants {                          # {{{1
     'netron/cap'                   =>   4.21,
     'nexpert'                      =>   1.63,
     'nial'                         =>   1.63,
+    'Nim'                          =>   2.00,
     'nomad2'                       =>   2.00,
     'nonprocedural default'        =>   2.22,
     'notes vip'                    =>   2.22,
@@ -7075,6 +7129,7 @@ sub set_constants {                          # {{{1
     'Teamcenter def'               =>   1.00,
     'Teamcenter met'               =>   1.00,
     'Teamcenter mth'               =>   1.00,
+    'TeX'                          =>   1.50,
     'telon'                        =>   5.00,
     'tessaract'                    =>   2.00,
     'the twin'                     =>  13.33,

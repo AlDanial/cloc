@@ -1,3 +1,27 @@
+                Release Notes for cloc version 1.70
+                   https://github.com/AlDanial/cloc
+                             July 1, 2016
+
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *   v1.70 is a bugfix release to correct the "which: no abc in"   *
+ *   problem seen on non-Debian based Linux distributions; ref.    *
+ *   https://github.com/AlDanial/cloc/issues/105                   *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+New Languages:
+    o Freemarker Template
+    o Haxe
+    o Nim
+    o TeX
+
+Updates:
+    o Improved handling for Forth comments.
+
+Bug Fixes:
+    o Fixed "which: no abc in" bug; issue 105
+      https://github.com/AlDanial/cloc/issues/105
+
+============================================================================
                 Release Notes for cloc version 1.68
                    https://github.com/AlDanial/cloc
                              June 3, 2016

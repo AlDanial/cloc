@@ -5,6 +5,8 @@
 * * *
 cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.
 
+Latest release:  v1.70 (July 1, 2016)
+
 Hosted at http://cloc.sourceforge.net/ since August 2006, cloc began the
 transition to GitHub in September 2015.
 
@@ -46,8 +48,8 @@ Step 2:  Open a terminal (`cmd.exe` on Windows).
 Step 3:  Invoke cloc to count your source files, directories, or archives.
 The executable name differs depending on whether you use the 
 development source version (`cloc`), source for a
-released version (`cloc-1.68.pl`) or a Windows executable
-(`cloc-1.68.exe`).  On this page, `cloc` is the generic term
+released version (`cloc-1.70.pl`) or a Windows executable
+(`cloc-1.70.exe`).  On this page, `cloc` is the generic term
 used to refer to any of these.
 
 **a file**
@@ -191,7 +193,7 @@ cloc has many features that make it easy to use, thorough, extensible, and porta
 1.  Exists as a single, self-contained file that requires minimal installation effort---just download the file and run it.
 2.  Can read language comment definitions from a file and thus potentially work with computer languages that do not yet exist.
 3.  Allows results from multiple runs to be summed together by language and by project.
-4.  Can produce results in a variety of formats: plain text, SQL, XML, YAML, comma separated values.
+4.  Can produce results in a variety of formats: plain text, SQL, JSON, XML, YAML, comma separated values.
 5.  Can count code within compressed archives (tar balls, Zip files, Java .ear files).
 6.  Has numerous troubleshooting options.
 7.  Handles file and directory names with spaces and other unusual characters.
@@ -242,7 +244,7 @@ and Digest::MD5 installed locally.
 <a name="building_exe"></a> []({{{1)
 # [Building a Windows Executable &#9650;](#___top "click to go to top of document")
 
-The default Windows download, <tt>cloc-1.68.exe</tt>, was 
+The latest Windows download, <tt>cloc-1.70.exe</tt>, was 
 built with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm) 
 and Strawberry Perl 5.24.0.1 
 on an Amazon Web Services t2.micro instance running 32 bit Microsoft Windows Server 2008.
@@ -324,13 +326,6 @@ C:> cpan -i Algorithm::Diff
 C:> cpan -i PAR::Packer
 C:> pp -M Digest::MD5 -c -x -o cloc-1.68.exe cloc
 </pre>
-
-Note!  The `cloc` source file in the `pp` command above comes from
-the Unix subdirectory of the cloc source distribution.  This source
-file is stripped of the internally-provided Regexp::Common and 
-Algorithm::Diff modules that you'll find in the `cloc-1.66.pl` file
-and instead expects these to come from the Perl environment on your
-machine.
 
 A variation on the instructions above is if you installed the portable 
 version of Strawberry Perl, you will need to run `portableshell.bat` first
@@ -710,17 +705,20 @@ Arduino Sketch             (ino, pde)
 ASP                        (asa, asp)
 ASP.Net                    (asax, ascx, asmx, aspx, master, sitemap, webinfo)
 AspectJ                    (aj)
-Assembly                   (asm, S, s)
+Assembly                   (asm, s, S)
 AutoHotkey                 (ahk)
 awk                        (awk)
+Blade                      (blade.php)
 Bourne Again Shell         (bash)
 Bourne Shell               (sh)
+builder                    (xml.builder)
 C                          (c, ec, pgc)
 C Shell                    (csh, tcsh)
 C#                         (cs)
 C++                        (C, c++, cc, cpp, cxx, pcc)
 C/C++ Header               (h, H, hh, hpp, hxx)
 CCS                        (ccs)
+Clean                      (dcl, icl)
 Clojure                    (clj)
 ClojureC                   (cljc)
 ClojureScript              (cljs)
@@ -733,7 +731,7 @@ Coq                        (v)
 Crystal                    (cr)
 CSON                       (cson)
 CSS                        (css)
-CUDA                       (cu)
+CUDA                       (cu, cuh)
 Cython                     (pyx)
 D                          (d)
 DAL                        (da)
@@ -741,7 +739,7 @@ Dart                       (dart)
 diff                       (diff)
 DITA                       (dita)
 DOORS Extension Language   (dxl)
-DOS Batch                  (bat, BAT, btm, BTM, CMD, cmd)
+DOS Batch                  (bat, BAT, BTM, btm, cmd, CMD)
 DTD                        (dtd)
 dtrace                     (d)
 ECPP                       (ecpp)
@@ -756,8 +754,8 @@ Focus                      (focexec)
 Forth                      (4th, e4, f83, fb, forth, fpm, fr, frt, ft, fth, rx, fs, f, for)
 Fortran 77                 (F, f77, F77, FOR, FTN, ftn, pfo, f, for)
 Fortran 90                 (f90, F90)
-Fortran 95                 (f95, F95)
-Freemarker                 (ftl)
+Fortran 95                 (F95, f95)
+Freemarker Template        (ftl)
 GDScript                   (gd)
 Go                         (go)
 Grails                     (gsp)
@@ -770,9 +768,10 @@ Haxe                       (hx)
 HLSL                       (cg, cginc, hlsl, shader)
 HTML                       (htm, html)
 IDL                        (idl, pro)
+INI                        (ini)
 InstallShield              (ism)
 Java                       (java)
-JavaScript                 (js)
+JavaScript                 (es6, js)
 JavaServer Faces           (jsf)
 JCL                        (jcl)
 JSON                       (json)
@@ -784,11 +783,15 @@ Korn Shell                 (ksh)
 Kotlin                     (kt, kts)
 LESS                       (less)
 lex                        (l)
+liquid                     (liquid)
 Lisp                       (el, lisp, lsp, sc, cl, jl)
 LiveLink OScript           (oscript)
+Logtalk                    (lgt, logtalk)
 Lua                        (lua)
 m4                         (ac, m4)
-make                       (am, gnumakefile, Gnumakefile, Makefile, makefile)
+make                       (am, gnumakefile, Gnumakefile, Makefile, makefile, mk)
+Markdown                   (md)
+Mathematica                (mt, wl, wlt, m)
 MATLAB                     (m)
 Maven                      (pom, pom.xml)
 Modula3                    (i3, ig, m3, mg)
@@ -818,12 +821,14 @@ PowerBuilder               (sra, srf, srm, srs, sru, srw)
 PowerShell                 (ps1)
 Prolog                     (P, pl, pro)
 Protocol Buffers           (proto)
+Pug                        (pug)
 PureScript                 (purs)
 Python                     (py)
 QML                        (qml)
 Qt                         (ui)
+Qt Linguist                (ts)
 Qt Project                 (pro)
-R                          (R)
+R                          (r, R)
 Racket                     (rkt, rktl, sch, scm, scrbl, ss)
 Razor                      (cshtml)
 Rexx                       (rexx)
@@ -837,9 +842,10 @@ Scala                      (scala)
 sed                        (sed)
 SKILL                      (il)
 SKILL++                    (ils)
+Slim                       (slim)
 Smarty                     (smarty, tpl)
 Softbridge Basic           (sbl, SBL)
-SQL                        (psql, sql, SQL)
+SQL                        (psql, SQL, sql)
 SQL Data                   (data.sql)
 SQL Stored Procedure       (spc.sql, spoc.sql, sproc.sql, udf.sql)
 Standard ML                (fun, sig, sml)
@@ -848,10 +854,10 @@ Swift                      (swift)
 Tcl/Tk                     (itk, tcl, tk)
 Teamcenter met             (met)
 Teamcenter mth             (mth)
-TeX                        (tex)
+TeX                        (bst, dtx, sty, tex)
 TITAN Project File Information (tpd)
 Titanium Style Sheet       (tss)
-TTCN                       (ttcn, ttcn2, ttcnpp)
+TTCN                       (ttcn, ttcn2, ttcn3, ttcnpp)
 Twig                       (twig)
 TypeScript                 (ts)
 Unity-Prefab               (mat, prefab)
@@ -859,10 +865,10 @@ Vala                       (vala)
 Vala Header                (vapi)
 Velocity Template Language (vm)
 Verilog-SystemVerilog      (sv, svh, v)
-VHDL                       (vhd, VHD, vhdl, VHDL)
+VHDL                       (VHD, vhd, vhdl, VHDL)
 vim script                 (vim)
-Visual Basic               (bas, cls, ctl, dsr, frm, VB, vb, VBA, vba, VBS, vbs)
-Visual Fox Pro             (sca, SCA)
+Visual Basic               (bas, cls, ctl, dsr, frm, VB, vb, vba, VBA, vbs, VBS)
+Visual Fox Pro             (SCA, sca)
 Visualforce Component      (component)
 Visualforce Page           (page)
 Windows Message File       (mc)
@@ -875,11 +881,11 @@ XAML                       (xaml)
 xBase                      (prg)
 xBase Header               (ch)
 XHTML                      (xhtml)
-XMI                        (XMI, xmi)
-XML                        (tpd, xml, XML)
+XMI                        (xmi, XMI)
+XML                        (xml, XML)
 XQuery                     (xq, xquery)
 XSD                        (XSD, xsd)
-XSLT                       (XSL, xsl, XSLT, xslt)
+XSLT                       (XSL, xsl, xslt, XSLT)
 yacc                       (y)
 YAML                       (yaml, yml)
 zsh                        (zsh)
@@ -891,15 +897,18 @@ file with the `--read-lang-def` or `--force-lang-def` options.
 These file extensions map to multiple languages:
 
 *   `.cl` files could be Lisp or OpenCL
+*   `.d` files could be D or dtrace
 *   `.f` or `.for` files could be Fortran or Forth
 *   `.fs` files could be Forth or F#
 *   `.inc` files could be PHP or Pascal
 *   `.jl` files could be Lisp or Julia
-*   `.m` files could be MATLAB, Mercury, MUMPS, or Objective C
+*   `.m` files could be MATLAB, Mathematica, Mercury, MUMPS, or Objective C
 *   `.d` files could be D or dtrace
 *   `.pl` files could be Perl or Prolog
 *   `.pp` files could be Pascal or Puppet
 *   `.pro` files could be IDL, Prolog, or a Qt Project
+*   `.ts` files could be TypeScript or Qt Linguist
+*   `.v` files Coq or Verilog/SystemVerilog
 
 cloc has subroutines that attempt to identify the correct language based
 on the file's contents for these special cases. Language identification
@@ -1346,20 +1355,22 @@ Each language entry has four parts:
 A filter defines a method to remove comment text from the source file.
 For example the entry for C++ looks like this
 <pre>C++
-    filter remove_matches ^\s*//
-    filter call_regexp_common C
+    filter call_regexp_common C++
+    filter remove_inline //.*$
     extension C
+    extension c++
     extension cc
     extension cpp
     extension cxx
     extension pcc
     3rd_gen_scale 1.51
+    end_of_line_continuation \\$
 </pre>
-C++ has two filters:  first, remove lines that start with optional
-whitespace and are followed by `//`.
-Next, remove all C comments.  C comments are difficult to express
-as regular expressions so a call is made to Regexp::Common to get the
-appropriate regular expression to match C comments which are then removed.
+C++ has two filters:  first, remove lines matching
+Regexp::Common's C++ comment regex.
+The second filter using remove_inline is currently
+unused.  Its intent is to identify lines with both
+code and comments and it may be implemented in the future.
 
 A more complete discussion of the different filter options may appear
 here in the future.  The output of cloc's
