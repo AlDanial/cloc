@@ -5262,6 +5262,7 @@ sub set_constants {                          # {{{1
             'frm'         => 'Visual Basic'          ,
             'fs'          => 'F#/Forth'              ,
             'fsi'         => 'F#'                    ,
+            'g'           => 'Antlr'                 ,
             'gnumakefile' => 'make'                  ,
             'Gnumakefile' => 'make'                  ,
             'gd'          => 'GDScript'              ,
@@ -5582,6 +5583,9 @@ sub set_constants {                          # {{{1
     'Ant/XML'            => [
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
+    'Antlr'              => [
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Ant'                => [
                                 [ 'remove_html_comments',          ],
@@ -6598,6 +6602,7 @@ sub set_constants {                          # {{{1
     'AMPLE'                        =>   2.00,
     'Ant/XML'                      =>   1.90,
     'Ant'                          =>   1.90,
+    'Antlr'                        =>   2.00,
     'amppl ii'                     =>   1.25,
     'ansi basic'                   =>   1.25,
     'ansi cobol 74'                =>   0.75,

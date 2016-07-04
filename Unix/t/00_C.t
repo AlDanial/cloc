@@ -13,6 +13,12 @@ my @Tests = (   {
                     'args' => '../tests/inputs/Assembler-Intel.asm',
                 },
                 {
+                    'name' => 'Antlr',
+                    'ref'  => '../tests/outputs/ExprParser.g.yaml',
+                    'args' => '../tests/inputs/ExprParser.g',
+                },
+                
+                {
                     'name' => 'Blade',
                     'ref'  => '../tests/outputs/master.blade.php.yaml',
                     'args' => '../tests/inputs/master.blade.php',
