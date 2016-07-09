@@ -204,6 +204,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/logtalk.lgt',
                 },
                 {
+                    'name' => 'Lua',
+                    'ref'  => '../tests/outputs/hello.lua.yaml',
+                    'args' => '../tests/inputs/hello.lua',
+                },
+                {
                     'name' => 'Makefile',
                     'ref'  => '../tests/outputs/Makefile.yaml',
                     'args' => '../tests/inputs/Makefile',
