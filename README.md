@@ -903,7 +903,6 @@ These file extensions map to multiple languages:
 *   `.inc` files could be PHP or Pascal
 *   `.jl` files could be Lisp or Julia
 *   `.m` files could be MATLAB, Mathematica, Mercury, MUMPS, or Objective C
-*   `.d` files could be D or dtrace
 *   `.pl` files could be Perl or Prolog
 *   `.pp` files could be Pascal or Puppet
 *   `.pro` files could be IDL, Prolog, or a Qt Project
