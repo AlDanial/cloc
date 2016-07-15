@@ -5274,6 +5274,13 @@ sub set_constants {                          # {{{1
             'gnumakefile' => 'make'                  ,
             'Gnumakefile' => 'make'                  ,
             'gd'          => 'GDScript'              ,
+            'glsl'        => 'GLSL'                  ,
+			'vert'        => 'GLSL'                  ,
+			'tesc'        => 'GLSL'                  ,
+			'tese'        => 'GLSL'                  ,
+			'geom'        => 'GLSL'                  ,
+			'frag'        => 'GLSL'                  ,
+			'comp'        => 'GLSL'                  ,
             'go'          => 'Go'                    ,
             'gsp'         => 'Grails'                ,
             'groovy'      => 'Groovy'                ,
@@ -5835,6 +5842,9 @@ sub set_constants {                          # {{{1
     'Glade'              => [
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
+    'GLSL'               => [
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Go'                 => [
                                 [ 'call_regexp_common'  , 'C++'    ],
@@ -6828,6 +6838,7 @@ sub set_constants {                          # {{{1
     'geode 2.0'                    =>   5.00,
     'gfa basic'                    =>   2.35,
     'Glade'                        =>   2.00,
+    'GLSL'                         =>   2.00,
     'gml'                          =>   1.74,
     'golden common lisp'           =>   1.25,
     'gpss'                         =>   1.74,

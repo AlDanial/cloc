@@ -144,6 +144,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/glade-search-popover.ui',
                 },
                 {
+                    'name' => 'GLSL',
+                    'ref'  => '../tests/outputs/blur.glsl.yaml',
+                    'args' => '../tests/inputs/blur.glsl',
+                },
+                {
                     'name' => 'HAML',
                     'ref'  => '../tests/outputs/just_stuff.haml.yaml',
                     'args' => '../tests/inputs/just_stuff.haml',
