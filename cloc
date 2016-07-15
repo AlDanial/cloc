@@ -3771,7 +3771,7 @@ sub find_preprocessor {                      # {{{1
             if ($opt_not_match_d) {
                 if ($opt_fullpath and $File::Find::name =~ m{$opt_not_match_d}) {
                     $Ignored{$File::Find::name} = "--not-match-d=$opt_not_match_d";
-                } elsif (!-d $F_or_D and $F_or_D =~ m{$opt_not_match_d}) {
+                } elsif (!-d $F_or_D and basename($File::Find::name) =~ m{$opt_not_match_d}) {
                     $Ignored{$File::Find::name} = "--not-match-d (basename) =$opt_not_match_d";
                 } else {
                     push @ok, $F_or_D;
