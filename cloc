@@ -5476,6 +5476,7 @@ sub set_constants {                          # {{{1
             'tss'         => 'Titanium Style Sheet'  ,
             'twig'        => 'Twig'                  ,
             'ui'          => 'Qt/Glade'              ,
+            'glade'       => 'Glade'                 ,
             'vala'        => 'Vala'                  ,
             'vapi'        => 'Vala Header'           ,
             'vhd'         => 'VHDL'                  ,
