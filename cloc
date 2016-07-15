@@ -3222,6 +3222,7 @@ sub write_lang_def {                         # {{{1
                 $language eq "F#/Forth"                         or
                 $language eq "Verilog-SystemVerilog/Coq"        or
                 $language eq "TypeScript/Qt Linguist"           or
+                $language eq "Qt/Glade"                         or
                 $language eq "(unknown)";
         printf $OUT "%s\n", $language;
         foreach my $filter (@{$rhaa_Filters_by_Language->{$language}}) {
@@ -3497,6 +3498,11 @@ sub print_language_info {                    # {{{1
         push @{$extensions{'TypeScript'}}  , "ts";
         push @{$extensions{'Qt Linguist'}} , "ts";
         delete $extensions{'TypeScript/Qt Linguist'};
+    }
+    if (!$language or $language =~ /^(Qt|Glade)$/) {
+        push @{$extensions{'Glade'}} , "ui";
+        push @{$extensions{'Qt'}}    , "ui";
+        delete $extensions{'Qt/Glade'};
     }
     if (!$language or $language =~ /^(Ant)$/i) {
         push @{$extensions{'Ant'}}  , "build.xml";
@@ -4011,6 +4017,8 @@ sub classify_file {                          # {{{1
                 }
             } elsif ($Language_by_Extension{$extension} eq 'TypeScript/Qt Linguist') {
                 return TypeScript_or_QtLinguist( $full_file, $rh_Err, $raa_errors);
+            } elsif ($Language_by_Extension{$extension} eq 'Qt/Glade') {
+                return Qt_or_Glade( $full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'Brainfuck') {
                 if (really_is_bf($full_file)) {
                     return $Language_by_Extension{$extension};
@@ -5467,7 +5475,7 @@ sub set_constants {                          # {{{1
             'ts'          => 'TypeScript/Qt Linguist',
             'tss'         => 'Titanium Style Sheet'  ,
             'twig'        => 'Twig'                  ,
-            'ui'          => 'Qt'                    ,
+            'ui'          => 'Qt/Glade'              ,
             'vala'        => 'Vala'                  ,
             'vapi'        => 'Vala Header'           ,
             'vhd'         => 'VHDL'                  ,
@@ -5822,6 +5830,10 @@ sub set_constants {                          # {{{1
     'GDScript'           => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
+                            ],
+    'Glade'              => [
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ],
                             ],
     'Go'                 => [
                                 [ 'call_regexp_common'  , 'C++'    ],
@@ -6814,6 +6826,7 @@ sub set_constants {                          # {{{1
     'genifer'                      =>   4.21,
     'geode 2.0'                    =>   5.00,
     'gfa basic'                    =>   2.35,
+    'Glade'                        =>   2.00,
     'gml'                          =>   1.74,
     'golden common lisp'           =>   1.25,
     'gpss'                         =>   1.74,
@@ -7287,6 +7300,7 @@ sub check_scale_existence {                  # {{{1
         "F#/Forth"                          => 1,
         "Verilog-SystemVerilog/Coq"         => 1,
         "TypeScript/Qt Linguist"            => 1,
+        "Qt/Glade"                          => 1,
     );
     my $OK = 1;
     foreach my $language (sort keys %{$rhaa_Filters_by_Language}) {
@@ -9570,6 +9584,38 @@ sub TypeScript_or_QtLinguist {               # {{{1
         $lang = "Qt Linguist";
     }
     print "<- TypeScript_or_QtLinguist\n" if $opt_v > 2;
+    return $lang;
+} # 1}}}
+sub Qt_or_Glade {                            # {{{1
+    my ($file        , # in
+        $rh_Err      , # in   hash of error codes
+        $raa_errors  , # out
+       ) = @_;
+
+    print "-> Qt_or_Glade\n" if $opt_v > 2;
+
+    my $lang = undef;
+    my $IN = new IO::File $file, "r";
+    if (!defined $IN) {
+        push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
+        return $lang;
+    }
+    my $qt_points    =  1;
+    my $glade_points = -1;
+    while (<$IN>) {
+        if (/generated\s+with\s+glade/i) {
+            $glade_points =  1;
+            $qt_points    = -1;
+            last;
+        }
+    }
+    $IN->close;
+    if ($glade_points > $qt_points) {
+        $lang = "Glade";
+    } else {
+        $lang = "Qt";
+    }
+    print "<- Qt_or_Glade\n" if $opt_v > 2;
     return $lang;
 } # 1}}}
 sub html_colored_text {                      # {{{1

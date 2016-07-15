@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.70
+  elapsed_seconds    : 0.00665783882141113
+  n_files            : 1
+  n_lines            : 254
+  files_per_second   : 150.198889883617
+  lines_per_second   : 38150.5180304387
+  report_file        : ../outputs/glade-search-popover.ui.yaml
+Glade :
+  nFiles: 1
+  blank: 0
+  comment: 22
+  code: 232
+SUM: 
+  blank: 0
+  comment: 22
+  code: 232
+  nFiles: 1

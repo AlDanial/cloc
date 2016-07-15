@@ -139,6 +139,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/fsharp.fs',
                 },
                 {
+                    'name' => 'Glade',
+                    'ref'  => '../tests/outputs/glade-search-popover.ui.yaml',
+                    'args' => '../tests/inputs/glade-search-popover.ui',
+                },
+                {
                     'name' => 'HAML',
                     'ref'  => '../tests/outputs/just_stuff.haml.yaml',
                     'args' => '../tests/inputs/just_stuff.haml',
