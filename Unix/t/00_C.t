@@ -314,6 +314,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/script1-hadoop.pig',
                 },
                 {
+                    'name' => 'PO File',   
+                    'ref'  => '../tests/outputs/en_AU.po.yaml',
+                    'args' => '../tests/inputs/en_AU.po',
+                },
+                {
                     'name' => 'PL/I',
                     'ref'  => '../tests/outputs/hello.pl1.yaml',
                     'args' => '../tests/inputs/hello.pl1',

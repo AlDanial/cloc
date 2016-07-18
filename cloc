@@ -5420,6 +5420,7 @@ sub set_constants {                          # {{{1
             'ses'         => 'Patran Command Language'   ,
             'pcl'         => 'Patran Command Language'   ,
             'pl1'         => 'PL/I'                  ,
+            'po'          => 'PO File'               ,
             'sra'         => 'PowerBuilder'          ,
             'srf'         => 'PowerBuilder'          ,
             'srm'         => 'PowerBuilder'          ,
@@ -6096,6 +6097,9 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '--.*$'  ],
                                 [ 'call_regexp_common'  , 'C'       ],
                             ],
+    'PO File'            => [
+                                [ 'remove_matches'      , '^\s*#[^,]' ],  # '#,' is not a comment
+                            ],
     'PowerBuilder'       => [
 #                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
@@ -6547,7 +6551,6 @@ sub set_constants {                          # {{{1
    'pdf'     => 1,
    'pfb'     => 1,
    'png'     => 1,
-   'po'      => 1,
    'ps'      => 1,  # Postscript is _USUALLY_ generated automatically.
    'sgm'     => 1,
    'sgml'    => 1,
@@ -7035,6 +7038,7 @@ sub set_constants {                          # {{{1
     'planner'                      =>   1.25,
     'planperfect 1'                =>  11.43,
     'plato'                        =>   1.51,
+    'PO File'                      =>   1.50,
     'polyforth'                    =>   1.25,
     'pop'                          =>   1.38,
     'poplog'                       =>   1.38,

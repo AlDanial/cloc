@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.70
+  elapsed_seconds    : 0.00470113754272461
+  n_files            : 1
+  n_lines            : 60
+  files_per_second   : 212.714474084593
+  lines_per_second   : 12762.8684450756
+  report_file        : ../outputs/en_AU.po.yaml
+PO File :
+  nFiles: 1
+  blank: 9
+  comment: 18
+  code: 33
+SUM: 
+  blank: 9
+  comment: 18
+  code: 33
+  nFiles: 1
