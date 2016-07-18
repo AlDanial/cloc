@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "1.70";  # odd number == beta; even number == stable
+my $VERSION = "1.71";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.006;
 # use modules                                  {{{1
@@ -5337,6 +5337,7 @@ sub set_constants {                          # {{{1
             'lhs'         => 'Haskell'               ,
             'l'           => 'lex'                   ,
             'less'        => 'LESS'                  ,
+            'lfe'         => 'LFE'                   ,
             'liquid'      => 'liquid'                ,
             'lsp'         => 'Lisp'                  ,
             'lisp'        => 'Lisp'                  ,
@@ -5962,6 +5963,10 @@ sub set_constants {                          # {{{1
 #                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
+                            ],
+    'LFE'                => [
+                                [ 'remove_matches'      , '^\s*;'  ],
+                                [ 'remove_between_general', '#|', '|#' ],
                             ],
     'liquid'             => [
                                 [ 'remove_between_general', '{% comment %}', 
@@ -6933,6 +6938,7 @@ sub set_constants {                          # {{{1
     'lambit/l'                     =>   1.25,
     'lattice c'                    =>   0.63,
     'LESS'                         =>   1.50,
+    'LFE'                          =>   1.25,
     'liana'                        =>   0.63,
     'lilith'                       =>   1.13,
     'linc ii'                      =>   5.71,

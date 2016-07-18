@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.71
+  elapsed_seconds    : 0.00490498542785645
+  n_files            : 1
+  n_lines            : 61
+  files_per_second   : 203.874204053857
+  lines_per_second   : 12436.3264472853
+  report_file        : ../outputs/ping_pong.lfe.yaml
+LFE :
+  nFiles: 1
+  blank: 15
+  comment: 21
+  code: 25
+SUM: 
+  blank: 15
+  comment: 21
+  code: 25
+  nFiles: 1

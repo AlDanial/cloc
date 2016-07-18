@@ -204,6 +204,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/hello.kt',
                 },
                 {
+                    'name' => 'LFE',
+                    'ref'  => '../tests/outputs/ping_pong.lfe.yaml',
+                    'args' => '../tests/inputs/ping_pong.lfe',
+                },
+                {
                     'name' => 'Lisp',
                     'ref'  => '../tests/outputs/sharpsign.cl.yaml',
                     'args' => '../tests/inputs/sharpsign.cl',
