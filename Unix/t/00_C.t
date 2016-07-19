@@ -424,6 +424,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/verilog.sv',
                 },
                 {
+                    'name' => 'Vuejs Component',
+                    'ref'  => '../tests/outputs/ItemView.vue.yaml',
+                    'args' => '../tests/inputs/ItemView.vue',
+                },
+                {
                     'name' => 'Windows Message',
                     'ref'  => '../tests/outputs/ZosMsg.mc.yaml',
                     'args' => '../tests/inputs/ZosMsg.mc',
