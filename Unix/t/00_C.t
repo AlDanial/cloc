@@ -8,9 +8,14 @@ my @Tests = (   {
                     'ref'  => '../tests/outputs/C-Ansi.c.yaml',
                 },
                 {
-                    'name' => 'Assembly',
+                    'name' => 'Assembly 1',
                     'ref'  => '../tests/outputs/Assembler-Intel.asm.yaml',
                     'args' => '../tests/inputs/Assembler-Intel.asm',
+                },
+                {
+                    'name' => 'Assembly 2',
+                    'ref'  => '../tests/outputs/Assembly-sysv.S.yaml',
+                    'args' => '../tests/inputs/Assembly-sysv.S',
                 },
                 {
                     'name' => 'Antlr',
