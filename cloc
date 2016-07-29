@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "1.70";  # odd number == beta; even number == stable
+my $VERSION = "1.71";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.006;
 # use modules                                  {{{1
@@ -3757,7 +3757,7 @@ sub find_preprocessor {                      # {{{1
     # Reads global variable %Exclude_Dir.
     # Populates global variable %Ignored.
     # Reject files/directories in cwd which are in the exclude list.
-
+    print "-> find_preprocessor(", cwd(), ")\n" if $opt_v > 2;
     my @ok = ();
 
 #printf "TOP find_preprocessor\n";
@@ -3782,6 +3782,7 @@ sub find_preprocessor {                      # {{{1
         }
     }
 
+    print "<- find_preprocessor(@ok)\n" if $opt_v > 2;
     return @ok;
 } # 1}}}
 sub files {                                  # {{{1
