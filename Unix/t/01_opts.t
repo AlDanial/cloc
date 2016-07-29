@@ -21,6 +21,48 @@ my @Tests = (
                     'args' => '--not-match-d cc *',
                     'ref'  => '../tests/outputs/exclude_dir_1.yaml',
                 },
+                {
+                    'name' => '--not-match-d (github issue #114 T1)',
+                    'cd'   => '../tests/inputs',
+                    'args' => '--by-file issues/114',
+                    'ref'  => '../tests/outputs/issues/114/T1.yaml',
+                },
+                {
+                    'name' => '--not-match-d (github issue #114 T2)',
+                    'cd'   => '../tests/inputs',
+                    'args' => '--by-file --not-match-d bar issues/114',
+                    'ref'  => '../tests/outputs/issues/114/T2.yaml',
+                },
+                {
+                    'name' => '--not-match-d (github issue #114 T3)',
+                    'cd'   => '../tests/inputs',
+                    'args' => '--by-file --not-match-d bee issues/114',
+                    'ref'  => '../tests/outputs/issues/114/T3.yaml',
+                },
+                {
+                    'name' => '--not-match-d (github issue #114 T4)',
+                    'cd'   => '../tests/inputs',
+                    'args' => '--by-file --not-match-d bar/bee issues/114',
+                    'ref'  => '../tests/outputs/issues/114/T4.yaml',
+                },
+                {
+                    'name' => '--not-match-d (github issue #114 T5)',
+                    'cd'   => '../tests/inputs',
+                    'args' => '--by-file --fullpath --not-match-d   bar issues/114',
+                    'ref'  => '../tests/outputs/issues/114/T5.yaml',
+                },
+                {
+                    'name' => '--not-match-d (github issue #114 T6)',
+                    'cd'   => '../tests/inputs',
+                    'args' => '--by-file --fullpath --not-match-d ./bar issues/114',
+                    'ref'  => '../tests/outputs/issues/114/T6.yaml',
+                },
+                {
+                    'name' => '--not-match-d (github issue #114 T7)',
+                    'cd'   => '../tests/inputs',
+                    'args' => '--by-file --fullpath --not-match-d bar/bee issues/114',
+                    'ref'  => '../tests/outputs/issues/114/T7.yaml',
+                },
             );
 
 my $Verbose = 0;

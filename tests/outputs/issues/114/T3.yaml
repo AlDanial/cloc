@@ -1,0 +1,26 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.70
+  elapsed_seconds    : 0.0176558494567871
+  n_files            : 2
+  n_lines            : 2
+  files_per_second   : 113.276906041537
+  lines_per_second   : 113.276906041537
+  report_file        : outputs/issues/114/T3.yaml
+inputs/issues/114/bar/under_Bar.js :
+  blank: 0
+  comment: 0
+  code: 1
+  language: JavaScript
+inputs/issues/114/foo/under_foo.js :
+  blank: 0
+  comment: 0
+  code: 1
+  language: JavaScript
+SUM: 
+  blank: 0
+  comment: 0
+  code: 2
+  nFiles: 2

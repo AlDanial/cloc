@@ -361,6 +361,8 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              compared to the regex.
                              Add --fullpath to compare parent directories to 
                              the regex.
+                             Do not include file path separators at the beginning
+                             or end of the regex.
    --match-f=<regex>         Only count files whose basenames match the Perl
                              regex.  For example
                                --match-f='^[Ww]idget'
@@ -3757,21 +3759,25 @@ sub remove_duplicate_files {                 # {{{1
     print "<- remove_duplicate_files\n" if $opt_v > 2;
 } # 1}}}
 sub find_preprocessor {                      # {{{1
-    # invoked by File::Find's find()
+    # invoked by File::Find's find() each time it enters a new directory
     # Reads global variable %Exclude_Dir.
     # Populates global variable %Ignored.
     # Reject files/directories in cwd which are in the exclude list.
-
+    print "-> find_preprocessor(", cwd(), ")\n" if $opt_v > 2;
     my @ok = ();
 
+#printf "TOP find_preprocessor\n";
+
     foreach my $F_or_D (@_) {  # pure file or directory name, no separators
+        next if $F_or_D =~ /^\.{1,2}$/;  # skip .  and  ..
         if ($Exclude_Dir{$F_or_D}) {
             $Ignored{$File::Find::name} = "--exclude-dir=$Exclude_Dir{$F_or_D}";
-        } elsif (-d $F_or_D) {
+        } else {
+#printf "  F_or_D=%-20s File::Find::name=%s\n", $F_or_D, $File::Find::name;
             if ($opt_not_match_d) {
                 if ($opt_fullpath and $File::Find::name =~ m{$opt_not_match_d}) {
                     $Ignored{$File::Find::name} = "--not-match-d=$opt_not_match_d";
-                } elsif ($F_or_D =~ m{$opt_not_match_d}) {
+                } elsif (!-d $F_or_D and basename($File::Find::name) =~ m{$opt_not_match_d}) {
                     $Ignored{$File::Find::name} = "--not-match-d (basename) =$opt_not_match_d";
                 } else {
                     push @ok, $F_or_D;
@@ -3779,11 +3785,10 @@ sub find_preprocessor {                      # {{{1
             } else {
                 push @ok, $F_or_D;
             }
-        } else {
-            push @ok, $F_or_D;
         }
     }
 
+    print "<- find_preprocessor(@ok)\n" if $opt_v > 2;
     return @ok;
 } # 1}}}
 sub files {                                  # {{{1
