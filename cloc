@@ -5404,6 +5404,7 @@ sub set_constants {                          # {{{1
             'pp'          => 'Pascal/Puppet'         ,
             'psql'        => 'SQL'                   ,
             'py'          => 'Python'                ,
+            'pyj'         => 'RapydScript'           ,
             'pyx'         => 'Cython'                ,
             'qml'         => 'QML'                   ,
             'rb'          => 'Ruby'                  ,
@@ -6173,6 +6174,12 @@ sub set_constants {                          # {{{1
     'Racket'             => [
                                 [ 'remove_matches'      , '^\s*;'  ],
                                 [ 'remove_inline'       , ';.*$'   ],
+                            ],
+    'RapydScript'        => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'docstring_to_C'                 ],
+                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'remove_inline'       , '#.*$'   ],
                             ],
     'Razor'              => [
 #                               [ 'remove_matches'      , '^\s*//' ],
@@ -7291,6 +7298,7 @@ sub set_constants {                          # {{{1
     'Modula3'                      => 2.00,
     'PHP'                          => 3.50,
     'Python'                       => 4.20,
+    'RapydScript'                  => 4.20,
     'Cython'                       => 3.80,
     'Ruby'                         => 4.20,
     'Ruby HTML'                    => 4.00,
