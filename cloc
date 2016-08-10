@@ -5955,9 +5955,9 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*$'  ],
                             ],
     'Julia'              => [
+                                [ 'remove_between_general', '#=', '=#' ],
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
-                                [ 'remove_between_general', '#=', '=#' ],
                             ],
     'Kotlin'             => [
                                 [ 'call_regexp_common'  , 'C++'    ],

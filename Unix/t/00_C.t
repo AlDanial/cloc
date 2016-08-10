@@ -204,6 +204,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/glossary.json',
                 },
                 {
+                    'name' => 'Julia',
+                    'ref'  => '../tests/outputs/julia.jl.yaml',
+                    'args' => '../tests/inputs/julia.jl',
+                },
+                {
                     'name' => 'Kotlin',
                     'ref'  => '../tests/outputs/hello.kt.yaml',
                     'args' => '../tests/inputs/hello.kt',
