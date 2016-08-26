@@ -394,6 +394,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/Slim.html.slim',
                 },
                 {
+                    'name' => 'Specman e',
+                    'ref'  => '../tests/outputs/specman_e.e.yaml',
+                    'args' => '../tests/inputs/specman_e.e',
+                },
+                {
                     'name' => 'Swift',
                     'ref'  => '../tests/outputs/tour.swift.yaml',
                     'args' => '../tests/inputs/tour.swift',

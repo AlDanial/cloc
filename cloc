@@ -5461,6 +5461,7 @@ sub set_constants {                          # {{{1
             'sig'         => 'Standard ML'           ,
             'fun'         => 'Standard ML'           ,
             'slim'        => 'Slim'                  ,
+            'e'           => 'Specman e'             ,
             'sql'         => 'SQL'                   ,
             'SQL'         => 'SQL'                   ,
             'sproc.sql'   => 'SQL Stored Procedure'  ,
@@ -6230,6 +6231,12 @@ sub set_constants {                          # {{{1
     'SKILL++'            => [
                                 [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_matches'      , '^\s*;'  ],
+                            ],
+    'Specman e'          => [
+                                [ 'pre_post_fix'        , "'>", "<'"],
+                                [ 'remove_between_general', "'>", "<'" ],
+                                [ 'call_regexp_common'  , 'C++',   ],
+                                [ 'remove_matches'      , '^\s*--' ],
                             ],
     'SQL'                => [
                                 [ 'call_regexp_common'  , 'C'      ],
@@ -7168,6 +7175,7 @@ sub set_constants {                          # {{{1
     'spreadsheet default'          =>  13.33,
     'sps'                          =>   0.25,
     'spss'                         =>   2.50,
+    'Specman e'                    =>   2.00,
     'SQL'                          =>   2.29,
     'sqlwindows'                   =>   6.67,
     'statistical default'          =>   2.50,
@@ -9040,6 +9048,17 @@ EOAlgDiff
     push @INC, $dir;  # between this & Regexp::Common only need to do once
     eval "use Algorithm::Diff qw / sdiff /";
     $HAVE_Algorith_Diff = 1 unless $problems;
+} # 1}}}
+sub pre_post_fix {                     # {{{1
+    # Return the input lines prefixed and postfixed
+    # by the given strings.
+    my ($ra_lines, $prefix, $postfix ) = @_;
+    print "-> pre_post_fix with $prefix, $postfix\n" if $opt_v > 2;
+
+    my $all_lines = $prefix . join(""  , @{$ra_lines}) . $postfix;
+
+    print "<- pre_post_fix\n" if $opt_v > 2;
+    return split("\n", $all_lines);
 } # 1}}}
 sub call_regexp_common {                     # {{{1
     my ($ra_lines, $language ) = @_;
