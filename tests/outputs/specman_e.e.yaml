@@ -3,19 +3,19 @@
 header : 
   cloc_url           : github.com/AlDanial/cloc
   cloc_version       : 1.71
-  elapsed_seconds    : 0.00588607788085938
+  elapsed_seconds    : 0.00766897201538086
   n_files            : 1
   n_lines            : 28
-  files_per_second   : 169.892417368762
-  lines_per_second   : 4756.98768632534
-  report_file        : outputs/specman_e.e.yaml
+  files_per_second   : 130.395572965243
+  lines_per_second   : 3651.0760430268
+  report_file        : specman_e.e.yaml
 Specman e :
   nFiles: 1
   blank: 1
-  comment: 13
-  code: 14
+  comment: 14
+  code: 13
 SUM: 
   blank: 1
-  comment: 13
-  code: 14
+  comment: 14
+  code: 13
   nFiles: 1

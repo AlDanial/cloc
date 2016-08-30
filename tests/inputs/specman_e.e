@@ -4,7 +4,7 @@ http://www.asic-world.com/code/specman_examples/mem_op_monitor.e
 struct mem_op_monitor {
   mem_object : mem_base_object;
   mem_scoreboard : mem_scoreboard;
-  event clk is fall('memory_tb.clk') @sim;
+  -- event clk is fall('memory_tb.clk') @sim;
 
   output_monitor()@clk is {
     while (TRUE) {
@@ -14,7 +14,7 @@ struct mem_op_monitor {
     */
          outf("Output_monitor : Detected memory read access-> Address : %x   Data : %x\n", 'memory_tb.address','memory_tb.data_out');
 	// mem_object.addr = 'memory_tb.address';
-	 mem_object.data = 'memory_tb.data_out';
+	 mem_object.data = 'memory_tb.data_out';  -- more comment
          mem_scoreboard.post_output(mem_object);
       };
     };
