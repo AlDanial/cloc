@@ -5489,6 +5489,7 @@ sub set_constants {                          # {{{1
             'ttcnpp'      => 'TTCN'                  ,
             'tpd'         => 'TITAN Project File Information',
             'ts'          => 'TypeScript/Qt Linguist',
+            'tsx'         => 'TypeScript'            ,
             'tss'         => 'Titanium Style Sheet'  ,
             'twig'        => 'Twig'                  ,
             'ui'          => 'Qt/Glade'              ,

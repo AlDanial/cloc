@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.71
+  elapsed_seconds    : 0.00571799278259277
+  n_files            : 1
+  n_lines            : 14
+  files_per_second   : 174.886544635784
+  lines_per_second   : 2448.41162490097
+  report_file        : ../outputs/greeter.tsx.yaml
+TypeScript :
+  nFiles: 1
+  blank: 2
+  comment: 5
+  code: 7
+SUM: 
+  blank: 2
+  comment: 5
+  code: 7
+  nFiles: 1

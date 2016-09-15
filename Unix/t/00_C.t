@@ -419,14 +419,19 @@ my @Tests = (   {
                     'args' => '../tests/inputs/clusterConf.ttcn',
                 },
                 {
+                    'name' => 'TypeScript',
+                    'ref'  => '../tests/outputs/TypeScript.ts.yaml',
+                    'args' => '../tests/inputs/TypeScript.ts',
+                },
+                {
                     'name' => 'TypeScript 2',
                     'ref'  => '../tests/outputs/warship.ts.yaml',
                     'args' => '../tests/inputs/warship.ts',
                 },
                 {
-                    'name' => 'TypeScript',
-                    'ref'  => '../tests/outputs/TypeScript.ts.yaml',
-                    'args' => '../tests/inputs/TypeScript.ts',
+                    'name' => 'TypeScript 3',
+                    'ref'  => '../tests/outputs/greeter.tsx.yaml',
+                    'args' => '../tests/inputs/greeter.tsx',
                 },
                 {
                     'name' => 'VB.Net',
