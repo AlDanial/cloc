@@ -318,7 +318,7 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
    --exclude-dir=<D1>[,D2,]  Exclude the given comma separated directories
                              D1, D2, D3, et cetera, from being scanned.  For
                              example  --exclude-dir=.cache,test  will skip
-                             all files and subdirectories that have /.cache/ 
+                             all files and subdirectories that have /.cache/
                              or /test/ as their parent directory.
                              Directories named .bzr, .cvs, .hg, .git, and
                              .svn are always excluded.
@@ -359,7 +359,7 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              directory name is compared, for example, when
                              counting in /usr/local/lib, only 'lib' is
                              compared to the regex.
-                             Add --fullpath to compare parent directories to 
+                             Add --fullpath to compare parent directories to
                              the regex.
                              Do not include file path separators at the beginning
                              or end of the regex.
@@ -1983,9 +1983,15 @@ sub diff_report     {                        # {{{1
     # returns an array of lines containing the results
     print "-> diff_report\n" if $opt_v > 2;
 
-    if ($opt_xml or $opt_yaml or $opt_json) {
+    if ($opt_xml) {
         print "<- diff_report\n" if $opt_v > 2;
         return diff_xml_yaml_json_report(@_)
+    } elsif ($opt_yaml) {
+        print "<- diff_report\n" if $opt_v > 2;
+        return diff_yaml_report(@_)
+    } elsif ($opt_json) {
+        print "<- diff_report\n" if $opt_v > 2;
+        return diff_json_report(@_)
     } elsif ($opt_csv or $opt_md) {
         print "<- diff_report\n" if $opt_v > 2;
         return diff_csv_report(@_)
@@ -2254,6 +2260,120 @@ sub xml_yaml_or_json_header {                # {{{1
     print "<- xml_yaml_or_json_header\n" if $opt_v > 2;
     return $header;
 } # 1}}}
+sub diff_yaml_report {                       # {{{1
+    # returns an array of lines containing the results
+    my ($version    , # in
+        $elapsed_sec, # in
+        $report_type, # in  "by language" | "by report file" | "by file"
+        $rhhh_count , # in  count{TYPE}{nFiles|code|blank|comment}{a|m|r|s}
+        $rh_scale   , # in
+       ) = @_;
+    print "-> diff_yaml_report\n" if $opt_v > 2;
+    $elapsed_sec = 0.5 unless $elapsed_sec;
+    my @results       = ();
+    my %sum           = ();
+    my ($sum_lines, $sum_files, $BY_FILE, $BY_LANGUAGE) =
+        diff_header_sum($report_type, $rhhh_count, \%sum);
+
+    if (!$ALREADY_SHOWED_HEADER) {
+        push @results,
+              xml_yaml_or_json_header($URL, $version, $elapsed_sec,
+                                 $sum_files, $sum_lines, $BY_FILE);
+        $ALREADY_SHOWED_HEADER = 1;
+    }
+    foreach my $S (qw(added same modified removed)) {
+        push @results, "$S :";
+        foreach my $F_or_L (keys %{$rhhh_count}) {
+            push @results, "  $F_or_L :";
+            foreach my $k (keys %{$rhhh_count->{$F_or_L}}) {
+                next if $k eq "lang"; # present only in those cases
+                                      # where code exists for action $S
+                $rhhh_count->{$F_or_L}{$k}{$S} = 0 unless
+                    defined $rhhh_count->{$F_or_L}{$k}{$S};
+                push @results,
+                    "    $k : $rhhh_count->{$F_or_L}{$k}{$S}";
+            }
+        }
+    }
+    print "<- diff_yaml_report\n" if $opt_v > 2;
+    return @results;
+} # 1}}}
+sub diff_json_report {                       # {{{1
+    # returns an array of lines containing the results
+    my ($version    , # in
+        $elapsed_sec, # in
+        $report_type, # in  "by language" | "by report file" | "by file"
+        $rhhh_count , # in  count{TYPE}{nFiles|code|blank|comment}{a|m|r|s}
+        $rh_scale   , # in
+       ) = @_;
+    print "-> diff_json_report\n" if $opt_v > 2;
+    $elapsed_sec = 0.5 unless $elapsed_sec;
+    my @results       = ();
+    my %sum           = ();
+    my ($sum_lines, $sum_files, $BY_FILE, $BY_LANGUAGE) =
+        diff_header_sum($report_type, $rhhh_count, \%sum);
+
+    if (!$ALREADY_SHOWED_HEADER) {
+        push @results,
+              xml_yaml_or_json_header($URL, $version, $elapsed_sec,
+                                 $sum_files, $sum_lines, $BY_FILE);
+        $ALREADY_SHOWED_HEADER = 1;
+    }
+    foreach my $S (qw(added same modified removed)) {
+        push @results, " \"$S\" : {";
+        foreach my $F_or_L (keys %{$rhhh_count}) {
+            push @results, "  \"$F_or_L\" : {";
+            foreach my $k (keys %{$rhhh_count->{$F_or_L}}) {
+                next if $k eq "lang"; # present only in those cases
+                                      # where code exists for action $S
+                $rhhh_count->{$F_or_L}{$k}{$S} = 0 unless
+                    defined $rhhh_count->{$F_or_L}{$k}{$S};
+                push @results,
+                    "    \"$k\" : \"$rhhh_count->{$F_or_L}{$k}{$S}\",";
+            }
+            $results[-1] =~ s/,\s*$//;
+            push @results, "  },"
+        }
+        $results[-1] =~ s/,\s*$//;
+        push @results, "  },"
+    }
+    $results[-1] =~ s/,\s*$//;
+    push @results, "}";
+    print "<- diff_json_report\n" if $opt_v > 2;
+    return @results;
+} # 1}}}
+sub diff_header_sum {                        # {{{1
+    my ($report_type, # in  "by language" | "by report file" | "by file"
+        $rhhh_count , # in  count{TYPE}{nFiles|code|blank|comment}{a|m|r|s}
+        $rhh_sum    , # out sum{nFiles|blank|comment|code}{same|modified|added|removed}
+       ) = @_;
+
+    my $sum_files = 0;
+    my $sum_lines = 0;
+    foreach my $language (keys %{$rhhh_count}) {
+        foreach my $V (qw(nFiles blank comment code)) {
+            foreach my $S (qw(added same modified removed)) {
+                $rhhh_count->{$language}{$V}{$S} = 0 unless
+                    defined $rhhh_count->{$language}{$V}{$S};
+                $rhh_sum->{$V}{$S}  += $rhhh_count->{$language}{$V}{$S};
+                if ($V eq "nFiles") {
+                    $sum_files += $rhhh_count->{$language}{$V}{$S};
+                } else {
+                    $sum_lines += $rhhh_count->{$language}{$V}{$S};
+                }
+            }
+        }
+    }
+
+    my $BY_LANGUAGE = 0;
+    my $BY_FILE     = 0;
+    if      ($report_type eq "by language") {
+        $BY_LANGUAGE  = 1;
+    } elsif ($report_type eq "by file")     {
+        $BY_FILE      = 1;
+    }
+    return $sum_lines, $sum_files, $BY_FILE, $BY_LANGUAGE;
+} # 1}}}
 sub diff_xml_yaml_json_report {              # {{{1
     # returns an array of lines containing the results
     my ($version    , # in
@@ -2266,37 +2386,15 @@ sub diff_xml_yaml_json_report {              # {{{1
     my ($Q, $open_B, $close_B, $start, $C) = yaml_to_json_separators();
 
 #print "diff_report: ", Dumper($rhhh_count), "\n";
-    my @results       = ();
-
-    my $languages     = ();
-    my %sum           = (); # sum{nFiles|blank|comment|code}{same|modified|added|removed}
-
-    my $sum_files = 0;
-    my $sum_lines = 0;
-    foreach my $language (keys %{$rhhh_count}) {
-        foreach my $V (qw(nFiles blank comment code)) {
-            foreach my $S (qw(added same modified removed)) {
-                $rhhh_count->{$language}{$V}{$S} = 0 unless
-                    defined $rhhh_count->{$language}{$V}{$S};
-                $sum{$V}{$S}  += $rhhh_count->{$language}{$V}{$S};
-                if ($V eq "nFiles") {
-                    $sum_files += $rhhh_count->{$language}{$V}{$S};
-                } else {
-                    $sum_lines += $rhhh_count->{$language}{$V}{$S};
-                }
-            }
-        }
-    }
     $elapsed_sec = 0.5 unless $elapsed_sec;
+    my @results       = ();
+    my %sum           = ();
+    my $languages     = ();
+
+    my ($sum_lines, $sum_files, $BY_FILE, $BY_LANGUAGE) =
+        diff_header_sum($report_type, $rhhh_count, \%sum);
 
     my $data_line   = "";
-    my $BY_LANGUAGE = 0;
-    my $BY_FILE     = 0;
-    if      ($report_type eq "by language") {
-        $BY_LANGUAGE  = 1;
-    } elsif ($report_type eq "by file")     {
-        $BY_FILE      = 1;
-    }
 
     if (!$ALREADY_SHOWED_HEADER) {
         push @results,
@@ -2874,7 +2972,7 @@ sub generate_report {                        # {{{1
             "3rd gen. equiv"
               if $opt_3;
         if ($opt_md) {
-            my @col_header  = (); 
+            my @col_header  = ();
             if ($data_line =~ m{\s%}) {
                 $data_line =~ s{\s%}{_%}g;
                 foreach my $w ( split(' ', $data_line) ) {
@@ -5977,7 +6075,7 @@ sub set_constants {                          # {{{1
                                 [ 'remove_between_general', '#|', '|#' ],
                             ],
     'liquid'             => [
-                                [ 'remove_between_general', '{% comment %}', 
+                                [ 'remove_between_general', '{% comment %}',
                                                             '{% endcomment %}' ],
                                 [ 'remove_html_comments',          ],
                             ],
@@ -7655,12 +7753,12 @@ sub _clone_with {
 }
 
 1;
-# 
+#
 # This software is Copyright (c) 2001 - 2011, Damian Conway and Abigail.
-# 
+#
 # This module is free software, and maybe used under any of the following
 # licenses:
-# 
+#
 #  1) The Perl Artistic License.     See the file COPYRIGHT.AL.
 #  2) The Perl Artistic License 2.0. See the file COPYRIGHT.AL2.
 #  3) The BSD Licence.               See the file COPYRIGHT.BSD.
@@ -7749,7 +7847,7 @@ my @generic = (
 
     {languages => [qw /Oberon/],
      from_to   => [[qw /(* *)/]]},
-     
+
     {languages => [[qw /Pascal Delphi/], [qw /Pascal Free/], [qw /Pascal GPC/]],
      to_eol    => ['//'],
      from_to   => [[qw !{ }!], [qw !(* *)!]]},
@@ -7894,7 +7992,7 @@ foreach my $group (@generic) {
                 ;
     }
 }
-                
+
 
     
 #
