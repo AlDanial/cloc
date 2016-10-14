@@ -244,6 +244,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/mfile.mk',
                 },
                 {
+                    'name' => 'Mako',
+                    'ref'  => '../tests/outputs/Mako.mako.yaml',
+                    'args' => '../tests/inputs/Mako.mako',
+                },
+                {
                     'name' => 'Mathematica',
                     'ref'  => '../tests/outputs/Mathematica_1.m.yaml',
                     'args' => '../tests/inputs/Mathematica_1.m',

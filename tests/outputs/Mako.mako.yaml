@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00447511672973633
+  n_files            : 1
+  n_lines            : 20
+  files_per_second   : 223.457858284497
+  lines_per_second   : 4245.69930740543
+  report_file        : Mako.mako.yaml
+Mako:
+  nFiles: 1
+  blank: 3
+  comment: 8
+  code: 9
+SUM: 
+  blank: 3
+  comment: 8
+  code: 9
+  nFiles: 1

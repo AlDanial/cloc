@@ -5451,6 +5451,7 @@ sub set_constants {                          # {{{1
             'm4'          => 'm4'                    ,
             'makefile'    => 'make'                  ,
             'Makefile'    => 'make'                  ,
+            'mako'        => 'Mako'                  ,
             'md'          => 'Markdown'              ,
             'mc'          => 'Windows Message File'  ,
             'met'         => 'Teamcenter met'        ,
@@ -6146,6 +6147,9 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '//.*$'  ], # C99
                             ],
     'PHP/Pascal'               => [ [ 'die' ,          ], ], # never called
+    'Mako'               => [
+                                [ 'remove_matches'       , '##.*$'  ],
+                            ],
     'Markdown'           => [
                                 [ 'remove_between_regex',
                                   '\[(comment|\/\/)?\]\s*:?\s*(<\s*>|#)?\s*\(.*?', '.*?\)' ],
@@ -7086,6 +7090,7 @@ sub set_constants {                          # {{{1
     'magik'                        =>   3.81,
     'Lake'                         =>   3.81,
     'make'                         =>   2.50,
+    'Mako'                         =>   1.50, # Not sure about the scaling.
     'mantis'                       =>   2.96,
     'mapper'                       =>   0.99,
     'mark iv'                      =>   2.00,
