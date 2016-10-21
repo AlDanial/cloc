@@ -5552,8 +5552,8 @@ sub set_constants {                          # {{{1
             'rc'          => 'Windows Resource File' ,
             'rc2'         => 'Windows Resource File' ,
             'sas'         => 'SAS'                   ,
-            'sass'        => 'SASS'                  ,
-            'scss'        => 'SASS'                  ,
+            'sass'        => 'Sass'                  ,
+            'scss'        => 'Sass'                  ,
             'sh'          => 'Bourne Shell'          ,
             'smarty'      => 'Smarty'                ,
             'sml'         => 'Standard ML'           ,
@@ -6315,7 +6315,7 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_between_general', '*', ';' ],
                             ],
-    'SASS'               => [
+    'Sass'               => [
                                 [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
@@ -7254,7 +7254,7 @@ sub set_constants {                          # {{{1
     'C Shell'                      =>   3.81,
     'siebel tools '                =>   6.15,
     'SAS'                          =>   1.5 ,
-    'SASS'                         =>   1.5 ,
+    'Sass'                         =>   1.5 ,
     'simplan'                      =>   2.22,
     'simscript'                    =>   1.74,
     'simula'                       =>   1.74,
