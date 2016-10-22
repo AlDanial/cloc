@@ -1985,7 +1985,8 @@ sub diff_report     {                        # {{{1
 
     if ($opt_xml) {
         print "<- diff_report\n" if $opt_v > 2;
-        return diff_xml_yaml_json_report(@_)
+        return diff_xml_report(@_)
+###     return diff_xml_yaml_json_report(@_)
     } elsif ($opt_yaml) {
         print "<- diff_report\n" if $opt_v > 2;
         return diff_yaml_report(@_)
@@ -2374,7 +2375,7 @@ sub diff_header_sum {                        # {{{1
     }
     return $sum_lines, $sum_files, $BY_FILE, $BY_LANGUAGE;
 } # 1}}}
-sub diff_xml_yaml_json_report {              # {{{1
+sub diff_xml_report {                        # {{{1
     # returns an array of lines containing the results
     my ($version    , # in
         $elapsed_sec, # in
@@ -2382,7 +2383,7 @@ sub diff_xml_yaml_json_report {              # {{{1
         $rhhh_count , # in  count{TYPE}{nFiles|code|blank|comment}{a|m|r|s}
         $rh_scale   , # in
        ) = @_;
-    print "-> diff_xml_yaml_json_report\n" if $opt_v > 2;
+    print "-> diff_xml_report\n" if $opt_v > 2;
     my ($Q, $open_B, $close_B, $start, $C) = yaml_to_json_separators();
 
 #print "diff_report: ", Dumper($rhhh_count), "\n";
@@ -2404,144 +2405,78 @@ sub diff_xml_yaml_json_report {              # {{{1
     }
 
     foreach my $S (qw(same modified added removed)) {
-        if ($opt_xml) {
-            push @results, "  <$S>";
-        } elsif ($opt_yaml or $opt_json) {
-            push @results, "${Q}${S}${Q} : ${open_B}";
-        }
+        push @results, "  <$S>";
         foreach my $lang_or_file (sort {
                                      $rhhh_count->{$b}{'code'} <=>
                                      $rhhh_count->{$a}{'code'}
                                    }
                               keys %{$rhhh_count}) {
             my $L = "";
-            if ($opt_xml) {
-                if ($BY_FILE) {
-                    $L .= sprintf "    <file name=\"%s\" files_count=\"1\" ",
-                        xml_metachars(
-                            rm_leading_tempdir($lang_or_file, \%TEMP_DIR));
-                } else {
-                    $L .= sprintf "    <language name=\"%s\" files_count=\"%d\" ",
-                            $lang_or_file ,
-                            $rhhh_count->{$lang_or_file}{'nFiles'}{$S};
-                }
-                if ($opt_by_percent) {
-                  my $DEN = compute_denominator($opt_by_percent            ,
-                                $rhhh_count->{$lang_or_file}{'code'}{$S}   ,
-                                $rhhh_count->{$lang_or_file}{'comment'}{$S},
-                                $rhhh_count->{$lang_or_file}{'blank'}{$S}  );
-                  foreach my $T (qw(blank comment)) {
-                      if ($rhhh_count->{$lang_or_file}{'code'}{$S} > 0) {
-                        $L .= sprintf "%s=\"%.2f\" ",
-                                $T, $rhhh_count->{$lang_or_file}{$T}{$S} / $DEN * 100;
-                      } else {
-                        $L .= sprintf "%s=\"0.0\" ", $T;
-                      }
-                  }
-                  foreach my $T (qw(code)) {
-                      $L .= sprintf "%s=\"%d\" ",
-                              $T, $rhhh_count->{$lang_or_file}{$T}{$S};
-                  }
-                } else {
-                  foreach my $T (qw(blank comment code)) {
-                      $L .= sprintf "%s=\"%d\" ",
-                              $T, $rhhh_count->{$lang_or_file}{$T}{$S};
-                  }
-                }
-                push @results, $L . "/>";
-            } elsif ($opt_yaml or $opt_json) {
-                if ($BY_FILE) {
-                    push @results, sprintf "    ${Q}file${Q} : ${Q}%s${Q}${C}",
-                                   rm_leading_tempdir($lang_or_file, \%TEMP_DIR);
-                    push @results, sprintf "    ${Q}files_count${Q} : 1${C}",
-                } else {
-                    push @results, sprintf "    ${Q}language${Q} : ${Q}%s${Q}${C}", $lang_or_file;
-                    push @results, sprintf "    ${Q}files_count${Q} : %d${C}",
-                            $rhhh_count->{$lang_or_file}{'nFiles'}{$S};
-                }
-                if ($opt_by_percent) {
-                    my $DEN = compute_denominator($opt_by_percent  ,
-                        $rhhh_count->{$lang_or_file}{'code'}{$S}   ,
-                        $rhhh_count->{$lang_or_file}{'comment'}{$S},
-                        $rhhh_count->{$lang_or_file}{'blank'}{$S}  );
-                    foreach my $T (qw(blank comment)) {
-                        if ($rhhh_count->{$lang_or_file}{'code'}{$S} > 0) {
-                            push @results, sprintf "    ${Q}%s${Q} : %.2f${C}",
-                                    $T, $rhhh_count->{$lang_or_file}{$T}{$S} / $DEN * 100;
-                        } else {
-                            push @results, sprintf "    ${Q}%s${Q} : 0.0${C}", $T;
-                        }
-                    }
-                    foreach my $T (qw(code)) {
-                        push @results, sprintf "    ${Q}%s${Q} : %d${C}",
-                                $T, $rhhh_count->{$lang_or_file}{$T}{$S};
-                    }
-                } else {
-                    foreach my $T (qw(blank comment code)) {
-                        push @results, sprintf "    ${Q}%s${Q} : %d${C}",
-                                $T, $rhhh_count->{$lang_or_file}{$T}{$S};
-                    }
-                }
-            }
-        }
 
-        if ($opt_xml) {
-            my $L = sprintf "    <total sum_files=\"%d\" ", $sum{'nFiles'}{$S};
+            if ($BY_FILE) {
+                $L .= sprintf "    <file name=\"%s\" files_count=\"1\" ",
+                    xml_metachars(
+                        rm_leading_tempdir($lang_or_file, \%TEMP_DIR));
+            } else {
+                $L .= sprintf "    <language name=\"%s\" files_count=\"%d\" ",
+                        $lang_or_file ,
+                        $rhhh_count->{$lang_or_file}{'nFiles'}{$S};
+            }
             if ($opt_by_percent) {
-              my $DEN = compute_denominator($opt_by_percent,
-                            $sum{'code'}{$S}   ,
-                            $sum{'comment'}{$S},
-                            $sum{'blank'}{$S}  );
-              foreach my $V (qw(blank comment)) {
-                  if ($sum{'code'}{$S} > 0) {
-                      $L .= sprintf "%s=\"%.2f\" ", $V, $sum{$V}{$S} / $DEN * 100;
+              my $DEN = compute_denominator($opt_by_percent            ,
+                            $rhhh_count->{$lang_or_file}{'code'}{$S}   ,
+                            $rhhh_count->{$lang_or_file}{'comment'}{$S},
+                            $rhhh_count->{$lang_or_file}{'blank'}{$S}  );
+              foreach my $T (qw(blank comment)) {
+                  if ($rhhh_count->{$lang_or_file}{'code'}{$S} > 0) {
+                    $L .= sprintf "%s=\"%.2f\" ",
+                            $T, $rhhh_count->{$lang_or_file}{$T}{$S} / $DEN * 100;
                   } else {
-                      $L .= sprintf "%s=\"0.0\" ", $V;
+                    $L .= sprintf "%s=\"0.0\" ", $T;
                   }
               }
-              foreach my $V (qw(code)) {
-                  $L .= sprintf "%s=\"%d\" ", $V, $sum{$V}{$S};
+              foreach my $T (qw(code)) {
+                  $L .= sprintf "%s=\"%d\" ",
+                          $T, $rhhh_count->{$lang_or_file}{$T}{$S};
               }
             } else {
-              foreach my $V (qw(blank comment code)) {
-                  $L .= sprintf "%s=\"%d\" ", $V, $sum{$V}{$S};
+              foreach my $T (qw(blank comment code)) {
+                  $L .= sprintf "%s=\"%d\" ",
+                          $T, $rhhh_count->{$lang_or_file}{$T}{$S};
               }
             }
             push @results, $L . "/>";
-            push @results, "  </$S>";
-        } elsif ($opt_yaml) {
-            push @results, sprintf "%s_total :\n    sum_files : %d",
-                                $S, $sum{'nFiles'}{$S};
-            if ($opt_by_percent) {
-                my $DEN = compute_denominator($opt_by_percent    ,
-                                              $sum{'code'}{$S}   ,
-                                              $sum{'comment'}{$S},
-                                              $sum{'blank'}{$S}  );
-                foreach my $V (qw(blank comment)) {
-                    if ($sum{'code'}{$S} > 0) {
-                        push @results, sprintf "    %s : %.2f", $V, $sum{$V}{$S} / $DEN * 100;
-                    } else {
-                        push @results, sprintf "    %s : 0.0", $V;
-                    }
-                }
-                foreach my $V (qw(code)) {
-                    push @results, sprintf "    %s : %d", $V, $sum{$V}{$S};
-                }
-            } else {
-                foreach my $V (qw(blank comment code)) {
-                    push @results, sprintf "    %s : %d", $V, $sum{$V}{$S};
-                }
-            }
         }
-        $results[-1] =~ s/,\s*$/},/;   # close last set with  },  instead of ,
-    }
-    $results[-1] =~ s/,\s*$/}/;   # close last set with  }  instead of ,
 
-    if ($opt_xml) {
-        push @results, "</diff_results>";
+
+        my $L = sprintf "    <total sum_files=\"%d\" ", $sum{'nFiles'}{$S};
+        if ($opt_by_percent) {
+          my $DEN = compute_denominator($opt_by_percent,
+                        $sum{'code'}{$S}   ,
+                        $sum{'comment'}{$S},
+                        $sum{'blank'}{$S}  );
+          foreach my $V (qw(blank comment)) {
+              if ($sum{'code'}{$S} > 0) {
+                  $L .= sprintf "%s=\"%.2f\" ", $V, $sum{$V}{$S} / $DEN * 100;
+              } else {
+                  $L .= sprintf "%s=\"0.0\" ", $V;
+              }
+          }
+          foreach my $V (qw(code)) {
+              $L .= sprintf "%s=\"%d\" ", $V, $sum{$V}{$S};
+          }
+        } else {
+          foreach my $V (qw(blank comment code)) {
+              $L .= sprintf "%s=\"%d\" ", $V, $sum{$V}{$S};
+          }
+        }
+        push @results, $L . "/>";
+        push @results, "  </$S>";
     }
+
+    push @results, "</diff_results>";
     write_xsl_file() if $opt_xsl and $opt_xsl eq $CLOC_XSL;
-    print "<- diff_xml_yaml_json_report\n" if $opt_v > 2;
+    print "<- diff_xml_report\n" if $opt_v > 2;
     return @results;
 } # 1}}}
 sub diff_csv_report {                        # {{{1
