@@ -743,6 +743,11 @@ $opt_by_percent = lc $opt_by_percent;
 if (defined $opt_vcs) {
     if      ($opt_vcs eq "git") {
         $opt_vcs = "git ls-files";
+        my @submodules = invoke_generator('git submodule status');
+        foreach my $SM (@submodules) {
+            $SM =~ s/^.*?\s(\S+)$/$1/;   # keep only last column of text
+            $Exclude_Dir{$SM} = 1;
+        }
     } elsif ($opt_vcs eq "svn") {
         $opt_vcs = "svn list -R";
     }
