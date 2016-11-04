@@ -743,6 +743,14 @@ $opt_by_percent = lc $opt_by_percent;
 if (defined $opt_vcs) {
     if      ($opt_vcs eq "git") {
         $opt_vcs = "git ls-files";
+        my @submodules = invoke_generator('git submodule status');
+        foreach my $SM (@submodules) {
+            $SM =~ s/^\s+//;        # may have leading space
+            $SM =~ s/\(\S+\)\s*$//; # may end with something like (heads/master)
+			my ($checksum, $dir) = split(' ', $SM, 2);
+            $dir =~ s/\s+$//;
+            $Exclude_Dir{$dir} = 1;
+        }
     } elsif ($opt_vcs eq "svn") {
         $opt_vcs = "svn list -R";
     }
@@ -3656,7 +3664,7 @@ sub make_file_list {                         # {{{1
     @file_list = @new_file_list;
 
     foreach my $dir (@dir_list) {
-#print "make_file_list dir=$dir\n";
+#print "make_file_list dir=$dir  Exclude_Dir{$dir}=$Exclude_Dir{$dir}\n";
         # populates global variable @file_list
         if ($Exclude_Dir{$dir}) {
             $Ignored{$dir} = "--exclude-dir=$Exclude_Dir{$dir}";
@@ -3666,6 +3674,7 @@ sub make_file_list {                         # {{{1
               preprocess => \&find_preprocessor,
               follow     =>  $opt_follow_links }, $dir);
     }
+
     $nFiles_Found = scalar @file_list;
     printf "%8d text file%s.\n", plural_form($nFiles_Found) unless $opt_quiet;
     write_file($opt_found, sort @file_list) if $opt_found;
@@ -3724,7 +3733,7 @@ sub invoke_generator {                       # {{{1
         chomp;
         my $F = $_;
         print "VCS input:  $F\n" if $opt_v >= 2;
-        if (!@{$ra_user_inputs}) {
+        if (!defined $ra_user_inputs or !@{$ra_user_inputs}) {
             push @files, $F;
         } else {
             # is this file desired?
