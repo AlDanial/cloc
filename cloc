@@ -166,8 +166,10 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              See also --exclude-list-file.
    --vcs=<VCS>               Invoke a system call to <VCS> to obtain a list of
                              files to work on.  If <VCS> is 'git', then will
-                             invoke 'git ls-files'.  If <VCS> is 'svn' then
-                             will invoke 'svn list -R'.  The primary benefit
+                             invoke 'git ls-files' to get a file list and
+                             'git submodule status' to get a list of submodules
+                             whose contents will be ignored.  If <VCS> is 'svn'
+                             then will invoke 'svn list -R'.  The primary benefit
                              is that cloc will then skip files explicitly
                              excluded by the versioning tool in question,
                              ie, those in .gitignore or have the svn:ignore
