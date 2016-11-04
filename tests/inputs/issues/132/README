@@ -1,0 +1,20 @@
+Issue #132 (https://github.com/AlDanial/cloc/issues/132) needs
+a non-git controlled subdirectory called 'ignore_git' created 
+here.  Copy into this new directory the file hi.py from the 
+test inputs directory.
+
+    # if cwd is cloc/tests/inputs/issues/132/ then:
+    mkdir ignore_git
+    cp ../../hi.py ignore_git/
+
+    # if cwd is cloc/ then:
+    mkdir tests/inputs/issues/132/ignore_git
+    cp    tests/inputs/hi.py tests/inputs/issues/132/ignore_git/
+
+    # if cwd is cloc/Unix then:
+    mkdir ../tests/inputs/issues/132/ignore_git
+    cp    ../tests/inputs/hi.py ../tests/inputs/issues/132/ignore_git/
+
+Note:  The actions above are done automatically when running 
+'make test' in the cloc/Unix directory.
+    

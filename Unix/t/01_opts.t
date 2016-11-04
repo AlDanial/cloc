@@ -2,6 +2,7 @@
 use warnings;
 use strict;
 use Test::More;
+use File::Copy "cp";
 use Cwd;
 my @Tests = (
                 {
@@ -63,7 +64,48 @@ my @Tests = (
                     'args' => '--by-file --fullpath --not-match-d bar/bee issues/114',
                     'ref'  => '../tests/outputs/issues/114/T7.yaml',
                 },
+                {
+                    'name' => 'all files (github issue #132 T1)',
+                    'cd'   => '../tests/inputs',
+                    'args' => 'issues/132',
+                    'ref'  => '../tests/outputs/issues/132/T1.yaml',
+                },
+                {
+                    'name' => '--vcs git issues/132 (github issue #132 T2)',
+                    'cd'   => '../tests/inputs',
+                    'args' => '--vcs git issues/132',
+                    'ref'  => '../tests/outputs/issues/132/T2.yaml',
+                },
+                {
+                    'name' => '--vcs-git --exclude-dir ignore_dir (github issue #132 T3)',
+                    'cd'   => '../tests/inputs/issues/132',
+                    'args' => '--vcs git --exclude-dir ignore_dir .',
+                    'ref'  => '../tests/outputs/issues/132/T3.yaml',
+                },
+                {
+                    'name' => '--vcs git --fullpath --not-match-d issues/132/ignore_dir (github issue #132 T4)',
+                    'cd'   => '../tests/inputs',
+                    'args' => '--vcs git --fullpath --not-match-d issues/132/ignore_dir issues/132',
+                    'ref'  => '../tests/outputs/issues/132/T4.yaml',
+                },
+                {
+                    'name' => '--vcs git --match-f C-Ansi (github issue #132 T5)',
+                    'cd'   => '../tests/inputs',
+                    'args' => '--vcs git --match-f C-Ansi issues/132',
+                    'ref'  => '../tests/outputs/issues/132/T5.yaml',
+                },
+                {
+                    'name' => '--vcs git --match-f "\.c$" (github issue #132 T6)',
+                    'cd'   => '../tests/inputs',
+                    'args' => '--vcs git --match-f "\.c$" issues/132',
+                    'ref'  => '../tests/outputs/issues/132/T6.yaml',
+                },
             );
+
+# Create test input for issue #132 which needs data not in the git repo.
+# Silently fail if file/dir already exists.
+mkdir "../tests/inputs/issues/132/ignore_git";
+cp    "../tests/inputs/hi.py", "../tests/inputs/issues/132/ignore_git/";
 
 my $Verbose = 0;
 
@@ -84,7 +126,7 @@ foreach my $t (@Tests) {
 }
 done_testing();
 
-sub load_yaml {
+sub load_yaml {                             # {{{1
     my ($file, ) = @_;
     my %result = ();
     if (!-r $file) {
@@ -108,4 +150,4 @@ sub load_yaml {
     }
     close IN;
     return %result
-}
+} # 1}}}

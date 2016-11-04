@@ -956,7 +956,7 @@ if ($opt_sum_reports and $opt_diff) {
         my @list = read_list_file($opt_list_file);
         @results = combine_diffs(\@list);
     } elsif ($opt_vcs) { # read inputs from the VCS generator
-        my @list = invoke_generator($opt_vcs);
+        my @list = invoke_generator($opt_vcs, \@ARGV);
         @results = combine_diffs(\@list);
     } else { # get inputs from the command line
         @results = combine_diffs(\@ARGV);
@@ -976,7 +976,7 @@ if ($opt_sum_reports) {
             # read inputs from the list file
             my @list;
             if ($opt_vcs) {
-                @list = invoke_generator($opt_vcs);
+                @list = invoke_generator($opt_vcs, \@ARGV);
             } else {
                 @list = read_list_file($opt_list_file);
             }
@@ -1649,7 +1649,7 @@ my $fh = 0;
 if ($opt_list_file or $opt_vcs) {
     my @list;
     if ($opt_vcs) {
-        @list = invoke_generator($opt_vcs);
+        @list = invoke_generator($opt_vcs, \@ARGV);
     } else {
         @list = read_list_file($opt_list_file);
     }
@@ -3643,13 +3643,15 @@ sub make_file_list {                         # {{{1
     my @new_file_list = ();
     foreach my $File (@file_list) {
         my ($volume, $directories, $filename) = File::Spec->splitpath( $File );
+        my $ignore_this_file = 0;
         foreach my $Sub_Dir ( File::Spec->splitdir($directories) ) {
             if ($Exclude_Dir{$Sub_Dir}) {
-                $Ignored{$Sub_Dir} = "--exclude-dir=$Exclude_Dir{$Sub_Dir}";
-                next;
+                $Ignored{$Sub_Dir} = "($File) --exclude-dir=$Sub_Dir";
+                $ignore_this_file = 1;
+                last;
             }
         }
-        push @new_file_list, $File;
+        push @new_file_list, $File unless $ignore_this_file;
     }
     @file_list = @new_file_list;
 
@@ -3710,19 +3712,61 @@ die  "make_file_list($file) undef lang" unless defined $language;
     return $fh;   # handle to the file containing the list of files to process
 }  # 1}}}
 sub invoke_generator {                       # {{{1
-    my ($generator,) = @_;
+    my ($generator, $ra_user_inputs) = @_;
+    # If user provided file/directory inputs, only return
+    # generated files that are in user's request.
+    # Populates global variable %Ignored.
     print "-> invoke_generator($generator)\n" if $opt_v > 2;
     open(FH, "$generator |") or
         die "Failed to pipe $generator: $!";
     my @files = ();
     while(<FH>) {
         chomp;
-        print "VCS input:  $_\n" if $opt_v >= 2;
-        push @files, $_;
+        my $F = $_;
+        print "VCS input:  $F\n" if $opt_v >= 2;
+        if (!@{$ra_user_inputs}) {
+            push @files, $F;
+        } else {
+            # is this file desired?
+            my $want_this_one = 0;
+            foreach my $file_dir (@{$ra_user_inputs}) {
+                if (/^$file_dir/) {
+                    $want_this_one = 1;
+                    last;
+                }
+            }
+            push @files, $F if $want_this_one;
+        }
     }
     close(FH);
+    # apply match/not-match file/dir filters to the list so far
+    my @post_filter = ();
+    foreach my $F (@files) {
+        if ($opt_match_f) {
+            push @post_filter, $F if basename($F) =~ m{$opt_match_f};
+            next;
+        }
+        if ($opt_match_d) {
+            push @post_filter, $F if $F =~ m{$opt_match_d};
+            next;
+        }
+        if ($opt_not_match_d) {
+            if ($opt_fullpath and $F =~ m{$opt_not_match_d}) {
+                $Ignored{$F} = "--not-match-d=$opt_not_match_d";
+                next;
+            } elsif (basename($F) =~ m{$opt_not_match_d}) {
+                $Ignored{$F} = "--not-match-d (basename) =$opt_not_match_d";
+                next;
+            }
+        }
+        if ($opt_not_match_f) {
+            push @post_filter, $F unless basename($F) =~ m{$opt_not_match_f};
+            next;
+        }
+        push @post_filter, $F;
+    }
     print "<- invoke_generator\n" if $opt_v > 2;
-    return @files;
+    return @post_filter;
 } # 1}}}
 sub remove_duplicate_files {                 # {{{1
     my ($fh                   , # in
@@ -6576,65 +6620,66 @@ sub set_constants {                          # {{{1
     );
 # 1}}}
 %{$rh_Not_Code_Extension}    = (             # {{{1
-   '1'       => 1,  # Man pages (documentation):
-   '2'       => 1,
-   '3'       => 1,
-   '4'       => 1,
-   '5'       => 1,
-   '6'       => 1,
-   '7'       => 1,
-   '8'       => 1,
-   '9'       => 1,
-   'a'       => 1,  # Static object code.
-   'ad'      => 1,  # X application default resource file.
-   'afm'     => 1,  # font metrics
-   'arc'     => 1,  # arc(1) archive
-   'arj'     => 1,  # arj(1) archive
-   'au'      => 1,  # Audio sound filearj(1) archive
-   'bak'     => 1,  # Backup files - we only want to count the "real" files.
-   'bdf'     => 1,
-   'bmp'     => 1,
-   'bz2'     => 1,  # bzip2(1) compressed file
-   'csv'     => 1,  # comma separated values
-   'desktop' => 1,
-   'dic'     => 1,
-   'doc'     => 1,
-   'elc'     => 1,
-   'eps'     => 1,
-   'fig'     => 1,
-   'gif'     => 1,
-   'gz'      => 1,
-   'hdf'     => 1,  # hierarchical data format
-   'in'      => 1,  # Debatable.
-   'jpg'     => 1,
-   'kdelnk'  => 1,
-   'man'     => 1,
-   'mf'      => 1,
-   'mp3'     => 1,
-   'n'       => 1,
-   'o'       => 1,  # Object code is generated from source code.
-   'o.cmd'   => 1,  # not DOS Batch; Linux kernel compilation optimization file
-   'pbm'     => 1,
-   'pdf'     => 1,
-   'pfb'     => 1,
-   'png'     => 1,
-   'ps'      => 1,  # Postscript is _USUALLY_ generated automatically.
-   'sgm'     => 1,
-   'sgml'    => 1,
-   'so'      => 1,  # Dynamically-loaded object code.
-   'Tag'     => 1,
-   'text'    => 1,
-   'tfm'     => 1,
-   'tgz'     => 1,  # gzipped tarball
-   'tiff'    => 1,
-   'txt'     => 1,
-   'vf'      => 1,
-   'wav'     => 1,
-   'xbm'     => 1,
-   'xpm'     => 1,
-   'Y'       => 1,  # file compressed with "Yabba"
-   'Z'       => 1,  # file compressed with "compress"
-   'zip'     => 1,  # zip archive
+   '1'         => 1,  # Man pages (documentation):
+   '2'         => 1,
+   '3'         => 1,
+   '4'         => 1,
+   '5'         => 1,
+   '6'         => 1,
+   '7'         => 1,
+   '8'         => 1,
+   '9'         => 1,
+   'a'         => 1,  # Static object code.
+   'ad'        => 1,  # X application default resource file.
+   'afm'       => 1,  # font metrics
+   'arc'       => 1,  # arc(1) archive
+   'arj'       => 1,  # arj(1) archive
+   'au'        => 1,  # Audio sound filearj(1) archive
+   'bak'       => 1,  # Backup files - we only want to count the "real" files.
+   'bdf'       => 1,
+   'bmp'       => 1,
+   'bz2'       => 1,  # bzip2(1) compressed file
+   'csv'       => 1,  # comma separated values
+   'desktop'   => 1,
+   'dic'       => 1,
+   'doc'       => 1,
+   'elc'       => 1,
+   'eps'       => 1,
+   'fig'       => 1,
+   'gif'       => 1,
+   'gz'        => 1,
+   'hdf'       => 1,  # hierarchical data format
+   'in'        => 1,  # Debatable.
+   'jpg'       => 1,
+   'kdelnk'    => 1,
+   'man'       => 1,
+   'mf'        => 1,
+   'mp3'       => 1,
+   'n'         => 1,
+   'o'         => 1,  # Object code is generated from source code.
+   'o.cmd'     => 1,  # not DOS Batch; Linux kernel compilation optimization file
+   'pbm'       => 1,
+   'pdf'       => 1,
+   'pfb'       => 1,
+   'png'       => 1,
+   'ps'        => 1,  # Postscript is _USUALLY_ generated automatically.
+   'sgm'       => 1,
+   'sgml'      => 1,
+   'so'        => 1,  # Dynamically-loaded object code.
+   'Tag'       => 1,
+   'text'      => 1,
+   'tfm'       => 1,
+   'tgz'       => 1,  # gzipped tarball
+   'tiff'      => 1,
+   'txt'       => 1,
+   'vf'        => 1,
+   'wav'       => 1,
+   'xbm'       => 1,
+   'xpm'       => 1,
+   'Y'         => 1,  # file compressed with "Yabba"
+   'Z'         => 1,  # file compressed with "compress"
+   'zip'       => 1,  # zip archive
+   'gitignore' => 1,
 ); # 1}}}
 %{$rh_Not_Code_Filename}     = (             # {{{1
    'AUTHORS'     => 1,
