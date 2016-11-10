@@ -26,18 +26,18 @@ endif
 PACKAGE		= cloc
 
 DESTDIR		=
-prefix		= /usr
-exec_prefix	= $(prefix)
-man_prefix	= $(prefix)/share
+PREFIX		?= /usr
+exec_prefix	= $(PREFIX)
+man_prefix	= $(PREFIX)/share
 mandir		= $(man_prefix)/man
 bindir		= $(exec_prefix)/bin
-sharedir	= $(prefix)/share
+sharedir	= $(PREFIX)/share
 
 BINDIR		= $(DESTDIR)$(bindir)
 DOCDIR		= $(DESTDIR)$(sharedir)/doc
 LOCALEDIR	= $(DESTDIR)$(sharedir)/locale
 SHAREDIR	= $(DESTDIR)$(sharedir)/$(PACKAGE)
-LIBDIR		= $(DESTDIR)$(prefix)/lib/$(PACKAGE)
+LIBDIR		= $(DESTDIR)$(PREFIX)/lib/$(PACKAGE)
 SBINDIR		= $(DESTDIR)$(exec_prefix)/sbin
 ETCDIR		= $(DESTDIR)/etc/$(PACKAGE)
 
@@ -60,7 +60,7 @@ INSTALL_DATA	= $(INSTALL) -m 644
 
 all: man
 	@echo "Nothing to compile for a Perl script."
-	@echo "Try 'make help' or 'make -n DESTDIR= prefix=/usr/local install'"
+	@echo "Try 'make help' or 'make -n DESTDIR= PREFIX=/usr/local install'"
 
 # Rule: help - display Makefile rules
 help:
@@ -120,7 +120,7 @@ install: install-bin install-man
 # Rule: install-test - for Maintainer only
 install-test:
 	rm -rf tmp
-	$(MAKE) DESTDIR=$$(pwd)/tmp prefix=/usr install
+	$(MAKE) DESTDIR=$$(pwd)/tmp PREFIX=/usr install
 	find tmp | sort
 
 # Rule: dist - for Maintainer only, make distribution
