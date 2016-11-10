@@ -78,7 +78,7 @@ realclean: clean
 
 # Rule: man - Generate or update manual page
 man:
-	make -f pod2man.mk PACKAGE=$(PACKAGE) makeman
+	$(MAKE) -f pod2man.mk PACKAGE=$(PACKAGE) makeman
 
 # Rule: doc - Generate or update all documentation
 doc: man
@@ -120,7 +120,7 @@ install: install-bin install-man
 # Rule: install-test - for Maintainer only
 install-test:
 	rm -rf tmp
-	make DESTDIR=$$(pwd)/tmp prefix=/usr install
+	$(MAKE) DESTDIR=$$(pwd)/tmp prefix=/usr install
 	find tmp | sort
 
 # Rule: dist - for Maintainer only, make distribution
