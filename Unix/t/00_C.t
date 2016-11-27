@@ -154,6 +154,13 @@ my @Tests = (   {
                     'args' => '../tests/inputs/blur.glsl',
                 },
                 {
+                    'name' => 'Groovy',
+                    # issue #139; avoid 
+                    # Complex regular subexpression recursion limit (32766) exceeded 
+                    'ref'  => '../tests/outputs/regex_limit.gradle.yaml',
+                    'args' => '../tests/inputs/regex_limit.gradle',
+                },
+                {
                     'name' => 'HAML',
                     'ref'  => '../tests/outputs/just_stuff.haml.yaml',
                     'args' => '../tests/inputs/just_stuff.haml',

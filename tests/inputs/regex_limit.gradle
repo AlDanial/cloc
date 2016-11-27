@@ -1,0 +1,16 @@
+war {
+    from ('src') {
+        exclude 'com/**'
+        exclude 'org/**'
+        into '/WEB-INF/classes'
+    }
+}
+war.dependsOn longStringTypedHere
+eclipse {
+    wtp {
+        component {
+            resource sourcePath: "$WEBDIR_NAME", deployPath: "/"
+        }
+    }
+}
+tasks.eclipse.dependsOn longStringTypedHere
