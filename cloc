@@ -5961,7 +5961,8 @@ sub set_constants {                          # {{{1
                             ],
     'Groovy'             => [
                                 [ 'remove_inline'       , '//.*$'  ],
-                                [ 'remove_between_regex', '/\*\*', '$' ],
+                                # remove /* inside quoted strings:
+                                [ 'remove_between_regex', '(["\']).*?/\*.*?\g1', '$' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Handlebars'         => [

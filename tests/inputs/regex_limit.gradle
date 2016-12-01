@@ -2,6 +2,7 @@ war {
     from ('src') {
         exclude 'com/**'
         exclude 'org/**'
+        exclude "abc/*"
         into '/WEB-INF/classes'
     }
 }
