@@ -5,7 +5,9 @@ war {
         exclude "abc/*"
         into '/WEB-INF/classes'
     }
-}
+}  /* this
+is a comment 
+ spanning 1 code line and 2 comment lines */
 war.dependsOn longStringTypedHere
 eclipse {
     wtp {
