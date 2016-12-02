@@ -4839,6 +4839,42 @@ sub remove_between_regex   {                 # {{{1
     print "<- remove_between_regex\n" if $opt_v > 2;
     return @save_lines;
 } # 1}}}
+sub replace_between_regex  {                 # {{{1
+    my ($ra_lines, $start_RE, $end_RE, $replace_RE, ) = @_;
+    # Start and end regex's may be any length strings.
+
+    print "-> replace_between_regex(start=$start_RE, end=$end_RE)\n"
+        if $opt_v > 2;
+
+    my $all_lines = join("", @{$ra_lines});
+
+    my @save_lines = ();
+    my $in_comment = 0;
+    foreach (@{$ra_lines}) {
+
+        next if /^\s*$/;
+        s/${start_RE}.*?${end_RE}/${replace_RE}/eeg;  # strip one-line comments
+        next if /^\s*$/;
+        if ($in_comment) {
+            if (/$end_RE/) {
+                s/^.*?${end_RE}/${replace_RE}/ee;
+                $in_comment = 0;
+            }
+            next if $in_comment;
+        }
+        next if /^\s*$/;
+        $in_comment = 1 if /^(.*?)${start_RE}/; # $1 may be blank or code
+        next if defined $1 and $1 =~ /^\s*$/; # leading blank; all comment
+        if ($in_comment) {
+            # part code, part comment; strip the comment and keep the code
+            s/^(.*?)${start_RE}.*$/$1/;
+        }
+        push @save_lines, $_;
+    }
+
+    print "<- replace_between_regex\n" if $opt_v > 2;
+    return @save_lines;
+} # 1}}}
 sub remove_cobol_blanks {                    # {{{1
     # subroutines derived from SLOCCount
     my ($ra_lines, ) = @_;
@@ -5961,8 +5997,9 @@ sub set_constants {                          # {{{1
                             ],
     'Groovy'             => [
                                 [ 'remove_inline'       , '//.*$'  ],
-                                # remove /* inside quoted strings:
-                                [ 'remove_between_regex', '(["\']).*?/\*.*?\g1', '$' ],
+                                # separate /* inside quoted strings with two
+                                # concatenated strings split between / and *
+                                [ 'replace_between_regex', '(["\'])(.*?/)(\*.*?)\g1', '$' , '"$1$2$1 + $1$3$1"'],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Handlebars'         => [
@@ -6023,22 +6060,21 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C'      ],
                             ],
     'JavaServer Faces'   => [
-#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'Java'               => [
-#                               [ 'remove_matches'      , '^\s*//' ],
+                                # separate /* inside quoted strings with two
+                                # concatenated strings split between / and *
+                                [ 'replace_between_regex', '(["\'])(.*?/)(\*.*?)\g1', '$' , '"$1$2$1 + $1$3$1"'],
                                 [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'JavaScript'         => [
-#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'JSX'                => [
-#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
