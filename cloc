@@ -5516,6 +5516,7 @@ sub set_constants {                          # {{{1
             'php4'        => 'PHP'                   ,
             'php5'        => 'PHP'                   ,
             'php'         => 'PHP'                   ,
+            'phtml'       => 'PHP'                   ,
             'pig'         => 'Pig Latin'             ,
             'plh'         => 'Perl'                  ,
             'pl'          => 'Perl/Prolog'           ,
