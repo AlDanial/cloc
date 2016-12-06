@@ -5568,6 +5568,7 @@ sub set_constants {                          # {{{1
             'proto'       => 'Protocol Buffers'      ,
             'mat'         => 'Unity-Prefab'          ,
             'ps1'         => 'PowerShell'            ,
+            'psd1'        => 'PowerShell'            ,
             'psm1'        => 'PowerShell'            ,
             'R'           => 'R'                     ,
             'r'           => 'R'                     ,
