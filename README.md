@@ -5,7 +5,7 @@
 * * *
 cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.
 
-Latest release:  v1.71 (July 17, 2016)
+Latest release:  v1.70 (July 1, 2016)
 
 Hosted at http://cloc.sourceforge.net/ since August 2006, cloc began the
 transition to GitHub in September 2015.
@@ -56,7 +56,7 @@ used to refer to any of these.
 <pre>
 prompt> cloc hello.c
        1 text file.
-       1 unique file.                              
+       1 unique file.
        0 files ignored.
 
 https://github.com/AlDanial/cloc v 1.65  T=0.04 s (28.3 files/s, 340.0 lines/s)
@@ -71,7 +71,7 @@ C                                1              0              7              5
 <pre>
 prompt> cloc gcc-5.2.0/gcc/c
       16 text files.
-      15 unique files.                              
+      15 unique files.
        3 files ignored.
 
 https://github.com/AlDanial/cloc v 1.65  T=0.23 s (57.1 files/s, 188914.0 lines/s)
@@ -144,7 +144,7 @@ Damian Conway and Abigail's Perl module
 Sean M. Burke's Perl module
 [Win32::Autoglob](http://search.cpan.org/%7Esburke/Win32-Autoglob-1.01/Autoglob.pm),
 and Tye McQueen's Perl module
-[Algorithm::Diff](http://search.cpan.org/%7Etyemq/Algorithm-Diff-1.1902/lib/Algorithm/Diff.pm).  
+[Algorithm::Diff](http://search.cpan.org/%7Etyemq/Algorithm-Diff-1.1902/lib/Algorithm/Diff.pm).
 Language scale factors were derived from Mayes Consulting, LLC web site
 http://softwareestimator.com/IndustryData2.htm.
 [](1}}})
@@ -339,10 +339,10 @@ cloc is a command line program that takes file, directory, and/or
 archive names as inputs. Here's an example of running cloc against the
 Perl v5.22.0 source distribution:
 
-<pre>  
+<pre>
 prompt> cloc perl-5.22.0.tar.gz
     5605 text files.
-    5386 unique files.                                          
+    5386 unique files.
     2176 files ignored.
 
 https://github.com/AlDanial/cloc v 1.65  T=25.49 s (134.7 files/s, 51980.3 lines/s)
@@ -377,7 +377,7 @@ To run cloc on Windows computers, one must first open up a command (aka DOS) win
 <a name="Options"></a> []({{{1)
 # [Options &#9650;](#___top "click to go to top of document")
 
-<pre>  
+<pre>
 prompt> cloc
 
 Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
@@ -408,7 +408,7 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              process from FILE, which has one file/directory
                              name per line.  Only exact matches are counted;
                              relative path names will be resolved starting from
-                             the directory where cloc is invoked.  
+                             the directory where cloc is invoked.
                              See also --exclude-list-file.
    --vcs=VCS                 Invoke a system call to VCS to obtain a list of
                              files to work on.  If VCS is 'git', then will
@@ -439,7 +439,7 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
    --by-file                 Report results for every source file encountered.
    --by-file-by-lang         Report results for every source file encountered
                              in addition to reporting by language.
-   --count-and-diff SET1 SET2    
+   --count-and-diff SET1 SET2
                              First perform direct code counts of source file(s)
                              of SET1 and SET2 separately, then perform a diff
                              of these.  Inputs may be pairs of files, directories,
@@ -498,7 +498,7 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              cloc's memory requirement is roughly twenty times
                              larger than the largest file so running with
                              files larger than 100 MB on a computer with less
-                             than 2 GB of memory will cause problems.  
+                             than 2 GB of memory will cause problems.
                              Note:  this check does not apply to files
                              explicitly passed as command line arguments.
    --read-binary-files       Process binary files in addition to text files.
@@ -506,9 +506,9 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              attempted with text files that have embedded
                              binary data.
    --read-lang-def=FILE      Load new language processing filters from FILE
-                             and merge them with those already known to cloc.  
+                             and merge them with those already known to cloc.
                              If <file> defines a language cloc already knows
-                             about, cloc's definition will take precedence.  
+                             about, cloc's definition will take precedence.
                              Use --force-lang-def to over-ride cloc's
                              definitions (see also --write-lang-def ).
    --script-lang=LANG,S      Process all files that invoke S as a #!
@@ -579,7 +579,7 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              appear in FILE.  FILE should have one file
                              name per line.  Only exact matches are ignored;
                              relative path names will be resolved starting from
-                             the directory where cloc is invoked.  
+                             the directory where cloc is invoked.
                              See also --list-file.
    --include-lang=L1[,L2,]   Count only the given comma separated languages
                              L1, L2, L3, et cetera.
@@ -689,12 +689,11 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
    --yaml                    Write the results in YAML.
 
 </pre>
-
 [](1}}})
 <a name="Languages"></a> []({{{1)
 # [Recognized Languages &#9650;](#___top "click to go to top of document")
 
-<pre>  
+<pre>
 prompt> cloc --show-lang
 
 ABAP                       (abap)
@@ -845,7 +844,6 @@ Scala                      (scala)
 sed                        (sed)
 SKILL                      (il)
 SKILL++                    (ils)
-Slice                      (ice)
 Slim                       (slim)
 Smarty                     (smarty, tpl)
 Softbridge Basic           (sbl, SBL)
@@ -1001,7 +999,7 @@ prompt> tar zxf sqlite-amalgamation-3.5.6.tar.gz
 prompt> cd sqlite-3.5.6/
 prompt> cloc --strip-comments=nc sqlite.c
        1 text file.
-       1 unique file.                              
+       1 unique file.
 Wrote sqlite3.c.nc
        0 files ignored.
 
@@ -1163,7 +1161,7 @@ releases:
 <pre><i>prompt&gt;</i> cloc --diff Python-2.7.9.tgz Python-2.7.10.tar.xz
     4315 text files.
     4313 text files.s
-    2173 files ignored.                                         
+    2173 files ignored.
 
 4 errors:
 Diff error, exceeded timeout:  /tmp/8ToGAnB9Y1/Python-2.7.9/Mac/Modules/qt/_Qtmodule.c
@@ -1349,7 +1347,7 @@ Each language entry has four parts:
 * The language name starting in column 1.
 * One or more comment *filters* starting in column 5.
 * One or more filename extensions starting in column 5.
-* A 3rd generation scale factor starting in column 5.  
+* A 3rd generation scale factor starting in column 5.
   This entry must be provided
   but its value is not important
   unless you want to compare your language to a hypothetical
@@ -1708,12 +1706,12 @@ SUM:                         15556         900921        1284892        5831741
 Cloc can write results in the form of SQL table create and insert
 statements for use
 with relational database programs such as SQLite, MySQL,
-PostgreSQL, Oracle, or Microsoft SQL.  
+PostgreSQL, Oracle, or Microsoft SQL.
 Once the code count information is in a database,
 the information can be interrogated and displayed in interesting ways.
 
 A database created from cloc SQL output has two tables,
-**metadata** and **t**:  
+**metadata** and **t**:
 
 Table **metadata**:
 
@@ -1815,7 +1813,7 @@ prompt> sqlite3 code.db 'select project,file,nBlank+nComment+nCode as nL from t
                          where nL = (select max(nBlank+nComment+nCode) from t)' | ./sqlite_formatter
   <font color="darkgreen">
   -- Loading resources from ~/.sqliterc
-  Project File                                  nL     
+  Project File                                  nL
   _______ _____________________________________ ______
   sqlite  sqlite-amalgamation-3081101/sqlite3.c 161623
   </font>
@@ -1831,7 +1829,7 @@ If the "Project File" line doesn't appear, add `.header on` to your
 prompt> sqlite3 code.db 'select project,file,nBlank+nComment+nCode as nL from t
                          where nL = (select max(nBlank+nComment+nCode) from t)' | sqlite_formatter
 
-Project File                                  nL     
+Project File                                  nL
 _______ _____________________________________ ______
 sqlite  sqlite-amalgamation-3081101/sqlite3.c 161623
 </pre>
@@ -1842,7 +1840,7 @@ sqlite  sqlite-amalgamation-3081101/sqlite3.c 161623
 prompt> sqlite3 code.db 'select project,file,max(nBlank+nComment+nCode) as nL from t
                           group by project order by nL;' | sqlite_formatter
 
-Project    File                                                             nL     
+Project    File                                                             nL
 __________ ________________________________________________________________ ______
 python     Python-2.7.10/Mac/Modules/qt/_Qtmodule.c                          28091
 postgresql postgresql-9.4.4/src/interfaces/ecpg/preproc/preproc.c            54623
@@ -1857,7 +1855,7 @@ sqlite     sqlite-amalgamation-3081101/sqlite3.c                            1616
 prompt> sqlite3 code.db 'select project,file,max(nCode) as nL from t
                          group by project order by nL desc;' | sqlite_formatter
 
-Project    File                                                             nL     
+Project    File                                                             nL
 __________ ________________________________________________________________ ______
 perl       perl-5.22.0/cpan/Locale-Codes/lib/Locale/Codes/Language_Codes.pm 100735
 sqlite     sqlite-amalgamation-3081101/sqlite3.c                             97469
@@ -1874,67 +1872,67 @@ prompt> sqlite3 code.db 'select project, file, nCode, nComment,
                          where language="C" and nCode > 300 and
                          comment_ratio < 1 order by comment_ratio;' | sqlite_formatter
 
-Project    File                                                                                            nCode nComment comment_ratio      
+Project    File                                                                                            nCode nComment comment_ratio
 __________ _______________________________________________________________________________________________ _____ ________ __________________
 mariadb    server-10.1/storage/mroonga/vendor/groonga/lib/nfkc.c                                           80221       14 0.0174487443135789
 python     Python-2.7.10/Python/graminit.c                                                                  2175        1 0.0459558823529412
 postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_turkish.c                            2095        1 0.0477099236641221
 postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_french.c                             1211        1 0.0825082508250825
 postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_french.c                        1201        1 0.0831946755407654
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_hungarian.c                          1182        1 0.084530853761623  
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_hungarian.c                          1182        1 0.084530853761623
 postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_hungarian.c                     1178        1 0.0848176420695505
 mariadb    server-10.1/strings/ctype-eucjpms.c                                                             67466       60 0.0888546633889169
 postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_english.c                            1072        1 0.0931966449207828
 postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_english.c                       1064        1 0.0938967136150235
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_spanish.c                            1053        1 0.094876660341556  
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_spanish.c                            1053        1 0.094876660341556
 postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_spanish.c                       1049        1 0.0952380952380952
 postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_italian.c                            1031        1 0.0968992248062016
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_italian.c                       1023        1 0.09765625         
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_portuguese.c                          981        1 0.10183299389002   
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_portuguese.c                     975        1 0.102459016393443  
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_romanian.c                            967        1 0.103305785123967  
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_2_romanian.c                       961        1 0.103950103950104  
-mariadb    server-10.1/strings/ctype-ujis.c                                                                67177       79 0.117461639110265  
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_finnish.c                             720        1 0.13869625520111   
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_porter.c                              717        1 0.139275766016713  
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_finnish.c                        714        1 0.13986013986014   
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_porter.c                         711        1 0.140449438202247  
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_KOI8_R_russian.c                            660        1 0.151285930408472  
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_russian.c                             654        1 0.152671755725191  
-python     Python-2.7.10/Mac/Modules/qt/_Qtmodule.c                                                        26705       42 0.157026956294164  
-python     Python-2.7.10/Mac/Modules/icn/_Icnmodule.c                                                       1521        3 0.196850393700787  
-mariadb    server-10.1/strings/ctype-extra.c                                                                8282       18 0.216867469879518  
-postgresql postgresql-9.4.4/src/bin/psql/sql_help.c                                                         3576        8 0.223214285714286  
-mariadb    server-10.1/strings/ctype-sjis.c                                                                34006       86 0.252258594391646  
-python     Python-2.7.10/Python/Python-ast.c                                                                6554       17 0.258712524729874  
-mariadb    server-10.1/strings/ctype-cp932.c                                                               34609       92 0.265122042592432  
-perl       perl-5.22.0/keywords.c                                                                           2815        8 0.283386468296139  
-python     Python-2.7.10/Mac/Modules/menu/_Menumodule.c                                                     3263       10 0.305530094714329  
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_dutch.c                               596        2 0.334448160535117  
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_dutch.c                          586        2 0.340136054421769  
-mariadb    server-10.1/strings/ctype-gbk.c                                                                 10684       38 0.354411490393583  
-python     Python-2.7.10/Mac/Modules/qd/_Qdmodule.c                                                         6694       24 0.357249181303959  
-python     Python-2.7.10/Mac/Modules/win/_Winmodule.c                                                       3056       11 0.358656667753505  
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_german.c                              476        2 0.418410041841004  
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_german.c                         470        2 0.423728813559322  
-mariadb    server-10.1/strings/ctype-euc_kr.c                                                               9956       44 0.44               
-postgresql postgresql-9.4.4/src/backend/utils/fmgrtab.c                                                     4815       23 0.475403059115337  
-python     Python-2.7.10/Mac/Modules/ctl/_Ctlmodule.c                                                       5442       28 0.511882998171846  
-python     Python-2.7.10/Mac/Modules/ae/_AEmodule.c                                                         1347        7 0.51698670605613   
-python     Python-2.7.10/Mac/Modules/app/_Appmodule.c                                                       1712        9 0.52295177222545   
-mariadb    server-10.1/strings/ctype-gb2312.c                                                               6377       35 0.54585152838428   
-mariadb    server-10.1/storage/tokudb/ft-index/third_party/xz-4.999.9beta/src/liblzma/lzma/fastpos_table.c   516        3 0.578034682080925  
-python     Python-2.7.10/Mac/Modules/evt/_Evtmodule.c                                                        504        3 0.591715976331361  
-python     Python-2.7.10/Modules/expat/xmlrole.c                                                            1256        8 0.632911392405063  
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_danish.c                              312        2 0.636942675159236  
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_danish.c                         310        2 0.641025641025641  
-python     Python-2.7.10/Mac/Modules/res/_Resmodule.c                                                       1621       12 0.734843845682792  
-python     Python-2.7.10/Mac/Modules/drag/_Dragmodule.c                                                     1046        8 0.759013282732448  
-python     Python-2.7.10/Mac/Modules/list/_Listmodule.c                                                     1021        8 0.777453838678329  
-python     Python-2.7.10/Mac/Modules/te/_TEmodule.c                                                         1198       10 0.827814569536424  
-python     Python-2.7.10/Mac/Modules/cg/_CGmodule.c                                                         1190       10 0.833333333333333  
-python     Python-2.7.10/Modules/clmodule.c                                                                 2379       23 0.957535387177352  
-python     Python-2.7.10/Mac/Modules/folder/_Foldermodule.c                                                  306        3 0.970873786407767  
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_italian.c                       1023        1 0.09765625
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_portuguese.c                          981        1 0.10183299389002
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_portuguese.c                     975        1 0.102459016393443
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_romanian.c                            967        1 0.103305785123967
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_2_romanian.c                       961        1 0.103950103950104
+mariadb    server-10.1/strings/ctype-ujis.c                                                                67177       79 0.117461639110265
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_finnish.c                             720        1 0.13869625520111
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_porter.c                              717        1 0.139275766016713
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_finnish.c                        714        1 0.13986013986014
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_porter.c                         711        1 0.140449438202247
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_KOI8_R_russian.c                            660        1 0.151285930408472
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_russian.c                             654        1 0.152671755725191
+python     Python-2.7.10/Mac/Modules/qt/_Qtmodule.c                                                        26705       42 0.157026956294164
+python     Python-2.7.10/Mac/Modules/icn/_Icnmodule.c                                                       1521        3 0.196850393700787
+mariadb    server-10.1/strings/ctype-extra.c                                                                8282       18 0.216867469879518
+postgresql postgresql-9.4.4/src/bin/psql/sql_help.c                                                         3576        8 0.223214285714286
+mariadb    server-10.1/strings/ctype-sjis.c                                                                34006       86 0.252258594391646
+python     Python-2.7.10/Python/Python-ast.c                                                                6554       17 0.258712524729874
+mariadb    server-10.1/strings/ctype-cp932.c                                                               34609       92 0.265122042592432
+perl       perl-5.22.0/keywords.c                                                                           2815        8 0.283386468296139
+python     Python-2.7.10/Mac/Modules/menu/_Menumodule.c                                                     3263       10 0.305530094714329
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_dutch.c                               596        2 0.334448160535117
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_dutch.c                          586        2 0.340136054421769
+mariadb    server-10.1/strings/ctype-gbk.c                                                                 10684       38 0.354411490393583
+python     Python-2.7.10/Mac/Modules/qd/_Qdmodule.c                                                         6694       24 0.357249181303959
+python     Python-2.7.10/Mac/Modules/win/_Winmodule.c                                                       3056       11 0.358656667753505
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_german.c                              476        2 0.418410041841004
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_german.c                         470        2 0.423728813559322
+mariadb    server-10.1/strings/ctype-euc_kr.c                                                               9956       44 0.44
+postgresql postgresql-9.4.4/src/backend/utils/fmgrtab.c                                                     4815       23 0.475403059115337
+python     Python-2.7.10/Mac/Modules/ctl/_Ctlmodule.c                                                       5442       28 0.511882998171846
+python     Python-2.7.10/Mac/Modules/ae/_AEmodule.c                                                         1347        7 0.51698670605613
+python     Python-2.7.10/Mac/Modules/app/_Appmodule.c                                                       1712        9 0.52295177222545
+mariadb    server-10.1/strings/ctype-gb2312.c                                                               6377       35 0.54585152838428
+mariadb    server-10.1/storage/tokudb/ft-index/third_party/xz-4.999.9beta/src/liblzma/lzma/fastpos_table.c   516        3 0.578034682080925
+python     Python-2.7.10/Mac/Modules/evt/_Evtmodule.c                                                        504        3 0.591715976331361
+python     Python-2.7.10/Modules/expat/xmlrole.c                                                            1256        8 0.632911392405063
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_danish.c                              312        2 0.636942675159236
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_danish.c                         310        2 0.641025641025641
+python     Python-2.7.10/Mac/Modules/res/_Resmodule.c                                                       1621       12 0.734843845682792
+python     Python-2.7.10/Mac/Modules/drag/_Dragmodule.c                                                     1046        8 0.759013282732448
+python     Python-2.7.10/Mac/Modules/list/_Listmodule.c                                                     1021        8 0.777453838678329
+python     Python-2.7.10/Mac/Modules/te/_TEmodule.c                                                         1198       10 0.827814569536424
+python     Python-2.7.10/Mac/Modules/cg/_CGmodule.c                                                         1190       10 0.833333333333333
+python     Python-2.7.10/Modules/clmodule.c                                                                 2379       23 0.957535387177352
+python     Python-2.7.10/Mac/Modules/folder/_Foldermodule.c                                                  306        3 0.970873786407767
 </pre>
 
 **What are the ten longest files (based on code lines) that have no comments at all?  Exclude header, .html, and YAML files.**
