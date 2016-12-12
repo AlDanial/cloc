@@ -5434,6 +5434,7 @@ sub set_constants {                          # {{{1
             'htm'         => 'HTML'                  ,
             'html'        => 'HTML'                  ,
             'i3'          => 'Modula3'               ,
+            'ice'         => 'Slice'                 ,
             'icl'         => 'Clean'                 ,
             'dcl'         => 'Clean'                 ,
             'idl'         => 'IDL'                   ,
@@ -6357,6 +6358,12 @@ sub set_constants {                          # {{{1
 #                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
                                 [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'Slice'             => [
+                                [ 'call_regexp_common'  , 'C++'    ],
+#                               [ 'remove_matches'      , '^\s*//' ],
+                                [ 'remove_inline'       , '//.*$'  ],
+#                               [ 'remove_between_general', '/*', '*/' ],
                             ],
     'Slim'               => [
                                 [ 'remove_slim_block'   ,          ],
@@ -7298,6 +7305,7 @@ sub set_constants {                          # {{{1
     'SKILL'                        =>   2.00,
     'SKILL++'                      =>   2.00,
     'slogan'                       =>   0.98,
+    'Slice'                        =>   1.50,
     'smalltalk'                    =>   2.50,
     'smalltalk 286'                =>   3.81,
     'smalltalk 80'                 =>   3.81,
