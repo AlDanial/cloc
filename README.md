@@ -5,7 +5,7 @@
 * * *
 cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.
 
-Latest release:  v1.70 (July 1, 2016)
+Latest release:  v1.71 (July 17, 2016)
 
 Hosted at http://cloc.sourceforge.net/ since August 2006, cloc began the
 transition to GitHub in September 2015.
@@ -46,7 +46,7 @@ Step 1:  Download cloc (several methods, see below).
 Step 2:  Open a terminal (`cmd.exe` on Windows).
 
 Step 3:  Invoke cloc to count your source files, directories, or archives.
-The executable name differs depending on whether you use the 
+The executable name differs depending on whether you use the
 development source version (`cloc`), source for a
 released version (`cloc-1.70.pl`) or a Windows executable
 (`cloc-1.70.exe`).  On this page, `cloc` is the generic term
@@ -109,11 +109,11 @@ SUM:                             2            725           1103           8713
 [Translations:
 [Arabic](http://www.garciniacambogiareviews.ca/translations/aldanial-cloc/),
 [Armenian](http://students.studybay.com/?p=34),
-[Belarussian](http://www.besteonderdelen.nl/blog/?p=5426), 
-[Bulgarian](http://www.ajoft.com/wpaper/aj-cloc.html), 
-[]( [Polish](http://www.trevister.com/blog/cloc.html), ) 
-[Russian](http://someblogscience.com/cloc.html), 
-[Serbo-Croatian](http://science.webhostinggeeks.com/cloc), 
+[Belarussian](http://www.besteonderdelen.nl/blog/?p=5426),
+[Bulgarian](http://www.ajoft.com/wpaper/aj-cloc.html),
+[]( [Polish](http://www.trevister.com/blog/cloc.html), )
+[Russian](http://someblogscience.com/cloc.html),
+[Serbo-Croatian](http://science.webhostinggeeks.com/cloc),
 [Romanian](http://www.bildelestore.dk/blog/cloc-contele-de-linii-de-cod/),
 [Slovakian](http://newknowledgez.com/cloc.html),
 [Tamil](http://healthcareadministrationdegree.co/socialwork/aldanial-cloc/),
@@ -137,21 +137,21 @@ installed. Alternatively one can use the Windows binary of cloc
 generated with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-
 1.019/lib/pp.pm) to run on Windows computers that have neither Perl nor Cygwin.)
 
-cloc contains code from David Wheeler's 
-[SLOCCount](http://www.dwheeler.com/sloccount/), 
-Damian Conway and Abigail's Perl module 
-[Regexp::Common](http://search.cpan.org/%7Eabigail/Regexp-Common-2.120/lib/Regexp/Common.pm), 
-Sean M. Burke's Perl module 
-[Win32::Autoglob](http://search.cpan.org/%7Esburke/Win32-Autoglob-1.01/Autoglob.pm), 
-and Tye McQueen's Perl module 
+cloc contains code from David Wheeler's
+[SLOCCount](http://www.dwheeler.com/sloccount/),
+Damian Conway and Abigail's Perl module
+[Regexp::Common](http://search.cpan.org/%7Eabigail/Regexp-Common-2.120/lib/Regexp/Common.pm),
+Sean M. Burke's Perl module
+[Win32::Autoglob](http://search.cpan.org/%7Esburke/Win32-Autoglob-1.01/Autoglob.pm),
+and Tye McQueen's Perl module
 [Algorithm::Diff](http://search.cpan.org/%7Etyemq/Algorithm-Diff-1.1902/lib/Algorithm/Diff.pm).  
-Language scale factors were derived from Mayes Consulting, LLC web site 
+Language scale factors were derived from Mayes Consulting, LLC web site
 http://softwareestimator.com/IndustryData2.htm.
 [](1}}})
 <a name="apt-get"></a> []({{{1)
 ## Install via package manager
 Depending your operating system, one of these installation methods may work for you:
- 
+
     npm install -g cloc                    # https://www.npmjs.com/package/cloc
     sudo apt-get install cloc              # Debian, Ubuntu
     sudo yum install cloc                  # Red Hat, Fedora
@@ -179,10 +179,10 @@ https://github.com/AlDanial/cloc/raw/master/cloc
 # [License &#9650;](#___top "click to go to top of document")
 
 cloc is licensed under the [GNU General Public License, v 2]
-(http://www.gnu.org/licenses/gpl-2.0.html), excluding portions which 
+(http://www.gnu.org/licenses/gpl-2.0.html), excluding portions which
 are copied from other sources. Code
 copied from the Regexp::Common, Win32::Autoglob, and Algorithm::Diff
-Perl modules is subject to the 
+Perl modules is subject to the
 [Artistic License](http://www.opensource.org/licenses/artistic-license-2.0.php).
 [](1}}})
 <a name="why_use"></a> []({{{1)
@@ -244,12 +244,12 @@ and Digest::MD5 installed locally.
 <a name="building_exe"></a> []({{{1)
 # [Building a Windows Executable &#9650;](#___top "click to go to top of document")
 
-The latest Windows download, <tt>cloc-1.70.exe</tt>, was 
-built with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm) 
-and Strawberry Perl 5.24.0.1 
+The latest Windows download, <tt>cloc-1.70.exe</tt>, was
+built with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm)
+and Strawberry Perl 5.24.0.1
 on an Amazon Web Services t2.micro instance running 32 bit Microsoft Windows Server 2008.
 
-The <tt>cloc-1.66.exe</tt> executable was built with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm) 
+The <tt>cloc-1.66.exe</tt> executable was built with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm)
 on a 32 bit Windows 7 VirtualBox image
 pulled from https://dev.windows.com/en-us/microsoft-edge/tools/vms/linux/
 and running on an Ubuntu 15.10 host.
@@ -263,7 +263,7 @@ before passing it to perl2exe; lines 87 and 88 were uncommented:
 
 <pre>
 <font color="gray">85</font>  # Uncomment next two lines when building Windows executable with perl2exe
-<font color="gray">86</font>  # or if running on a system that already has Regexp::Common. 
+<font color="gray">86</font>  # or if running on a system that already has Regexp::Common.
 <font color="gray">87</font>  <font color="red">#use Regexp::Common;</font>
 <font color="gray">88</font>  <font color="red">#$HAVE_Rexexp_Common = 1;</font>
 </pre>
@@ -276,28 +276,28 @@ run the cloc source file.
 On centrally-managed corporate Windows machines, however, this
 this may be difficult or impossible.
 
-The Windows executable distributed with cloc 
+The Windows executable distributed with cloc
 is provided as
 a best-effort of a virus and malware-free `.exe`.
 You are encouraged to run your own virus scanners against the
-executable and also check sites such 
+executable and also check sites such
 https://www.virustotal.com/ .
 The entries for cloc 1.66 and 1.68 are:
 
 cloc 1.68 exe:
 https://www.virustotal.com/en/file/c484fc58615fc3b0d5569b9063ec1532980281c3155e4a19099b11ef1c24443b/analysis/
 
-cloc 1.66 exe: 
+cloc 1.66 exe:
 https://www.virustotal.com/en/file/54d6662e59b04be793dd10fa5e5edf7747cf0c0cc32f71eb67a3cf8e7a171d81/analysis/1453601367/
 
 #### Why is the Windows executable so large?
 
 Windows executables of cloc versions 1.60 and earlier, created with
 perl2exe as noted above, are about 1.6 MB, while versions 1.62 and 1.54, created
-with `PAR::Packer`, are 11 MB. 
+with `PAR::Packer`, are 11 MB.
 Version 1.66, built with a newer version of `PAR::Packer`, is about 5.5 MB.
 Why are the `PAR::Packer`, executables so
-much larger than those built with perl2exe? My theory is that perl2exe 
+much larger than those built with perl2exe? My theory is that perl2exe
 uses smarter tree pruning logic
 than `PAR::Packer`, but that's pure speculation.
 
@@ -308,7 +308,7 @@ It includes a utility, `perlapp`, which can build stand-alone
 Windows, Mac, and Linux binaries of Perl source code.
 
 [perl2exe](http://www.indigostar.com/perl2exe.php)
-will also do the trick.  If you do have `perl2exe, modify lines 
+will also do the trick.  If you do have `perl2exe, modify lines
 84-87 in the cloc source code for a minor code
 modification that is necessary to make a cloc Windows executable.
 
@@ -327,7 +327,7 @@ C:> cpan -i PAR::Packer
 C:> pp -M Digest::MD5 -c -x -o cloc-1.68.exe cloc
 </pre>
 
-A variation on the instructions above is if you installed the portable 
+A variation on the instructions above is if you installed the portable
 version of Strawberry Perl, you will need to run `portableshell.bat` first
 to properly set up your environment.
 
@@ -407,7 +407,7 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
    --list-file=FILE          Take the list of file and/or directory names to
                              process from FILE, which has one file/directory
                              name per line.  Only exact matches are counted;
-                             relative path names will be resolved starting from 
+                             relative path names will be resolved starting from
                              the directory where cloc is invoked.  
                              See also --exclude-list-file.
    --vcs=VCS                 Invoke a system call to VCS to obtain a list of
@@ -441,8 +441,8 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              in addition to reporting by language.
    --count-and-diff SET1 SET2    
                              First perform direct code counts of source file(s)
-                             of SET1 and SET2 separately, then perform a diff 
-                             of these.  Inputs may be pairs of files, directories, 
+                             of SET1 and SET2 separately, then perform a diff
+                             of these.  Inputs may be pairs of files, directories,
                              or archives.  See also --diff, --diff-alignment,
                              --diff-timeout, --ignore-case, --ignore-whitespace.
    --diff SET1 SET2          Compute differences in code and comments between
@@ -450,11 +450,11 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              may be pairs of files, directories, or archives.
                              Use --diff-alignment to generate a list showing
                              which file pairs where compared.  See also
-                             --count-and-diff, --diff-alignment, --diff-timeout, 
+                             --count-and-diff, --diff-alignment, --diff-timeout,
                              --ignore-case, --ignore-whitespace.
    --diff-timeout N          Ignore files which take more than N seconds
                              to process.  Default is 10 seconds.
-                             (Large files with many repeated lines can cause 
+                             (Large files with many repeated lines can cause
                              Algorithm::Diff::sdiff() to take hours.)
    --follow-links            [Unix only] Follow symbolic links to directories
                              (sym links to files are always followed).
@@ -473,14 +473,14 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              See also --script-lang, --lang-no-ext.
    --force-lang-def=FILE     Load language processing filters from FILE,
                              then use these filters instead of the built-in
-                             filters.  Note:  languages which map to the same 
+                             filters.  Note:  languages which map to the same
                              file extension (for example:
-                             MATLAB/Objective C/MUMPS/Mercury;  Pascal/PHP; 
-                             Lisp/OpenCL; Lisp/Julia; Perl/Prolog) will be 
-                             ignored as these require additional processing 
-                             that is not expressed in language definition 
-                             files.  Use --read-lang-def to define new 
-                             language filters without replacing built-in 
+                             MATLAB/Objective C/MUMPS/Mercury;  Pascal/PHP;
+                             Lisp/OpenCL; Lisp/Julia; Perl/Prolog) will be
+                             ignored as these require additional processing
+                             that is not expressed in language definition
+                             files.  Use --read-lang-def to define new
+                             language filters without replacing built-in
                              filters (see also --write-lang-def).
    --ignore-whitespace       Ignore horizontal white space when comparing files
                              with --diff.  See also --ignore-case.
@@ -495,11 +495,11 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              --force-lang, --script-lang.
    --max-file-size=MB        Skip files larger than MB megabytes when
                              traversing directories.  By default, MB=100.
-                             cloc's memory requirement is roughly twenty times 
-                             larger than the largest file so running with 
-                             files larger than 100 MB on a computer with less 
+                             cloc's memory requirement is roughly twenty times
+                             larger than the largest file so running with
+                             files larger than 100 MB on a computer with less
                              than 2 GB of memory will cause problems.  
-                             Note:  this check does not apply to files 
+                             Note:  this check does not apply to files
                              explicitly passed as command line arguments.
    --read-binary-files       Process binary files in addition to text files.
                              This is usually a bad idea and should only be
@@ -507,9 +507,9 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              binary data.
    --read-lang-def=FILE      Load new language processing filters from FILE
                              and merge them with those already known to cloc.  
-                             If <file> defines a language cloc already knows 
+                             If <file> defines a language cloc already knows
                              about, cloc's definition will take precedence.  
-                             Use --force-lang-def to over-ride cloc's 
+                             Use --force-lang-def to over-ride cloc's
                              definitions (see also --write-lang-def ).
    --script-lang=LANG,S      Process all files that invoke S as a #!
                              scripting language with the counter for language
@@ -541,7 +541,7 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
    --original-dir            [Only effective in combination with
                              --strip-comments]  Write the stripped files
                              to the same directory as the original files.
-                                
+
    --sum-reports             Input arguments are report files previously
                              created with the --report-file option.  Makes
                              a cumulative set of results containing the
@@ -578,7 +578,7 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
    --exclude-list-file=FILE  Ignore files and/or directories whose names
                              appear in FILE.  FILE should have one file
                              name per line.  Only exact matches are ignored;
-                             relative path names will be resolved starting from 
+                             relative path names will be resolved starting from
                              the directory where cloc is invoked.  
                              See also --list-file.
    --include-lang=L1[,L2,]   Count only the given comma separated languages
@@ -602,14 +602,14 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              the code will skip files that end with .zip,
                              .tar, .tar.gz, .tar.Z, .tar.bz2, .tar.xz, and
                              .tar.7z.
-                             
+
    --skip-win-hidden         On Windows, ignore hidden files.
 
  Debug Options
    --categorized=FILE        Save names of categorized files to FILE.
    --counted=FILE            Save names of processed source files to FILE.
    --explain=LANG            Print the filters used to remove comments for
-                             language LANG and exit.  In some cases the 
+                             language LANG and exit.  In some cases the
                              filters refer to Perl subroutines rather than
                              regular expressions.  An examination of the
                              source code may be needed for further explanation.
@@ -621,7 +621,7 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
    --found=FILE              Save names of every file found to FILE.
    --ignored=FILE            Save names of ignored files and the reason they
                              were ignored to FILE.
-   --print-filter-stages     Print processed source code before and after 
+   --print-filter-stages     Print processed source code before and after
                              each filter is applied.
    --show-ext[=EXT]          Print information about all known (or just the
                              given) file extensions and exit.
@@ -641,16 +641,16 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              (This option can cause report summation to fail
                              if some reports were produced with this option
                              while others were produced without it.)
-   --by-percent  X           Instead of comment and blank line counts, show 
-                             these values as percentages based on the value 
+   --by-percent  X           Instead of comment and blank line counts, show
+                             these values as percentages based on the value
                              of X in the denominator:
                                 X = 'c'   -> # lines of code
                                 X = 'cm'  -> # lines of code + comments
                                 X = 'cb'  -> # lines of code + blanks
                                 X = 'cmb' -> # lines of code + comments + blanks
                              For example, if using method 'c' and your code
-                             has twice as many lines of comments as lines 
-                             of code, the value in the comment column will 
+                             has twice as many lines of comments as lines
+                             of code, the value in the comment column will
                              be 200%.  The code column remains a line count.
    --csv                     Write the results as comma separated values.
    --csv-delimiter=C         Use the character C as the delimiter for comma
@@ -676,7 +676,7 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
    --sql-project=NAME        Use NAME as the project identifier for the
                              current run.  Only valid with the --sql option.
    --sql-style=STYLE         Write SQL statements in the given style instead
-                             of the default SQLite format.  Currently, the 
+                             of the default SQLite format.  Currently, the
                              only style option is Oracle.
    --sum-one                 For plain text reports, show the SUM: output line
                              even if only one input file is processed.
@@ -689,6 +689,7 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
    --yaml                    Write the results in YAML.
 
 </pre>
+
 [](1}}})
 <a name="Languages"></a> []({{{1)
 # [Recognized Languages &#9650;](#___top "click to go to top of document")
@@ -844,6 +845,7 @@ Scala                      (scala)
 sed                        (sed)
 SKILL                      (il)
 SKILL++                    (ils)
+Slice                      (ice)
 Slim                       (slim)
 Smarty                     (smarty, tpl)
 Softbridge Basic           (sbl, SBL)
@@ -950,8 +952,8 @@ A more detailed description:
     included in the report.) See also the `--ignored=` switch to see which
     files were ignored and why.
 4.  Scan the candidate file list for file extensions which cloc
-    associates with programming languages (see the `--show-lang` and 
-    `--show-ext` options). Files which match are classified as 
+    associates with programming languages (see the `--show-lang` and
+    `--show-ext` options). Files which match are classified as
     containing source
     code for that language. Each file without an extensions is opened
     and its first line read to see if it is a Unix shell script
@@ -970,9 +972,9 @@ A more detailed description:
         optional whitespace followed by // and (2) remove text between
         /* and */) Apply each filter to the code to remove comments.
         Count the left over lines (= L<sub>code</sub>).
-    5.  Save the counts for this language: 
-        * blank lines = L<sub>original</sub> - L<sub>non_blank</sub> 
-        * comment lines = L<sub>non_blank</sub> - L<sub>code</sub> 
+    5.  Save the counts for this language:
+        * blank lines = L<sub>original</sub> - L<sub>non_blank</sub>
+        * comment lines = L<sub>non_blank</sub> - L<sub>code</sub>
         * code lines = L<sub>code</sub>
 
 The options modify the algorithm slightly. The `--read-lang-def` option
@@ -987,7 +989,7 @@ code for this option is processed between Steps 2 and 3.
 ##  [Remove Comments from Source Code &#9650;](#___top "click to go to top of document")
 
 How can you tell if cloc correctly identifies comments? One way to
-convince yourself cloc is doing the right thing is to use its 
+convince yourself cloc is doing the right thing is to use its
 `--strip-comments` option to remove comments and blank lines from files, then
 compare the stripped-down files to originals.
 
@@ -995,7 +997,7 @@ Let's try this out with the SQLite amalgamation, a C file containing all
 code needed to build the SQLite library along with a header file:
 
 <pre>
-prompt> tar zxf sqlite-amalgamation-3.5.6.tar.gz 
+prompt> tar zxf sqlite-amalgamation-3.5.6.tar.gz
 prompt> cd sqlite-3.5.6/
 prompt> cloc --strip-comments=nc sqlite.c
        1 text file.
@@ -1016,7 +1018,7 @@ The extension argument given to --strip-comments is arbitrary; here nc was used 
 cloc removed over 31,000 lines from the file:
 
 <pre>
-prompt> wc -l sqlite3.c sqlite3.c.nc 
+prompt> wc -l sqlite3.c sqlite3.c.nc
   82895 sqlite3.c
   50901 sqlite3.c.nc
  133796 total
@@ -1047,7 +1049,7 @@ prompt> md5sum sqlite3.o
 cce5f1a2ea27c7e44b2e1047e2588b49  sqlite3.o
 </pre>
 
-cloc removed over 31,000 lines of comments and blanks but did not modify the source code in any significant way since the resulting object file matches the original. 
+cloc removed over 31,000 lines of comments and blanks but did not modify the source code in any significant way since the resulting object file matches the original.
 [](1}}})
 <a name="compressed_arch"></a> []({{{1)
 ##  [Work with Compressed Archives &#9650;](#___top "click to go to top of document")
@@ -1057,8 +1059,8 @@ to expand an archive file.  Beginning with v1.07 this is extraction is
 attempted automatically.  At the moment the automatic extraction method works
 reasonably well on Unix-type OS's for the following file types:
 `.tar.gz`,
-`.tar.bz2`, 
-`.tar.xz`, 
+`.tar.bz2`,
+`.tar.xz`,
 `.tgz`,
 `.zip`,
 `.ear`,
@@ -1100,7 +1102,7 @@ one step) the command can be shortened to
 <pre>
 cloc --extract-with='tar zxf &gt;FILE&lt;' perl-5.8.5.tar.gz Python-2.4.2.tar.gz
 </pre>
-On a Windows computer with WinZip installed in 
+On a Windows computer with WinZip installed in
 `c:\Program Files\WinZip` the command would look like
 <pre>
 cloc.exe --extract-with="\"c:\Program Files\WinZip\WinZip32.exe\" -e -o &gt;FILE&lt; ." perl-5.8.5.tar.gz Python-2.4.2.tar.gz
@@ -1123,9 +1125,9 @@ source code and comments between two versions of a file, directory,
 or archive.  Differences reveal much more than absolute code
 counts of two file versions.  For example, say a source file
 has 100 lines and its developer delivers a newer version with
-102 lines.  Did the developer add two comment lines, 
+102 lines.  Did the developer add two comment lines,
 or delete seventeen source
-lines and add fourteen source lines and five comment lines, or did 
+lines and add fourteen source lines and five comment lines, or did
 the developer
 do a complete rewrite, discarding all 100 original lines and
 adding 102 lines of all new source?  The diff option tells how
@@ -1135,7 +1137,7 @@ modified or stayed the same.
 
 In addition to file pairs, one can give cloc pairs of
 directories, or pairs of file archives, or a file archive
-and a directory.  cloc will try to align 
+and a directory.  cloc will try to align
 file pairs within the directories or archives and compare diffs
 for each pair.  For example, to see what changed between
 GCC 4.4.0 and 4.5.0 one could do
@@ -1300,7 +1302,7 @@ A pair of errors occurred.
 The first pair was caused by timing out when computing diffs of the file
 `Python-X/Mac/Modules/qt/_Qtmodule.c` in each Python version.
 This file has > 26,000 lines of C code and takes more than
-10 seconds--the default maximum duration for diff'ing a 
+10 seconds--the default maximum duration for diff'ing a
 single file--on my slow computer.  (Note:  this refers to
 performing differences with
 the `sdiff()` function in the Perl `Algorithm::Diff` module,
@@ -1309,7 +1311,7 @@ overcome by raising the time to, say, 20 seconds
 with `--diff-timeout 20`.
 
 The second error is more problematic.  The files
-`Python-X/Mac/Modules/qd/qdsupport.py` 
+`Python-X/Mac/Modules/qd/qdsupport.py`
 include Python docstring (text between pairs of triple quotes)
 containing C comments.  cloc treats docstrings as comments and handles them
 by first converting them to C comments, then using the C comment removing
@@ -1496,7 +1498,7 @@ Wrote databases.file
 </pre>
 
 The report combination produces two output files, one for sums by
-programming language (`databases.lang`) and one by project 
+programming language (`databases.lang`) and one by project
 (`databases.file`).
 Their contents are
 <pre><i>Unix&gt;</i> cat databases.lang
@@ -1705,12 +1707,12 @@ SUM:                         15556         900921        1284892        5831741
 ##  [SQL &#9650;](#___top "click to go to top of document")
 Cloc can write results in the form of SQL table create and insert
 statements for use
-with relational database programs such as SQLite, MySQL, 
+with relational database programs such as SQLite, MySQL,
 PostgreSQL, Oracle, or Microsoft SQL.  
 Once the code count information is in a database,
 the information can be interrogated and displayed in interesting ways.
 
-A database created from cloc SQL output has two tables, 
+A database created from cloc SQL output has two tables,
 **metadata** and **t**:  
 
 Table **metadata**:
@@ -1740,7 +1742,7 @@ row to the metadata table.
 The code count information resides in table **t**.
 
 Let's repeat the code count examples of Perl, Python, SQLite, MySQL and
-PostgreSQL tarballs shown in the 
+PostgreSQL tarballs shown in the
 [Combine Reports](#combine_reports)
 example above, this time
 using the SQL output options and the
@@ -1766,8 +1768,8 @@ since we'll be adding code counts from four other tarballs, we'll only
 be able to identify data by input source if we supply a
 project name for each run.
 
-Now that we have a database we will need to pass in the `--sql-append` 
-switch to tell cloc not to wipe out this database but instead add more data: 
+Now that we have a database we will need to pass in the `--sql-append`
+switch to tell cloc not to wipe out this database but instead add more data:
 
 <pre>
 cloc --sql 1 --sql-project postgresql --sql-append postgresql-9.4.4.tar.bz2        | sqlite3 code.db
@@ -1776,21 +1778,21 @@ cloc --sql 1 --sql-project python     --sql-append Python-2.7.10.tar.xz         
 cloc --sql 1 --sql-project perl       --sql-append perl-5.22.0.tar.gz              | sqlite3 code.db
 </pre>
 
-Now the fun begins--we have a database, `code.db`, with lots of 
-information about the five projects and can query it 
+Now the fun begins--we have a database, `code.db`, with lots of
+information about the five projects and can query it
 for all manner of interesting facts.
 
 **Which is the longest file over all projects?**
 
 <pre>
-prompt> sqlite3 code.db 'select project,file,nBlank+nComment+nCode as nL from t 
+prompt> sqlite3 code.db 'select project,file,nBlank+nComment+nCode as nL from t
                                  where nL = (select max(nBlank+nComment+nCode) from t)'
 
 sqlite|sqlite-amalgamation-3081101/sqlite3.c|161623
 </pre>
 
-`sqlite3`'s default output format leaves a bit to be desired. 
-We can add an option to the program's rc file, 
+`sqlite3`'s default output format leaves a bit to be desired.
+We can add an option to the program's rc file,
 `~/.sqliterc`, to show column headers:
 <pre>
   .header on
@@ -1803,19 +1805,19 @@ in `~/.sqliterc` but this causes problems when the output has more than
 one row since the widths of entries in the first row govern the maximum
 width for all subsequent rows. Often this leads to truncated output--not
 at all desirable. One option is to write a custom SQLite output
-formatter such as `sqlite_formatter`, included with cloc. 
+formatter such as `sqlite_formatter`, included with cloc.
 
 To use it, simply pass `sqlite3`'s STDOUT into `sqlite_formatter`
 via a pipe:
 
 <pre>
-prompt> sqlite3 code.db 'select project,file,nBlank+nComment+nCode as nL from t 
+prompt> sqlite3 code.db 'select project,file,nBlank+nComment+nCode as nL from t
                          where nL = (select max(nBlank+nComment+nCode) from t)' | ./sqlite_formatter
   <font color="darkgreen">
   -- Loading resources from ~/.sqliterc
   Project File                                  nL     
-  _______ _____________________________________ ______ 
-  sqlite  sqlite-amalgamation-3081101/sqlite3.c 161623 
+  _______ _____________________________________ ______
+  sqlite  sqlite-amalgamation-3081101/sqlite3.c 161623
   </font>
 </pre>
 
@@ -1830,63 +1832,63 @@ prompt> sqlite3 code.db 'select project,file,nBlank+nComment+nCode as nL from t
                          where nL = (select max(nBlank+nComment+nCode) from t)' | sqlite_formatter
 
 Project File                                  nL     
-_______ _____________________________________ ______ 
-sqlite  sqlite-amalgamation-3081101/sqlite3.c 161623 
+_______ _____________________________________ ______
+sqlite  sqlite-amalgamation-3081101/sqlite3.c 161623
 </pre>
 
 **What is the longest file in each project?**
 
 <pre>
-prompt> sqlite3 code.db 'select project,file,max(nBlank+nComment+nCode) as nL from t 
+prompt> sqlite3 code.db 'select project,file,max(nBlank+nComment+nCode) as nL from t
                           group by project order by nL;' | sqlite_formatter
 
 Project    File                                                             nL     
-__________ ________________________________________________________________ ______ 
-python     Python-2.7.10/Mac/Modules/qt/_Qtmodule.c                          28091 
-postgresql postgresql-9.4.4/src/interfaces/ecpg/preproc/preproc.c            54623 
-mariadb    server-10.1/storage/mroonga/vendor/groonga/lib/nfkc.c             80246 
-perl       perl-5.22.0/cpan/Locale-Codes/lib/Locale/Codes/Language_Codes.pm 100747 
-sqlite     sqlite-amalgamation-3081101/sqlite3.c                            161623 
+__________ ________________________________________________________________ ______
+python     Python-2.7.10/Mac/Modules/qt/_Qtmodule.c                          28091
+postgresql postgresql-9.4.4/src/interfaces/ecpg/preproc/preproc.c            54623
+mariadb    server-10.1/storage/mroonga/vendor/groonga/lib/nfkc.c             80246
+perl       perl-5.22.0/cpan/Locale-Codes/lib/Locale/Codes/Language_Codes.pm 100747
+sqlite     sqlite-amalgamation-3081101/sqlite3.c                            161623
 </pre>
 
 **Which files in each project have the most code lines?**
 
 <pre>
-prompt> sqlite3 code.db 'select project,file,max(nCode) as nL from t 
+prompt> sqlite3 code.db 'select project,file,max(nCode) as nL from t
                          group by project order by nL desc;' | sqlite_formatter
 
 Project    File                                                             nL     
-__________ ________________________________________________________________ ______ 
-perl       perl-5.22.0/cpan/Locale-Codes/lib/Locale/Codes/Language_Codes.pm 100735 
-sqlite     sqlite-amalgamation-3081101/sqlite3.c                             97469 
-mariadb    server-10.1/storage/mroonga/vendor/groonga/lib/nfkc.c             80221 
-postgresql postgresql-9.4.4/src/interfaces/ecpg/preproc/preproc.c            45297 
-python     Python-2.7.10/Mac/Modules/qt/_Qtmodule.c                          26705 
+__________ ________________________________________________________________ ______
+perl       perl-5.22.0/cpan/Locale-Codes/lib/Locale/Codes/Language_Codes.pm 100735
+sqlite     sqlite-amalgamation-3081101/sqlite3.c                             97469
+mariadb    server-10.1/storage/mroonga/vendor/groonga/lib/nfkc.c             80221
+postgresql postgresql-9.4.4/src/interfaces/ecpg/preproc/preproc.c            45297
+python     Python-2.7.10/Mac/Modules/qt/_Qtmodule.c                          26705
 </pre>
 
 **Which C source files with more than 300 lines have a comment ratio below 1%?**
 
 <pre>
-prompt> sqlite3 code.db 'select project, file, nCode, nComment, 
+prompt> sqlite3 code.db 'select project, file, nCode, nComment,
                          (100.0*nComment)/(nComment+nCode) as comment_ratio from t
-                         where language="C" and nCode > 300 and 
+                         where language="C" and nCode > 300 and
                          comment_ratio < 1 order by comment_ratio;' | sqlite_formatter
 
 Project    File                                                                                            nCode nComment comment_ratio      
-__________ _______________________________________________________________________________________________ _____ ________ __________________ 
-mariadb    server-10.1/storage/mroonga/vendor/groonga/lib/nfkc.c                                           80221       14 0.0174487443135789 
-python     Python-2.7.10/Python/graminit.c                                                                  2175        1 0.0459558823529412 
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_turkish.c                            2095        1 0.0477099236641221 
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_french.c                             1211        1 0.0825082508250825 
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_french.c                        1201        1 0.0831946755407654 
+__________ _______________________________________________________________________________________________ _____ ________ __________________
+mariadb    server-10.1/storage/mroonga/vendor/groonga/lib/nfkc.c                                           80221       14 0.0174487443135789
+python     Python-2.7.10/Python/graminit.c                                                                  2175        1 0.0459558823529412
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_turkish.c                            2095        1 0.0477099236641221
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_french.c                             1211        1 0.0825082508250825
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_french.c                        1201        1 0.0831946755407654
 postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_hungarian.c                          1182        1 0.084530853761623  
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_hungarian.c                     1178        1 0.0848176420695505 
-mariadb    server-10.1/strings/ctype-eucjpms.c                                                             67466       60 0.0888546633889169 
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_english.c                            1072        1 0.0931966449207828 
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_english.c                       1064        1 0.0938967136150235 
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_hungarian.c                     1178        1 0.0848176420695505
+mariadb    server-10.1/strings/ctype-eucjpms.c                                                             67466       60 0.0888546633889169
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_english.c                            1072        1 0.0931966449207828
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_english.c                       1064        1 0.0938967136150235
 postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_spanish.c                            1053        1 0.094876660341556  
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_spanish.c                       1049        1 0.0952380952380952 
-postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_italian.c                            1031        1 0.0968992248062016 
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_spanish.c                       1049        1 0.0952380952380952
+postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_italian.c                            1031        1 0.0968992248062016
 postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_italian.c                       1023        1 0.09765625         
 postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_UTF_8_portuguese.c                          981        1 0.10183299389002   
 postgresql postgresql-9.4.4/src/backend/snowball/libstemmer/stem_ISO_8859_1_portuguese.c                     975        1 0.102459016393443  
@@ -1938,135 +1940,135 @@ python     Python-2.7.10/Mac/Modules/folder/_Foldermodule.c                     
 **What are the ten longest files (based on code lines) that have no comments at all?  Exclude header, .html, and YAML files.**
 
 <pre>
-prompt> sqlite3 code.db 'select project, file, nCode from t 
-                         where nComment = 0 and 
-                         language not in ("C/C++ Header", "YAML", "HTML") 
+prompt> sqlite3 code.db 'select project, file, nCode from t
+                         where nComment = 0 and
+                         language not in ("C/C++ Header", "YAML", "HTML")
                          order by nCode desc limit 10;' | sqlite_formatter
 
-Project File                                                                 nCode 
-_______ ____________________________________________________________________ _____ 
-perl    perl-5.22.0/cpan/Unicode-Collate/Collate/Locale/ja.pl                 1938 
-python  Python-2.7.10/PCbuild/pythoncore.vcproj                               1889 
-python  Python-2.7.10/PC/VS8.0/pythoncore.vcproj                              1889 
-mariadb server-10.1/mysql-test/extra/binlog_tests/mysqlbinlog_row_engine.inc  1862 
-perl    perl-5.22.0/cpan/Unicode-Collate/Collate/Locale/zh_strk.pl            1589 
-perl    perl-5.22.0/cpan/Unicode-Collate/Collate/Locale/zh_zhu.pl             1563 
-mariadb server-10.1/storage/mroonga/vendor/groonga/configure.ac               1526 
-perl    perl-5.22.0/cpan/Unicode-Collate/Collate/Locale/zh_pin.pl             1505 
-mariadb server-10.1/mysql-test/suite/funcs_1/storedproc/storedproc_02.inc     1465 
-python  Python-2.7.10/PC/VS8.0/_bsddb.vcproj                                  1463 
+Project File                                                                 nCode
+_______ ____________________________________________________________________ _____
+perl    perl-5.22.0/cpan/Unicode-Collate/Collate/Locale/ja.pl                 1938
+python  Python-2.7.10/PCbuild/pythoncore.vcproj                               1889
+python  Python-2.7.10/PC/VS8.0/pythoncore.vcproj                              1889
+mariadb server-10.1/mysql-test/extra/binlog_tests/mysqlbinlog_row_engine.inc  1862
+perl    perl-5.22.0/cpan/Unicode-Collate/Collate/Locale/zh_strk.pl            1589
+perl    perl-5.22.0/cpan/Unicode-Collate/Collate/Locale/zh_zhu.pl             1563
+mariadb server-10.1/storage/mroonga/vendor/groonga/configure.ac               1526
+perl    perl-5.22.0/cpan/Unicode-Collate/Collate/Locale/zh_pin.pl             1505
+mariadb server-10.1/mysql-test/suite/funcs_1/storedproc/storedproc_02.inc     1465
+python  Python-2.7.10/PC/VS8.0/_bsddb.vcproj                                  1463
 </pre>
 
 **What are the most popular languages (in terms of lines
 of code) in each project?**
 
 <pre>
-prompt> sqlite3 code.db 'select project, language, sum(nCode) as SumCode from t 
-                         group by project,language 
+prompt> sqlite3 code.db 'select project, language, sum(nCode) as SumCode from t
+                         group by project,language
                          order by project,SumCode desc;' | sqlite_formatter
-Project    Language                  SumCode 
-__________ _________________________ _______ 
-mariadb    C++                        983026 
-mariadb    C                          715018 
-mariadb    C/C++ Header               209394 
-mariadb    Bourne Shell                61943 
-mariadb    Perl                        35562 
-mariadb    Pascal                      32541 
-mariadb    HTML                        16489 
-mariadb    Javascript                  15540 
-mariadb    m4                          14215 
-mariadb    CMake                       12206 
-mariadb    XML                          5210 
-mariadb    Ruby                         4998 
-mariadb    Puppet                       3848 
-mariadb    make                         3631 
-mariadb    SQL                          3405 
-mariadb    Python                       2545 
-mariadb    Bourne Again Shell           1604 
-mariadb    Windows Module Definition    1211 
-mariadb    lex                           991 
-mariadb    yacc                          810 
-mariadb    DOS Batch                     700 
-mariadb    Prolog                        448 
-mariadb    RobotFramework                441 
-mariadb    CSS                           393 
-mariadb    JSON                          359 
-mariadb    dtrace                        306 
-mariadb    Windows Resource File         250 
-mariadb    Assembly                      237 
-mariadb    WiX source                    155 
-mariadb    Visual Basic                   88 
-mariadb    YAML                           65 
-mariadb    PHP                            24 
-mariadb    SKILL                          16 
-mariadb    sed                            16 
-mariadb    Windows Message File            6 
-mariadb    D                               4 
-mariadb    diff                            4 
-perl       Perl                       536445 
-perl       C                          155648 
-perl       C/C++ Header               147858 
-perl       Bourne Shell                42668 
-perl       Pascal                       8592 
-perl       XML                          2410 
-perl       YAML                         2078 
-perl       C++                          2033 
-perl       make                         1986 
-perl       Prolog                       1146 
-perl       JSON                         1037 
-perl       yacc                          998 
-perl       Windows Message File          489 
-perl       DOS Batch                     389 
-perl       Windows Resource File          85 
-perl       D                               8 
-perl       Lisp                            4 
-postgresql HTML                       785991 
-postgresql C                          736519 
-postgresql C/C++ Header                57014 
-postgresql SQL                         51926 
-postgresql yacc                        28491 
-postgresql Bourne Shell                17170 
-postgresql Perl                         9456 
-postgresql lex                          4285 
-postgresql make                         4114 
-postgresql m4                           1642 
-postgresql Windows Module Definition    1152 
-postgresql XSLT                          294 
-postgresql DOS Batch                      92 
-postgresql Assembly                       69 
-postgresql CSS                            69 
-postgresql D                              66 
-postgresql Windows Resource File          62 
-postgresql Lisp                           16 
-postgresql sed                            15 
-postgresql Python                         13 
-postgresql Bourne Again Shell             10 
-postgresql Windows Message File            5 
-python     Python                     434015 
-python     C                          375555 
-python     C/C++ Header                66942 
-python     Bourne Shell                45091 
-python     MSBuild script              38910 
-python     m4                          15559 
-python     Assembly                    12298 
-python     make                         2953 
-python     HTML                         2344 
-python     Windows Module Definition    2081 
-python     Objective C                   635 
-python     Expect                        565 
-python     DOS Batch                     506 
-python     CSS                           328 
-python     Javascript                    229 
-python     Windows Resource File         207 
-python     C++                           128 
-python     vim script                    106 
-python     diff                          105 
-python     XML                            74 
-python     NAnt script                    30 
-python     Prolog                         24 
-python     Visual Basic                   12 
-sqlite     C                          101454 
-sqlite     C/C++ Header                 1546 
+Project    Language                  SumCode
+__________ _________________________ _______
+mariadb    C++                        983026
+mariadb    C                          715018
+mariadb    C/C++ Header               209394
+mariadb    Bourne Shell                61943
+mariadb    Perl                        35562
+mariadb    Pascal                      32541
+mariadb    HTML                        16489
+mariadb    Javascript                  15540
+mariadb    m4                          14215
+mariadb    CMake                       12206
+mariadb    XML                          5210
+mariadb    Ruby                         4998
+mariadb    Puppet                       3848
+mariadb    make                         3631
+mariadb    SQL                          3405
+mariadb    Python                       2545
+mariadb    Bourne Again Shell           1604
+mariadb    Windows Module Definition    1211
+mariadb    lex                           991
+mariadb    yacc                          810
+mariadb    DOS Batch                     700
+mariadb    Prolog                        448
+mariadb    RobotFramework                441
+mariadb    CSS                           393
+mariadb    JSON                          359
+mariadb    dtrace                        306
+mariadb    Windows Resource File         250
+mariadb    Assembly                      237
+mariadb    WiX source                    155
+mariadb    Visual Basic                   88
+mariadb    YAML                           65
+mariadb    PHP                            24
+mariadb    SKILL                          16
+mariadb    sed                            16
+mariadb    Windows Message File            6
+mariadb    D                               4
+mariadb    diff                            4
+perl       Perl                       536445
+perl       C                          155648
+perl       C/C++ Header               147858
+perl       Bourne Shell                42668
+perl       Pascal                       8592
+perl       XML                          2410
+perl       YAML                         2078
+perl       C++                          2033
+perl       make                         1986
+perl       Prolog                       1146
+perl       JSON                         1037
+perl       yacc                          998
+perl       Windows Message File          489
+perl       DOS Batch                     389
+perl       Windows Resource File          85
+perl       D                               8
+perl       Lisp                            4
+postgresql HTML                       785991
+postgresql C                          736519
+postgresql C/C++ Header                57014
+postgresql SQL                         51926
+postgresql yacc                        28491
+postgresql Bourne Shell                17170
+postgresql Perl                         9456
+postgresql lex                          4285
+postgresql make                         4114
+postgresql m4                           1642
+postgresql Windows Module Definition    1152
+postgresql XSLT                          294
+postgresql DOS Batch                      92
+postgresql Assembly                       69
+postgresql CSS                            69
+postgresql D                              66
+postgresql Windows Resource File          62
+postgresql Lisp                           16
+postgresql sed                            15
+postgresql Python                         13
+postgresql Bourne Again Shell             10
+postgresql Windows Message File            5
+python     Python                     434015
+python     C                          375555
+python     C/C++ Header                66942
+python     Bourne Shell                45091
+python     MSBuild script              38910
+python     m4                          15559
+python     Assembly                    12298
+python     make                         2953
+python     HTML                         2344
+python     Windows Module Definition    2081
+python     Objective C                   635
+python     Expect                        565
+python     DOS Batch                     506
+python     CSS                           328
+python     Javascript                    229
+python     Windows Resource File         207
+python     C++                           128
+python     vim script                    106
+python     diff                          105
+python     XML                            74
+python     NAnt script                    30
+python     Prolog                         24
+python     Visual Basic                   12
+sqlite     C                          101454
+sqlite     C/C++ Header                 1546
 </pre>
 
 [](1}}})
@@ -2079,7 +2081,7 @@ same code in a hypothetical third-generation computer language.
 To produce this output one must now use the `--3` switch.
 
 Scale factors were derived from the 2006 version of language gearing ratios
-listed at Mayes Consulting web site, 
+listed at Mayes Consulting web site,
 [http://softwareestimator.com/IndustryData2.htm](http://softwareestimator.com/IndustryData2.htm), using this equation:
 
 cloc scale factor for language X = 3rd generation default gearing ratio / language X gearing ratio
@@ -2246,7 +2248,7 @@ created and maintains the npm package of cloc.
 [Russian](http://carrrsmag.com/blog/cloc.html)
 translation.
 
-[Science Blog](http://someblogscience.com) provided the 
+[Science Blog](http://someblogscience.com) provided the
 [Russian](http://someblogscience.com/cloc.html) translation.
 
 [Viktoria Parnak](http://kudoybook.com)
