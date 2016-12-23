@@ -5723,6 +5723,7 @@ sub set_constants {                          # {{{1
             'pom.xml'        => 'Maven/XML'          ,
             'Rakefile'       => 'Ruby'               ,
             'rakefile'       => 'Ruby'               ,
+            'Dockerfile'     => 'Dockerfile'         ,
             );
 # 1}}}
 %{$rhaa_Filters_by_Language} = (             # {{{1
@@ -5930,6 +5931,10 @@ sub set_constants {                          # {{{1
     'NASTRAN DMAP'       => [
                                 [ 'remove_matches'      , '^\s*\$' ],
                                 [ 'remove_inline'       , '\$.*$'  ],
+                            ],
+    'Dockerfile'         => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
                             ],
     'DOS Batch'          => [   [ 'remove_matches'      , '^\s*rem', ], ],
     'DTD'                => [   [ 'remove_html_comments',          ],
@@ -6948,6 +6953,7 @@ sub set_constants {                          # {{{1
     'NASTRAN DMAP'                 =>   2.35,
     'dna4'                         =>   4.21,
     'DOORS Extension Language'     =>   1.50,
+    'Dockerfile'                   =>   2.00,
     'DOS Batch'                    =>   0.63,
     'dsp assembly'                 =>   0.50,
     'dtabl'                        =>   1.74,
@@ -8042,7 +8048,7 @@ foreach my $group (@generic) {
 }
 
 
-    
+
 #
 # Other languages.
 #
@@ -8216,10 +8222,10 @@ pattern name    => [qw /balanced -parens=() -begin= -end=/],
 
 1;
 # This software is Copyright (c) 2001 - 2013, Damian Conway and Abigail.
-# 
+#
 # This module is free software, and maybe used under any of the following
 # licenses:
-# 
+#
 #  1) The Perl Artistic License.     See the file COPYRIGHT.AL.
 #  2) The Perl Artistic License 2.0. See the file COPYRIGHT.AL2.
 #  3) The BSD Licence.               See the file COPYRIGHT.BSD.
@@ -8287,10 +8293,10 @@ pattern name   => [qw( quoted -esc=\\ )],
 
 1;
 # This software is Copyright (c) 2001 - 2009, Damian Conway and Abigail.
-# 
+#
 # This module is free software, and maybe used under any of the following
 # licenses:
-# 
+#
 #  1) The Perl Artistic License.     See the file COPYRIGHT.AL.
 #  2) The Perl Artistic License 2.0. See the file COPYRIGHT.AL2.
 #  3) The BSD Licence.               See the file COPYRIGHT.BSD.

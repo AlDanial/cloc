@@ -22,7 +22,7 @@ my @Tests = (   {
                     'ref'  => '../tests/outputs/ExprParser.g.yaml',
                     'args' => '../tests/inputs/ExprParser.g',
                 },
-                
+
                 {
                     'name' => 'Blade',
                     'ref'  => '../tests/outputs/master.blade.php.yaml',
@@ -99,6 +99,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/aa',
                 },
                 {
+                    'name' => 'Dockerfile',
+                    'ref'  => '../tests/outputs/Dockerfile.yaml',
+                    'args' => '../tests/inputs/Dockerfile',
+                },
+                {
                     'name' => 'DOS batch',
                     'ref'  => '../tests/outputs/MSDOS.bat.yaml',
                     'args' => '../tests/inputs/MSDOS.bat',
@@ -155,8 +160,8 @@ my @Tests = (   {
                 },
                 {
                     'name' => 'Groovy',
-                    # issue #139; avoid 
-                    # Complex regular subexpression recursion limit (32766) exceeded 
+                    # issue #139; avoid
+                    # Complex regular subexpression recursion limit (32766) exceeded
                     'ref'  => '../tests/outputs/regex_limit.gradle.yaml',
                     'args' => '../tests/inputs/regex_limit.gradle',
                 },
@@ -341,7 +346,7 @@ my @Tests = (   {
                     'args' => '../tests/inputs/script1-hadoop.pig',
                 },
                 {
-                    'name' => 'PO File',   
+                    'name' => 'PO File',
                     'ref'  => '../tests/outputs/en_AU.po.yaml',
                     'args' => '../tests/inputs/en_AU.po',
                 },
@@ -525,7 +530,7 @@ sub load_yaml {
     my ($file, ) = @_;
     my %result = ();
     if (!-r $file) {
-        warn "File not found: $file\n"; 
+        warn "File not found: $file\n";
         return %result;
     }
     open IN, $file or return %result;
