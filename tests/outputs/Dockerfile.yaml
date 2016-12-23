@@ -1,21 +1,21 @@
 ---
 # github.com/AlDanial/cloc
-header :
+header : 
   cloc_url           : github.com/AlDanial/cloc
-  cloc_version       : 1.67
-  elapsed_seconds    : 0.0172619819641113
+  cloc_version       : 1.71
+  elapsed_seconds    : 0.00575685501098633
   n_files            : 1
-  n_lines            : 59
-  files_per_second   : 173.792326178835
-  lines_per_second   : 53817.6903400459
-  report_file        : Dockerfile.yaml
+  n_lines            : 58
+  files_per_second   : 173.705955437754
+  lines_per_second   : 10074.9454153897
+  report_file        : ../outputs/Dockerfile.yaml
 Dockerfile :
   nFiles: 1
-  blank: 5
+  blank: 4
   comment: 1
   code: 53
-SUM:
-  blank: 5
+SUM: 
+  blank: 4
   comment: 1
   code: 53
   nFiles: 1
