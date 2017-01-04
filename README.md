@@ -88,9 +88,11 @@ SUM:                            13           4779           6907          31308
 **sub directory**
 <pre>
 Original Equation: for d in ./*/ ; do (cd "$d" && !!); done
-note1: !! output is shown.. this is where user can nest to however many subdirectories they want.
+note1: !! output is shown.. this is where user can nest to however many subdirectories they want. 
+They will reach that level.
 note2: user would have to know how many subdirectories and nest accordingly.
-note3: there is not a large amount of damage done to nesting too much.
+note3: a notification will show if there are no directories and you have nested too far.
+
 prompt>
 note: performed in git bash on windows.
 for d in ./*/ ; do (cd "$d" && for d in ./*/ ; do (cd "$d" && cloc $(git ls-files)); done); done
