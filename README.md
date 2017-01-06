@@ -87,7 +87,7 @@ SUM:                            13           4779           6907          31308
 
 **each subdirectory of a particular directory**
 <pre>
-prompt> for d in ./*/ ; do (cd "$d" && echo "$d" && cloc $(git ls-files)); done
+prompt> for d in ./*/ ; do (cd "$d" && echo "$d" && cloc --vcs git); done
 ./ProjectName0/
 7 text files.
        7 unique files.                              
