@@ -85,17 +85,10 @@ SUM:                            13           4779           6907          31308
 -------------------------------------------------------------------------------
 </pre>
 
-**sub directory**
+**each subdirectory of a particular directory**
 <pre>
-Original Equation: for d in ./*/ ; do (cd "$d" && !!); done
-note1: !! output is shown.. this is where user can nest to however many subdirectories they want. 
-They will reach that level.
-note2: user would have to know how many subdirectories and nest accordingly.
-note3: a notification will show if there are no directories and you have nested too far.
+prompt> for d in ./*/ ; do (cd "$d" && cloc $(git ls-files)); done
 
-prompt>
-note: performed in git bash on windows.
-for d in ./*/ ; do (cd "$d" && for d in ./*/ ; do (cd "$d" && cloc $(git ls-files)); done); done
 7 text files.
        7 unique files.                              
        1 file ignored.
