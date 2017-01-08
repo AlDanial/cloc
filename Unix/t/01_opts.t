@@ -112,6 +112,12 @@ my @Tests = (
                     'args' => '--vcs git --match-f "\.c$" issues/132',
                     'ref'  => '../tests/outputs/issues/132/T6.yaml',
                 },
+                {
+                    'name' => '--vcs "find X" (github issue #147)',
+                    'cd'   => '../tests/inputs',
+                    'args' => '--vcs "find foo_bar"',
+                    'ref'  => '../tests/outputs/issues/147/T1.yaml',
+                },
             );
 
 # Create test input for issue #132 which needs data not in the git repo.

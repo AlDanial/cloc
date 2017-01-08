@@ -3676,6 +3676,10 @@ sub make_file_list {                         # {{{1
               preprocess => \&find_preprocessor,
               follow     =>  $opt_follow_links }, $dir);
     }
+    # there's a possibility of file duplication if user provided a list
+    # file or --vcs command that returns directory names; squash these
+    my %unique_file_list = map { $_ => 1 } @file_list;
+    @file_list = sort keys %unique_file_list;
 
     $nFiles_Found = scalar @file_list;
     printf "%8d text file%s.\n", plural_form($nFiles_Found) unless $opt_quiet;
