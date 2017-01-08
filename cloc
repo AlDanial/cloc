@@ -134,6 +134,24 @@ my $NN     = chr(27) . "[0m";  # normal
 my $BB     = chr(27) . "[1m";  # bold
    $BB     = "" if $ON_WINDOWS or !(-t STDERR);
 my $script = basename $0;
+my $brief_usage  = "
+                       cloc -- Count Lines of Code
+
+Usage:
+    $script [options] <file(s)/dir(s)>
+        Count physical lines of source code and comments in the given files
+        (may be archives such as compressed tarballs or zip files) and/or
+        recursively below the given directories.
+        Example:    cloc src/ include/ main.c
+
+    $script [options] --diff <set1>  <set2>
+        Compute differences of physical lines of source code and comments
+        between a pair of directories or archive files.
+        Example:    cloc --diff Python-3.5.tar.xz python-3.6/
+
+$script --help  shows full documentation on the options.
+http://$URL has numerous examples and more information.
+";
 my $usage  = "
 Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
 
@@ -758,16 +776,16 @@ if (defined $opt_vcs) {
     }
 }
 
-die $usage unless defined $opt_version         or
-                  defined $opt_show_lang       or
-                  defined $opt_show_ext        or
-                  defined $opt_show_os         or
-                  defined $opt_write_lang_def  or
-                  defined $opt_list_file       or
-                  defined $opt_vcs             or
-                  defined $opt_xsl             or
-                  defined $opt_explain         or
-                  scalar @ARGV >= 1;
+die $brief_usage unless defined $opt_version         or
+                        defined $opt_show_lang       or
+                        defined $opt_show_ext        or
+                        defined $opt_show_os         or
+                        defined $opt_write_lang_def  or
+                        defined $opt_list_file       or
+                        defined $opt_vcs             or
+                        defined $opt_xsl             or
+                        defined $opt_explain         or
+                        scalar @ARGV >= 1;
 die "--diff requires two arguments; got ", scalar @ARGV, "\n"
     if $opt_diff and scalar @ARGV != 2;
 if ($opt_version) {
