@@ -85,63 +85,6 @@ SUM:                            13           4779           6907          31308
 -------------------------------------------------------------------------------
 </pre>
 
-**each subdirectory of a particular directory**
-<pre>
-prompt> for d in ./*/ ; do (cd "$d" && echo "$d" && cloc --vcs git); done
-./ProjectName0/
-7 text files.
-       7 unique files.                              
-       1 file ignored.
-
-github.com/AlDanial/cloc v 1.68  T=0.02 s (390.2 files/s, 25687.6 lines/s)
--------------------------------------------------------------------------------
-Language                     files          blank        comment           code
--------------------------------------------------------------------------------
-D                                4             61             32            251
-Markdown                         1              9              0             38
-make                             1              0              0              4
--------------------------------------------------------------------------------
-SUM:                             6             70             32            293
--------------------------------------------------------------------------------
-Saving session...
-...saving history...truncating history files...
-...completed.
-./ProjectName1/
-       7 text files.
-       7 unique files.                              
-       0 files ignored.
-
-github.com/AlDanial/cloc v 1.68  T=0.02 s (293.0 files/s, 52107.1 lines/s)
--------------------------------------------------------------------------------
-Language                     files          blank        comment           code
--------------------------------------------------------------------------------
-Go                               7            165            282            798
--------------------------------------------------------------------------------
-SUM:                             7            165            282            798
--------------------------------------------------------------------------------
-Saving session...
-...saving history...truncating history files...
-...completed.
-./ProjectName2/
-      49 text files.
-      47 unique files.                              
-      13 files ignored.
-
-github.com/AlDanial/cloc v 1.68  T=0.10 s (399.5 files/s, 70409.4 lines/s)
--------------------------------------------------------------------------------
-Language                     files          blank        comment           code
--------------------------------------------------------------------------------
-Python                          33           1226           1026           3017
-C                                4            327            337            888
-Markdown                         1             11              0             28
-YAML                             1              0              2             12
--------------------------------------------------------------------------------
-SUM:                            39           1564           1365           3945
--------------------------------------------------------------------------------
-Saving session...
-...saving history...truncating history files...
-...completed.
-
 **an archive**
 
 We'll pull cloc's source zip file from GitHub, then count the contents:
@@ -158,6 +101,59 @@ Perl                             2            725           1103           8713
 SUM:                             2            725           1103           8713
 -------------------------------------------------------------------------------
 </pre>
+
+**each subdirectory of a particular directory**
+
+Say you have a directory with three different git-managed projects,
+Project0, Project1, and Project2.  You can use your shell's looping
+capability to count the code in each.  This example uses bash:
+<pre>
+prompt> for d in ./*/ ; do (cd "$d" && echo "$d" && cloc --vcs git); done
+./Project0/
+7 text files.
+       7 unique files.                              
+       1 file ignored.
+
+github.com/AlDanial/cloc v 1.71  T=0.02 s (390.2 files/s, 25687.6 lines/s)
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+D                                4             61             32            251
+Markdown                         1              9              0             38
+make                             1              0              0              4
+-------------------------------------------------------------------------------
+SUM:                             6             70             32            293
+-------------------------------------------------------------------------------
+./Project1/
+       7 text files.
+       7 unique files.                              
+       0 files ignored.
+
+github.com/AlDanial/cloc v 1.71  T=0.02 s (293.0 files/s, 52107.1 lines/s)
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Go                               7            165            282            798
+-------------------------------------------------------------------------------
+SUM:                             7            165            282            798
+-------------------------------------------------------------------------------
+./Project2/
+      49 text files.
+      47 unique files.                              
+      13 files ignored.
+
+github.com/AlDanial/cloc v 1.71  T=0.10 s (399.5 files/s, 70409.4 lines/s)
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Python                          33           1226           1026           3017
+C                                4            327            337            888
+Markdown                         1             11              0             28
+YAML                             1              0              2             12
+-------------------------------------------------------------------------------
+SUM:                            39           1564           1365           3945
+-------------------------------------------------------------------------------
+<pre>
 
 [](1}}})
 <a name="Overview"></a>      []({{{1)
