@@ -1,0 +1,7 @@
+This directory contains inputs for tests 21 through 24 in cloc/Unix/t/01_opts.t 
+The tests exercise cloc's ability to work with git submodules (specifically, 
+to ignore code in these).  If you're working with a git repo clone you will 
+need to update the submodule via
+  git submodule init
+  git submodule update
+issued within your cloc working directory to get the tests to pass.
