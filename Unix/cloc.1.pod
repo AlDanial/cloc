@@ -1,7 +1,7 @@
 #   Copyright
 #
-#      Copyright (C) 2016 Al Danial <al.danial@gmail.com>.
-#      Copyright (C) 2010-2016 Jari Aalto <jari.aalto@cante.net>
+#      Copyright (C) 2017 Al Danial <al.danial@gmail.com>.
+#      Copyright (C) 2010-2017 Jari Aalto <jari.aalto@cante.net>
 #
 #   License
 #
@@ -41,7 +41,7 @@
 
 =head1 NAME
 
-cloc - Count, and compute differences of, lines of source code and comments.
+cloc - Count, or compute differences of, lines of source code and comments.
 
 =head1 SYNOPSIS
 
@@ -49,8 +49,8 @@ cloc - Count, and compute differences of, lines of source code and comments.
 
 =head1 DESCRIPTION
 
-Count, or compute differences of, physical lines of source code in the 
-given files (may be archives such as compressed tarballs or zip files) 
+Count, or compute differences of, physical lines of source code in the
+given files (may be archives such as compressed tarballs or zip files)
 and/or recursively below the given directories.  It is
 written entirely in Perl, using only modules from the standard
 distribution.
@@ -92,14 +92,17 @@ process from FILE, which has one file/directory
 name per line.  Only exact matches are counted;
 relative path names will be resolved starting from
 the directory where cloc is invoked.
-See also 
+See also
 B<--exclude-list-file>
 
 =item B<--vcs=VCS>
 
 Invoke a system call to VCS to obtain a list of
 files to work on.  If VCS is 'git', then will
-invoke 'git ls-files'.  If VCS is 'svn' then
+invoke 'git ls-files'
+to get a file list and 'git submodule status' to get a
+list of submodules whose contents will be ignored.
+If VCS is 'svn' then
 will invoke 'svn list -R'.  The primary benefit
 is that cloc will then skip files explicitly
 excluded by the versioning tool in question,
@@ -143,30 +146,30 @@ reporting by language.
 =item B<--count-and-diff SET1 SET2>
 
 First perform direct code counts of source file(s)
-of SET1 and SET2 separately, then perform a diff 
-of these.  Inputs may be pairs of files, directories, 
-or archives.  See also B<--diff>, B<--diff-alignment>, 
+of SET1 and SET2 separately, then perform a diff
+of these.  Inputs may be pairs of files, directories,
+or archives.  See also B<--diff>, B<--diff-alignment>,
 B<--diff-timeout>, B<--ignore-case>, B<--ignore-whitespace>.
 
 =item B<--diff SET1 SET2>
 
-Compute differences in code and comments between source file(s) of 
-SET1 and SET2.  The inputs may be pairs of files, directories, or 
+Compute differences in code and comments between source file(s) of
+SET1 and SET2.  The inputs may be pairs of files, directories, or
 archives.  Use B<--diff-alignment> to generate a list showing
-which file pairs where compared.  See also 
-B<--count-and-diff>, B<--diff-alignment>, B<--diff-timeout>, 
+which file pairs where compared.  See also
+B<--count-and-diff>, B<--diff-alignment>, B<--diff-timeout>,
 B<--ignore-case>, B<--ignore-whitespace>.
 
 =item B<--diff-timeout N>
 
 Ignore files which take more than N seconds
 to process.  Default is 10 seconds.
-(Large files with many repeated lines can cause 
+(Large files with many repeated lines can cause
 Algorithm::Diff::sdiff() to take hours.)
 
 =item B<--follow-links>
 
-[Unix only] Follow symbolic links to directories (sym links to files 
+[Unix only] Follow symbolic links to directories (sym links to files
 are always followed).
 
 =item B<--force-lang=LANG[,EXT]>
@@ -187,11 +190,11 @@ B<--lang-no-ext>.
 
 Load language processing filters from FILE,
 then use these filters instead of the built-in
-filters.  Note:  languages which map to the same 
+filters.  Note:  languages which map to the same
 file extension (for example:
-MATLAB/Objective C/MUMPS;  Pascal/PHP; 
+MATLAB/Objective C/MUMPS;  Pascal/PHP;
 Lisp/OpenCL; Lisp/Julia; Perl/Prolog) will be ignored as
-these require additional processing that is not expressed in 
+these require additional processing that is not expressed in
 language definition files.
 Use B<--read-lang-def> to define new language
 filters without replacing built-in filters
@@ -204,25 +207,25 @@ with B<--diff>.  See also B<--ignore-case>.
 
 =item B<--ignore-case>
 
-Ignore changes in case; consider upper- and lowercase letters equivalent 
+Ignore changes in case; consider upper- and lowercase letters equivalent
 when comparing files with B<--diff>.  See also B<--ignore-whitespace>.
 
 =item B<--lang-no-ext=LANG>
 
-Count files without extensions using the LANG counter.  This option 
-overrides internal logic for files without extensions (where such files 
-are checked against known scripting languages by examining the first 
+Count files without extensions using the LANG counter.  This option
+overrides internal logic for files without extensions (where such files
+are checked against known scripting languages by examining the first
 line for C<#!>).  See also B<--force-lang>, B<--script-lang>.
 
 =item B<--max-file-size=MB>
 
 Skip files larger than C<MB> megabytes when
 traversing directories.  By default, C<MB>=100.
-cloc's memory requirement is roughly twenty times 
-larger than the largest file so running with 
-files larger than 100 MB on a computer with less 
-than 2 GB of memory will cause problems.  
-Note:  this check does not apply to files 
+cloc's memory requirement is roughly twenty times
+larger than the largest file so running with
+files larger than 100 MB on a computer with less
+than 2 GB of memory will cause problems.
+Note:  this check does not apply to files
 explicitly passed as command line arguments.
 
 =item B<--read-binary-files>
@@ -236,7 +239,7 @@ binary data.
 Load new language processing filters from FILE
 and merge them with those
 already known to cloc.  If FILE defines a
-language cloc already knows about, cloc's 
+language cloc already knows about, cloc's
 definition will take precedence.  Use
 B<--force-lang-def> to over-ride cloc's definitions.
 (see also B<--write-lang-def>).
@@ -326,6 +329,10 @@ example:
 will skip all files that match C</.cache/> or C</test/> as part of
 their path. Directories named C<.bzr>, C<.cvs>, C<.hg>, C<.git>,
 and C<.svn> are always excluded.
+This option only works with individual directory
+names so including file path separators is not
+allowed.  Use B<--fullpath> and B<--not-match-d=REGEX>
+to supply a regex matching multiple subdirectories.
 
 =item B<--exclude-ext=EXT1[,EXT2 ...]>
 
@@ -368,6 +375,13 @@ or C</include/>.
 =item B<--not-match-d=REGEX>
 
 Count all files except in directories matching the Perl regex.
+Only the trailing directory name is compared, for example, when
+counting in C</usr/local/lib>, only C<lib> is
+compared to the regex.
+Add B<--fullpath> to compare parent directories to
+the regex.
+Do not include file path separators at the beginning
+or end of the regex.
 
 =item B<--match-f=REGEX>
 
@@ -376,9 +390,14 @@ this only counts files at start with Widget or widget:
 
      --match-f='^[Ww]idget'
 
+Add B<--fullpath> to include parent directories
+in the regex instead of just the basename.
+
 =item B<--not-match-f=REGEX>
 
 Count all files except those whose basenames match the Perl regex.
+Add B<--fullpath> to include parent directories
+in the regex instead of just the basename.
 
 =item B<--skip-archive=REGEX>
 
@@ -417,14 +436,14 @@ forces the B<--diff> mode on.
 =item B<--explain=LANG>
 
 Print the filters used to remove comments for
-language LANG and exit.  In some cases the 
+language LANG and exit.  In some cases the
 filters refer to Perl subroutines rather than
 regular expressions.  An examination of the
 source code may be needed for further explanation.
 
 =item B<--help>
 
-Print this usage information and exit.
+Print cloc's internal usage information and exit.
 
 =item B<--found=FILE>
 
@@ -480,13 +499,13 @@ B<--force-lang-def>, B<--read-lang-def>.
 
 =item B<--3>
 
-Print third-generation language output.  (This option can cause report 
-summation to fail if some reports were produced with this option while 
+Print third-generation language output.  (This option can cause report
+summation to fail if some reports were produced with this option while
 others were produced without it.)
 
-=item B<--by-percent X>          
+=item B<--by-percent X>
 
-Instead of comment and blank line counts, show 
+Instead of comment and blank line counts, show
 these values as percentages based on the
 value of X in the denominator:
 
@@ -496,8 +515,8 @@ value of X in the denominator:
     X = 'cmb' -> # lines of code + comments + blanks
 
 For example, if using method 'c' and your code
-has twice as many lines of comments as lines 
-of code, the value in the comment column will 
+has twice as many lines of comments as lines
+of code, the value in the comment column will
 be 200%.  The code column remains a line count.
 
 =item B<--csv>
@@ -506,7 +525,7 @@ Write the results as comma separated values.
 
 =item B<--csv-delimiter=C>
 
-Use the character C as the delimiter for comma separated files 
+Use the character C as the delimiter for comma separated files
 instead of ,.  This switch forces B<--csv> to be on.
 
 =item B<--json>
@@ -543,22 +562,22 @@ I<STDOUT>.
 
 =item B<--sql-append>
 
-Append SQL insert statements to the file specified by B<--sql> and 
+Append SQL insert statements to the file specified by B<--sql> and
 do not generate table creation option.
 
 =item B<--sql-project=NAME>
 
-Use <name> as the project identifier for the current run. Only valid
+Use B<name> as the project identifier for the current run. Only valid
 with the B<--sql> option.
 
-=item B<--sql-style=STYLE>       
+=item B<--sql-style=STYLE>
 
 Write SQL statements in the given style instead of the default
-SQLite format.  Currently, the only style option is Oracle.
+SQLite format.  Currently, the only style option is B<Oracle>.
 
 =item B<--sum-one>
 
-For plain text reports, show the SUM: output line even if only 
+For plain text reports, show the SUM: output line even if only
 one input file is processed.
 
 =item B<--xml>
@@ -620,7 +639,7 @@ sloccount(1)
 =head1 AUTHORS
 
 The cloc program was written by Al Danial <al.danial@gmail.com> and
-is Copyright (C) 2006-2016 <al.danial@gmail.com>.
+is Copyright (C) 2006-2017 <al.danial@gmail.com>.
 
 The manual page was originally written by Jari Aalto <jari.aalto@cante.net>.
 
