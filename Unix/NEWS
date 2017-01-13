@@ -1,3 +1,43 @@
+                Release Notes for cloc version 1.72
+                   https://github.com/AlDanial/cloc
+                          January 14, 2017
+
+New Languages:
+    o Antlr
+    o Dockerfile
+    o Glade
+    o GLSL
+    o Lisp Flavored Erlang
+    o Mako
+    o PO files (used for translations in GTK programming)
+    o RapydScript
+    o Slice interface specification language
+    o Specman e
+    o Vue.js Component
+
+Updates:
+    o Support for Lua --[[ ]] block comments.
+    o Improve --not-match-d support.
+    o Add extension .tsx for TypeScript.
+    o Renamed SASS to Sass.
+    o '--vcs git' now ignores code in git submodules.
+    o Add .p6 and .pm6 extensions for Perl 6.
+    o Add .phtml extension for PHP.
+    o Add .psm1 and .psd1 extensions for PowerShell.
+    o Only print a small usage summary when running cloc without
+      arguments.  Now have to run 'cloc --help' to get the huge
+      output.
+
+Bug Fixes:
+    o Filter updates for Assembly, Groovy to prevent infinite recursion in
+      regex.
+    o Correct handling of Julia block comments.
+    o Correct output when running with '--diff --json' or '--diff --yaml'.
+    o Fix logic error in code that handled --exclude-dir.
+    o Fix error in handling of '--vcs X' where X is a user-provided
+      command to generate a list of files.
+
+============================================================================
                 Release Notes for cloc version 1.70
                    https://github.com/AlDanial/cloc
                              July 1, 2016
