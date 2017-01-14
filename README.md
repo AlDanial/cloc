@@ -5,7 +5,7 @@
 * * *
 cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.
 
-Latest release:  v1.70 (July 1, 2016)
+Latest release:  v1.72 (January 14, 2017)
 
 Hosted at http://cloc.sourceforge.net/ since August 2006, cloc began the
 transition to GitHub in September 2015.
@@ -48,8 +48,8 @@ Step 2:  Open a terminal (`cmd.exe` on Windows).
 Step 3:  Invoke cloc to count your source files, directories, or archives.
 The executable name differs depending on whether you use the
 development source version (`cloc`), source for a
-released version (`cloc-1.70.pl`) or a Windows executable
-(`cloc-1.70.exe`).  On this page, `cloc` is the generic term
+released version (`cloc-1.72.pl`) or a Windows executable
+(`cloc-1.72.exe`).  On this page, `cloc` is the generic term
 used to refer to any of these.
 
 **a file**
@@ -297,7 +297,7 @@ and Digest::MD5 installed locally.
 <a name="building_exe"></a> []({{{1)
 # [Building a Windows Executable &#9650;](#___top "click to go to top of document")
 
-The latest Windows download, <tt>cloc-1.70.exe</tt>, was
+The two most recent Windows downloads, <tt>cloc-1.70.exe</tt> and <tt>cloc-1.72.exe</tt>, were
 built with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm)
 and Strawberry Perl 5.24.0.1
 on an Amazon Web Services t2.micro instance running 32 bit Microsoft Windows Server 2008.
