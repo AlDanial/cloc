@@ -431,9 +431,9 @@ To run cloc on Windows computers, one must first open up a command (aka DOS) win
 # [Options &#9650;](#___top "click to go to top of document")
 
 <pre>
-prompt> cloc
+prompt> cloc --help
 
-Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
+Usage: cloc [options] <file(s)/dir(s)> | SET 1 SET 2 | <report files>
 
  Count, or compute differences of, physical lines of source code in the
  given files (may be archives such as compressed tarballs or zip files)
@@ -444,18 +444,17 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              to figure out how to extract the contents of
                              the input file(s) by itself.
                              Use CMD to extract binary archive files (e.g.:
-                             .tar.gz, .zip, .Z).  Use the literal '&gt;FILE&lt' as
+                             .tar.gz, .zip, .Z).  Use the literal '>FILE<' as
                              a stand-in for the actual file(s) to be
                              extracted.  For example, to count lines of code
                              in the input files
                                 gcc-4.2.tar.gz  perl-5.8.8.tar.gz
                              on Unix use
-                               --extract-with='gzip -dc &gt;FILE&lt | tar xf -'
+                               --extract-with='gzip -dc >FILE< | tar xf -'
                              or, if you have GNU tar,
-                               --extract-with='tar zxf &gt;FILE&lt'
+                               --extract-with='tar zxf >FILE<'
                              and on Windows use, for example:
-                               --extract-with="\"c:\Program Files\WinZip\WinZip32.exe\" -e -o >FILE<
-; ."
+                               --extract-with="\"c:\Program Files\WinZip\WinZip32.exe\" -e -o >FILE< ."
                              (if WinZip is installed there).
    --list-file=FILE          Take the list of file and/or directory names to
                              process from FILE, which has one file/directory
@@ -467,7 +466,7 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              files to work on.  If VCS is 'git', then will
                              invoke 'git ls-files' to get a file list and
                              'git submodule status' to get a list of submodules
-                             whose contents will be ignored.  If <VCS> is 'svn'
+                             whose contents will be ignored.  If VCS is 'svn'
                              then will invoke 'svn list -R'.  The primary benefit
                              is that cloc will then skip files explicitly
                              excluded by the versioning tool in question,
@@ -499,7 +498,7 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              or archives.  See also --diff, --diff-alignment,
                              --diff-timeout, --ignore-case, --ignore-whitespace.
    --diff SET1 SET2          Compute differences in code and comments between
-                             source file(s) in SET1 and SET2.  The inputs
+                             source file(s) of SET1 and SET2.  The inputs
                              may be pairs of files, directories, or archives.
                              Use --diff-alignment to generate a list showing
                              which file pairs where compared.  See also
@@ -519,21 +518,21 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              end with .f90) instead of the default Fortran 77
                              counter, use
                                --force-lang="Fortran 90",f
-                             If <ext> is omitted, every file will be counted
-                             with the <lang> counter.  This option can be
+                             If EXT is omitted, every file will be counted
+                             with the LANG counter.  This option can be
                              specified multiple times (but that is only
-                             useful when <ext> is given each time).
+                             useful when EXT is given each time).
                              See also --script-lang, --lang-no-ext.
    --force-lang-def=FILE     Load language processing filters from FILE,
                              then use these filters instead of the built-in
                              filters.  Note:  languages which map to the same
                              file extension (for example:
-                             MATLAB/Objective C/MUMPS/Mercury;  Pascal/PHP;
-                             Lisp/OpenCL; Lisp/Julia; Perl/Prolog) will be
-                             ignored as these require additional processing
-                             that is not expressed in language definition
-                             files.  Use --read-lang-def to define new
-                             language filters without replacing built-in
+                             MATLAB/Mathematica/Objective C/MUMPS/Mercury;
+                             Pascal/PHP; Lisp/OpenCL; Lisp/Julia; Perl/Prolog)
+                             will be ignored as these require additional
+                             processing that is not expressed in language
+                             definition files.  Use --read-lang-def to define
+                             new language filters without replacing built-in
                              filters (see also --write-lang-def).
    --ignore-whitespace       Ignore horizontal white space when comparing files
                              with --diff.  See also --ignore-case.
@@ -554,13 +553,16 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              than 2 GB of memory will cause problems.
                              Note:  this check does not apply to files
                              explicitly passed as command line arguments.
+   --original-dir            [Only effective in combination with
+                             --strip-comments]  Write the stripped files
+                             to the same directory as the original files.
    --read-binary-files       Process binary files in addition to text files.
                              This is usually a bad idea and should only be
                              attempted with text files that have embedded
                              binary data.
    --read-lang-def=FILE      Load new language processing filters from FILE
                              and merge them with those already known to cloc.
-                             If <file> defines a language cloc already knows
+                             If FILE defines a language cloc already knows
                              about, cloc's definition will take precedence.
                              Use --force-lang-def to over-ride cloc's
                              definitions (see also --write-lang-def ).
@@ -584,17 +586,14 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              files with identical contents multiple times
                              (if such duplicates exist).
    --stdin-name=FILE         Give a file name to use to determine the language
-                             for standard input.
+                             for standard input.  (Use - as the input name to
+                             receive source code via STDIN.)
    --strip-comments=EXT      For each file processed, write to the current
                              directory a version of the file which has blank
                              lines and comments removed.  The name of each
                              stripped file is the original file name with
                              .EXT appended to it.  It is written to the
                              current directory unless --original-dir is on.
-   --original-dir            [Only effective in combination with
-                             --strip-comments]  Write the stripped files
-                             to the same directory as the original files.
-
    --sum-reports             Input arguments are report files previously
                              created with the --report-file option.  Makes
                              a cumulative set of results containing the
@@ -616,13 +615,17 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              See also --unix, --show-os.
 
  Filter Options
-   --exclude-dir=D1[,D2,]  Exclude the given comma separated directories
+   --exclude-dir=D1[,D2,]    Exclude the given comma separated directories
                              D1, D2, D3, et cetera, from being scanned.  For
                              example  --exclude-dir=.cache,test  will skip
-                             all files that have /.cache/ or /test/ as part
-                             of their path.
+                             all files and subdirectories that have /.cache/
+                             or /test/ as their parent directory.
                              Directories named .bzr, .cvs, .hg, .git, and
                              .svn are always excluded.
+                             This option only works with individual directory
+                             names so including file path separators is not
+                             allowed.  Use --fullpath and --not-match-d=REGEX
+                             to supply a regex matching multiple subdirectories.
    --exclude-ext=EXT1[,EXT2[...]]
                              Do not count files having the given file name
                              extensions.
@@ -634,42 +637,62 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              relative path names will be resolved starting from
                              the directory where cloc is invoked.
                              See also --list-file.
+   --fullpath                Modifies the behavior of --match-f, --not-match-f,
+                             and --not-match-d to include the file's path
+                             in the regex, not just the file's basename.
+                             (This does not expand each file to include its
+                             absolute path, instead it uses as much of
+                             the path as is passed in to cloc.)
+                             Note:  --match-d always looks at the full
+                             path and therefore is unaffected by --fullpath.
    --include-lang=L1[,L2,]   Count only the given comma separated languages
                              L1, L2, L3, et cetera.
    --match-d=REGEX           Only count files in directories matching the Perl
                              regex.  For example
                                --match-d='/(src|include)/'
                              only counts files in directories containing
-                             /src/ or /include/.
+                             /src/ or /include/.  Unlike --not-match-d,
+                             --match-f, and --not-match-f, --match-d always
+                             compares the fully qualified path against the regex.
    --not-match-d=REGEX       Count all files except those in directories
-                             matching the Perl regex.
+                             matching the Perl regex.  Only the trailing
+                             directory name is compared, for example, when
+                             counting in /usr/local/lib, only 'lib' is
+                             compared to the regex.
+                             Add --fullpath to compare parent directories to
+                             the regex.
+                             Do not include file path separators at the beginning
+                             or end of the regex.
    --match-f=REGEX           Only count files whose basenames match the Perl
                              regex.  For example
                                --match-f='^[Ww]idget'
                              only counts files that start with Widget or widget.
+                             Add --fullpath to include parent directories
+                             in the regex instead of just the basename.
    --not-match-f=REGEX       Count all files except those whose basenames
-                             match the Perl regex.
+                             match the Perl regex.  Add --fullpath to include
+                             parent directories in the regex instead of just
+                             the basename.
    --skip-archive=REGEX      Ignore files that end with the given Perl regular
                              expression.  For example, if given
                                --skip-archive='(zip|tar(.(gz|Z|bz2|xz|7z))?)'
                              the code will skip files that end with .zip,
                              .tar, .tar.gz, .tar.Z, .tar.bz2, .tar.xz, and
                              .tar.7z.
-
    --skip-win-hidden         On Windows, ignore hidden files.
 
  Debug Options
    --categorized=FILE        Save names of categorized files to FILE.
    --counted=FILE            Save names of processed source files to FILE.
+   --diff-alignment=FILE     Write to FILE a list of files and file pairs
+                             showing which files were added, removed, and/or
+                             compared during a run with --diff.  This switch
+                             forces the --diff mode on.
    --explain=LANG            Print the filters used to remove comments for
                              language LANG and exit.  In some cases the
                              filters refer to Perl subroutines rather than
                              regular expressions.  An examination of the
                              source code may be needed for further explanation.
-   --diff-alignment=FILE     Write to FILE a list of files and file pairs
-                             showing which files were added, removed, and/or
-                             compared during a run with --diff.  This switch
-                             forces the --diff mode on.
    --help                    Print this usage information and exit.
    --found=FILE              Save names of every file found to FILE.
    --ignored=FILE            Save names of ignored files and the reason they
@@ -683,6 +706,7 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
    --show-os                 Print the value of the operating system mode
                              and exit.  See also --unix, --windows.
    -v[=N]                    Verbose switch (optional numeric value).
+   -verbose[=N]              Long form of -v.
    --version                 Print the version of this program and exit.
    --write-lang-def=FILE     Writes to FILE the language processing filters
                              then exits.  Useful as a first step to creating
@@ -712,7 +736,6 @@ Usage: cloc [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              (JSON) formatted output.
    --md                      Write the results as Markdown-formatted text.
    --out=FILE                Synonym for --report-file=FILE.
-                             --csv to be on.
    --progress-rate=N         Show progress update after every N files are
                              processed (default N=100).  Set N to 0 to
                              suppress progress output (useful when redirecting
@@ -755,12 +778,13 @@ Ada                        (ada, adb, ads, pad)
 ADSO/IDSM                  (adso)
 AMPLE                      (ample, dofile, startup)
 Ant                        (build.xml, build.xml)
+Antlr                      (g)
 Apex Trigger               (trigger)
 Arduino Sketch             (ino, pde)
 ASP                        (asa, asp)
 ASP.Net                    (asax, ascx, asmx, aspx, master, sitemap, webinfo)
 AspectJ                    (aj)
-Assembly                   (asm, s, S)
+Assembly                   (asm, S, s)
 AutoHotkey                 (ahk)
 awk                        (awk)
 Blade                      (blade.php)
@@ -794,24 +818,26 @@ Dart                       (dart)
 diff                       (diff)
 DITA                       (dita)
 DOORS Extension Language   (dxl)
-DOS Batch                  (bat, BAT, BTM, btm, cmd, CMD)
+DOS Batch                  (BAT, bat, btm, BTM, cmd, CMD)
 DTD                        (dtd)
 dtrace                     (d)
 ECPP                       (ecpp)
 EEx                        (eex)
 Elixir                     (ex, exs)
 Elm                        (elm)
-ERB                        (ERB, erb)
+ERB                        (erb, ERB)
 Erlang                     (erl, hrl)
 Expect                     (exp)
 F#                         (fsi, fs, fs)
 Focus                      (focexec)
 Forth                      (4th, e4, f83, fb, forth, fpm, fr, frt, ft, fth, rx, fs, f, for)
-Fortran 77                 (F, f77, F77, FOR, FTN, ftn, pfo, f, for)
+Fortran 77                 (F, f77, F77, FOR, ftn, FTN, pfo, f, for)
 Fortran 90                 (f90, F90)
-Fortran 95                 (F95, f95)
+Fortran 95                 (f95, F95)
 Freemarker Template        (ftl)
 GDScript                   (gd)
+Glade                      (glade, ui)
+GLSL                       (comp, frag, geom, glsl, tesc, tese, vert)
 Go                         (go)
 Grails                     (gsp)
 Groovy                     (gant, gradle, groovy)
@@ -838,13 +864,15 @@ Korn Shell                 (ksh)
 Kotlin                     (kt, kts)
 LESS                       (less)
 lex                        (l)
+LFE                        (lfe)
 liquid                     (liquid)
 Lisp                       (el, lisp, lsp, sc, cl, jl)
 LiveLink OScript           (oscript)
 Logtalk                    (lgt, logtalk)
 Lua                        (lua)
 m4                         (ac, m4)
-make                       (am, gnumakefile, Gnumakefile, Makefile, makefile, mk)
+make                       (am, Gnumakefile, gnumakefile, makefile, Makefile, mk)
+Mako                       (mako)
 Markdown                   (md)
 Mathematica                (mt, wl, wlt, m)
 MATLAB                     (m)
@@ -867,13 +895,14 @@ Oracle Reports             (rex)
 Pascal                     (dpr, p, pas)
 Pascal/Puppet              (pp)
 Patran Command Language    (pcl, ses)
-Perl                       (perl, plh, plx, pm, pl)
-PHP                        (php, php3, php4, php5)
+Perl                       (perl, plh, plx, pm, pm6, pl)
+PHP                        (php, php3, php4, php5, phtml)
 PHP/Pascal                 (inc)
 Pig Latin                  (pig)
 PL/I                       (pl1)
+PO File                    (po)
 PowerBuilder               (sra, srf, srm, srs, sru, srw)
-PowerShell                 (ps1)
+PowerShell                 (ps1, psd1, psm1)
 Prolog                     (P, pl, pro)
 Protocol Buffers           (proto)
 Pug                        (pug)
@@ -883,8 +912,9 @@ QML                        (qml)
 Qt                         (ui)
 Qt Linguist                (ts)
 Qt Project                 (pro)
-R                          (r, R)
+R                          (R, r)
 Racket                     (rkt, rktl, sch, scm, scrbl, ss)
+RapydScript                (pyj)
 Razor                      (cshtml)
 Rexx                       (rexx)
 RobotFramework             (robot, tsv)
@@ -897,10 +927,12 @@ Scala                      (scala)
 sed                        (sed)
 SKILL                      (il)
 SKILL++                    (ils)
+Slice                      (ice)
 Slim                       (slim)
 Smarty                     (smarty, tpl)
-Softbridge Basic           (sbl, SBL)
-SQL                        (psql, SQL, sql)
+Softbridge Basic           (SBL, sbl)
+Specman e                  (e)
+SQL                        (psql, sql, SQL)
 SQL Data                   (data.sql)
 SQL Stored Procedure       (spc.sql, spoc.sql, sproc.sql, udf.sql)
 Standard ML                (fun, sig, sml)
@@ -914,18 +946,19 @@ TITAN Project File Information (tpd)
 Titanium Style Sheet       (tss)
 TTCN                       (ttcn, ttcn2, ttcn3, ttcnpp)
 Twig                       (twig)
-TypeScript                 (ts)
+TypeScript                 (tsx, ts)
 Unity-Prefab               (mat, prefab)
 Vala                       (vala)
 Vala Header                (vapi)
 Velocity Template Language (vm)
 Verilog-SystemVerilog      (sv, svh, v)
-VHDL                       (VHD, vhd, vhdl, VHDL)
+VHDL                       (VHD, vhd, VHDL, vhdl)
 vim script                 (vim)
-Visual Basic               (bas, cls, ctl, dsr, frm, VB, vb, vba, VBA, vbs, VBS)
-Visual Fox Pro             (SCA, sca)
+Visual Basic               (bas, cls, ctl, dsr, frm, VB, vb, vba, VBA, VBS, vbs)
+Visual Fox Pro             (sca, SCA)
 Visualforce Component      (component)
 Visualforce Page           (page)
+Vuejs Component            (vue)
 Windows Message File       (mc)
 Windows Module Definition  (def)
 Windows Resource File      (rc, rc2)
@@ -936,7 +969,7 @@ XAML                       (xaml)
 xBase                      (prg)
 xBase Header               (ch)
 XHTML                      (xhtml)
-XMI                        (xmi, XMI)
+XMI                        (XMI, xmi)
 XML                        (xml, XML)
 XQuery                     (xq, xquery)
 XSD                        (XSD, xsd)
