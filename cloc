@@ -5318,6 +5318,7 @@ sub set_constants {                          # {{{1
             'asa'         => 'ASP'                   ,
             'asax'        => 'ASP.Net'               ,
             'ascx'        => 'ASP.Net'               ,
+            'asd'         => 'Lisp'                  , # system definition file
             'asm'         => 'Assembly'              ,
             'asmx'        => 'ASP.Net'               ,
             'asp'         => 'ASP'                   ,
