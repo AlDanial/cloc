@@ -253,6 +253,7 @@ cloc has many features that make it easy to use, thorough, extensible, and porta
 8.  Has no dependencies outside the standard Perl distribution.
 9.  Runs on Linux, FreeBSD, NetBSD, OpenBSD, Mac OS X, AIX, HP-UX, Solaris, IRIX, and z/OS systems that have Perl 5.6 or higher. The source version runs on Windows with either ActiveState Perl, Strawberry Perl, Cygwin, or MobaXTerm+Perl plugin. Alternatively on Windows one can run the Windows binary which has no dependencies.
 [](1}}})
+
 <a name="Other_Counters"></a> []({{{1)
 # [Other Counters &#9650;](#___top "click to go to top of document")
 
