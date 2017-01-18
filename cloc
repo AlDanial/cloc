@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "1.72";  # odd number == beta; even number == stable
+my $VERSION = "1.73";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.006;
 # use modules                                  {{{1
