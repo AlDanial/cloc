@@ -276,9 +276,10 @@ Count lines streamed via I<STDIN> as if they came from a file named FILE.
 =item B<--strip-comments=EXT>
 
 For each file processed, write to the current directory a version of
-the file which has blank lines and comments removed. The name of each
-stripped file is the original file name with C<.EXT> appended to it.
-It is written to the current directory unless B<--original-dir> is on.
+the file which has blank and commented lines removed (in-line comments
+persist). The name of each stripped file is the original file name with 
+C<.EXT> appended to it. It is written to the current directory unless 
+B<--original-dir> is on.
 
 =item B<--original-dir>
 

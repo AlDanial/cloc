@@ -308,10 +308,11 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              receive source code via STDIN.)
    --strip-comments=<ext>    For each file processed, write to the current
                              directory a version of the file which has blank
-                             lines and comments removed.  The name of each
-                             stripped file is the original file name with
-                             .<ext> appended to it.  It is written to the
-                             current directory unless --original-dir is on.
+                             and commented lines removed (in-line comments
+                             persist).  The name of each stripped file is the 
+                             original file name with .<ext> appended to it.  
+                             It is written to the current directory unless 
+                             --original-dir is on.
    --sum-reports             Input arguments are report files previously
                              created with the --report-file option.  Makes
                              a cumulative set of results containing the
