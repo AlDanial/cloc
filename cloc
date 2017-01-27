@@ -311,9 +311,9 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
    --strip-comments=<ext>    For each file processed, write to the current
                              directory a version of the file which has blank
                              and commented lines removed (in-line comments
-                             persist).  The name of each stripped file is the 
-                             original file name with .<ext> appended to it.  
-                             It is written to the current directory unless 
+                             persist).  The name of each stripped file is the
+                             original file name with .<ext> appended to it.
+                             It is written to the current directory unless
                              --original-dir is on.
    --sum-reports             Input arguments are report files previously
                              created with the --report-file option.  Makes
@@ -341,8 +341,8 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              example  --exclude-dir=.cache,test  will skip
                              all files and subdirectories that have /.cache/
                              or /test/ as their parent directory.
-                             Directories named .bzr, .cvs, .hg, .git, and
-                             .svn are always excluded.
+                             Directories named .bzr, .cvs, .hg, .git, .svn,
+                             and .snapshot are always excluded.
                              This option only works with individual directory
                              names so including file path separators is not
                              allowed.  Use --fullpath and --not-match-d=<regex>
@@ -672,6 +672,7 @@ $Exclude_Dir{".cvs"}   = 1;
 $Exclude_Dir{".hg"}    = 1;
 $Exclude_Dir{".git"}   = 1;
 $Exclude_Dir{".bzr"}   = 1;
+$Exclude_Dir{".snapshot"} = 1;  # NetApp backups
 $opt_count_diff        = defined $opt_count_diff ? 1 : 0;
 $opt_diff              = 1  if $opt_diff_alignment;
 $opt_exclude_ext       = "" unless $opt_exclude_ext;
@@ -10238,6 +10239,7 @@ sub array_diff {                             # {{{1
     }
 #use Data::Dumper::Simple;
 #print Dumper($rah_diff_L, $rah_diff_R);
+#print Dumper($rah_diff_L);
 
     print "<- array_diff\n" if $opt_v > 2;
 } # 1}}}
