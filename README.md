@@ -210,6 +210,7 @@ Depending your operating system, one of these installation methods may work for 
     sudo yum install cloc                  # Red Hat, Fedora
     sudo dnf install cloc                  # Fedora 22 or later
     sudo pacman -S cloc                    # Arch
+    emerge -av dev-util/cloc               # Gentoo https://packages.gentoo.org/packages/dev-util/cloc
     sudo pkg install cloc                  # FreeBSD
     sudo port install cloc                 # Mac OS X with MacPorts
     brew install cloc                      # Mac OS X with Homebrew
