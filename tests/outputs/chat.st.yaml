@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.73
+  elapsed_seconds    : 0.00579404830932617
+  n_files            : 1
+  n_lines            : 82
+  files_per_second   : 172.590897868488
+  lines_per_second   : 14152.453625216
+  report_file        : chat.st.yaml
+Smalltalk :
+  nFiles: 1
+  blank: 15
+  comment: 2
+  code: 65
+SUM: 
+  blank: 15
+  comment: 2
+  code: 65
+  nFiles: 1

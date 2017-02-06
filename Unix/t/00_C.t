@@ -411,6 +411,16 @@ my @Tests = (   {
                     'args' => '../tests/inputs/Slim.html.slim',
                 },
                 {
+                    'name' => 'Smalltalk 1',
+                    'ref'  => '../tests/outputs/chat.st.yaml',
+                    'args' => '../tests/inputs/chat.st',
+                },
+                {
+                    'name' => 'Smalltalk 2',
+                    'ref'  => '../tests/outputs/captcha.cs.yaml',
+                    'args' => '../tests/inputs/captcha.cs',
+                },
+                {
                     'name' => 'Specman e',
                     'ref'  => '../tests/outputs/specman_e.e.yaml',
                     'args' => '../tests/inputs/specman_e.e',

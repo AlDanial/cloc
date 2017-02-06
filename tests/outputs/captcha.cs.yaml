@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.73
+  elapsed_seconds    : 0.00586390495300293
+  n_files            : 1
+  n_lines            : 27
+  files_per_second   : 170.53482415125
+  lines_per_second   : 4604.44025208376
+  report_file        : captcha.cs.yaml
+Smalltalk :
+  nFiles: 1
+  blank: 4
+  comment: 3
+  code: 20
+SUM: 
+  blank: 4
+  comment: 3
+  code: 20
+  nFiles: 1
