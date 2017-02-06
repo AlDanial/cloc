@@ -3305,6 +3305,7 @@ sub write_lang_def {                         # {{{1
                 $language eq "Verilog-SystemVerilog/Coq"        or
                 $language eq "TypeScript/Qt Linguist"           or
                 $language eq "Qt/Glade"                         or
+                $language eq "C#/Smalltalk"                     or
                 $language eq "(unknown)";
         printf $OUT "%s\n", $language;
         foreach my $filter (@{$rhaa_Filters_by_Language->{$language}}) {
@@ -3585,6 +3586,11 @@ sub print_language_info {                    # {{{1
         push @{$extensions{'Glade'}} , "ui";
         push @{$extensions{'Qt'}}    , "ui";
         delete $extensions{'Qt/Glade'};
+    }
+    if (!$language or $language =~ /^(C#|Smalltalk)$/) {
+        push @{$extensions{'C#'}}           , "cs";
+        push @{$extensions{'Smalltalk'}}    , "cs";
+        delete $extensions{'C#/Smalltalk'};
     }
     if (!$language or $language =~ /^(Ant)$/i) {
         push @{$extensions{'Ant'}}  , "build.xml";
@@ -4153,6 +4159,8 @@ sub classify_file {                          # {{{1
                 return TypeScript_or_QtLinguist( $full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'Qt/Glade') {
                 return Qt_or_Glade( $full_file, $rh_Err, $raa_errors);
+            } elsif ($Language_by_Extension{$extension} eq 'C#/Smalltalk') {
+                return Csharp_or_Smalltalk( $full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'Brainfuck') {
                 if (really_is_bf($full_file)) {
                     return $Language_by_Extension{$extension};
@@ -5381,7 +5389,7 @@ sub set_constants {                          # {{{1
             'component'   => 'Visualforce Component' ,
             'cpp'         => 'C++'                   ,
             'cr'          => 'Crystal'               ,
-            'cs'          => 'C#'                    ,
+            'cs'          => 'C#/Smalltalk'          ,
             'csh'         => 'C Shell'               ,
             'cson'        => 'CSON'                  ,
             'css'         => "CSS"                   ,
@@ -5642,6 +5650,7 @@ sub set_constants {                          # {{{1
             'spc.sql'     => 'SQL Stored Procedure'  ,
             'udf.sql'     => 'SQL Stored Procedure'  ,
             'data.sql'    => 'SQL Data'              ,
+            'st'          => 'Smalltalk'             ,
             'styl'        => 'Stylus'                ,
             'sv'          => 'Verilog-SystemVerilog' ,
             'svh'         => 'Verilog-SystemVerilog' ,
@@ -5892,6 +5901,7 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
+    'C#/Smalltalk' => [ [ 'die' ,  ], ], # never called
     'C#'                 => [
 #                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
@@ -6447,6 +6457,9 @@ sub set_constants {                          # {{{1
     'sed'                => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
+                            ],
+    'Smalltalk'          => [
+                                [ 'call_regexp_common'  , 'Smalltalk'      ],
                             ],
     'Smarty'             => [
                                 [ 'smarty_to_C'                    ],
@@ -7354,7 +7367,7 @@ sub set_constants {                          # {{{1
     'SKILL++'                      =>   2.00,
     'slogan'                       =>   0.98,
     'Slice'                        =>   1.50,
-    'smalltalk'                    =>   2.50,
+    'Smalltalk'                    =>   4.00,
     'smalltalk 286'                =>   3.81,
     'smalltalk 80'                 =>   3.81,
     'smalltalk/v'                  =>   3.81,
@@ -7545,6 +7558,7 @@ sub check_scale_existence {                  # {{{1
         "Verilog-SystemVerilog/Coq"         => 1,
         "TypeScript/Qt Linguist"            => 1,
         "Qt/Glade"                          => 1,
+        "C#/Smalltalk"                      => 1,
     );
     my $OK = 1;
     foreach my $language (sort keys %{$rhaa_Filters_by_Language}) {
@@ -9871,6 +9885,43 @@ sub Qt_or_Glade {                            # {{{1
         $lang = "Qt";
     }
     print "<- Qt_or_Glade\n" if $opt_v > 2;
+    return $lang;
+} # 1}}}
+sub Csharp_or_Smalltalk {                    # {{{1
+    my ($file        , # in
+        $rh_Err      , # in   hash of error codes
+        $raa_errors  , # out
+       ) = @_;
+
+    print "-> Csharp_or_Smalltalk($file)\n" if $opt_v > 2;
+
+    my $lang = undef;
+    my $IN = new IO::File $file, "r";
+    if (!defined $IN) {
+        push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
+        return $lang;
+    }
+    my $cs_points        = 0;
+    my $smalltalk_points = 0;
+    while (<$IN>) {
+        s{//.*?$}{};        # strip inline C# comments for better clarity
+        if (/[;}{]\s*$/) {
+            ++$cs_points       ;
+        } else {
+            ++$smalltalk_points;
+        }
+        if (/(\!|\])\s*$/) {
+            ++$smalltalk_points;
+            --$cs_points       ;
+        }
+    }
+    $IN->close;
+    if ($smalltalk_points > $cs_points) {
+        $lang = "Smalltalk";
+    } else {
+        $lang = "C#";
+    }
+    print "<- Csharp_or_Smalltalk($file)=$lang\n" if $opt_v > 2;
     return $lang;
 } # 1}}}
 sub html_colored_text {                      # {{{1
