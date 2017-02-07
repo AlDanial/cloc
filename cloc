@@ -9910,7 +9910,7 @@ sub Csharp_or_Smalltalk {                    # {{{1
         } else {
             ++$smalltalk_points;
         }
-        if (/(\!|\])\s*$/) {
+        if (/(\!|\]\.)\s*$/) {
             ++$smalltalk_points;
             --$cs_points       ;
         }
