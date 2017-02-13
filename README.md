@@ -155,6 +155,44 @@ SUM:                            39           1564           1365           3945
 -------------------------------------------------------------------------------
 </pre>
 
+**Apply CLOC on all files and folders at a particular level**
+
+Say you have a directory with three different git-managed projects,
+Directory_Project0, File_Project1, and Directory_Project2.  You can use your shell's looping
+capability to count the code in each.  This example uses bash:
+<pre>
+prompt> for d in * ; do (echo "$d" && cloc "$d"); done
+./Directory_Project0/
+     913 text files.
+     494 unique files.                                          
+     464 files ignored.
+
+github.com/AlDanial/cloc v 1.72  T=3.07 s (146.9 files/s, 4811.8 lines/s)
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Elixir                         433           2381           2236           9387
+Markdown                        15            200              0            518
+Ruby                             1              1              9             15
+Lua                              1              1              0             14
+Erlang                           1              2              0              4
+-------------------------------------------------------------------------------
+SUM:                           451           2585           2245           9938
+-------------------------------------------------------------------------------
+
+./File_Project1/
+       1 text file.
+       1 unique file.                              
+       0 files ignored.
+
+github.com/AlDanial/cloc v 1.72  T=0.01 s (123.7 files/s, 2473.4 lines/s)
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Bourne Shell                     1              1              1             18
+-------------------------------------------------------------------------------
+</pre>
+
 [](1}}})
 <a name="Overview"></a>      []({{{1)
 # [Overview &#9650;](#___top "click to go to top of document")
