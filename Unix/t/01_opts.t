@@ -118,6 +118,12 @@ my @Tests = (
                     'args' => '--vcs "find foo_bar"',
                     'ref'  => '../tests/outputs/issues/147/T1.yaml',
                 },
+                {
+                    'name' => '--read-lang-def w/remove_between_general (github issue #166)',
+                    'cd'   => '../tests/inputs/issues/166',
+                    'args' => '--read-lang-def X fake.thy',
+                    'ref'  => '../tests/outputs/issues/166/fake.thy.yaml',
+                },
             );
 
 # Create test input for issue #132 which needs data not in the git repo.

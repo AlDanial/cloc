@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.73
+  elapsed_seconds    : 0.00702595710754395
+  n_files            : 1
+  n_lines            : 5
+  files_per_second   : 142.329363059486
+  lines_per_second   : 711.646815297431
+  report_file        : /home/al/git-cloc/tests/outputs/issues/166/fake.thy.yaml
+Isabelle :
+  nFiles: 1
+  blank: 1
+  comment: 2
+  code: 2
+SUM: 
+  blank: 1
+  comment: 2
+  code: 2
+  nFiles: 1
