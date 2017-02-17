@@ -263,7 +263,7 @@ If cloc does not suit your needs here are other freely available counters to con
 *   [Sonar](http://www.sonarsource.org/)
 *   [Ohcount](https://github.com/blackducksoftware/ohcount)
 *   [SLOCCount](http://www.dwheeler.com/sloccount/)
-*   [sclc](http://www.cmcrossroads.com/bradapp/clearperl/sclc.html)
+*   [sclc](https://code.google.com/archive/p/sclc/)
 *   USC's [CODECOUNT](http://sunset.usc.edu/research/CODECOUNT/)
 *   [loc](http://freshmeat.net/projects/loc/)
 
