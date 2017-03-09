@@ -272,6 +272,7 @@ Other references:
 *   QSM's [directory](http://www.qsm.com/CodeCounters.html) of code counting tools.
 *   The [Wikipedia entry](http://en.wikipedia.org/wiki/Source_lines_of_code) for source code line counts.
 [](1}}})
+
 # <a name="regexp_common">Regexp::Common, Digest::MD5, Win32::Autoglob, Algorithm::Diff</a> []({{{1)
 
 Although cloc does not need Perl modules outside those found in the
