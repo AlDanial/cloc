@@ -1,0 +1,51 @@
+// https://github.com/AlDanial/cloc/issues/172
+
+/*
+ * Copyright 2010 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.drools.examples.fibonacci
+
+import org.drools.examples.fibonacci.FibonacciExample.Fibonacci;
+
+dialect "mvel"
+
+rule Recurse
+    salience 10
+    when
+        f : Fibonacci ( value == -1 )
+        not ( Fibonacci ( sequence == 1 ) )    
+    then
+        insert( new Fibonacci( f.sequence - 1 ) );
+        System.out.println( "recurse for " + f.sequence );
+end
+
+rule Bootstrap
+    when
+        f : Fibonacci( sequence == 1 || == 2, value == -1 ) // this is a multi-restriction || on a single field
+    then 
+        modify ( f ){ value = 1 };
+        System.out.println( f.sequence + " == " + f.value );
+end
+
+rule Calculate
+    when
+        f1 : Fibonacci( s1 : sequence, value != -1 ) // here we bind sequence
+        f2 : Fibonacci( sequence == (s1 + 1 ), value != -1 ) // here we don't, just to demonstrate the different way bindings can be used
+        f3 : Fibonacci( s3 : sequence == (f2.sequence + 1 ), value == -1 )              
+    then    
+        modify ( f3 ) { value = f1.value + f2.value };
+        System.out.println( s3 + " == " + f3.value ); // see how you can access pattern and field  bindings
+end

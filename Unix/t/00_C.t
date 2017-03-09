@@ -109,6 +109,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/MSDOS.bat',
                 },
                 {
+                    'name' => 'Drools',   
+                    'ref'  => '../tests/outputs/drools.drl.yaml',
+                    'args' => '../tests/inputs/drools.drl',
+                },
+                {
                     'name' => 'ECPP',
                     'ref'  => '../tests/outputs/comp.ecpp.yaml',
                     'args' => '../tests/inputs/comp.ecpp',

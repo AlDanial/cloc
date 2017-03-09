@@ -5411,6 +5411,7 @@ sub set_constants {                          # {{{1
             'dmap'        => 'NASTRAN DMAP'          ,
             'dpr'         => 'Pascal'                ,
             'dita'        => 'DITA'                  ,
+            'drl'         => 'Drools'                ,
             'dsr'         => 'Visual Basic'          ,
             'dtd'         => 'DTD'                   ,
             'ec'          => 'C'                     ,
@@ -5865,6 +5866,7 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*xml_markup.comment!'  ],
                             ],
     'C'                  => [
+[ 'remove_matches'      , '([0-9]+.*)+\s+/' ], # REMOVE ME
                                 [ 'call_regexp_common'  , 'C++'    ],
 #                               [ 'remove_matches'      , '^\s*//' ], # C99
                                 [ 'remove_inline'       , '//.*$'  ], # C99
@@ -5964,6 +5966,9 @@ sub set_constants {                          # {{{1
     'DOORS Extension Language' => [
 #                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'Drools'             => [
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'dtrace'             => [
@@ -7014,6 +7019,7 @@ sub set_constants {                          # {{{1
     'DOORS Extension Language'     =>   1.50,
     'Dockerfile'                   =>   2.00,
     'DOS Batch'                    =>   0.63,
+    'Drools'                       =>   2.00,
     'dsp assembly'                 =>   0.50,
     'dtabl'                        =>   1.74,
     'dtipt'                        =>   1.74,

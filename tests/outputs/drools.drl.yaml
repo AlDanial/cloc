@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.73
+  elapsed_seconds    : 0.00578093528747559
+  n_files            : 1
+  n_lines            : 51
+  files_per_second   : 172.982389573968
+  lines_per_second   : 8822.10186827236
+  report_file        : tests/outputs/drools.drl.yaml
+Drools :
+  nFiles: 1
+  blank: 7
+  comment: 16
+  code: 28
+SUM: 
+  blank: 7
+  comment: 16
+  code: 28
+  nFiles: 1
