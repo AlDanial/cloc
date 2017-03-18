@@ -426,9 +426,14 @@ my @Tests = (   {
                     'args' => '../tests/inputs/captcha.cs',
                 },
                 {
-                    'name' => 'Specman e',
+                    'name' => 'Specman e 1',
                     'ref'  => '../tests/outputs/specman_e.e.yaml',
                     'args' => '../tests/inputs/specman_e.e',
+                },
+                {
+                    'name' => 'Specman e 2',
+                    'ref'  => '../tests/outputs/specman_e2.e.yaml',
+                    'args' => '../tests/inputs/specman_e2.e',
                 },
                 {
                     'name' => 'Swift',

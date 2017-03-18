@@ -6450,9 +6450,11 @@ sub set_constants {                          # {{{1
                             ],
     'Specman e'          => [
                                 [ 'pre_post_fix'        , "'>", "<'"],
-                                [ 'remove_between_general', "'>", "<'" ],
+                                [ 'remove_between_general', "^'>", "^<'" ],
                                 [ 'call_regexp_common'  , 'C++',   ],
                                 [ 'remove_matches'      , '^\s*--' ],
+                                [ 'rm_last_line'        , ],  # undo pre_post_fix addition
+                                                              # of trailing line of just <'
                             ],
     'SQL'                => [
                                 [ 'call_regexp_common'  , 'C'      ],
@@ -6690,9 +6692,9 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
     'XSLT'               => [   [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
-    'NAnt script'       => [   [ 'remove_html_comments',          ],
+    'NAnt script'       => [    [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
-    'MSBuild script'    => [   [ 'remove_html_comments',          ],
+    'MSBuild script'    => [    [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
     'zsh'                => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -9284,6 +9286,14 @@ sub pre_post_fix {                           # {{{1
 
     print "<- pre_post_fix\n" if $opt_v > 2;
     return split("\n", $all_lines);
+} # 1}}}
+sub rm_last_line {                           # {{{1
+    # Return all but the last line.
+    my ($ra_lines, ) = @_;
+    print "-> rm_last_line\n" if $opt_v > 2;
+    print "<- rm_last_line\n" if $opt_v > 2;
+    my $n = scalar(@{$ra_lines}) - 2;
+    return @{$ra_lines}[0..$n];
 } # 1}}}
 sub call_regexp_common {                     # {{{1
     my ($ra_lines, $language ) = @_;
