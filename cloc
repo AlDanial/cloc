@@ -5392,6 +5392,7 @@ sub set_constants {                          # {{{1
             'coffee'      => 'CoffeeScript'          ,
             'component'   => 'Visualforce Component' ,
             'cpp'         => 'C++'                   ,
+            'CPP'         => 'C++'                   ,
             'cr'          => 'Crystal'               ,
             'cs'          => 'C#/Smalltalk'          ,
             'csh'         => 'C Shell'               ,
