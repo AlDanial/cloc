@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header :
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.67
+  elapsed_seconds    : 0.00526905059814453
+  n_files            : 1
+  n_lines            : 1
+  files_per_second   : 189.787511312217
+  lines_per_second   : 5693.62533936652
+  report_file        : C++-uppercase.CPP.yaml
+C++ :
+  nFiles: 1
+  blank: 2
+  comment: 1
+  code: 1
+SUM:
+  blank: 2
+  comment: 1
+  code: 1
+  nFiles: 1

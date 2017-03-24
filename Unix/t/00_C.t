@@ -79,6 +79,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/C++-MFC.cc',
                 },
                 {
+                    'name' => 'C++ Uppercase extension',
+                    'ref'  => '../tests/outputs/C++-uppercase.CPP.yaml',
+                    'args' => '../tests/inputs/C++-uppercase.CPP',
+                },
+                {
                     'name' => 'C simple',
                     'ref'  => '../tests/outputs/C-Ansi.c.yaml',
                     'args' => '../tests/inputs/C-Ansi.c',
