@@ -187,8 +187,8 @@ higher, [Strawberry Perl](http://strawberryperl.com/),
 [Cygwin](http://www.cygwin.com/), or
 [MobaXTerm](http://mobaxterm.mobatek.net/) with the Perl plug-in
 installed. Alternatively one can use the Windows binary of cloc
-generated with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-
-1.019/lib/pp.pm) to run on Windows computers that have neither Perl nor Cygwin.)
+generated with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm)
+to run on Windows computers that have neither Perl nor Cygwin.)
 
 cloc contains code from David Wheeler's
 [SLOCCount](http://www.dwheeler.com/sloccount/),
@@ -338,7 +338,13 @@ a best-effort of a virus and malware-free `.exe`.
 You are encouraged to run your own virus scanners against the
 executable and also check sites such
 https://www.virustotal.com/ .
-The entries for cloc 1.66 and 1.68 are:
+The entries for recent versions are:
+
+cloc 1.72 exe:
+https://www.virustotal.com/en/url/8fd2af5cd972f648d7a2d7917bc202492012484c3a6f0b48c8fd60a8d395c98c/analysis/
+
+cloc 1.70 exe:
+https://www.virustotal.com/en/url/63edef209099a93aa0be1a220dc7c4c7ed045064d801e6d5daa84ee624fc0b4a/analysis/
 
 cloc 1.68 exe:
 https://www.virustotal.com/en/file/c484fc58615fc3b0d5569b9063ec1532980281c3155e4a19099b11ef1c24443b/analysis/
@@ -364,7 +370,7 @@ It includes a utility, `perlapp`, which can build stand-alone
 Windows, Mac, and Linux binaries of Perl source code.
 
 [perl2exe](http://www.indigostar.com/perl2exe.php)
-will also do the trick.  If you do have `perl2exe, modify lines
+will also do the trick.  If you do have `perl2exe`, modify lines
 84-87 in the cloc source code for a minor code
 modification that is necessary to make a cloc Windows executable.
 
@@ -380,7 +386,7 @@ C:> cpan -i Digest::MD5
 C:> cpan -i Regexp::Common
 C:> cpan -i Algorithm::Diff
 C:> cpan -i PAR::Packer
-C:> pp -M Digest::MD5 -c -x -o cloc-1.68.exe cloc
+C:> pp -M Digest::MD5 -c -x -o cloc-1.72.exe cloc
 </pre>
 
 A variation on the instructions above is if you installed the portable
