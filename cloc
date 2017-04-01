@@ -5464,6 +5464,7 @@ sub set_constants {                          # {{{1
 			'tesc'        => 'GLSL'                  ,
 			'tese'        => 'GLSL'                  ,
 			'geom'        => 'GLSL'                  ,
+			'feature'     => 'Cucumber'              ,
 			'frag'        => 'GLSL'                  ,
 			'comp'        => 'GLSL'                  ,
             'go'          => 'Go'                    ,
@@ -5935,6 +5936,9 @@ sub set_constants {                          # {{{1
     'CSON'               => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
+                            ],
+    'Cucumber'           => [
+                                [ 'remove_matches'      , '^\s*#'  ],
                             ],
     'D/dtrace'           => [ [ 'die' ,          ], ], # never called
     'D'                  => [
@@ -7003,8 +7007,9 @@ sub set_constants {                          # {{{1
     'csp'                          =>   1.51,
     'cssl'                         =>   1.74,
     'CSS'                          =>   1.0,
-    'culprit'                      =>   1.57,
+    'Cucumber'                     =>   3.00,
     'CUDA'                         =>   1.00,
+    'culprit'                      =>   1.57,
     'cxpert'                       =>   1.63,
     'cygnet'                       =>   4.21,
     'D'                            =>   1.70,

@@ -44,6 +44,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/locale_facets.h',
                 },
                 {
+                    'name' => 'Cucumber',
+                    'ref'  => '../tests/outputs/cucumber.feature.yaml',
+                    'args' => '../tests/inputs/cucumber.feature',
+                },
+                {
                     'name' => 'Clean',
                     'ref'  => '../tests/outputs/iclean.icl.yaml',
                     'args' => '../tests/inputs/iclean.icl',
