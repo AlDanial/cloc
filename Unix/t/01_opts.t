@@ -124,6 +124,12 @@ my @Tests = (
                     'args' => '--read-lang-def X fake.thy',
                     'ref'  => '../tests/outputs/issues/166/fake.thy.yaml',
                 },
+                {
+                    'name' => '--read-lang-def w/triple_extension',
+                    'cd'   => '../tests/inputs',
+                    'args' => '--read-lang-def triple_lang_def.txt custom.triple.extension.js',
+                    'ref'  => '../tests/outputs/custom.triple.extension.js.yaml',
+                },
             );
 
 # Create test input for issue #132 which needs data not in the git repo.

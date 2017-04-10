@@ -4063,6 +4063,11 @@ sub classify_file {                          # {{{1
           $extension = lc $extension if $ON_WINDOWS;
           unshift @extension_list, $extension;  # examine double ext first
       }
+      if ($file =~ /\.([^\.]+\.[^\.]+\.[^\.]+)$/) { # has a triple extension
+          my $extension = $1;
+          $extension = lc $extension if $ON_WINDOWS;
+          unshift @extension_list, $extension;  # examine triple ext first
+      }
       foreach my $extension (@extension_list) {
         if ($Not_Code_Extension{$extension} and
            !$Forced_Extension{$extension}) {
