@@ -5202,7 +5202,10 @@ sub Forth_paren_to_C  {                      # {{{1
     print "-> Forth_paren_to_C()\n" if $opt_v > 2;
 
     my $in_comment = 0;
+    my $max_paren_pair_per_line = 255;
     foreach (@{$ra_lines}) {
+#print "Forth_paren_to_C: [$_]\n";
+        my $n_iter = 0;
         while (/\s\(\s/ or ($in_comment and /\)/)) {
             if (/\s\(\s.*?\)/) {
                 # in-line parenthesis comment; handle here
@@ -5213,6 +5216,12 @@ sub Forth_paren_to_C  {                      # {{{1
             } elsif ($in_comment and /\)/) {
                 s{\)}{*/};
                 $in_comment = 0;
+            } else {
+                # gets here if it can't find a matching
+                # close parenthesis; in this case the
+                # results will likely be incorrect
+                ++$n_iter;
+                last if $n_iter > $max_paren_pair_per_line;
             }
         }
     }
