@@ -34,6 +34,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/hello.bf',
                 },
                 {
+                    'name' => 'BrightScript',
+                    'ref'  => '../tests/outputs/roku.brs.yaml',
+                    'args' => '../tests/inputs/roku.brs',
+                },
+                {
                     'name' => 'C# 2',
                     'ref'  => '../tests/outputs/wokka.cs.yaml',
                     'args' => '../tests/inputs/wokka.cs',

@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.73
+  elapsed_seconds    : 0.00533485412597656
+  n_files            : 1
+  n_lines            : 22
+  files_per_second   : 187.446549874866
+  lines_per_second   : 4123.82409724705
+  report_file        : ../outputs/roku.brs.yaml
+BrightScript :
+  nFiles: 1
+  blank: 0
+  comment: 3
+  code: 19
+SUM: 
+  blank: 0
+  comment: 3
+  code: 19
+  nFiles: 1

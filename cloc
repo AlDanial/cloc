@@ -5380,6 +5380,7 @@ sub set_constants {                          # {{{1
             'build.xml'   => 'Ant'                   ,
             'b'           => 'Brainfuck'             ,
             'bf'          => 'Brainfuck'             ,
+            'brs'         => 'BrightScript'          ,
             'cbl'         => 'COBOL'                 ,
             'CBL'         => 'COBOL'                 ,
             'c'           => 'C'                     ,
@@ -5873,6 +5874,10 @@ sub set_constants {                          # {{{1
     'Brainfuck'          => [ # puerile name for a language
 #                               [ 'call_regexp_common'  , 'Brainfuck' ],  # inaccurate
                                 [ 'remove_bf_comments',               ],
+                            ],
+    'BrightScript'       => [
+                                [ 'remove_matches'      , '^\s*rem', ],
+                                [ 'remove_matches'      , '^\s*\'',  ],
                             ],
     'builder'            => [
                                 [ 'remove_matches'      , '^\s*xml_markup.comment!'  ],
@@ -6957,6 +6962,7 @@ sub set_constants {                          # {{{1
     'boeingcalc'                   =>  13.33,
     'bteq'                         =>   6.15,
     'Brainfuck'                    =>   0.10,
+    'BrightScript'                 =>   2.00,
     'builder'                      =>   2.00,
     'C'                            =>   0.77,
     'c set 2'                      =>   0.88,
