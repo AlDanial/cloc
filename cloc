@@ -5470,6 +5470,8 @@ sub set_constants {                          # {{{1
             'Gnumakefile' => 'make'                  ,
             'gd'          => 'GDScript'              ,
             'glsl'        => 'GLSL'                  ,
+            'gql'         => 'GraphQL'               ,
+            'graphql'     => 'GraphQL'               ,
 			'vert'        => 'GLSL'                  ,
 			'tesc'        => 'GLSL'                  ,
 			'tese'        => 'GLSL'                  ,
@@ -6084,6 +6086,10 @@ sub set_constants {                          # {{{1
 #                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'add_newlines'        ,          ],
                                 [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'GraphQL'            => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
                             ],
     'Groovy'             => [
                                 [ 'remove_inline'       , '//.*$'  ],
@@ -7123,6 +7129,7 @@ sub set_constants {                          # {{{1
     'GDScript'                     =>   2.50,
     'Go'                           =>   2.50,
     'Grails'                       =>   1.48,
+    'GraphQL'                      =>   4.00,
     'Groovy'                       =>   4.10,
     'gw basic'                     =>   0.82,
     'Harbour'                      =>   2.00,

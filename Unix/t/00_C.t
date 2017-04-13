@@ -186,6 +186,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/regex_limit.gradle',
                 },
                 {
+                    'name' => 'GraphQL',
+                    'ref'  => '../tests/outputs/graphql.gql.yaml',
+                    'args' => '../tests/inputs/graphql.gql',
+                },
+                {
                     'name' => 'HAML',
                     'ref'  => '../tests/outputs/just_stuff.haml.yaml',
                     'args' => '../tests/inputs/just_stuff.haml',
