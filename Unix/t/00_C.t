@@ -34,6 +34,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/hello.bf',
                 },
                 {
+                    'name' => 'BrightScript',
+                    'ref'  => '../tests/outputs/roku.brs.yaml',
+                    'args' => '../tests/inputs/roku.brs',
+                },
+                {
                     'name' => 'C# 2',
                     'ref'  => '../tests/outputs/wokka.cs.yaml',
                     'args' => '../tests/inputs/wokka.cs',
@@ -42,6 +47,11 @@ my @Tests = (   {
                     'name' => 'C/C++ header',
                     'ref'  => '../tests/outputs/locale_facets.h.yaml',
                     'args' => '../tests/inputs/locale_facets.h',
+                },
+                {
+                    'name' => 'Cucumber',
+                    'ref'  => '../tests/outputs/cucumber.feature.yaml',
+                    'args' => '../tests/inputs/cucumber.feature',
                 },
                 {
                     'name' => 'Clean',
@@ -77,6 +87,11 @@ my @Tests = (   {
                     'name' => 'C++',
                     'ref'  => '../tests/outputs/C++-MFC.cc.yaml',
                     'args' => '../tests/inputs/C++-MFC.cc',
+                },
+                {
+                    'name' => 'C++ Uppercase extension',
+                    'ref'  => '../tests/outputs/C++-uppercase.CPP.yaml',
+                    'args' => '../tests/inputs/C++-uppercase.CPP',
                 },
                 {
                     'name' => 'C simple',
@@ -169,6 +184,11 @@ my @Tests = (   {
                     # Complex regular subexpression recursion limit (32766) exceeded
                     'ref'  => '../tests/outputs/regex_limit.gradle.yaml',
                     'args' => '../tests/inputs/regex_limit.gradle',
+                },
+                {
+                    'name' => 'GraphQL',
+                    'ref'  => '../tests/outputs/graphql.gql.yaml',
+                    'args' => '../tests/inputs/graphql.gql',
                 },
                 {
                     'name' => 'HAML',
@@ -426,9 +446,14 @@ my @Tests = (   {
                     'args' => '../tests/inputs/captcha.cs',
                 },
                 {
-                    'name' => 'Specman e',
+                    'name' => 'Specman e 1',
                     'ref'  => '../tests/outputs/specman_e.e.yaml',
                     'args' => '../tests/inputs/specman_e.e',
+                },
+                {
+                    'name' => 'Specman e 2',
+                    'ref'  => '../tests/outputs/specman_e2.e.yaml',
+                    'args' => '../tests/inputs/specman_e2.e',
                 },
                 {
                     'name' => 'Swift',

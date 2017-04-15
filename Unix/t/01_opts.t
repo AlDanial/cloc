@@ -124,6 +124,18 @@ my @Tests = (
                     'args' => '--read-lang-def X fake.thy',
                     'ref'  => '../tests/outputs/issues/166/fake.thy.yaml',
                 },
+                {
+                    'name' => 'Forth balanced parentheses #1 (github issue #183)',
+                    'cd'   => '../tests/inputs/issues/183',
+                    'args' => 'file.fth',
+                    'ref'  => '../tests/outputs/issues/183/file.fth.yaml',
+                },
+                {
+                    'name' => 'Forth balanced parentheses #2 (github issue #183)',
+                    'cd'   => '../tests/inputs/issues/183',
+                    'args' => 'eval1957.SACunidir.fr',
+                    'ref'  => '../tests/outputs/issues/183/eval1957.SACunidir.fr.yaml',
+                },
             );
 
 # Create test input for issue #132 which needs data not in the git repo.

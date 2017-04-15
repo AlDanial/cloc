@@ -5202,7 +5202,10 @@ sub Forth_paren_to_C  {                      # {{{1
     print "-> Forth_paren_to_C()\n" if $opt_v > 2;
 
     my $in_comment = 0;
+    my $max_paren_pair_per_line = 255;
     foreach (@{$ra_lines}) {
+#print "Forth_paren_to_C: [$_]\n";
+        my $n_iter = 0;
         while (/\s\(\s/ or ($in_comment and /\)/)) {
             if (/\s\(\s.*?\)/) {
                 # in-line parenthesis comment; handle here
@@ -5213,6 +5216,12 @@ sub Forth_paren_to_C  {                      # {{{1
             } elsif ($in_comment and /\)/) {
                 s{\)}{*/};
                 $in_comment = 0;
+            } else {
+                # gets here if it can't find a matching
+                # close parenthesis; in this case the
+                # results will likely be incorrect
+                ++$n_iter;
+                last if $n_iter > $max_paren_pair_per_line;
             }
         }
     }
@@ -5371,6 +5380,7 @@ sub set_constants {                          # {{{1
             'build.xml'   => 'Ant'                   ,
             'b'           => 'Brainfuck'             ,
             'bf'          => 'Brainfuck'             ,
+            'brs'         => 'BrightScript'          ,
             'cbl'         => 'COBOL'                 ,
             'CBL'         => 'COBOL'                 ,
             'c'           => 'C'                     ,
@@ -5392,6 +5402,7 @@ sub set_constants {                          # {{{1
             'coffee'      => 'CoffeeScript'          ,
             'component'   => 'Visualforce Component' ,
             'cpp'         => 'C++'                   ,
+            'CPP'         => 'C++'                   ,
             'cr'          => 'Crystal'               ,
             'cs'          => 'C#/Smalltalk'          ,
             'csh'         => 'C Shell'               ,
@@ -5459,10 +5470,13 @@ sub set_constants {                          # {{{1
             'Gnumakefile' => 'make'                  ,
             'gd'          => 'GDScript'              ,
             'glsl'        => 'GLSL'                  ,
+            'gql'         => 'GraphQL'               ,
+            'graphql'     => 'GraphQL'               ,
 			'vert'        => 'GLSL'                  ,
 			'tesc'        => 'GLSL'                  ,
 			'tese'        => 'GLSL'                  ,
 			'geom'        => 'GLSL'                  ,
+			'feature'     => 'Cucumber'              ,
 			'frag'        => 'GLSL'                  ,
 			'comp'        => 'GLSL'                  ,
             'go'          => 'Go'                    ,
@@ -5863,6 +5877,10 @@ sub set_constants {                          # {{{1
 #                               [ 'call_regexp_common'  , 'Brainfuck' ],  # inaccurate
                                 [ 'remove_bf_comments',               ],
                             ],
+    'BrightScript'       => [
+                                [ 'remove_matches'      , '^\s*rem', ],
+                                [ 'remove_matches'      , '^\s*\'',  ],
+                            ],
     'builder'            => [
                                 [ 'remove_matches'      , '^\s*xml_markup.comment!'  ],
                             ],
@@ -5934,6 +5952,9 @@ sub set_constants {                          # {{{1
     'CSON'               => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
+                            ],
+    'Cucumber'           => [
+                                [ 'remove_matches'      , '^\s*#'  ],
                             ],
     'D/dtrace'           => [ [ 'die' ,          ], ], # never called
     'D'                  => [
@@ -6065,6 +6086,10 @@ sub set_constants {                          # {{{1
 #                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'add_newlines'        ,          ],
                                 [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'GraphQL'            => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
                             ],
     'Groovy'             => [
                                 [ 'remove_inline'       , '//.*$'  ],
@@ -6449,9 +6474,11 @@ sub set_constants {                          # {{{1
                             ],
     'Specman e'          => [
                                 [ 'pre_post_fix'        , "'>", "<'"],
-                                [ 'remove_between_general', "'>", "<'" ],
+                                [ 'remove_between_general', "^'>", "^<'" ],
                                 [ 'call_regexp_common'  , 'C++',   ],
                                 [ 'remove_matches'      , '^\s*--' ],
+                                [ 'rm_last_line'        , ],  # undo pre_post_fix addition
+                                                              # of trailing line of just <'
                             ],
     'SQL'                => [
                                 [ 'call_regexp_common'  , 'C'      ],
@@ -6689,9 +6716,9 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
     'XSLT'               => [   [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
-    'NAnt script'       => [   [ 'remove_html_comments',          ],
+    'NAnt script'       => [    [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
-    'MSBuild script'    => [   [ 'remove_html_comments',          ],
+    'MSBuild script'    => [    [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
     'zsh'                => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -6941,6 +6968,7 @@ sub set_constants {                          # {{{1
     'boeingcalc'                   =>  13.33,
     'bteq'                         =>   6.15,
     'Brainfuck'                    =>   0.10,
+    'BrightScript'                 =>   2.00,
     'builder'                      =>   2.00,
     'C'                            =>   0.77,
     'c set 2'                      =>   0.88,
@@ -7000,8 +7028,9 @@ sub set_constants {                          # {{{1
     'csp'                          =>   1.51,
     'cssl'                         =>   1.74,
     'CSS'                          =>   1.0,
-    'culprit'                      =>   1.57,
+    'Cucumber'                     =>   3.00,
     'CUDA'                         =>   1.00,
+    'culprit'                      =>   1.57,
     'cxpert'                       =>   1.63,
     'cygnet'                       =>   4.21,
     'D'                            =>   1.70,
@@ -7100,6 +7129,7 @@ sub set_constants {                          # {{{1
     'GDScript'                     =>   2.50,
     'Go'                           =>   2.50,
     'Grails'                       =>   1.48,
+    'GraphQL'                      =>   4.00,
     'Groovy'                       =>   4.10,
     'gw basic'                     =>   0.82,
     'Harbour'                      =>   2.00,
@@ -9283,6 +9313,14 @@ sub pre_post_fix {                           # {{{1
 
     print "<- pre_post_fix\n" if $opt_v > 2;
     return split("\n", $all_lines);
+} # 1}}}
+sub rm_last_line {                           # {{{1
+    # Return all but the last line.
+    my ($ra_lines, ) = @_;
+    print "-> rm_last_line\n" if $opt_v > 2;
+    print "<- rm_last_line\n" if $opt_v > 2;
+    my $n = scalar(@{$ra_lines}) - 2;
+    return @{$ra_lines}[0..$n];
 } # 1}}}
 sub call_regexp_common {                     # {{{1
     my ($ra_lines, $language ) = @_;

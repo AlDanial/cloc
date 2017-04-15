@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.73
+  elapsed_seconds    : 0.0075380802154541
+  n_files            : 1
+  n_lines            : 161
+  files_per_second   : 132.659771641838
+  lines_per_second   : 21358.223234336
+  report_file        : /home/al/git-cloc/tests/outputs/issues/183/file.fth.yaml
+Forth :
+  nFiles: 1
+  blank: 17
+  comment: 38
+  code: 106
+SUM: 
+  blank: 17
+  comment: 38
+  code: 106
+  nFiles: 1

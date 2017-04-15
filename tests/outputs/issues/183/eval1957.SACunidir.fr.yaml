@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.73
+  elapsed_seconds    : 0.0095360279083252
+  n_files            : 1
+  n_lines            : 469
+  files_per_second   : 104.865464909868
+  lines_per_second   : 49181.9030427282
+  report_file        : /home/al/git-cloc/tests/outputs/issues/183/eval1957.SACunidir.fr.yaml
+Forth :
+  nFiles: 1
+  blank: 0
+  comment: 46
+  code: 423
+SUM: 
+  blank: 0
+  comment: 46
+  code: 423
+  nFiles: 1

@@ -1,0 +1,17 @@
+# https://www.npmjs.com/package/graphql-example
+mutation { # create new user
+  createUser(name: "") {
+    id
+    name
+    errors {
+
+      path
+      errors {
+      	validator
+      	message
+      	code
+  # comment 2
+      }
+    }
+  }
+}
