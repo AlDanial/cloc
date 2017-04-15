@@ -1,0 +1,6 @@
+Custom Triple JS
+    filter call_regexp_common C++
+    filter remove_inline //.*$
+    extension triple.extension.js
+    3rd_gen_scale 1.48
+    end_of_line_continuation \\$
