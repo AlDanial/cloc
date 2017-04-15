@@ -34,6 +34,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/hello.bf',
                 },
                 {
+                    'name' => 'BrightScript',
+                    'ref'  => '../tests/outputs/roku.brs.yaml',
+                    'args' => '../tests/inputs/roku.brs',
+                },
+                {
                     'name' => 'C# 2',
                     'ref'  => '../tests/outputs/wokka.cs.yaml',
                     'args' => '../tests/inputs/wokka.cs',
@@ -179,6 +184,11 @@ my @Tests = (   {
                     # Complex regular subexpression recursion limit (32766) exceeded
                     'ref'  => '../tests/outputs/regex_limit.gradle.yaml',
                     'args' => '../tests/inputs/regex_limit.gradle',
+                },
+                {
+                    'name' => 'GraphQL',
+                    'ref'  => '../tests/outputs/graphql.gql.yaml',
+                    'args' => '../tests/inputs/graphql.gql',
                 },
                 {
                     'name' => 'HAML',
