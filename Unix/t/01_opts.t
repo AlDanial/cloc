@@ -125,6 +125,12 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/166/fake.thy.yaml',
                 },
                 {
+                    'name' => '--read-lang-def w/triple_extension',
+                    'cd'   => '../tests/inputs',
+                    'args' => '--read-lang-def triple_lang_def.txt custom.triple.extension.js',
+                    'ref'  => '../tests/outputs/custom.triple.extension.js.yaml',
+                },
+                {
                     'name' => 'Forth balanced parentheses #1 (github issue #183)',
                     'cd'   => '../tests/inputs/issues/183',
                     'args' => 'file.fth',
