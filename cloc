@@ -5626,6 +5626,7 @@ sub set_constants {                          # {{{1
             'SBL'         => 'Softbridge Basic'      ,
             'sed'         => 'sed'                   ,
             'ses'         => 'Patran Command Language'   ,
+            'sol'         => 'Solidity'              ,
             'pcl'         => 'Patran Command Language'   ,
             'pl1'         => 'PL/I'                  ,
             'po'          => 'PO File'               ,
@@ -6477,6 +6478,10 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_matches'      , '^\s*;'  ],
                             ],
+    'Solidity'           => [
+                                [ 'call_regexp_common'  , 'C++'    ],
+                                [ 'remove_inline'       , '//.*$'  ],
+                            ],
     'Specman e'          => [
                                 [ 'pre_post_fix'        , "'>", "<'"],
                                 [ 'remove_between_general', "^'>", "^<'" ],
@@ -6777,6 +6782,7 @@ sub set_constants {                          # {{{1
     'C Shell'            =>     '\\\\$'         ,
     'Kermit'             =>     '\\\\$'         ,
     'Korn Shell'         =>     '\\\\$'         ,
+    'Solidity'           =>     '\\\\$'         ,
     'Stylus'             =>     '\\\\$'         ,
     'Tcl/Tk'             =>     '\\\\$'         ,
     'TTCN'               =>     '\\\\$'         ,
@@ -7400,6 +7406,7 @@ sub set_constants {                          # {{{1
     'screen painter default'       =>  13.33,
     'sequal'                       =>   6.67,
     'Slim'                         =>   3.00,
+    'Solidity'                     =>   1.48,
     'Bourne Shell'                 =>   3.81,
     'Bourne Again Shell'           =>   3.81,
     'ksh'                          =>   3.81,
@@ -7973,7 +7980,7 @@ my @generic = (
      from_to   => [['<?_c', '_c?>']],
     },
 
-    {languages => [qw /C++/, 'C#', qw /AspectJ Cg ECMAScript FPL Java JavaScript JSX Stylus/],
+    {languages => [qw /C++/, 'C#', qw /AspectJ Cg ECMAScript FPL Java JavaScript JSX Stylus Solidity/],
      to_eol    => ['//'],
      from_to   => [[qw {/* */}]]},
 
