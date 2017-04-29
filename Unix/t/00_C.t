@@ -446,6 +446,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/captcha.cs',
                 },
                 {
+                    'name' => 'Solidity',
+                    'ref'  => '../tests/outputs/solidity.sol.yaml',
+                    'args' => '../tests/inputs/solidity.sol',
+                },
+                {
                     'name' => 'Specman e 1',
                     'ref'  => '../tests/outputs/specman_e.e.yaml',
                     'args' => '../tests/inputs/specman_e.e',
