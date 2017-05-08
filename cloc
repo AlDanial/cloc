@@ -9972,7 +9972,7 @@ sub Csharp_or_Smalltalk {                    # {{{1
         s{//.*?$}{};        # strip inline C# comments for better clarity
         if (/[;}{]\s*$/) {
             ++$cs_points       ;
-        } elsif (/\[assembly:/) {
+        } elsif (/^\s*\[assembly:/) {
             ++$cs_points       ;
         } else {
             ++$smalltalk_points;
