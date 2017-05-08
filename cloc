@@ -7980,7 +7980,7 @@ my @generic = (
      from_to   => [['<?_c', '_c?>']],
     },
 
-    {languages => [qw /C++/, 'C#', qw /AspectJ Cg ECMAScript FPL Java JavaScript JSX Stylus Solidity/],
+    {languages => [qw /C++/, 'C#', qw /AspectJ Cg ECMAScript FPL Java JavaScript JSX Stylus/],
      to_eol    => ['//'],
      from_to   => [[qw {/* */}]]},
 
@@ -9971,6 +9971,8 @@ sub Csharp_or_Smalltalk {                    # {{{1
     while (<$IN>) {
         s{//.*?$}{};        # strip inline C# comments for better clarity
         if (/[;}{]\s*$/) {
+            ++$cs_points       ;
+        } elsif (/\[assembly:/) {
             ++$cs_points       ;
         } else {
             ++$smalltalk_points;

@@ -44,6 +44,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/wokka.cs',
                 },
                 {
+                    'name' => 'C# 3',
+                    'ref'  => '../tests/outputs/assembly.cs.yaml',
+                    'args' => '../tests/inputs/assembly.cs',
+                },
+                {
                     'name' => 'C/C++ header',
                     'ref'  => '../tests/outputs/locale_facets.h.yaml',
                     'args' => '../tests/inputs/locale_facets.h',
