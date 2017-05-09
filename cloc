@@ -9970,8 +9970,13 @@ sub Csharp_or_Smalltalk {                    # {{{1
     my $smalltalk_points = 0;
     while (<$IN>) {
         s{//.*?$}{};        # strip inline C# comments for better clarity
+        next if /^\s*$/;
         if (/[;}{]\s*$/) {
             ++$cs_points       ;
+        } elsif (/^(using|namespace)\s/) {
+            $cs_points += 20;
+        } elsif (/^\s*(public|private|new)\s/) {
+            $cs_points += 20;
         } elsif (/^\s*\[assembly:/) {
             ++$cs_points       ;
         } else {
