@@ -174,6 +174,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/fsharp.fs',
                 },
                 {
+                    'name' => 'F# Script',
+                    'ref'  => '../tests/outputs/fsharp_script.fsx.yaml',
+                    'args' => '../tests/inputs/fsharp_script.fsx',
+                },
+                {
                     'name' => 'Glade',
                     'ref'  => '../tests/outputs/glade-search-popover.ui.yaml',
                     'args' => '../tests/inputs/glade-search-popover.ui',

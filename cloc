@@ -5212,20 +5212,25 @@ sub Forth_paren_to_C  {                      # {{{1
 #print "Forth_paren_to_C: [$_]\n";
         my $n_iter = 0;
         while (/\s\(\s/ or ($in_comment and /\)/)) {
+#print "TOP n_iter=$n_iter in_comment=$in_comment\n";
             if (/\s\(\s.*?\)/) {
                 # in-line parenthesis comment; handle here
                 s/\s+\(\s+.*?\)//g;
+#print "B\n";
             } elsif (!$in_comment and /\s\(\s/) {
                 s{\s+\(\s+}{/*};
+#print "C\n";
                 $in_comment = 1;
             } elsif ($in_comment and /\)/) {
                 s{\)}{*/};
+#print "D\n";
                 $in_comment = 0;
             } else {
                 # gets here if it can't find a matching
                 # close parenthesis; in this case the
                 # results will likely be incorrect
                 ++$n_iter;
+#print "E\n";
                 last if $n_iter > $max_paren_pair_per_line;
             }
         }
@@ -5470,6 +5475,7 @@ sub set_constants {                          # {{{1
             'frm'         => 'Visual Basic'          ,
             'fs'          => 'F#/Forth'              ,
             'fsi'         => 'F#'                    ,
+            'fsx'         => 'F# Script'             ,
             'g'           => 'Antlr'                 ,
             'gnumakefile' => 'make'                  ,
             'Gnumakefile' => 'make'                  ,
@@ -6067,6 +6073,10 @@ sub set_constants {                          # {{{1
                                 [ 'remove_between_general', '<#--', '-->' ],
                             ],
     'F#'                 => [
+                                [ 'call_regexp_common'  , 'Pascal' ],
+                                [ 'remove_matches'      , '^\s*//' ],
+                            ],
+    'F# Script'          => [
                                 [ 'call_regexp_common'  , 'Pascal' ],
                                 [ 'remove_matches'      , '^\s*//' ],
                             ],
@@ -7122,6 +7132,7 @@ sub set_constants {                          # {{{1
     'framework'                    =>  13.33,
     'Freemarker Template'          =>   1.48,
     'F#'                           =>   2.50,
+    'F# Script'                    =>   2.50,
     'g2'                           =>   1.63,
     'gamma'                        =>   5.00,
     'genascript'                   =>   2.96,
