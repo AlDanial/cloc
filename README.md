@@ -84,6 +84,72 @@ C/C++ Header                     3             99            286            496
 SUM:                            13           4779           6907          31308
 -------------------------------------------------------------------------------
 </pre>
+**all Directories and Subdirectories**
+<pre>
+note, based off the basic format: for d in ./*/ ; do (cd "$d" && !!); done
+note, nesting happens at !!. put the command here again for each subdirectory level. 
+note, when finishing nesting !!, now becomes `cloc $(git ls-files)` -- see example.
+
+prompt> for three subdirectory file structure... 
+prompt> for d in ./*/ ; do (cd "$d" && for d in ./*/ ; do (cd "$d" && for d in ./*/ ; do (cd "$d" && cloc $(git ls-files)); done);); done); done
+
+      16 text files.
+      15 unique files.
+       3 files ignored.
+
+https://github.com/AlDanial/cloc v 1.65  T=0.23 s (57.1 files/s, 188914.0 lines/s)
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+C                               10           4680           6621          30812
+C/C++ Header                     3             99            286            496
+-------------------------------------------------------------------------------
+SUM:                            13           4779           6907          31308
+-------------------------------------------------------------------------------
+Saving session...
+...saving history...truncating history files...
+...completed.
+      49 text files.
+      47 unique files.                              
+      13 files ignored.
+
+github.com/AlDanial/cloc v 1.68  T=0.10 s (399.5 files/s, 70409.4 lines/s)
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Python                          33           1226           1026           3017
+C                                4            327            337            888
+Markdown                         1             11              0             28
+YAML                             1              0              2             12
+-------------------------------------------------------------------------------
+SUM:                            39           1564           1365           3945
+-------------------------------------------------------------------------------
+Saving session...
+...saving history...truncating history files...
+...completed.
+      57 text files.
+      57 unique files.                              
+      14 files ignored.
+
+github.com/AlDanial/cloc v 1.68  T=0.07 s (644.5 files/s, 84766.0 lines/s)
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Scala                           31            998            467           4124
+XML                              6              4             15            178
+Bourne Shell                     6             27              5            130
+HTML                             2             13              0             66
+YAML                             1              0              0             23
+-------------------------------------------------------------------------------
+SUM:                            46           1042            487           4521
+-------------------------------------------------------------------------------
+Saving session...
+...saving history...truncating history files...
+...completed.
+Saving session...
+...saving history...truncating history files...
+...completed.
+</pre>
 
 **an archive**
 
