@@ -139,6 +139,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/comp.ecpp',
                 },
                 {
+                    'name' => 'Elixir',
+                    'ref'  => '../tests/outputs/elixir.ex.yaml',
+                    'args' => '../tests/inputs/elixir.ex',
+                },
+                {
                     'name' => 'Focus',
                     'ref'  => '../tests/outputs/FOCUS.focexec.yaml',
                     'args' => '../tests/inputs/FOCUS.focexec',
