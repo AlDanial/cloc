@@ -5200,6 +5200,26 @@ sub docstring_to_C {                         # {{{1
     print "<- docstring_to_C\n" if $opt_v > 2;
     return @{$ra_lines};
 } # 1}}}
+sub elixir_doc_to_C {                         # {{{1
+    my ($ra_lines, ) = @_;
+    # Converts Elixir docs to C comments.
+
+    print "-> elixir_doc_to_C()\n" if $opt_v > 2;
+
+    my $in_docstring = 0;
+    foreach (@{$ra_lines}) {
+        if (!$in_docstring && /(\@(module)?doc\s+(~[sScC])?['"]{3})/) {
+            s{$1}{/*};
+            $in_docstring = 1;
+        } elsif ($in_docstring && /(['"]{3})/) {
+            s{$1}{*/};
+            $in_docstring = 0;
+        }
+    }
+
+    print "<- elixir_doc_to_C\n" if $opt_v > 2;
+    return @{$ra_lines};
+} # 1}}}
 sub Forth_paren_to_C  {                      # {{{1
     my ($ra_lines, ) = @_;
     # Converts Forth comment parentheses to C comments.
@@ -6036,6 +6056,8 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
     'Elixir'             => [
                                 [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'elixir_doc_to_C'                ],
+                                [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
     'Erlang'             => [
