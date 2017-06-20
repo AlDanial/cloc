@@ -1,0 +1,139 @@
+#!/usr/bin/env python
+# Copyright: see README and LICENSE under the project root directory.
+# Author: Haihong Li
+#
+# File: clocs ("cloc scripts")
+# ---------------------------
+# Calls cloc (path: (project)/tools/third-party/cloc) and generates reports for 
+# subdirectories of this project. I use absolute paths here so that this script 
+# can be invoked anywhere.
+
+import os
+import sys
+import getopt
+import subprocess
+
+# paths
+project_path = os.path.dirname(os.path.realpath(__file__)).rstrip("/tools")
+tools_path = os.path.join(project_path, "tools")
+third_party_path = os.path.join(tools_path, "third-party")
+cloc_exe = os.path.join(third_party_path, "cloc")
+
+# stat file name
+stat_file_name = "stat.txt"
+
+# default directories, with path starts from the project directory
+project_ls = os.listdir(project_path)
+project_dirs = [item for item in project_ls if item[0] is not "." and os.path.isdir(os.path.join(project_path, item))]
+project_dirs.append(".")
+
+# files that should not be counted
+excluded_files_list = os.path.join(third_party_path, "cloc-ignored-files.txt")
+excluded_files_list_temp = os.path.join(third_party_path, ".cloc-ignored-files-temp.txt") # this file is to be added and deleted
+
+# languages that should not be counted (.txt are automatically included)
+exclude_langs = "Markdown"
+
+# usage string
+usage_string = "\
+Usage: clocs [option] [<dir1> <dir2> ..]\n\
+  Count lines of code in this project and generate a report for each <dir*>.\n\
+  If no directory is specified, then it uses the project directory itself.\n\
+  -a or --all uses all project subdirectories, as listed below.\n\
+  -c or --clean removes existing reports.\n\
+  -h or --help displays this help message.\n\
+  <dir*> can be:\n  "
+for relative_name in project_dirs:
+	usage_string += relative_name + " "
+usage_string += "(\".\" is the project directory itself)"
+
+# message prefix
+error_prefix = "clocs: ERROR: "
+warning_prefix = "clocs: WARNING: "
+
+def _build_cmd():
+	cloc_ignore_file = open(excluded_files_list, 'r')
+	excluded_files_list_temp_file = open(os.path.join(third_party_path, excluded_files_list_temp), 'w')
+	lines = list(cloc_ignore_file)
+	for line in lines:
+		new_line = os.path.join(project_path, line.strip('\n').strip()) + '\n'
+		excluded_files_list_temp_file.write(new_line)
+
+	# cloc command: tools/cloc --exclude-list-file=tools/cloc-ignore.txt --sum-one <dir1> <dir2> ..
+	cloc_command = cloc_exe + " --exclude-list-file=" + excluded_files_list_temp + " --exclude-lang=" + exclude_langs + " --sum-one "
+	return cloc_command
+
+def _get_default_dirs():
+	print("Use subdirectories of the project.")
+	return project_dirs
+
+def _print_to_file_and_stdout(absolute_dir, stat_info):
+	# if the file is a directory, generate a report in that directory
+	stat_file = open(os.path.join(absolute_dir, stat_file_name), 'w') # overwrite if existing, create one and write if not.
+	# write to file
+	stat_file.write(stat_info)
+	# print to stdout
+	print(stat_info)
+	return
+
+def main(argv):
+	try:
+		opt_list, arg_list = getopt.getopt(argv, "hac", ["help", "all", "clean"])
+	except getopt.GetoptError:
+		print(error_prefix + "no such option(s)")
+		print(usage_string)
+		return
+
+	# options handling
+	if len(opt_list) is 0 and len(arg_list) is 0:
+		# if not directory is specified, then use the project directory
+		arg_list = ["."]
+	for opt, opt_arg in opt_list:
+		if opt in ("-h", "--help"):
+			if len(arg_list) is not 0 or len(opt_list) is not 1:
+				print("Option " + str(opt) + " triggered, ignoring other arguments..")
+			print(usage_string)
+			return
+		elif opt in ("-a", "--all"):
+			if len(arg_list) is not 0 or len(opt_list) is not 1:
+				print("Option " + str(opt) + " triggered, ignoring other arguments..")
+			arg_list = [] # clear
+			arg_list = _get_default_dirs()
+		elif opt in ("-c", "--clean"):
+			if len(arg_list) is not 0 or len(opt_list) is not 1:
+				print("Option " + str(opt) + " triggered, ignoring other arguments..")
+			for relative_name in project_dirs:
+				stat_file_absolute_path = os.path.join(project_path, relative_name, stat_file_name)
+				if os.path.exists(stat_file_absolute_path):
+					os.remove(stat_file_absolute_path)
+					if relative_name is ".":
+						print("(project_file)/" + stat_file_name + " deleted.")
+					else:
+						print("(project_file)/" + relative_name + "/" + stat_file_name + " deleted.")
+			return
+		else:
+			print(error_prefix + "no such option(s)")
+			print(usage_string)
+			return
+
+	# build cloc command
+	cloc_command = _build_cmd()
+
+	# do the real work: call cloc command on each specified directory or file
+	for relative_name in arg_list: # each could be a file or a directory, with relative path starts from the project directory
+		if relative_name not in project_dirs:
+			print(">> Target: (project)/" + relative_name)
+			print(warning_prefix + "he specified directory \"" + relative_name + "\" does not exist or is not an allowed subdirectory.")
+			print("   Directory ignored. Use -h option to see more information.\n")
+			continue
+		if relative_name is not ".": # "cloc --exclude-list-file" requires EXACT match
+			absolute_dir = os.path.join(project_path, relative_name)
+		else:
+			absolute_dir = project_path
+		cloc_stdout = subprocess.check_output(cloc_command + absolute_dir, shell="True").decode("utf-8")
+		stat_info = ">> Target: (project)/" + relative_name + "\n" + cloc_stdout
+		_print_to_file_and_stdout(absolute_dir, stat_info)
+	os.remove(excluded_files_list_temp) # remove the temp file
+
+if __name__ == "__main__":
+	main(sys.argv[1:])
