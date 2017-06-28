@@ -476,6 +476,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/specman_e2.e',
                 },
                 {
+                    'name' => 'Stata',           
+                    'ref'  => '../tests/outputs/stata.do.yaml',
+                    'args' => '../tests/inputs/stata.do',
+                },
+                {
                     'name' => 'Swift',
                     'ref'  => '../tests/outputs/tour.swift.yaml',
                     'args' => '../tests/inputs/tour.swift',

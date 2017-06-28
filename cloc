@@ -5450,6 +5450,8 @@ sub set_constants {                          # {{{1
             'def'         => 'Windows Module Definition',
             'diff'        => 'diff'                  ,
             'dmap'        => 'NASTRAN DMAP'          ,
+            'do'          => 'Stata'                 ,
+            'DO'          => 'Stata'                 ,
             'dpr'         => 'Pascal'                ,
             'dita'        => 'DITA'                  ,
             'drl'         => 'Drools'                ,
@@ -6551,6 +6553,9 @@ sub set_constants {                          # {{{1
     'Standard ML'        => [
                                 [ 'remove_between_general', '(*', '*)' ],
                             ],
+    'Stata'              => [
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'Stylus'             => [
 #                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
@@ -6815,6 +6820,7 @@ sub set_constants {                          # {{{1
     'Kermit'             =>     '\\\\$'         ,
     'Korn Shell'         =>     '\\\\$'         ,
     'Solidity'           =>     '\\\\$'         ,
+    'Stata'              =>     '///$'          ,
     'Stylus'             =>     '\\\\$'         ,
     'Tcl/Tk'             =>     '\\\\$'         ,
     'TTCN'               =>     '\\\\$'         ,
@@ -7478,6 +7484,7 @@ sub set_constants {                          # {{{1
     'sqlwindows'                   =>   6.67,
     'statistical default'          =>   2.50,
     'Standard ML'                  =>   3.00,
+    'Stata'                        =>   3.00,
     'strategem'                    =>   2.22,
     'stress'                       =>   1.13,
     'strongly typed default'       =>   0.88,
