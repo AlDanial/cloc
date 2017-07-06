@@ -401,6 +401,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/modules1-ntp1.pp',
                 },
                 {
+                    'name' => 'Python',
+                    'ref'  => '../tests/outputs/hi.py.yaml',
+                    'args' => '../tests/inputs/hi.py',
+                },
+                {
                     'name' => 'Qt Linguist',
                     'ref'  => '../tests/outputs/i18n_de.ts.yaml',
                     'args' => '../tests/inputs/i18n_de.ts',
