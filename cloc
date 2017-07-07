@@ -5186,12 +5186,12 @@ sub docstring_to_C {                         # {{{1
 
     my $in_docstring = 0;
     foreach (@{$ra_lines}) {
-        while (/"""/) {
+        while (/((""")|('''))/) {
             if (!$in_docstring) {
-                s{[uU]?"""}{/*};
+                s{[uU]?((""")|('''))}{/*};
                 $in_docstring = 1;
             } else {
-                s{"""}{*/};
+                s{((""")|('''))}{*/};
                 $in_docstring = 0;
             }
         }

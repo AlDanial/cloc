@@ -10,3 +10,8 @@ print('Hello.  The time is %f Unix epoch.' % (time.time()))  # inline comment
 Docstring,
   also counted as comment.
 """
+
+'''
+Single
+  Quoted
+    Docstring'''
