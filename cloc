@@ -3669,7 +3669,9 @@ sub replace_git_hash_with_tarfile {          # {{{1
                 next;
             }
             my ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, SUFFIX => '.tar');  # delete on exit
-            my $cmd = "git diff --name-only $file_or_dir | tar cf $Tarfile -T -";
+#           my $cmd = "git diff --name-only $file_or_dir | tar cf $Tarfile -T -";
+            # next line won't work on csh/tcsh
+            my $cmd = "git archive -o $Tarfile $file_or_dir \$(git diff --name-only $file_or_dir)";
             print  $cmd, "\n";
             system $cmd;
             push @replacement_arg_list, $Tarfile;
