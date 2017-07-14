@@ -138,15 +138,17 @@ my $brief_usage  = "
                        cloc -- Count Lines of Code
 
 Usage:
-    $script [options] <file(s)/dir(s)>
+    $script [options] <file(s)/dir(s)/git hash(es)>
         Count physical lines of source code and comments in the given files
         (may be archives such as compressed tarballs or zip files) and/or
-        recursively below the given directories.
+        recursively below the given directories or git commit hashes (Unix
+        only).
         Example:    cloc src/ include/ main.c
 
     $script [options] --diff <set1>  <set2>
         Compute differences of physical lines of source code and comments
-        between a pair of directories or archive files.
+        between any pairwise combination of directory names, archive
+        files or git commit hashes (Unix only).
         Example:    cloc --diff Python-3.5.tar.xz python-3.6/
 
 $script --help  shows full documentation on the options.
@@ -219,7 +221,8 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              --diff-timeout, --ignore-case, --ignore-whitespace.
    --diff <set1> <set2>      Compute differences in code and comments between
                              source file(s) of <set1> and <set2>.  The inputs
-                             may be pairs of files, directories, or archives.
+                             may be any mix of files, directories, archives,
+                             or git commit hashes (Unix only).
                              Use --diff-alignment to generate a list showing
                              which file pairs where compared.  See also
                              --count-and-diff, --diff-alignment, --diff-timeout,
@@ -806,6 +809,7 @@ if ($opt_version) {
     printf "$VERSION\n";
     exit;
 }
+replace_git_hash_with_tarfile(\@ARGV);
 # 1}}}
 # Step 1:  Initialize global constants.        {{{1
 #
@@ -3636,6 +3640,47 @@ sub print_language_filters {                 # {{{1
         print  "\n";
     }
     print_language_info($language, "    extensions:");
+} # 1}}}
+sub replace_git_hash_with_tarfile {          # {{{1
+    my ($ra_arg_list,) = @_;  # in   file name, directory name and/or git commit hash to examine
+    # replace git hashes in $ra_arg_list with tar files
+
+#print "ra_arg_list 1: @{$ra_arg_list}\n";
+    return if $ON_WINDOWS;
+
+    my @replacement_arg_list;
+    my $checked_tar_git = 0;
+    my $have_tar_git    = 0;
+    foreach my $file_or_dir (@{$ra_arg_list}) {
+        if (-r $file_or_dir) { # not a git hash
+            push @replacement_arg_list, $file_or_dir;
+            next;
+        }
+        if ($file_or_dir =~ m/^[a-z\d]{5,}+$/) {
+            # looks like a git hash
+            if (!$checked_tar_git) {
+                $have_tar_git = external_utility_exists("tar --version") &&
+                                external_utility_exists("git --version");
+            }
+            $checked_tar_git = 1;
+            if (!$have_tar_git) {
+                printf "Skipping %s: looks like a git hash but " .
+                       "either git or tar are not available\n", $file_or_dir;
+                next;
+            }
+            my ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, SUFFIX => '.tar');  # delete on exit
+            my $cmd = "git diff --name-only $file_or_dir | tar cf $Tarfile -T -";
+            print  $cmd, "\n";
+            system $cmd;
+            push @replacement_arg_list, $Tarfile;
+        } else {
+            # weird, shouldn't be here
+            push @replacement_arg_list, $file_or_dir;
+        }
+    }
+    @{$ra_arg_list} = @replacement_arg_list;
+
+#print "ra_arg_list 2: @{$ra_arg_list}\n";
 } # 1}}}
 sub make_file_list {                         # {{{1
     my ($ra_arg_list,  # in   file and/or directory names to examine
