@@ -4032,29 +4032,34 @@ sub is_file {                                # {{{1
     # portable method to test if item is a file
     # (-f doesn't work in ActiveState Perl on Windows)
     my $item = shift @_;
+    return (-f $item);
 
-    if ($ON_WINDOWS) {
-        my $mode = (stat $item)[2];
-           $mode = 0 unless $mode;
-        if ($mode & 0100000) { return 1; }
-        else                 { return 0; }
-    } else {
-        return (-f $item);  # works on Unix, Linux, CygWin, z/OS
-    }
+#     Was:
+####if ($ON_WINDOWS) {
+####    my $mode = (stat $item)[2];
+####       $mode = 0 unless $mode;
+####    if ($mode & 0100000) { return 1; }
+####    else                 { return 0; }
+####} else {
+####    return (-f $item);  # works on Unix, Linux, CygWin, z/OS
+####}
 } # 1}}}
 sub is_dir {                                 # {{{1
-    # portable method to test if item is a directory
-    # (-d doesn't work in older versions of ActiveState Perl on Windows)
     my $item = shift @_;
+    return (-d $item); # should work everywhere now (July 2017)
 
-    if ($ON_WINDOWS) {
-        my $mode = (stat $item)[2];
-           $mode = 0 unless $mode;
-        if ($mode & 0040000) { return 1; }
-        else                 { return 0; }
-    } else {
-        return (-d $item);  # works on Unix, Linux, CygWin, z/OS
-    }
+#     Was:
+##### portable method to test if item is a directory
+##### (-d doesn't work in older versions of ActiveState Perl on Windows)
+
+####if ($ON_WINDOWS) {
+####    my $mode = (stat $item)[2];
+####       $mode = 0 unless $mode;
+####    if ($mode & 0040000) { return 1; }
+####    else                 { return 0; }
+####} else {
+####    return (-d $item);  # works on Unix, Linux, CygWin, z/OS
+####}
 } # 1}}}
 sub is_excluded {                            # {{{1
     my ($file       , # in
