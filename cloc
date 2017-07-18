@@ -3453,7 +3453,7 @@ sub merge_lang_def {                         # {{{1
 
         } elsif (/^    filter\s+(remove_between_(general|regex))\s+(\S+)\s+(\S+)\s*$/) {
             next if $already_know_it;
-            push @{$rhaa_Filters_by_Language->{$language}}, 
+            push @{$rhaa_Filters_by_Language->{$language}},
                   [ $1 , $3 , $4 ]
         } elsif (/^    filter\s+(\w+)\s+(.*?)\s*$/) {
             next if $already_know_it;
@@ -3648,15 +3648,23 @@ sub replace_git_hash_with_tarfile {          # {{{1
 #print "ra_arg_list 1: @{$ra_arg_list}\n";
     return if $ON_WINDOWS;
 
-    my @replacement_arg_list;
+    my %replacement_arg_list = ();
     my $checked_tar_git = 0;
     my $have_tar_git    = 0;
+    my $all_hashes      = "";
+    my $hash_regex      = qr/^([a-f\d]{5,40}|master|HEAD)$/;
+
+    # need two passes:  first captures all the hashes of
+    # inputs that look like git commits
+
+    my $i = 0;
     foreach my $file_or_dir (@{$ra_arg_list}) {
+        ++$i;
         if (-r $file_or_dir) { # not a git hash
-            push @replacement_arg_list, $file_or_dir;
+            $replacement_arg_list{$i} = $file_or_dir;
             next;
         }
-        if ($file_or_dir =~ m/^[a-z\d]{5,}+$/) {
+        if ($file_or_dir =~ m/$hash_regex/) {
             # looks like a git hash
             if (!$checked_tar_git) {
                 $have_tar_git = external_utility_exists("tar --version") &&
@@ -3668,19 +3676,35 @@ sub replace_git_hash_with_tarfile {          # {{{1
                        "either git or tar are not available\n", $file_or_dir;
                 next;
             }
-            my ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, SUFFIX => '.tar');  # delete on exit
-#           my $cmd = "git diff --name-only $file_or_dir | tar cf $Tarfile -T -";
-            # next line won't work on csh/tcsh
-            my $cmd = "git archive -o $Tarfile $file_or_dir \$(git diff --name-only $file_or_dir)";
-            print  $cmd, "\n";
-            system $cmd;
-            push @replacement_arg_list, $Tarfile;
+            $all_hashes .= " $file_or_dir";
         } else {
             # weird, shouldn't be here
-            push @replacement_arg_list, $file_or_dir;
+            $replacement_arg_list{$i} = $file_or_dir;
         }
     }
-    @{$ra_arg_list} = @replacement_arg_list;
+
+    # second pass creates a tar file of each git diff file listing
+
+    if ($all_hashes) {  # at least one input is a git commit hash
+        my $i = 0;
+        foreach my $file_or_dir (@{$ra_arg_list}) {
+            ++$i;
+            next if -r $file_or_dir;
+            next unless $file_or_dir =~ m/$hash_regex/;
+            my ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, SUFFIX => '.tar');  # delete on exit
+            # next line won't work on csh/tcsh
+            my $cmd = "git archive -o $Tarfile $file_or_dir \$(git diff --name-only $all_hashes)";
+            print  $cmd, "\n";
+            system $cmd;
+            $replacement_arg_list{$i} = $Tarfile;
+        }
+    }
+
+    # replace the input arg list with the new one
+    @{$ra_arg_list} = ();
+    foreach my $index (sort {$a <=> $b} keys %replacement_arg_list) {
+        push @{$ra_arg_list}, $replacement_arg_list{$index};
+    }
 
 #print "ra_arg_list 2: @{$ra_arg_list}\n";
 } # 1}}}
