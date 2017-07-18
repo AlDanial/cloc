@@ -3696,6 +3696,10 @@ sub replace_git_hash_with_tarfile {          # {{{1
             my $cmd = "git archive -o $Tarfile $file_or_dir \$(git diff --name-only $all_hashes)";
             print  $cmd, "\n";
             system $cmd;
+            if (!-r $Tarfile or !-s $Tarfile) {
+                # not readable, or zero sized
+                die "Failed to create tarfile of files from git.";
+            }
             $replacement_arg_list{$i} = $Tarfile;
         }
     }
