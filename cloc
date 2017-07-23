@@ -42,6 +42,7 @@ use File::Find;
 use File::Path;
 use File::Spec;
 use IO::File;
+use Cwd;
 use POSIX qw { strftime ceil};
 
 # Parallel::ForkManager isn't in the standard distribution. Use it only if installed.
@@ -4075,7 +4076,6 @@ sub make_file_list {                         # {{{1
         push @new_file_list, $File unless $ignore_this_file;
     }
     @file_list = @new_file_list;
-
     foreach my $dir (@dir_list) {
 #print "make_file_list dir=$dir  Exclude_Dir{$dir}=$Exclude_Dir{$dir}\n";
         # populates global variable @file_list
@@ -4097,6 +4097,7 @@ sub make_file_list {                         # {{{1
     write_file($opt_found, sort @file_list) if $opt_found;
 
     my $nFiles_Categorized = 0;
+
     foreach my $file (@file_list) {
         printf "classifying $file\n" if $opt_v > 2;
 
@@ -4132,7 +4133,6 @@ die  "make_file_list($file) undef lang" unless defined $language;
     }
     printf "classified %d files\r", $nFiles_Categorized
         if !$opt_quiet and $nFiles_Categorized > 1;
-
     print "<- make_file_list()\n" if $opt_v > 2;
 
     return $fh;   # handle to the file containing the list of files to process
@@ -4298,7 +4298,7 @@ sub files {                                  # {{{1
     # invoked by File::Find's find()   Populates global variable @file_list.
     # See also find_preprocessor() which prunes undesired directories.
 
-    my $Dir = cwd(); # not $File::Find::dir which just gives relative path
+    my $Dir = fastcwd(); # not $File::Find::dir which just gives relative path
     if ($opt_fullpath) {
         # look at as much of the path as is known
         if ($opt_match_f    ) {
