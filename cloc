@@ -1934,10 +1934,17 @@ sub get_max_processes {			     # {{{1
             return $opt_processes;
         }
     }
+
     # Disable multiprocessing on Windows - not tested.
     if ($ON_WINDOWS) {
         return 0;
     }
+ 
+    # Disable multiprocessing if Parallel::ForkManager is not available
+    if ( ! $HAVE_Parallel_ForkManager ) {
+        return 0;
+    }
+
     # Set to number of cores on Linux
     if ( -x '/usr/bin/nproc' ) {
         my $numavcores = `/usr/bin/nproc`;
