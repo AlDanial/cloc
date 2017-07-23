@@ -165,12 +165,12 @@ SUM:                            39           1564           1365           3945
 [Belarussian](http://www.besteonderdelen.nl/blog/?p=5426),
 [Bulgarian](http://www.ajoft.com/wpaper/aj-cloc.html),
 []( [Polish](http://www.trevister.com/blog/cloc.html), )
-[Russian](http://someblogscience.com/cloc.html),
+[]( [Russian](http://someblogscience.com/cloc.html), )
 [Serbo-Croatian](http://science.webhostinggeeks.com/cloc),
 [Romanian](http://www.bildelestore.dk/blog/cloc-contele-de-linii-de-cod/),
 [Slovakian](http://newknowledgez.com/cloc.html),
-[Tamil](http://healthcareadministrationdegree.co/socialwork/aldanial-cloc/),
-[Ukrainian](http://blog.kudoybook.com/cloc/) ]
+[Tamil](http://healthcareadministrationdegree.co/socialwork/aldanial-cloc/)
+[]( [Ukrainian](http://blog.kudoybook.com/cloc/) ] )
 
 cloc counts blank lines, comment lines, and physical lines of source
 code in [many programming languages](#Languages). Given two versions of
@@ -2337,12 +2337,7 @@ Ryan Lindeman implemented the `--by-percent` feature.
 Kent C. Dodds, [@kentcdodds](https://twitter.com/kentcdodd),
 created and maintains the npm package of cloc.
 
-[Anna Litwinka](http://carrrsmag.com) provided the
-[Russian](http://carrrsmag.com/blog/cloc.html)
-translation.
-
-[Science Blog](http://someblogscience.com) provided the
-[Russian](http://someblogscience.com/cloc.html) translation.
+[] ( [Anna Litwinka](http://carrrsmag.com) provided the [Russian](http://carrrsmag.com/blog/cloc.html) translation.  [Science Blog](http://someblogscience.com) provided the [Russian](http://someblogscience.com/cloc.html) translation. )
 
 [Viktoria Parnak](http://kudoybook.com)
 provided the
