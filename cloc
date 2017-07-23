@@ -1823,9 +1823,14 @@ my %Results_by_Language = ();
 my %Results_by_File     = ();
 my @results_parts  = ();
 my @sorted_files = sort keys %unique_source_file;
+
 if ( $max_processes == 0) {
     # Multiprocessing is disabled    
-    push (@results_parts , count_files ( \@sorted_files , 0, \%Language));
+    my $part = count_files ( \@sorted_files , 0, \%Language);
+    %Results_by_File = %{$part->{'results_by_file'}};
+    %Results_by_Language= %{$part->{'results_by_language'}};
+    %Ignored = ( %Ignored, %{$part->{'ignored'}});
+    push ( @Errors, @{$part->{'errors'}});   
 }
 else {
     # Do not create more processes than the number of files to be processed
@@ -1859,6 +1864,7 @@ else {
             }
         }
         %Results_by_File = ( %Results_by_File, %$part_result_by_file );
+        %Ignored = (%Ignored, %$part_ignored);
         push ( @Errors, @$part_errors);
     } );
     my $num_files_per_part = ceil ( ( scalar @sorted_files ) / $num_processes );
