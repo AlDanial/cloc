@@ -42,7 +42,14 @@ use File::Find;
 use File::Path;
 use File::Spec;
 use IO::File;
-use POSIX "strftime";
+use POSIX qw { strftime ceil};
+
+# Parallel::ForkManager isn't in the standard distribution. Use it only if installed.
+my $HAVE_Parallel_ForkManager = 0;
+eval "use Parallel::ForkManager 0.7.6;";
+if ( defined $Parallel::ForkManager::VERSION ) {
+    $HAVE_Parallel_ForkManager = 1;
+}
 
 # Digest::MD5 isn't in the standard distribution. Use it only if installed.
 my $HAVE_Digest_MD5 = 0;
@@ -342,6 +349,12 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              created with the --report-file option.  Makes
                              a cumulative set of results containing the
                              sum of data from the individual report files.
+   --processes=NUM           Sets the maximum number of processes that cloc uses. If this
+                             parameter is set to 0, multiprocessing will not be used. On Unix systems,
+                             cloc tries to detect the number of CPU cores and creates
+                             up to one thread for each core by default. On Windows systems
+                             and on systems with an unknown number of cores,
+                             using multiple processes is disabled by default.
    --unix                    Override the operating system autodetection
                              logic and run in UNIX mode.  See also
                              --windows, --show-os.
@@ -552,6 +565,7 @@ my (
     $opt_report_file          ,
     $opt_sdir                 ,
     $opt_sum_reports          ,
+    $opt_processes            ,
     $opt_unicode              ,
     $opt_no3                  ,   # accept it but don't use it
     $opt_3                    ,
@@ -630,6 +644,7 @@ my $getopt_success = GetOptions(
    "strip_comments|strip-comments=s"         => \$opt_strip_comments      ,
    "original_dir|original-dir"               => \$opt_original_dir        ,
    "sum_reports|sum-reports"                 => \$opt_sum_reports         ,
+   "processes=n"                             => \$opt_processes           ,
    "unicode"                                 => \$opt_unicode             ,
    "no3"                                     => \$opt_no3                 ,  # ignored
    "3"                                       => \$opt_3                   ,
@@ -900,6 +915,8 @@ if ($opt_lang_no_ext and !defined $Filters_by_Language{$opt_lang_no_ext}) {
 check_scale_existence(\%Filters_by_Language, \%Language_by_Extension,
                       \%Scale_Factor);
 
+my $nCounted = 0;
+
 # Process command line provided extension-to-language mapping overrides.
 # Make a hash of known languages in lower case for easier matching.
 my %Recognized_Language_lc = (); # key = language name in lc, value = true name
@@ -1112,6 +1129,9 @@ if ($opt_show_os) {
     }
     exit;
 }
+
+my $max_processes = get_max_processes();
+
 # 1}}}
 # Step 3:  Create a list of files to consider. {{{1
 #  a) If inputs are binary archives, first cd to a temp
@@ -1798,73 +1818,58 @@ printf "%8d unique file%s.                              \n",
 # 1}}}
 # Step 6:  Count code, comments, blank lines.  {{{1
 #
-
 my %Results_by_Language = ();
 my %Results_by_File     = ();
-my $nCounted = 0;
-foreach my $file (sort keys %unique_source_file) {
-    ++$nCounted;
-    printf "Counting:  %d\r", $nCounted
-        unless (!$opt_progress_rate or ($nCounted % $opt_progress_rate));
-    next if $Ignored{$file};
-    if ($opt_include_lang and not $Include_Language{$Language{$file}}) {
-        $Ignored{$file} = "--include-lang=$Language{$file}";
-        next;
-    }
-    if ($Exclude_Language{$Language{$file}}) {
-        $Ignored{$file} = "--exclude-lang=$Language{$file}";
-        next;
-    }
-    my $Filters_by_Language_Language_file = ! @{$Filters_by_Language{$Language{$file}} };
-    if ($Filters_by_Language_Language_file) {
-        if ($Language{$file} eq "(unknown)") {
-            $Ignored{$file} = "language unknown (#1)";
-        } else {
-            $Ignored{$file} = "missing Filters_by_Language{$Language{$file}}";
-        }
-        next;
-    }
-
-    my ($all_line_count, $blank_count, $comment_count, $code_count);
-    if ($opt_use_sloccount and $Language{$file} =~ /^(C|C\+\+|XML|PHP|Pascal|Java)$/) {
-        chomp ($blank_count     = `grep -Pcv '\\S' $file`);
-        chomp ($all_line_count  = `cat $file | wc -l`);
-        if      ($Language{$file} =~ /^(C|C\+\+)$/) {
-            $code_count = `cat '$file' | c_count      | head -n 1`;
-        } elsif ($Language{$file} eq "XML") {
-            $code_count = `cat '$file' | xml_count    | head -n 1`;
-        } elsif ($Language{$file} eq "PHP") {
-            $code_count = `cat '$file' | php_count    | head -n 1`;
-        } elsif ($Language{$file} eq "Pascal") {
-            $code_count = `cat '$file' | pascal_count | head -n 1`;
-        } elsif ($Language{$file} eq "Java") {
-            $code_count = `cat '$file' | java_count   | head -n 1`;
-        } else {
-            die "SLOCCount match failure: file=[$file] lang=[$Language{$file}]";
-        }
-        $code_count = substr($code_count, 0, -2);
-        $comment_count = $all_line_count - $code_count - $blank_count;
-    } else {
-        ($all_line_count,
-         $blank_count   ,
-         $comment_count ,) = call_counter($file, $Language{$file}, \@Errors);
-        $code_count = $all_line_count - $blank_count - $comment_count;
-    }
-    if ($opt_by_file) {
-        $Results_by_File{$file}{'code'   } = $code_count     ;
-        $Results_by_File{$file}{'blank'  } = $blank_count    ;
-        $Results_by_File{$file}{'comment'} = $comment_count  ;
-        $Results_by_File{$file}{'lang'   } = $Language{$file};
-        $Results_by_File{$file}{'nFiles' } = 1;
-    } else {
-        $Results_by_File{$file} = 1;  # just keep track of counted files
-    }
-
-    $Results_by_Language{$Language{$file}}{'nFiles'}++;
-    $Results_by_Language{$Language{$file}}{'code'}    += $code_count   ;
-    $Results_by_Language{$Language{$file}}{'blank'}   += $blank_count  ;
-    $Results_by_Language{$Language{$file}}{'comment'} += $comment_count;
+my @results_parts  = ();
+my @sorted_files = sort keys %unique_source_file;
+if ( $max_processes == 0) {
+    # Multiprocessing is disabled    
+    push (@results_parts , count_files ( \@sorted_files , 0, \%Language));
 }
+else {
+    # Do not create more processes than the number of files to be processed
+    my $num_files = scalar @sorted_files;
+    my $num_processes = $num_files >= $max_processes ? $max_processes : $num_files;
+    # Use at least one process.
+       $num_processes = 1
+            if $num_processes == 0;
+    # Start processes for counting
+    my $pm = Parallel::ForkManager->new($num_processes);
+    # When processes finish, they will use the embedded subroutine for
+    # merging the data into global variables.
+    $pm->run_on_finish ( sub {
+        my ($pid, $exit_code, $ident, $exit_signal, $core_dump, $part) = @_;
+        my $part_ignored = $part->{'ignored'};
+        my $part_result_by_file = $part->{'results_by_file'};
+        my $part_result_by_language = $part->{'results_by_language'};
+        my $part_errors = $part->{'errors'};
+        my $nCounted+= scalar keys %$part_result_by_file;
+        # Since files are processed by multiple processes, we can't measure
+        # the number of processed files exactly. We approximate this by showing
+        # the number of files counted by finished processes.
+	printf "Counting:  %d\r", $nCounted
+                 if $opt_progress_rate;
+
+        foreach my $this_language ( keys %$part_result_by_language ) {
+            my $counts = $part_result_by_language->{$this_language};
+            foreach my $inner_key ( keys %$counts ) {
+                $Results_by_Language{$this_language}{$inner_key} += 
+                    $counts->{$inner_key};
+            }
+        }
+        %Results_by_File = ( %Results_by_File, %$part_result_by_file );
+        push ( @Errors, @$part_errors);
+    } );
+    my $num_files_per_part = ceil ( ( scalar @sorted_files ) / $num_processes );
+    while ( my @part = splice @sorted_files, 0 , $num_files_per_part ) { 
+        $pm->start() and next;
+        my $count_result = count_files ( \@part, 1, \%Language );
+        $pm->finish(0 , $count_result);
+    }
+    # Wait for processes to finish
+    $pm->wait_all_children();
+}
+
 my @ignored_reasons = map { "$_: $Ignored{$_}" } sort keys %Ignored;
 write_file($opt_ignored, @ignored_reasons   ) if $opt_ignored;
 write_file($opt_counted, sort keys %Results_by_File) if $opt_counted;
@@ -1906,7 +1911,37 @@ if ($opt_count_diff) {
     exit if $opt_count_diff > 3;
     goto Top_of_Processing_Loop;
 }
-
+sub get_max_processes {			     # {{{1
+    # If user has specified valid number of threads, use that.
+    if (defined $opt_processes) {
+        if ( $opt_processes !~ /^\d+$/ ) {
+            print "Error: processes option argument must be numeric.\n";
+            exit 1;
+        }
+        elsif ( ! $HAVE_Parallel_ForkManager ) {
+            print "Error: cannot use multiple processes, because " .
+                  "Parallel::ForkManager is not installed, or the version is too old.\n";
+            exit 1;
+        }
+        else {
+            return $opt_processes;
+        }
+    }
+    # Disable multiprocessing on Windows - not tested.
+    if ($ON_WINDOWS) {
+        return 0;
+    }
+    # Set to number of cores on Linux
+    if ( -x '/usr/bin/nproc' ) {
+        my $numavcores = `/usr/bin/nproc`;
+        chomp $numavcores;
+        if ( $numavcores =~ /^\d+$/ ) {
+            return $numavcores;
+        }
+    }
+    # Disable multiprocessing in other cases
+    return 0;
+} # 1}}}
 sub exclude_autogenerated_files {            # {{{1
     my ($ra_file_list, # in
         $rh_Err      , # in   hash of error codes
@@ -1932,6 +1967,92 @@ sub exclude_autogenerated_files {            # {{{1
     @{$ra_file_list} = @file_list_minus_autogen;
     print "<- exclude_autogenerated_files()\n" if $opt_v > 2;
 } # 1}}}
+sub count_files {
+    my ($filelist,$counter_type,$language_hash) = @_;
+    my @p_errors = ();
+    my %p_ignored = ();
+    my %p_rbl = ();
+    my %p_rbf = ();
+    my %Language = %$language_hash;
+
+    foreach my $file (@$filelist) {
+        if ( ! $counter_type ) {
+            # Multithreading disabled
+            $nCounted++;
+            
+            printf "Counting:  %d\r", $nCounted
+                 unless (!$opt_progress_rate or ($nCounted % $opt_progress_rate));
+        }
+
+        next if $Ignored{$file};
+        if ($opt_include_lang and not $Include_Language{$Language{$file}}) {
+            $p_ignored{$file} = "--include-lang=$Language{$file}";
+            next;
+        }
+        if ($Exclude_Language{$Language{$file}}) {
+            $p_ignored{$file} = "--exclude-lang=$Language{$file}";
+            next;
+        }
+
+        my $Filters_by_Language_Language_file = ! @{$Filters_by_Language{$Language{$file}} };
+        if ($Filters_by_Language_Language_file) {
+            if ($Language{$file} eq "(unknown)") {
+                $p_ignored{$file} = "language unknown (#1)";
+            } else {
+                $p_ignored{$file} = "missing Filters_by_Language{$Language{$file}}";
+            }
+            next;
+        }
+
+        my ($all_line_count, $blank_count, $comment_count, $code_count);
+        if ($opt_use_sloccount and $Language{$file} =~ /^(C|C\+\+|XML|PHP|Pascal|Java)$/) {
+            chomp ($blank_count     = `grep -Pcv '\\S' $file`);
+            chomp ($all_line_count  = `cat $file | wc -l`);
+            if      ($Language{$file} =~ /^(C|C\+\+)$/) {
+                $code_count = `cat '$file' | c_count      | head -n 1`;
+            } elsif ($Language{$file} eq "XML") {
+                $code_count = `cat '$file' | xml_count    | head -n 1`;
+            } elsif ($Language{$file} eq "PHP") {
+                $code_count = `cat '$file' | php_count    | head -n 1`;
+            } elsif ($Language{$file} eq "Pascal") {
+                $code_count = `cat '$file' | pascal_count | head -n 1`;
+            } elsif ($Language{$file} eq "Java") {
+                $code_count = `cat '$file' | java_count   | head -n 1`;
+            } else {
+                die "SLOCCount match failure: file=[$file] lang=[$Language{$file}]";
+            }
+            $code_count = substr($code_count, 0, -2);
+            $comment_count = $all_line_count - $code_count - $blank_count;
+        } else {
+            ($all_line_count,
+             $blank_count   ,
+             $comment_count ,) = call_counter($file, $Language{$file}, \@Errors);
+            $code_count = $all_line_count - $blank_count - $comment_count;
+        }
+
+        if ($opt_by_file) {
+            $p_rbf{$file}{'code'   } = $code_count     ;
+            $p_rbf{$file}{'blank'  } = $blank_count    ;
+            $p_rbf{$file}{'comment'} = $comment_count  ;
+            $p_rbf{$file}{'lang'   } = $Language{$file};
+            $p_rbf{$file}{'nFiles' } = 1;
+        } else {
+            $p_rbf{$file} = 1;  # just keep track of counted files
+        }
+
+        $p_rbl{$Language{$file}}{'nFiles'}++;
+        $p_rbl{$Language{$file}}{'code'}    += $code_count   ;
+        $p_rbl{$Language{$file}}{'blank'}   += $blank_count  ;
+        $p_rbl{$Language{$file}}{'comment'} += $comment_count;
+
+    }    
+    return {
+        "ignored" => \%p_ignored,
+        "errors"  => \@p_errors,
+        "results_by_file" => \%p_rbf,
+        "results_by_language" => \%p_rbl,
+    }
+}
 sub exclude_dir_validates {                  # {{{1
     my ($rh_Exclude_Dir) = @_;
     my $is_OK = 1;
