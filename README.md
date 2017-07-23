@@ -2337,8 +2337,6 @@ Ryan Lindeman implemented the `--by-percent` feature.
 Kent C. Dodds, [@kentcdodds](https://twitter.com/kentcdodd),
 created and maintains the npm package of cloc.
 
-[]( [Anna Litwinka](http://carrrsmag.com) provided the [Russian](http://carrrsmag.com/blog/cloc.html) translation.  [Science Blog](http://someblogscience.com) provided the [Russian](http://someblogscience.com/cloc.html) translation. )
-
 [Viktoria Parnak](http://kudoybook.com)
 provided the
 [Ukrainian](http://blog.kudoybook.com/cloc/)
