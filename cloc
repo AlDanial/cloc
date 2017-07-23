@@ -825,6 +825,7 @@ my %Error_Codes = ( 'Unable to read'                => -1,
                     'Neither file nor directory'    => -2,
                     'Diff error (quoted comments?)' => -3,
                     'Diff error, exceeded timeout'  => -4,
+                    'Line count, exceeded timeout'  => -5,
                   );
 my @Autogen_to_ignore = no_autogen_files($list_no_autogen);
 if ($opt_force_lang_def) {
@@ -1498,7 +1499,7 @@ foreach (my $F = 0; $F < scalar @fh - 1; $F++) {
 #print "2: scalar(lines_L)=", scalar @lines_L, "\n";
         @lines_L    = add_newlines(\@lines_L); # compensate for rm_comments()
         @lines_L    = rm_comments( \@lines_L, $Lang_L, $file_L,
-                                   \%EOL_Continuation_re);
+                                   \%EOL_Continuation_re, \@Errors);
 #print "3: scalar(lines_L)=", scalar @lines_L, "\n";
 
 #print "Diff blank removal R language= $Lang_R\n";
@@ -1507,7 +1508,7 @@ foreach (my $F = 0; $F < scalar @fh - 1; $F++) {
         @lines_R    = @original_minus_blanks_R;
         @lines_R    = add_newlines(\@lines_R); # taken away by rm_comments()
         @lines_R    = rm_comments( \@lines_R, $Lang_R, $file_R,
-                                   \%EOL_Continuation_re);
+                                   \%EOL_Continuation_re, \@Errors);
 
         my (@diff_LL, @diff_LR, );
         array_diff( $file_L                  ,   # in
@@ -4451,7 +4452,7 @@ sub call_counter {                           # {{{1
         if $opt_print_filter_stages;
 
     @lines = rm_comments(\@lines, $language, $file,
-                               \%EOL_Continuation_re);
+                               \%EOL_Continuation_re, $ra_Errors);
 
     my $comment_lines = $total_lines - $blank_lines - scalar  @lines;
     if ($opt_strip_comments) {
@@ -4635,6 +4636,7 @@ sub rm_comments {                            # {{{1
         $file     , # in (some language counters, eg Haskell, need
                     #     access to the original file)
         $rh_EOL_continuation_re , # in
+        $raa_Errors , # out
        ) = @_;
     print "-> rm_comments(file=$file)\n" if $opt_v > 2;
     my @routines       = @{$Filters_by_Language{$language}};
@@ -4665,8 +4667,28 @@ sub rm_comments {                            # {{{1
 #print "lines before=\n";
 #print Dumper(\@lines);
 
-        no strict 'refs';
-        @lines = &{$subroutine}(\@lines, @args);   # apply filter...
+        # Unusual inputs, namely /* within strings without
+        # a corresponding */ can cause huge delays so put a timer on this.
+        my $max_duration_sec = scalar(@lines)/1000.0; # est lines per second
+           $max_duration_sec = 1.0 if $max_duration_sec < 1;
+#print "max_duration_sec=$max_duration_sec\n";
+        eval {
+            local $SIG{ALRM} = sub { die "alarm\n" };
+            alarm $max_duration_sec;
+            no strict 'refs';
+            @lines = &{$subroutine}(\@lines, @args);   # apply filter...
+            alarm 0;
+        };
+        if ($@) {
+            # timed out
+            die unless $@ eq "alarm\n";
+            push @{$raa_Errors},
+                [ $Error_Codes{'Line count, exceeded timeout'}, $file ];
+            if ($opt_v) {
+                warn "rm_comments($subroutine): exceeded timeout for $file--ignoring\n";
+            }
+            next;
+        }
 
 #print "lines after=\n";
 #print Dumper(\@lines);
@@ -9485,7 +9507,7 @@ sub call_regexp_common {                     # {{{1
         #         (* This is { another } test. **)
         # Curiously, testing for "defined $1" breaks the substitution.
         no warnings;
-        # remove   comments
+        # Remove comments.
         $all_lines =~ s/$1//g;
     }
     # a bogus use of %RE to avoid:
