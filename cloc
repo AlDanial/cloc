@@ -3645,65 +3645,127 @@ sub print_language_filters {                 # {{{1
 sub replace_git_hash_with_tarfile {          # {{{1
     my ($ra_arg_list,) = @_;  # in   file name, directory name and/or git commit hash to examine
     # replace git hashes in $ra_arg_list with tar files
+    # Diff mode and count mode behave differently:
+    #   Diff:
+    #       file  git_hash
+    #          Extract file from the git repo and only compare to it.
+    #       git_hash1  git_hash2
+    #          Get listings of all files in git_hash1 and git_hash2.
+    #          Next, get listings of files that changed with git_hash1
+    #          and git_hash2.  Finally, make two tar files of
+    #          git repos1 and 2 where the file listing is the union
+    #          of changes.
+    #   Regular count:
+    #       Simply make a tar file of all files in the git repo.
 
 #print "ra_arg_list 1: @{$ra_arg_list}\n";
     return if $ON_WINDOWS;
 
+    my $hash_regex = qr/^([a-f\d]{5,40}|master|HEAD)$/;
     my %replacement_arg_list = ();
-    my $checked_tar_git = 0;
-    my $have_tar_git    = 0;
-    my $all_hashes      = "";
-    my $hash_regex      = qr/^([a-f\d]{5,40}|master|HEAD)$/;
 
-    # need two passes:  first captures all the hashes of
-    # inputs that look like git commits
-
+    # early exit if none of the inputs look like git hashes
+    my %git_hash = ();
     my $i = 0;
     foreach my $file_or_dir (@{$ra_arg_list}) {
         ++$i;
-        if (-r $file_or_dir) { # not a git hash
+        if (-r $file_or_dir) { # readable file or dir; not a git hash
             $replacement_arg_list{$i} = $file_or_dir;
             next;
+        } elsif ($file_or_dir =~ m/$hash_regex/) {
+            $git_hash{$file_or_dir} = $i;
+        } # else the input can't be understood; ignore for now
+    }
+    return unless %git_hash;
+
+    my $have_tar_git = external_utility_exists("tar --version") &&
+                       external_utility_exists("git --version");
+    if (!$have_tar_git) {
+        warn "One or more inputs looks like a git hash but " .
+             "either git or tar is unavailable.\n";
+        return;
+    }
+
+    my %repo_listing = ();  # $repo_listing{hash}{files} = 1;
+    foreach my $hash (sort keys %git_hash) {
+        foreach my $file (`git ls-tree --name-only -r $hash`) {
+            $file =~ s/\s+$//;
+            $repo_listing{$hash}{$file} = 1;
         }
-        if ($file_or_dir =~ m/$hash_regex/) {
-            # looks like a git hash
-            if (!$checked_tar_git) {
-                $have_tar_git = external_utility_exists("tar --version") &&
-                                external_utility_exists("git --version");
+    }
+
+    # logic for each of the modes
+    if ($opt_diff) {
+#print "A DIFF\n";
+        # is it git to git, or git to file/dir ?
+        my ($Left, $Right) = @{$ra_arg_list};
+        my %diff_listing = ();  # $diff_listing{hash}{files} = 1;
+        foreach my $hash (sort keys %git_hash) {
+            foreach my $file (`git diff-tree --no-commit-id --name-only $hash`) {
+                $file =~ s/\s+$//;
+                $diff_listing{$hash}{$file} = 1;
             }
-            $checked_tar_git = 1;
-            if (!$have_tar_git) {
-                printf "Skipping %s: looks like a git hash but " .
-                       "either git or tar are not available\n", $file_or_dir;
-                next;
+            if (!scalar keys %{$diff_listing{$hash}}) {
+                print "No files modified with git commit $hash.\n";
+                die;
             }
-            $all_hashes .= " $file_or_dir";
+        }
+#use Data::Dumper;
+#print "diff_listing= "; print Dumper(\%diff_listing);
+#print "git_hash= "; print Dumper(\%git_hash);
+#print "repo_listing= "; print Dumper(\%repo_listing);
+        if ($git_hash{$Left} and $git_hash{$Right}) {
+#print "A DIFF git-to-git\n";
+            # git to git
+            # first make a union of all files that have changed in both commits
+            my %files_union = ();
+            foreach my $file (sort keys %{$diff_listing{$Left}}  ) {
+                $files_union{$file} = 1;
+            }
+            foreach my $file (sort keys %{$diff_listing{$Right}} ) {
+                $files_union{$file} = 1;
+            }
+            # then make trucated tar files of those union files which
+            # actually exist in each repo
+            my @left_files  = ();
+            my @right_files = ();
+            foreach my $file (sort keys %files_union) {
+                push @left_files , $file if $repo_listing{$Left }{$file};
+                push @right_files, $file if $repo_listing{$Right}{$file};
+            }
+            my $files = join(" ", @left_files);
+            $replacement_arg_list{$git_hash{$Left}}  = git_archive("$Left  $files");
+               $files = join(" ", @right_files);
+            $replacement_arg_list{$git_hash{$Right}} = git_archive("$Right $files");
         } else {
-            # weird, shouldn't be here
-            $replacement_arg_list{$i} = $file_or_dir;
-        }
-    }
-
-    # second pass creates a tar file of each git diff file listing
-
-    if ($all_hashes) {  # at least one input is a git commit hash
-        my $i = 0;
-        foreach my $file_or_dir (@{$ra_arg_list}) {
-            ++$i;
-            next if -r $file_or_dir;
-            next unless $file_or_dir =~ m/$hash_regex/;
-            my ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, SUFFIX => '.tar');  # delete on exit
-            # next line won't work on csh/tcsh
-            my $cmd = "git archive -o $Tarfile $file_or_dir \$(git diff --name-only $all_hashes)";
-            print  $cmd, "\n";
-            system $cmd;
-            if (!-r $Tarfile or !-s $Tarfile) {
-                # not readable, or zero sized
-                die "Failed to create tarfile of files from git.";
+#print "A DIFF git-to-file or file-to-git Left=$Left Right=$Right\n";
+            # git to file/dir or file/dir to git
+            if      ($git_hash{$Left}  and $repo_listing{$Left}{$Right} ) {
+#print "A DIFF 1\n";
+                # $Left is a git hash and $Right is a file
+                $replacement_arg_list{$git_hash{$Left}}  = git_archive("$Left $Right");
+            } elsif ($git_hash{$Right} and $repo_listing{$Right}{$Left}) {
+#print "A DIFF 2\n";
+                # $Left is a file and $Right is a git hash
+                $replacement_arg_list{$git_hash{$Right}} = git_archive("$Right $Left");
+            } elsif ($git_hash{$Left}) {
+#print "A DIFF 3\n";
+                # assume Right is a directory; tar the entire git archive at this hash
+                $replacement_arg_list{$git_hash{$Left}}  = git_archive($Left);
+            } else {
+#print "A DIFF 4\n";
+                # assume Left  is a directory; tar the entire git archive at this hash
+                $replacement_arg_list{$git_hash{$Right}} = git_archive($Right);
             }
-            $replacement_arg_list{$i} = $Tarfile;
+        }
+    } else {
+#print "B COUNT\n";
+        foreach my $hash (sort keys %git_hash) {
+            $replacement_arg_list{$git_hash{$hash}} = git_archive($hash);
         }
     }
+# print "git_hash= "; print Dumper(\%git_hash);
+#print "repo_listing= "; print Dumper(\%repo_listing);
 
     # replace the input arg list with the new one
     @{$ra_arg_list} = ();
@@ -3712,6 +3774,22 @@ sub replace_git_hash_with_tarfile {          # {{{1
     }
 
 #print "ra_arg_list 2: @{$ra_arg_list}\n";
+} # 1}}}
+sub git_archive {                            # {{{1
+    # Invoke 'git archive' as a system command to create a tar file
+    # using the given argument(s).
+    my ($args, ) = @_;
+    print "-> git_archive($args)\n" if $opt_v > 2;
+    my ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, SUFFIX => '.tar');  # delete on exit
+    my $cmd = "git archive -o $Tarfile $args";
+    print  $cmd, "\n";
+    system $cmd;
+    if (!-r $Tarfile or !-s $Tarfile) {
+        # not readable, or zero sized
+        die "Failed to create tarfile of files from git.";
+    }
+    print "<- git_archive()\n" if $opt_v > 2;
+    return $Tarfile
 } # 1}}}
 sub make_file_list {                         # {{{1
     my ($ra_arg_list,  # in   file and/or directory names to examine
