@@ -35,6 +35,7 @@ require 5.006;
 # use modules                                  {{{1
 use warnings;
 use strict;
+
 use Getopt::Long;
 use File::Basename;
 use File::Temp qw { tempfile tempdir };
@@ -42,6 +43,7 @@ use File::Find;
 use File::Path;
 use File::Spec;
 use IO::File;
+use List::Util qw( min max );
 use Cwd;
 use POSIX qw { strftime ceil};
 
@@ -1335,392 +1337,125 @@ my %Results_by_File     = ();
 my %Delta_by_Language   = ();
 my %Delta_by_File       = ();
 
-foreach (my $F = 0; $F < scalar @fh - 1; $F++) {
-    # loop over file sets; do diff between set $F to $F+1
+my @files_added_tot = ();
+my @files_removed_tot = ();
+my @file_pairs_tot = ();
+my @alignment = ();
 
-    my $nCounted = 0;
+my $fset_a = $fh[0];
+my $fset_b = $fh[1];
 
-    my @file_pairs    = ();
-    my @files_added   = ();
-    my @files_removed = ();
+my $n_filepairs_compared = 0;
+my $tot_counted = 0;
 
-    align_by_pairs(\%{$unique_source_file{$fh[$F  ]}}    , # in
-                   \%{$unique_source_file{$fh[$F+1]}}    , # in
-                   \@files_added                         , # out
-                   \@files_removed                       , # out
-                   \@file_pairs                          , # out
-                   );
-    my %already_counted = (); # already_counted{ filename } = 1
+if ( scalar @fh != 2 ) {
+    print "Error: in correct length fh array when preparing diff at step 6.\n";
+    exit 1;
+}
 
-    if (!@file_pairs) {
-        # Special case where all files were either added or deleted.
-        # In this case, one of these arrays will be empty:
-        #   @files_added, @files_removed
-        # so loop over both to cover both cases.
-        my $status = @files_added ? 'added' : 'removed';
-        my $offset = @files_added ? 1       : 0        ;
-        foreach my $file (@files_added, @files_removed) {
-            next unless defined $Language{$fh[$F+$offset]}{$file};
-            my $Lang = $Language{$fh[$F+$offset]}{$file};
-            next if $Lang eq '(unknown)';
-            my ($all_line_count,
-                $blank_count   ,
-                $comment_count ,
-               ) = call_counter($file, $Lang, \@Errors);
-            $already_counted{$file} = 1;
-            my $code_count = $all_line_count-$blank_count-$comment_count;
-            if ($opt_by_file) {
-                $Delta_by_File{$file}{'code'   }{$status} += $code_count   ;
-                $Delta_by_File{$file}{'blank'  }{$status} += $blank_count  ;
-                $Delta_by_File{$file}{'comment'}{$status} += $comment_count;
-                $Delta_by_File{$file}{'lang'   }{$status}  = $Lang         ;
-                $Delta_by_File{$file}{'nFiles' }{$status} += 1             ;
+align_by_pairs        (\%{$unique_source_file{$fset_a}}      , # in
+                       \%{$unique_source_file{$fset_b}}      , # in
+                       \@files_added_tot                     , # out
+                       \@files_removed_tot                   , # out
+                       \@file_pairs_tot                      , # out
+                      );
+
+
+if ( $max_processes == 0) {
+    # Multiprocessing is disabled    
+    my $part = count_filesets ( $fset_a, $fset_b, \@files_added_tot, \@files_removed_tot, \@file_pairs_tot , 0, \%Language);
+    %Results_by_File = %{$part->{'results_by_file'}};
+    %Results_by_Language= %{$part->{'results_by_language'}};
+    %Delta_by_File = %{$part->{'delta_by_file'}};
+    %Delta_by_Language= %{$part->{'delta_by_language'}};
+    %Ignored = ( %Ignored, %{$part->{'ignored'}});
+    @alignment = @{$part->{'alignment'}};
+    $n_filepairs_compared = $part->{'n_filepairs_compared'};
+    push ( @Errors, @{$part->{'errors'}});   
+}
+else {
+    # Multiprocessing is enabled
+    # Do not create more processes than the amount of data to be processed
+    my $num_processes = min(max(scalar @files_added_tot,scalar @files_removed_tot,scalar @file_pairs_tot),$max_processes);
+    # ... but use at least one process.
+       $num_processes = 1
+            if $num_processes == 0;
+    # Start processes for counting
+    my $pm = Parallel::ForkManager->new($num_processes);
+    # When processes finish, they will use the embedded subroutine for
+    # merging the data into global variables.
+    $pm->run_on_finish ( sub {
+        my ($pid, $exit_code, $ident, $exit_signal, $core_dump, $part) = @_;
+        my $part_ignored = $part->{'ignored'};
+        my $part_result_by_file = $part->{'results_by_file'};
+        my $part_result_by_language = $part->{'results_by_language'};
+        my $part_delta_by_file = $part->{'delta_by_file'};
+        my $part_delta_by_language = $part->{'delta_by_language'};
+        my $part_alignment = $part->{'alignment'};
+        my $part_errors = $part->{'errors'};
+           $tot_counted += scalar keys %$part_result_by_file;
+           $n_filepairs_compared += $part->{'n_filepairs_compared'};
+        # Since files are processed by multiple processes, we can't measure
+        # the number of processed files exactly. We approximate this by showing
+        # the number of files counted by finished processes.
+	printf "Counting:  %d\r", $tot_counted
+                 if $opt_progress_rate;
+
+        foreach my $this_language ( keys %$part_result_by_language ) {
+            my $counts = $part_result_by_language->{$this_language};
+            foreach my $inner_key ( keys %$counts ) {
+                $Results_by_Language{$this_language}{$inner_key} += 
+                    $counts->{$inner_key};
             }
-            $Delta_by_Language{$Lang}{'code'   }{$status} += $code_count   ;
-            $Delta_by_Language{$Lang}{'blank'  }{$status} += $blank_count  ;
-            $Delta_by_Language{$Lang}{'comment'}{$status} += $comment_count;
-            $Delta_by_Language{$Lang}{'nFiles' }{$status} += 1             ;
-        }
-    }
-   #use Data::Dumper::Simple;
-   #use Data::Dumper;
-   #print Dumper(\@files_added, \@files_removed, \@file_pairs);
-    my @alignment = (); # only  used if --diff-alignment
-#print "after align_by_pairs:\n";
-
-#print "added:\n";
-    push @alignment, sprintf "Files added: %d\n", scalar @files_added
-        if $opt_diff_alignment;
-    foreach my $f (@files_added) {
-        next if $already_counted{$f};
-#printf "%10s -> %s\n", $f, $Language{$fh[$F+1]}{$f};
-        # Don't proceed unless the file (both L and R versions)
-        # is in a known language.
-        next if $opt_include_lang
-                and not $Include_Language{$Language{$fh[$F+1]}{$f}};
-        next if $Language{$fh[$F+1]}{$f} eq "(unknown)";
-        next if $Exclude_Language{$Language{$fh[$F+1]}{$f}};
-        push @alignment, sprintf "  + %s ; %s\n", $f, $Language{$fh[$F+1]}{$f}
-            if $opt_diff_alignment;
-        ++$Delta_by_Language{ $Language{$fh[$F+1]}{$f} }{'nFiles'}{'added'};
-        # Additionally, add contents of file $f to
-        #        Delta_by_File{$f}{comment/blank/code}{'added'}
-        #        Delta_by_Language{$lang}{comment/blank/code}{'added'}
-        my ($all_line_count,
-            $blank_count   ,
-            $comment_count ,
-           ) = call_counter($f, $Language{$fh[$F+1]}{$f}, \@Errors);
-        $Delta_by_Language{ $Language{$fh[$F+1]}{$f} }{'comment'}{'added'} +=
-            $comment_count;
-        $Delta_by_Language{ $Language{$fh[$F+1]}{$f} }{'blank'}{'added'}   +=
-            $blank_count;
-        $Delta_by_Language{ $Language{$fh[$F+1]}{$f} }{'code'}{'added'}    +=
-            $all_line_count - $blank_count - $comment_count;
-        $Delta_by_File{ $f }{'comment'}{'added'} = $comment_count;
-        $Delta_by_File{ $f }{'blank'}{'added'}   = $blank_count;
-        $Delta_by_File{ $f }{'code'}{'added'}    =
-            $all_line_count - $blank_count - $comment_count;
-    }
-    push @alignment, "\n";
-
-#print "removed:\n";
-    push @alignment, sprintf "Files removed: %d\n", scalar @files_removed
-        if $opt_diff_alignment;
-    foreach my $f (@files_removed) {
-        next if $already_counted{$f};
-        # Don't proceed unless the file (both L and R versions)
-        # is in a known language.
-        next if $opt_include_lang
-                and not $Include_Language{$Language{$fh[$F]}{$f}};
-        next if $Language{$fh[$F]}{$f} eq "(unknown)";
-        next if $Exclude_Language{$Language{$fh[$F]}{$f}};
-        ++$Delta_by_Language{ $Language{$fh[$F]}{$f} }{'nFiles'}{'removed'};
-        push @alignment, sprintf "  - %s ; %s\n", $f, $Language{$fh[$F]}{$f}
-            if $opt_diff_alignment;
-#printf "%10s -> %s\n", $f, $Language{$fh[$F  ]}{$f};
-        # Additionally, add contents of file $f to
-        #        Delta_by_File{$f}{comment/blank/code}{'removed'}
-        #        Delta_by_Language{$lang}{comment/blank/code}{'removed'}
-        my ($all_line_count,
-            $blank_count   ,
-            $comment_count ,
-           ) = call_counter($f, $Language{$fh[$F  ]}{$f}, \@Errors);
-        $Delta_by_Language{ $Language{$fh[$F  ]}{$f} }{'comment'}{'removed'} +=
-            $comment_count;
-        $Delta_by_Language{ $Language{$fh[$F  ]}{$f} }{'blank'}{'removed'}   +=
-            $blank_count;
-        $Delta_by_Language{ $Language{$fh[$F  ]}{$f} }{'code'}{'removed'}    +=
-            $all_line_count - $blank_count - $comment_count;
-        $Delta_by_File{ $f }{'comment'}{'removed'} = $comment_count;
-        $Delta_by_File{ $f }{'blank'}{'removed'}   = $blank_count;
-        $Delta_by_File{ $f }{'code'}{'removed'}    =
-            $all_line_count - $blank_count - $comment_count;
-    }
-    push @alignment, "\n";
-
-    my $alignment_pairs_index = scalar @alignment;
-    my $n_file_pairs_compared = 0;
-    # Don't know ahead of time how many file pairs will be compared
-    # since duplicates are weeded out below.  The answer is
-    # scalar @file_pairs only if there are no duplicates.
-    push @alignment, sprintf "File pairs compared: UPDATE_ME\n"
-        if $opt_diff_alignment;
-
-    foreach my $pair (@file_pairs) {
-        my $file_L = $pair->[0];
-        my $file_R = $pair->[1];
-        my $Lang_L = $Language{$fh[$F  ]}{$file_L};
-        my $Lang_R = $Language{$fh[$F+1]}{$file_R};
-#print "main step 6 file_L=$file_L    file_R=$file_R\n";
-        ++$nCounted;
-        printf "Counting:  %d\r", $nCounted
-            unless (!$opt_progress_rate or ($nCounted % $opt_progress_rate));
-        next if $Ignored{$file_L};
-        # filter out non-included languages
-        if ($opt_include_lang and not $Include_Language{$Lang_L}
-                              and not $Include_Language{$Lang_R}) {
-            $Ignored{$file_L} = "--include-lang=$Lang_L";
-            $Ignored{$file_R} = "--include-lang=$Lang_R";
-            next;
-        }
-        # filter out excluded or unrecognized languages
-        if ($Exclude_Language{$Lang_L} or $Exclude_Language{$Lang_R}) {
-            $Ignored{$file_L} = "--exclude-lang=$Lang_L";
-            $Ignored{$file_R} = "--exclude-lang=$Lang_R";
-            next;
-        }
-        my $not_Filters_by_Language_Lang_LR = 0;
-#print "file_LR = [$file_L] [$file_R]\n";
-#print "Lang_LR = [$Lang_L] [$Lang_R]\n";
-        if (!(@{$Filters_by_Language{$Lang_L} }) or
-            !(@{$Filters_by_Language{$Lang_R} })) {
-            $not_Filters_by_Language_Lang_LR = 1;
-        }
-        if ($not_Filters_by_Language_Lang_LR) {
-            if (($Lang_L eq "(unknown)") or ($Lang_R eq "(unknown)")) {
-                $Ignored{$fh[$F  ]}{$file_L} = "language unknown (#1)";
-                $Ignored{$fh[$F+1]}{$file_R} = "language unknown (#1)";
-            } else {
-                $Ignored{$fh[$F  ]}{$file_L} = "missing Filters_by_Language{$Lang_L}";
-                $Ignored{$fh[$F+1]}{$file_R} = "missing Filters_by_Language{$Lang_R}";
-            }
-            next;
         }
 
-#print "DIFF($file_L, $file_R)\n";
-        # step 0: compare the two files' contents
-        chomp ( my @lines_L = read_file($file_L) );
-        chomp ( my @lines_R = read_file($file_R) );
-        my $language_file_L = "";
-        if (defined $Language{$fh[$F]}{$file_L}) {
-            $language_file_L = $Language{$fh[$F]}{$file_L};
-        } else {
-            # files $file_L and $file_R do not contain known language
-            next;
-        }
-        my $contents_are_same = 1;
-        if (scalar @lines_L == scalar @lines_R) {
-            # same size, must compare line-by-line
-            for (my $i = 0; $i < scalar @lines_L; $i++) {
-                if ($lines_L[$i] ne $lines_R[$i]) {
-                    $contents_are_same = 0;
-                    last;
+        foreach my $this_language ( keys %$part_delta_by_language ) {
+            my $counts = $part_delta_by_language->{$this_language};
+            foreach my $inner_key ( keys %$counts ) {
+                my $statuses = $counts->{$inner_key};
+                foreach my $inner_status ( keys %$statuses ) {
+                    $Delta_by_Language{$this_language}{$inner_key}{$inner_status} += 
+                          $counts->{$inner_key}->{$inner_status};
                 }
             }
-            if ($contents_are_same) {
-                ++$Delta_by_Language{$language_file_L}{'nFiles'}{'same'};
-            } else {
-                ++$Delta_by_Language{$language_file_L}{'nFiles'}{'modified'};
-            }
-        } else {
-            $contents_are_same = 0;
-            # different sizes, contents have changed
-            ++$Delta_by_Language{$language_file_L}{'nFiles'}{'modified'};
         }
-        if ($opt_diff_alignment) {
-            my $str =  "$file_L | $file_R ; $language_file_L";
-            if ($contents_are_same) {
-                push @alignment, "  == $str";
-            } else {
-                push @alignment, "  != $str";
-            }
-            ++$n_file_pairs_compared;
-        }
+       
+        %Results_by_File = ( %Results_by_File, %$part_result_by_file );
+        %Delta_by_File = ( %Delta_by_File, %$part_delta_by_file );
+        %Ignored = (%Ignored, %$part_ignored );
+        push ( @alignment , @$part_alignment ); 
+        push ( @Errors, @$part_errors );
+    } );
 
-        # step 1: identify comments in both files
-#print "Diff blank removal L language= $Lang_L";
-#print " scalar(lines_L)=", scalar @lines_L, "\n";
-        my @original_minus_blanks_L
-                    = rm_blanks(  \@lines_L, $Lang_L, \%EOL_Continuation_re);
-#print "1: scalar(original_minus_blanks_L)=", scalar @original_minus_blanks_L, "\n";
-        @lines_L    = @original_minus_blanks_L;
-#print "2: scalar(lines_L)=", scalar @lines_L, "\n";
-        @lines_L    = add_newlines(\@lines_L); # compensate for rm_comments()
-        @lines_L    = rm_comments( \@lines_L, $Lang_L, $file_L,
-                                   \%EOL_Continuation_re, \@Errors);
-#print "3: scalar(lines_L)=", scalar @lines_L, "\n";
+    
+    my $num_filepairs_per_part = ceil ( ( scalar @file_pairs_tot ) / $num_processes );
+    my $num_filesremoved_per_part = ceil ( ( scalar @files_removed_tot ) / $num_processes );
+    my $num_filesadded_per_part = ceil ( ( scalar @files_added_tot ) / $num_processes );
 
-#print "Diff blank removal R language= $Lang_R\n";
-        my @original_minus_blanks_R
-                    = rm_blanks(  \@lines_R, $Lang_R, \%EOL_Continuation_re);
-        @lines_R    = @original_minus_blanks_R;
-        @lines_R    = add_newlines(\@lines_R); # taken away by rm_comments()
-        @lines_R    = rm_comments( \@lines_R, $Lang_R, $file_R,
-                                   \%EOL_Continuation_re, \@Errors);
-
-        my (@diff_LL, @diff_LR, );
-        array_diff( $file_L                  ,   # in
-                   \@original_minus_blanks_L ,   # in
-                   \@lines_L                 ,   # in
-                   "comment"                 ,   # in
-                   \@diff_LL, \@diff_LR      ,   # out
-                   \@Errors);                    # in/out
-
-        my (@diff_RL, @diff_RR, );
-        array_diff( $file_R                  ,   # in
-                   \@original_minus_blanks_R ,   # in
-                   \@lines_R                 ,   # in
-                   "comment"                 ,   # in
-                   \@diff_RL, \@diff_RR      ,   # out
-                   \@Errors);                    # in/out
-        # each line of each file is now classified as
-        # code or comment
-
-#use Data::Dumper;
-#print Dumper("diff_LL", \@diff_LL, "diff_LR", \@diff_LR, );
-#print Dumper("diff_RL", \@diff_RL, "diff_RR", \@diff_RR, );
-#die;
-        # step 2: separate code from comments for L and R files
-        my @code_L = ();
-        my @code_R = ();
-        my @comm_L = ();
-        my @comm_R = ();
-        foreach my $line_info (@diff_LL) {
-            if      ($line_info->{'type'} eq "code"   ) {
-                push @code_L, $line_info->{char};
-            } elsif ($line_info->{'type'} eq "comment") {
-                push @comm_L, $line_info->{char};
-            } else {
-                die "Diff unexpected line type ",
-                    $line_info->{'type'}, "for $file_L line ",
-                    $line_info->{'lnum'};
-            }
-        }
-        foreach my $line_info (@diff_RL) {
-            if      ($line_info->{type} eq "code"   ) {
-                push @code_R, $line_info->{'char'};
-            } elsif ($line_info->{type} eq "comment") {
-                push @comm_R, $line_info->{'char'};
-            } else {
-                die "Diff unexpected line type ",
-                    $line_info->{'type'}, "for $file_R line ",
-                    $line_info->{'lnum'};
-            }
+    while ( 1 ) { 
+        my @files_added_part = splice @files_added_tot, 0, $num_filesadded_per_part;
+        my @files_removed_part = splice @files_removed_tot, 0, $num_filesremoved_per_part;
+        my @filepairs_part = splice @file_pairs_tot, 0, $num_filepairs_per_part;
+        if ( scalar @files_added_part == 0 and scalar @files_removed_part == 0 and
+             scalar @filepairs_part == 0 ) {
+            last;
         }
 
-        if ($opt_ignore_whitespace) {
-            # strip all whitespace from each line of source code
-            # and comments then use these stripped arrays in diffs
-            foreach (@code_L) { s/\s+//g }
-            foreach (@code_R) { s/\s+//g }
-            foreach (@comm_L) { s/\s+//g }
-            foreach (@comm_R) { s/\s+//g }
-        }
-        if ($opt_ignore_case) {
-            # change all text to lowercase in diffs
-            foreach (@code_L) { $_ = lc }
-            foreach (@code_R) { $_ = lc }
-            foreach (@comm_L) { $_ = lc }
-            foreach (@comm_R) { $_ = lc }
-        }
-        # step 3: compute code diffs
-        array_diff("$file_L v. $file_R"   ,   # in
-                   \@code_L               ,   # in
-                   \@code_R               ,   # in
-                   "revision"             ,   # in
-                   \@diff_LL, \@diff_LR   ,   # out
-                   \@Errors);                 # in/out
-#print Dumper("diff_LL", \@diff_LL, "diff_LR", \@diff_LR, );
-#print Dumper("diff_LR", \@diff_LR);
-        foreach my $line_info (@diff_LR) {
-            my $status = $line_info->{'desc'}; # same|added|removed|modified
-            ++$Delta_by_Language{$Lang_L}{'code'}{$status};
-            if ($opt_by_file) {
-                ++$Delta_by_File{$file_L}{'code'}{$status};
-            }
-        }
-#use Data::Dumper;
-#print Dumper("code diffs:", \@diff_LL, \@diff_LR);
-
-        # step 4: compute comment diffs
-        array_diff("$file_L v. $file_R"   ,   # in
-                   \@comm_L               ,   # in
-                   \@comm_R               ,   # in
-                   "revision"             ,   # in
-                   \@diff_LL, \@diff_LR   ,   # out
-                   \@Errors);                 # in/out
-#print Dumper("comment diff_LR", \@diff_LR);
-        foreach my $line_info (@diff_LR) {
-            my $status = $line_info->{'desc'}; # same|added|removed|modified
-            ++$Delta_by_Language{$Lang_L}{'comment'}{$status};
-            if ($opt_by_file) {
-                ++$Delta_by_File{$file_L}{'comment'}{$status};
-            }
-        }
-#print Dumper("comment diffs:", \@diff_LL, \@diff_LR);
-
-        # step 5: compute difference in blank lines (kind of pointless)
-        next if $Lang_L eq '(unknown)' or
-                $Lang_R eq '(unknown)';
-        my ($all_line_count_L,
-            $blank_count_L   ,
-            $comment_count_L ,
-           ) = call_counter($file_L, $Lang_L, \@Errors);
-
-        my ($all_line_count_R,
-            $blank_count_R   ,
-            $comment_count_R ,
-           ) = call_counter($file_R, $Lang_R, \@Errors);
-
-        if ($blank_count_L <  $blank_count_R) {
-            my $D = $blank_count_R - $blank_count_L;
-            $Delta_by_Language{$Lang_L}{'blank'}{'added'}   += $D;
-        } else {
-            my $D = $blank_count_L - $blank_count_R;
-            $Delta_by_Language{$Lang_L}{'blank'}{'removed'} += $D;
-        }
-        if ($opt_by_file) {
-            if ($blank_count_L <  $blank_count_R) {
-                my $D = $blank_count_R - $blank_count_L;
-                $Delta_by_File{$file_L}{'blank'}{'added'}   += $D;
-            } else {
-                my $D = $blank_count_L - $blank_count_R;
-                $Delta_by_File{$file_L}{'blank'}{'removed'} += $D;
-            }
-        }
-
-        my $code_count_L = $all_line_count_L-$blank_count_L-$comment_count_L;
-        if ($opt_by_file) {
-            $Results_by_File{$file_L}{'code'   } = $code_count_L    ;
-            $Results_by_File{$file_L}{'blank'  } = $blank_count_L   ;
-            $Results_by_File{$file_L}{'comment'} = $comment_count_L ;
-            $Results_by_File{$file_L}{'lang'   } = $Lang_L          ;
-            $Results_by_File{$file_L}{'nFiles' } = 1                ;
-        } else {
-            $Results_by_File{$file_L} = 1;  # just keep track of counted files
-        }
-
-        $Results_by_Language{$Lang_L}{'nFiles'}++;
-        $Results_by_Language{$Lang_L}{'code'}    += $code_count_L   ;
-        $Results_by_Language{$Lang_L}{'blank'}   += $blank_count_L  ;
-        $Results_by_Language{$Lang_L}{'comment'} += $comment_count_L;
+        $pm->start() and next;
+        my $count_result = count_filesets ( $fset_a, $fset_b,  
+            \@files_added_part, \@files_removed_part, \@filepairs_part, 1, \%Language );
+        $pm->finish(0 , $count_result);
     }
-    if ($opt_diff_alignment) {
-        $alignment[$alignment_pairs_index] =~ s/UPDATE_ME/$n_file_pairs_compared/;
-        write_file($opt_diff_alignment, @alignment);
-    }
-
+    # Wait for processes to finish
+    $pm->wait_all_children();
 }
+
+# Write alignment data, if needed
+if ($opt_diff_alignment) {
+    push (@alignment, "File pairs compared: " . $n_filepairs_compared . "\n");
+    write_file($opt_diff_alignment, @alignment);
+}
+
 #use Data::Dumper;
 #print Dumper("Delta_by_Language:"  , \%Delta_by_Language);
 #print Dumper("Results_by_Language:", \%Results_by_Language);
@@ -2065,6 +1800,402 @@ sub count_files {
         "errors"  => \@p_errors,
         "results_by_file" => \%p_rbf,
         "results_by_language" => \%p_rbl,
+    }
+}
+sub count_filesets {
+    my ($fset_a,$fset_b,$files_added,$files_removed,$file_pairs,$counter_type,$language_hash) = @_;
+    my @p_errors = ();
+    my @p_alignment = ();
+    my %p_ignored = ();
+    my %p_rbl = ();
+    my %p_rbf = ();
+    my %p_dbl = ();
+    my %p_dbf = ();
+    my %Language = %$language_hash;
+
+        my $nCounted = 0;
+
+    
+        my %already_counted = (); # already_counted{ filename } = 1
+
+        if (!@$file_pairs) {
+            # Special case where all files were either added or deleted.
+            # In this case, one of these arrays will be empty:
+            #   @files_added, @files_removed
+            # so loop over both to cover both cases.
+            my $status = @$files_added ? 'added' : 'removed';
+            my $fset = @$files_added ? $fset_b : $fset_a;
+            foreach my $file (@$files_added, @$files_removed) {
+                next unless defined $Language{$fset}{$file};
+                my $Lang = $Language{$fset}{$file};
+                next if $Lang eq '(unknown)';
+                my ($all_line_count,
+                    $blank_count   ,
+                    $comment_count ,
+                   ) = call_counter($file, $Lang, \@p_errors);
+                $already_counted{$file} = 1;
+                my $code_count = $all_line_count-$blank_count-$comment_count;
+                if ($opt_by_file) {
+                    $p_dbf{$file}{'code'   }{$status} += $code_count   ;
+                    $p_dbf{$file}{'blank'  }{$status} += $blank_count  ;
+                    $p_dbf{$file}{'comment'}{$status} += $comment_count;
+                    $p_dbf{$file}{'lang'   }{$status}  = $Lang         ;
+                    $p_dbf{$file}{'nFiles' }{$status} += 1             ;
+                }
+                $p_dbl{$Lang}{'code'   }{$status} += $code_count   ;
+                $p_dbl{$Lang}{'blank'  }{$status} += $blank_count  ;
+                $p_dbl{$Lang}{'comment'}{$status} += $comment_count;
+                $p_dbl{$Lang}{'nFiles' }{$status} += 1             ;
+            }
+        }
+
+        #use Data::Dumper::Simple;
+        #use Data::Dumper;
+        #print Dumper(\@files_added, \@files_removed, \@file_pairs);
+        #print "after align_by_pairs:\n";
+        #print "added:\n";
+        push @p_alignment, sprintf "Files added: %d\n", scalar @$files_added
+            if $opt_diff_alignment;
+
+        foreach my $f (@$files_added) {
+            next if $already_counted{$f};
+            #printf "%10s -> %s\n", $f, $Language{$fh[$F+1]}{$f};
+            # Don't proceed unless the file (both L and R versions)
+            # is in a known language.
+            next if $opt_include_lang
+                and not $Include_Language{$Language{$fset_b}{$f}};
+            next if $Language{$fset_b}{$f} eq "(unknown)";
+            next if $Exclude_Language{$fset_b}{$f};
+            push @p_alignment, sprintf "  + %s ; %s\n", $f, $Language{$fset_b}{$f}
+            		if $opt_diff_alignment;
+            ++$p_dbl{ $Language{$fset_b}{$f} }{'nFiles'}{'added'};
+            # Additionally, add contents of file $f to
+            # Delta_by_File{$f}{comment/blank/code}{'added'}
+            # Delta_by_Language{$lang}{comment/blank/code}{'added'}
+            # via the $p_dbl and $p_dbf variables.
+            my ($all_line_count,
+                $blank_count   ,
+                $comment_count ,
+               ) = call_counter($f, $Language{$fset_b}{$f}, \@p_errors);
+            $p_dbl{ $Language{$fset_b}{$f} }{'comment'}{'added'} +=
+               $comment_count;
+            $p_dbl{ $Language{$fset_b}{$f} }{'blank'}{'added'}   +=
+               $blank_count;
+            $p_dbl{ $Language{$fset_b}{$f} }{'code'}{'added'}    +=
+               $all_line_count - $blank_count - $comment_count;
+            $p_dbf{ $f }{'comment'}{'added'} = $comment_count;
+            $p_dbf{ $f }{'blank'}{'added'}   = $blank_count;
+            $p_dbf{ $f }{'code'}{'added'}    =
+               $all_line_count - $blank_count - $comment_count;
+        }
+
+        push @p_alignment, "\n";
+
+        #print "removed:\n";
+        push @p_alignment, sprintf "Files removed: %d\n", scalar @$files_removed
+            if $opt_diff_alignment;
+        foreach my $f (@$files_removed) {
+            next if $already_counted{$f};
+            # Don't proceed unless the file (both L and R versions)
+            # is in a known language.
+            next if $opt_include_lang
+                and not $Include_Language{$Language{$fset_a}{$f}};
+            next if $Language{$fset_a}{$f} eq "(unknown)";
+            next if $Exclude_Language{$fset_a}{$f};
+            ++$p_dbl{ $Language{$fset_a}{$f} }{'nFiles'}{'removed'};
+            push @p_alignment, sprintf "  - %s ; %s\n", $f, $Language{$fset_a}{$f}
+                if $opt_diff_alignment;
+            #printf "%10s -> %s\n", $f, $Language{$fh[$F  ]}{$f};
+            # Additionally, add contents of file $f to
+            #        Delta_by_File{$f}{comment/blank/code}{'removed'}
+            #        Delta_by_Language{$lang}{comment/blank/code}{'removed'}
+            # via the $p_dbl and $p_dbf variables.
+            my ($all_line_count,
+                $blank_count   ,
+                $comment_count ,
+               ) = call_counter($f, $Language{$fset_a}{$f}, \@p_errors);
+            $p_dbl{ $Language{$fset_a}{$f}}{'comment'}{'removed'} +=
+                 $comment_count;
+            $p_dbl{ $Language{$fset_a}{$f}}{'blank'}{'removed'}   +=
+                 $blank_count;
+            $p_dbl{ $Language{$fset_a}{$f}}{'code'}{'removed'}    +=
+                 $all_line_count - $blank_count - $comment_count;
+            $p_dbf{ $f }{'comment'}{'removed'} = $comment_count;
+            $p_dbf{ $f }{'blank'}{'removed'}   = $blank_count;
+            $p_dbf{ $f }{'code'}{'removed'}    =
+                $all_line_count - $blank_count - $comment_count;
+        }
+        push @p_alignment, "\n";
+
+         my $n_file_pairs_compared = 0;
+        # Don't know ahead of time how many file pairs will be compared
+        # since duplicates are weeded out below.  The answer is
+        # scalar @file_pairs only if there are no duplicates.
+ 
+        foreach my $pair (@$file_pairs) {
+            my $file_L = $pair->[0];
+            my $file_R = $pair->[1];
+            my $Lang_L = $Language{$fset_a}{$file_L};
+            my $Lang_R = $Language{$fset_b}{$file_R};
+            #print "main step 6 file_L=$file_L    file_R=$file_R\n";
+            ++$nCounted;
+            printf "Counting:  %d\r", $nCounted
+                unless ($counter_type or !$opt_progress_rate or ($nCounted % $opt_progress_rate));
+            next if $p_ignored{$file_L};
+            # filter out non-included languages
+            if ($opt_include_lang and not $Include_Language{$Lang_L}
+                              and not $Include_Language{$Lang_R}) {
+                $p_ignored{$file_L} = "--include-lang=$Lang_L";
+                $p_ignored{$file_R} = "--include-lang=$Lang_R";
+                next;
+            }
+            # filter out excluded or unrecognized languages
+            if ($Exclude_Language{$Lang_L} or $Exclude_Language{$Lang_R}) {
+                $p_ignored{$file_L} = "--exclude-lang=$Lang_L";
+                $p_ignored{$file_R} = "--exclude-lang=$Lang_R";
+                next;
+            }
+
+            my $not_Filters_by_Language_Lang_LR = 0;
+            #print "file_LR = [$file_L] [$file_R]\n";
+            #print "Lang_LR = [$Lang_L] [$Lang_R]\n";
+            if (!(@{$Filters_by_Language{$Lang_L} }) or
+                !(@{$Filters_by_Language{$Lang_R} })) {
+                $not_Filters_by_Language_Lang_LR = 1;
+            }
+            if ($not_Filters_by_Language_Lang_LR) {
+                if (($Lang_L eq "(unknown)") or ($Lang_R eq "(unknown)")) {
+                    $p_ignored{$fset_a}{$file_L} = "language unknown (#1)";
+                    $p_ignored{$fset_b}{$file_R} = "language unknown (#1)";
+                } else {
+                    $p_ignored{$fset_a}{$file_L} = "missing Filters_by_Language{$Lang_L}";
+                    $p_ignored{$fset_b}{$file_R} = "missing Filters_by_Language{$Lang_R}";
+                }
+                next;
+            }
+
+            #print "DIFF($file_L, $file_R)\n";
+            # step 0: compare the two files' contents
+            chomp ( my @lines_L = read_file($file_L) );
+            chomp ( my @lines_R = read_file($file_R) );
+            my $language_file_L = "";
+            if (defined $Language{$fset_a}{$file_L}) {
+                $language_file_L = $Language{$fset_a}{$file_L};
+            } else {
+                # files $file_L and $file_R do not contain known language
+                next;
+            }
+
+            my $contents_are_same = 1;
+            if (scalar @lines_L == scalar @lines_R) {
+                # same size, must compare line-by-line
+                for (my $i = 0; $i < scalar @lines_L; $i++) {
+                    if ($lines_L[$i] ne $lines_R[$i]) {
+                        $contents_are_same = 0;
+                        last;
+                    }
+                }
+                if ($contents_are_same) {
+                    ++$p_dbl{$language_file_L}{'nFiles'}{'same'};
+                } else {
+                    ++$p_dbl{$language_file_L}{'nFiles'}{'modified'};
+                }
+            } else {
+                $contents_are_same = 0;
+                # different sizes, contents have changed
+                ++$p_dbl{$language_file_L}{'nFiles'}{'modified'};
+            }
+
+            if ($opt_diff_alignment) {
+                my $str =  "$file_L | $file_R ; $language_file_L";
+                if ($contents_are_same) {
+                    push @p_alignment, "  == $str";
+                } else {
+                    push @p_alignment, "  != $str";
+                }
+                ++$n_file_pairs_compared;
+            }
+
+            # step 1: identify comments in both files
+            #print "Diff blank removal L language= $Lang_L";
+            #print " scalar(lines_L)=", scalar @lines_L, "\n";
+            my @original_minus_blanks_L
+                    = rm_blanks(  \@lines_L, $Lang_L, \%EOL_Continuation_re);
+            #print "1: scalar(original_minus_blanks_L)=", scalar @original_minus_blanks_L, "\n";
+            @lines_L    = @original_minus_blanks_L;
+            #print "2: scalar(lines_L)=", scalar @lines_L, "\n";
+            @lines_L    = add_newlines(\@lines_L); # compensate for rm_comments()
+            @lines_L    = rm_comments( \@lines_L, $Lang_L, $file_L,
+                                   \%EOL_Continuation_re);
+            #print "3: scalar(lines_L)=", scalar @lines_L, "\n";
+
+            #print "Diff blank removal R language= $Lang_R\n";
+            my @original_minus_blanks_R
+                    = rm_blanks(  \@lines_R, $Lang_R, \%EOL_Continuation_re);
+            @lines_R    = @original_minus_blanks_R;
+            @lines_R    = add_newlines(\@lines_R); # taken away by rm_comments()
+            @lines_R    = rm_comments( \@lines_R, $Lang_R, $file_R,
+                                   \%EOL_Continuation_re);
+
+            my (@diff_LL, @diff_LR, );
+                array_diff( $file_L                  ,   # in
+                   \@original_minus_blanks_L ,   # in
+                   \@lines_L                 ,   # in
+                   "comment"                 ,   # in
+                   \@diff_LL, \@diff_LR      ,   # out
+                   \@p_errors);                    # in/out
+
+            my (@diff_RL, @diff_RR, );
+                array_diff( $file_R                  ,   # in
+                   \@original_minus_blanks_R ,   # in
+                   \@lines_R                 ,   # in
+                   "comment"                 ,   # in
+                   \@diff_RL, \@diff_RR      ,   # out
+                   \@p_errors);                    # in/out
+            # each line of each file is now classified as
+            # code or comment
+
+            #use Data::Dumper;
+            #print Dumper("diff_LL", \@diff_LL, "diff_LR", \@diff_LR, );
+            #print Dumper("diff_RL", \@diff_RL, "diff_RR", \@diff_RR, );
+            #die;
+
+            # step 2: separate code from comments for L and R files
+            my @code_L = ();
+            my @code_R = ();
+            my @comm_L = ();
+            my @comm_R = ();
+            foreach my $line_info (@diff_LL) {
+                if      ($line_info->{'type'} eq "code"   ) {
+                    push @code_L, $line_info->{char};
+                } elsif ($line_info->{'type'} eq "comment") {
+                    push @comm_L, $line_info->{char};
+                } else {
+                    die "Diff unexpected line type ",
+                        $line_info->{'type'}, "for $file_L line ",
+                        $line_info->{'lnum'};
+                }
+            }
+
+            foreach my $line_info (@diff_RL) {
+                if      ($line_info->{type} eq "code"   ) {
+                    push @code_R, $line_info->{'char'};
+                } elsif ($line_info->{type} eq "comment") {
+                    push @comm_R, $line_info->{'char'};
+                } else {
+                    die "Diff unexpected line type ",
+                        $line_info->{'type'}, "for $file_R line ",
+                        $line_info->{'lnum'};
+                }
+            }
+
+        if ($opt_ignore_whitespace) {
+            # strip all whitespace from each line of source code
+            # and comments then use these stripped arrays in diffs
+            foreach (@code_L) { s/\s+//g }
+            foreach (@code_R) { s/\s+//g }
+            foreach (@comm_L) { s/\s+//g }
+            foreach (@comm_R) { s/\s+//g }
+        }
+        if ($opt_ignore_case) {
+            # change all text to lowercase in diffs
+            foreach (@code_L) { $_ = lc }
+            foreach (@code_R) { $_ = lc }
+            foreach (@comm_L) { $_ = lc }
+            foreach (@comm_R) { $_ = lc }
+        }
+        # step 3: compute code diffs
+        array_diff("$file_L v. $file_R"   ,   # in
+                   \@code_L               ,   # in
+                   \@code_R               ,   # in
+                   "revision"             ,   # in
+                   \@diff_LL, \@diff_LR   ,   # out
+                   \@p_errors);                 # in/out
+        #print Dumper("diff_LL", \@diff_LL, "diff_LR", \@diff_LR, );
+        #print Dumper("diff_LR", \@diff_LR);
+        foreach my $line_info (@diff_LR) {
+            my $status = $line_info->{'desc'}; # same|added|removed|modified
+            ++$p_dbl{$Lang_L}{'code'}{$status};
+            if ($opt_by_file) {
+                ++$p_dbf{$file_L}{'code'}{$status};
+            }
+        }
+        #use Data::Dumper;
+        #print Dumper("code diffs:", \@diff_LL, \@diff_LR);
+
+        # step 4: compute comment diffs
+        array_diff("$file_L v. $file_R"   ,   # in
+                   \@comm_L               ,   # in
+                   \@comm_R               ,   # in
+                   "revision"             ,   # in
+                   \@diff_LL, \@diff_LR   ,   # out
+                   \@Errors);                 # in/out
+        #print Dumper("comment diff_LR", \@diff_LR);
+        foreach my $line_info (@diff_LR) {
+            my $status = $line_info->{'desc'}; # same|added|removed|modified
+            ++$p_dbl{$Lang_L}{'comment'}{$status};
+            if ($opt_by_file) {
+                ++$p_dbf{$file_L}{'comment'}{$status};
+            }
+        }
+        #print Dumper("comment diffs:", \@diff_LL, \@diff_LR);
+
+        # step 5: compute difference in blank lines (kind of pointless)
+        next if $Lang_L eq '(unknown)' or
+                $Lang_R eq '(unknown)';
+        my ($all_line_count_L,
+            $blank_count_L   ,
+            $comment_count_L ,
+           ) = call_counter($file_L, $Lang_L, \@Errors);
+
+        my ($all_line_count_R,
+            $blank_count_R   ,
+            $comment_count_R ,
+           ) = call_counter($file_R, $Lang_R, \@Errors);
+
+        if ($blank_count_L <  $blank_count_R) {
+            my $D = $blank_count_R - $blank_count_L;
+            $p_dbl{$Lang_L}{'blank'}{'added'}   += $D;
+        } else {
+            my $D = $blank_count_L - $blank_count_R;
+            $p_dbl{$Lang_L}{'blank'}{'removed'} += $D;
+        }
+        if ($opt_by_file) {
+            if ($blank_count_L <  $blank_count_R) {
+                my $D = $blank_count_R - $blank_count_L;
+                $p_dbf{$file_L}{'blank'}{'added'}   += $D;
+            } else {
+                my $D = $blank_count_L - $blank_count_R;
+                $p_dbf{$file_L}{'blank'}{'removed'} += $D;
+            }
+        }
+
+        my $code_count_L = $all_line_count_L-$blank_count_L-$comment_count_L;
+        if ($opt_by_file) {
+            $p_rbf{$file_L}{'code'   } = $code_count_L    ;
+            $p_rbf{$file_L}{'blank'  } = $blank_count_L   ;
+            $p_rbf{$file_L}{'comment'} = $comment_count_L ;
+            $p_rbf{$file_L}{'lang'   } = $Lang_L          ;
+            $p_rbf{$file_L}{'nFiles' } = 1                ;
+        } else {
+            $p_rbf{$file_L} = 1;  # just keep track of counted files
+        }
+
+        $p_rbl{$Lang_L}{'nFiles'}++;
+        $p_rbl{$Lang_L}{'code'}    += $code_count_L   ;
+        $p_rbl{$Lang_L}{'blank'}   += $blank_count_L  ;
+        $p_rbl{$Lang_L}{'comment'} += $comment_count_L;
+    }
+
+    return {
+        "ignored" => \%p_ignored,
+        "errors"  => \@p_errors,
+        "results_by_file" => \%p_rbf,
+        "results_by_language" => \%p_rbl,
+        "delta_by_file" => \%p_dbf,
+        "delta_by_language" => \%p_dbl,
+        "alignment" => \@p_alignment,
+        "n_filepairs_compared" => $n_file_pairs_compared
     }
 }
 sub exclude_dir_validates {                  # {{{1
