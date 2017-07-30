@@ -1340,7 +1340,7 @@ my %Delta_by_File       = ();
 my @files_added_tot = ();
 my @files_removed_tot = ();
 my @file_pairs_tot = ();
-my @alignment = ();
+my %alignment = ();
 
 my $fset_a = $fh[0];
 my $fset_b = $fh[1];
@@ -1369,7 +1369,7 @@ if ( $max_processes == 0) {
     %Delta_by_File = %{$part->{'delta_by_file'}};
     %Delta_by_Language= %{$part->{'delta_by_language'}};
     %Ignored = ( %Ignored, %{$part->{'ignored'}});
-    @alignment = @{$part->{'alignment'}};
+    %alignment = %{$part->{'alignment'}};
     $n_filepairs_compared = $part->{'n_filepairs_compared'};
     push ( @Errors, @{$part->{'errors'}});   
 }
@@ -1423,7 +1423,7 @@ else {
         %Results_by_File = ( %Results_by_File, %$part_result_by_file );
         %Delta_by_File = ( %Delta_by_File, %$part_delta_by_file );
         %Ignored = (%Ignored, %$part_ignored );
-        push ( @alignment , @$part_alignment ); 
+        %alignment = ( %alignment, %$part_alignment );
         push ( @Errors, @$part_errors );
     } );
 
@@ -1452,8 +1452,7 @@ else {
 
 # Write alignment data, if needed
 if ($opt_diff_alignment) {
-    push (@alignment, "File pairs compared: " . $n_filepairs_compared . "\n");
-    write_file($opt_diff_alignment, @alignment);
+    write_alignment_data ( $opt_diff_alignment, $n_filepairs_compared, \%alignment ) ; 
 }
 
 #use Data::Dumper;
@@ -1805,7 +1804,7 @@ sub count_files {
 sub count_filesets {
     my ($fset_a,$fset_b,$files_added,$files_removed,$file_pairs,$counter_type,$language_hash) = @_;
     my @p_errors = ();
-    my @p_alignment = ();
+    my %p_alignment = ();
     my %p_ignored = ();
     my %p_rbl = ();
     my %p_rbf = ();
@@ -1853,8 +1852,6 @@ sub count_filesets {
     #print Dumper(\@files_added, \@files_removed, \@file_pairs);
     #print "after align_by_pairs:\n";
     #print "added:\n";
-    push @p_alignment, sprintf "Files added: %d\n", scalar @$files_added
-        if $opt_diff_alignment;
 
     foreach my $f (@$files_added) {
         next if $already_counted{$f};
@@ -1865,8 +1862,7 @@ sub count_filesets {
             and not $Include_Language{$Language{$fset_b}{$f}};
         next if $Language{$fset_b}{$f} eq "(unknown)";
         next if $Exclude_Language{$fset_b}{$f};
-        push @p_alignment, sprintf "  + %s ; %s\n", $f, $Language{$fset_b}{$f}
-    		if $opt_diff_alignment;
+        $p_alignment{"added"}{sprintf "  + %s ; %s\n", $f, $Language{$fset_b}{$f}} = 1;
         ++$p_dbl{ $Language{$fset_b}{$f} }{'nFiles'}{'added'};
         # Additionally, add contents of file $f to
         # Delta_by_File{$f}{comment/blank/code}{'added'}
@@ -1888,11 +1884,7 @@ sub count_filesets {
            $all_line_count - $blank_count - $comment_count;
     }
 
-    push @p_alignment, "\n";
-
     #print "removed:\n";
-    push @p_alignment, sprintf "Files removed: %d\n", scalar @$files_removed
-        if $opt_diff_alignment;
     foreach my $f (@$files_removed) {
         next if $already_counted{$f};
         # Don't proceed unless the file (both L and R versions)
@@ -1902,8 +1894,7 @@ sub count_filesets {
         next if $Language{$fset_a}{$f} eq "(unknown)";
         next if $Exclude_Language{$fset_a}{$f};
         ++$p_dbl{ $Language{$fset_a}{$f} }{'nFiles'}{'removed'};
-        push @p_alignment, sprintf "  - %s ; %s\n", $f, $Language{$fset_a}{$f}
-            if $opt_diff_alignment;
+        $p_alignment{"removed"}{sprintf "  - %s ; %s\n", $f, $Language{$fset_a}{$f}} = 1;
         #printf "%10s -> %s\n", $f, $Language{$fh[$F  ]}{$f};
         # Additionally, add contents of file $f to
         #        Delta_by_File{$f}{comment/blank/code}{'removed'}
@@ -1925,8 +1916,6 @@ sub count_filesets {
             $all_line_count - $blank_count - $comment_count;
     }
     
-    push @p_alignment, "\n";
-
     my $n_file_pairs_compared = 0;
     # Don't know ahead of time how many file pairs will be compared
     # since duplicates are weeded out below.  The answer is
@@ -2009,9 +1998,9 @@ sub count_filesets {
         if ($opt_diff_alignment) {
             my $str =  "$file_L | $file_R ; $language_file_L";
             if ($contents_are_same) {
-                push @p_alignment, "  == $str";
+                $p_alignment{"pairs"}{"  == $str"} = 1;
             } else {
-                push @p_alignment, "  != $str";
+                $p_alignment{"pairs"}{"  != $str"} = 1;                
             }
             ++$n_file_pairs_compared;
         }
@@ -2193,9 +2182,37 @@ sub count_filesets {
         "results_by_language" => \%p_rbl,
         "delta_by_file" => \%p_dbf,
         "delta_by_language" => \%p_dbl,
-        "alignment" => \@p_alignment,
+        "alignment" => \%p_alignment,
         "n_filepairs_compared" => $n_file_pairs_compared
     }
+}
+sub write_alignment_data {
+    my ($filename, $n_filepairs_compared, $data ) = @_;
+    my @output = ();
+    if ( $data->{'added'} ) {
+        my %added_lines = %{$data->{'added'}};
+        push (@output, "Files added: " . (scalar keys %added_lines) . "\n");
+        foreach my $line ( sort keys %added_lines ) {
+            push (@output, $line);
+        }
+        push (@output, "\n" );
+    }
+    if ( $data->{'removed'} ) {
+        my %removed_lines = %{$data->{'removed'}};
+        push (@output, "Files removed: " . (scalar keys %removed_lines) . "\n");
+        foreach my $line ( sort keys %removed_lines ) {
+            push (@output, $line);
+        }
+        push (@output, "\n");
+    }
+    if ( $data->{'pairs'} ) {
+        my %pairs = %{$data->{'pairs'}};
+        push (@output, "File pairs compared: " . $n_filepairs_compared . "\n");
+        foreach my $pair ( sort keys %pairs ) {
+            push (@output, $pair);
+        }
+    }
+    write_file($filename, @output);
 }
 sub exclude_dir_validates {                  # {{{1
     my ($rh_Exclude_Dir) = @_;
