@@ -3688,7 +3688,9 @@ sub replace_git_hash_with_tarfile {          # {{{1
 
     my %repo_listing = ();  # $repo_listing{hash}{files} = 1;
     foreach my $hash (sort keys %git_hash) {
-        foreach my $file (`git ls-tree --name-only -r $hash`) {
+        my $git_list_cmd = "git ls-tree --name-only -r $hash";
+        print "$git_list_cmd\n" if $opt_v;
+        foreach my $file (`$git_list_cmd`) {
             $file =~ s/\s+$//;
             $repo_listing{$hash}{$file} = 1;
         }
@@ -3699,17 +3701,21 @@ sub replace_git_hash_with_tarfile {          # {{{1
 #print "A DIFF\n";
         # is it git to git, or git to file/dir ?
         my ($Left, $Right) = @{$ra_arg_list};
-        my %diff_listing = ();  # $diff_listing{hash}{files} = 1;
-        foreach my $hash (sort keys %git_hash) {
-            foreach my $file (`git diff-tree --no-commit-id --name-only $hash`) {
-                $file =~ s/\s+$//;
-                $diff_listing{$hash}{$file} = 1;
-            }
-            if (!scalar keys %{$diff_listing{$hash}}) {
-                print "No files modified with git commit $hash.\n";
-                die;
-            }
-        }
+
+##      my %diff_listing = ();  # $diff_listing{hash}{files} = 1;
+##      foreach my $hash (sort keys %git_hash) {
+##          my $git_list_cmd = "git diff-tree -r --no-commit-id --name-only $hash";
+##          print "$git_list_cmd\n" if $opt_v;
+##          foreach my $file (`$git_list_cmd`) {
+##              $file =~ s/\s+$//;
+##              $diff_listing{$hash}{$file} = 1;
+##          }
+##          if (!scalar keys %{$diff_listing{$hash}}) {
+##              print "No files modified with git commit $hash.\n";
+##              die;
+##          }
+##      }
+
 #use Data::Dumper;
 #print "diff_listing= "; print Dumper(\%diff_listing);
 #print "git_hash= "; print Dumper(\%git_hash);
@@ -3719,12 +3725,20 @@ sub replace_git_hash_with_tarfile {          # {{{1
             # git to git
             # first make a union of all files that have changed in both commits
             my %files_union = ();
-            foreach my $file (sort keys %{$diff_listing{$Left}}  ) {
+
+##          foreach my $file (sort keys %{$diff_listing{$Left}}  ) {
+##              $files_union{$file} = 1;
+##          }
+##          foreach my $file (sort keys %{$diff_listing{$Right}} ) {
+##              $files_union{$file} = 1;
+##          }
+            my $git_list_cmd = "git diff-tree --no-commit-id --name-only $Left $Right";
+            print "$git_list_cmd\n" if $opt_v;
+            foreach my $file (`$git_list_cmd`) {
+                chomp($file);
                 $files_union{$file} = 1;
             }
-            foreach my $file (sort keys %{$diff_listing{$Right}} ) {
-                $files_union{$file} = 1;
-            }
+
             # then make trucated tar files of those union files which
             # actually exist in each repo
             my @left_files  = ();
