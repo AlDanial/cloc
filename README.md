@@ -164,13 +164,14 @@ SUM:                            39           1564           1365           3945
 [Armenian](http://students.studybay.com/?p=34),
 [Belarussian](http://www.besteonderdelen.nl/blog/?p=5426),
 [Bulgarian](http://www.ajoft.com/wpaper/aj-cloc.html),
+[Hungarian](http://www.forallworld.com/cloc-grof-sornyi-kodot/),
 []( [Polish](http://www.trevister.com/blog/cloc.html), )
 []( [Russian](http://someblogscience.com/cloc.html), )
 [Serbo-Croatian](http://science.webhostinggeeks.com/cloc),
 [Romanian](http://www.bildelestore.dk/blog/cloc-contele-de-linii-de-cod/),
 [Slovakian](http://newknowledgez.com/cloc.html),
 [Tamil](http://healthcareadministrationdegree.co/socialwork/aldanial-cloc/)
-[]( [Ukrainian](http://blog.kudoybook.com/cloc/) ] )
+[]( [Ukrainian](http://blog.kudoybook.com/cloc/) )
 
 cloc counts blank lines, comment lines, and physical lines of source
 code in [many programming languages](#Languages). Given two versions of
@@ -232,8 +233,9 @@ https://github.com/AlDanial/cloc/raw/master/cloc
 <a name="License"></a> []({{{1)
 # [License &#9650;](#___top "click to go to top of document")
 
-cloc is licensed under the [GNU General Public License, v 2]
-(http://www.gnu.org/licenses/gpl-2.0.html), excluding portions which
+cloc is licensed under the
+[GNU General Public License, v 2](http://www.gnu.org/licenses/gpl-2.0.html),
+excluding portions which
 are copied from other sources. Code
 copied from the Regexp::Common, Win32::Autoglob, and Algorithm::Diff
 Perl modules is subject to the
@@ -2365,11 +2367,14 @@ provided the
 [Armenian translation](http://students.studybay.com/?p=34)
 for http://studybay.com.
 
+<a href="http://www.forallworld.com/cloc-grof-sornyi-kodot/">Hungarian translation</a>
+courtesy of <a href="http://www.forallworld.com/">Zsolt Boros</a>.
+
 The development of cloc was partially funded by the Northrop Grumman
 Corporation.
 
 [](1}}})
 <a name="Copyright"></a> []({{{1)
 #   [Copyright &#9650;](#___top "click to go to top of document")
-Copyright (c) 2006-2016, [Al Danial](https://github.com/AlDanial)
+Copyright (c) 2006-2017, [Al Danial](https://github.com/AlDanial)
 [](1}}})
