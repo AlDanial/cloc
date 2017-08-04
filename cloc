@@ -3732,7 +3732,7 @@ sub replace_git_hash_with_tarfile {          # {{{1
 ##          foreach my $file (sort keys %{$diff_listing{$Right}} ) {
 ##              $files_union{$file} = 1;
 ##          }
-            my $git_list_cmd = "git diff-tree --no-commit-id --name-only $Left $Right";
+            my $git_list_cmd = "git diff-tree -r --no-commit-id --name-only $Left $Right";
             print "$git_list_cmd\n" if $opt_v;
             foreach my $file (`$git_list_cmd`) {
                 chomp($file);
@@ -3796,7 +3796,7 @@ sub git_archive {                            # {{{1
     print "-> git_archive($args)\n" if $opt_v > 2;
     my ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, SUFFIX => '.tar');  # delete on exit
     my $cmd = "git archive -o $Tarfile $args";
-    print  $cmd, "\n";
+    print  $cmd, "\n" if $opt_v;
     system $cmd;
     if (!-r $Tarfile or !-s $Tarfile) {
         # not readable, or zero sized
