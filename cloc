@@ -5692,7 +5692,6 @@ sub set_constants {                          # {{{1
             'fs'          => 'F#/Forth'              ,
             'fsi'         => 'F#'                    ,
             'fsx'         => 'F# Script'             ,
-            'g'           => 'Antlr'                 ,
             'gnumakefile' => 'make'                  ,
             'Gnumakefile' => 'make'                  ,
             'gd'          => 'GDScript'              ,
@@ -5706,6 +5705,8 @@ sub set_constants {                          # {{{1
 			'feature'     => 'Cucumber'              ,
 			'frag'        => 'GLSL'                  ,
 			'comp'        => 'GLSL'                  ,
+            'g'           => 'ANTLR Grammar'         ,
+            'g4'          => 'ANTLR Grammar'         ,
             'go'          => 'Go'                    ,
             'gsp'         => 'Grails'                ,
             'groovy'      => 'Groovy'                ,
@@ -6044,7 +6045,7 @@ sub set_constants {                          # {{{1
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
                             ],
-    'Antlr'              => [
+    'ANTLR Grammar'      => [
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Ant'                => [
@@ -7158,7 +7159,7 @@ sub set_constants {                          # {{{1
     'AMPLE'                        =>   2.00,
     'Ant/XML'                      =>   1.90,
     'Ant'                          =>   1.90,
-    'Antlr'                        =>   2.00,
+    'ANTLR Grammar'                =>   2.00,
     'amppl ii'                     =>   1.25,
     'ansi basic'                   =>   1.25,
     'ansi cobol 74'                =>   0.75,

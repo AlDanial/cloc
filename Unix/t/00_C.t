@@ -2,11 +2,7 @@
 use warnings;
 use strict;
 use Test::More;
-my @Tests = (   {
-                    'name' => 'C simple',
-                    'args' => '../tests/inputs/C-Ansi.c',
-                    'ref'  => '../tests/outputs/C-Ansi.c.yaml',
-                },
+my @Tests = (
                 {
                     'name' => 'Assembly 1',
                     'ref'  => '../tests/outputs/Assembler-Intel.asm.yaml',
@@ -18,11 +14,15 @@ my @Tests = (   {
                     'args' => '../tests/inputs/Assembly-sysv.S',
                 },
                 {
-                    'name' => 'Antlr',
+                    'name' => 'ANTLR Grammar 1',
                     'ref'  => '../tests/outputs/ExprParser.g.yaml',
                     'args' => '../tests/inputs/ExprParser.g',
                 },
-
+                {
+                    'name' => 'ANTLR Grammar 2',
+                    'ref'  => '../tests/outputs/C.g4.yaml',
+                    'args' => '../tests/inputs/C.g4',
+                },
                 {
                     'name' => 'Blade',
                     'ref'  => '../tests/outputs/master.blade.php.yaml',
@@ -37,6 +37,11 @@ my @Tests = (   {
                     'name' => 'BrightScript',
                     'ref'  => '../tests/outputs/roku.brs.yaml',
                     'args' => '../tests/inputs/roku.brs',
+                },
+                {
+                    'name' => 'C simple',
+                    'args' => '../tests/inputs/C-Ansi.c',
+                    'ref'  => '../tests/outputs/C-Ansi.c.yaml',
                 },
                 {
                     'name' => 'C# 2',

@@ -9,7 +9,7 @@ header :
   files_per_second   : 155.448224742421
   lines_per_second   : 50365.2248165444
   report_file        : tests/outputs/ExprParser.g.yaml
-Antlr :
+ANTLR Grammar :
   nFiles: 1
   blank: 48
   comment: 19
