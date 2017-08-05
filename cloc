@@ -5734,6 +5734,8 @@ sub set_constants {                          # {{{1
             'icl'         => 'Clean'                 ,
             'dcl'         => 'Clean'                 ,
             'idl'         => 'IDL'                   ,
+            'idr'         => 'Idris'                 ,
+            'lidr'        => 'Literate Idris'        ,
             'ini'         => 'INI'                   ,
             'ism'         => 'InstallShield'         ,
             'pro'         => 'IDL/Qt Project/Prolog' ,
@@ -6377,6 +6379,13 @@ sub set_constants {                          # {{{1
     'Haskell'            => [   [ 'remove_haskell_comments', '>filename<' ], ],
     'IDL'                => [   [ 'remove_matches'      , '^\s*;'  ], ],
     'IDL/Qt Project/Prolog' => [ [ 'die' ,          ], ], # never called
+    'Idris'              => [
+                                [ 'remove_matches'      , '^--'    ],
+                                [ 'remove_matches'      , '^\|{3}' ],
+                            ],
+    'Literate Idris'        => [
+                                [ 'remove_matches'      , '^[^>]'  ],
+                            ],
     'InstallShield'      => [   [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
     'Jam'                => [
@@ -7409,6 +7418,8 @@ sub set_constants {                          # {{{1
     'icon'                         =>   1.00,
     'ideal'                        =>   1.54,
     'idms'                         =>   2.00,
+    'Idris'                        =>   2.00,
+    'Literate Idris'               =>   2.00,
     'ief'                          =>   5.71,
     'ief/cool:gen'                 =>   2.58,
     'iew'                          =>   5.71,

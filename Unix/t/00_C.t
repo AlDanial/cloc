@@ -241,6 +241,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/IDL.idl',
                 },
                 {
+                    'name' => 'Idris',
+                    'ref'  => '../tests/outputs/Combinators.idr.yaml',
+                    'args' => '../tests/inputs/Combinators.idr',
+                },
+                {
                     'name' => 'INI',
                     'ref'  => '../tests/outputs/wpedia.ini.yaml',
                     'args' => '../tests/inputs/wpedia.ini',
@@ -274,6 +279,11 @@ my @Tests = (   {
                     'name' => 'Lisp',
                     'ref'  => '../tests/outputs/sharpsign.cl.yaml',
                     'args' => '../tests/inputs/sharpsign.cl',
+                },
+                {
+                    'name' => 'Literate Idris',
+                    'ref'  => '../tests/outputs/Hello.lidr.yaml',
+                    'args' => '../tests/inputs/Hello.lidr',
                 },
                 {
                     'name' => 'Logtalk',

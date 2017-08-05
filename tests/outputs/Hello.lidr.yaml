@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.73
+  elapsed_seconds    : 0.00544500350952148
+  n_files            : 1
+  n_lines            : 7
+  files_per_second   : 183.654610736492
+  lines_per_second   : 1285.58227515544
+  report_file        : Hello.lidr.yaml
+Literate Idris :
+  nFiles: 1
+  blank: 2
+  comment: 2
+  code: 3
+SUM: 
+  blank: 2
+  comment: 2
+  code: 3
+  nFiles: 1
