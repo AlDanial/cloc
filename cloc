@@ -352,12 +352,15 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              created with the --report-file option.  Makes
                              a cumulative set of results containing the
                              sum of data from the individual report files.
-   --processes=NUM           Sets the maximum number of processes that cloc uses. If this
-                             parameter is set to 0, multiprocessing will not be used. On Unix systems,
-                             cloc tries to detect the number of CPU cores and creates
-                             up to one thread for each core by default. On Windows systems
-                             and on systems with an unknown number of cores,
-                             using multiple processes is disabled by default.
+   --processes=NUM           Sets the maximum number of processes that cloc
+                             uses. If this parameter is set to 0, multi-
+                             processing will not be used. On Linux systems,
+                             cloc tries to detect the number of CPU cores
+                             and creates up to one process per core by
+                             default. On systems with an unknown number
+                             of cores, using multiple processes is disabled
+                             by default. It is not possible to use multiple
+                             processes on Windows systems.
    --unix                    Override the operating system autodetection
                              logic and run in UNIX mode.  See also
                              --windows, --show-os.
@@ -1419,11 +1422,17 @@ else {
                 }
             }
         }
+
+        foreach my $label ( keys %$part_alignment ) {
+            my $inner = $part_alignment->{$label};
+            foreach my $key ( keys %$inner ) {
+                $alignment{$label}{$key} = 1;
+            }
+        }
        
         %Results_by_File = ( %Results_by_File, %$part_result_by_file );
         %Delta_by_File = ( %Delta_by_File, %$part_delta_by_file );
         %Ignored = (%Ignored, %$part_ignored );
-        %alignment = ( %alignment, %$part_alignment );
         push ( @Errors, @$part_errors );
     } );
 
@@ -1664,12 +1673,16 @@ sub get_max_processes {			     # {{{1
                   "Parallel::ForkManager is not installed, or the version is too old.\n";
             exit 1;
         }
+	elsif ( $opt_processes >0 and $ON_WINDOWS ) {
+            print "Error: cannot use multiple processes on Windows systems.\n";
+            exit 1;
+        }
         else {
             return $opt_processes;
         }
     }
 
-    # Disable multiprocessing on Windows - not tested.
+    # Disable multiprocessing on Windows - does not work reliably
     if ($ON_WINDOWS) {
         return 0;
     }

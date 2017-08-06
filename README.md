@@ -677,12 +677,15 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
                              created with the --report-file option.  Makes
                              a cumulative set of results containing the
                              sum of data from the individual report files.
-   --processes=NUM	     Sets the maximum number of processes that cloc uses. If this
-                             parameter is set to 0, multiprocessing will not be used. On Unix systems,
-                             cloc tries to detect the number of CPU cores and creates
-                             up to one process for each core by default. On Windows systems
-                             and on systems with an unknown number of cores, 
-                             multiprocessing is disabled by default.
+   --processes=NUM	     Sets the maximum number of processes that cloc
+                             uses. If this parameter is set to 0, multi-
+                             processing will not be used. On Linux systems,
+                             cloc tries to detect the number of CPU cores
+                             and creates up to one process per core by
+                             default. On systems with an unknown number
+                             of cores, using multiple processes is disabled
+                             by default. It is not possible to use multiple
+                             processes on Windows systems.
    --unix                    Override the operating system autodetection
                              logic and run in UNIX mode.  See also
                              --windows, --show-os.
