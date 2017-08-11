@@ -5910,6 +5910,7 @@ sub set_constants {                          # {{{1
             'tcsh'        => 'C Shell'               ,
             'tk'          => 'Tcl/Tk'                ,
             'tex'         => 'TeX'                   , # TeX, LaTex, MikTex, ..
+            'toml'        => 'TOML'                  ,
             'sty'         => 'TeX'                   ,
 #           'cls'         => 'TeX'                   ,
             'dtx'         => 'TeX'                   ,
@@ -6800,8 +6801,9 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '//.*$'  ],
                                 [ 'remove_between_regex', '/[^/]', '[^/]/' ],
                             ],
-    'Twig'               => [
-                                [ 'remove_between_general', '{#', '#}' ],
+    'TOML'               => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
                             ],
     'TTCN'               => [
                                 [ 'call_regexp_common'  , 'C++'      ],
@@ -6810,6 +6812,9 @@ sub set_constants {                          # {{{1
     'TITAN Project File Information'               => [
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
+    'Twig'               => [
+                                [ 'remove_between_general', '{#', '#}' ],
                             ],
     'TypeScript'         => [
 #                               [ 'remove_matches'      , '^\s*//' ],
@@ -7714,21 +7719,15 @@ sub set_constants {                          # {{{1
     'telon'                        =>   5.00,
     'tessaract'                    =>   2.00,
     'the twin'                     =>  13.33,
-    'themis'                       =>   6.15,
     'tiief'                        =>   5.71,
     'Titanium Style Sheet'         =>   2.00,
-    'topspeed c++'                 =>   2.76,
+    'TOML'                         =>   2.76,
     'transform'                    =>   5.33,
     'translisp plus'               =>   1.43,
     'treet'                        =>   1.25,
     'treetran'                     =>   1.25,
     'trs80 basic'                  =>   0.63,
     'true basic'                   =>   1.25,
-    'turbo c'                      =>   0.63,
-    'turbo expert'                 =>   1.63,
-    'turbo pascal >5'              =>   1.63,
-    'turbo pascal 14'              =>   1.00,
-    'turbo pascal 45'              =>   1.13,
     'turing'                       =>   1.00,
     'tutor'                        =>   1.51,
     'twaice'                       =>   1.63,

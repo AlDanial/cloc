@@ -516,6 +516,11 @@ my @Tests = (
                     'args' => '../tests/inputs/LaTeX.tex',
                 },
                 {
+                    'name' => 'TOML',
+                    'ref'  => '../tests/outputs/toml_example.toml.yaml',
+                    'args' => '../tests/inputs/toml_example.toml',
+                },
+                {
                     'name' => 'TTCN',
                     'ref'  => '../tests/outputs/clusterConf.ttcn.yaml',
                     'args' => '../tests/inputs/clusterConf.ttcn',
