@@ -6295,7 +6295,7 @@ sub set_constants {                          # {{{1
                                 [ 'remove_between_general', '<#--', '-->' ],
                             ],
     'F#'                 => [
-                                [ 'call_regexp_common'  , 'Pascal' ],
+                                [ 'remove_between_general', '(*', '*)' ],
                                 [ 'remove_matches'      , '^\s*//' ],
                             ],
     'F# Script'          => [
