@@ -4612,7 +4612,7 @@ sub write_file {                             # {{{1
     if ($ON_WINDOWS) {
         $file = (windows_glob($file))[0];
     } else {
-        $file = File::Glob::glob($file);
+        $file = File::Glob::bsd_glob($file);
     }
 #print "write_file 3 [$file]\n";
     $file = $preglob_filename unless $file;
