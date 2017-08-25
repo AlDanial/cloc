@@ -188,12 +188,13 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              files to work on.  If <VCS> is 'git', then will
                              invoke 'git ls-files' to get a file list and
                              'git submodule status' to get a list of submodules
-                             whose contents will be ignored.  If <VCS> is 'svn'
-                             then will invoke 'svn list -R'.  The primary benefit
-                             is that cloc will then skip files explicitly
-                             excluded by the versioning tool in question,
-                             ie, those in .gitignore or have the svn:ignore
-                             property.
+                             whose contents will be ignored.  See also --git
+                             which accepts git commit hashes and branch names.
+                             If <VCS> is 'svn' then will invoke 'svn list -R'.
+                             The primary benefit is that cloc will then skip
+                             files explicitly excluded by the versioning tool
+                             in question, ie, those in .gitignore or have the
+                             svn:ignore property.
                              Alternatively <VCS> may be any system command
                              that generates a list of files.
                              Note:  cloc must be in a directory which can read
@@ -257,7 +258,18 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              definition files.  Use --read-lang-def to define
                              new language filters without replacing built-in
                              filters (see also --write-lang-def).
-   --git                     Forces the targets to be interpreted as git hashes.
+   --git                     Forces the inputs to be interpreted as git targets
+                             (commit hashes, branch names, et cetera) if these
+                             are not first identified as file or directory
+                             names.  This option overrides the --vcs=git logic
+                             if this is given; in other words, --git gets its
+                             list of files to work on directly from git using
+                             the hash or branch name rather than from
+                             'git ls-files'.  This option can be used with
+                             --diff to perform line count diffs between git
+                             commits, or between a git commit and a file,
+                             directory, or archive.  Use -v/--verbose to see
+                             the git system commands cloc issues.
    --ignore-whitespace       Ignore horizontal white space when comparing files
                              with --diff.  See also --ignore-case.
    --ignore-case             Ignore changes in case; consider upper- and lower-
@@ -382,7 +394,8 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              only counts files in directories containing
                              /src/ or /include/.  Unlike --not-match-d,
                              --match-f, and --not-match-f, --match-d always
-                             compares the fully qualified path against the regex.
+                             compares the fully qualified path against the
+                             regex.
    --not-match-d=<regex>     Count all files except those in directories
                              matching the Perl regex.  Only the trailing
                              directory name is compared, for example, when
@@ -390,8 +403,8 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              compared to the regex.
                              Add --fullpath to compare parent directories to
                              the regex.
-                             Do not include file path separators at the beginning
-                             or end of the regex.
+                             Do not include file path separators at the
+                             beginning or end of the regex.
    --match-f=<regex>         Only count files whose basenames match the Perl
                              regex.  For example
                                --match-f='^[Ww]idget'
@@ -721,6 +734,7 @@ if ($opt_use_sloccount) {
         $opt_strip_comments = 0;
     }
 }
+$opt_vcs = 0 if $opt_force_git;
 
 my @COUNT_DIFF_ARGV        = undef;
 my $COUNT_DIFF_report_file = undef;
@@ -3675,7 +3689,7 @@ sub replace_git_hash_with_tarfile {          # {{{1
         if (-r $file_or_dir) { # readable file or dir; not a git hash
             $replacement_arg_list{$i} = $file_or_dir;
             next;
-        } elsif (defined $opt_force_git || $file_or_dir =~ m/$hash_regex/) {
+        } elsif ($opt_force_git or $file_or_dir =~ m/$hash_regex/) {
             $git_hash{$file_or_dir} = $i;
         } # else the input can't be understood; ignore for now
     }
@@ -3705,20 +3719,6 @@ sub replace_git_hash_with_tarfile {          # {{{1
         # is it git to git, or git to file/dir ?
         my ($Left, $Right) = @{$ra_arg_list};
 
-##      my %diff_listing = ();  # $diff_listing{hash}{files} = 1;
-##      foreach my $hash (sort keys %git_hash) {
-##          my $git_list_cmd = "git diff-tree -r --no-commit-id --name-only $hash";
-##          print "$git_list_cmd\n" if $opt_v;
-##          foreach my $file (`$git_list_cmd`) {
-##              $file =~ s/\s+$//;
-##              $diff_listing{$hash}{$file} = 1;
-##          }
-##          if (!scalar keys %{$diff_listing{$hash}}) {
-##              print "No files modified with git commit $hash.\n";
-##              die;
-##          }
-##      }
-
 #use Data::Dumper;
 #print "diff_listing= "; print Dumper(\%diff_listing);
 #print "git_hash= "; print Dumper(\%git_hash);
@@ -3729,12 +3729,6 @@ sub replace_git_hash_with_tarfile {          # {{{1
             # first make a union of all files that have changed in both commits
             my %files_union = ();
 
-##          foreach my $file (sort keys %{$diff_listing{$Left}}  ) {
-##              $files_union{$file} = 1;
-##          }
-##          foreach my $file (sort keys %{$diff_listing{$Right}} ) {
-##              $files_union{$file} = 1;
-##          }
             my $git_list_cmd = "git diff-tree -r --no-commit-id --name-only $Left $Right";
             print "$git_list_cmd\n" if $opt_v;
             foreach my $file (`$git_list_cmd`) {
@@ -5397,7 +5391,7 @@ sub docstring_to_C {                         # {{{1
     print "<- docstring_to_C\n" if $opt_v > 2;
     return @{$ra_lines};
 } # 1}}}
-sub elixir_doc_to_C {                         # {{{1
+sub elixir_doc_to_C {                        # {{{1
     my ($ra_lines, ) = @_;
     # Converts Elixir docs to C comments.
 
