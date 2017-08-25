@@ -257,6 +257,7 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              definition files.  Use --read-lang-def to define
                              new language filters without replacing built-in
                              filters (see also --write-lang-def).
+   --git                     Forces the targets to be interpreted as git hashes.
    --ignore-whitespace       Ignore horizontal white space when comparing files
                              with --diff.  See also --ignore-case.
    --ignore-case             Ignore changes in case; consider upper- and lower-
@@ -578,6 +579,7 @@ my (
     $opt_max_file_size        ,   # in MB
     $opt_use_sloccount        ,
     $opt_no_autogen           ,
+    $opt_force_git            ,
    );
 my $getopt_success = GetOptions(
    "by_file|by-file"                         => \$opt_by_file             ,
@@ -657,6 +659,7 @@ my $getopt_success = GetOptions(
    "max_file_size|max-file-size=i"           => \$opt_max_file_size       ,
    "use_sloccount|use-sloccount"             => \$opt_use_sloccount       ,
    "no_autogen|no-autogen"                   => \$opt_no_autogen          ,
+   "git"                                     => \$opt_force_git           ,
   );
 $opt_by_file  = 1 if defined  $opt_by_file_by_lang;
 my $CLOC_XSL = "cloc.xsl"; # created with --xsl
@@ -3672,7 +3675,7 @@ sub replace_git_hash_with_tarfile {          # {{{1
         if (-r $file_or_dir) { # readable file or dir; not a git hash
             $replacement_arg_list{$i} = $file_or_dir;
             next;
-        } elsif ($file_or_dir =~ m/$hash_regex/) {
+        } elsif (defined $opt_force_git || $file_or_dir =~ m/$hash_regex/) {
             $git_hash{$file_or_dir} = $i;
         } # else the input can't be understood; ignore for now
     }
