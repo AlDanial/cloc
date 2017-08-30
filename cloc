@@ -10975,7 +10975,7 @@ sub html_header {                            # {{{1
     return
 '<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="GENERATOR" content="cloc http://cloc.sourceforge.net">
 ' .
 "
