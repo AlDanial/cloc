@@ -10976,7 +10976,7 @@ sub html_header {                            # {{{1
 '<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="GENERATOR" content="cloc http://cloc.sourceforge.net">
+<meta name="GENERATOR" content="cloc http://github.com/AlDanial/cloc">
 ' .
 "
 <!-- Created by $script v$VERSION -->
