@@ -218,8 +218,11 @@ Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
                              First perform direct code counts of source file(s)
                              of <set1> and <set2> separately, then perform a diff
                              of these.  Inputs may be pairs of files, directories,
-                             or archives.  See also --diff, --diff-alignment,
-                             --diff-timeout, --ignore-case, --ignore-whitespace.
+                             or archives.  If --out or --report-file is given,
+                             three output files will be created, one for each
+                             of the two counts and one for the diff.  See also
+                             --diff, --diff-alignment, --diff-timeout,
+                             --ignore-case, --ignore-whitespace.
    --diff <set1> <set2>      Compute differences in code and comments between
                              source file(s) of <set1> and <set2>.  The inputs
                              may be any mix of files, directories, archives,
@@ -985,10 +988,23 @@ if ($opt_count_diff) {
     if ($opt_report_file) {
         # Instead of just one output file, will have three.
         # Keep their names unique otherwise results are clobbered.
-        if ($opt_count_diff == 3) {
-            $opt_report_file = $COUNT_DIFF_report_file . ".diff.$ARGV[0].$ARGV[1]";
+        # Replace file path separators with underscores otherwise
+        # may end up with illegal file names.
+        my ($fn_0, $fn_1) = (undef, undef);
+        if ($ON_WINDOWS) {
+            ($fn_0 = $ARGV[0]) =~ s{\\}{_}g;
+            ($fn_0 = $ARGV[0]) =~ s{::}{_}g;
+            ($fn_1 = $ARGV[1]) =~ s{\\}{_}g if defined $ARGV[1];
+            ($fn_1 = $ARGV[1]) =~ s{::}{_}g if defined $ARGV[1];
         } else {
-            $opt_report_file = $COUNT_DIFF_report_file . "." .  $ARGV[0];
+            ($fn_0 = $ARGV[0]) =~ s{/}{_}g;
+            ($fn_1 = $ARGV[1]) =~ s{/}{_}g  if defined $ARGV[1];
+        }
+
+        if ($opt_count_diff == 3) {
+            $opt_report_file = $COUNT_DIFF_report_file . ".diff.$fn_0.$fn_1";
+        } else {
+            $opt_report_file = $COUNT_DIFF_report_file . "." .  $fn_0;
         }
     } else {
         # STDOUT; print a header showing what it's working on
