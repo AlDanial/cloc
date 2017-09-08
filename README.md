@@ -5,7 +5,7 @@
 * * *
 cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.
 
-Latest release:  v1.72 (January 14, 2017)
+Latest release:  v1.74 (September 8, 2017)
 
 Hosted at http://cloc.sourceforge.net/ since August 2006, cloc began the
 transition to GitHub in September 2015.
@@ -48,8 +48,8 @@ Step 2:  Open a terminal (`cmd.exe` on Windows).
 Step 3:  Invoke cloc to count your source files, directories, or archives.
 The executable name differs depending on whether you use the
 development source version (`cloc`), source for a
-released version (`cloc-1.72.pl`) or a Windows executable
-(`cloc-1.72.exe`).  On this page, `cloc` is the generic term
+released version (`cloc-1.74.pl`) or a Windows executable
+(`cloc-1.74.exe`).  On this page, `cloc` is the generic term
 used to refer to any of these.
 
 **a file**
@@ -102,6 +102,35 @@ SUM:                             2            725           1103           8713
 -------------------------------------------------------------------------------
 </pre>
 
+**a git repository, using a specific commit**
+
+This example uses code from
+<a href=https://pypi.python.org/pypi/pudb>PuDB</a>, a fantastic Python debugger.
+
+<pre>
+prompt> git clone http://git.tiker.net/trees/pudb.git
+
+prompt> cd pudb
+
+prompt> cloc 6be804e07a5db
+      48 text files.
+      48 unique files.
+      15 files ignored.
+
+github.com/AlDanial/cloc v 1.73  T=0.15 s (223.1 files/s, 46159.0 lines/s)
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Python                          28           1519            728           4659
+YAML                             2              9              2             75
+Bourne Shell                     3              6              0             17
+make                             1              4              6             10
+-------------------------------------------------------------------------------
+SUM:                            34           1538            736           4761
+-------------------------------------------------------------------------------
+
+</pre>
+
 **each subdirectory of a particular directory**
 
 Say you have a directory with three different git-managed projects,
@@ -111,7 +140,7 @@ capability to count the code in each.  This example uses bash:
 prompt> for d in ./*/ ; do (cd "$d" && echo "$d" && cloc --vcs git); done
 ./Project0/
 7 text files.
-       7 unique files.                              
+       7 unique files.
        1 file ignored.
 
 github.com/AlDanial/cloc v 1.71  T=0.02 s (390.2 files/s, 25687.6 lines/s)
@@ -126,7 +155,7 @@ SUM:                             6             70             32            293
 -------------------------------------------------------------------------------
 ./Project1/
        7 text files.
-       7 unique files.                              
+       7 unique files.
        0 files ignored.
 
 github.com/AlDanial/cloc v 1.71  T=0.02 s (293.0 files/s, 52107.1 lines/s)
@@ -139,7 +168,7 @@ SUM:                             7            165            282            798
 -------------------------------------------------------------------------------
 ./Project2/
       49 text files.
-      47 unique files.                              
+      47 unique files.
       13 files ignored.
 
 github.com/AlDanial/cloc v 1.71  T=0.10 s (399.5 files/s, 70409.4 lines/s)
@@ -217,7 +246,7 @@ Depending your operating system, one of these installation methods may work for 
     brew install cloc                      # Mac OS X with Homebrew
     choco install cloc                     # Windows with Chocolatey
 
-Note: I don't control any of these packages.
+**Note**: I don't control any of these packages.
 If you encounter a bug in cloc using one of the above
 packages, try with cloc pulled from the latest stable release here
 on github (link follows below) before submitting a problem report.
@@ -302,7 +331,10 @@ and Digest::MD5 installed locally.
 <a name="building_exe"></a> []({{{1)
 # [Building a Windows Executable &#9650;](#___top "click to go to top of document")
 
-The two most recent Windows downloads, <tt>cloc-1.70.exe</tt> and <tt>cloc-1.72.exe</tt>, were
+The three most recent Windows downloads,
+<tt>cloc-1.70.exe</tt>,
+<tt>cloc-1.72.exe</tt>, ane
+<tt>cloc-1.74.exe</tt>, were
 built with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm)
 and Strawberry Perl 5.24.0.1
 on an Amazon Web Services t2.micro instance running 32 bit Microsoft Windows Server 2008.
@@ -388,7 +420,7 @@ C:> cpan -i Digest::MD5
 C:> cpan -i Regexp::Common
 C:> cpan -i Algorithm::Diff
 C:> cpan -i PAR::Packer
-C:> pp -M Digest::MD5 -c -x -o cloc-1.72.exe cloc
+C:> pp -M Digest::MD5 -c -x -o cloc-1.74.exe cloc
 </pre>
 
 A variation on the instructions above is if you installed the portable
@@ -444,7 +476,7 @@ To run cloc on Windows computers, one must first open up a command (aka DOS) win
 <pre>
 prompt> cloc --help
 
-Usage: cloc [options] <file(s)/dir(s)> | SET 1 SET 2 | <report files>
+Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report files>
 
  Count, or compute differences of, physical lines of source code in the
  given files (may be archives such as compressed tarballs or zip files)
@@ -477,12 +509,13 @@ Usage: cloc [options] <file(s)/dir(s)> | SET 1 SET 2 | <report files>
                              files to work on.  If VCS is 'git', then will
                              invoke 'git ls-files' to get a file list and
                              'git submodule status' to get a list of submodules
-                             whose contents will be ignored.  If VCS is 'svn'
-                             then will invoke 'svn list -R'.  The primary benefit
-                             is that cloc will then skip files explicitly
-                             excluded by the versioning tool in question,
-                             ie, those in .gitignore or have the svn:ignore
-                             property.
+                             whose contents will be ignored.  See also --git
+                             which accepts git commit hashes and branch names.
+                             If VCS is 'svn' then will invoke 'svn list -R'.
+                             The primary benefit is that cloc will then skip
+                             files explicitly excluded by the versioning tool
+                             in question, ie, those in .gitignore or have the
+                             svn:ignore property.
                              Alternatively VCS may be any system command
                              that generates a list of files.
                              Note:  cloc must be in a directory which can read
@@ -498,7 +531,7 @@ Usage: cloc [options] <file(s)/dir(s)> | SET 1 SET 2 | <report files>
 
  Processing Options
    --autoconf                Count .in files (as processed by GNU autoconf) of
-                             recognized languages.
+                             recognized languages.  See also --no-autogen.
    --by-file                 Report results for every source file encountered.
    --by-file-by-lang         Report results for every source file encountered
                              in addition to reporting by language.
@@ -506,11 +539,15 @@ Usage: cloc [options] <file(s)/dir(s)> | SET 1 SET 2 | <report files>
                              First perform direct code counts of source file(s)
                              of SET1 and SET2 separately, then perform a diff
                              of these.  Inputs may be pairs of files, directories,
-                             or archives.  See also --diff, --diff-alignment,
-                             --diff-timeout, --ignore-case, --ignore-whitespace.
+                             or archives.  If --out or --report-file is given,
+                             three output files will be created, one for each
+                             of the two counts and one for the diff.  See also
+                             --diff, --diff-alignment, --diff-timeout,
+                             --ignore-case, --ignore-whitespace.
    --diff SET1 SET2          Compute differences in code and comments between
                              source file(s) of SET1 and SET2.  The inputs
-                             may be pairs of files, directories, or archives.
+                             may be any mix of files, directories, archives,
+                             or git commit hashes (Unix only).
                              Use --diff-alignment to generate a list showing
                              which file pairs where compared.  See also
                              --count-and-diff, --diff-alignment, --diff-timeout,
@@ -521,7 +558,7 @@ Usage: cloc [options] <file(s)/dir(s)> | SET 1 SET 2 | <report files>
                              Algorithm::Diff::sdiff() to take hours.)
    --follow-links            [Unix only] Follow symbolic links to directories
                              (sym links to files are always followed).
-   --force-lang=LANG[,EXT]
+   --force-lang=LANG,EXT
                              Process all files that have a EXT extension
                              with the counter for language LANG.  For
                              example, to count all .f files with the
@@ -545,6 +582,18 @@ Usage: cloc [options] <file(s)/dir(s)> | SET 1 SET 2 | <report files>
                              definition files.  Use --read-lang-def to define
                              new language filters without replacing built-in
                              filters (see also --write-lang-def).
+   --git                     Forces the inputs to be interpreted as git targets
+                             (commit hashes, branch names, et cetera) if these
+                             are not first identified as file or directory
+                             names.  This option overrides the --vcs=git logic
+                             if this is given; in other words, --git gets its
+                             list of files to work on directly from git using
+                             the hash or branch name rather than from
+                             'git ls-files'.  This option can be used with
+                             --diff to perform line count diffs between git
+                             commits, or between a git commit and a file,
+                             directory, or archive.  Use -v/--verbose to see
+                             the git system commands cloc issues.
    --ignore-whitespace       Ignore horizontal white space when comparing files
                              with --diff.  See also --ignore-case.
    --ignore-case             Ignore changes in case; consider upper- and lower-
@@ -564,6 +613,10 @@ Usage: cloc [options] <file(s)/dir(s)> | SET 1 SET 2 | <report files>
                              than 2 GB of memory will cause problems.
                              Note:  this check does not apply to files
                              explicitly passed as command line arguments.
+   --no-autogen[=list]       Ignore files generated by code-production systems
+                             such as GNU autoconf.  To see a list of these files
+                             (then exit), run with --no-autogen list
+                             See also --autoconf.
    --original-dir            [Only effective in combination with
                              --strip-comments]  Write the stripped files
                              to the same directory as the original files.
@@ -601,10 +654,11 @@ Usage: cloc [options] <file(s)/dir(s)> | SET 1 SET 2 | <report files>
                              receive source code via STDIN.)
    --strip-comments=EXT      For each file processed, write to the current
                              directory a version of the file which has blank
-                             lines and comments removed.  The name of each
-                             stripped file is the original file name with
-                             .EXT appended to it.  It is written to the
-                             current directory unless --original-dir is on.
+                             and commented lines removed (in-line comments
+                             persist).  The name of each stripped file is the
+                             original file name with .EXT appended to it.
+                             It is written to the current directory unless
+                             --original-dir is on.
    --sum-reports             Input arguments are report files previously
                              created with the --report-file option.  Makes
                              a cumulative set of results containing the
@@ -631,8 +685,8 @@ Usage: cloc [options] <file(s)/dir(s)> | SET 1 SET 2 | <report files>
                              example  --exclude-dir=.cache,test  will skip
                              all files and subdirectories that have /.cache/
                              or /test/ as their parent directory.
-                             Directories named .bzr, .cvs, .hg, .git, and
-                             .svn are always excluded.
+                             Directories named .bzr, .cvs, .hg, .git, .svn,
+                             and .snapshot are always excluded.
                              This option only works with individual directory
                              names so including file path separators is not
                              allowed.  Use --fullpath and --not-match-d=REGEX
@@ -664,7 +718,8 @@ Usage: cloc [options] <file(s)/dir(s)> | SET 1 SET 2 | <report files>
                              only counts files in directories containing
                              /src/ or /include/.  Unlike --not-match-d,
                              --match-f, and --not-match-f, --match-d always
-                             compares the fully qualified path against the regex.
+                             compares the fully qualified path against the
+                             regex.
    --not-match-d=REGEX       Count all files except those in directories
                              matching the Perl regex.  Only the trailing
                              directory name is compared, for example, when
@@ -672,8 +727,8 @@ Usage: cloc [options] <file(s)/dir(s)> | SET 1 SET 2 | <report files>
                              compared to the regex.
                              Add --fullpath to compare parent directories to
                              the regex.
-                             Do not include file path separators at the beginning
-                             or end of the regex.
+                             Do not include file path separators at the
+                             beginning or end of the regex.
    --match-f=REGEX           Only count files whose basenames match the Perl
                              regex.  For example
                                --match-f='^[Ww]idget'
@@ -789,31 +844,32 @@ Ada                        (ada, adb, ads, pad)
 ADSO/IDSM                  (adso)
 AMPLE                      (ample, dofile, startup)
 Ant                        (build.xml, build.xml)
-Antlr                      (g)
+ANTLR Grammar              (g, g4)
 Apex Trigger               (trigger)
 Arduino Sketch             (ino, pde)
 ASP                        (asa, asp)
-ASP.Net                    (asax, ascx, asmx, aspx, master, sitemap, webinfo)
+ASP.NET                    (asax, ascx, asmx, aspx, master, sitemap, webinfo)
 AspectJ                    (aj)
-Assembly                   (asm, S, s)
+Assembly                   (asm, s, S)
 AutoHotkey                 (ahk)
 awk                        (awk)
 Blade                      (blade.php)
 Bourne Again Shell         (bash)
 Bourne Shell               (sh)
+BrightScript               (brs)
 builder                    (xml.builder)
 C                          (c, ec, pgc)
 C Shell                    (csh, tcsh)
 C#                         (cs)
 C++                        (C, c++, cc, cpp, CPP, cxx, pcc)
-C/C++ Header               (h, H, hh, hpp, hxx)
+C/C++ Header               (H, h, hh, hpp, hxx)
 CCS                        (ccs)
 Clean                      (dcl, icl)
 Clojure                    (clj)
 ClojureC                   (cljc)
 ClojureScript              (cljs)
 CMake                      (cmake, CMakeLists.txt)
-COBOL                      (CBL, cbl, cob, COB)
+COBOL                      (CBL, cbl, COB, cob)
 CoffeeScript               (coffee)
 ColdFusion                 (cfm)
 ColdFusion CFScript        (cfc)
@@ -821,6 +877,7 @@ Coq                        (v)
 Crystal                    (cr)
 CSON                       (cson)
 CSS                        (css)
+Cucumber                   (feature)
 CUDA                       (cu, cuh)
 Cython                     (pyx)
 D                          (d)
@@ -829,7 +886,8 @@ Dart                       (dart)
 diff                       (diff)
 DITA                       (dita)
 DOORS Extension Language   (dxl)
-DOS Batch                  (BAT, bat, btm, BTM, cmd, CMD)
+DOS Batch                  (bat, BAT, BTM, btm, CMD, cmd)
+Drools                     (drl)
 DTD                        (dtd)
 dtrace                     (d)
 ECPP                       (ecpp)
@@ -840,10 +898,11 @@ ERB                        (erb, ERB)
 Erlang                     (erl, hrl)
 Expect                     (exp)
 F#                         (fsi, fs, fs)
+F# Script                  (fsx)
 Focus                      (focexec)
 Forth                      (4th, e4, f83, fb, forth, fpm, fr, frt, ft, fth, rx, fs, f, for)
 Fortran 77                 (F, f77, F77, FOR, ftn, FTN, pfo, f, for)
-Fortran 90                 (f90, F90)
+Fortran 90                 (F90, f90)
 Fortran 95                 (f95, F95)
 Freemarker Template        (ftl)
 GDScript                   (gd)
@@ -851,6 +910,7 @@ Glade                      (glade, ui)
 GLSL                       (comp, frag, geom, glsl, tesc, tese, vert)
 Go                         (go)
 Grails                     (gsp)
+GraphQL                    (gql, graphql)
 Groovy                     (gant, gradle, groovy)
 Haml                       (haml)
 Handlebars                 (handlebars, hbs)
@@ -860,6 +920,7 @@ Haxe                       (hx)
 HLSL                       (cg, cginc, hlsl, shader)
 HTML                       (htm, html)
 IDL                        (idl, pro)
+Idris                      (idr)
 INI                        (ini)
 InstallShield              (ism)
 Java                       (java)
@@ -877,12 +938,13 @@ LESS                       (less)
 lex                        (l)
 LFE                        (lfe)
 liquid                     (liquid)
-Lisp                       (asd, el, lisp, lsp, sc, cl, jl)
+Lisp                       (asd, el, lisp, lsp, cl, jl)
+Literate Idris             (lidr)
 LiveLink OScript           (oscript)
 Logtalk                    (lgt, logtalk)
 Lua                        (lua)
 m4                         (ac, m4)
-make                       (am, Gnumakefile, gnumakefile, makefile, Makefile, mk)
+make                       (am, Gnumakefile, gnumakefile, Makefile, makefile, mk)
 Mako                       (mako)
 Markdown                   (md)
 Mathematica                (mt, wl, wlt, m)
@@ -923,8 +985,8 @@ QML                        (qml)
 Qt                         (ui)
 Qt Linguist                (ts)
 Qt Project                 (pro)
-R                          (R, r)
-Racket                     (rkt, rktl, sch, scm, scrbl, ss)
+R                          (r, R)
+Racket                     (rkt, rktl, scrbl)
 RapydScript                (pyj)
 Razor                      (cshtml)
 Rexx                       (rexx)
@@ -935,18 +997,22 @@ Rust                       (rs)
 SAS                        (sas)
 Sass                       (sass, scss)
 Scala                      (scala)
+Scheme                     (sc, sch, scm, sld, sls, ss)
 sed                        (sed)
 SKILL                      (il)
 SKILL++                    (ils)
 Slice                      (ice)
 Slim                       (slim)
+Smalltalk                  (st, cs)
 Smarty                     (smarty, tpl)
 Softbridge Basic           (SBL, sbl)
+Solidity                   (sol)
 Specman e                  (e)
-SQL                        (psql, sql, SQL)
+SQL                        (psql, SQL, sql)
 SQL Data                   (data.sql)
 SQL Stored Procedure       (spc.sql, spoc.sql, sproc.sql, udf.sql)
 Standard ML                (fun, sig, sml)
+Stata                      (do, DO)
 Stylus                     (styl)
 Swift                      (swift)
 Tcl/Tk                     (itk, tcl, tk)
@@ -955,6 +1021,7 @@ Teamcenter mth             (mth)
 TeX                        (bst, dtx, sty, tex)
 TITAN Project File Information (tpd)
 Titanium Style Sheet       (tss)
+TOML                       (toml)
 TTCN                       (ttcn, ttcn2, ttcn3, ttcnpp)
 Twig                       (twig)
 TypeScript                 (tsx, ts)
@@ -963,9 +1030,9 @@ Vala                       (vala)
 Vala Header                (vapi)
 Velocity Template Language (vm)
 Verilog-SystemVerilog      (sv, svh, v)
-VHDL                       (VHD, vhd, VHDL, vhdl)
+VHDL                       (VHD, vhd, vhdl, VHDL)
 vim script                 (vim)
-Visual Basic               (bas, cls, ctl, dsr, frm, VB, vb, vba, VBA, VBS, vbs)
+Visual Basic               (bas, cls, ctl, dsr, frm, VB, vb, vba, VBA, vbs, VBS)
 Visual Fox Pro             (sca, SCA)
 Visualforce Component      (component)
 Visualforce Page           (page)
@@ -980,11 +1047,11 @@ XAML                       (xaml)
 xBase                      (prg)
 xBase Header               (ch)
 XHTML                      (xhtml)
-XMI                        (XMI, xmi)
-XML                        (xml, XML)
+XMI                        (xmi, XMI)
+XML                        (XML, xml)
 XQuery                     (xq, xquery)
 XSD                        (XSD, xsd)
-XSLT                       (XSL, xsl, xslt, XSLT)
+XSLT                       (xsl, XSL, XSLT, xslt)
 yacc                       (y)
 YAML                       (yaml, yml)
 zsh                        (zsh)
