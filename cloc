@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "1.73";  # odd number == beta; even number == stable
+my $VERSION = "1.74";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.006;
 # use modules                                  {{{1
@@ -155,7 +155,7 @@ $script --help  shows full documentation on the options.
 http://$URL has numerous examples and more information.
 ";
 my $usage  = "
-Usage: $script [options] <file(s)/dir(s)> | <set 1> <set 2> | <report files>
+Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report files>
 
  Count, or compute differences of, physical lines of source code in the
  given files (may be archives such as compressed tarballs or zip files)
@@ -993,9 +993,9 @@ if ($opt_count_diff) {
         my ($fn_0, $fn_1) = (undef, undef);
         if ($ON_WINDOWS) {
             ($fn_0 = $ARGV[0]) =~ s{\\}{_}g;
-            ($fn_0 = $ARGV[0]) =~ s{::}{_}g;
+             $fn_0 =~ s{::}{_}g;
             ($fn_1 = $ARGV[1]) =~ s{\\}{_}g if defined $ARGV[1];
-            ($fn_1 = $ARGV[1]) =~ s{::}{_}g if defined $ARGV[1];
+             $fn_1 =~ s{::}{_}g             if defined $ARGV[1];
         } else {
             ($fn_0 = $ARGV[0]) =~ s{/}{_}g;
             ($fn_1 = $ARGV[1]) =~ s{/}{_}g  if defined $ARGV[1];
