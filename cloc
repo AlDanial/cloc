@@ -5960,7 +5960,6 @@ sub set_constants {                          # {{{1
             'xmi'         => 'XMI'                   ,
             'XMI'         => 'XMI'                   ,
             'xml'         => 'XML'                   ,
-            'xml'         => 'XML'                   ,
             'XML'         => 'XML'                   ,
             'mxml'        => 'MXML'                  ,
             'xml.builder' => 'builder'               ,
