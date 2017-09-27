@@ -5884,6 +5884,7 @@ sub set_constants {                          # {{{1
             'psm1'        => 'PowerShell'            ,
             'R'           => 'R'                     ,
             'r'           => 'R'                     ,
+            'raml'        => 'RAML'                  ,
             'rkt'         => 'Racket'                ,
             'rktl'        => 'Racket'                ,
             'scrbl'       => 'Racket'                ,
@@ -6663,6 +6664,10 @@ sub set_constants {                          # {{{1
     'Racket'             => [
                                 [ 'remove_matches'      , '^\s*;'  ],
                                 [ 'remove_inline'       , ';.*$'   ],
+                            ],
+    'RAML'               => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
                             ],
     'RapydScript'        => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -7638,6 +7643,7 @@ sub set_constants {                          # {{{1
     'Racket'                       =>   1.50,
     'rally'                        =>   2.00,
     'ramis ii'                     =>   2.00,
+    'RAML'                         =>   0.90,
     'rapidgen'                     =>   2.86,
     'ratfor'                       =>   0.88,
     'rdb'                          =>   2.00,
