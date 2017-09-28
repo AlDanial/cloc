@@ -1,0 +1,70 @@
+# https://raw.githubusercontent.com/raml2html/raml2html/master/examples/helloworld.raml
+#
+#%RAML 1.0
+title: Hello world # required title
+version: 1
+baseUri: http://example.com/{version}
+documentation:
+  - title: Welcome
+    content: |
+      Welcome to the Example Documentation. The Example API allows you
+      to do stuff. See also [example.com](https://www.example.com).
+  - title: Chapter two
+    content: |
+      More content here. Including **bold** text!
+
+/helloworld: # optional resource
+  description: This is the top level description for /helloworld.
+
+  get: # HTTP method declaration
+    responses: # declare a response
+      200: # HTTP status code
+        body: # declare content of response
+          application/json: # media type
+            type: | # structural definition of a response (schema or type)
+              {
+                "title": "Hello world Response",
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  }
+                }
+              }
+            example: # example how a response looks like
+              {
+                "message": "Hello world"
+              }
+  /test:
+    displayName: TEST
+    get:
+      description: a sub resource
+
+  /{id}:
+    uriParameters:
+      id:
+        type: string
+        description: account identifier
+        minLength: 1
+        maxLength: 10
+
+    get:
+      headers:
+        Authorization:
+          type: string
+          description: Basic authentication header
+          example: |
+            Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
+
+    put:
+      body:
+        application/x-www-form-urlencoded:
+          properties:
+            name:
+              description: name on account
+              type: string
+              examples:
+                example1: Naruto Uzumaki
+                example2: Kevin Renskers
+            gender:
+              enum: ["male", "female"]

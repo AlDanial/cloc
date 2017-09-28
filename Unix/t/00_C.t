@@ -436,6 +436,11 @@ my @Tests = (
                     'args' => '../tests/inputs/md5.rkt',
                 },
                 {
+                    'name' => 'RAML',
+                    'ref'  => '../tests/outputs/helloworld.raml.yaml',
+                    'args' => '../tests/inputs/helloworld.raml',
+                },
+                {
                     'name' => 'Razor',
                     'ref'  => '../tests/outputs/razor.cshtml.yaml',
                     'args' => '../tests/inputs/razor.cshtml',

@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.75
+  elapsed_seconds    : 0.00540709495544434
+  n_files            : 1
+  n_lines            : 70
+  files_per_second   : 184.942193218396
+  lines_per_second   : 12945.9535252877
+  report_file        : ../outputs/helloworld.raml.yaml
+RAML :
+  nFiles: 1
+  blank: 5
+  comment: 3
+  code: 62
+SUM: 
+  blank: 5
+  comment: 3
+  code: 62
+  nFiles: 1

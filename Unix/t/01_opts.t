@@ -142,6 +142,12 @@ my @Tests = (
                     'args' => 'eval1957.SACunidir.fr',
                     'ref'  => '../tests/outputs/issues/183/eval1957.SACunidir.fr.yaml',
                 },
+#               {
+#                   'name' => '--count-and--diff with --out',
+#                   'cd'   => '../tests/inputs/issues/220',
+#                   'args' => '--count-and-diff ../../aa ../../dd',
+#                   'ref'  => '../tests/outputs/issues/220/rpt.yaml.diff..._.._aa..._.._dd',
+#               },
             );
 
 # Create test input for issue #132 which needs data not in the git repo.
