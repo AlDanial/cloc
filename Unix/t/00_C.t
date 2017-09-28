@@ -4,6 +4,11 @@ use strict;
 use Test::More;
 my @Tests = (
                 {
+                    'name' => 'AsciiDoc',
+                    'ref'  => '../tests/outputs/asciidoctor.adoc.yaml',
+                    'args' => '../tests/inputs/asciidoctor.adoc',
+                },
+                {
                     'name' => 'Assembly 1',
                     'ref'  => '../tests/outputs/Assembler-Intel.asm.yaml',
                     'args' => '../tests/inputs/Assembler-Intel.asm',

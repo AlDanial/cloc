@@ -1,0 +1,78 @@
+// https://raw.githubusercontent.com/asciidoctor/asciidoctor/master/man/asciidoctor.adoc
+// Stripped down, added block comments for cloc
+= asciidoctor(1)
+Dan Allen; Sarah White; Ryan Waldron
+:doctype: manpage
+:man manual: Asciidoctor Manual
+:man source: Asciidoctor 1.5.6.1
+:page-layout: base
+
+== NAME
+
+asciidoctor - converts AsciiDoc source files to HTML, DocBook and other formats
+
+== SYNOPSIS
+
+*asciidoctor* [_OPTION_]... _FILE_...
+
+== DESCRIPTION
+
+The asciidoctor(1) command converts the AsciiDoc source file(s) _FILE_ to HTML5, DocBook 5, DocBook 4.5, man(ual) page and other custom output formats.
+
+If _FILE_ is _-_ then the AsciiDoc source is read from standard input.
+
+== OPTIONS
+////
+=== Security Settings
+
+*-B, --base-dir*=_DIR_::
+  Base directory containing the document and resources.
+  Defaults to the directory containing the source file, or the working directory if the source is read from a stream.
+  When combined with the safe mode setting, can be used to chroot the execution of the program.
+
+*-S, --safe-mode*=_SAFE_MODE_::
+  Set safe mode level: _unsafe_, _safe_, _server_ or _secure_.
+  Disables potentially dangerous macros in source files, such as `include::[]`.
+  If not set, the safe mode level defaults to _unsafe_ when Asciidoctor is invoked using this script.
+
+*--safe*::
+  Set safe mode level to _safe_.
+  Enables include directives, but prevents access to ancestor paths of source file.
+  Provided for compatibility with the asciidoc command.
+  If not set, the safe mode level defaults to _unsafe_ when Asciidoctor is invoked using this script.
+
+=== Document Settings
+////
+
+*-a, --attribute*=_ATTRIBUTE_::
+  Define, override or delete a document attribute.
+  Command-line attributes take precedence over attributes defined in the source file unless the value ends with _@_.
++
+_ATTRIBUTE_ is normally formatted as a key-value pair, in the form _NAME=VALUE_.
+Alternate acceptable forms are _NAME_ (where the _VALUE_ defaults to an empty string), _NAME!_ (unassigns the _NAME_ attribute) and _NAME=VALUE@_ (where _VALUE_ does not override value of _NAME_ attribute if it's already defined in the source document).
+Values containing spaces should be enclosed in quotes.
++
+This option may be specified more than once.
+
+////
+*-b, --backend*=_BACKEND_::
+  Backend output file format: _html5_, _docbook5_, _docbook45_ and _manpage_ are supported out of the box.
+  You can also use the backend alias names _html_ (aliased to _html5_) or _docbook_ (aliased to _docbook5_).
+  Other values can be passed, but if Asciidoctor cannot resolve the backend to a converter, it will fail.
+  Defaults to _html5_.
+////
+
+*-d, --doctype*=_DOCTYPE_::
+  Document type: _article_, _book_, _manpage_ or _inline_.
+  Sets the root element when using the _docbook_ backend and the style class on the HTML body element when using the _html_ backend.
+  The _book_ document type allows multiple level-0 section titles in a single document.
+  The _manpage_ document type enables parsing of metadata necessary to produce a man page.
+  The _inline_ document type allows the content of a single paragraph to be formatted and returned without wrapping it in a containing element.
+  Defaults to _article_.
+
+=== Rendering Control
+
+*-C, --compact*::
+  Compact the output by removing blank lines.
+  (No longer in use).
+// file truncated here

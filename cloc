@@ -5590,6 +5590,8 @@ sub set_constants {                          # {{{1
             'am'          => 'make'                  ,
             'ample'       => 'AMPLE'                 ,
             'as'          => 'ActionScript'          ,
+            'adoc'        => 'AsciiDoc'              ,
+            'asciidoc'    => 'AsciiDoc'              ,
             'dofile'      => 'AMPLE'                 ,
             'startup'     => 'AMPLE'                 ,
             'asa'         => 'ASP'                   ,
@@ -6073,6 +6075,10 @@ sub set_constants {                          # {{{1
     'Arduino Sketch'     => [   # same as C
                                 [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
+                            ],
+    'AsciiDoc'           => [
+                                [ 'remove_between_general', '////', '////' ],
+                                [ 'remove_matches'      , '^\s*\/\/'  ],
                             ],
     'AspectJ'            => [
                                 [ 'call_regexp_common'  , 'C++'    ],
@@ -7207,6 +7213,7 @@ sub set_constants {                          # {{{1
     'art enterprise'               =>   1.74,
     'artemis'                      =>   2.00,
     'artim'                        =>   1.74,
+    'AsciiDoc'                     =>   1.50,
     'AspectJ'                      =>   1.36,
     'as/set'                       =>   4.21,
     'asi/inquiry'                  =>   6.15,
