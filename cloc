@@ -3724,7 +3724,8 @@ sub replace_git_hash_with_tarfile {          # {{{1
         my $git_list_cmd = "git ls-tree --name-only -r $hash";
         print "$git_list_cmd\n" if $opt_v;
         foreach my $file (`$git_list_cmd`) {
-            $file =~ 's/\s+$//';
+            $file =~ s/\s+$//;
+	    $file =~ s/ /\\ /;
             $repo_listing{$hash}{$file} = 1;
         }
     }
