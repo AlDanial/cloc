@@ -1,4 +1,5 @@
 // "Production-grade" hello world
+// From https://github.com/chapel-lang/chapel/blob/release/1.16/test/release/examples/hello2-module.chpl
 
 /* This program is conceptually very similar to :ref:`hello.chpl
    <primers-hello>`, but it uses a more structured programming style,
