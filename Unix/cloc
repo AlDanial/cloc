@@ -5622,6 +5622,7 @@ sub set_constants {                          # {{{1
             'ccs'         => 'CCS'                   ,
             'cfc'         => 'ColdFusion CFScript'   ,
             'cfm'         => 'ColdFusion'            ,
+            'chpl'        => 'Chapel'                ,
             'cl'          => 'Lisp/OpenCL'           ,
             'clj'         => 'Clojure'               ,
             'cljs'        => 'ClojureScript'         ,
@@ -6129,6 +6130,10 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C++'    ],
 #                               [ 'remove_matches'      , '^\s*//' ], # C99
                                 [ 'remove_inline'       , '//.*$'  ], # C99
+                            ],
+    'Chapel'       => [
+                                [ 'call_regexp_common'  , 'C++'    ],
+                                [ 'remove_inline'       , '//.*$'  ],
                             ],
     'C++'                => [
                                 [ 'call_regexp_common'  , 'C++'    ],
@@ -7249,6 +7254,7 @@ sub set_constants {                          # {{{1
     'cellsim'                      =>   1.74,
     'ColdFusion'                   =>   4.00,
     'ColdFusion CFScript'          =>   4.00,
+    'Chapel'                       =>   2.96,  # estimate from some test code bases comparing to Python
     'chili'                        =>   0.75,
     'chill'                        =>   0.75,
     'cics'                         =>   1.74,
