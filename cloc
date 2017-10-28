@@ -6721,7 +6721,7 @@ sub set_constants {                          # {{{1
                             ],
     'Scala'              => [
 #                               [ 'remove_matches'      , '^\s*//' ],
-                                [ 'remove_inline'       , '//.*$'  ],
+#                               [ 'remove_inline'       , '//.*$'  ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Scheme'             => [

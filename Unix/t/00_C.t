@@ -58,7 +58,8 @@ my @Tests = (
                     'ref'  => '../tests/outputs/assembly.cs.yaml',
                     'args' => '../tests/inputs/assembly.cs',
                 },
-                { 'name' => 'C/C++ header',
+                {
+                    'name' => 'C/C++ header',
                     'ref'  => '../tests/outputs/locale_facets.h.yaml',
                     'args' => '../tests/inputs/locale_facets.h',
                 },
@@ -143,7 +144,7 @@ my @Tests = (
                     'args' => '../tests/inputs/MSDOS.bat',
                 },
                 {
-                    'name' => 'Drools',   
+                    'name' => 'Drools',
                     'ref'  => '../tests/outputs/drools.drl.yaml',
                     'args' => '../tests/inputs/drools.drl',
                 },
@@ -510,7 +511,7 @@ my @Tests = (
                     'args' => '../tests/inputs/specman_e2.e',
                 },
                 {
-                    'name' => 'Stata',           
+                    'name' => 'Stata',
                     'ref'  => '../tests/outputs/stata.do.yaml',
                     'args' => '../tests/inputs/stata.do',
                 },
