@@ -58,10 +58,14 @@ my @Tests = (
                     'ref'  => '../tests/outputs/assembly.cs.yaml',
                     'args' => '../tests/inputs/assembly.cs',
                 },
-                {
-                    'name' => 'C/C++ header',
+                { 'name' => 'C/C++ header',
                     'ref'  => '../tests/outputs/locale_facets.h.yaml',
                     'args' => '../tests/inputs/locale_facets.h',
+                },
+                {
+                    'name' => 'Chapel',
+                    'ref'  => '../tests/outputs/Chapel.chpl.yaml',
+                    'args' => '../tests/inputs/Chapel.chpl',
                 },
                 {
                     'name' => 'Cucumber',
