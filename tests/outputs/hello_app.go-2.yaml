@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.75
+  elapsed_seconds    : 0.00606894493103027
+  n_files            : 1
+  n_lines            : 34
+  files_per_second   : 164.773286191318
+  lines_per_second   : 5602.29173050481
+  report_file        : ../outputs/hello_app.go-2.yaml
+Go :
+  nFiles: 1
+  blank: 5
+  comment: 18
+  code: 11
+SUM: 
+  blank: 5
+  comment: 18
+  code: 11
+  nFiles: 1

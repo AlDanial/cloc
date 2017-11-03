@@ -209,6 +209,16 @@ my @Tests = (
                     'args' => '../tests/inputs/blur.glsl',
                 },
                 {
+                    'name' => 'Go',
+                    'ref'  => '../tests/outputs/hello_app.go-1.yaml',
+                    'args' => '../tests/inputs/hello_app*.go',
+                },
+                {
+                    'name' => 'Go --no-autogen',
+                    'ref'  => '../tests/outputs/hello_app.go-2.yaml',
+                    'args' => '--no-autogen ../tests/inputs/hello_app*.go',
+                },
+                {
                     'name' => 'Groovy',
                     # issue #139; avoid
                     # Complex regular subexpression recursion limit (32766) exceeded
