@@ -251,9 +251,14 @@ my @Tests = (
                     'args' => '../tests/inputs/Sys.hx',
                 },
                 {
-                    'name' => 'IDL',
+                    'name' => 'IDL 1',
                     'ref'  => '../tests/outputs/IDL.idl.yaml',
                     'args' => '../tests/inputs/IDL.idl',
+                },
+                {
+                    'name' => 'IDL 2',
+                    'ref'  => '../tests/outputs/streamlines.pro.yaml',
+                    'args' => '../tests/inputs/streamlines.pro',
                 },
                 {
                     'name' => 'Idris',
@@ -409,6 +414,16 @@ my @Tests = (
                     'name' => 'Pig Latin',
                     'ref'  => '../tests/outputs/script1-hadoop.pig.yaml',
                     'args' => '../tests/inputs/script1-hadoop.pig',
+                },
+                {
+                    'name' => 'ProGuard',
+                    'ref'  => '../tests/outputs/proguard-project-app.pro.yaml',
+                    'args' => '../tests/inputs/proguard-project-app.pro',
+                },
+                {
+                    'name' => 'Prolog',
+                    'ref'  => '../tests/outputs/birds.pro.yaml',
+                    'args' => '../tests/inputs/birds.pro',
                 },
                 {
                     'name' => 'PO File',
