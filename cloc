@@ -2414,7 +2414,17 @@ sub diff_yaml_report {                       # {{{1
             }
         }
     }
+
+    push @results, "SUM :";
+    foreach my $S (qw(added same modified removed)) {
+        push @results, "  $S :";
+        foreach my $topic (keys %sum) {
+            push @results, "    $topic : $sum{$topic}{$S}";
+        }
+    }
+
     print "<- diff_yaml_report\n" if $opt_v > 2;
+
     return @results;
 } # 1}}}
 sub diff_json_report {                       # {{{1
@@ -2448,7 +2458,7 @@ sub diff_json_report {                       # {{{1
                 $rhhh_count->{$F_or_L}{$k}{$S} = 0 unless
                     defined $rhhh_count->{$F_or_L}{$k}{$S};
                 push @results,
-                    "    \"$k\" : \"$rhhh_count->{$F_or_L}{$k}{$S}\",";
+                    "    \"$k\" : $rhhh_count->{$F_or_L}{$k}{$S},";
             }
             $results[-1] =~ s/,\s*$//;
             push @results, "  },"
@@ -2456,8 +2466,19 @@ sub diff_json_report {                       # {{{1
         $results[-1] =~ s/,\s*$//;
         push @results, "  },"
     }
+
+    push @results, "  \"SUM\" : {";
+    foreach my $S (qw(added same modified removed)) {
+        push @results, "  \"$S\" : {";
+        foreach my $topic (keys %sum) {
+            push @results, "    \"$topic\" : $sum{$topic}{$S},";
+        }
+        $results[-1] =~ s/,\s*$//;
+        push @results, "},";
+    }
+
     $results[-1] =~ s/,\s*$//;
-    push @results, "}";
+    push @results, "} }";
     print "<- diff_json_report\n" if $opt_v > 2;
     return @results;
 } # 1}}}
