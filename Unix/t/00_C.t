@@ -446,6 +446,11 @@ my @Tests = (
                     'args' => '../tests/inputs/hello.pl1',
                 },
                 {
+                    'name' => 'PL/M',
+                    'ref'  => '../tests/outputs/find.plm.yaml',
+                    'args' => '../tests/inputs/find.plm',
+                },
+                {
                     'name' => 'Puppet',
                     'ref'  => '../tests/outputs/modules1-ntp1.pp.yaml',
                     'args' => '../tests/inputs/modules1-ntp1.pp',

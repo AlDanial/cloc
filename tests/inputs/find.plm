@@ -1,0 +1,25 @@
+/*
+ https://en.wikipedia.org/wiki/PL/M
+*/
+ FIND: PROCEDURE(PA,PB) BYTE;
+    DECLARE (PA,PB) BYTE;
+    /* FIND THE STRING IN SCRATCH STARTING AT PA AND ENDING AT PB */
+    DECLARE J ADDRESS,
+        (K, MATCH) BYTE;
+    J = BACK ;
+    MATCH = FALSE;
+        DO WHILE NOT MATCH AND (MAXM > J);
+        LAST,J = J + 1; /* START SCAN AT J */
+        K = PA ; /* ATTEMPT STRING MATCH AT K */
+            DO WHILE SCRATCH(K) = MEMORY(LAST) AND
+                NOT (MATCH := K = PB);
+            /* MATCHED ONE MORE CHARACTER */
+            K = K + 1; LAST = LAST + 1;
+            END;
+        END;
+    IF MATCH THEN /* MOVE STORAGE */
+        DO; LAST = LAST - 1; CALL MOVER;
+        END;
+    RETURN MATCH;
+    END FIND;
+

@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.75
+  elapsed_seconds    : 0.00586414337158203
+  n_files            : 1
+  n_lines            : 25
+  files_per_second   : 170.527890713937
+  lines_per_second   : 4263.19726784843
+  report_file        : ../outputs/find.plm.yaml
+PL/M :
+  nFiles: 1
+  blank: 1
+  comment: 5
+  code: 19
+SUM: 
+  blank: 1
+  comment: 5
+  code: 19
+  nFiles: 1
