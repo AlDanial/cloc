@@ -332,13 +332,22 @@ and Digest::MD5 installed locally.
 <a name="building_exe"></a> []({{{1)
 # [Building a Windows Executable &#9650;](#___top "click to go to top of document")
 
-The three most recent Windows downloads,
+The most recent Windows downloads,
 <tt>cloc-1.70.exe</tt>,
 <tt>cloc-1.72.exe</tt>, ane
 <tt>cloc-1.74.exe</tt>, were
 built with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm)
 and Strawberry Perl 5.24.0.1
-on an Amazon Web Services t2.micro instance running 32 bit Microsoft Windows Server 2008.
+on an Amazon Web Services t2.micro instance running Microsoft Windows Server 2008
+(32 bit for 1.70 and 1.72; 64 bit for 1.74).
+
+The 1.74 release includes a second Windows executable, <tt>cloc-1.74_x86.exe</tt>,
+which was built on a 32 bit Windows 7 virtual machine (IE11.Win7.For.Windows.VirtualBox.zip
+pulled from https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/)
+using Strawberry Perl 5.26.1.1.  This executable was created to address
+a user-reported
+<a href=https://github.com/AlDanial/cloc/issues/226>issue</a>
+with command line parsing with <tt>cloc-1.74.exe</tt>.
 
 The <tt>cloc-1.66.exe</tt> executable was built with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm)
 on a 32 bit Windows 7 VirtualBox image
@@ -374,6 +383,9 @@ You are encouraged to run your own virus scanners against the
 executable and also check sites such
 https://www.virustotal.com/ .
 The entries for recent versions are:
+
+cloc-1.74_x86.exe:
+https://www.virustotal.com/#/file/b73dece71f6d3199d90d55db53a588e1393c8dbf84231a7e1be2ce3c5a0ec75b/detection
 
 cloc 1.72 exe:
 https://www.virustotal.com/en/url/8fd2af5cd972f648d7a2d7917bc202492012484c3a6f0b48c8fd60a8d395c98c/analysis/
@@ -1234,11 +1246,12 @@ in the default location (`C:\Program Files\WinZip\WinZip32.exe`).
 Additionally, with newer versions of WinZip, the
 [http://www.winzip.com/downcl.htm](command line add-on)
 is needed for correct operation; in this case one would invoke cloc with
-something like<br>
+something like <br>
 <pre>
- --extract-with="\"c:\Program Files\WinZip\wzunzip\" -e -o &gt;FILE&lt ."
+ --extract-with="\"c:\Program Files\WinZip\wzunzip\" -e -o &gt;FILE&lt; ."
  </code>
-</pre> (ref. [http://sourceforge.net/projects/cloc/forums/forum/600963/topic/4021070?message=8938196](forum post)).
+</pre>
+Ref. http://sourceforge.net/projects/cloc/forums/forum/600963/topic/4021070?message=8938196
 
 In situations where the automatic extraction fails, one can try the
 `--extract-with=CMD`
