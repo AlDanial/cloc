@@ -354,9 +354,9 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              sum of data from the individual report files.
    --processes=NUM           Sets the maximum number of processes that cloc
                              uses. If this parameter is set to 0, multi-
-                             processing will not be used. On Linux systems,
-                             cloc tries to detect the number of CPU cores
-                             and creates up to one process per core by
+                             processing will not be used. On Linux and MacOS
+                             systems, cloc tries to detect the number of CPU
+                             cores and creates up to one process per core by
                              default. On systems with an unknown number
                              of cores, using multiple processes is disabled
                              by default. It is not possible to use multiple
@@ -1662,7 +1662,7 @@ if ($opt_count_diff) {
     goto Top_of_Processing_Loop;
 }
 sub get_max_processes {			     # {{{1
-    # If user has specified valid number of threads, use that.
+    # If user has specified valid number of processes, use that.
     if (defined $opt_processes) {
         if ( $opt_processes !~ /^\d+$/ ) {
             print "Error: processes option argument must be numeric.\n";
@@ -1686,20 +1686,30 @@ sub get_max_processes {			     # {{{1
     if ($ON_WINDOWS) {
         return 0;
     }
- 
+
     # Disable multiprocessing if Parallel::ForkManager is not available
     if ( ! $HAVE_Parallel_ForkManager ) {
         return 0;
     }
 
     # Set to number of cores on Linux
-    if ( -x '/usr/bin/nproc' ) {
-        my $numavcores = `/usr/bin/nproc`;
-        chomp $numavcores;
-        if ( $numavcores =~ /^\d+$/ ) {
-            return $numavcores;
+    if ( $^O =~ /linux/i and -x '/usr/bin/nproc' ) {
+        my $numavcores_linux = `/usr/bin/nproc`;
+        chomp $numavcores_linux;
+        if ( $numavcores_linux =~ /^\d+$/ ) {
+            return $numavcores_linux;
         }
     }
+
+    # Set to number of cores on MacOS
+    if ( $^O =~ /darwin/i and -x '/usr/sbin/sysctl') {
+       my $numavcores_macos = `/usr/sbin/sysctl -n hw.physicalcpu`;
+       chomp $numavcores_macos;
+       if ($numavcores_macos =~ /^\d+$/ ) {
+           return $numavcores_macos;
+       }
+    }
+
     # Disable multiprocessing in other cases
     return 0;
 } # 1}}}
