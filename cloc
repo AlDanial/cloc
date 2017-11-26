@@ -9859,7 +9859,7 @@ printf "END LOOP    obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $obje
                    'Objective C' => $objective_C_points,
                    'Mercury'     => $mercury_points    , );
 
-    ${$rs_language} = (sort { $points{$b} <=> $points{$a}} keys %points)[0];
+    ${$rs_language} = (sort { $points{$b} <=> $points{$a} or $a cmp $b } keys %points)[0];
 
     print "<- matlab_or_objective_C($file: matlab=$matlab_points, mathematica=$mathematica_points, C=$objective_C_points, mumps=$mumps_points, mercury=$mercury_points) => ${$rs_language}\n"
         if $opt_v > 2;
@@ -10010,7 +10010,7 @@ sub IDL_or_QtProject {                       # {{{1
                    'ProGuard'   => $proguard_points  ,
                  );
 
-    $lang = (sort { $points{$b} <=> $points{$a}} keys %points)[0];
+    $lang = (sort { $points{$b} <=> $points{$a} or $a cmp $b} keys %points)[0];
 
     print "<- IDL_or_QtProject(idl_points=$idl_points, ",
           "qtproj_points=$qtproj_points, prolog_points=$prolog_points, ",
