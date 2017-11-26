@@ -9988,7 +9988,8 @@ sub IDL_or_QtProject {                       # {{{1
     while (<$IN>) {
         ++$idl_points      if /^\s*;/;
         ++$idl_points      if /plot\(/i;
-        ++$qtproj_points   if /^\s*(qt|configs|sources)\s*\+?=/i;
+        ++$qtproj_points   if /^\s*(qt|configs|sources|template|target|targetpath|subdirs)\b/i;
+        ++$qtproj_points   if /qthavemodule/i;
         ++$prolog_points   if /\.\s*$/;
         ++$prolog_points   if /:-/;
         ++$proguard_points if /^\s*#/;
