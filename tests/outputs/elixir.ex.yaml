@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.73
+  elapsed_seconds    : 0.00999093055725098
+  n_files            : 1
+  n_lines            : 20
+  files_per_second   : 100.09077675695
+  lines_per_second   : 2001.815535139
+  report_file        : elixir.ex.yaml
+Elixir :
+  nFiles: 1
+  blank: 3
+  comment: 10
+  code: 7
+SUM: 
+  blank: 3
+  comment: 10
+  code: 7
+  nFiles: 1

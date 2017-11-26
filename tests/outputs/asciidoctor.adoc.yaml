@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.75
+  elapsed_seconds    : 0.00542187690734863
+  n_files            : 1
+  n_lines            : 78
+  files_per_second   : 184.43797546282
+  lines_per_second   : 14386.1620861
+  report_file        : tests/outputs/asciidoctor.adoc.yaml
+AsciiDoc :
+  nFiles: 1
+  blank: 17
+  comment: 27
+  code: 34
+SUM: 
+  blank: 17
+  comment: 27
+  code: 34
+  nFiles: 1

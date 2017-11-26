@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.75
+  elapsed_seconds    : 0.00716781616210938
+  n_files            : 1
+  n_lines            : 162
+  files_per_second   : 139.512506652475
+  lines_per_second   : 22601.0260777009
+  report_file        : ../outputs/birds.pro.yaml
+Prolog :
+  nFiles: 1
+  blank: 42
+  comment: 8
+  code: 112
+SUM: 
+  blank: 42
+  comment: 8
+  code: 112
+  nFiles: 1

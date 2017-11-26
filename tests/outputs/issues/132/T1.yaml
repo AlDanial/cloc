@@ -2,12 +2,12 @@
 # github.com/AlDanial/cloc
 header : 
   cloc_url           : github.com/AlDanial/cloc
-  cloc_version       : 1.71
-  elapsed_seconds    : 0.0166549682617188
+  cloc_version       : 1.75
+  elapsed_seconds    : 0.0163099765777588
   n_files            : 3
-  n_lines            : 29
-  files_per_second   : 180.126431516262
-  lines_per_second   : 1741.22217132387
+  n_lines            : 34
+  files_per_second   : 183.936499583388
+  lines_per_second   : 2084.61366194507
   report_file        : ../outputs/issues/132/T1.yaml
 C :
   nFiles: 1
@@ -21,11 +21,11 @@ Fortran 77 :
   code: 3
 Python :
   nFiles: 1
-  blank: 3
-  comment: 7
+  blank: 4
+  comment: 11
   code: 2
 SUM: 
-  blank: 6
-  comment: 11
+  blank: 7
+  comment: 15
   code: 12
   nFiles: 3

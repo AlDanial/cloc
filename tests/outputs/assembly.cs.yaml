@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.73
+  elapsed_seconds    : 0.00577282905578613
+  n_files            : 1
+  n_lines            : 17
+  files_per_second   : 173.225292198406
+  lines_per_second   : 2944.8299673729
+  report_file        : ../outputs/assembly.cs.yaml
+C# :
+  nFiles: 1
+  blank: 4
+  comment: 4
+  code: 9
+SUM: 
+  blank: 4
+  comment: 4
+  code: 9
+  nFiles: 1

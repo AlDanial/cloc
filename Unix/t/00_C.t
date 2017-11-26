@@ -2,10 +2,11 @@
 use warnings;
 use strict;
 use Test::More;
-my @Tests = (   {
-                    'name' => 'C simple',
-                    'args' => '../tests/inputs/C-Ansi.c',
-                    'ref'  => '../tests/outputs/C-Ansi.c.yaml',
+my @Tests = (
+                {
+                    'name' => 'AsciiDoc',
+                    'ref'  => '../tests/outputs/asciidoctor.adoc.yaml',
+                    'args' => '../tests/inputs/asciidoctor.adoc',
                 },
                 {
                     'name' => 'Assembly 1',
@@ -18,11 +19,15 @@ my @Tests = (   {
                     'args' => '../tests/inputs/Assembly-sysv.S',
                 },
                 {
-                    'name' => 'Antlr',
+                    'name' => 'ANTLR Grammar 1',
                     'ref'  => '../tests/outputs/ExprParser.g.yaml',
                     'args' => '../tests/inputs/ExprParser.g',
                 },
-
+                {
+                    'name' => 'ANTLR Grammar 2',
+                    'ref'  => '../tests/outputs/C.g4.yaml',
+                    'args' => '../tests/inputs/C.g4',
+                },
                 {
                     'name' => 'Blade',
                     'ref'  => '../tests/outputs/master.blade.php.yaml',
@@ -39,14 +44,29 @@ my @Tests = (   {
                     'args' => '../tests/inputs/roku.brs',
                 },
                 {
+                    'name' => 'C simple',
+                    'args' => '../tests/inputs/C-Ansi.c',
+                    'ref'  => '../tests/outputs/C-Ansi.c.yaml',
+                },
+                {
                     'name' => 'C# 2',
                     'ref'  => '../tests/outputs/wokka.cs.yaml',
                     'args' => '../tests/inputs/wokka.cs',
                 },
                 {
+                    'name' => 'C# 3',
+                    'ref'  => '../tests/outputs/assembly.cs.yaml',
+                    'args' => '../tests/inputs/assembly.cs',
+                },
+                {
                     'name' => 'C/C++ header',
                     'ref'  => '../tests/outputs/locale_facets.h.yaml',
                     'args' => '../tests/inputs/locale_facets.h',
+                },
+                {
+                    'name' => 'Chapel',
+                    'ref'  => '../tests/outputs/Chapel.chpl.yaml',
+                    'args' => '../tests/inputs/Chapel.chpl',
                 },
                 {
                     'name' => 'Cucumber',
@@ -124,7 +144,7 @@ my @Tests = (   {
                     'args' => '../tests/inputs/MSDOS.bat',
                 },
                 {
-                    'name' => 'Drools',   
+                    'name' => 'Drools',
                     'ref'  => '../tests/outputs/drools.drl.yaml',
                     'args' => '../tests/inputs/drools.drl',
                 },
@@ -132,6 +152,11 @@ my @Tests = (   {
                     'name' => 'ECPP',
                     'ref'  => '../tests/outputs/comp.ecpp.yaml',
                     'args' => '../tests/inputs/comp.ecpp',
+                },
+                {
+                    'name' => 'Elixir',
+                    'ref'  => '../tests/outputs/elixir.ex.yaml',
+                    'args' => '../tests/inputs/elixir.ex',
                 },
                 {
                     'name' => 'Focus',
@@ -169,6 +194,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/fsharp.fs',
                 },
                 {
+                    'name' => 'F# Script',
+                    'ref'  => '../tests/outputs/fsharp_script.fsx.yaml',
+                    'args' => '../tests/inputs/fsharp_script.fsx',
+                },
+                {
                     'name' => 'Glade',
                     'ref'  => '../tests/outputs/glade-search-popover.ui.yaml',
                     'args' => '../tests/inputs/glade-search-popover.ui',
@@ -177,6 +207,16 @@ my @Tests = (   {
                     'name' => 'GLSL',
                     'ref'  => '../tests/outputs/blur.glsl.yaml',
                     'args' => '../tests/inputs/blur.glsl',
+                },
+                {
+                    'name' => 'Go',
+                    'ref'  => '../tests/outputs/hello_app.go-1.yaml',
+                    'args' => '../tests/inputs/hello_app*.go',
+                },
+                {
+                    'name' => 'Go --no-autogen',
+                    'ref'  => '../tests/outputs/hello_app.go-2.yaml',
+                    'args' => '--no-autogen ../tests/inputs/hello_app*.go',
                 },
                 {
                     'name' => 'Groovy',
@@ -221,9 +261,19 @@ my @Tests = (   {
                     'args' => '../tests/inputs/Sys.hx',
                 },
                 {
-                    'name' => 'IDL',
+                    'name' => 'IDL 1',
                     'ref'  => '../tests/outputs/IDL.idl.yaml',
                     'args' => '../tests/inputs/IDL.idl',
+                },
+                {
+                    'name' => 'IDL 2',
+                    'ref'  => '../tests/outputs/streamlines.pro.yaml',
+                    'args' => '../tests/inputs/streamlines.pro',
+                },
+                {
+                    'name' => 'Idris',
+                    'ref'  => '../tests/outputs/Combinators.idr.yaml',
+                    'args' => '../tests/inputs/Combinators.idr',
                 },
                 {
                     'name' => 'INI',
@@ -259,6 +309,11 @@ my @Tests = (   {
                     'name' => 'Lisp',
                     'ref'  => '../tests/outputs/sharpsign.cl.yaml',
                     'args' => '../tests/inputs/sharpsign.cl',
+                },
+                {
+                    'name' => 'Literate Idris',
+                    'ref'  => '../tests/outputs/Hello.lidr.yaml',
+                    'args' => '../tests/inputs/Hello.lidr',
                 },
                 {
                     'name' => 'Logtalk',
@@ -371,6 +426,16 @@ my @Tests = (   {
                     'args' => '../tests/inputs/script1-hadoop.pig',
                 },
                 {
+                    'name' => 'ProGuard',
+                    'ref'  => '../tests/outputs/proguard-project-app.pro.yaml',
+                    'args' => '../tests/inputs/proguard-project-app.pro',
+                },
+                {
+                    'name' => 'Prolog',
+                    'ref'  => '../tests/outputs/birds.pro.yaml',
+                    'args' => '../tests/inputs/birds.pro',
+                },
+                {
                     'name' => 'PO File',
                     'ref'  => '../tests/outputs/en_AU.po.yaml',
                     'args' => '../tests/inputs/en_AU.po',
@@ -381,9 +446,19 @@ my @Tests = (   {
                     'args' => '../tests/inputs/hello.pl1',
                 },
                 {
+                    'name' => 'PL/M',
+                    'ref'  => '../tests/outputs/find.plm.yaml',
+                    'args' => '../tests/inputs/find.plm',
+                },
+                {
                     'name' => 'Puppet',
                     'ref'  => '../tests/outputs/modules1-ntp1.pp.yaml',
                     'args' => '../tests/inputs/modules1-ntp1.pp',
+                },
+                {
+                    'name' => 'Python',
+                    'ref'  => '../tests/outputs/hi.py.yaml',
+                    'args' => '../tests/inputs/hi.py',
                 },
                 {
                     'name' => 'Qt Linguist',
@@ -399,6 +474,11 @@ my @Tests = (   {
                     'name' => 'Racket',
                     'ref'  => '../tests/outputs/md5.rkt.yaml',
                     'args' => '../tests/inputs/md5.rkt',
+                },
+                {
+                    'name' => 'RAML',
+                    'ref'  => '../tests/outputs/helloworld.raml.yaml',
+                    'args' => '../tests/inputs/helloworld.raml',
                 },
                 {
                     'name' => 'Razor',
@@ -446,6 +526,11 @@ my @Tests = (   {
                     'args' => '../tests/inputs/captcha.cs',
                 },
                 {
+                    'name' => 'Solidity',
+                    'ref'  => '../tests/outputs/solidity.sol.yaml',
+                    'args' => '../tests/inputs/solidity.sol',
+                },
+                {
                     'name' => 'Specman e 1',
                     'ref'  => '../tests/outputs/specman_e.e.yaml',
                     'args' => '../tests/inputs/specman_e.e',
@@ -454,6 +539,11 @@ my @Tests = (   {
                     'name' => 'Specman e 2',
                     'ref'  => '../tests/outputs/specman_e2.e.yaml',
                     'args' => '../tests/inputs/specman_e2.e',
+                },
+                {
+                    'name' => 'Stata',
+                    'ref'  => '../tests/outputs/stata.do.yaml',
+                    'args' => '../tests/inputs/stata.do',
                 },
                 {
                     'name' => 'Swift',
@@ -469,6 +559,11 @@ my @Tests = (   {
                     'name' => 'TeX',
                     'ref'  => '../tests/outputs/LaTeX.tex.yaml',
                     'args' => '../tests/inputs/LaTeX.tex',
+                },
+                {
+                    'name' => 'TOML',
+                    'ref'  => '../tests/outputs/toml_example.toml.yaml',
+                    'args' => '../tests/inputs/toml_example.toml',
                 },
                 {
                     'name' => 'TTCN',

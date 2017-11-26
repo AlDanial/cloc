@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.73
+  elapsed_seconds    : 0.0056149959564209
+  n_files            : 1
+  n_lines            : 21
+  files_per_second   : 178.094518279479
+  lines_per_second   : 3739.98488386905
+  report_file        : ../outputs/solidity.sol.yaml
+Solidity :
+  nFiles: 1
+  blank: 0
+  comment: 2
+  code: 19
+SUM: 
+  blank: 0
+  comment: 2
+  code: 19
+  nFiles: 1

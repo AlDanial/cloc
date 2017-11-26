@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.75
+  elapsed_seconds    : 0.00521683692932129
+  n_files            : 1
+  n_lines            : 24
+  files_per_second   : 191.687034413418
+  lines_per_second   : 4600.48882592203
+  report_file        : ../outputs/proguard-project-app.pro.yaml
+ProGuard :
+  nFiles: 1
+  blank: 7
+  comment: 14
+  code: 3
+SUM: 
+  blank: 7
+  comment: 14
+  code: 3
+  nFiles: 1
