@@ -47,12 +47,10 @@ use List::Util qw( min max );
 use Cwd;
 use POSIX qw { strftime ceil};
 
-# Parallel::ForkManager isn't in the standard distribution. Use it only if installed.
+# Parallel::ForkManager isn't in the standard distribution.
+# Use it only if installed, and only if --processes=N is given.
+# The module load happens in get_max_processes().
 my $HAVE_Parallel_ForkManager = 0;
-eval "use Parallel::ForkManager 0.7.6;";
-if ( defined $Parallel::ForkManager::VERSION ) {
-    $HAVE_Parallel_ForkManager = 1;
-}
 
 # Digest::MD5 isn't in the standard distribution. Use it only if installed.
 my $HAVE_Digest_MD5 = 0;
@@ -1367,7 +1365,7 @@ align_by_pairs        (\%{$unique_source_file{$fset_a}}      , # in
 
 
 if ( $max_processes == 0) {
-    # Multiprocessing is disabled    
+    # Multiprocessing is disabled
     my $part = count_filesets ( $fset_a, $fset_b, \@files_added_tot, \@files_removed_tot, \@file_pairs_tot , 0, \%Language);
     %Results_by_File = %{$part->{'results_by_file'}};
     %Results_by_Language= %{$part->{'results_by_language'}};
@@ -1376,7 +1374,7 @@ if ( $max_processes == 0) {
     %Ignored = ( %Ignored, %{$part->{'ignored'}});
     %alignment = %{$part->{'alignment'}};
     $n_filepairs_compared = $part->{'n_filepairs_compared'};
-    push ( @Errors, @{$part->{'errors'}});   
+    push ( @Errors, @{$part->{'errors'}});
 }
 else {
     # Multiprocessing is enabled
@@ -1409,7 +1407,7 @@ else {
         foreach my $this_language ( keys %$part_result_by_language ) {
             my $counts = $part_result_by_language->{$this_language};
             foreach my $inner_key ( keys %$counts ) {
-                $Results_by_Language{$this_language}{$inner_key} += 
+                $Results_by_Language{$this_language}{$inner_key} +=
                     $counts->{$inner_key};
             }
         }
@@ -1419,7 +1417,7 @@ else {
             foreach my $inner_key ( keys %$counts ) {
                 my $statuses = $counts->{$inner_key};
                 foreach my $inner_status ( keys %$statuses ) {
-                    $Delta_by_Language{$this_language}{$inner_key}{$inner_status} += 
+                    $Delta_by_Language{$this_language}{$inner_key}{$inner_status} +=
                           $counts->{$inner_key}->{$inner_status};
                 }
             }
@@ -1431,19 +1429,18 @@ else {
                 $alignment{$label}{$key} = 1;
             }
         }
-       
+
         %Results_by_File = ( %Results_by_File, %$part_result_by_file );
         %Delta_by_File = ( %Delta_by_File, %$part_delta_by_file );
         %Ignored = (%Ignored, %$part_ignored );
         push ( @Errors, @$part_errors );
     } );
 
-    
     my $num_filepairs_per_part = ceil ( ( scalar @file_pairs_tot ) / $num_processes );
     my $num_filesremoved_per_part = ceil ( ( scalar @files_removed_tot ) / $num_processes );
     my $num_filesadded_per_part = ceil ( ( scalar @files_added_tot ) / $num_processes );
 
-    while ( 1 ) { 
+    while ( 1 ) {
         my @files_added_part = splice @files_added_tot, 0, $num_filesadded_per_part;
         my @files_removed_part = splice @files_removed_tot, 0, $num_filesremoved_per_part;
         my @filepairs_part = splice @file_pairs_tot, 0, $num_filepairs_per_part;
@@ -1453,7 +1450,7 @@ else {
         }
 
         $pm->start() and next;
-        my $count_result = count_filesets ( $fset_a, $fset_b,  
+        my $count_result = count_filesets ( $fset_a, $fset_b,
             \@files_added_part, \@files_removed_part, \@filepairs_part, 1 , \%Language );
         $pm->finish(0 , $count_result);
     }
@@ -1463,7 +1460,7 @@ else {
 
 # Write alignment data, if needed
 if ($opt_diff_alignment) {
-    write_alignment_data ( $opt_diff_alignment, $n_filepairs_compared, \%alignment ) ; 
+    write_alignment_data ( $opt_diff_alignment, $n_filepairs_compared, \%alignment ) ;
 }
 
 #use Data::Dumper;
@@ -1570,12 +1567,12 @@ my @results_parts  = ();
 my @sorted_files = sort keys %unique_source_file;
 
 if ( $max_processes == 0) {
-    # Multiprocessing is disabled    
+    # Multiprocessing is disabled
     my $part = count_files ( \@sorted_files , 0, \%Language);
     %Results_by_File = %{$part->{'results_by_file'}};
     %Results_by_Language= %{$part->{'results_by_language'}};
     %Ignored = ( %Ignored, %{$part->{'ignored'}});
-    push ( @Errors, @{$part->{'errors'}});   
+    push ( @Errors, @{$part->{'errors'}});
 }
 else {
     # Do not create more processes than the number of files to be processed
@@ -1604,7 +1601,7 @@ else {
         foreach my $this_language ( keys %$part_result_by_language ) {
             my $counts = $part_result_by_language->{$this_language};
             foreach my $inner_key ( keys %$counts ) {
-                $Results_by_Language{$this_language}{$inner_key} += 
+                $Results_by_Language{$this_language}{$inner_key} +=
                     $counts->{$inner_key};
             }
         }
@@ -1613,7 +1610,7 @@ else {
         push ( @Errors, @$part_errors);
     } );
     my $num_files_per_part = ceil ( ( scalar @sorted_files ) / $num_processes );
-    while ( my @part = splice @sorted_files, 0 , $num_files_per_part ) { 
+    while ( my @part = splice @sorted_files, 0 , $num_files_per_part ) {
         $pm->start() and next;
         my $count_result = count_files ( \@part, 1, \%Language );
         $pm->finish(0 , $count_result);
@@ -1666,6 +1663,10 @@ if ($opt_count_diff) {
 sub get_max_processes {			     # {{{1
     # If user has specified valid number of processes, use that.
     if (defined $opt_processes) {
+		eval "use Parallel::ForkManager 0.7.6;";
+		if ( defined $Parallel::ForkManager::VERSION ) {
+			$HAVE_Parallel_ForkManager = 1;
+		}
         if ( $opt_processes !~ /^\d+$/ ) {
             print "Error: processes option argument must be numeric.\n";
             exit 1;
@@ -1752,7 +1753,7 @@ sub count_files {
         if ( ! $counter_type ) {
             # Multithreading disabled
             $nCounted++;
-            
+
             printf "Counting:  %d\r", $nCounted
                  unless (!$opt_progress_rate or ($nCounted % $opt_progress_rate));
         }
@@ -1818,7 +1819,7 @@ sub count_files {
         $p_rbl{$Language{$file}}{'blank'}   += $blank_count  ;
         $p_rbl{$Language{$file}}{'comment'} += $comment_count;
 
-    }    
+    }
     return {
         "ignored" => \%p_ignored,
         "errors"  => \@p_errors,
@@ -1838,7 +1839,7 @@ sub count_filesets {
     my %Language = %$language_hash;
 
     my $nCounted = 0;
-  
+
     my %already_counted = (); # already_counted{ filename } = 1
 
     if (!@$file_pairs) {
@@ -1940,12 +1941,12 @@ sub count_filesets {
         $p_dbf{ $f }{'code'}{'removed'}    =
             $all_line_count - $blank_count - $comment_count;
     }
-    
+
     my $n_file_pairs_compared = 0;
     # Don't know ahead of time how many file pairs will be compared
     # since duplicates are weeded out below.  The answer is
     # scalar @file_pairs only if there are no duplicates.
- 
+
     foreach my $pair (@$file_pairs) {
         my $file_L = $pair->[0];
         my $file_R = $pair->[1];
@@ -2025,7 +2026,7 @@ sub count_filesets {
             if ($contents_are_same) {
                 $p_alignment{"pairs"}{"  == $str"} = 1;
             } else {
-                $p_alignment{"pairs"}{"  != $str"} = 1;                
+                $p_alignment{"pairs"}{"  != $str"} = 1;
             }
             ++$n_file_pairs_compared;
         }
