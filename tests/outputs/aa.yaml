@@ -2,20 +2,20 @@
 # github.com/AlDanial/cloc
 header : 
   cloc_url           : github.com/AlDanial/cloc
-  cloc_version       : 1.73
-  elapsed_seconds    : 0.0130398273468018
+  cloc_version       : 1.75
+  elapsed_seconds    : 0.00842499732971191
   n_files            : 1
   n_lines            : 399
-  files_per_second   : 76.6881319364452
-  lines_per_second   : 30598.5646426417
-  report_file        : outputs/aa.yaml
+  files_per_second   : 118.694399637773
+  lines_per_second   : 47359.0654554716
+  report_file        : aa.yaml
 C :
   nFiles: 1
   blank: 79
-  comment: 35
-  code: 285
+  comment: 34
+  code: 286
 SUM: 
   blank: 79
-  comment: 35
-  code: 285
+  comment: 34
+  code: 286
   nFiles: 1

@@ -6521,7 +6521,6 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*xml_markup.comment!'  ],
                             ],
     'C'                  => [
-[ 'remove_matches'      , '([0-9]+.*)+\s+/' ], # REMOVE ME
                                 [ 'call_regexp_common'  , 'C++'    ],
 #                               [ 'remove_matches'      , '^\s*//' ], # C99
                                 [ 'remove_inline'       , '//.*$'  ], # C99
