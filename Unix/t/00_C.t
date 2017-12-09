@@ -391,6 +391,11 @@ my @Tests = (
                     'args' => '../tests/inputs/qsort_demo.m',
                 },
                 {
+                    'name' => 'Oracle PL/SQL',
+                    'ref'  => '../tests/outputs/bubs_tak_ard.prc.yaml',
+                    'args' => '../tests/inputs/bubs_tak_ard.prc',
+                },
+                {
                     'name' => 'Pascal',
                     'ref'  => '../tests/outputs/Pascal.pas.yaml',
                     'args' => '../tests/inputs/Pascal.pas',
