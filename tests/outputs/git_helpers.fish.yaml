@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.75
+  elapsed_seconds    : 0.00541305541992188
+  n_files            : 1
+  n_lines            : 123
+  files_per_second   : 184.738548273432
+  lines_per_second   : 22722.8414376321
+  report_file        : ../outputs/git_helpers.fish.yaml
+Fish Shell :
+  nFiles: 1
+  blank: 14
+  comment: 47
+  code: 62
+SUM: 
+  blank: 14
+  comment: 47
+  code: 62
+  nFiles: 1

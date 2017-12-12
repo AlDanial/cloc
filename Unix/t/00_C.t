@@ -159,6 +159,11 @@ my @Tests = (
                     'args' => '../tests/inputs/elixir.ex',
                 },
                 {
+                    'name' => 'Fish Shell',
+                    'ref'  => '../tests/outputs/git_helpers.fish.yaml',
+                    'args' => '../tests/inputs/git_helpers.fish',
+                },
+                {
                     'name' => 'Focus',
                     'ref'  => '../tests/outputs/FOCUS.focexec.yaml',
                     'args' => '../tests/inputs/FOCUS.focexec',
