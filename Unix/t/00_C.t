@@ -521,6 +521,11 @@ my @Tests = (
                     'args' => '../tests/inputs/style.scss',
                 },
                 {
+                    'name' => 'Skylark',
+                    'ref'  => '../tests/outputs/build.bzl.yaml',
+                    'args' => '../tests/inputs/build.bzl',
+                },
+                {
                     'name' => 'Slim',
                     'ref'  => '../tests/outputs/Slim.html.slim.yaml',
                     'args' => '../tests/inputs/Slim.html.slim',
