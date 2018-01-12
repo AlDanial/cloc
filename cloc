@@ -4062,7 +4062,6 @@ sub replace_git_hash_with_tarfile {          # {{{1
     #       Simply make a tar file of all files in the git repo.
 
 #print "ra_arg_list 1: @{$ra_arg_list}\n";
-    return if $ON_WINDOWS;
 
     my $hash_regex = qr/^([a-f\d]{5,40}|master|HEAD)$/;
     my %replacement_arg_list = ();
@@ -4081,7 +4080,7 @@ sub replace_git_hash_with_tarfile {          # {{{1
     }
     return unless %git_hash;
 
-    my $have_tar_git = external_utility_exists("tar --version") &&
+    my $have_tar_git = external_utility_exists($ON_WINDOWS ? "7z" : "tar --version") &&
                        external_utility_exists("git --version");
     if (!$have_tar_git) {
         warn "One or more inputs looks like a git hash but " .
@@ -4177,7 +4176,7 @@ sub git_archive {                            # {{{1
     # using the given argument(s).
     my ($args, ) = @_;
     print "-> git_archive($args)\n" if $opt_v > 2;
-    my ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, SUFFIX => '.tar');  # delete on exit
+    my ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, SUFFIX => $ON_WINDOWS ? '.zip' : '.tar');  # delete on exit
     my $cmd = "git archive -o $Tarfile $args";
     print  $cmd, "\n" if $opt_v;
     system $cmd;
@@ -11639,15 +11638,11 @@ sub uncompress_archive_cmd {                 # {{{1
             $missing = "dpkg-deb";
         }
     } elsif ($ON_WINDOWS and $archive_file =~ /\.zip$/i) {
-        # zip on Windows, guess default Winzip install location
-        $extract_cmd = "";
-        my $WinZip = '"C:\\Program Files\\WinZip\\WinZip32.exe"';
-        if (external_utility_exists($WinZip)) {
-            $extract_cmd = "$WinZip -e -o \"$archive_file\" .";
-#print "trace 5 extract_cmd=[$extract_cmd]\n";
+        # use 7zip on Windows
+        if (external_utility_exists("7z")) {
+             $extract_cmd = "7z x \"$archive_file\" -o\".\"";
         } else {
-#print "trace 6\n";
-            $missing = $WinZip;
+            $missing = "7z";
         }
     }
     print "<- uncompress_archive_cmd\n" if $opt_v > 2;
