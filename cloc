@@ -149,14 +149,13 @@ Usage:
     $script [options] <file(s)/dir(s)/git hash(es)>
         Count physical lines of source code and comments in the given files
         (may be archives such as compressed tarballs or zip files) and/or
-        recursively below the given directories or git commit hashes (Unix
-        only).
+        recursively below the given directories or git commit hashes.
         Example:    cloc src/ include/ main.c
 
     $script [options] --diff <set1>  <set2>
         Compute differences of physical lines of source code and comments
         between any pairwise combination of directory names, archive
-        files or git commit hashes (Unix only).
+        files or git commit hashes.
         Example:    cloc --diff Python-3.5.tar.xz python-3.6/
 
 $script --help  shows full documentation on the options.
@@ -234,11 +233,10 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
    --diff <set1> <set2>      Compute differences in code and comments between
                              source file(s) of <set1> and <set2>.  The inputs
                              may be any mix of files, directories, archives,
-                             or git commit hashes (Unix only).
-                             Use --diff-alignment to generate a list showing
-                             which file pairs where compared.  See also
-                             --count-and-diff, --diff-alignment, --diff-timeout,
-                             --ignore-case, --ignore-whitespace.
+                             or git commit hashes.  Use --diff-alignment to
+                             generate a list showing which file pairs where
+                             compared.  See also --count-and-diff, --diff-alignment,
+                             --diff-timeout, --ignore-case, --ignore-whitespace.
    --diff-timeout <N>        Ignore files which take more than <N> seconds
                              to process.  Default is 10 seconds.
                              (Large files with many repeated lines can cause
@@ -4080,7 +4078,7 @@ sub replace_git_hash_with_tarfile {          # {{{1
     }
     return unless %git_hash;
 
-    my $have_tar_git = external_utility_exists($ON_WINDOWS ? "7z" : "tar --version") &&
+    my $have_tar_git = external_utility_exists($ON_WINDOWS ? "unzip" : "tar --version") &&
                        external_utility_exists("git --version");
     if (!$have_tar_git) {
         warn "One or more inputs looks like a git hash but " .
@@ -11638,11 +11636,11 @@ sub uncompress_archive_cmd {                 # {{{1
             $missing = "dpkg-deb";
         }
     } elsif ($ON_WINDOWS and $archive_file =~ /\.zip$/i) {
-        # use 7zip on Windows
-        if (external_utility_exists("7z")) {
-             $extract_cmd = "7z x \"$archive_file\" -o\".\"";
+        # use unzip on Windows (comes with git-for-Windows)
+        if (external_utility_exists("unzip")) {
+             $extract_cmd = "unzip -qq -d . \"$archive_file\" ";
         } else {
-            $missing = "7z";
+            $missing = "unzip";
         }
     }
     print "<- uncompress_archive_cmd\n" if $opt_v > 2;
