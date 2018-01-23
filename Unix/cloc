@@ -2365,7 +2365,7 @@ sub diff_yaml_report {                       # {{{1
     foreach my $S (qw(added same modified removed)) {
         push @results, "$S :";
         foreach my $F_or_L (keys %{$rhhh_count}) {
-            push @results, "  $F_or_L :";
+            push @results, "  " . rm_leading_tempdir($F_or_L, \%TEMP_DIR) . " :";
             foreach my $k (keys %{$rhhh_count->{$F_or_L}}) {
                 next if $k eq "lang"; # present only in those cases
                                       # where code exists for action $S
@@ -2403,7 +2403,7 @@ sub diff_json_report {                       # {{{1
     foreach my $S (qw(added same modified removed)) {
         push @results, " \"$S\" : {";
         foreach my $F_or_L (keys %{$rhhh_count}) {
-            push @results, "  \"$F_or_L\" : {";
+            push @results, "  \"" . rm_leading_tempdir($F_or_L, \%TEMP_DIR) . "\" : {";
             foreach my $k (keys %{$rhhh_count->{$F_or_L}}) {
                 next if $k eq "lang"; # present only in those cases
                                       # where code exists for action $S
@@ -3108,7 +3108,7 @@ sub generate_report {                        # {{{1
             }
         } elsif ($opt_yaml or $opt_json) {
             my ($Q, $open_B, $close_B, $start, $C) = yaml_to_json_separators();
-            push @results,"${Q}$lang_or_file${Q} :$open_B";
+            push @results,"${Q}" . rm_leading_tempdir($lang_or_file, \%TEMP_DIR). "${Q} :$open_B";
             push @results,"  ${Q}nFiles${Q}: " . $rhh_count->{$lang_or_file}{'nFiles'} . $C
                 unless $BY_FILE;
             if ($opt_by_percent) {
