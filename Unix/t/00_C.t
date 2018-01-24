@@ -204,6 +204,11 @@ my @Tests = (
                     'args' => '../tests/inputs/fsharp_script.fsx',
                 },
                 {
+                    'name' => 'Gencat NLS',
+                    'ref'  => '../tests/outputs/Gencat-NLS.msg.yaml',
+                    'args' => '../tests/inputs/Gencat-NLS.msg',
+                },
+                {
                     'name' => 'Glade',
                     'ref'  => '../tests/outputs/glade-search-popover.ui.yaml',
                     'args' => '../tests/inputs/glade-search-popover.ui',

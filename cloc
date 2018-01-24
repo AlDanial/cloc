@@ -6189,6 +6189,7 @@ sub set_constants {                          # {{{1
             'mll'         => 'OCaml'                 ,
             'm'           => 'MATLAB/Mathematica/Objective C/MUMPS/Mercury' ,
             'mm'          => 'Objective C++'         ,
+            'msg'         => 'Gencat NLS'            ,
             'mt'          => 'Mathematica'           ,
             'wl'          => 'Mathematica'           ,
             'wlt'         => 'Mathematica'           ,
@@ -6655,6 +6656,7 @@ sub set_constants {                          # {{{1
     'ERB'                => [
                                 [ 'remove_between_general', '<%#', '%>' ],
                             ],
+    'Gencat NLS'         => [   [ 'remove_matches'       , '^\$ .*$' ], ],
     'NASTRAN DMAP'       => [
                                 [ 'remove_matches'      , '^\s*\$' ],
                                 [ 'remove_inline'       , '\$.*$'  ],
@@ -7436,6 +7438,7 @@ sub set_constants {                          # {{{1
     'D'                  =>     '\\\\$'         ,
     'Dart'               =>     '\\\\$'         ,
     'Expect'             =>     '\\\\$'         ,
+    'Gencat NLS'         =>     '\\\\$'         ,
     'Go'                 =>     '\\\\$'         ,
     'IDL'                =>     '\$\\$'         ,
     'Java'               =>     '\\\\$'         ,
@@ -8245,6 +8248,7 @@ sub set_constants {                          # {{{1
     'zim'                          =>   4.21,
     'zlisp'                        =>   1.25,
     'Expect'                       => 2.00,
+    'Gencat NLS'                   => 1.50,
     'C/C++ Header'                 => 1.00,
     'inc'                          => 1.00,
     'lex'                          => 1.00,
