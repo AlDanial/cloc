@@ -3,19 +3,19 @@
 header : 
   cloc_url           : github.com/AlDanial/cloc
   cloc_version       : 1.75
-  elapsed_seconds    : 0.0146248340606689
+  elapsed_seconds    : 0.0155718326568604
   n_files            : 1
-  n_lines            : 17
-  files_per_second   : 68.376844198823
-  lines_per_second   : 1162.40635137999
-  report_file        : C.msg
+  n_lines            : 20
+  files_per_second   : 64.2185169874298
+  lines_per_second   : 1284.3703397486
+  report_file        : Gencat-NLS.msg.yaml
 Gencat NLS :
   nFiles: 1
-  blank: 0
-  comment: 5
-  code: 12
+  blank: 1
+  comment: 4
+  code: 15
 SUM: 
-  blank: 0
-  comment: 5
-  code: 12
+  blank: 1
+  comment: 4
+  code: 15
   nFiles: 1

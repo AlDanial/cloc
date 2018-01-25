@@ -13,7 +13,8 @@ $quote "
 7 "\t[--null] [pattern] [file ...]\n"
 8 "Binary file %s matches\n"
 9 "%s (BSD grep) %s\n"
-10 "cloc \\ but not a line continued"
-12 "cloc a line is continued\\
+10 "cloc \ but not a line continued"
+11 "cloc a line is continued\
 until the bitter end"
-$ empty:1 comment:4 code:14
+12 "cloc \\ but not a line continued"
+$ cloc should give empty:1 comment:4 code:15
