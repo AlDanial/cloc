@@ -6421,18 +6421,20 @@ sub set_constants {                          # {{{1
             );
 # 1}}}
 %{$rh_Language_by_File}      = (             # {{{1
-            'build.xml'      => 'Ant/XML'            ,
-            'CMakeLists.txt' => 'CMake'              ,
-            'Jamfile'        => 'Jam'                ,
-            'Jamrules'       => 'Jam'                ,
-            'Makefile'       => 'make'               ,
-            'makefile'       => 'make'               ,
-            'gnumakefile'    => 'make'               ,
-            'Gnumakefile'    => 'make'               ,
-            'pom.xml'        => 'Maven/XML'          ,
-            'Rakefile'       => 'Ruby'               ,
-            'rakefile'       => 'Ruby'               ,
-            'Dockerfile'     => 'Dockerfile'         ,
+            'build.xml'         => 'Ant/XML'            ,
+            'CMakeLists.txt'    => 'CMake'              ,
+            'Jamfile'           => 'Jam'                ,
+            'Jamrules'          => 'Jam'                ,
+            'Makefile'          => 'make'               ,
+            'makefile'          => 'make'               ,
+            'gnumakefile'       => 'make'               ,
+            'Gnumakefile'       => 'make'               ,
+            'pom.xml'           => 'Maven/XML'          ,
+            'Rakefile'          => 'Ruby'               ,
+            'rakefile'          => 'Ruby'               ,
+            'Dockerfile'        => 'Dockerfile'         ,
+            'Dockerfile.build'  => 'Dockerfile'         ,
+            'Dockerfile.test'   => 'Dockerfile'         ,
             );
 # 1}}}
 %{$rhaa_Filters_by_Language} = (             # {{{1
