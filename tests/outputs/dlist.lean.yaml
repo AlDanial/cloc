@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.75
+  elapsed_seconds    : 0.00614404678344727
+  n_files            : 1
+  n_lines            : 146
+  files_per_second   : 162.75917733799
+  lines_per_second   : 23762.8398913465
+  report_file        : ../outputs/dlist.lean.yaml
+Lean :
+  nFiles: 1
+  blank: 36
+  comment: 20
+  code: 90
+SUM: 
+  blank: 36
+  comment: 20
+  code: 90
+  nFiles: 1

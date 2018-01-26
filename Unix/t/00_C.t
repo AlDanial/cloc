@@ -311,6 +311,11 @@ my @Tests = (
                     'args' => '../tests/inputs/hello.kt',
                 },
                 {
+                    'name' => 'Lean',
+                    'ref'  => '../tests/outputs/dlist.lean.yaml',
+                    'args' => '../tests/inputs/dlist.lean',
+                },
+                {
                     'name' => 'LFE',
                     'ref'  => '../tests/outputs/ping_pong.lfe.yaml',
                     'args' => '../tests/inputs/ping_pong.lfe',

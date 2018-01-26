@@ -6161,6 +6161,7 @@ sub set_constants {                          # {{{1
             'ksh'         => 'Korn Shell'            ,
             'kt'          => 'Kotlin'                ,
             'kts'         => 'Kotlin'                ,
+            'lean'        => 'Lean'                  ,
             'lhs'         => 'Haskell'               ,
             'l'           => 'lex'                   ,
             'less'        => 'LESS'                  ,
@@ -6854,9 +6855,12 @@ sub set_constants {                          # {{{1
                             ],
     'Kotlin'             => [
                                 [ 'call_regexp_common'  , 'C++'    ],
-#                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
-#                               [ 'remove_between_general', '/*', '*/' ],
+                            ],
+    'Lean'               => [
+                                [ 'remove_between_general', '/-', '-/' ],
+                                [ 'remove_matches'      , '^\s*--' ],
+                                [ 'remove_inline'       , '--.*$'  ],
                             ],
     'LESS'               => [
 #                               [ 'remove_matches'      , '^\s*//' ],
@@ -7917,6 +7921,7 @@ sub set_constants {                          # {{{1
     'ladder logic'                 =>   2.22,
     'lambit/l'                     =>   1.25,
     'lattice c'                    =>   0.63,
+    'Lean'                         =>   3.00,
     'LESS'                         =>   1.50,
     'LFE'                          =>   1.25,
     'liana'                        =>   0.63,
