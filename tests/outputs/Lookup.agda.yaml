@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.75
+  elapsed_seconds    : 0.00518894195556641
+  n_files            : 1
+  n_lines            : 51
+  files_per_second   : 192.717515162654
+  lines_per_second   : 9828.59327329535
+  report_file        : ../outputs/Lookup.agda.yaml
+Agda :
+  nFiles: 1
+  blank: 10
+  comment: 3
+  code: 38
+SUM: 
+  blank: 10
+  comment: 3
+  code: 38
+  nFiles: 1

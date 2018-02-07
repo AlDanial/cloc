@@ -4,6 +4,11 @@ use strict;
 use Test::More;
 my @Tests = (
                 {
+                    'name' => 'Agda',
+                    'ref'  => '../tests/outputs/Lookup.agda.yaml',
+                    'args' => '../tests/inputs/Lookup.agda',
+                },
+                {
                     'name' => 'AsciiDoc',
                     'ref'  => '../tests/outputs/asciidoctor.adoc.yaml',
                     'args' => '../tests/inputs/asciidoctor.adoc',
