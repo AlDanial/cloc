@@ -6120,6 +6120,9 @@ sub set_constants {                          # {{{1
             'hb'          => 'Harbour'               ,
             'hrl'         => 'Erlang'                ,
             'hs'          => 'Haskell'               ,
+            'hcl'         => 'HCL'                   ,
+            'tf'          => 'HCL'                   ,
+            'nomad'       => 'HCL'                   ,
             'hlsl'        => 'HLSL'                  ,
             'shader'      => 'HLSL'                  ,
             'cg'          => 'HLSL'                  ,
@@ -6777,11 +6780,6 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '\&\&.*$' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
-    'HLSL'               => [
-#                               [ 'remove_matches'      , '^\s*//' ],
-                                [ 'remove_inline'       , '//.*$'  ],
-                                [ 'call_regexp_common'  , 'C++'    ],
-                            ],
     'Haml'               => [
                                 [ 'remove_haml_block'   ,          ],
                                 [ 'remove_html_comments',          ],
@@ -6789,6 +6787,14 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*-#\s*\S+' ],
                             ],
     'Haxe'               => [
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'HCL'                => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'HLSL'               => [
+                                [ 'remove_inline'       , '//.*$'  ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'HTML'               => [
@@ -7845,6 +7851,7 @@ sub set_constants {                          # {{{1
     'gw basic'                     =>   0.82,
     'Harbour'                      =>   2.00,
     'Haskell'                      =>   2.11,
+    'HCL'                          =>   2.50,
     'high c'                       =>   0.63,
     'hlevel'                       =>   1.38,
     'hp basic'                     =>   0.63,

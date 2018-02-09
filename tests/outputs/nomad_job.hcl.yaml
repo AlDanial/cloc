@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.75
+  elapsed_seconds    : 0.00662708282470703
+  n_files            : 1
+  n_lines            : 93
+  files_per_second   : 150.895956252698
+  lines_per_second   : 14033.3239315009
+  report_file        : ../outputs/nomad_job.hcl.yaml
+HCL :
+  nFiles: 1
+  blank: 14
+  comment: 36
+  code: 43
+SUM: 
+  blank: 14
+  comment: 36
+  code: 43
+  nFiles: 1

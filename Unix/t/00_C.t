@@ -276,6 +276,11 @@ my @Tests = (
                     'args' => '../tests/inputs/Sys.hx',
                 },
                 {
+                    'name' => 'HCL',
+                    'ref'  => '../tests/outputs/nomad_job.hcl.yaml',
+                    'args' => '../tests/inputs/nomad_job.hcl',
+                },
+                {
                     'name' => 'IDL 1',
                     'ref'  => '../tests/outputs/IDL.idl.yaml',
                     'args' => '../tests/inputs/IDL.idl',
