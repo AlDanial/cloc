@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.75
+  elapsed_seconds    : 0.00647306442260742
+  n_files            : 1
+  n_lines            : 23
+  files_per_second   : 154.486335174954
+  lines_per_second   : 3553.18570902394
+  report_file        : ../outputs/swig_example.i.yaml
+SWIG :
+  nFiles: 1
+  blank: 4
+  comment: 4
+  code: 15
+SUM: 
+  blank: 4
+  comment: 4
+  code: 15
+  nFiles: 1

@@ -586,6 +586,11 @@ my @Tests = (
                     'args' => '../tests/inputs/tour.swift',
                 },
                 {
+                    'name' => 'SWIG',
+                    'ref'  => '../tests/outputs/swig_example.i.yaml',
+                    'args' => '../tests/inputs/swig_example.i',
+                },
+                {
                     'name' => 'Tcl/Tk',
                     'ref'  => '../tests/outputs/Tk.yaml',
                     'args' => '../tests/inputs/Tk',
