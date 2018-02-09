@@ -12,3 +12,4 @@ Dependencies:
   Algorithm::Diff
   Regexp::Common
   Digest::MD5
+  Parallel::ForkManager

@@ -5,7 +5,7 @@
 * * *
 cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.
 
-Latest release:  v1.74 (September 8, 2017)
+Latest release:  v1.76 (February 9, 2018)
 
 Hosted at http://cloc.sourceforge.net/ since August 2006, cloc began the
 transition to GitHub in September 2015.
@@ -677,17 +677,11 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
                              created with the --report-file option.  Makes
                              a cumulative set of results containing the
                              sum of data from the individual report files.
-   --processes=NUM           Sets the maximum number of processes that cloc
-                             uses. If this parameter is set to 0, multi-
-                             processing will be disabled. On Linux and MacOS
-                             systems, cloc creates up to one process per core
-                             by default if a recent version of the
-                             Parallel::ForkManager module is available.
-                             Multiprocessing is disabled by default if cloc
-                             is unable to determine the number of CPU cores.
-                             Multiprocessing is not supported on Windows systems
-                             and on systems which don't have a recent version
-                             of the Parallel::ForkManager module.
+   --processes=NUM           [Available only on systems with a recent version
+                             of the Parallel::ForkManager module.  Not
+                             available on Windows.] Sets the maximum number of
+                             cores that cloc uses.  The default value of 0
+                             disables multiprocessing.
    --unix                    Override the operating system autodetection
                              logic and run in UNIX mode.  See also
                              --windows, --show-os.
@@ -867,15 +861,17 @@ ABAP                       (abap)
 ActionScript               (as)
 Ada                        (ada, adb, ads, pad)
 ADSO/IDSM                  (adso)
+Agda                       (agda, lagda)
 AMPLE                      (ample, dofile, startup)
 Ant                        (build.xml, build.xml)
 ANTLR Grammar              (g, g4)
 Apex Trigger               (trigger)
 Arduino Sketch             (ino, pde)
+AsciiDoc                   (adoc, asciidoc)
 ASP                        (asa, asp)
 ASP.NET                    (asax, ascx, asmx, aspx, master, sitemap, webinfo)
 AspectJ                    (aj)
-Assembly                   (asm, s, S)
+Assembly                   (asm, S, s)
 AutoHotkey                 (ahk)
 awk                        (awk)
 Blade                      (blade.php)
@@ -886,7 +882,7 @@ builder                    (xml.builder)
 C                          (c, ec, pgc)
 C Shell                    (csh, tcsh)
 C#                         (cs)
-C++                        (C, c++, cc, cpp, CPP, cxx, pcc)
+C++                        (C, c++, cc, CPP, cpp, cxx, pcc)
 C/C++ Header               (H, h, hh, hpp, hxx)
 CCS                        (ccs)
 Chapel                     (chpl)
@@ -895,7 +891,7 @@ Clojure                    (clj)
 ClojureC                   (cljc)
 ClojureScript              (cljs)
 CMake                      (cmake, CMakeLists.txt)
-COBOL                      (CBL, cbl, COB, cob)
+COBOL                      (cbl, CBL, COB, cob)
 CoffeeScript               (coffee)
 ColdFusion                 (cfm)
 ColdFusion CFScript        (cfc)
@@ -912,7 +908,7 @@ Dart                       (dart)
 diff                       (diff)
 DITA                       (dita)
 DOORS Extension Language   (dxl)
-DOS Batch                  (bat, BAT, BTM, btm, CMD, cmd)
+DOS Batch                  (bat, BAT, BTM, btm, cmd, CMD)
 Drools                     (drl)
 DTD                        (dtd)
 dtrace                     (d)
@@ -925,6 +921,7 @@ Erlang                     (erl, hrl)
 Expect                     (exp)
 F#                         (fsi, fs, fs)
 F# Script                  (fsx)
+Fish Shell                 (fish)
 Focus                      (focexec)
 Forth                      (4th, e4, f83, fb, forth, fpm, fr, frt, ft, fth, rx, fs, f, for)
 Fortran 77                 (F, f77, F77, FOR, ftn, FTN, pfo, f, for)
@@ -932,6 +929,7 @@ Fortran 90                 (F90, f90)
 Fortran 95                 (f95, F95)
 Freemarker Template        (ftl)
 GDScript                   (gd)
+Gencat NLS                 (msg)
 Glade                      (glade, ui)
 GLSL                       (comp, frag, geom, glsl, tesc, tese, vert)
 Go                         (go)
@@ -943,6 +941,7 @@ Handlebars                 (handlebars, hbs)
 Harbour                    (hb)
 Haskell                    (hs, lhs)
 Haxe                       (hx)
+HCL                        (hcl, nomad, tf)
 HLSL                       (cg, cginc, hlsl, shader)
 HTML                       (htm, html)
 IDL                        (idl, pro)
@@ -960,6 +959,7 @@ Julia                      (jl)
 Kermit                     (ksc)
 Korn Shell                 (ksh)
 Kotlin                     (kt, kts)
+Lean                       (lean)
 LESS                       (less)
 lex                        (l)
 LFE                        (lfe)
@@ -990,6 +990,7 @@ Objective C++              (mm)
 OCaml                      (ml, mli, mll, mly)
 OpenCL                     (cl)
 Oracle Forms               (fmt)
+Oracle PL/SQL              (bod, fnc, prc, spc, trg)
 Oracle Reports             (rex)
 Pascal                     (dpr, p, pas)
 Pascal/Puppet              (pp)
@@ -999,9 +1000,11 @@ PHP                        (php, php3, php4, php5, phtml)
 PHP/Pascal                 (inc)
 Pig Latin                  (pig)
 PL/I                       (pl1)
+PL/M                       (lit, plm)
 PO File                    (po)
 PowerBuilder               (sra, srf, srm, srs, sru, srw)
 PowerShell                 (ps1, psd1, psm1)
+ProGuard                   (pro)
 Prolog                     (P, pl, pro)
 Protocol Buffers           (proto)
 Pug                        (pug)
@@ -1011,8 +1014,9 @@ QML                        (qml)
 Qt                         (ui)
 Qt Linguist                (ts)
 Qt Project                 (pro)
-R                          (r, R)
+R                          (R, r)
 Racket                     (rkt, rktl, scrbl)
+RAML                       (raml)
 RapydScript                (pyj)
 Razor                      (cshtml)
 Rexx                       (rexx)
@@ -1027,6 +1031,7 @@ Scheme                     (sc, sch, scm, sld, sls, ss)
 sed                        (sed)
 SKILL                      (il)
 SKILL++                    (ils)
+Skylark                    (bzl)
 Slice                      (ice)
 Slim                       (slim)
 Smalltalk                  (st, cs)
@@ -1034,13 +1039,14 @@ Smarty                     (smarty, tpl)
 Softbridge Basic           (SBL, sbl)
 Solidity                   (sol)
 Specman e                  (e)
-SQL                        (psql, SQL, sql)
+SQL                        (psql, sql, SQL)
 SQL Data                   (data.sql)
 SQL Stored Procedure       (spc.sql, spoc.sql, sproc.sql, udf.sql)
 Standard ML                (fun, sig, sml)
 Stata                      (do, DO)
 Stylus                     (styl)
 Swift                      (swift)
+SWIG                       (i)
 Tcl/Tk                     (itk, tcl, tk)
 Teamcenter met             (met)
 Teamcenter mth             (mth)
@@ -1058,8 +1064,8 @@ Velocity Template Language (vm)
 Verilog-SystemVerilog      (sv, svh, v)
 VHDL                       (VHD, vhd, vhdl, VHDL)
 vim script                 (vim)
-Visual Basic               (bas, cls, ctl, dsr, frm, VB, vb, vba, VBA, vbs, VBS)
-Visual Fox Pro             (sca, SCA)
+Visual Basic               (bas, cls, ctl, dsr, frm, VB, vb, VBA, vba, VBS, vbs)
+Visual Fox Pro             (SCA, sca)
 Visualforce Component      (component)
 Visualforce Page           (page)
 Vuejs Component            (vue)
@@ -1073,11 +1079,11 @@ XAML                       (xaml)
 xBase                      (prg)
 xBase Header               (ch)
 XHTML                      (xhtml)
-XMI                        (xmi, XMI)
-XML                        (XML, xml)
+XMI                        (XMI, xmi)
+XML                        (xml, XML)
 XQuery                     (xq, xquery)
 XSD                        (XSD, xsd)
-XSLT                       (xsl, XSL, XSLT, xslt)
+XSLT                       (XSL, xsl, XSLT, xslt)
 yacc                       (y)
 YAML                       (yaml, yml)
 zsh                        (zsh)
@@ -2463,6 +2469,10 @@ for http://studybay.com.
 
 <a href="http://www.forallworld.com/cloc-grof-sornyi-kodot/">Hungarian translation</a>
 courtesy of <a href="http://www.forallworld.com/">Zsolt Boros</a>.
+
+<a href=https://github.com/stsnel>Sietse Snel</a> implemented the parallel
+processing capability available with the <tt>--processes=<i>N</i></tt>
+switch.
 
 The development of cloc was partially funded by the Northrop Grumman
 Corporation.

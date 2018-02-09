@@ -1,6 +1,6 @@
 #   Copyright
 #
-#      Copyright (C) 2017 Al Danial <al.danial@gmail.com>.
+#      Copyright (C) 2018 Al Danial <al.danial@gmail.com>.
 #      Copyright (C) 2010-2017 Jari Aalto <jari.aalto@cante.net>
 #
 #   License
@@ -93,7 +93,7 @@ name per line.  Only exact matches are counted;
 relative path names will be resolved starting from
 the directory where cloc is invoked.
 See also
-B<--exclude-list-file>
+B<--exclude-list-file>.
 
 
 =item B<--vcs=VCS>
@@ -133,6 +133,7 @@ This causes performance to drop noticeably.
 =item B<--autoconf>
 
 Count .in files (as processed by GNU autoconf) of recognized languages.
+See also B<--no-autogen>.
 
 =item B<--by-file>
 
@@ -316,6 +317,14 @@ Input arguments are report files previously created with the
 B<--report-file> option. Makes a cumulative set of results containing
 the sum of data from the individual report files.
 
+=item B<--processes=NUM>
+
+[Available only on systems with a recent version
+of the Parallel::ForkManager module.  Not
+available on Windows.] Sets the maximum number of
+cores that cloc uses.  The default value of 0
+disables multiprocessing.
+
 =item B<--unix>
 
 Over-ride the operating system detection logic and run in UNIX
@@ -368,6 +377,7 @@ Do not count files having the given file name extensions.
 Exclude the given comma separated languages from being counted.
 
 =item B<--exclude-list-file=FILE>
+
 Ignore files and/or directories whose names
 appear in FILE.  FILE should have one file
 name per line.  Only exact matches are ignored;
@@ -376,6 +386,7 @@ the directory where cloc is invoked.
 See also B<--list-file>.
 
 =item B<--fullpath>
+
 Modifies the behavior of B<--match-f> or
 B<--not-match-f> to include the file's path
 in the regex, not just the file's basename.
@@ -639,11 +650,16 @@ alignment information is written to C<align.txt>:
 
   cloc --diff-aligment=align.txt gcc-4.4.0.tar.bz2  gcc-4.5.0.tar.bz2
 
-Print the recognized languages
+Count file, code, and comment changes between two git commits:
+
+  cloc --git --diff b409850824 HEAD
+
+Print the recognized languages:
 
   cloc --show-lang
 
 Remove comments from C<foo.c> and save the result in C<foo.c.nc>
+("nc" is an arbitrary extension; used here to denote "no comments"):
 
   cloc --strip-comments=nc foo.c
 
@@ -664,7 +680,7 @@ sloccount(1)
 =head1 AUTHORS
 
 The cloc program was written by Al Danial <al.danial@gmail.com> and
-is Copyright (C) 2006-2017 <al.danial@gmail.com>.
+is Copyright (C) 2006-2018 <al.danial@gmail.com>.
 
 The manual page was originally written by Jari Aalto <jari.aalto@cante.net>.
 

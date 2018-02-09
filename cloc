@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 # cloc -- Count Lines of Code                  {{{1
-# Copyright (C) 2006-2017 Al Danial <al.danial@gmail.com>
+# Copyright (C) 2006-2018 Al Danial <al.danial@gmail.com>
 # First release August 2006
 #
 # Includes code from:
@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "1.75";  # odd number == beta; even number == stable
+my $VERSION = "1.76";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.006;
 # use modules                                  {{{1
@@ -165,8 +165,9 @@ my $usage  = "
 Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report files>
 
  Count, or compute differences of, physical lines of source code in the
- given files (may be archives such as compressed tarballs or zip files)
- and/or recursively below the given directories.
+ given files (may be archives such as compressed tarballs or zip files,
+ or git commit hashes or branch names) and/or recursively below the
+ given directories.
 
  ${BB}Input Options${NN}
    --extract-with=<cmd>      This option is only needed if cloc is unable
@@ -348,17 +349,11 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              created with the --report-file option.  Makes
                              a cumulative set of results containing the
                              sum of data from the individual report files.
-   --processes=NUM           Sets the maximum number of processes that cloc
-                             uses. If this parameter is set to 0, multi-
-                             processing will be disabled. On Linux and MacOS
-                             systems, cloc creates up to one process per core
-                             by default if a recent version of the
-                             Parallel::ForkManager module is available.
-                             Multiprocessing is disabled by default if cloc
-                             is unable to determine the number of CPU cores.
-                             Multiprocessing is not supported on Windows systems
-                             and on systems which don't have a recent version
-                             of the Parallel::ForkManager module.
+   --processes=NUM           [Available only on systems with a recent version
+                             of the Parallel::ForkManager module.  Not
+                             available on Windows.] Sets the maximum number of
+                             cores that cloc uses.  The default value of 0
+                             disables multiprocessing.
    --unix                    Override the operating system autodetection
                              logic and run in UNIX mode.  See also
                              --windows, --show-os.
