@@ -1,0 +1,22 @@
+<%# Embedded Crystal example %>
+<%#
+https://raw.githubusercontent.com/ysbaddaden/frost/master/test/views/capture.ecr
+
+%>
+<%= content_tag :h1, "inlined content" %>
+
+<%= content_tag :p do %>
+  inner content
+<% end %>
+
+<%= content_tag :div do %>
+  <%= tag :br %>
+<% end %>
+
+<%= content_tag :outer do %>
+  <%= content_tag :inner do %>
+    <%= content_tag :nested do %>
+      contents
+    <% end %>
+  <% end %>
+<% end %>

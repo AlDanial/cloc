@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "1.76";  # odd number == beta; even number == stable
+my $VERSION = "1.77";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.006;
 # use modules                                  {{{1
@@ -6052,6 +6052,7 @@ sub set_constants {                          # {{{1
             'elm'         => 'Elm'                   ,
             'exs'         => 'Elixir'                ,
             'ex'          => 'Elixir'                ,
+            'ecr'         => 'Embedded Crystal'      ,
             'erb'         => 'ERB'                   ,
             'ERB'         => 'ERB'                   ,
             'erl'         => 'Erlang'                ,
@@ -6637,6 +6638,9 @@ sub set_constants {                          # {{{1
                                 [ 'remove_between_general', '<%#', '%>' ],
                             ],
     'Elm'                => [   [ 'remove_haskell_comments', '>filename<' ], ],
+    'Embedded Crystal'   => [
+                                [ 'remove_between_general', '<%#', '%>' ],
+                            ],
     'ERB'                => [
                                 [ 'remove_between_general', '<%#', '%>' ],
                             ],
@@ -7720,6 +7724,7 @@ sub set_constants {                          # {{{1
     'englishbased default'         =>   1.51,
     'ensemble'                     =>   2.76,
     'epos'                         =>   4.00,
+    'Embedded Crystal'             =>   2.00,
     'ERB'                          =>   2.00,
     'Erlang'                       =>   2.11,
     'esf'                          =>   2.00,

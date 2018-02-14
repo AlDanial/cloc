@@ -164,6 +164,11 @@ my @Tests = (
                     'args' => '../tests/inputs/elixir.ex',
                 },
                 {
+                    'name' => 'Embedded Crystal',
+                    'ref'  => '../tests/outputs/capture.ecr.yaml',
+                    'args' => '../tests/inputs/capture.ecr',
+                },
+                {
                     'name' => 'Fish Shell',
                     'ref'  => '../tests/outputs/git_helpers.fish.yaml',
                     'args' => '../tests/inputs/git_helpers.fish',

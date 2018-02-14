@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.77
+  elapsed_seconds    : 0.00519084930419922
+  n_files            : 1
+  n_lines            : 22
+  files_per_second   : 192.646702186294
+  lines_per_second   : 4238.22744809848
+  report_file        : ../outputs/capture.ecr.yaml
+Embedded Crystal :
+  nFiles: 1
+  blank: 4
+  comment: 4
+  code: 14
+SUM: 
+  blank: 4
+  comment: 4
+  code: 14
+  nFiles: 1
