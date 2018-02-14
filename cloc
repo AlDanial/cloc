@@ -6126,6 +6126,7 @@ sub set_constants {                          # {{{1
             'handlebars'  => 'Handlebars'            ,
             'hbs'         => 'Handlebars'            ,
             'hx'          => 'Haxe'                  ,
+            'hoon'        => 'Hoon'                  ,
             'htm'         => 'HTML'                  ,
             'html'        => 'HTML'                  ,
             'i3'          => 'Modula3'               ,
@@ -6772,6 +6773,10 @@ sub set_constants {                          # {{{1
     'HTML'               => [
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
+    'Hoon'               => [
+                                [ 'remove_matches'      , '^\s*:[:><]' ],
+                                [ 'remove_inline'       , ':[:><].*$'  ],
                             ],
     'INI'                => [
                                 [ 'remove_matches'      , '^\s*;'  ],
@@ -7783,6 +7788,7 @@ sub set_constants {                          # {{{1
     'Haml'                         =>   2.50,
     'Handlebars'                   =>   2.50,
     'Haxe'                         =>   2.00,
+    'Hoon'                         =>   2.00,
     'HTML'                         =>   1.90,
     'XHTML'                        =>   1.90,
     'XMI'                          =>   1.90,

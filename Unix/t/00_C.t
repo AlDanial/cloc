@@ -281,6 +281,11 @@ my @Tests = (
                     'args' => '../tests/inputs/nomad_job.hcl',
                 },
                 {
+                    'name' => 'Hoon',
+                    'ref'  => '../tests/outputs/arvo.hoon.yaml',
+                    'args' => '../tests/inputs/arvo.hoon',
+                },
+                {
                     'name' => 'IDL 1',
                     'ref'  => '../tests/outputs/IDL.idl.yaml',
                     'args' => '../tests/inputs/IDL.idl',

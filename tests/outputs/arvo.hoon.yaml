@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.76
+  elapsed_seconds    : 0.00490403175354004
+  n_files            : 1
+  n_lines            : 120
+  files_per_second   : 203.913850940736
+  lines_per_second   : 24469.6621128883
+  report_file        : ../outputs/arvo.hoon.yaml
+Hoon :
+  nFiles: 1
+  blank: 0
+  comment: 10
+  code: 110
+SUM: 
+  blank: 0
+  comment: 10
+  code: 110
+  nFiles: 1
