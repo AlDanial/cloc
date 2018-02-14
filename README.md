@@ -2480,5 +2480,5 @@ Corporation.
 [](1}}})
 <a name="Copyright"></a> []({{{1)
 #   [Copyright &#9650;](#___top "click to go to top of document")
-Copyright (c) 2006-2017, [Al Danial](https://github.com/AlDanial)
+Copyright (c) 2006-2018, [Al Danial](https://github.com/AlDanial)
 [](1}}})
