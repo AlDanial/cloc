@@ -45,11 +45,12 @@ Step 1:  Download cloc (several methods, see below).
 
 Step 2:  Open a terminal (`cmd.exe` on Windows).
 
-Step 3:  Invoke cloc to count your source files, directories, or archives.
+Step 3:  Invoke cloc to count your source files, directories, archives,
+or git commits.
 The executable name differs depending on whether you use the
 development source version (`cloc`), source for a
-released version (`cloc-1.74.pl`) or a Windows executable
-(`cloc-1.74.exe`).  On this page, `cloc` is the generic term
+released version (`cloc-1.76.pl`) or a Windows executable
+(`cloc-1.76.exe`).  On this page, `cloc` is the generic term
 used to refer to any of these.
 
 **a file**
@@ -215,9 +216,13 @@ NetBSD, OpenBSD, Mac OS X, AIX, HP-UX, Solaris, IRIX, z/OS, and Windows.
 (To run the Perl source version of cloc on Windows one needs
 [ActiveState Perl](http://www.activestate.com/activeperl) 5.6.1 or
 higher, [Strawberry Perl](http://strawberryperl.com/),
-[Cygwin](http://www.cygwin.com/), or
+[Cygwin](http://www.cygwin.com/),
 [MobaXTerm](http://mobaxterm.mobatek.net/) with the Perl plug-in
-installed. Alternatively one can use the Windows binary of cloc
+installed,
+or
+a mingw environment and terminal such as provided by
+[Git for Windows](https://gitforwindows.org/).
+Alternatively one can use the Windows binary of cloc
 generated with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm)
 to run on Windows computers that have neither Perl nor Cygwin.)
 
@@ -237,12 +242,12 @@ http://softwareestimator.com/IndustryData2.htm.
 Depending your operating system, one of these installation methods may work for you:
 
     npm install -g cloc                    # https://www.npmjs.com/package/cloc
-    sudo apt-get install cloc              # Debian, Ubuntu
+    sudo apt install cloc                  # Debian, Ubuntu
     sudo yum install cloc                  # Red Hat, Fedora
     sudo dnf install cloc                  # Fedora 22 or later
     sudo pacman -S cloc                    # Arch
-    emerge -av dev-util/cloc               # Gentoo https://packages.gentoo.org/packages/dev-util/cloc
-    apk add cloc                           # Alpine Linux
+    sudo emerge -av dev-util/cloc          # Gentoo https://packages.gentoo.org/packages/dev-util/cloc
+    sudo apk add cloc                      # Alpine Linux
     sudo pkg install cloc                  # FreeBSD
     sudo port install cloc                 # Mac OS X with MacPorts
     brew install cloc                      # Mac OS X with Homebrew
@@ -325,8 +330,13 @@ Only three lines are needed from Win32::Autoglob and these are included
 directly in cloc.
 
 Additionally, cloc will use Digest::MD5 to validate uniqueness among
-input files if Digest::MD5 is installed locally. If Digest::MD5 is not
-found the file uniqueness check is skipped.
+equally-sized input files if Digest::MD5 is installed locally.
+
+A parallel processing option, <tt>--processes=<i>N</i></tt>, was introduced with
+cloc version 1.76 to enable faster runs on multicored machines.  However,
+to use it, one must have the module Parallel::ForkManager installed.
+This module does not work reliably on Windows so parallel processing
+will only work on Unix-like operating systems.
 
 The Windows binary is built on a computer that has both Regexp::Common
 and Digest::MD5 installed locally.
@@ -334,22 +344,18 @@ and Digest::MD5 installed locally.
 <a name="building_exe"></a> []({{{1)
 # [Building a Windows Executable &#9650;](#___top "click to go to top of document")
 
-The most recent Windows downloads,
-<tt>cloc-1.70.exe</tt>,
-<tt>cloc-1.72.exe</tt>, ane
-<tt>cloc-1.74.exe</tt>, were
+The Windows downloads
+<tt>cloc-1.70.exe</tt> and
+<tt>cloc-1.72.exe</tt> were
 built with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm)
 and Strawberry Perl 5.24.0.1
 on an Amazon Web Services t2.micro instance running Microsoft Windows Server 2008
 (32 bit for 1.70 and 1.72; 64 bit for 1.74).
 
-The 1.74 release includes a second Windows executable, <tt>cloc-1.74_x86.exe</tt>,
-which was built on a 32 bit Windows 7 virtual machine (IE11.Win7.For.Windows.VirtualBox.zip
+The 1.74 and 1.76 releases, <tt>cloc-1.74_x86.exe</tt> and <tt>cloc-1.76.exe</tt>,
+were was built on a 32 bit Windows 7 virtual machine (IE11.Win7.For.Windows.VirtualBox.zip
 pulled from https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/)
-using Strawberry Perl 5.26.1.1.  This executable was created to address
-a user-reported
-<a href=https://github.com/AlDanial/cloc/issues/226>issue</a>
-with command line parsing with <tt>cloc-1.74.exe</tt>.
+using Strawberry Perl 5.26.1.1.
 
 The <tt>cloc-1.66.exe</tt> executable was built with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm)
 on a 32 bit Windows 7 VirtualBox image
@@ -385,6 +391,9 @@ You are encouraged to run your own virus scanners against the
 executable and also check sites such
 https://www.virustotal.com/ .
 The entries for recent versions are:
+
+cloc-1.76.exe:
+https://www.virustotal.com/#/url/c1b9b9fe909f91429f95d41e9a9928ab7c58b21351b3acd4249def2a61acd39d/detection
 
 cloc-1.74_x86.exe:
 https://www.virustotal.com/#/file/b73dece71f6d3199d90d55db53a588e1393c8dbf84231a7e1be2ce3c5a0ec75b/detection
@@ -435,7 +444,7 @@ C:> cpan -i Digest::MD5
 C:> cpan -i Regexp::Common
 C:> cpan -i Algorithm::Diff
 C:> cpan -i PAR::Packer
-C:> pp -M Digest::MD5 -c -x -o cloc-1.74.exe cloc
+C:> pp -M Digest::MD5 -c -x -o cloc-1.76.exe cloc
 </pre>
 
 A variation on the instructions above is if you installed the portable
@@ -1096,6 +1105,7 @@ file with the `--read-lang-def` or `--force-lang-def` options.
 These file extensions map to multiple languages:
 
 *   `.cl` files could be Lisp or OpenCL
+*   `.cs` files could be C# or Smalltalk
 *   `.d` files could be D or dtrace
 *   `.f` or `.for` files could be Fortran or Forth
 *   `.fs` files could be Forth or F#
@@ -1106,7 +1116,10 @@ These file extensions map to multiple languages:
 *   `.pp` files could be Pascal or Puppet
 *   `.pro` files could be IDL, Prolog, or a Qt Project
 *   `.ts` files could be TypeScript or Qt Linguist
-*   `.v` files Coq or Verilog/SystemVerilog
+*   `.ui` files could be Qt or Glade
+*   `.v` files could be Coq or Verilog/SystemVerilog
+*   `build.xml` files could be Ant or XML
+*   `pom.xml` files could be Maven or XML
 
 cloc has subroutines that attempt to identify the correct language based
 on the file's contents for these special cases. Language identification
