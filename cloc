@@ -6053,6 +6053,7 @@ sub set_constants {                          # {{{1
             'exs'         => 'Elixir'                ,
             'ex'          => 'Elixir'                ,
             'ecr'         => 'Embedded Crystal'      ,
+            'ejs'         => 'EJS'                   ,
             'erb'         => 'ERB'                   ,
             'ERB'         => 'ERB'                   ,
             'erl'         => 'Erlang'                ,
@@ -6636,6 +6637,10 @@ sub set_constants {                          # {{{1
                             ],
     'EEx'                => [
                                 [ 'remove_between_general', '<%#', '%>' ],
+                            ],
+    'EJS'                => [
+                                [ 'remove_between_general', '<%#', '%>' ],
+                                [ 'remove_html_comments',          ],
                             ],
     'Elm'                => [   [ 'remove_haskell_comments', '>filename<' ], ],
     'Embedded Crystal'   => [
@@ -7718,6 +7723,7 @@ sub set_constants {                          # {{{1
     'edscheme 3.4'                 =>   1.51,
     'EEx'                          =>   2.00,
     'eiffel'                       =>   3.81,
+    'EJS'                          =>   2.50,
     'Elixir'                       =>   2.11,
     'Elm'                          =>   2.50,
     'enform'                       =>   1.74,
