@@ -159,6 +159,11 @@ my @Tests = (
                     'args' => '../tests/inputs/comp.ecpp',
                 },
                 {
+                    'name' => 'EJS',
+                    'ref'  => '../tests/outputs/sample.ejs.yaml',
+                    'args' => '../tests/inputs/sample.ejs',
+                },
+                {
                     'name' => 'Elixir',
                     'ref'  => '../tests/outputs/elixir.ex.yaml',
                     'args' => '../tests/inputs/elixir.ex',
