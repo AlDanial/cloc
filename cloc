@@ -239,9 +239,10 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              compared.  See also --count-and-diff, --diff-alignment,
                              --diff-timeout, --ignore-case, --ignore-whitespace.
    --diff-timeout <N>        Ignore files which take more than <N> seconds
-                             to process.  Default is 10 seconds.
-                             (Large files with many repeated lines can cause
-                             Algorithm::Diff::sdiff() to take hours.)
+                             to process.  Default is 10 seconds.  Setting <N>
+                             to 0 allows unlimited time.  (Large files with many
+                             repeated lines can cause Algorithm::Diff::sdiff()
+                             to take hours.)
    --follow-links            [Unix only] Follow symbolic links to directories
                              (sym links to files are always followed).
    --force-lang=<lang>[,<ext>]
@@ -722,7 +723,12 @@ $opt_ignore_whitespace = 0  unless $opt_ignore_whitespace;
 $opt_ignore_case       = 0  unless $opt_ignore_case;
 $opt_lang_no_ext       = 0  unless $opt_lang_no_ext;
 $opt_follow_links      = 0  unless $opt_follow_links;
-$opt_diff_timeout      =10  unless $opt_diff_timeout;
+if (defined $opt_diff_timeout) {
+    # if defined but with a value of <= 0, set to 2^31 seconds = 68 years
+    $opt_diff_timeout = 2**31 unless $opt_diff_timeout > 0;
+} else {
+    $opt_diff_timeout  =10; # seconds
+}
 $opt_csv               = 1  if $opt_csv_delimiter;
 $ON_WINDOWS            = 1  if $opt_force_on_windows;
 $ON_WINDOWS            = 0  if $opt_force_on_unix;
