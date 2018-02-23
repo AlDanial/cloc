@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!--
+  This example demonstrates how to compile and render EJS templates in the
+  browser. It is usually recommended to always embed a precompiled function
+  in the HTML, rather than compile it on-the-fly, but this demonstrates that
+  it is possible.
+  To use this example, first run `jake build` in the EJS root directory to
+  produce the client-side ejs.js and ejs.min.js. Alternatively, you can
+  download the prebuilt client scripts (both minified and not) in GitHub
+  releases.
+  -->
+<html>
+  <head>
+    <script src="../ejs.js"></script>
+    <!-- `type` can be anything but application/javascript -->
+    <script id="users" type="text/template">
+      <% if (names.length) { %>
+        <ul>
+          <% names.forEach(function(name){ %>
+            <li><%= name %></li>
+          <% }) %>
+        </ul>
+      <% } %>
+    </script>
+    <script>
+      onload = function () {
+        // get the EJS template as a string
+        var templ = document.getElementById('users').innerHTML;
+        console.log('EJS template:');
+        console.log(templ);
+        // data to output to the template function
+        var data = { names: ['loki', 'tobi', 'jane'] };
+        // stores the rendered HTML
+        var html = ejs.compile(templ)(data);
+        console.log('Rendered HTML:');
+        console.log(html);
+        // inject the rendered data to <body>
+        document.body.innerHTML = html;
+        console.log('HTML injected to <body>');
+      }
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

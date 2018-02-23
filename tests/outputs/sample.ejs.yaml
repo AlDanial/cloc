@@ -1,0 +1,24 @@
+﻿       1 text file.
+       1 unique file.                              
+       0 files ignored.
+
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.77
+  elapsed_seconds    : 0.0163509845733643
+  n_files            : 1
+  n_lines            : 45
+  files_per_second   : 61.1583966404689
+  lines_per_second   : 2752.1278488211
+EJS :
+  nFiles: 1
+  blank: 0
+  comment: 11
+  code: 34
+SUM: 
+  blank: 0
+  comment: 11
+  code: 34
+  nFiles: 1
