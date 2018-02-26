@@ -6151,6 +6151,7 @@ sub set_constants {                          # {{{1
             'il'          => 'SKILL'                 ,
             'ils'         => 'SKILL++'               ,
             'inc'         => 'PHP/Pascal'            , # might be PHP or Pascal
+            'inl'         => 'C++'                   ,
             'ino'         => 'Arduino Sketch'        ,
             'pde'         => 'Arduino Sketch'        , # pre 1.0
             'itk'         => 'Tcl/Tk'                ,
