@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.77
+  elapsed_seconds    : 0.00636696815490723
+  n_files            : 1
+  n_lines            : 160
+  files_per_second   : 157.060625351058
+  lines_per_second   : 25129.7000561693
+  report_file        : ../outputs/Xtend.xtend.yaml
+Xtend :
+  nFiles: 1
+  blank: 17
+  comment: 52
+  code: 91
+SUM: 
+  blank: 17
+  comment: 52
+  code: 91
+  nFiles: 1

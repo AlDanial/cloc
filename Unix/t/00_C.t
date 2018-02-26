@@ -700,6 +700,11 @@ my @Tests = (
                     'ref'  => '../tests/outputs/XSLT.xslt.yaml',
                     'args' => '../tests/inputs/XSLT.xslt',
                 },
+                {
+                    'name' => 'Xtend',
+                    'ref'  => '../tests/outputs/Xtend.xtend.yaml',
+                    'args' => '../tests/inputs/Xtend.xtend',
+                },
             );
 
 my $Verbose = 0;

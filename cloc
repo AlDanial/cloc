@@ -6386,6 +6386,7 @@ sub set_constants {                          # {{{1
             'XSLT'        => 'XSLT'                  ,
             'xsl'         => 'XSLT'                  ,
             'XSL'         => 'XSLT'                  ,
+            'xtend'       => 'Xtend'                 ,
             'y'           => 'yacc'                  ,
             'yaml'        => 'YAML'                  ,
             'yml'         => 'YAML'                  ,
@@ -7371,6 +7372,15 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
     'XSLT'               => [   [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
+    'Xtend'              => [   # copy of Java, plus triple << inline
+                                # separate /* inside quoted strings with two
+                                # concatenated strings split between / and *
+                                [ 'replace_between_regex', '(["\'])(.*?/)(\*.*?)\g1',
+                                  '(.*?)' , '"$1$2$1 + $1$3$1$4"'],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                                [ 'remove_matches'      , '^\s*\x{c2ab}{3}'  ], # doesn't work
+                                # \xCA2B is unicode << character
+                            ],
     'NAnt script'       => [    [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
     'MSBuild script'    => [    [ 'remove_html_comments',          ],
@@ -8239,6 +8249,7 @@ sub set_constants {                          # {{{1
     'sed'                          => 4.00,
     'Lua'                          => 4.00,
     'OpenCL'                       => 1.50,
+    'Xtend'                        => 2.00,
 );
 # 1}}}
 %{$rh_Known_Binary_Archives} = (             # {{{1
