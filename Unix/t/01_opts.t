@@ -142,6 +142,18 @@ my @Tests = (
                     'args' => 'eval1957.SACunidir.fr',
                     'ref'  => '../tests/outputs/issues/183/eval1957.SACunidir.fr.yaml',
                 },
+                {
+                    'name' => 'diff identical files (github issue #280)',
+                    'cd'   => '../tests/inputs/issues/280',
+                    'args' => '--diff L R',
+                    'ref'  => '../tests/outputs/issues/280/280.yaml',
+                },
+                {
+                    'name' => 'diff identical files by file (github issue #280)',
+                    'cd'   => '../tests/inputs/issues/280',
+                    'args' => '--by-file --diff L R',
+                    'ref'  => '../tests/outputs/issues/280/280_by_file.yaml',
+                },
 #               {
 #                   'name' => '--count-and--diff with --out',
 #                   'cd'   => '../tests/inputs/issues/220',

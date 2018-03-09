@@ -1,0 +1,96 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.77
+  elapsed_seconds    : 0.0132617950439453
+  n_files            : 0
+  n_lines            : 1608
+  files_per_second   : 0
+  lines_per_second   : 121250.554293111
+  report_file        : 280_by_file.yaml
+added :
+  L/locale_facets.h :
+    nFiles : 0
+    blank : 0
+    code : 0
+    comment : 0
+  L/hello_1.c :
+    blank : 0
+    nFiles : 0
+    code : 0
+    comment : 0
+  R/hello_2.c :
+    comment : 2
+    code : 7
+    blank : 2
+    nFiles : 0
+same :
+  L/locale_facets.h :
+    nFiles : 0
+    blank : 191
+    code : 617
+    comment : 780
+  L/hello_1.c :
+    blank : 0
+    nFiles : 0
+    code : 0
+    comment : 0
+  R/hello_2.c :
+    comment : 0
+    code : 0
+    blank : 0
+    nFiles : 0
+modified :
+  L/locale_facets.h :
+    nFiles : 0
+    blank : 0
+    code : 0
+    comment : 0
+  L/hello_1.c :
+    blank : 0
+    nFiles : 0
+    code : 0
+    comment : 0
+  R/hello_2.c :
+    comment : 0
+    code : 0
+    blank : 0
+    nFiles : 0
+removed :
+  L/locale_facets.h :
+    nFiles : 0
+    blank : 0
+    code : 0
+    comment : 0
+  L/hello_1.c :
+    blank : 2
+    nFiles : 0
+    code : 6
+    comment : 1
+  R/hello_2.c :
+    comment : 0
+    code : 0
+    blank : 0
+    nFiles : 0
+SUM :
+  added :
+    comment : 2
+    nFiles : 0
+    blank : 2
+    code : 7
+  same :
+    comment : 780
+    nFiles : 0
+    blank : 191
+    code : 617
+  modified :
+    comment : 0
+    nFiles : 0
+    blank : 0
+    code : 0
+  removed :
+    comment : 1
+    nFiles : 0
+    blank : 2
+    code : 6

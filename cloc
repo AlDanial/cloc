@@ -2041,141 +2041,163 @@ sub count_filesets {                         # {{{1
             ++$n_file_pairs_compared;
         }
 
-        # step 1: identify comments in both files
-        #print "Diff blank removal L language= $Lang_L";
-        #print " scalar(lines_L)=", scalar @lines_L, "\n";
-        my @original_minus_blanks_L
-                = rm_blanks(  \@lines_L, $Lang_L, \%EOL_Continuation_re);
-        #print "1: scalar(original_minus_blanks_L)=", scalar @original_minus_blanks_L, "\n";
-        @lines_L    = @original_minus_blanks_L;
-        #print "2: scalar(lines_L)=", scalar @lines_L, "\n";
-        @lines_L    = add_newlines(\@lines_L); # compensate for rm_comments()
-        @lines_L    = rm_comments( \@lines_L, $Lang_L, $file_L,
-                                   \%EOL_Continuation_re);
-        #print "3: scalar(lines_L)=", scalar @lines_L, "\n";
+        my ($all_line_count_L, $blank_count_L   , $comment_count_L ,
+            $all_line_count_R, $blank_count_R   , $comment_count_R , )  = (0,0,0,0,0,0,);
+        if (!$contents_are_same) {
+            # step 1: identify comments in both files
+            #print "Diff blank removal L language= $Lang_L";
+            #print " scalar(lines_L)=", scalar @lines_L, "\n";
+            my @original_minus_blanks_L
+                    = rm_blanks(  \@lines_L, $Lang_L, \%EOL_Continuation_re);
+            #print "1: scalar(original_minus_blanks_L)=", scalar @original_minus_blanks_L, "\n";
+            @lines_L    = @original_minus_blanks_L;
+            #print "2: scalar(lines_L)=", scalar @lines_L, "\n";
+            @lines_L    = add_newlines(\@lines_L); # compensate for rm_comments()
+            @lines_L    = rm_comments( \@lines_L, $Lang_L, $file_L,
+                                       \%EOL_Continuation_re);
+            #print "3: scalar(lines_L)=", scalar @lines_L, "\n";
 
-        #print "Diff blank removal R language= $Lang_R\n";
-        my @original_minus_blanks_R
-                = rm_blanks(  \@lines_R, $Lang_R, \%EOL_Continuation_re);
-        @lines_R    = @original_minus_blanks_R;
-        @lines_R    = add_newlines(\@lines_R); # taken away by rm_comments()
-        @lines_R    = rm_comments( \@lines_R, $Lang_R, $file_R,
-                                   \%EOL_Continuation_re);
+            #print "Diff blank removal R language= $Lang_R\n";
+            my @original_minus_blanks_R
+                    = rm_blanks(  \@lines_R, $Lang_R, \%EOL_Continuation_re);
+            @lines_R    = @original_minus_blanks_R;
+            @lines_R    = add_newlines(\@lines_R); # taken away by rm_comments()
+            @lines_R    = rm_comments( \@lines_R, $Lang_R, $file_R,
+                                       \%EOL_Continuation_re);
 
-        my (@diff_LL, @diff_LR, );
-               array_diff( $file_L                  ,   # in
-                   \@original_minus_blanks_L ,   # in
-                   \@lines_L                 ,   # in
-                   "comment"                 ,   # in
-                   \@diff_LL, \@diff_LR      ,   # out
-                   \@p_errors);                    # in/out
+            my (@diff_LL, @diff_LR, );
+                   array_diff( $file_L                  ,   # in
+                       \@original_minus_blanks_L ,   # in
+                       \@lines_L                 ,   # in
+                       "comment"                 ,   # in
+                       \@diff_LL, \@diff_LR      ,   # out
+                       \@p_errors);                    # in/out
 
-        my (@diff_RL, @diff_RR, );
-                array_diff( $file_R                  ,   # in
-                   \@original_minus_blanks_R ,   # in
-                   \@lines_R                 ,   # in
-                   "comment"                 ,   # in
-                   \@diff_RL, \@diff_RR      ,   # out
-                   \@p_errors);                    # in/out
-        # each line of each file is now classified as
-        # code or comment
-        #use Data::Dumper;
-        #print Dumper("diff_LL", \@diff_LL, "diff_LR", \@diff_LR, );
-        #print Dumper("diff_RL", \@diff_RL, "diff_RR", \@diff_RR, );
-        #die;
+            my (@diff_RL, @diff_RR, );
+                    array_diff( $file_R                  ,   # in
+                       \@original_minus_blanks_R ,   # in
+                       \@lines_R                 ,   # in
+                       "comment"                 ,   # in
+                       \@diff_RL, \@diff_RR      ,   # out
+                       \@p_errors);                    # in/out
+            # each line of each file is now classified as
+            # code or comment
+            #use Data::Dumper;
+            #print Dumper("diff_LL", \@diff_LL, "diff_LR", \@diff_LR, );
+            #print Dumper("diff_RL", \@diff_RL, "diff_RR", \@diff_RR, );
+            #die;
 
-        # step 2: separate code from comments for L and R files
-        my @code_L = ();
-        my @code_R = ();
-        my @comm_L = ();
-        my @comm_R = ();
-        foreach my $line_info (@diff_LL) {
-            if      ($line_info->{'type'} eq "code"   ) {
-                push @code_L, $line_info->{char};
-            } elsif ($line_info->{'type'} eq "comment") {
-                push @comm_L, $line_info->{char};
-            } else {
-                die "Diff unexpected line type ",
-                    $line_info->{'type'}, "for $file_L line ",
-                    $line_info->{'lnum'};
+            # step 2: separate code from comments for L and R files
+            my @code_L = ();
+            my @code_R = ();
+            my @comm_L = ();
+            my @comm_R = ();
+            foreach my $line_info (@diff_LL) {
+                if      ($line_info->{'type'} eq "code"   ) {
+                    push @code_L, $line_info->{char};
+                } elsif ($line_info->{'type'} eq "comment") {
+                    push @comm_L, $line_info->{char};
+                } else {
+                    die "Diff unexpected line type ",
+                        $line_info->{'type'}, "for $file_L line ",
+                        $line_info->{'lnum'};
+                }
             }
-        }
 
-        foreach my $line_info (@diff_RL) {
-            if      ($line_info->{type} eq "code"   ) {
-                push @code_R, $line_info->{'char'};
-            } elsif ($line_info->{type} eq "comment") {
-                push @comm_R, $line_info->{'char'};
-            } else {
-                die "Diff unexpected line type ",
-                    $line_info->{'type'}, "for $file_R line ",
-                    $line_info->{'lnum'};
+            foreach my $line_info (@diff_RL) {
+                if      ($line_info->{type} eq "code"   ) {
+                    push @code_R, $line_info->{'char'};
+                } elsif ($line_info->{type} eq "comment") {
+                    push @comm_R, $line_info->{'char'};
+                } else {
+                    die "Diff unexpected line type ",
+                        $line_info->{'type'}, "for $file_R line ",
+                        $line_info->{'lnum'};
+                }
             }
-        }
 
-        if ($opt_ignore_whitespace) {
-            # strip all whitespace from each line of source code
-            # and comments then use these stripped arrays in diffs
-            foreach (@code_L) { s/\s+//g }
-            foreach (@code_R) { s/\s+//g }
-            foreach (@comm_L) { s/\s+//g }
-            foreach (@comm_R) { s/\s+//g }
-        }
-        if ($opt_ignore_case) {
-            # change all text to lowercase in diffs
-            foreach (@code_L) { $_ = lc }
-            foreach (@code_R) { $_ = lc }
-            foreach (@comm_L) { $_ = lc }
-            foreach (@comm_R) { $_ = lc }
-        }
-        # step 3: compute code diffs
-        array_diff("$file_L v. $file_R"   ,   # in
-                   \@code_L               ,   # in
-                   \@code_R               ,   # in
-                   "revision"             ,   # in
-                   \@diff_LL, \@diff_LR   ,   # out
-                   \@p_errors);                 # in/out
-        #print Dumper("diff_LL", \@diff_LL, "diff_LR", \@diff_LR, );
-        #print Dumper("diff_LR", \@diff_LR);
-        foreach my $line_info (@diff_LR) {
-            my $status = $line_info->{'desc'}; # same|added|removed|modified
-            ++$p_dbl{$Lang_L}{'code'}{$status};
+            if ($opt_ignore_whitespace) {
+                # strip all whitespace from each line of source code
+                # and comments then use these stripped arrays in diffs
+                foreach (@code_L) { s/\s+//g }
+                foreach (@code_R) { s/\s+//g }
+                foreach (@comm_L) { s/\s+//g }
+                foreach (@comm_R) { s/\s+//g }
+            }
+            if ($opt_ignore_case) {
+                # change all text to lowercase in diffs
+                foreach (@code_L) { $_ = lc }
+                foreach (@code_R) { $_ = lc }
+                foreach (@comm_L) { $_ = lc }
+                foreach (@comm_R) { $_ = lc }
+            }
+            # step 3: compute code diffs
+            array_diff("$file_L v. $file_R"   ,   # in
+                       \@code_L               ,   # in
+                       \@code_R               ,   # in
+                       "revision"             ,   # in
+                       \@diff_LL, \@diff_LR   ,   # out
+                       \@p_errors);                 # in/out
+            #print Dumper("diff_LL", \@diff_LL, "diff_LR", \@diff_LR, );
+            #print Dumper("diff_LR", \@diff_LR);
+            foreach my $line_info (@diff_LR) {
+                my $status = $line_info->{'desc'}; # same|added|removed|modified
+                ++$p_dbl{$Lang_L}{'code'}{$status};
+                if ($opt_by_file) {
+                    ++$p_dbf{$file_L}{'code'}{$status};
+                }
+            }
+            #use Data::Dumper;
+            #print Dumper("code diffs:", \@diff_LL, \@diff_LR);
+
+            # step 4: compute comment diffs
+            array_diff("$file_L v. $file_R"   ,   # in
+                       \@comm_L               ,   # in
+                       \@comm_R               ,   # in
+                       "revision"             ,   # in
+                       \@diff_LL, \@diff_LR   ,   # out
+                       \@Errors);                 # in/out
+            #print Dumper("comment diff_LR", \@diff_LR);
+            foreach my $line_info (@diff_LR) {
+                my $status = $line_info->{'desc'}; # same|added|removed|modified
+                ++$p_dbl{$Lang_L}{'comment'}{$status};
+                if ($opt_by_file) {
+                    ++$p_dbf{$file_L}{'comment'}{$status};
+                }
+            }
+            #print Dumper("comment diffs:", \@diff_LL, \@diff_LR);
+
+            # step 5: compute difference in blank lines (kind of pointless)
+            next if $Lang_L eq '(unknown)' or
+                    $Lang_R eq '(unknown)';
+            ($all_line_count_L,
+             $blank_count_L   ,
+             $comment_count_L ,
+            ) = call_counter($file_L, $Lang_L, \@Errors);
+
+            ($all_line_count_R,
+             $blank_count_R   ,
+             $comment_count_R ,
+            ) = call_counter($file_R, $Lang_R, \@Errors);
+        } else {
+            # L and R file contents are identical, no need to diff
+            ($all_line_count_L,
+             $blank_count_L   ,
+             $comment_count_L ,
+            ) = call_counter($file_L, $Lang_L, \@Errors);
+            $all_line_count_R = $all_line_count_L;
+            $blank_count_R    = $blank_count_L   ;
+            $comment_count_R  = $comment_count_L ;
+            my $code_lines_R  = $all_line_count_R - ($blank_count_R + $comment_count_R);
+            $p_dbl{$Lang_L}{'blank'}{'same'}   += $blank_count_R;
+            $p_dbl{$Lang_L}{'comment'}{'same'} += $comment_count_R;
+            $p_dbl{$Lang_L}{'code'}{'same'}    += $code_lines_R;
             if ($opt_by_file) {
-                ++$p_dbf{$file_L}{'code'}{$status};
+                $p_dbf{$file_L}{'blank'}{'same'}   += $blank_count_R;
+                $p_dbf{$file_L}{'comment'}{'same'} += $comment_count_R;
+                $p_dbf{$file_L}{'code'}{'same'}    += $code_lines_R;
             }
         }
-        #use Data::Dumper;
-        #print Dumper("code diffs:", \@diff_LL, \@diff_LR);
-
-        # step 4: compute comment diffs
-        array_diff("$file_L v. $file_R"   ,   # in
-                   \@comm_L               ,   # in
-                   \@comm_R               ,   # in
-                   "revision"             ,   # in
-                   \@diff_LL, \@diff_LR   ,   # out
-                   \@Errors);                 # in/out
-        #print Dumper("comment diff_LR", \@diff_LR);
-        foreach my $line_info (@diff_LR) {
-            my $status = $line_info->{'desc'}; # same|added|removed|modified
-            ++$p_dbl{$Lang_L}{'comment'}{$status};
-            if ($opt_by_file) {
-                ++$p_dbf{$file_L}{'comment'}{$status};
-            }
-        }
-        #print Dumper("comment diffs:", \@diff_LL, \@diff_LR);
-
-        # step 5: compute difference in blank lines (kind of pointless)
-        next if $Lang_L eq '(unknown)' or
-                $Lang_R eq '(unknown)';
-        my ($all_line_count_L,
-            $blank_count_L   ,
-            $comment_count_L ,
-           ) = call_counter($file_L, $Lang_L, \@Errors);
-
-        my ($all_line_count_R,
-            $blank_count_R   ,
-            $comment_count_R ,
-           ) = call_counter($file_R, $Lang_R, \@Errors);
 
         if ($blank_count_L <  $blank_count_R) {
             my $D = $blank_count_R - $blank_count_L;
