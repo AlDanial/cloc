@@ -6300,6 +6300,7 @@ sub set_constants {                          # {{{1
             'SBL'         => 'Softbridge Basic'      ,
             'sed'         => 'sed'                   ,
             'ses'         => 'Patran Command Language'   ,
+            'sp'          => 'SparForte'             ,
             'sol'         => 'Solidity'              ,
             'pcl'         => 'Patran Command Language'   ,
             'pl1'         => 'PL/I'                  ,
@@ -7172,6 +7173,10 @@ sub set_constants {                          # {{{1
                             ],
     'Solidity'           => [
                                 [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'SparForte'          => [
+                                [ 'remove_matches'      , '^\s*#!' ],
+                                [ 'remove_matches'      , '^\s*--' ],
                             ],
     'Specman e'          => [
                                 [ 'pre_post_fix'        , "'>", "<'"],
@@ -8141,6 +8146,7 @@ sub set_constants {                          # {{{1
     'softscreen'                   =>   5.71,
     'Softbridge Basic'             =>   2.76,
     'solo'                         =>   1.38,
+    'SparForte'                    =>   3.80,
     'speakeasy'                    =>   2.22,
     'spinnaker ppl'                =>   2.22,
     'splus'                        =>   2.50,

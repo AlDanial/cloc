@@ -576,6 +576,11 @@ my @Tests = (
                     'args' => '../tests/inputs/captcha.cs',
                 },
                 {
+                    'name' => 'SparForte',
+                    'ref'  => '../tests/outputs/hello.sp.yaml',
+                    'args' => '../tests/inputs/hello.sp',
+                },
+                {
                     'name' => 'Solidity',
                     'ref'  => '../tests/outputs/solidity.sol.yaml',
                     'args' => '../tests/inputs/solidity.sol',
