@@ -4162,10 +4162,10 @@ sub replace_git_hash_with_tarfile {          # {{{1
                 push @left_files , $file if $repo_listing{$Left }{$file};
                 push @right_files, $file if $repo_listing{$Right}{$file};
             }
-            # backslash whitespace within file names (#257)
-            my $files = join(" ", map {$_ =~ s/(\s)/\\$1/g; $_} @left_files);
+            # backslash whitespace, weird chars within file names (#257, #284)
+            my $files = join(" ", map {$_ =~ s/([\s\(\)\[\]{}';\^\$\?])/\\$1/g; $_} @left_files);
             $replacement_arg_list{$git_hash{$Left}}  = git_archive("$Left  $files");
-               $files = join(" ", map {$_ =~ s/(\s)/\\$1/g; $_} @right_files);
+               $files = join(" ", map {$_ =~ s/([\s\(\)\[\]{}';\^\$\?])/\\$1/g; $_} @right_files);
             $replacement_arg_list{$git_hash{$Right}} = git_archive("$Right $files");
         } else {
 #print "A DIFF git-to-file or file-to-git Left=$Left Right=$Right\n";
