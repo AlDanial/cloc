@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.77
+  elapsed_seconds    : 0.00613999366760254
+  n_files            : 1
+  n_lines            : 73
+  files_per_second   : 162.866617481458
+  lines_per_second   : 11889.2630761465
+  report_file        : ../outputs/darwin-configuration.nix.yaml
+Nix :
+  nFiles: 1
+  blank: 15
+  comment: 15
+  code: 43
+SUM: 
+  blank: 15
+  comment: 15
+  code: 43
+  nFiles: 1

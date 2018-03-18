@@ -6248,6 +6248,7 @@ sub set_constants {                          # {{{1
             'mth'         => 'Teamcenter mth'        ,
             'n'           => 'Nemerle'               ,
             'nim'         => 'Nim'                   ,
+            'nix'         => 'Nix'                   ,
             'oscript'     => 'LiveLink OScript'      ,
             'bod'         => 'Oracle PL/SQL'         ,
             'spc'         => 'Oracle PL/SQL'         ,
@@ -6987,6 +6988,11 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*#'  ],
 #                               [ 'docstring_to_C'                 ],
 #                               [ 'call_regexp_common'  , 'C'      ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
+    'Nix'                => [
+                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
     'Octave'             => [
@@ -7993,6 +7999,7 @@ sub set_constants {                          # {{{1
     'nexpert'                      =>   1.63,
     'nial'                         =>   1.63,
     'Nim'                          =>   2.00,
+    'Nix'                          =>   2.70,
     'nomad2'                       =>   2.00,
     'nonprocedural default'        =>   2.22,
     'notes vip'                    =>   2.22,
