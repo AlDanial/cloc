@@ -4306,6 +4306,12 @@ sub make_file_list {                         # {{{1
               preprocess => \&find_preprocessor,
               follow     =>  $opt_follow_links }, $dir);
     }
+    if ($opt_follow_links) {
+        # giving { 'follow' => 1 } to find() makes it skip the
+        # call to find_preprocessor() so have to call this manually
+        @file_list = manual_find_preprocessor(@file_list);
+    }
+
     # there's a possibility of file duplication if user provided a list
     # file or --vcs command that returns directory names; squash these
     my %unique_file_list = map { $_ => 1 } @file_list;
@@ -4480,6 +4486,46 @@ sub remove_duplicate_files {                 # {{{1
     }
     print "<- remove_duplicate_files\n" if $opt_v > 2;
 } # 1}}}
+sub manual_find_preprocessor {               # {{{1
+    # When running with --follow-links, find_preprocessor() is not
+    # called by find().  Have to do it manually.  Inputs here
+    # are only files, which differs from find_preprocessor() which
+    # gets directories too.
+    # Reads global variable %Exclude_Dir.
+    # Populates global variable %Ignored.
+    # Reject files/directories in cwd which are in the exclude list.
+    print "-> manual_find_preprocessor(", cwd(), ")\n" if $opt_v > 2;
+    my @ok = ();
+
+    foreach my $File (@_) {  # pure file or directory name, no separators
+        my $Dir = dirname $File;
+#printf "File=[$File] Dir=[$Dir]\n";
+        if ($Exclude_Dir{$Dir}) {
+            $Ignored{$File} = "--exclude-dir=$Exclude_Dir{$Dir}";
+        } else {
+            if ($opt_not_match_d) {
+                if ($opt_fullpath) {
+                    if ($Dir =~ m{^${opt_not_match_d}$}) {
+                        $Ignored{$File} = "--not-match-d=$opt_not_match_d";
+#print "matched fullpath\n"
+                    } else {
+                        push @ok, $File;
+                    }
+                } elsif (basename($Dir) =~ m{$opt_not_match_d}) {
+                    $Ignored{$File} = "--not-match-d=$opt_not_match_d";
+print "matched partial\n"
+                } else {
+                    push @ok, $File;
+                }
+            } else {
+                push @ok, $File;
+            }
+        }
+    }
+
+    print "<- manual_find_preprocessor(@ok)\n" if $opt_v > 2;
+    return @ok;
+} # 1}}}
 sub find_preprocessor {                      # {{{1
     # invoked by File::Find's find() each time it enters a new directory
     # Reads global variable %Exclude_Dir.
@@ -4497,8 +4543,12 @@ sub find_preprocessor {                      # {{{1
         } else {
 #printf "  F_or_D=%-20s File::Find::name=%s\n", $F_or_D, $File::Find::name;
             if ($opt_not_match_d) {
-                if ($opt_fullpath and $File::Find::name =~ m{$opt_not_match_d}) {
-                    $Ignored{$File::Find::name} = "--not-match-d=$opt_not_match_d";
+                if ($opt_fullpath) {
+                    if ($File::Find::name =~ m{$opt_not_match_d}) {
+                        $Ignored{$File::Find::name} = "--not-match-d=$opt_not_match_d";
+                    } else {
+                        push @ok, $F_or_D;
+                    }
                 } elsif (!-d $F_or_D and basename($File::Find::name) =~ m{$opt_not_match_d}) {
                     $Ignored{$File::Find::name} = "--not-match-d (basename) =$opt_not_match_d";
                 } else {

@@ -154,6 +154,52 @@ my @Tests = (
                     'args' => '--by-file --diff L R',
                     'ref'  => '../tests/outputs/issues/280/280_by_file.yaml',
                 },
+
+                {
+                    'name' => '--follow-links, --not-match-d, --fullpath  1/6 (github issue #286)',
+                    'cd'   => '../tests/inputs/issues/286',
+                    'args' => '               --not-match-d ignore_subdir                    project',
+                    'ref'  => '../tests/outputs/issues/286/1.yaml',
+                },
+
+                {
+                    'name' => '--follow-links, --not-match-d, --fullpath  2/6 (github issue #286)',
+                    'cd'   => '../tests/inputs/issues/286',
+                    'args' => '--follow-links --not-match-d ignore_subdir                    project',
+
+                    'ref'  => '../tests/outputs/issues/286/2.yaml',
+                },
+
+                {
+                    'name' => '--follow-links, --not-match-d, --fullpath  3/6 (github issue #286)',
+                    'cd'   => '../tests/inputs/issues/286',
+                    'args' => '               --not-match-d ignore_subdir --fullpath         project',
+
+                    'ref'  => '../tests/outputs/issues/286/3.yaml',
+                },
+
+                {
+                    'name' => '--follow-links, --not-match-d, --fullpath  4/6 (github issue #286)',
+                    'cd'   => '../tests/inputs/issues/286',
+                    'args' => '--follow-links --not-match-d ignore_subdir --fullpath         project',
+                    'ref'  => '../tests/outputs/issues/286/4.yaml',
+                },
+
+                {
+                    'name' => '--follow-links, --not-match-d, --fullpath  5/6 (github issue #286)',
+                    'cd'   => '../tests/inputs/issues/286',
+                    'args' => '               --not-match-d project/ignore_subdir --fullpath project',
+                    'ref'  => '../tests/outputs/issues/286/5.yaml',
+                },
+
+                {
+                    'name' => '--follow-links, --not-match-d, --fullpath  6/6 (github issue #286)',
+                    'cd'   => '../tests/inputs/issues/286',
+                    'args' => '--follow-links --not-match-d project/ignore_subdir --fullpath project',
+                    'ref'  => '../tests/outputs/issues/286/6.yaml',
+                },
+
+
 #               {
 #                   'name' => '--count-and--diff with --out',
 #                   'cd'   => '../tests/inputs/issues/220',
