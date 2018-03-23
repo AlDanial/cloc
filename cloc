@@ -5658,7 +5658,7 @@ sub remove_jcl_comments {                    # {{{1
     my $in_comment = 0;
     foreach (@{$ra_lines}) {
         next if /^\s*$/;
-        next if m{^\s*//\*};
+        next if m{^//\*};
         last if m{^\s*//\s*$};
         push @save_lines, $_;
     }
@@ -6587,6 +6587,7 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '!.*$'   ],
                                 [ 'remove_inline'       , '#.*$'   ],
                                 [ 'remove_inline'       , '--.*$'  ],
+                                [ 'remove_matches'      , '^\*'    ],  # z/OS Assembly
                             ],
     'AutoHotkey'         => [
                                 [ 'remove_matches'      , '^\s*;'  ],

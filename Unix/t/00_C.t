@@ -24,6 +24,11 @@ my @Tests = (
                     'args' => '../tests/inputs/Assembly-sysv.S',
                 },
                 {
+                    'name' => 'Assembly 3',
+                    'ref'  => '../tests/outputs/zos_assembly.s.yaml',
+                    'args' => '../tests/inputs/zos_assembly.s',
+                },
+                {
                     'name' => 'ANTLR Grammar 1',
                     'ref'  => '../tests/outputs/ExprParser.g.yaml',
                     'args' => '../tests/inputs/ExprParser.g',
@@ -319,6 +324,11 @@ my @Tests = (
                     'name' => 'Java',
                     'ref'  => '../tests/outputs/Java.java.yaml',
                     'args' => '../tests/inputs/Java.java',
+                },
+                {
+                    'name' => 'JCL',
+                    'ref'  => '../tests/outputs/offline.jcl.yaml',
+                    'args' => '../tests/inputs/offline.jcl',
                 },
                 {
                     'name' => 'JSON',

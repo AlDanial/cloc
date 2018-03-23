@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.77
+  elapsed_seconds    : 0.00715398788452148
+  n_files            : 1
+  n_lines            : 37
+  files_per_second   : 139.782176897954
+  lines_per_second   : 5171.94054522429
+  report_file        : ../outputs/zos_assembly.s.yaml
+Assembly :
+  nFiles: 1
+  blank: 0
+  comment: 30
+  code: 7
+SUM: 
+  blank: 0
+  comment: 30
+  code: 7
+  nFiles: 1
