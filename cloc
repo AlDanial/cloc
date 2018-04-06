@@ -4164,28 +4164,34 @@ sub replace_git_hash_with_tarfile {          # {{{1
             }
             # backslash whitespace, weird chars within file names (#257, #284)
             my $files = join(" ", map {$_ =~ s/([\s\(\)\[\]{}';\^\$\?])/\\$1/g; $_} @left_files);
-            $replacement_arg_list{$git_hash{$Left}}  = git_archive("$Left  $files");
+############$replacement_arg_list{$git_hash{$Left}}  = git_archive("$Left  $files");
+            $replacement_arg_list{$git_hash{$Left}}  = git_archive($Left, \@left_files);
                $files = join(" ", map {$_ =~ s/([\s\(\)\[\]{}';\^\$\?])/\\$1/g; $_} @right_files);
-            $replacement_arg_list{$git_hash{$Right}} = git_archive("$Right $files");
+############$replacement_arg_list{$git_hash{$Right}} = git_archive("$Right $files");
+            $replacement_arg_list{$git_hash{$Right}} = git_archive($Right, @right_files);
         } else {
 #print "A DIFF git-to-file or file-to-git Left=$Left Right=$Right\n";
             # git to file/dir or file/dir to git
             if      ($git_hash{$Left}  and $repo_listing{$Left}{$Right} ) {
 #print "A DIFF 1\n";
                 # $Left is a git hash and $Right is a file
-                $replacement_arg_list{$git_hash{$Left}}  = git_archive("$Left $Right");
+################$replacement_arg_list{$git_hash{$Left}}  = git_archive("$Left $Right");
+                $replacement_arg_list{$git_hash{$Left}}  = git_archive($Left, $Right);
             } elsif ($git_hash{$Right} and $repo_listing{$Right}{$Left}) {
 #print "A DIFF 2\n";
                 # $Left is a file and $Right is a git hash
-                $replacement_arg_list{$git_hash{$Right}} = git_archive("$Right $Left");
+################$replacement_arg_list{$git_hash{$Right}} = git_archive("$Right $Left");
+                $replacement_arg_list{$git_hash{$Right}} = git_archive($Right, $Left);
             } elsif ($git_hash{$Left}) {
 #print "A DIFF 3\n";
                 # assume Right is a directory; tar the entire git archive at this hash
-                $replacement_arg_list{$git_hash{$Left}}  = git_archive($Left);
+################$replacement_arg_list{$git_hash{$Left}}  = git_archive($Left);
+                $replacement_arg_list{$git_hash{$Left}}  = git_archive($Left, "");
             } else {
 #print "A DIFF 4\n";
                 # assume Left  is a directory; tar the entire git archive at this hash
-                $replacement_arg_list{$git_hash{$Right}} = git_archive($Right);
+################$replacement_arg_list{$git_hash{$Right}} = git_archive($Right);
+                $replacement_arg_list{$git_hash{$Right}} = git_archive($Right, "");
             }
         }
     } else {
@@ -4208,18 +4214,59 @@ sub replace_git_hash_with_tarfile {          # {{{1
 sub git_archive {                            # {{{1
     # Invoke 'git archive' as a system command to create a tar file
     # using the given argument(s).
-    my ($args, ) = @_;
-    print "-> git_archive($args)\n" if $opt_v > 2;
+    my ($A1, $A2) = @_;
+
+    my $args = undef;
+	my @File_Set = ( );
+    my $n_sets   = 1;
+    if (ref $A2 eq 'ARRAY') {
+        # Avoid "Argument list too long" for the git archive command
+        # by splitting the inputs into sets of 10,000 files (issue 273).
+        my $FILES_PER_ARCHIVE = 30_000;
+
+        my $n_files  = scalar(@{$A2});
+        $n_sets = $n_files/$FILES_PER_ARCHIVE;
+        $n_sets = 1 + int($n_sets) if $n_sets > int($n_sets);
+        foreach my $i (0..$n_sets-1) {
+            my $start = $i*$FILES_PER_ARCHIVE;
+            my $end   = smaller(($i+1)*$FILES_PER_ARCHIVE, $n_files) - 1;
+            push @File_Set,
+                 "$A1 " . join(" ", map {$_ =~ s/([\s\(\)\[\]{}';\^\$\?])/\\$1/g; $_}
+                              @{$A2}[$start .. $end]);
+        }
+########$args = "$A1 " . join(" ", map {$_ =~ s/([\s\(\)\[\]{}';\^\$\?])/\\$1/g; $_} @{$A2});
+    } else {
+		push @File_Set, "$A1 $A2";
+########$args = "$A1 $A2";
+    }
+    print "-> git_archive($File_Set[0])\n" if $opt_v > 2;
     my ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, SUFFIX => $ON_WINDOWS ? '.zip' : '.tar');  # delete on exit
-    my $cmd = "git archive -o $Tarfile $args";
+    my $cmd = "git archive -o $Tarfile $File_Set[0]";
     print  $cmd, "\n" if $opt_v;
     system $cmd;
     if (!-r $Tarfile or !-s $Tarfile) {
         # not readable, or zero sized
         die "Failed to create tarfile of files from git.";
     }
+    if ($n_sets > 1) {
+        foreach my $i (1..$n_sets-1) {
+            my $cmd = "git archive -o ${Tarfile}_extra $File_Set[$i]";
+            print  $cmd, "\n" if $opt_v;
+            system $cmd;
+            # and merge into the first one
+            # TODO:  on Windows switch to .tar instead of .zip
+               $cmd = "tar -A -f ${Tarfile} ${Tarfile}_extra";
+            print  $cmd, "\n" if $opt_v;
+            system $cmd;
+        }
+        unlink "${Tarfile}_extra";
+    }
     print "<- git_archive()\n" if $opt_v > 2;
     return $Tarfile
+} # 1}}}
+sub smaller {						                          # {{{1
+    my( $a, $b ) = @_;
+    return $a < $b ? $a : $b;
 } # 1}}}
 sub make_file_list {                         # {{{1
     my ($ra_arg_list,  # in   file and/or directory names to examine
