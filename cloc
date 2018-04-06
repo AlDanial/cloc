@@ -7062,7 +7062,7 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'OCaml'              => [
-                                [ 'call_regexp_common'  , 'Pascal' ],
+                                [ 'remove_between_general', '(*', '*)' ],
                             ],
     'OpenCL'             => [
                                 [ 'call_regexp_common'  , 'C++'    ],
