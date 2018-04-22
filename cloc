@@ -4087,13 +4087,24 @@ sub replace_git_hash_with_tarfile {          # {{{1
     #          Extract file from the git repo and only compare to it.
     #       git_hash1  git_hash2
     #          Get listings of all files in git_hash1 and git_hash2.
+    #            git ls-tree --name-only -r *git_hash1*
+    #            git ls-tree --name-only -r *git_hash2*
     #          Next, get listings of files that changed with git_hash1
-    #          and git_hash2.  Finally, make two tar files of
-    #          git repos1 and 2 where the file listing is the union
-    #          of changes.
+    #          and git_hash2.
+    #            git diff-tree -r --no-commit-id --name-only *git_hash1* *git_hash2*
+    #          Finally, make two tar files of git repos1 and 2 where the file
+    #          listing is the union of changes.
+    #            git archive -o tarfile1 *git_hash1* \
+    #               <union of files that changed and exist in this commit>
+    #            git archive -o tarfile2 *git_hash2* \
+    #               <union of files that changed and exist in this commit>
+    #          To avoid "Argument list too long" error, repeat the git
+    #          achive step with chunks of 30,000 files at a time then
+    #          merge the tar files as the final step.
     #   Regular count:
     #       Simply make a tar file of all files in the git repo.
 
+    print "-> replace_git_hash_with_tarfile()\n" if $opt_v > 2;
 #print "ra_arg_list 1: @{$ra_arg_list}\n";
 
     my $hash_regex = qr/^([a-f\d]{5,40}|master|HEAD)$/;
@@ -4163,34 +4174,33 @@ sub replace_git_hash_with_tarfile {          # {{{1
                 push @right_files, $file if $repo_listing{$Right}{$file};
             }
             # backslash whitespace, weird chars within file names (#257, #284)
-            my $files = join(" ", map {$_ =~ s/([\s\(\)\[\]{}';\^\$\?])/\\$1/g; $_} @left_files);
-############$replacement_arg_list{$git_hash{$Left}}  = git_archive("$Left  $files");
-            $replacement_arg_list{$git_hash{$Left}}  = git_archive($Left, \@left_files);
-               $files = join(" ", map {$_ =~ s/([\s\(\)\[\]{}';\^\$\?])/\\$1/g; $_} @right_files);
-############$replacement_arg_list{$git_hash{$Right}} = git_archive("$Right $files");
-            $replacement_arg_list{$git_hash{$Right}} = git_archive($Right, @right_files);
+
+            my @Lfiles= map {$_ =~ s/([\s\(\)\[\]{}';\^\$\?])/\\$1/g; $_}   @left_files;
+            $replacement_arg_list{$git_hash{$Left}}  = git_archive($Left , \@Lfiles);
+            my @Rfiles= map {$_ =~ s/([\s\(\)\[\]{}';\^\$\?])/\\$1/g; $_}   @right_files ;
+            $replacement_arg_list{$git_hash{$Right}} = git_archive($Right, \@Rfiles);
+#write_file("/tmp/Lfiles.txt", sort @Lfiles);
+#write_file("/tmp/Rfiles.txt", sort @Rfiles);
+#write_file("/tmp/files_union.txt", sort keys %files_union);
+
         } else {
 #print "A DIFF git-to-file or file-to-git Left=$Left Right=$Right\n";
             # git to file/dir or file/dir to git
             if      ($git_hash{$Left}  and $repo_listing{$Left}{$Right} ) {
 #print "A DIFF 1\n";
                 # $Left is a git hash and $Right is a file
-################$replacement_arg_list{$git_hash{$Left}}  = git_archive("$Left $Right");
                 $replacement_arg_list{$git_hash{$Left}}  = git_archive($Left, $Right);
             } elsif ($git_hash{$Right} and $repo_listing{$Right}{$Left}) {
 #print "A DIFF 2\n";
                 # $Left is a file and $Right is a git hash
-################$replacement_arg_list{$git_hash{$Right}} = git_archive("$Right $Left");
                 $replacement_arg_list{$git_hash{$Right}} = git_archive($Right, $Left);
             } elsif ($git_hash{$Left}) {
 #print "A DIFF 3\n";
                 # assume Right is a directory; tar the entire git archive at this hash
-################$replacement_arg_list{$git_hash{$Left}}  = git_archive($Left);
                 $replacement_arg_list{$git_hash{$Left}}  = git_archive($Left, "");
             } else {
 #print "A DIFF 4\n";
                 # assume Left  is a directory; tar the entire git archive at this hash
-################$replacement_arg_list{$git_hash{$Right}} = git_archive($Right);
                 $replacement_arg_list{$git_hash{$Right}} = git_archive($Right, "");
             }
         }
@@ -4210,6 +4220,7 @@ sub replace_git_hash_with_tarfile {          # {{{1
     }
 
 #print "ra_arg_list 2: @{$ra_arg_list}\n";
+    print "<- replace_git_hash_with_tarfile()\n" if $opt_v > 2;
 } # 1}}}
 sub git_archive {                            # {{{1
     # Invoke 'git archive' as a system command to create a tar file
@@ -4227,6 +4238,7 @@ sub git_archive {                            # {{{1
         my $n_files  = scalar(@{$A2});
         $n_sets = $n_files/$FILES_PER_ARCHIVE;
         $n_sets = 1 + int($n_sets) if $n_sets > int($n_sets);
+        $n_sets = 1 if !$n_sets;
         foreach my $i (0..$n_sets-1) {
             my $start = $i*$FILES_PER_ARCHIVE;
             my $end   = smaller(($i+1)*$FILES_PER_ARCHIVE, $n_files) - 1;
