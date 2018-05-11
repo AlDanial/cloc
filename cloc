@@ -1780,8 +1780,8 @@ sub count_files {                            # {{{1
 
         my ($all_line_count, $blank_count, $comment_count, $code_count);
         if ($opt_use_sloccount and $Language{$file} =~ /^(C|C\+\+|XML|PHP|Pascal|Java)$/) {
-            chomp ($blank_count     = `grep -Pcv '\\S' $file`);
-            chomp ($all_line_count  = `cat $file | wc -l`);
+            chomp ($blank_count     = `grep -Pcv '\\S' '$file'`);
+            chomp ($all_line_count  = `cat '$file' | wc -l`);
             if      ($Language{$file} =~ /^(C|C\+\+)$/) {
                 $code_count = `cat '$file' | c_count      | head -n 1`;
             } elsif ($Language{$file} eq "XML") {
