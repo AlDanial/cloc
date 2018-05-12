@@ -316,6 +316,11 @@ my @Tests = (
                     'args' => '../tests/inputs/Combinators.idr',
                 },
                 {
+                    'name' => 'IPython Notebook (JSON count only for now)',
+                    'ref'  => '../tests/outputs/Trapezoid_Rule.ipynb.yaml',
+                    'args' => '../tests/inputs/Trapezoid_Rule.ipynb',
+                },
+                {
                     'name' => 'INI',
                     'ref'  => '../tests/outputs/wpedia.ini.yaml',
                     'args' => '../tests/inputs/wpedia.ini',

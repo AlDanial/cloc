@@ -6391,6 +6391,7 @@ sub set_constants {                          # {{{1
             'pp'          => 'Pascal/Puppet'         ,
             'psql'        => 'SQL'                   ,
             'py'          => 'Python'                ,
+            'ipynb'       => 'IPython Notebook'      ,
             'pyj'         => 'RapydScript'           ,
             'pyx'         => 'Cython'                ,
             'qml'         => 'QML'                   ,
@@ -7190,6 +7191,12 @@ sub set_constants {                          # {{{1
                                 [ 'docstring_to_C'                 ],
                                 [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_inline'       , '#.*$'   ],
+                            ],
+    'IPython Notebook'   => [   # these are JSON files; have no comments
+                                # would have to parse JSON for
+                                #      "cell_type": "code"
+                                # to count code lines
+                                [ 'remove_matches'      , '^\s*$'  ],
                             ],
     'PHP'                => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -8397,6 +8404,7 @@ sub set_constants {                          # {{{1
     'ML'                           => 3.00,
     'Modula3'                      => 2.00,
     'PHP'                          => 3.50,
+    'IPython Notebook'             => 4.20,
     'Python'                       => 4.20,
     'RapydScript'                  => 4.20,
     'Skylark'                      => 4.20,

@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.77
+  elapsed_seconds    : 0.00600194931030273
+  n_files            : 1
+  n_lines            : 147
+  files_per_second   : 166.61253674426
+  lines_per_second   : 24492.0429014062
+  report_file        : outputs/Trapezoid_Rule.ipynb.yaml
+IPython Notebook :
+  nFiles: 1
+  blank: 0
+  comment: 0
+  code: 147
+SUM: 
+  blank: 0
+  comment: 0
+  code: 147
+  nFiles: 1
