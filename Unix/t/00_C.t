@@ -566,6 +566,11 @@ my @Tests = (
                     'args' => '../tests/inputs/utilities.R',
                 },
                 {
+                    'name' => 'Rmd',
+                    'ref'  => '../tests/output/test.Rmd.yaml',
+                    'args' => '../tests/inputs/test.Rmd',
+                },
+                {
                     'name' => 'Ruby',
                     'ref'  => '../tests/outputs/messages.rb.yaml',
                     'args' => '../tests/inputs/messages.rb',

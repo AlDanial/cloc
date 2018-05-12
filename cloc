@@ -5382,6 +5382,28 @@ sub remove_f90_comments {                    # {{{1
     print "<- remove_f90_comments\n" if $opt_v > 2;
     return @save_lines;
 } # 1}}}
+sub reduce_to_rmd_code_blocks {              #{{{1
+    my ($ra_lines) = @_; #in
+    print "<- remove_f90_comments\n" if $opt_v > 2;
+    print "-> reduce_to_rmd_code_blocks()\n" if $opt_v > 2;
+    
+    my $in_code_block = 0;
+    my @save_lines = ();
+    foreach (@{$ra_lines}) {
+        if ( m/^```{\s*[[:alpha:]] / ) {
+            $in_code_block = 1;
+            next;
+        }
+        if ( m/^```\s*$/ ) {
+            $in_code_block = 0;
+        }
+        next if (!$in_code_block);
+        push @save_lines, $_;
+    }
+
+    print "<- reduce_to_rmd_code_blocks()\n" if $opt_v> 2;
+    return @save_lines;
+} # 1}}}
 sub remove_matches {                         # {{{1
     my ($ra_lines, # in
         $pattern , # in   Perl regular expression (case insensitive)
@@ -6434,6 +6456,7 @@ sub set_constants {                          # {{{1
             'psm1'        => 'PowerShell'            ,
             'R'           => 'R'                     ,
             'r'           => 'R'                     ,
+            'Rmd'         => 'Rmd'                   ,
             'raml'        => 'RAML'                  ,
             'rkt'         => 'Racket'                ,
             'rktl'        => 'Racket'                ,
@@ -7223,6 +7246,11 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
+    'Rmd'                => [
+                                [ 'reduce_to_rmd_code_blocks'      ],
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
     'Racket'             => [
                                 [ 'remove_matches'      , '^\s*;'  ],
                                 [ 'remove_inline'       , ';.*$'   ],
@@ -7592,6 +7620,7 @@ sub set_constants {                          # {{{1
     'PowerShell'         =>     '\\\\$'         ,
     'Python'             =>     '\\\\$'         ,
     'R'                  =>     '\\\\$'         ,
+    'Rmd'                =>     '\\\\$'         ,
     'Ruby'               =>     '\\\\$'         ,
     'sed'                =>     '\\\\$'         ,
     'Swift'              =>     '\\\\$'         ,
@@ -7686,6 +7715,7 @@ sub set_constants {                          # {{{1
    'CHANGES'     => 1,
    'COPYING'     => 1,
    'COPYING'     => 1,
+   'DESCRIPTION' => 1, # R pacakges metafile
    '.cvsignore'  => 1,
    'Entries'     => 1,
    'FAQ'         => 1,
@@ -7693,6 +7723,7 @@ sub set_constants {                          # {{{1
    'INSTALL'     => 1,
    'MAINTAINERS' => 1,
    'MD5SUMS'     => 1,
+   'NAMESPACE'   => 1, # R pacakges metafile
    'NEWS'        => 1,
    'readme'      => 1,
    'Readme'      => 1,
@@ -8206,6 +8237,7 @@ sub set_constants {                          # {{{1
     'quickbuild'                   =>   2.86,
     'quiz'                         =>   5.33,
     'R'                            =>   3.00,
+    'Rmd'                          =>   3.00,
     'Racket'                       =>   1.50,
     'rally'                        =>   2.00,
     'ramis ii'                     =>   2.00,
