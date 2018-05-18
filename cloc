@@ -5889,6 +5889,34 @@ sub remove_pug_block {                       # {{{1
     my ($ra_lines, ) = @_;
     return remove_intented_block($ra_lines, '^(\s*)(//)\s*$');
 } # 1}}}
+sub remove_OCaml_comments {                  # {{{1
+    my ($ra_lines, ) = @_;
+
+    print "-> remove_OCaml_comments\n" if $opt_v > 2;
+
+    my @save_lines = ();
+    my $in_comment = 0;   # counter to depth of nested comments
+    foreach my $L (@{$ra_lines}) {
+        next if $L =~ /^\s*$/;
+        # make an array of tokens where a token is a start comment
+        # marker, end comment marker, string, or anything else
+        my $clean_line = ""; # ie, free of comments
+        my @tokens = split(/(\(\*|\*\)|".*?")/, $L);
+        foreach my $t (@tokens) {
+            next unless $t;
+            if      ($t eq "(*") {
+                ++$in_comment;
+            } elsif ($t eq "*)") {
+                --$in_comment;
+            } elsif (!$in_comment) {
+                $clean_line .= $t;
+            }
+        }
+        push @save_lines, $clean_line if $clean_line;
+    }
+    print "<- remove_OCaml_comments\n" if $opt_v > 2;
+    return @save_lines;
+} # 1}}}
 sub remove_slim_block {                      # {{{1
     # slim comments start with /
     # followed by indented text on subsequent lines.
@@ -7075,7 +7103,7 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'OCaml'              => [
-                                [ 'remove_between_general', '(*', '*)' ],
+                                [ 'remove_OCaml_comments',         ],
                             ],
     'OpenCL'             => [
                                 [ 'call_regexp_common'  , 'C++'    ],
