@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.77
+  elapsed_seconds    : 0.00584006309509277
+  n_files            : 1
+  n_lines            : 26
+  files_per_second   : 171.231026740151
+  lines_per_second   : 4452.00669524393
+  report_file        : ../outputs/glossary.json5.yaml
+JSON5 :
+  nFiles: 1
+  blank: 0
+  comment: 4
+  code: 22
+SUM: 
+  blank: 0
+  comment: 4
+  code: 22
+  nFiles: 1

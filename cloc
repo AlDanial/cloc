@@ -6335,6 +6335,7 @@ sub set_constants {                          # {{{1
             'jsx'         => 'JSX'                   ,
             'xhtml'       => 'XHTML'                 ,
             'json'        => 'JSON'                  ,
+            'json5'       => 'JSON5'                 ,
             'jsp'         => 'JSP'                   , # Java server pages
             'jspf'        => 'JSP'                   , # Java server pages
             'vm'          => 'Velocity Template Language' ,
@@ -7022,6 +7023,9 @@ sub set_constants {                          # {{{1
                                 # so just use a placeholder filter
                                 [ 'remove_matches'      , '^\s*$'  ],
                             ],
+    'JSON5'              => [   # same as JavaScript
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'Julia'              => [
                                 [ 'remove_between_general', '#=', '=#' ],
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -7604,6 +7608,7 @@ sub set_constants {                          # {{{1
     'IDL'                =>     '\$\\$'         ,
     'Java'               =>     '\\\\$'         ,
     'JavaScript'         =>     '\\\\$'         ,
+    'JSON5'              =>     '\\\\$'         ,
     'JSX'                =>     '\\\\$'         ,
     'LESS'               =>     '\\\\$'         ,
     'Lua'                =>     '\\\\$'         ,
@@ -8059,6 +8064,7 @@ sub set_constants {                          # {{{1
     'JavaScript'                   =>   1.48,
     'JavaServer Faces'             =>   1.5 ,
     'JSON'                         =>   2.50,
+    'JSON5'                        =>   2.50,
     'JSP'                          =>   1.48,
     'JSX'                          =>   1.48,
     'Velocity Template Language'   =>   1.00,
