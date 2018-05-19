@@ -7715,7 +7715,7 @@ sub set_constants {                          # {{{1
    'CHANGES'     => 1,
    'COPYING'     => 1,
    'COPYING'     => 1,
-   'DESCRIPTION' => 1, # R pacakges metafile
+   'DESCRIPTION' => 1, # R packages metafile
    '.cvsignore'  => 1,
    'Entries'     => 1,
    'FAQ'         => 1,
@@ -7723,7 +7723,7 @@ sub set_constants {                          # {{{1
    'INSTALL'     => 1,
    'MAINTAINERS' => 1,
    'MD5SUMS'     => 1,
-   'NAMESPACE'   => 1, # R pacakges metafile
+   'NAMESPACE'   => 1, # R packages metafile
    'NEWS'        => 1,
    'readme'      => 1,
    'Readme'      => 1,
