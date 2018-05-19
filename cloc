@@ -5390,7 +5390,7 @@ sub reduce_to_rmd_code_blocks {              #{{{1
     my $in_code_block = 0;
     my @save_lines = ();
     foreach (@{$ra_lines}) {
-        if ( m/^```\{\s*[[:alpha:]] / ) {
+        if ( m/^```\{\s*[[:alpha:]]/ ) {
             $in_code_block = 1;
             next;
         }
