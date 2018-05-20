@@ -572,7 +572,7 @@ my @Tests = (
                 },
                 {
                     'name' => 'Rmd',
-                    'ref'  => '../tests/output/test.Rmd.yaml',
+                    'ref'  => '../tests/outputs/test.Rmd.yaml',
                     'args' => '../tests/inputs/test.Rmd',
                 },
                 {

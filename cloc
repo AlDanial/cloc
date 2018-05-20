@@ -5384,7 +5384,6 @@ sub remove_f90_comments {                    # {{{1
 } # 1}}}
 sub reduce_to_rmd_code_blocks {              #{{{1
     my ($ra_lines) = @_; #in
-    print "<- remove_f90_comments\n" if $opt_v > 2;
     print "-> reduce_to_rmd_code_blocks()\n" if $opt_v > 2;
     
     my $in_code_block = 0;
