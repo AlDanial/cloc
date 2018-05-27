@@ -199,6 +199,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/286/6.yaml',
                 },
 
+                {
+                    'name' => '--include-ext m,lua (github issue #296)',
+                    'cd'   => '../tests/inputs',
+                    'args' => '--include-ext m,lua .',
+                    'ref'  => '../tests/outputs/issues/296/results.yaml',
+                },
+
 
 #               {
 #                   'name' => '--count-and--diff with --out',

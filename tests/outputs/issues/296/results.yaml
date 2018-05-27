@@ -1,0 +1,36 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.77
+  elapsed_seconds    : 0.0224320888519287
+  n_files            : 5
+  n_lines            : 143
+  files_per_second   : 222.89498017792
+  lines_per_second   : 6374.79643308852
+  report_file        : ../tests/inputs/issues/296/out.yaml
+MATLAB :
+  nFiles: 2
+  blank: 0
+  comment: 1
+  code: 50
+Objective C :
+  nFiles: 1
+  blank: 11
+  comment: 11
+  code: 25
+Mathematica :
+  nFiles: 1
+  blank: 12
+  comment: 8
+  code: 11
+Lua :
+  nFiles: 1
+  blank: 3
+  comment: 9
+  code: 2
+SUM: 
+  blank: 26
+  comment: 29
+  code: 88
+  nFiles: 5
