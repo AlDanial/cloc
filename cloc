@@ -136,6 +136,12 @@ if ($ON_WINDOWS and $ENV{'SHELL'}) {
         $ON_WINDOWS = 1;  # MKS defines $SHELL but still acts like Windows
     }
 }
+my $config_file = '';
+if ( $ENV{'HOME'} ) {
+    $config_file = File::Spec->catfile( $ENV{'HOME'}, '.config', 'cloc', 'options.txt');
+} elsif ( $ENV{'APPDATA'} and $ON_WINDOWS ) {
+    $config_file = File::Spec->catfile( $ENV{'APPDATA'}, 'cloc');
+}
 
 my $NN     = chr(27) . "[0m";  # normal
    $NN     = "" if $ON_WINDOWS or !(-t STDERR); # -t STDERR:  is it a terminal?
@@ -222,6 +228,13 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
    --by-file                 Report results for every source file encountered.
    --by-file-by-lang         Report results for every source file encountered
                              in addition to reporting by language.
+   --config <file>           Read command line switches from <file> instead of
+                             the default location of $config_file.
+                             The file should contain one switch, along with
+                             arguments (if any), per line.  Blank lines and lines
+                             beginning with '#' are skipped.  Options given on
+                             the command line take priority over entries read from
+                             the file.
    --count-and-diff <set1> <set2>
                              First perform direct code counts of source file(s)
                              of <set1> and <set2> separately, then perform a diff
@@ -618,9 +631,10 @@ my (
     $opt_use_sloccount        ,
     $opt_no_autogen           ,
     $opt_force_git            ,
+    $opt_config_file          ,
    );
 
-my $getopt_success = GetOptions( # {{{1
+my $getopt_success = GetOptions(             # {{{1
    "by_file|by-file"                         => \$opt_by_file             ,
    "by_file_by_lang|by-file-by-lang"         => \$opt_by_file_by_lang     ,
    "categorized=s"                           => \$opt_categorized         ,
@@ -701,9 +715,11 @@ my $getopt_success = GetOptions( # {{{1
    "use_sloccount|use-sloccount"             => \$opt_use_sloccount       ,
    "no_autogen|no-autogen"                   => \$opt_no_autogen          ,
    "git"                                     => \$opt_force_git           ,
+   "config=s"                                => \$opt_config_file         ,
   );
 # 1}}}
-load_from_config_file(                # {{{1
+$config_file = $opt_config_file if defined $opt_config_file;
+load_from_config_file($config_file,          # {{{1
                                                 \$opt_by_file             ,
                                                 \$opt_by_file_by_lang     ,
                                                 \$opt_categorized         ,
@@ -12628,7 +12644,9 @@ sub no_autogen_files {                       # {{{1
     return @files;
 } # 1}}}
 sub load_from_config_file {                  # {{{1
-   my (
+    # Supports all options except --config itself which would
+    # be pointless.
+    my ($config_file,
                                                  $rs_by_file             ,
                                                  $rs_by_file_by_lang     ,
                                                  $rs_categorized         ,
@@ -12712,11 +12730,16 @@ sub load_from_config_file {                  # {{{1
         #    $ENV{'HOME'}/.config/cloc/options.txt         -> POSIX
         #    $ENV{'APPDATA'} . 'cloc'
 
-    my $config_file = File::Spec->catfile( $ENV{'HOME'}, '.config', 'cloc', 'options.txt');
-       $config_file = File::Spec->catfile( $ENV{'APPDATA'}, 'cloc') if $ON_WINDOWS;
-    return unless -f $config_file and -r $config_file;
+    print "-> load_from_config_file($config_file)\n" if $opt_v and $opt_v > 2;
+    if (!-f $config_file) {
+        print "<- load_from_config_file() (no such file: $config_file)\n" if $opt_v and $opt_v > 2;
+        return;
+    } elsif (!-r $config_file) {
+        print "<- load_from_config_file() (unable to read $config_file)\n" if $opt_v and $opt_v > 2;
+        return;
+    }
+    print "Reading options from $config_file.\n" if defined $opt_v;
 
-#       } elsif (!defined ${$rs_ignored} and /ignored(=|\s+)(.*?)$/)                         { ${$rs_ignored}            = $2;
     my @lines = read_file($config_file);
     foreach (@lines) {
         next if /^\s*$/ or /^\s*#/;
@@ -12814,100 +12837,7 @@ sub load_from_config_file {                  # {{{1
     }
 } # 1}}}
 # subroutines copied from SLOCCount
-my %lex_files    = ();  # really_is_lex()
-my %expect_files = ();  # really_is_expect()
 my %php_files    = ();  # really_is_php()
-
-sub really_is_lex {                          # {{{1
-# Given filename, returns TRUE if its contents really is lex.
-# lex file must have "%%", "%{", and "%}".
-# In theory, a lex file doesn't need "%{" and "%}", but in practice
-# they all have them, and requiring them avoid mislabeling a
-# non-lexfile as a lex file.
-
- my $filename = shift;
- chomp($filename);
-
- my $is_lex = 0;      # Value to determine.
- my $percent_percent = 0;
- my $percent_opencurly = 0;
- my $percent_closecurly = 0;
-
- # Return cached result, if available:
- if ($lex_files{$filename}) { return $lex_files{$filename};}
-
- open(LEX_FILE, "<$filename") ||
-      die "Can't open $filename to determine if it's lex.\n";
- while(<LEX_FILE>) {
-   $percent_percent++     if (m/^\s*\%\%/);
-   $percent_opencurly++   if (m/^\s*\%\{/);
-   $percent_closecurly++   if (m/^\s*\%\}/);
- }
- close(LEX_FILE);
-
- if ($percent_percent && $percent_opencurly && $percent_closecurly)
-          {$is_lex = 1;}
-
- $lex_files{$filename} = $is_lex; # Store result in cache.
-
- return $is_lex;
-} # 1}}}
-sub really_is_expect {                       # {{{1
-# Given filename, returns TRUE if its contents really are Expect.
-# Many "exp" files (such as in Apache and Mesa) are just "export" data,
-# summarizing something else # (e.g., its interface).
-# Sometimes (like in RPM) it's just misc. data.
-# Thus, we need to look at the file to determine
-# if it's really an "expect" file.
-
- my $filename = shift;
- chomp($filename);
-
-# The heuristic is as follows: it's Expect _IF_ it:
-# 1. has "load_lib" command and either "#" comments or {}.
-# 2. {, }, and one of: proc, if, [...], expect
-
- my $is_expect = 0;      # Value to determine.
-
- my $begin_brace = 0;  # Lines that begin with curly braces.
- my $end_brace = 0;    # Lines that begin with curly braces.
- my $load_lib = 0;     # Lines with the Load_lib command.
- my $found_proc = 0;
- my $found_if = 0;
- my $found_brackets = 0;
- my $found_expect = 0;
- my $found_pound = 0;
-
- # Return cached result, if available:
- if ($expect_files{$filename}) { return expect_files{$filename};}
-
- open(EXPECT_FILE, "<$filename") ||
-      die "Can't open $filename to determine if it's expect.\n";
- while(<EXPECT_FILE>) {
-
-   if (m/#/) {$found_pound++; s/#.*//;}
-   if (m/^\s*\{/) { $begin_brace++;}
-   if (m/\{\s*$/) { $begin_brace++;}
-   if (m/^\s*\}/) { $end_brace++;}
-   if (m/\};?\s*$/) { $end_brace++;}
-   if (m/^\s*load_lib\s+\S/) { $load_lib++;}
-   if (m/^\s*proc\s/) { $found_proc++;}
-   if (m/^\s*if\s/) { $found_if++;}
-   if (m/\[.*\]/) { $found_brackets++;}
-   if (m/^\s*expect\s/) { $found_expect++;}
- }
- close(EXPECT_FILE);
-
- if ($load_lib && ($found_pound || ($begin_brace && $end_brace)))
-          {$is_expect = 1;}
- if ( $begin_brace && $end_brace &&
-      ($found_proc || $found_if || $found_brackets || $found_expect))
-          {$is_expect = 1;}
-
- $expect_files{$filename} = $is_expect; # Store result in cache.
-
- return $is_expect;
-} # 1}}}
 sub really_is_pascal {                       # {{{1
 # Given filename, returns TRUE if its contents really are Pascal.
 
