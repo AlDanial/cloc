@@ -299,12 +299,15 @@ cloc has many features that make it easy to use, thorough, extensible, and porta
 
 If cloc does not suit your needs here are other freely available counters to consider:
 
-*   [Sonar](http://www.sonarsource.org/)
-*   [Ohcount](https://github.com/blackducksoftware/ohcount)
-*   [SLOCCount](http://www.dwheeler.com/sloccount/)
+*   [loc](https://github.com/cgag/loc/)
+*   [gocloc](https://github.com/hhatto/gocloc/)
+*   [Ohcount](https://github.com/blackducksoftware/ohcount/)
 *   [sclc](https://code.google.com/archive/p/sclc/)
-*   USC's [CODECOUNT](http://sunset.usc.edu/research/CODECOUNT/)
-*   [loc](http://freshmeat.net/projects/loc/)
+*   [SLOCCount](http://www.dwheeler.com/sloccount/)
+*   [Sonar](http://www.sonarsource.org/)
+*   [ssc](https://github.com/boyter/scc/)
+*   [tokei](https://github.com/Aaronepower/tokei/)
+*   [Unified Code Count](http://csse.usc.edu/ucc_new/wordpress/)
 
 Other references:
 
