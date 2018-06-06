@@ -510,6 +510,8 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
    --csv                     Write the results as comma separated values.
    --csv-delimiter=<C>       Use the character <C> as the delimiter for comma
                              separated files instead of ,.  This switch forces
+   --hide-rate               Don't show rate of processing files/lines. This
+                             makes output deterministic.
    --json                    Write the results as JavaScript Object Notation
                              (JSON) formatted output.
    --md                      Write the results as Markdown-formatted text.
@@ -586,6 +588,7 @@ my (
     $opt_report_file          ,
     $opt_sdir                 ,
     $opt_sum_reports          ,
+    $opt_hide_rate            ,
     $opt_processes            ,
     $opt_unicode              ,
     $opt_no3                  ,   # accept it but don't use it
@@ -668,6 +671,7 @@ my $getopt_success = GetOptions(             # {{{1
    "strip_comments|strip-comments=s"         => \$opt_strip_comments      ,
    "original_dir|original-dir"               => \$opt_original_dir        ,
    "sum_reports|sum-reports"                 => \$opt_sum_reports         ,
+   "hide_rate|hide-rate"                     => \$opt_hide_rate           ,
    "processes=n"                             => \$opt_processes           ,
    "unicode"                                 => \$opt_unicode             ,
    "no3"                                     => \$opt_no3                 ,  # ignored
@@ -752,6 +756,7 @@ load_from_config_file($config_file,          # {{{1
                                                 \$opt_strip_comments      ,
                                                 \$opt_original_dir        ,
                                                 \$opt_sum_reports         ,
+                                                \$opt_hide_rate           ,
                                                 \$opt_processes           ,
                                                 \$opt_unicode             ,
                                                 \$opt_3                   ,
@@ -2680,7 +2685,7 @@ sub diff_report     {                        # {{{1
        $header_line .= sprintf("  T=%.2f s (%.1f files/s, %.1f lines/s)",
                         $elapsed_sec           ,
                         $sum_files/$elapsed_sec,
-                        $sum_lines/$elapsed_sec) unless $opt_sum_reports;
+                        $sum_lines/$elapsed_sec) unless $opt_sum_reports or $opt_hide_rate;
     if ($Style eq "txt") {
         push @results, output_header($header_line, $hyphen_line, $BY_FILE);
     } elsif ($Style eq "csv") {
@@ -3477,7 +3482,7 @@ sub generate_report {                        # {{{1
        $header_line .= sprintf("  T=%.2f s (%.1f files/s, %.1f lines/s)",
                         $elapsed_sec           ,
                         $sum_files/$elapsed_sec,
-                        $sum_lines/$elapsed_sec) unless $opt_sum_reports;
+                        $sum_lines/$elapsed_sec) unless $opt_sum_reports or $opt_hide_rate;
     if ($opt_xml or $opt_yaml or $opt_json) {
         if (!$ALREADY_SHOWED_HEADER) {
             push @results, xml_yaml_or_json_header($URL, $version, $elapsed_sec,
