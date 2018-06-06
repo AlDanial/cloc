@@ -6479,6 +6479,7 @@ sub set_constants {                          # {{{1
             'inc'         => 'PHP/Pascal'            , # might be PHP or Pascal
             'inl'         => 'C++'                   ,
             'ino'         => 'Arduino Sketch'        ,
+            'ipf'         => 'Igor Pro'              ,
             'pde'         => 'Arduino Sketch'        , # pre 1.0
             'itk'         => 'Tcl/Tk'                ,
             'java'        => 'Java'                  ,
@@ -7141,6 +7142,10 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^--'    ],
                                 [ 'remove_matches'      , '^\|{3}' ],
                             ],
+    'Igor Pro'           => [
+                                [ 'remove_matches'      , '^\s*//' ],
+                                [ 'remove_inline'       , '//.*$'  ],
+                            ],
     'Literate Idris'        => [
                                 [ 'remove_matches'      , '^[^>]'  ],
                             ],
@@ -7767,6 +7772,7 @@ sub set_constants {                          # {{{1
     'Gencat NLS'         =>     '\\\\$'         ,
     'Go'                 =>     '\\\\$'         ,
     'IDL'                =>     '\$\\$'         ,
+    'Igor Pro'           =>     '\\$'           ,
     'Java'               =>     '\\\\$'         ,
     'JavaScript'         =>     '\\\\$'         ,
     'JSON5'              =>     '\\\\$'         ,
@@ -8207,6 +8213,7 @@ sub set_constants {                          # {{{1
     'ief/cool:gen'                 =>   2.58,
     'iew'                          =>   5.71,
     'ifps/plus'                    =>   2.50,
+    'Igor Pro'                     =>   4.00,
     'imprs'                        =>   2.00,
     'informix'                     =>   2.58,
     'ingres'                       =>   2.00,

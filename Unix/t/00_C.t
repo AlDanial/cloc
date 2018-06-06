@@ -316,6 +316,11 @@ my @Tests = (
                     'args' => '../tests/inputs/Combinators.idr',
                 },
                 {
+                    'name' => 'Igor Pro',
+                    'ref'  => '../tests/outputs/igorpro.ipf.yaml',
+                    'args' => '../tests/inputs/igorpro.ipf',
+                },
+                {
                     'name' => 'IPython Notebook (JSON count only for now)',
                     'ref'  => '../tests/outputs/Trapezoid_Rule.ipynb.yaml',
                     'args' => '../tests/inputs/Trapezoid_Rule.ipynb',
