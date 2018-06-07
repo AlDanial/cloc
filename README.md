@@ -305,7 +305,7 @@ If cloc does not suit your needs here are other freely available counters to con
 *   [sclc](https://code.google.com/archive/p/sclc/)
 *   [SLOCCount](http://www.dwheeler.com/sloccount/)
 *   [Sonar](http://www.sonarsource.org/)
-*   [ssc](https://github.com/boyter/scc/)
+*   [scc](https://github.com/boyter/scc/)
 *   [tokei](https://github.com/Aaronepower/tokei/)
 *   [Unified Code Count](http://csse.usc.edu/ucc_new/wordpress/)
 
