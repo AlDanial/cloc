@@ -959,7 +959,7 @@ die $brief_usage unless defined $opt_version         or
                         $list_no_autogen             or
                         scalar @ARGV >= 1;
 die "--diff requires two arguments; got ", scalar @ARGV, "\n"
-    if $opt_diff and scalar @ARGV != 2;
+    if $opt_diff and !$opt_sum_reports and scalar @ARGV != 2;
 if ($opt_version) {
     printf "$VERSION\n";
     exit;
