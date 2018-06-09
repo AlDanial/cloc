@@ -960,6 +960,9 @@ die $brief_usage unless defined $opt_version         or
                         scalar @ARGV >= 1;
 die "--diff requires two arguments; got ", scalar @ARGV, "\n"
     if $opt_diff and !$opt_sum_reports and scalar @ARGV != 2;
+die "--diff arguments are identical; nothing done", "\n"
+    if $opt_diff and !$opt_sum_reports and scalar @ARGV == 2
+                                       and $ARGV[0] eq $ARGV[1];
 if ($opt_version) {
     printf "$VERSION\n";
     exit;
