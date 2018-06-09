@@ -12548,8 +12548,12 @@ sub combine_diffs {                          # {{{1
                     $cols[0], $cols[1], $cols[2], $cols[3]);
     $res .= sprintf("%s\n", "-" x $width);
 
+    # no inputs? %HoH will be empty
+    return $res unless %HoH;
+
     for my $sec ( keys %HoH ) {
         next if $sec =~ /SUM:/;
+        next unless defined $HoH{$sec};  # eg, the header line
         $res .= "$sec\n";
         foreach (@rows) {
             $res .= sprintf(" %-18s %14s %14s %14s %14s\n",
