@@ -4384,8 +4384,9 @@ sub git_archive {                            # {{{1
         foreach my $i (0..$n_sets-1) {
             my $start = $i*$FILES_PER_ARCHIVE;
             my $end   = smaller(($i+1)*$FILES_PER_ARCHIVE, $n_files) - 1;
+            # don't include \$ in the regex because git handles these correctly
             push @File_Set,
-                 "$A1 " . join(" ", map {$_ =~ s/([\s\(\)\[\]{}';\^\$\?])/\\$1/g; $_}
+                 "$A1 " . join(" ", map {$_ =~ s/([\s\(\)\[\]{}';\^\?])/\\$1/g; $_}
                               @{$A2}[$start .. $end]);
         }
 ########$args = "$A1 " . join(" ", map {$_ =~ s/([\s\(\)\[\]{}';\^\$\?])/\\$1/g; $_} @{$A2});
