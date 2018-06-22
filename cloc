@@ -4550,8 +4550,13 @@ sub make_file_list {                         # {{{1
                                            $raa_errors,
                                            $rh_ignored);
         }
-die  "make_file_list($file) undef size" unless defined $size_in_bytes;
-die  "make_file_list($file) undef lang" unless defined $language;
+        if (!defined $size_in_bytes) {
+            $rh_ignored->{$file} = "no longer readable";
+            next;
+        } elsif (!defined $language) {
+            $rh_ignored->{$file} = "unable to associate with a language";
+            next;
+        }
         printf $fh "%d,%s,%s\n", $size_in_bytes, $language, $file;
         ++$nFiles_Categorized;
         #printf "classified %d files\n", $nFiles_Categorized
