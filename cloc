@@ -359,6 +359,17 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              original file name with .<ext> appended to it.
                              It is written to the current directory unless
                              --original-dir is on.
+   --strip-str-comments      Replace comment markers embedded in strings with
+                             'xx'.  This attempts to work around a limitation
+                             in Regexp::Common::Comment where comment markers
+                             embedded in strings are seen as actual comment
+                             markers and not strings, often resulting in a
+                             'Complex regular subexpression recursion limit'
+                             warning and incorrect counts.  There are two
+                             disadvantages to using this switch:  1/code count
+                             performance drops, and 2/code generated with
+                             --strip-comments will contain different strings
+                             where ever embedded comments are found.
    --sum-reports             Input arguments are report files previously
                              created with the --report-file option.  Makes
                              a cumulative set of results containing the
@@ -635,6 +646,7 @@ my (
     $opt_no_autogen           ,
     $opt_force_git            ,
     $opt_config_file          ,
+    $opt_strip_str_comments   ,
    );
 
 my $getopt_success = GetOptions(             # {{{1
@@ -720,6 +732,7 @@ my $getopt_success = GetOptions(             # {{{1
    "no_autogen|no-autogen"                   => \$opt_no_autogen          ,
    "git"                                     => \$opt_force_git           ,
    "config=s"                                => \$opt_config_file         ,
+   "strip_str_comments|strip-str-comments"   => \$opt_strip_str_comments  ,
   );
 # 1}}}
 $config_file = $opt_config_file if defined $opt_config_file;
@@ -803,6 +816,7 @@ load_from_config_file($config_file,          # {{{1
                                                 \$opt_use_sloccount       ,
                                                 \$opt_no_autogen          ,
                                                 \$opt_force_git           ,
+                                                \$opt_strip_str_comments  ,
 );  # 1}}} Not pretty.  Not at all.
 $opt_by_file  = 1 if defined  $opt_by_file_by_lang;
 my $CLOC_XSL = "cloc.xsl"; # created with --xsl
@@ -5426,6 +5440,7 @@ sub rm_comments {                            # {{{1
 
     foreach my $call_string (@routines) {
         my $subroutine = $call_string->[0];
+        next if $subroutine eq "rm_comments_in_strings" and !$opt_strip_str_comments;
         if (! defined &{$subroutine}) {
             warn "rm_comments undefined subroutine $subroutine for $file\n";
             next;
@@ -5724,6 +5739,33 @@ sub remove_between {                         # {{{1
 
     print "<- remove_between\n" if $opt_v > 2;
     return split("\n", $all_lines);
+} # 1}}}
+sub rm_comments_in_strings {                 # {{{1
+    my ($ra_lines, $string_marker, $start_comment, $end_comment, ) = @_;
+    # Replace comments within strings with 'xx'.
+
+    print "-> rm_comments_in_strings(string_marker=$string_marker, " .
+          "start_comment=$start_comment, end_comment=$end_comment)\n"
+        if $opt_v > 2;
+
+    my @save_lines = ();
+    foreach (@{$ra_lines}) {
+
+        my ($line, $string_marker, $start_comment, $end_comment) = @_;
+        my @tokens = split(/(${string_marker}.*?${string_marker})/, $line);
+        my $new_line = "";
+        foreach my $t (@tokens) {
+    #       printf "  t = [$t]\n";
+            $t =~ s/\Q${start_comment}\E/xx/g;
+            $t =~ s/\Q${end_comment}\E/xx/g if $end_comment;
+            $new_line .= $t;
+        }
+
+        push @save_lines, $new_line;
+    }
+
+    print "<- rm_comments_in_strings\n" if $opt_v > 2;
+    return @save_lines;
 } # 1}}}
 sub remove_between_general {                 # {{{1
     my ($ra_lines, $start_marker, $end_marker, ) = @_;
@@ -6800,11 +6842,17 @@ sub set_constants {                          # {{{1
     '(unknown)'          => [ ],
     'ABAP'               => [   [ 'remove_matches'      , '^\*'    ], ],
     'ActionScript'       => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
 
     'ASP'                => [   [ 'remove_matches'      , '^\s*\47'], ],  # \47 = '
-    'ASP.NET'            => [   [ 'call_regexp_common'  , 'C'      ], ],
+    'ASP.NET'            => [ 
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C'      ],
+                            ],
     'Ada'                => [   [ 'remove_matches'      , '^\s*--' ], ],
     'ADSO/IDSM'          => [   [ 'remove_matches'      , '^\s*\*[\+\!]' ], ],
     'Agda'               => [   [ 'remove_haskell_comments', '>filename<' ], ],
@@ -6814,6 +6862,8 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'HTML'   ],
                             ],
     'ANTLR Grammar'      => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Ant'                => [
@@ -6821,9 +6871,13 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'HTML'   ],
                             ],
     'Apex Trigger'       => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Arduino Sketch'     => [   # same as C
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'AsciiDoc'           => [
@@ -6831,6 +6885,8 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*\/\/'  ],
                             ],
     'AspectJ'            => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Assembly'           => [
@@ -6885,18 +6941,28 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*xml_markup.comment!'  ],
                             ],
     'C'                  => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Chapel'       => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'C++'                => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'C/C++ Header'       => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Clean'              => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Clojure'            => [   [ 'remove_matches'      , '^\s*;'  ], ],
@@ -6911,9 +6977,13 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
     'CUDA'               => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Cython'             => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'docstring_to_C'                 ],
                                 [ 'call_regexp_common'  , 'C'      ],
@@ -6922,18 +6992,32 @@ sub set_constants {                          # {{{1
     'C#/Smalltalk' => [ [ 'die' ,  ], ], # never called
     'C#'                 => [
 #                               [ 'remove_matches'      , '^\s*//' ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
-    'CCS'                => [   [ 'call_regexp_common'  , 'C'      ], ],
-    'CSS'                => [   [ 'call_regexp_common'  , 'C'      ], ],
+    'CCS'                => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C'      ],
+                            ],
+    'CSS'                => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C'      ],
+                            ],
     'COBOL'              => [   [ 'remove_cobol_comments',         ], ],
     'CoffeeScript'       => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
     'ColdFusion'         => [   [ 'remove_html_comments',          ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
     'ColdFusion CFScript'=> [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Coq'                => [
@@ -6949,7 +7033,9 @@ sub set_constants {                          # {{{1
                             ],
     'D/dtrace'           => [ [ 'die' ,          ], ], # never called
     'D'                  => [
-#                               [ 'remove_matches'      , '^\s*//' ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'rm_comments_in_strings', '"', '/+', '+/' ],
                                 [ 'remove_between_general', '/+', '+/' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
@@ -6957,6 +7043,8 @@ sub set_constants {                          # {{{1
                                 [ 'remove_between_general', '[', ']', ],
                             ],
     'Dart'               => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     # diff is kind of weird: anything but a space in the first column
@@ -6971,12 +7059,18 @@ sub set_constants {                          # {{{1
                             ],
     'DITA'               => [
                                 [ 'remove_html_comments',          ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
                             ],
     'DOORS Extension Language' => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Drools'             => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'dtrace'             => [
@@ -7038,6 +7132,8 @@ sub set_constants {                          # {{{1
     'Forth'              => [
                                 [ 'remove_matches'      , '^\s*\\\\.*$'  ],
                                 [ 'Forth_paren_to_C'                 ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'      ],
                                 [ 'remove_inline'       , '\\\\.*$'  ],
                             ],
@@ -7077,9 +7173,13 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'HTML'   ],
                             ],
     'GLSL'               => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Go'                 => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
@@ -7088,6 +7188,8 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'HTML'   ],
                                 [ 'remove_jsp_comments' ,          ],
                                 [ 'add_newlines'        ,          ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'GraphQL'            => [
@@ -7115,6 +7217,8 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*Note' ],
                                 [ 'remove_inline'       , '//.*$'  ],
                                 [ 'remove_inline'       , '\&\&.*$' ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Haml'               => [
@@ -7124,14 +7228,20 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*-#\s*\S+' ],
                             ],
     'Haxe'               => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'HCL'                => [
                                 [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'HLSL'               => [
                                 [ 'remove_inline'       , '//.*$'  ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'HTML'               => [
@@ -7177,6 +7287,8 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C'      ],
                             ],
     'JavaServer Faces'   => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Java'               => [
@@ -7187,9 +7299,13 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'JavaScript'         => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'JSX'                => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'JCL'                => [   [ 'remove_jcl_comments' ,          ], ],
@@ -7199,6 +7315,8 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*$'  ],
                             ],
     'JSON5'              => [   # same as JavaScript
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Julia'              => [
@@ -7207,6 +7325,8 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
     'Kotlin'             => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Lean'               => [
@@ -7216,6 +7336,8 @@ sub set_constants {                          # {{{1
                             ],
     'LESS'               => [
 #                               [ 'remove_matches'      , '^\s*//' ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'LFE'                => [
@@ -7271,20 +7393,28 @@ sub set_constants {                          # {{{1
         # Modula 3 comments are (* ... *) so applying the Pascal filter
         # which also treats { ... } as a comment is not really correct.
     'Nemerle'            => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Objective C'        => [
 #                               [ 'remove_matches'      , '^\s*//' ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Objective C++'      => [
 #                               [ 'remove_matches'      , '^\s*//' ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'OCaml'              => [
                                 [ 'remove_OCaml_comments',         ],
                             ],
     'OpenCL'             => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'PHP/Pascal'               => [ [ 'die' ,          ], ], # never called
@@ -7372,6 +7502,8 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*#[^,]' ],  # '#,' is not a comment
                             ],
     'PowerBuilder'       => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'PowerShell'         => [
@@ -7386,6 +7518,8 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '(//|\%).*$' ],
                             ],
     'Protocol Buffers'   => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Pug'                => [
@@ -7407,10 +7541,14 @@ sub set_constants {                          # {{{1
                             ],
     'PHP'                => [
                                 [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
     'QML'                => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
@@ -7451,6 +7589,8 @@ sub set_constants {                          # {{{1
                             ],
     'Razor'              => [
                                 [ 'remove_between_general', '@*', '*@' ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'RobotFramework'     => [
@@ -7469,6 +7609,8 @@ sub set_constants {                          # {{{1
     'Ruby HTML'          => [   [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
     'Rust'               => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'SAS'                => [
@@ -7480,6 +7622,8 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'Scala'              => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Scheme'             => [
@@ -7487,6 +7631,8 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , ';.*$'   ],
                             ],
     'Slice'             => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Slim'               => [
@@ -7507,6 +7653,8 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
     'Solidity'           => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'SparForte'          => [
@@ -7516,6 +7664,8 @@ sub set_constants {                          # {{{1
     'Specman e'          => [
                                 [ 'pre_post_fix'        , "'>", "<'"],
                                 [ 'remove_between_general', "^'>", "^<'" ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++',   ],
                                 [ 'remove_matches'      , '^\s*--' ],
                                 [ 'rm_last_line'        , ],  # undo pre_post_fix addition
@@ -7551,15 +7701,23 @@ sub set_constants {                          # {{{1
                                 [ 'remove_between_general', '(*', '*)' ],
                             ],
     'Stata'              => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Stylus'             => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Swift'              => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'SWIG'               => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
 
@@ -7597,6 +7755,8 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
     'TTCN'               => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'      ],
                             ],
     'TITAN Project File Information'               => [
@@ -7607,6 +7767,8 @@ sub set_constants {                          # {{{1
                                 [ 'remove_between_general', '{#', '#}' ],
                             ],
     'TypeScript'         => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Unity-Prefab'       => [
@@ -7624,17 +7786,25 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*\47'], ],  # \47 = '
     # http://www.altium.com/files/learningguides/TR0114%20VHDL%20Language%20Reference.pdf
     'Vala'               => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Vala Header'        => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Verilog-SystemVerilog/Coq' => [ ['die'] ], # never called
     'Verilog-SystemVerilog' => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'VHDL'               => [
                                 [ 'remove_matches'      , '^\s*--' ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '--.*$'  ],
                             ],
@@ -7664,6 +7834,8 @@ sub set_constants {                          # {{{1
     'Vuejs Component'     => [
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Teamcenter def'     => [   [ 'remove_matches'      , '^\s*#'  ], ],
@@ -7672,6 +7844,8 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , ';.*$'  ],
                             ],
     'yacc'               => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'YAML'               => [
@@ -7689,6 +7863,8 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*note' ],
                                 [ 'remove_matches'      , '^\s*Note' ],
                                 [ 'remove_inline'       , '\&\&.*$' ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'xBase'              => [
@@ -7699,6 +7875,8 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*note' ],
                                 [ 'remove_matches'      , '^\s*Note' ],
                                 [ 'remove_inline'       , '\&\&.*$' ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'MXML'               => [
@@ -7717,6 +7895,8 @@ sub set_constants {                          # {{{1
 #                                                         '^\s*;\s*\*/', ],
                             ],
     'Windows Resource File' => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'WiX source'         => [
@@ -12704,6 +12884,7 @@ sub load_from_config_file {                  # {{{1
                                                  $rs_strip_comments      ,
                                                  $rs_original_dir        ,
                                                  $rs_sum_reports         ,
+                                                 $rs_hide_rate           ,
                                                  $rs_processes           ,
                                                  $rs_unicode             ,
                                                  $rs_3                   ,
@@ -12750,6 +12931,7 @@ sub load_from_config_file {                  # {{{1
                                                  $rs_use_sloccount       ,
                                                  $rs_no_autogen          ,
                                                  $rs_force_git           ,
+                                                 $rs_strip_str_comments  ,
         ) = @_;
         # look for runtime configuration file in
         #    $ENV{'HOME'}/.config/cloc/options.txt         -> POSIX
@@ -12798,6 +12980,7 @@ sub load_from_config_file {                  # {{{1
         } elsif (!defined ${$rs_strip_comments}      and /strip_comments|strip-comments(=|\s+)(.*?)$/)   { ${$rs_strip_comments}     = $2;
         } elsif (!defined ${$rs_original_dir}        and /original_dir|original-dir/)                    { ${$rs_original_dir}       = 1;
         } elsif (!defined ${$rs_sum_reports}         and /sum_reports|sum-reports/)                      { ${$rs_sum_reports}        = 1;
+        } elsif (!defined ${$rs_hide_rate}           and /hid_rate|hide-rate/)                           { ${$rs_hide_rate}          = 1;
         } elsif (!defined ${$rs_processes}           and /processes(=|\s+)(\d+)/)                        { ${$rs_processes}          = $2;
         } elsif (!defined ${$rs_unicode}             and /unicode/)                                      { ${$rs_unicode}            = 1;
         } elsif (!defined ${$rs_3}                   and /3/)                                            { ${$rs_3}                  = 1;
@@ -12857,6 +13040,7 @@ sub load_from_config_file {                  # {{{1
         } elsif (!defined ${$rs_show_lang}         and /(show_lang|show-lang)((=|\s+)(.*))?s/){
             if (!defined $4) { ${$rs_show_lang} =  0; }
             else             { ${$rs_show_lang} = $4; }
+        } elsif (!defined ${$rs_strip_str_comments}  and /(strip_str_comments|strip-str-comments)/)      { ${$rs_strip_str_comments} = 1;
         }
 
     }

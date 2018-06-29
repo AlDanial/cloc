@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.77
+  elapsed_seconds    : 0.00808191299438477
+  n_files            : 1
+  n_lines            : 41
+  files_per_second   : 123.733081597734
+  lines_per_second   : 5073.05634550711
+  report_file        : CRS.scala.yaml
+Scala :
+  nFiles: 1
+  blank: 8
+  comment: 0
+  code: 33
+SUM: 
+  blank: 8
+  comment: 0
+  code: 33
+  nFiles: 1

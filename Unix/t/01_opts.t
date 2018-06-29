@@ -206,6 +206,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/296/results.yaml',
                 },
 
+                {
+                    'name' => '--strip-str-comments (github issue #245)',
+                    'cd'   => '../tests/inputs/issues/245',
+                    'args' => '--strip-str-comments .',
+                    'ref'  => '../tests/outputs/issues/245/CRS.scala.yaml',
+                },
+
 
 #               {
 #                   'name' => '--count-and--diff with --out',
