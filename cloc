@@ -2578,6 +2578,7 @@ sub yaml_to_json_separators {                # {{{1
     # YAML and JSON are closely related.  Their differences can be captured
     # by trailing commas ($C), braces ($open_B, $close_B), and
     # quotes around text ($Q).
+    print "-> yaml_to_json_separators()\n" if $opt_v > 2;
     my ($Q, $open_B, $close_B, $start, $C);
     if ($opt_json) {
        $C       = ',';
@@ -2592,6 +2593,7 @@ sub yaml_to_json_separators {                # {{{1
        $close_B = '';
        $start   = "---\n# $URL\n";
     }
+    print "<- yaml_to_json_separators()\n" if $opt_v > 2;
     return ($Q, $open_B, $close_B, $start, $C);
 } # 1}}}
 sub diff_report     {                        # {{{1
@@ -3502,9 +3504,12 @@ sub generate_report {                        # {{{1
                         $sum_lines/$elapsed_sec) unless $opt_sum_reports or $opt_hide_rate;
     if ($opt_xml or $opt_yaml or $opt_json) {
         if (!$ALREADY_SHOWED_HEADER) {
+            if ($opt_by_file_by_lang and $opt_json) {
+                push @results, '{ "by_file" : ';
+            }
             push @results, xml_yaml_or_json_header($URL, $version, $elapsed_sec,
                                                    $sum_files, $sum_lines, $BY_FILE);
-            $ALREADY_SHOWED_HEADER = 1 unless $opt_sum_reports;
+#           $ALREADY_SHOWED_HEADER = 1 unless $opt_sum_reports;
             # --sum-reports yields two xml or yaml files, one by
             # language and one by report file, each of which needs a header
         }
@@ -3800,6 +3805,13 @@ sub generate_report {                        # {{{1
         }
         if ($opt_json) {
             $results[-1] =~ s/,\s*$/} }/;
+            if ($opt_by_file_by_lang) {
+                if ($ALREADY_SHOWED_HEADER) {
+                    $results[-1] .= ' }';
+                } else {
+                    $results[-1] .= ', "by_lang" : {';
+                }
+            }
         }
     } elsif ($opt_csv) {
         # do nothing
@@ -3843,6 +3855,7 @@ sub generate_report {                        # {{{1
         }
     }
     write_xsl_file() if $opt_xsl and $opt_xsl eq $CLOC_XSL;
+    $ALREADY_SHOWED_HEADER = 1 unless $opt_sum_reports;
     print "<- generate_report\n" if $opt_v > 2;
     return @results;
 } # 1}}}
