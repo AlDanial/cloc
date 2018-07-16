@@ -2339,6 +2339,9 @@ where `xxxxxxx` represents cloc's view of commented text.
 Therefore cloc counts the five lines as two lines of C code and three
 lines of comments (lines with both code and comment are counted as code).
 </li>
+<li>  Embedded languages are not recognized.  For example, an HTML file containing
+JavaScript will be counted entirely as HTML.
+</li>
 </ol>
 
 [](1}}})
