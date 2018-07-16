@@ -11237,8 +11237,6 @@ sub Csharp_or_Smalltalk {                    # {{{1
             $cs_points += 20;
         } elsif (/^\s*\[assembly:/) {
             ++$cs_points       ;
-        } else {
-            ++$smalltalk_points;
         }
         if (/(\!|\]\.)\s*$/) {
             ++$smalltalk_points;
