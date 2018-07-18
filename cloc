@@ -4425,7 +4425,61 @@ sub git_archive {                            # {{{1
     my ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, SUFFIX => $ON_WINDOWS ? '.zip' : '.tar');  # delete on exit
     my $cmd = "git archive -o $Tarfile $File_Set[0]";
     print  $cmd, "\n" if $opt_v;
-    system $cmd;
+    # system $cmd;
+    # print "\n";
+    # print $n_sets;
+    # print "\n";
+    # print $File_Set[0];
+    my @cmds = split(/ /, $File_Set[0]);
+    my $commit_id = shift @cmds;
+    my $cmds_len = @cmds;
+    my $flag = 0;
+    my $onecmd = "";
+    # print $cmds_len, "长度\n";
+    # die "I kill this";
+    if ($cmds_len > 1000){
+        # print ">1000\n";
+        my @cmds_array;
+        while (@cmds > 1000){
+            my @tmp_list;
+            my @tmp_len = (1..1000);
+            foreach my $delcmd (@tmp_len){
+                push(@tmp_list, shift @cmds);
+            }
+            my $tmp_list_len = @tmp_list;
+            # print $tmp_list_len, "tmp list len\n";
+            my $tmp_cmd = join " ", @tmp_list;
+            push(@cmds_array, $tmp_cmd);
+        }
+        my $tmp_cmd = join " ", @cmds;
+        push(@cmds_array, $tmp_cmd);
+        my $cmds_array_len = @cmds_array;
+        # print $cmds_array_len, "cmds_array\n";
+
+        foreach my $c (@cmds_array) {
+            if ($flag == 0) {
+                $onecmd = "git archive -o ${Tarfile} $commit_id $c";
+                $flag = 1;
+                system $onecmd;
+            }else{
+                $onecmd = "git archive -o ${Tarfile}_extra $commit_id $c";
+                print  $onecmd, "\n" if $opt_v;
+                system $onecmd;
+                $onecmd = "tar -A -f ${Tarfile} ${Tarfile}_extra";
+                print  $onecmd, "\n" if $opt_v;
+                system $onecmd;
+            }
+            # print $flag, $onecmd, "\n";
+        }
+    }else{
+        system $cmd;
+    }
+
+    # print @cmds;
+    # print "\n";
+    # print "--";
+    # system $cmd;
+    # foreach my $i ()
     if (!-r $Tarfile or !-s $Tarfile) {
         # not readable, or zero sized
         die "Failed to create tarfile of files from git.";
