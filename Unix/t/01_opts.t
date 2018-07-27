@@ -213,6 +213,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/245/CRS.scala.yaml',
                 },
 
+                {
+                    'name' => 'YAML --by-file output with unusual filename (github issue #312)',
+                    'cd'   => '../tests/inputs/issues/312',
+                    'args' => '--by-file .',
+                    'ref'  => '../tests/outputs/issues/312/results.yaml',
+                },
+
 
 #               {
 #                   'name' => '--count-and--diff with --out',
