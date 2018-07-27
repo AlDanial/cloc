@@ -4,6 +4,7 @@ use strict;
 use Test::More;
 use File::Copy "cp";
 use Cwd;
+#use YAML qw(LoadFile);
 my @Tests = (
                 {
                     'name' => '--exclude-dir 1 (baseline for github issue #82)',
@@ -249,22 +250,25 @@ foreach my $t (@Tests) {
     unlink $results;
     chdir($work_dir) if defined $t->{'cd'};
     my %ref  = load_yaml($t->{'ref'});
+
+#   my $REF = LoadFile($t->{'ref'});  # using official YAML module
+#   is_deeply($REF , \%this, $t->{'name'} . " results match");
     is_deeply(\%ref, \%this, $t->{'name'} . " results match");
 }
 done_testing();
 
-sub load_yaml {                             # {{{1
+sub load_yaml { # {{{1
     my ($file, ) = @_;
     my %result = ();
     if (!-r $file) {
-        warn "File not found: $file\n"; 
+        warn "File not found: $file\n";
         return %result;
     }
     open IN, $file or return %result;
     my $section = undef;
     while (<IN>) {
         next if /^\s*#/ or /^--/;
-        if (/^(\w+)\s*:\s*$/) {
+        if (/^\s*'?(.*?)'?\s*:\s*$/) {
             $section = $1;
             next;
         }

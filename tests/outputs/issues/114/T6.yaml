@@ -9,7 +9,7 @@ header :
   files_per_second   : 64.6421206750405
   lines_per_second   : 64.6421206750405
   report_file        : outputs/issues/114/T6.yaml
-inputs/issues/114/foo/under_foo.js :
+issues/114/foo/under_foo.js :
   blank: 0
   comment: 0
   code: 1

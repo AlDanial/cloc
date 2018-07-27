@@ -8,7 +8,7 @@ header :
   n_lines            : 143
   files_per_second   : 222.89498017792
   lines_per_second   : 6374.79643308852
-  report_file        : ../tests/inputs/issues/296/out.yaml
+  report_file        : ../tests/issues/296/out.yaml
 MATLAB :
   nFiles: 2
   blank: 0

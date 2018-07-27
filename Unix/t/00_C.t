@@ -761,7 +761,7 @@ foreach my $t (@Tests) {
 }
 done_testing();
 
-sub load_yaml {
+sub load_yaml { # {{{1
     my ($file, ) = @_;
     my %result = ();
     if (!-r $file) {
@@ -772,7 +772,7 @@ sub load_yaml {
     my $section = undef;
     while (<IN>) {
         next if /^\s*#/ or /^--/;
-        if (/^(\w+)\s*:\s*$/) {
+        if (/^\s*'?(.*?)'?\s*:\s*$/) {
             $section = $1;
             next;
         }
@@ -781,8 +781,9 @@ sub load_yaml {
         chomp;
         s/\s+//g;
         my ($K, $V) = split(':');
+        $K =~ s/'//g;
         $result{$section}{$K} = $V;
     }
     close IN;
     return %result
-}
+} # 1}}}

@@ -9,7 +9,7 @@ header :
   files_per_second   : 191.722082552452
   lines_per_second   : 2108.94290807698
   report_file        : 00_C.yaml
-C :
+'C' :
   nFiles: 1
   blank: 2
   comment: 2
