@@ -2,14 +2,14 @@
 # github.com/AlDanial/cloc
 header : 
   cloc_url           : github.com/AlDanial/cloc
-  cloc_version       : 1.71
-  elapsed_seconds    : 0.00598287582397461
+  cloc_version       : 1.77
+  elapsed_seconds    : 0.00709295272827148
   n_files            : 1
   n_lines            : 19
-  files_per_second   : 167.143699689169
-  lines_per_second   : 3175.73029409421
-  report_file        : ../outputs/regex_limit.gradle.yaml
-Groovy :
+  files_per_second   : 140.985008403361
+  lines_per_second   : 2678.71515966387
+  report_file        : regex_limit.gradle.yaml
+'Gradle' :
   nFiles: 1
   blank: 0
   comment: 2

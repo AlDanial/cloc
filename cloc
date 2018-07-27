@@ -6517,7 +6517,8 @@ sub set_constants {                          # {{{1
             'gsp'         => 'Grails'                ,
             'groovy'      => 'Groovy'                ,
             'gant'        => 'Groovy'                ,
-            'gradle'      => 'Groovy'                ,
+            'gradle'      => 'Gradle'                ,
+            'gradle.kts'  => 'Gradle'                ,
             'h'           => 'C/C++ Header'          ,
             'H'           => 'C/C++ Header'          ,
             'hh'          => 'C/C++ Header'          ,
@@ -7203,6 +7204,14 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
+                            ],
+    'Gradle'             => [ # same as Groovy
+                                [ 'remove_inline'       , '//.*$'  ],
+                                # separate /* inside quoted strings with two
+                                # concatenated strings split between / and *
+                                [ 'replace_between_regex', '(["\'])(.*?/)(\*.*?)\g1',
+                                  '(.*?)' , '"$1$2$1 + $1$3$1$4"'],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Grails'             => [
                                 [ 'remove_html_comments',          ],
@@ -8383,6 +8392,7 @@ sub set_constants {                          # {{{1
     'guru'                         =>   1.63,
     'GDScript'                     =>   2.50,
     'Go'                           =>   2.50,
+    'Gradle'                       =>   4.00,
     'Grails'                       =>   1.48,
     'GraphQL'                      =>   4.00,
     'Groovy'                       =>   4.10,
