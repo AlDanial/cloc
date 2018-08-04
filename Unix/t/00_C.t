@@ -316,6 +316,11 @@ my @Tests = (
                     'args' => '../tests/inputs/Combinators.idr',
                 },
                 {
+                    'name' => 'Idris (block comments)',
+                    'ref'  => '../tests/outputs/idris_block_comments.idr.yaml',
+                    'args' => '../tests/inputs/idris_block_comments.idr',
+                },
+                {
                     'name' => 'Igor Pro',
                     'ref'  => '../tests/outputs/igorpro.ipf.yaml',
                     'args' => '../tests/inputs/igorpro.ipf',

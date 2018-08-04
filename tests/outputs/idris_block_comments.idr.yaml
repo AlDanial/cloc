@@ -8,7 +8,7 @@ header :
   n_lines            : 20
   files_per_second   : 158.431064440583
   lines_per_second   : 3168.62128881166
-  report_file        : test.idr.yaml
+  report_file        : idris_block_comments.idr.yaml
 Idris :
   nFiles: 1
   blank: 3
