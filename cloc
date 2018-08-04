@@ -7293,8 +7293,8 @@ sub set_constants {                          # {{{1
     'IDL'                => [   [ 'remove_matches'      , '^\s*;'  ], ],
     'IDL/Qt Project/Prolog/ProGuard' => [ [ 'die' ,          ], ], # never called
     'Idris'              => [
-                                [ 'remove_matches'      , '^--'    ],
-                                [ 'remove_matches'      , '^\|{3}' ],
+                                [ 'remove_haskell_comments', '>filename<' ],
+                                [ 'remove_matches'      , '^\s*\|{3}' ],
                             ],
     'Igor Pro'           => [
                                 [ 'remove_matches'      , '^\s*//' ],

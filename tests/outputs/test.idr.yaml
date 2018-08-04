@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header :
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.77
+  elapsed_seconds    : 0.00631189346313477
+  n_files            : 1
+  n_lines            : 20
+  files_per_second   : 158.431064440583
+  lines_per_second   : 3168.62128881166
+  report_file        : test.idr.yaml
+Idris :
+  nFiles: 1
+  blank: 3
+  comment: 11
+  code: 6
+SUM:
+  blank: 3
+  comment: 11
+  code: 6
+  nFiles: 1
