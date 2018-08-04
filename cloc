@@ -2838,7 +2838,7 @@ sub xml_yaml_or_json_header {                # {{{1
         }
     }
     if ($opt_xml) {
-        $header = "<?xml version=\"1.0\"?>";
+        $header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
         $header .= "\n<?xml-stylesheet type=\"text/xsl\" href=\"" . $opt_xsl . "\"?>" if $opt_xsl;
         $header .= "<${type}results>
 <header>
@@ -3377,7 +3377,7 @@ sub output_header   {                        # {{{1
     my @R = ();
     if      ($opt_xml) {
         if (!$ALREADY_SHOWED_XML_SECTION) {
-            push @R, "<?xml version=\"1.0\"?>";
+            push @R, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
             push @R, '<?xml-stylesheet type="text/xsl" href="' .
                             $opt_xsl . '"?>' if $opt_xsl;
             push @R, "<results>";
@@ -12275,7 +12275,7 @@ sub write_xsl_file {                         # {{{1
         return;
     }
     my $XSL =             # <style>  </style> {{{2
-'<?xml version="1.0" encoding="US-ASCII"?>
+'<?xml version="1.0" encoding="UTF-8"?>
 <!-- XLS file by Paul Schwann, January 2009.
      Fixes for by-file and by-file-by-lang by d_uragan, November 2010.
      -->
@@ -12427,7 +12427,7 @@ EO_XSL
 # 2}}}
 
     my $XSL_DIFF = <<'EO_DIFF_XSL'; # {{{2
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- XLS file by Blazej Kroll, November 2010 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="html"/>
