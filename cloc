@@ -281,7 +281,8 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              processing that is not expressed in language
                              definition files.  Use --read-lang-def to define
                              new language filters without replacing built-in
-                             filters (see also --write-lang-def).
+                             filters (see also --write-lang-def, ).
+                             --write-lang-def-incl-dup).
    --git                     Forces the inputs to be interpreted as git targets
                              (commit hashes, branch names, et cetera) if these
                              are not first identified as file or directory
@@ -329,7 +330,8 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              If <file> defines a language cloc already knows
                              about, cloc's definition will take precedence.
                              Use --force-lang-def to over-ride cloc's
-                             definitions (see also --write-lang-def ).
+                             definitions (see also --write-lang-def,
+                             --write-lang-def-incl-dup).
    --script-lang=<lang>,<s>  Process all files that invoke <s> as a #!
                              scripting language with the counter for language
                              <lang>.  For example, files that begin with
@@ -500,7 +502,14 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
    --write-lang-def=<file>   Writes to <file> the language processing filters
                              then exits.  Useful as a first step to creating
                              custom language definitions (see also
-                             --force-lang-def, --read-lang-def).
+                             --force-lang-def, --read-lang-def).  Note:
+                             languages which map to the same file extension
+                             will be excluded.
+   --write-lang-def-incl-dup=<file>
+                             Same as --write-lang-def, but includes duplicated
+                             extensions.  This generates a problematic language
+                             definition file because cloc will refuse to use
+                             it until duplicates are removed.
 
  ${BB}Output Options${NN}
    --3                       Print third-generation language output.
@@ -593,6 +602,7 @@ my (
     $opt_force_lang_def       ,
     $opt_read_lang_def        ,
     $opt_write_lang_def       ,
+    $opt_write_lang_def_incl_dup,
     $opt_strip_comments       ,
     $opt_original_dir         ,
     $opt_quiet                ,
@@ -692,6 +702,7 @@ my $getopt_success = GetOptions(             # {{{1
    "vcs=s"                                   => \$opt_vcs                 ,
    "version"                                 => \$opt_version             ,
    "write_lang_def|write-lang-def=s"         => \$opt_write_lang_def      ,
+   "write_lang_def_incl_dup|write-lang-def-incl-dup=s" => \$opt_write_lang_def_incl_dup,
    "xml"                                     => \$opt_xml                 ,
    "xsl=s"                                   => \$opt_xsl                 ,
    "force_lang|force-lang=s"                 => \@opt_force_lang          ,
@@ -777,6 +788,7 @@ load_from_config_file($config_file,          # {{{1
                                                 \$opt_vcs                 ,
                                                 \$opt_version             ,
                                                 \$opt_write_lang_def      ,
+                                                \$opt_write_lang_def_incl_dup,
                                                 \$opt_xml                 ,
                                                 \$opt_xsl                 ,
                                                 \@opt_force_lang          ,
@@ -966,6 +978,7 @@ die $brief_usage unless defined $opt_version         or
                         defined $opt_show_ext        or
                         defined $opt_show_os         or
                         defined $opt_write_lang_def  or
+                        defined $opt_write_lang_def_incl_dup  or
                         defined $opt_list_file       or
                         defined $opt_vcs             or
                         defined $opt_xsl             or
@@ -999,6 +1012,23 @@ my %Error_Codes = ( 'Unable to read'                => -1,
                     'Diff error, exceeded timeout'  => -4,
                     'Line count, exceeded timeout'  => -5,
                   );
+my %Extension_Collision = (
+    'ADSO/IDSM'                                     => [ 'adso' ] ,
+    'C#/Smalltalk'                                  => [ 'cs'   ] ,
+    'D/dtrace'                                      => [ 'd'    ] ,
+    'F#/Forth'                                      => [ 'fs'   ] ,
+    'Fortran 77/Forth'                              => [ 'f', 'for' ] ,
+    'IDL/Qt Project/Prolog/ProGuard'                => [ 'pro'  ] ,
+    'Lisp/Julia'                                    => [ 'jl'   ] ,
+    'Lisp/OpenCL'                                   => [ 'cl'   ] ,
+    'MATLAB/Mathematica/Objective C/MUMPS/Mercury'  => [ 'm'    ] ,
+    'Pascal/Puppet'                                 => [ 'pp'   ] ,
+    'Perl/Prolog'                                   => [ 'pl', 'PL'  ] ,
+    'PHP/Pascal'                                    => [ 'inc'  ] ,
+    'Qt/Glade'                                      => [ 'ui'   ] ,
+    'TypeScript/Qt Linguist'                        => [ 'ts'   ] ,
+    'Verilog-SystemVerilog/Coq'                     => [ 'v'    ] ,
+);
 my @Autogen_to_ignore = no_autogen_files($list_no_autogen);
 if ($opt_force_lang_def) {
     # replace cloc's definitions
@@ -1245,8 +1275,10 @@ if ($opt_sum_reports) {
     }
     exit;
 }
-if ($opt_write_lang_def) {
-    write_lang_def($opt_write_lang_def   ,
+if ($opt_write_lang_def or $opt_write_lang_def_incl_dup) {
+    my $file = $opt_write_lang_def          if $opt_write_lang_def;
+       $file = $opt_write_lang_def_incl_dup if $opt_write_lang_def_incl_dup;
+    write_lang_def($file                 ,
                   \%Language_by_Extension,
                   \%Language_by_Script   ,
                   \%Language_by_File     ,
@@ -1594,12 +1626,6 @@ if ($opt_diff_alignment) {
     write_alignment_data ( $opt_diff_alignment, $n_filepairs_compared, \%alignment ) ;
 }
 
-#use Data::Dumper;
-#print Dumper("Delta_by_Language:"  , \%Delta_by_Language);
-#print Dumper("Results_by_Language:", \%Results_by_Language);
-#print Dumper("Delta_by_File:"      , \%Delta_by_File);
-#print Dumper("Results_by_File:"    , \%Results_by_File);
-#die;
 my @ignored_reasons = map { "$_: $Ignored{$_}" } sort keys %Ignored;
 write_file($opt_ignored, @ignored_reasons   ) if $opt_ignored;
 write_file($opt_counted, sort keys %Results_by_File) if $opt_counted;
@@ -3129,9 +3155,6 @@ sub diff_csv_report {                        # {{{1
        ) = @_;
     print "-> diff_csv_report\n" if $opt_v > 2;
 
-#use Data::Dumper;
-#print "diff_csv_report: ", Dumper($rhhh_count), "\n";
-#die;
     my @results       = ();
     my $languages     = ();
 
@@ -3901,22 +3924,8 @@ sub write_lang_def {                         # {{{1
     die "Unable to write to $file\n" unless defined $OUT;
 
     foreach my $language (sort keys %{$rhaa_Filters_by_Language}) {
-        next if $language =~ /Brain/;
-        next if $language eq "MATLAB/Mathematica/Objective C/MUMPS/Mercury" or
-                $language eq "PHP/Pascal"                       or
-                $language eq "Pascal/Puppet"                    or
-                $language eq "Lisp/OpenCL"                      or
-                $language eq "Lisp/Julia"                       or
-                $language eq "Perl/Prolog"                      or
-                $language eq "D/dtrace"                         or
-                $language eq "IDL/Qt Project/Prolog/ProGuard"   or
-                $language eq "Fortran 77/Forth"                 or
-                $language eq "F#/Forth"                         or
-                $language eq "Verilog-SystemVerilog/Coq"        or
-                $language eq "TypeScript/Qt Linguist"           or
-                $language eq "Qt/Glade"                         or
-                $language eq "C#/Smalltalk"                     or
-                $language eq "(unknown)";
+        next if $language =~ /(Brain|\(unknown\))/;
+        next if defined $Extension_Collision{$language};
         printf $OUT "%s\n", $language;
         foreach my $filter (@{$rhaa_Filters_by_Language->{$language}}) {
             printf $OUT "    filter %s", $filter->[0];
@@ -3929,11 +3938,26 @@ sub write_lang_def {                         # {{{1
             printf $OUT " %s", $filter->[3] if defined $filter->[3];
             print  $OUT "\n";
         }
+
+        # file extension won't appear if the extension maps to
+        # multiple languages; work around this
+		my $found = 0;
         foreach my $ext (sort keys %{$rh_Language_by_Extension}) {
             if ($language eq $rh_Language_by_Extension->{$ext}) {
                 printf $OUT "    extension %s\n", $ext;
+				$found = 1;
             }
         }
+		if (!$found and $opt_write_lang_def_incl_dup) {
+            foreach my $multilang (sort keys %Extension_Collision) {
+                my %Languages = map { $_ => 1 } split('/', $multilang);
+                next unless $Languages{$language};
+                foreach my $ext (@{$Extension_Collision{$multilang}}) {
+                    printf $OUT "    extension %s\n", $ext;
+                }
+            }
+		}
+
         foreach my $filename (sort keys %{$rh_Language_by_File}) {
             if ($language eq $rh_Language_by_File->{$filename}) {
                 printf $OUT "    filename %s\n", $filename;
@@ -5473,12 +5497,6 @@ sub rm_comments {                            # {{{1
             shift   @args;
             unshift @args, $file;
         }
-#use Data::Dumper;
-#print "\ncall_string=", Dumper($call_string);
-#print "args=\n";
-#print Dumper(\@args);
-#print "lines before=\n";
-#print Dumper(\@lines);
 
         # Unusual inputs, namely /* within strings without
         # a corresponding */ can cause huge delays so put a timer on this.
@@ -5569,7 +5587,7 @@ sub remove_f90_comments {                    # {{{1
 sub reduce_to_rmd_code_blocks {              #{{{1
     my ($ra_lines) = @_; #in
     print "-> reduce_to_rmd_code_blocks()\n" if $opt_v > 2;
-    
+
     my $in_code_block = 0;
     my @save_lines = ();
     foreach (@{$ra_lines}) {
@@ -6870,7 +6888,7 @@ sub set_constants {                          # {{{1
                             ],
 
     'ASP'                => [   [ 'remove_matches'      , '^\s*\47'], ],  # \47 = '
-    'ASP.NET'            => [ 
+    'ASP.NET'            => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C'      ],
@@ -8846,6 +8864,19 @@ sub set_constants {                          # {{{1
     'Lua'                          => 4.00,
     'OpenCL'                       => 1.50,
     'Xtend'                        => 2.00,
+    # aggregates; value is meaningless
+	'C#/Smalltalk'     			   => 1.00,
+	'D/dtrace'         			   => 1.00,
+	'F#/Forth'         			   => 1.00,
+	'Fortran 77/Forth' 			   => 1.00,
+	'Lisp/Julia'       			   => 1.00,
+	'Lisp/OpenCL'      			   => 1.00,
+	'PHP/Pascal'       			   => 1.00,
+	'Pascal/Puppet'    			   => 1.00,
+	'Perl/Prolog'      			   => 1.00,
+	'Verilog-SystemVerilog/Coq'    => 1.00,
+	'MATLAB/Mathematica/Objective C/MUMPS/Mercury' => 1.00,
+	'IDL/Qt Project/Prolog/ProGuard'     => 1.00,
 );
 # 1}}}
 %{$rh_Known_Binary_Archives} = (             # {{{1
@@ -8868,26 +8899,9 @@ sub check_scale_existence {                  # {{{1
         $rh_Language_by_Extension,
         $rh_Scale_Factor) = @_;
 
-    my %extension_collisions = (
-        # TODO:  find a better way of dealing with these
-        "PHP/Pascal"                        => 1,
-        "Lisp/OpenCL"                       => 1,
-        "Lisp/Julia"                        => 1,
-        "MATLAB/Mathematica/Objective C/MUMPS/Mercury"  => 1,
-        "Pascal/Puppet"                     => 1,
-        "Perl/Prolog"                       => 1,
-        "IDL/Qt Project/Prolog/ProGuard"    => 1,
-        "D/dtrace"                          => 1,
-        "Fortran 77/Forth"                  => 1,
-        "F#/Forth"                          => 1,
-        "Verilog-SystemVerilog/Coq"         => 1,
-        "TypeScript/Qt Linguist"            => 1,
-        "Qt/Glade"                          => 1,
-        "C#/Smalltalk"                      => 1,
-    );
     my $OK = 1;
     foreach my $language (sort keys %{$rhaa_Filters_by_Language}) {
-        next if defined $extension_collisions{$language};
+        next if defined $Extension_Collision{$language};
         if (!defined $rh_Scale_Factor->{$language}) {
             $OK = 0;
             warn "Missing scale factor for $language\n";
@@ -8897,7 +8911,7 @@ sub check_scale_existence {                  # {{{1
     my %seen_it = ();
     foreach my $ext (sort keys %{$rh_Language_by_Extension}) {
         my $language = $rh_Language_by_Extension->{$ext};
-        next if defined $extension_collisions{$language};
+        next if defined $Extension_Collision{$language};
         next if $seen_it{$language};
         if (!$rhaa_Filters_by_Language->{$language}) {
             $OK = 0;
@@ -11391,8 +11405,6 @@ sub write_comments_to_html {                 # {{{1
 
     print "-> write_comments_to_html($filename)\n" if $opt_v > 2;
     my $file = $filename . ".html";
-#use Data::Dumper;
-#print Dumper("rah_diff_L", $rah_diff_L, "rah_diff_R", $rah_diff_R);
     my $OUT = new IO::File $file, "w";
     if (!defined $OUT) {
         warn "Unable to write to $file\n";
@@ -11535,10 +11547,6 @@ sub array_diff {                             # {{{1
         return;
     }
 
-#use Data::Dumper::Simple;
-#print Dumper($ra_lines_L, $ra_lines_R, @sdiffs);
-#die;
-
     my $n_L        = 0;
     my $n_R        = 0;
     my $n_sdiff    = 0;  # index to $rah_diff_L, $rah_diff_R
@@ -11575,48 +11583,10 @@ sub array_diff {                             # {{{1
             my @chars_L = split '', $line_L;
             my @chars_R = split '', $line_R;
 
-#XX         my @inline_sdiffs = sdiff( \@chars_L, \@chars_R );
-
-#use Data::Dumper::Simple;
-#if ($n_R == 6 or $n_R == 1 or $n_R == 2) {
-#print "L=[$line_L]\n";
-#print "R=[$line_R]\n";
-#print Dumper(@chars_L, @chars_R, @inline_sdiffs);
-#}
-#XX         my @index = ();
-#XX         foreach my $il_triple (@inline_sdiffs) {
-#XX             # make an array of u|c|+|- corresponding
-#XX             # to each character
-#XX             push @index, $il_triple->[0];
-#XX         }
-#XX#print Dumper(@index); die;
-#XX          # expect problems if arrays @index and $inline_sdiffs[1];
-#XX          # (@{$inline_sdiffs->[1]} are the characters of line_L)
-#XX          # aren't the same length
-#XX          my $prev_type = $index[0];
-#XX          my @strings   = ();  # blocks of consecutive code or comment
-#XX          my @type      = ();  # u (=code) or c (=comment)
-#XX          my $j_str     = 0;
-#XX          $strings[$j_str] .= $chars_L[0];
-#XX          $type[$j_str] = $prev_type;
-#XX          for (my $i = 1; $i < scalar @chars_L; $i++) {
-#XX              if ($index[$i] ne $prev_type) {
-#XX                  ++$j_str;
-#XX#print "change at j_str=$j_str type=$index[$i]\n";
-#XX                  $type[$j_str] = $index[$i];
-#XX                  $prev_type    = $index[$i];
-#XX              }
-#XX              $strings[$j_str] .= $chars_L[$i];
-#XX          }
-# print Dumper(@strings, @type); die;
-#XX         delete $rah_diff_R->[$n_sdiff]{char};
-#XX         @{$rah_diff_R->[$n_sdiff]{char}{strings}} = @strings;
-#XX         @{$rah_diff_R->[$n_sdiff]{char}{type}}    = @type;
             $rah_diff_L->[$n_sdiff]{desc} = "modified";
             $rah_diff_R->[$n_sdiff]{desc} = "modified";
             $rah_diff_L->[$n_sdiff]{lnum} = $n_L;
             $rah_diff_R->[$n_sdiff]{lnum} = $n_R;
-#}
 
         } elsif ($flag eq '+') {  # + = added
             ++$n_R;
@@ -11707,9 +11677,6 @@ sub remove_leading_dir {                     # {{{1
 
     # now loop over columns until either they are all
     # eliminated or a unique column is found
-
-#use Data::Dumper::Simple;
-#print Dumper("remove_leading_dir after ", @D);
 
     my @common   = ();  # to contain the common leading directories
     my $mismatch = 0;
@@ -12921,6 +12888,7 @@ sub load_from_config_file {                  # {{{1
                                                  $rs_vcs                 ,
                                                  $rs_version             ,
                                                  $rs_write_lang_def      ,
+                                                 $rs_write_lang_def_incl_dup,
                                                  $rs_xml                 ,
                                                  $rs_xsl                 ,
                                                  $ra_force_lang          ,
@@ -13016,6 +12984,7 @@ sub load_from_config_file {                  # {{{1
         } elsif (!defined ${$rs_vcs}                 and /vcs(=|\s+)s/)                                  { ${$rs_vcs}                = $2;
         } elsif (!defined ${$rs_version}             and /version/)                                      { ${$rs_version}            = 1;
         } elsif (!defined ${$rs_write_lang_def}      and /write_lang_def|write-lang-def(=|\s+)(.*?)$/)   { ${$rs_write_lang_def}     = $2;
+        } elsif (!defined ${$rs_write_lang_def_incl_dup} and /write_lang_def_incl_dup|write-lang-def-incl-dup(=|\s+)(.*?)$/) { ${$rs_write_lang_def_incl_dup} = $2;
         } elsif (!defined ${$rs_xml}                 and /xml/)                                          { ${$rs_xml}                = 1;
         } elsif (!defined ${$rs_xsl}                 and /xsl(=|\s+)(.*?)$/)                             { ${$rs_xsl}                = $2;
         } elsif (!defined ${$rs_lang_no_ext}         and /lang_no_ext|lang-no-ext(=|\s+)(.*?)$/)         { ${$rs_lang_no_ext}        = $2;
