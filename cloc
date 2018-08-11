@@ -2629,7 +2629,6 @@ sub diff_report     {                        # {{{1
     if ($opt_xml) {
         print "<- diff_report\n" if $opt_v > 2;
         return diff_xml_report(@_)
-###     return diff_xml_yaml_json_report(@_)
     } elsif ($opt_yaml) {
         print "<- diff_report\n" if $opt_v > 2;
         return diff_yaml_report(@_)
@@ -2761,10 +2760,6 @@ sub diff_report     {                        # {{{1
         push @results, $hyphen_line;
     }
 
-####foreach my $lang_or_file (keys %{$rhhh_count}) {
-####    $rhhh_count->{$lang_or_file}{'code'} = 0 unless
-####        defined $rhhh_count->{$lang_or_file}{'code'};
-####}
     foreach my $lang_or_file (sort {
                                  $rhhh_count->{$b}{'code'} <=>
                                  $rhhh_count->{$a}{'code'}
@@ -3607,10 +3602,6 @@ sub generate_report {                        # {{{1
     }
 
     my $sum_scaled = 0;
-####foreach my $lang_or_file (keys %{$rhh_count}) {
-####    $rhh_count->{$lang_or_file}{'code'} = 0 unless
-####        defined $rhh_count->{$lang_or_file}{'code'};
-####}
     foreach my $lang_or_file (sort {
                                  $rhh_count->{$b}{'code'} <=>
                                  $rhh_count->{$a}{'code'}
@@ -4376,10 +4367,18 @@ sub replace_git_hash_with_tarfile {          # {{{1
             }
             # backslash whitespace, weird chars within file names (#257, #284)
 
-            my @Lfiles= map {$_ =~ s/([\s\(\)\[\]{}';\^\$\?])/\\$1/g; $_}   @left_files;
-            $replacement_arg_list{$git_hash{$Left}}  = git_archive($Left , \@Lfiles);
-            my @Rfiles= map {$_ =~ s/([\s\(\)\[\]{}';\^\$\?])/\\$1/g; $_}   @right_files ;
-            $replacement_arg_list{$git_hash{$Right}} = git_archive($Right, \@Rfiles);
+#           my @Lfiles= map {$_ =~ s/([\s\(\)\[\]{}';\^\$\?])/\\$1/g; $_}   @left_files;
+#           my @Lfiles= @left_files;
+            $replacement_arg_list{$git_hash{$Left}}  = git_archive($Left , \@left_files);
+#           $replacement_arg_list{$git_hash{$Left}}  = git_archive($Left , \@Lfiles);
+#           my @Rfiles= map {$_ =~ s/([\s\(\)\[\]{}';\^\$\?])/\\$1/g; $_}   @right_files ;
+#           my @Rfiles= @right_files ;
+#use Data::Dumper;
+#print Dumper('left' , \@left_files);
+#print Dumper('right', \@right_files);
+#die;
+            $replacement_arg_list{$git_hash{$Right}} = git_archive($Right, \@right_files);
+#           $replacement_arg_list{$git_hash{$Right}} = git_archive($Right, \@Rfiles);
 #write_file("/tmp/Lfiles.txt", sort @Lfiles);
 #write_file("/tmp/Rfiles.txt", sort @Rfiles);
 #write_file("/tmp/files_union.txt", sort keys %files_union);
@@ -4427,6 +4426,7 @@ sub git_archive {                            # {{{1
     # Invoke 'git archive' as a system command to create a tar file
     # using the given argument(s).
     my ($A1, $A2) = @_;
+    print "-> git_archive($A1)\n" if $opt_v > 2;
 
     my $args = undef;
 	my @File_Set = ( );
@@ -4443,17 +4443,38 @@ sub git_archive {                            # {{{1
         foreach my $i (0..$n_sets-1) {
             my $start = $i*$FILES_PER_ARCHIVE;
             my $end   = smaller(($i+1)*$FILES_PER_ARCHIVE, $n_files) - 1;
-            # don't include \$ in the regex because git handles these correctly
-            push @File_Set,
-                 "$A1 " . join(" ", map {$_ =~ s/([\s\(\)\[\]{}';\^\?])/\\$1/g; $_}
-                              @{$A2}[$start .. $end]);
+            # Wrap each file name in single quotes to protect spaces
+            # and other odd characters.  File names that themselves have
+            # single quotes are instead wrapped in double quotes.  File
+            # names with both single and double quotes... jeez.
+            foreach my $fname (@{$A2}[$start .. $end]) {
+                if      ($fname =~ /^".*?\\".*?"$/) {
+                    # git pre-handles filenames with double quotes by backslashing
+                    # each double quote then surrounding entire name in double
+                    # quotes; undo this otherwise archive command crashes
+                    $fname =~ s/\\"/"/g;
+                    $fname =~ s/^"(.*)"$/$1/;
+                } elsif ($fname =~ /'/) {
+                    push @File_Set, "\"$fname\"";
+                } else {
+                    push @File_Set, "'$fname'";
+                }
+            }
+            unshift @File_Set, "$A1 ";
+
+##xx#        # don't include \$ in the regex because git handles these correctly
+#            # to each word in @{$A2}[$start .. $end]: first backslash each
+#            # single quote, then wrap all entries in single quotes (#320)
+#            push @File_Set,
+#                 "$A1 " . join(" ", map {$_ =~ s/'/\'/g; $_ =~ s/^(.*)$/'$1'/g; $_}
+##                "$A1 " . join(" ", map {$_ =~ s/([\s\(\)\[\]{}';\^\?])/\\$1/g; $_}
+#                              @{$A2}[$start .. $end]);
         }
-########$args = "$A1 " . join(" ", map {$_ =~ s/([\s\(\)\[\]{}';\^\$\?])/\\$1/g; $_} @{$A2});
     } else {
 		push @File_Set, "$A1 $A2";
-########$args = "$A1 $A2";
     }
-    print "-> git_archive($File_Set[0])\n" if $opt_v > 2;
+
+    print "   git_archive(file_set[0]=$File_Set[0])\n" if $opt_v > 2;
     my ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, SUFFIX => $ON_WINDOWS ? '.zip' : '.tar');  # delete on exit
     my $cmd = "git archive -o $Tarfile $File_Set[0]";
     print  $cmd, "\n" if $opt_v;
@@ -10920,12 +10941,6 @@ sub IDL_or_QtProject {                       # {{{1
     $IN->close;
     # print "idl_points=$idl_points   qtproj_points=$qtproj_points\n";
 
-####if ($idl_points > $qtproj_points) {
-####    $lang = "IDL";
-####} else {
-####    $lang = "Qt Project";
-####}
-
     my %points = ( 'IDL'        => $idl_points       ,
                    'Qt Project' => $qtproj_points    ,
                    'Prolog'     => $prolog_points    ,
@@ -11911,8 +11926,6 @@ sub align_by_pairs {                         # {{{1
     my $deepest_file_R    = find_deepest_file(@files_R);
 #print "deepest L = [$deepest_file_L]\n";
 #print "deepest R = [$deepest_file_R]\n";
-####my ($leading_dir_L, $leading_dir_R, $success) =
-####    find_uncommon_parent_dir($deepest_file_L, $deepest_file_R);
     my ($leading_dir_L, $leading_dir_R, $success) =
                 get_leading_dirs($rh_file_list_L, $rh_file_list_R);
 #print "leading_dir_L=[$leading_dir_L]\n";

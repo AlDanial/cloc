@@ -23,13 +23,14 @@ function git_init_config {                                  # {{{
 # 1}}}
 function create_main_c {                                    # {{{
 fname=$1
+N=$2
 cat <<EO_001 > "${fname}"
 /*
  *               gcc hello.c -o hello
  */
 main (int argc, char *argv[])
 {
-  printf("Hello.\n");
+  printf("Hello. $N\n");
 }
 EO_001
 }
@@ -88,8 +89,30 @@ function git_rm_commit {                                    # {{{
 
 git_init_config GitTestRepo # side effect: cd into GitTestRepo
 
-create_main_c  main.c
-git_add_commit main.c   "add main.c"                "T1"
+F1=main.c
+F2='date;ls ?.c'
+F3='$PWD.c'
+F4="weird'name.c"
+F5='ls -l .c'
+F6='Weird"Name.c'
+
+create_main_c  $F1  1
+create_main_c "$F2" 2
+create_main_c  $F3  3
+create_main_c  $F4  4
+create_main_c "$F5" 5
+create_main_c  $F6  6
+git_add_commit  $F1  "added $F1"  "Tag1"
+    git add 'date;ls ?.c'
+    git commit --quiet -m "${comment}" 'date;ls ?.c'
+    git tag "Tag2"
+git_add_commit  $F3  "added $F3"  "Tag3"
+git_add_commit  $F4  "added $F4"  "Tag4"
+    git add 'ls -l .c'
+    git commit --quiet -m "${comment}" 'ls -l .c'
+    git tag "Tag5"
+git_add_commit  $F6  "added $F6"  "Tag6"
+
 create_py      hello.py
 git_add_commit hello.py "add hello.py"              "T2"
 mod_py_A       hello.py
