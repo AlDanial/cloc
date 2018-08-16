@@ -8552,7 +8552,7 @@ sub Perl_or_Prolog {                         # {{{1
     my $prolog_points = 0;
     while (<$IN>) {
         ++$perl_points if  /;\s*$/;
-        ++$perl_points if  /({|})/;
+        ++$perl_points if  /(\{|})/;
         ++$perl_points if  /^\s*sub\s+/;
         ++$perl_points if  /\s*<<'/;  # start HERE block
         ++$perl_points if  /\$(\w+\->|[_!])/;
