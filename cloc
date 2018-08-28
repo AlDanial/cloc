@@ -281,7 +281,7 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              processing that is not expressed in language
                              definition files.  Use --read-lang-def to define
                              new language filters without replacing built-in
-                             filters (see also --write-lang-def, ).
+                             filters (see also --write-lang-def,
                              --write-lang-def-incl-dup).
    --git                     Forces the inputs to be interpreted as git targets
                              (commit hashes, branch names, et cetera) if these
@@ -2135,6 +2135,11 @@ sub count_filesets {                         # {{{1
         my $file_R = $pair->[1];
         my $Lang_L = $Language{$fset_a}{$file_L};
         my $Lang_R = $Language{$fset_b}{$file_R};
+        if (!defined($Lang_L) or !defined($Lang_R)) {
+            print " -> count_filesets skipping $file_L, $file_R ",
+                  "because language cannot be inferred\n" if $opt_v;
+            next;
+        }
         #print "main step 6 file_L=$file_L    file_R=$file_R\n";
         ++$nCounted;
         printf "Counting:  %d\r", $nCounted
@@ -4725,6 +4730,13 @@ sub remove_duplicate_files {                 # {{{1
     while (<$fh>) {
         ++$n;
         my ($size_in_bytes, $language, $file) = split(/,/, $_, 3);
+        if (!defined($size_in_bytes) or
+            !defined($language)      or 
+            !defined($file)) {
+            print "-> remove_duplicate_files skipping error line [$_]\n"
+                if $opt_v;
+            next;
+        }
         chomp($file);
         $rh_Language->{$file} = $language;
         push @{$files_by_size{$size_in_bytes}}, $file;
