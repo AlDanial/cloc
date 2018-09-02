@@ -2765,10 +2765,16 @@ sub diff_report     {                        # {{{1
         push @results, $hyphen_line;
     }
 
+    # sort diff output in descending order of cumulative entries
     foreach my $lang_or_file (sort {
-                                 $rhhh_count->{$b}{'code'} <=>
-                                 $rhhh_count->{$a}{'code'}
-                               }
+                                ($rhhh_count->{$b}{'code'}{'added'}    +
+                                 $rhhh_count->{$b}{'code'}{'same'}     +
+                                 $rhhh_count->{$b}{'code'}{'modified'} +
+                                 $rhhh_count->{$b}{'code'}{'removed'}  )  <=>
+                                ($rhhh_count->{$a}{'code'}{'added'}    +
+                                 $rhhh_count->{$a}{'code'}{'same'}     +
+                                 $rhhh_count->{$a}{'code'}{'modified'} +
+                                 $rhhh_count->{$a}{'code'}{'removed'})}
                           keys %{$rhhh_count}) {
 
         if ($BY_FILE) {
