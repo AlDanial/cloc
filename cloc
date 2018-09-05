@@ -11234,12 +11234,12 @@ sub TypeScript_or_QtLinguist {               # {{{1
     my $linguist_points = 0;
     while (<$IN>) {
         ++$linguist_points if m{\b</?(message|source|translation)>};
-        ++$tscript_points  if /^\s*(var|class|document)\b/;
+        ++$tscript_points  if /^\s*(var|const|let|class|document)\b/;
         ++$tscript_points  if /[;}]\s*$/;
         ++$tscript_points  if m{^\s*//};
     }
     $IN->close;
-    if ($tscript_points > $linguist_points) {
+    if ($tscript_points >= $linguist_points) {
         $lang = "TypeScript";
     } else {
         $lang = "Qt Linguist";
