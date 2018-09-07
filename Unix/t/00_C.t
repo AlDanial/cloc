@@ -677,11 +677,16 @@ my @Tests = (
                 },
                 {
                     'name' => 'TypeScript 2',
+                    'ref'  => '../tests/outputs/TypeScript_2.ts.yaml',
+                    'args' => '../tests/inputs/TypeScript_2.ts',
+                },
+                {
+                    'name' => 'TypeScript 3',
                     'ref'  => '../tests/outputs/warship.ts.yaml',
                     'args' => '../tests/inputs/warship.ts',
                 },
                 {
-                    'name' => 'TypeScript 3',
+                    'name' => 'TypeScript 4',
                     'ref'  => '../tests/outputs/greeter.tsx.yaml',
                     'args' => '../tests/inputs/greeter.tsx',
                 },

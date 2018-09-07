@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.77
+  elapsed_seconds    : 0.00699305534362793
+  n_files            : 1
+  n_lines            : 7
+  files_per_second   : 142.999011284989
+  lines_per_second   : 1000.99307899492
+  report_file        : ../outputs/TypeScript_2.ts.yaml
+'TypeScript' :
+  nFiles: 1
+  blank: 1
+  comment: 0
+  code: 6
+SUM: 
+  blank: 1
+  comment: 0
+  code: 6
+  nFiles: 1
