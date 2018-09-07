@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "1.77";  # odd number == beta; even number == stable
+my $VERSION = "1.78";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.006;
 # use modules                                  {{{1
@@ -501,10 +501,9 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
    --version                 Print the version of this program and exit.
    --write-lang-def=<file>   Writes to <file> the language processing filters
                              then exits.  Useful as a first step to creating
-                             custom language definitions (see also
-                             --force-lang-def, --read-lang-def).  Note:
-                             languages which map to the same file extension
-                             will be excluded.
+                             custom language definitions. Note: languages which
+                             map to the same file extension will be excluded.
+                             (See also --force-lang-def, --read-lang-def).
    --write-lang-def-incl-dup=<file>
                              Same as --write-lang-def, but includes duplicated
                              extensions.  This generates a problematic language
@@ -530,8 +529,8 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
    --csv                     Write the results as comma separated values.
    --csv-delimiter=<C>       Use the character <C> as the delimiter for comma
                              separated files instead of ,.  This switch forces
-   --hide-rate               Don't show rate of processing files/lines. This
-                             makes output deterministic.
+   --hide-rate               Do not show line and file processing rates in the
+                             output header. This makes output deterministic.
    --json                    Write the results as JavaScript Object Notation
                              (JSON) formatted output.
    --md                      Write the results as Markdown-formatted text.

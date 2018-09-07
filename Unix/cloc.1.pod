@@ -144,6 +144,19 @@ Report results for every source file encountered.
 Report results for every source file encountered in addition to
 reporting by language.
 
+=item B<--config FILE>
+
+First perform direct code counts of source file(s)
+
+Read command line switches from FILE instead of
+the default location of ~/.config/cloc/options.txt.
+The file should contain one switch, along with
+arguments (if any), per line.  Blank lines and lines
+beginning with '#' are skipped.  Options given on
+the command line take priority over entries read from
+the file.
+
+
 =item B<--count-and-diff SET1 SET2>
 
 First perform direct code counts of source file(s)
@@ -166,7 +179,8 @@ B<--ignore-case>, B<--ignore-whitespace>.
 =item B<--diff-timeout N>
 
 Ignore files which take more than N seconds
-to process.  Default is 10 seconds.
+to process.  Default is 10 seconds.  Setting N
+to 0 allows unlimited time.
 (Large files with many repeated lines can cause
 Algorithm::Diff::sdiff() to take hours.)
 
@@ -201,7 +215,7 @@ these require additional processing that is not expressed in
 language definition files.
 Use B<--read-lang-def> to define new language
 filters without replacing built-in filters
-(see also B<--write-lang-def>).
+(see also B<--write-lang-def>, B<--write-lang-def-incl-dup>).
 
 =item B<--git>
 
@@ -317,6 +331,20 @@ Input arguments are report files previously created with the
 B<--report-file> option. Makes a cumulative set of results containing
 the sum of data from the individual report files.
 
+=item B<--strip-str-comments>
+
+Replace comment markers embedded in strings with
+'xx'.  This attempts to work around a limitation
+in Regexp::Common::Comment where comment markers
+embedded in strings are seen as actual comment
+markers and not strings, often resulting in a
+'Complex regular subexpression recursion limit'
+warning and incorrect counts.  There are two
+disadvantages to using this switch:  1/code count
+performance drops, and 2/code generated with
+B<--strip-comments> will contain different strings
+where ever embedded comments are found.
+
 =item B<--processes=NUM>
 
 [Available only on systems with a recent version
@@ -372,7 +400,7 @@ to supply a regex matching multiple subdirectories.
 
 Do not count files having the given file name extensions.
 
-=item B<--exclude-lang=L1[,L2 ...]>
+=item B<--exclude-lang=L1[,L2[...]]>
 
 Exclude the given comma separated languages from being counted.
 
@@ -393,6 +421,12 @@ in the regex, not just the file's basename.
 (This does not expand each file to include its
 absolute path, instead it uses as much of
 the path as is passed in to cloc.)
+
+=item B<--include-ext=<ext1>[,ext2[...]]>
+
+Count only languages having the given comma
+separated file extensions.  Use B<--show-ext> to
+see the recognized extensions.
 
 =item B<--include-lang=L1[,L2 ...]>
 
@@ -524,8 +558,16 @@ Print the version of this program and exit.
 =item B<--write-lang-def=FILE>
 
 Writes to FILE the language processing filters then exits. Useful as a
-first step to creating custom language definitions. See also
-B<--force-lang-def>, B<--read-lang-def>.
+first step to creating custom language definitions. 
+Note: languages which map to the same file extension will be excluded.
+See also B<--force-lang-def>, B<--read-lang-def>.  
+
+=item B<--write-lang-def-incl-dup=FILE>
+
+Same as B<--write-lang-def>, but includes duplicated
+extensions.  This generates a problematic language
+definition file because cloc will refuse to use
+it until duplicates are removed.
 
 =back
 
@@ -563,6 +605,11 @@ Write the results as comma separated values.
 
 Use the character C as the delimiter for comma separated files
 instead of ,.  This switch forces B<--csv> to be on.
+
+=item B<--hide-rate>
+
+Do not show line and file processing rates in the output
+header. This makes output deterministic.
 
 =item B<--json>
 
