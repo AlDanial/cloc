@@ -1938,13 +1938,14 @@ sub count_files {                            # {{{1
             next;
         }
 
+        if ($Language{$file} eq "(unknown)") {
+            $p_ignored{$file} = "language unknown (#1)";
+            next;
+        }
+
         my $Filters_by_Language_Language_file = ! @{$Filters_by_Language{$Language{$file}} };
         if ($Filters_by_Language_Language_file) {
-            if ($Language{$file} eq "(unknown)") {
-                $p_ignored{$file} = "language unknown (#1)";
-            } else {
-                $p_ignored{$file} = "missing Filters_by_Language{$Language{$file}}";
-            }
+            $p_ignored{$file} = "missing Filters_by_Language{$Language{$file}}";
             next;
         }
 
