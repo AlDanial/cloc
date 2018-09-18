@@ -5091,7 +5091,7 @@ sub classify_file {                          # {{{1
             } elsif ($Language_by_Extension{$extension} eq 'Verilog-SystemVerilog/Coq') {
                 return Verilog_or_Coq( $full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'Smarty') {
-                if ($extension eq "smarty") {
+                if ($extension ne "tpl") {
                     # unambiguous -- if ends with .smarty, is Smarty
                     return $Language_by_Extension{$extension};
                 }

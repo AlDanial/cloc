@@ -221,6 +221,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/312/results.yaml',
                 },
 
+                {
+                    'name' => 'custom Smarty definition (github issue #327)',
+                    'cd'   => '../tests/inputs/issues/327',
+                    'args' => '--force-lang-def=lang.config example.smarty2',
+                    'ref'  => '../tests/outputs/issues/327/results.yaml',
+                },
+
 
 #               {
 #                   'name' => '--count-and--diff with --out',
