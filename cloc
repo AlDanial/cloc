@@ -4483,7 +4483,11 @@ sub git_archive {                            # {{{1
 #                              @{$A2}[$start .. $end]);
         }
     } else {
-		push @File_Set, "$A1 $A2";
+		if (defined $A2) {
+		    push @{$File_Set[0]}, "$A1 $A2";
+		} else {
+		    push @{$File_Set[0]}, "$A1";
+		}
     }
 
     my $files_this_commit = join(" ", @{$File_Set[0]});
