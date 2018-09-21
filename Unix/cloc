@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "1.78";  # odd number == beta; even number == stable
+my $VERSION = "1.79";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.006;
 # use modules                                  {{{1
@@ -4487,7 +4487,11 @@ sub git_archive {                            # {{{1
 #                              @{$A2}[$start .. $end]);
         }
     } else {
-		push @File_Set, "$A1 $A2";
+		if (defined $A2) {
+		    push @{$File_Set[0]}, "$A1 $A2";
+		} else {
+		    push @{$File_Set[0]}, "$A1";
+		}
     }
 
     my $files_this_commit = join(" ", @{$File_Set[0]});
@@ -5095,7 +5099,7 @@ sub classify_file {                          # {{{1
             } elsif ($Language_by_Extension{$extension} eq 'Verilog-SystemVerilog/Coq') {
                 return Verilog_or_Coq( $full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'Smarty') {
-                if ($extension eq "smarty") {
+                if ($extension ne "tpl") {
                     # unambiguous -- if ends with .smarty, is Smarty
                     return $Language_by_Extension{$extension};
                 }
@@ -10257,13 +10261,7 @@ sub align_by_pairs {                         # {{{1
 #use Data::Dumper::Simple;
 #print Dumper("align_by_pairs", %{$rh_file_list_L}, %{$rh_file_list_R},);
 #die;
-    if (scalar @files_L == 1 and scalar @files_R == 1) {
-        # The easy case:  compare two files.
-        push @{$ra_compare_list}, [ $files_L[0],  $files_R[0] ];
-        @{$ra_added  } = ();
-        @{$ra_removed} = ();
-        return;
-    }
+
     # The harder case:  compare groups of files.  This only works
     # if the groups are in different directories so the first step
     # is to strip the leading directory names from file lists to
