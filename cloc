@@ -6893,6 +6893,7 @@ sub set_constants {                          # {{{1
             'csh'      => 'C Shell'               ,
             'dmd'      => 'D'                     ,
             'dtrace'   => 'dtrace'                ,
+            'escript'  => 'Erlang'                ,
             'idl'      => 'IDL'                   ,
             'kermit'   => 'Kermit'                ,
             'ksh'      => 'Korn Shell'            ,
