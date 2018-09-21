@@ -534,6 +534,11 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
    --csv                     Write the results as comma separated values.
    --csv-delimiter=<C>       Use the character <C> as the delimiter for comma
                              separated files instead of ,.  This switch forces
+   --file-encoding=<E>       Write output files using the <E> encoding instead of
+                             the default ASCII (<E> = 'UTF-7').  Examples: 'UTF-16',
+                             'euc-kr', 'iso-8859-16'.  Known encodings can be
+                             printed with
+                               perl -MEncode -e 'print join(\"\\n\", Encode->encodings(\":all\")), \"\\n\"'
    --hide-rate               Do not show line and file processing rates in the
                              output header. This makes output deterministic.
    --json                    Write the results as JavaScript Object Notation
@@ -661,6 +666,7 @@ my (
     $opt_force_git            ,
     $opt_config_file          ,
     $opt_strip_str_comments   ,
+    $opt_file_encoding        ,
    );
 
 my $getopt_success = GetOptions(             # {{{1
@@ -748,6 +754,7 @@ my $getopt_success = GetOptions(             # {{{1
    "git"                                     => \$opt_force_git           ,
    "config=s"                                => \$opt_config_file         ,
    "strip_str_comments|strip-str-comments"   => \$opt_strip_str_comments  ,
+   "file_encoding|file-encoding=s"           => \$opt_file_encoding       ,
   );
 # 1}}}
 $config_file = $opt_config_file if defined $opt_config_file;
@@ -833,7 +840,12 @@ load_from_config_file($config_file,          # {{{2
                                                 \$opt_no_autogen          ,
                                                 \$opt_force_git           ,
                                                 \$opt_strip_str_comments  ,
+                                                \$opt_file_encoding       ,
 );  # 2}}} Not pretty.  Not at all.
+if ($opt_version) {
+    printf "$VERSION\n";
+    exit;
+}
 $opt_by_file  = 1 if defined  $opt_by_file_by_lang;
 my $CLOC_XSL = "cloc.xsl"; # created with --xsl
    $CLOC_XSL = "cloc-diff.xsl" if $opt_diff;
@@ -994,10 +1006,6 @@ die "--diff requires two arguments; got ", scalar @ARGV, "\n"
 die "--diff arguments are identical; nothing done", "\n"
     if $opt_diff and !$opt_sum_reports and scalar @ARGV == 2
                                        and $ARGV[0] eq $ARGV[1];
-if ($opt_version) {
-    printf "$VERSION\n";
-    exit;
-}
 replace_git_hash_with_tarfile(\@ARGV);
 # 1}}}
 # Step 1:  Initialize global constants.        {{{1
@@ -3926,23 +3934,23 @@ sub write_lang_def {                         # {{{1
        ) = @_;
 
     print "-> write_lang_def($file)\n" if $opt_v > 2;
-    my $OUT = new IO::File $file, "w";
-    die "Unable to write to $file\n" unless defined $OUT;
+    my @outlines = ();
 
     foreach my $language (sort keys %{$rhaa_Filters_by_Language}) {
         next if $language =~ /(Brain|\(unknown\))/;
         next if defined $Extension_Collision{$language};
-        printf $OUT "%s\n", $language;
+        push @outlines, $language;
         foreach my $filter (@{$rhaa_Filters_by_Language->{$language}}) {
-            printf $OUT "    filter %s", $filter->[0];
-            printf $OUT " %s", $filter->[1] if defined $filter->[1];
+            my $line = "";
+            $line .= sprintf "    filter %s", $filter->[0];
+            $line .= sprintf " %s", $filter->[1] if defined $filter->[1];
             # $filter->[0] == 'remove_between_general',
             #                 'remove_between_regex', and
             #                 'remove_matches_2re' have two args
-            printf $OUT " %s", $filter->[2] if defined $filter->[2];
+            $line .= sprintf " %s", $filter->[2] if defined $filter->[2];
             # $filter->[0] == 'replace_between_regex' has three args
-            printf $OUT " %s", $filter->[3] if defined $filter->[3];
-            print  $OUT "\n";
+            $line .= sprintf " %s", $filter->[3] if defined $filter->[3];
+            push @outlines, $line;
         }
 
         # file extension won't appear if the extension maps to
@@ -3950,7 +3958,7 @@ sub write_lang_def {                         # {{{1
 		my $found = 0;
         foreach my $ext (sort keys %{$rh_Language_by_Extension}) {
             if ($language eq $rh_Language_by_Extension->{$ext}) {
-                printf $OUT "    extension %s\n", $ext;
+                push @outlines, sprintf "    extension %s\n", $ext;
 				$found = 1;
             }
         }
@@ -3959,29 +3967,29 @@ sub write_lang_def {                         # {{{1
                 my %Languages = map { $_ => 1 } split('/', $multilang);
                 next unless $Languages{$language};
                 foreach my $ext (@{$Extension_Collision{$multilang}}) {
-                    printf $OUT "    extension %s\n", $ext;
+                    push @outlines, sprintf "    extension %s\n", $ext;
                 }
             }
 		}
 
         foreach my $filename (sort keys %{$rh_Language_by_File}) {
             if ($language eq $rh_Language_by_File->{$filename}) {
-                printf $OUT "    filename %s\n", $filename;
+                push @outlines, sprintf "    filename %s\n", $filename;
             }
         }
         foreach my $script_exe (sort keys %{$rh_Language_by_Script}) {
             if ($language eq $rh_Language_by_Script->{$script_exe}) {
-                printf $OUT "    script_exe %s\n", $script_exe;
+                push @outlines, sprintf "    script_exe %s\n", $script_exe;
             }
         }
-        printf $OUT "    3rd_gen_scale %.2f\n", $rh_Scale_Factor->{$language};
+        push @outlines, sprintf "    3rd_gen_scale %.2f\n", $rh_Scale_Factor->{$language};
         if (defined $rh_EOL_Continuation_re->{$language}) {
-            printf $OUT "    end_of_line_continuation %s\n",
+            push @outlines, sprintf "    end_of_line_continuation %s\n",
                 $rh_EOL_Continuation_re->{$language};
         }
     }
 
-    $OUT->close;
+    write_file($file, @outlines);
     print "<- write_lang_def\n" if $opt_v > 2;
 } # 1}}}
 sub read_lang_def {                          # {{{1
@@ -5419,7 +5427,15 @@ sub write_file {                             # {{{1
     my ($volume, $directories, $filename) = File::Spec->splitpath( $abs_file_path );
     mkpath($volume . $directories, 1, 0777);
 
-    my $OUT = new IO::File $file, "w";
+    my $OUT = undef;
+    unlink $file;
+    if ($opt_file_encoding) {
+#       $OUT = IO::File->new($file, ">:$opt_file_encoding");  # doesn't work?
+        open($OUT, "> :encoding($opt_file_encoding)", $file);
+    } else {
+        $OUT = new IO::File $file, "w";
+    }
+
     if (defined $OUT) {
         chomp(@lines);
         print $OUT join("\n", @lines), "\n";
@@ -5427,9 +5443,11 @@ sub write_file {                             # {{{1
     } else {
         warn "Unable to write to $file\n";
     }
-    print "Wrote $file" unless $opt_quiet;
-    print ", $CLOC_XSL" if $opt_xsl and $opt_xsl eq $CLOC_XSL;
-    print "\n" unless $opt_quiet;
+    if (-r $file) {
+        print "Wrote $file" unless $opt_quiet;
+        print ", $CLOC_XSL" if $opt_xsl and $opt_xsl eq $CLOC_XSL;
+        print "\n" unless $opt_quiet;
+    }
 
     print "<- write_file\n" if $opt_v > 2;
 } # 1}}}
@@ -9773,12 +9791,6 @@ sub write_comments_to_html {                 # {{{1
 
     print "-> write_comments_to_html($filename)\n" if $opt_v > 2;
     my $file = $filename . ".html";
-    my $OUT = new IO::File $file, "w";
-    if (!defined $OUT) {
-        warn "Unable to write to $file\n";
-        print "<- write_comments_to_html\n" if $opt_v > 2;
-        return;
-    }
 
     my $approx_line_count = scalar @{$rah_diff_L};
     my $n_digits = 1 + int(log($approx_line_count)/2.30258509299405); # log_10
@@ -9848,11 +9860,7 @@ warn "undef rah_diff_R[$i]{type} " unless defined $rah_diff_R->[$i]{type};
     $html_out .= html_end();
 
     my $out_file = "$filename.html";
-    open  OUT, ">$out_file" or die "Cannot write to $out_file $!\n";
-    print OUT $html_out;
-    close OUT;
-    print "Wrote $out_file\n" unless $opt_quiet;
-    $OUT->close;
+    write_file($out_file, ( $html_out ) );
 
     print "<- write_comments_to_html\n" if $opt_v > 2;
 } # 1}}}
@@ -10596,14 +10604,10 @@ sub external_utility_exists {                # {{{1
     return $success;
 } # 1}}}
 sub write_xsl_file {                         # {{{1
-    my $OUT = new IO::File $CLOC_XSL, "w";
-    if (!defined $OUT) {
-        warn "Unable to write $CLOC_XSL  $!\n";
-        return;
-    }
+    print "-> write_xsl_file\n" if $opt_v > 2;
     my $XSL =             # <style>  </style> {{{2
 '<?xml version="1.0" encoding="UTF-8"?>
-<!-- XLS file by Paul Schwann, January 2009.
+<!-- XSL file by Paul Schwann, January 2009.
      Fixes for by-file and by-file-by-lang by d_uragan, November 2010.
      -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -10755,7 +10759,7 @@ EO_XSL
 
     my $XSL_DIFF = <<'EO_DIFF_XSL'; # {{{2
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- XLS file by Blazej Kroll, November 2010 -->
+<!-- XSL file by Blazej Kroll, November 2010 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="html"/>
   <xsl:template match="/">
@@ -10999,11 +11003,11 @@ EO_DIFF_XSL
 EO_DIFF_XSL
 # 2}}}
     if ($opt_diff) {
-        print $OUT $XSL_DIFF;
+        write_file($CLOC_XSL, ( $XSL_DIFF ) );
     } else {
-        print $OUT $XSL;
+        write_file($CLOC_XSL, ( $XSL ) );
     }
-    $OUT->close();
+    print "<- write_xsl_file\n" if $opt_v > 2;
 } # 1}}}
 sub normalize_file_names {                   # {{{1
     my (@files, ) = @_;
@@ -11289,6 +11293,7 @@ sub load_from_config_file {                  # {{{1
                                                  $rs_no_autogen          ,
                                                  $rs_force_git           ,
                                                  $rs_strip_str_comments  ,
+                                                 $rs_file_encoding       ,
         ) = @_;
         # look for runtime configuration file in
         #    $ENV{'HOME'}/.config/cloc/options.txt         -> POSIX
@@ -11399,6 +11404,7 @@ sub load_from_config_file {                  # {{{1
             if (!defined $4) { ${$rs_show_lang} =  0; }
             else             { ${$rs_show_lang} = $4; }
         } elsif (!defined ${$rs_strip_str_comments}  and /(strip_str_comments|strip-str-comments)/)      { ${$rs_strip_str_comments} = 1;
+        } elsif (!defined ${$rs_file_encoding}       and /file_encoding|file-encoding(=|\s+)(\S+)/)      { ${$rs_file_encoding}      = $2;
         }
 
     }
