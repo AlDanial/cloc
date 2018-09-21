@@ -11933,13 +11933,7 @@ sub align_by_pairs {                         # {{{1
 #use Data::Dumper::Simple;
 #print Dumper("align_by_pairs", %{$rh_file_list_L}, %{$rh_file_list_R},);
 #die;
-    if (scalar @files_L == 1 and scalar @files_R == 1) {
-        # The easy case:  compare two files.
-        push @{$ra_compare_list}, [ $files_L[0],  $files_R[0] ];
-        @{$ra_added  } = ();
-        @{$ra_removed} = ();
-        return;
-    }
+
     # The harder case:  compare groups of files.  This only works
     # if the groups are in different directories so the first step
     # is to strip the leading directory names from file lists to
