@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.79
+  elapsed_seconds    : 0.00568318367004395
+  n_files            : 1
+  n_lines            : 14
+  files_per_second   : 175.957712799429
+  lines_per_second   : 2463.40797919201
+  report_file        : ../outputs/LogMain.re.yaml
+'ReasonML' :
+  nFiles: 1
+  blank: 2
+  comment: 8
+  code: 4
+SUM: 
+  blank: 2
+  comment: 8
+  code: 4
+  nFiles: 1

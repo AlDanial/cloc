@@ -546,7 +546,17 @@ my @Tests = (
                     'args' => '../tests/inputs/i18n_de.ts',
                 },
                 {
-                    'name' => 'R_2',
+                    'name' => 'R 1',
+                    'ref'  => '../tests/outputs/sample.R.yaml',
+                    'args' => '../tests/inputs/sample.R',
+                },
+                {
+                    'name' => 'R 2',
+                    'ref'  => '../tests/outputs/utilities.R.yaml',
+                    'args' => '../tests/inputs/utilities.R',
+                },
+                {
+                    'name' => 'R 3',
                     'ref'  => '../tests/outputs/acpclust.R.yaml',
                     'args' => '../tests/inputs/acpclust.R',
                 },
@@ -566,19 +576,14 @@ my @Tests = (
                     'args' => '../tests/inputs/razor.cshtml',
                 },
                 {
+                    'name' => 'ReasonML',
+                    'ref'  => '../tests/outputs/LogMain.re.yaml',
+                    'args' => '../tests/inputs/LogMain.re',
+                },
+                {
                     'name' => 'RobotFramework',
                     'ref'  => '../tests/outputs/robotframework.tsv.yaml',
                     'args' => '../tests/inputs/robotframework.tsv',
-                },
-                {
-                    'name' => 'R',
-                    'ref'  => '../tests/outputs/sample.R.yaml',
-                    'args' => '../tests/inputs/sample.R',
-                },
-                {
-                    'name' => 'R',
-                    'ref'  => '../tests/outputs/utilities.R.yaml',
-                    'args' => '../tests/inputs/utilities.R',
                 },
                 {
                     'name' => 'Rmd',
@@ -760,7 +765,8 @@ my @Tests = (
 my $Verbose = 0;
 
 my $results = 'results.yaml';
-my $Run = "../cloc --quiet --yaml --out $results ";
+#my $Run = "../cloc --quiet --yaml --out $results ";
+my $Run = "./cloc --quiet --yaml --out $results ";
 foreach my $t (@Tests) {
     print  $Run . $t->{'args'} if $Verbose;
     system($Run . $t->{'args'});

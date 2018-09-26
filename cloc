@@ -4458,7 +4458,6 @@ sub git_archive {                            # {{{1
         $n_sets = $n_files/$FILES_PER_ARCHIVE;
         $n_sets = 1 + int($n_sets) if $n_sets > int($n_sets);
         $n_sets = 1 if !$n_sets;
-#die "n_files=$n_files  n_sets=$n_sets";
         foreach my $i (0..$n_sets-1) {
 	        @{$File_Set[$i]} = ( );
             my $start = $i*$FILES_PER_ARCHIVE;
@@ -6779,10 +6778,12 @@ sub set_constants {                          # {{{1
             'psm1'        => 'PowerShell'            ,
             'R'           => 'R'                     ,
             'r'           => 'R'                     ,
-            'Rmd'         => 'Rmd'                   ,
             'raml'        => 'RAML'                  ,
             'rkt'         => 'Racket'                ,
             'rktl'        => 'Racket'                ,
+            'Rmd'         => 'Rmd'                   ,
+            're'          => 'ReasonML'              ,
+            'rei'         => 'ReasonML'              ,
             'scrbl'       => 'Racket'                ,
             'sc'          => 'Scheme'                ,
             'ss'          => 'Scheme'                ,
@@ -7706,6 +7707,11 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'Rexx'               => [   [ 'call_regexp_common'  , 'C'      ], ],
+    'ReasonML'           => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'remove_between_general', '/*', '*/' ],
+                            ],
     'RobotFramework'     => [
                                 [ 'remove_matches'      , '^\s*#'   ],
                                 [ 'remove_matches'      , '^\s*Comment' ],
@@ -7713,7 +7719,6 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*\[(Documentation|Tags)\]' ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
-    'Rexx'               => [   [ 'call_regexp_common'  , 'C'      ], ],
     'Ruby'               => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_below_above'  , '^=begin', '^=end' ],
@@ -8730,6 +8735,7 @@ sub set_constants {                          # {{{1
     'realia'                       =>   1.74,
     'realizer 1.0'                 =>   2.00,
     'realizer 2.0'                 =>   2.22,
+    'ReasonML'                     =>   2.50,
     'relate/3000'                  =>   2.00,
     'reuse default'                =>  16.00,
     'Razor'                        =>   2.00,
@@ -13079,6 +13085,7 @@ sub load_from_config_file {                  # {{{1
         } elsif (!defined ${$rs_strip_str_comments}  and /(strip_str_comments|strip-str-comments)/)      { ${$rs_strip_str_comments} = 1;
         } elsif (!defined ${$rs_file_encoding}       and /file_encoding|file-encoding(=|\s+)(\S+)/)      { ${$rs_file_encoding}      = $2;
         }
+
     }
 } # 1}}}
 # subroutines copied from SLOCCount
