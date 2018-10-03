@@ -556,8 +556,8 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
    --sql-project=<name>      Use <name> as the project identifier for the
                              current run.  Only valid with the --sql option.
    --sql-style=<style>       Write SQL statements in the given style instead
-                             of the default SQLite format.  Currently, the
-                             only style option is Oracle.
+                             of the default SQLite format.  Styles include
+                             'Oracle' and 'Named_Columns'.
    --sum-one                 For plain text reports, show the SUM: output line
                              even if only one input file is processed.
    --xml                     Write the results in XML.
@@ -953,7 +953,7 @@ if ($opt_sql eq "-" || $opt_sql eq "1") { # stream SQL output to STDOUT
 }
 if ($opt_sql_style) {
     $opt_sql_style = lc $opt_sql_style;
-    if (!grep { lc $_ eq $opt_sql_style } qw ( Oracle )) {
+    if (!grep { lc $_ eq $opt_sql_style } qw ( Oracle Named_Columns )) {
         die "'$opt_sql_style' is not a recognized SQL style.\n";
     }
 }
@@ -3345,10 +3345,14 @@ create table t        (
     }
     print $fh $schema unless defined $opt_sql_append;
 
+    my $insert_into_t = "insert into t ";
     if ($opt_sql_style eq "oracle") {
         printf $fh "insert into metadata values(TO_TIMESTAMP('%s','yyyy-mm-dd hh24:mi:ss'), '%s', %f);\n",
                     strftime("%Y-%m-%d %H:%M:%S", localtime(time())),
                     $opt_sql_project, $elapsed_sec;
+    } elsif ($opt_sql_style eq "named_columns") {
+        print $fh "begin transaction;\n";
+        $insert_into_t .= "( Project, Language, File, File_dirname, File_basename, nBlank, nComment, nCode, nScaled )";
     } else {
         print $fh "begin transaction;\n";
         printf $fh "insert into metadata values('%s', '%s', %f);\n",
@@ -3369,7 +3373,7 @@ create table t        (
         $clean_filename =~ s/\'/''/g;  # double embedded single quotes
                                        # to escape them
 
-        printf $fh "insert into t values('%s', '%s', '%s', '%s', '%s', " .
+        printf $fh "$insert_into_t values('%s', '%s', '%s', '%s', '%s', " .
                    "%d, %d, %d, %f);\n",
                     $opt_sql_project           ,
                     $language                  ,
