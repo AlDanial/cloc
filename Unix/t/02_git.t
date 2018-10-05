@@ -52,9 +52,10 @@ if (!-d 'cloc_submodule_test') {
     ok( 0, "git tests");
     print "-" x 79, "\n";
 } else {
-    my $results = 'results.yaml';
+    my $results  = 'results.yaml';
     my $work_dir = getcwd;
-    my $cloc    = "$work_dir/../cloc";
+    my $cloc     = "$work_dir/../cloc";   # all-purpose version
+#   my $cloc     = "$work_dir/cloc";      # Unix-tuned version
     my $Run = "$cloc --quiet --yaml --out $results ";
     foreach my $t (@Tests) {
         chdir($t->{'cd'}) if defined $t->{'cd'};

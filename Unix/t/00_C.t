@@ -2,6 +2,7 @@
 use warnings;
 use strict;
 use Test::More;
+use Cwd;
 my @Tests = (
                 {
                     'name' => 'Agda',
@@ -764,9 +765,11 @@ my @Tests = (
 
 my $Verbose = 0;
 
-my $results = 'results.yaml';
-#my $Run = "../cloc --quiet --yaml --out $results ";
-my $Run = "./cloc --quiet --yaml --out $results ";
+my $results  = 'results.yaml';
+my $work_dir = getcwd;
+my $cloc     = "$work_dir/../cloc";   # all-purpose version
+#my $cloc     = "$work_dir/cloc";      # Unix-tuned version
+my $Run = "$cloc --quiet --yaml --out $results ";
 foreach my $t (@Tests) {
     print  $Run . $t->{'args'} if $Verbose;
     system($Run . $t->{'args'});
