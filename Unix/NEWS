@@ -1,3 +1,28 @@
+                Release Notes for cloc version 1.80
+                   https://github.com/AlDanial/cloc
+                           Oct. 5, 2018
+
+This is a bug-fix release to solve mis-handling of git inputs for
+straight counts in 1.78 (--git --diff works ok in 1.78),
+https://github.com/AlDanial/cloc/issues/328.
+
+New Languages:
+    o ReasonML
+
+Updates:
+    o New SQL output style option with "--sql-style Named_Columns".  This
+      includes the table "t" column names in each insert statement.
+    o New option --file-encoding to create all output files using the
+      given file encoding (for example "--file-encoding
+    o Add escript as script language for Erlang.
+    o Improved handling of custom Smarty definitions through
+      --read-lang-def.
+    o Better diff logic when comparing two files.
+    o Faster program start on the Unix-tuned version of cloc when
+      multiple processors are not used.
+
+============================================================================
+
                 Release Notes for cloc version 1.78
                    https://github.com/AlDanial/cloc
                            Sept. 7, 2018

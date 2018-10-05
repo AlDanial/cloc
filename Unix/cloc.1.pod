@@ -656,7 +656,7 @@ with the B<--sql> option.
 =item B<--sql-style=STYLE>
 
 Write SQL statements in the given style instead of the default
-SQLite format.  Currently, the only style option is B<Oracle>.
+SQLite format.  Styles include B<Oracle> and B<Named_Columns>.
 
 =item B<--sum-one>
 
