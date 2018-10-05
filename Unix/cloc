@@ -47,12 +47,6 @@ use List::Util qw( min max );
 use Cwd;
 use POSIX qw { strftime ceil};
 
-# Parallel::ForkManager isn't in the standard distribution.
-# Use it only if installed, and only if --processes=N is given.
-# The module load happens in get_max_processes().
-my $HAVE_Parallel_ForkManager = 1;
-use Parallel::ForkManager;
-
 # Digest::MD5 isn't in the standard distribution. Use it only if installed.
 my $HAVE_Digest_MD5 = 1;
 use Digest::MD5;
@@ -561,8 +555,8 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
    --sql-project=<name>      Use <name> as the project identifier for the
                              current run.  Only valid with the --sql option.
    --sql-style=<style>       Write SQL statements in the given style instead
-                             of the default SQLite format.  Currently, the
-                             only style option is Oracle.
+                             of the default SQLite format.  Styles include
+                             'Oracle' and 'Named_Columns'.
    --sum-one                 For plain text reports, show the SUM: output line
                              even if only one input file is processed.
    --xml                     Write the results in XML.
@@ -842,6 +836,16 @@ load_from_config_file($config_file,          # {{{2
                                                 \$opt_strip_str_comments  ,
                                                 \$opt_file_encoding       ,
 );  # 2}}} Not pretty.  Not at all.
+my $HAVE_Parallel_ForkManager = undef;
+if ($opt_processes and $opt_processes > 1) {
+    # Parallel::ForkManager isn't in the standard distribution.
+    # Use it only if installed, and only if --processes=N is given.
+    # The module load is slow so only use it if called for.
+    use Parallel::ForkManager;
+    $HAVE_Parallel_ForkManager = 1;
+} else {
+    $HAVE_Parallel_ForkManager = 0;
+}
 if ($opt_version) {
     printf "$VERSION\n";
     exit;
@@ -958,7 +962,7 @@ if ($opt_sql eq "-" || $opt_sql eq "1") { # stream SQL output to STDOUT
 }
 if ($opt_sql_style) {
     $opt_sql_style = lc $opt_sql_style;
-    if (!grep { lc $_ eq $opt_sql_style } qw ( Oracle )) {
+    if (!grep { lc $_ eq $opt_sql_style } qw ( Oracle Named_Columns )) {
         die "'$opt_sql_style' is not a recognized SQL style.\n";
     }
 }
@@ -3350,10 +3354,14 @@ create table t        (
     }
     print $fh $schema unless defined $opt_sql_append;
 
+    my $insert_into_t = "insert into t ";
     if ($opt_sql_style eq "oracle") {
         printf $fh "insert into metadata values(TO_TIMESTAMP('%s','yyyy-mm-dd hh24:mi:ss'), '%s', %f);\n",
                     strftime("%Y-%m-%d %H:%M:%S", localtime(time())),
                     $opt_sql_project, $elapsed_sec;
+    } elsif ($opt_sql_style eq "named_columns") {
+        print $fh "begin transaction;\n";
+        $insert_into_t .= "( Project, Language, File, File_dirname, File_basename, nBlank, nComment, nCode, nScaled )";
     } else {
         print $fh "begin transaction;\n";
         printf $fh "insert into metadata values('%s', '%s', %f);\n",
@@ -3374,7 +3382,7 @@ create table t        (
         $clean_filename =~ s/\'/''/g;  # double embedded single quotes
                                        # to escape them
 
-        printf $fh "insert into t values('%s', '%s', '%s', '%s', '%s', " .
+        printf $fh "$insert_into_t values('%s', '%s', '%s', '%s', '%s', " .
                    "%d, %d, %d, %f);\n",
                     $opt_sql_project           ,
                     $language                  ,
@@ -6783,10 +6791,12 @@ sub set_constants {                          # {{{1
             'psm1'        => 'PowerShell'            ,
             'R'           => 'R'                     ,
             'r'           => 'R'                     ,
-            'Rmd'         => 'Rmd'                   ,
             'raml'        => 'RAML'                  ,
             'rkt'         => 'Racket'                ,
             'rktl'        => 'Racket'                ,
+            'Rmd'         => 'Rmd'                   ,
+            're'          => 'ReasonML'              ,
+            'rei'         => 'ReasonML'              ,
             'scrbl'       => 'Racket'                ,
             'sc'          => 'Scheme'                ,
             'ss'          => 'Scheme'                ,
@@ -6897,6 +6907,7 @@ sub set_constants {                          # {{{1
             'csh'      => 'C Shell'               ,
             'dmd'      => 'D'                     ,
             'dtrace'   => 'dtrace'                ,
+            'escript'  => 'Erlang'                ,
             'idl'      => 'IDL'                   ,
             'kermit'   => 'Kermit'                ,
             'ksh'      => 'Korn Shell'            ,
@@ -7709,6 +7720,11 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'Rexx'               => [   [ 'call_regexp_common'  , 'C'      ], ],
+    'ReasonML'           => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'remove_between_general', '/*', '*/' ],
+                            ],
     'RobotFramework'     => [
                                 [ 'remove_matches'      , '^\s*#'   ],
                                 [ 'remove_matches'      , '^\s*Comment' ],
@@ -7716,7 +7732,6 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*\[(Documentation|Tags)\]' ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
-    'Rexx'               => [   [ 'call_regexp_common'  , 'C'      ], ],
     'Ruby'               => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_below_above'  , '^=begin', '^=end' ],
@@ -8733,6 +8748,7 @@ sub set_constants {                          # {{{1
     'realia'                       =>   1.74,
     'realizer 1.0'                 =>   2.00,
     'realizer 2.0'                 =>   2.22,
+    'ReasonML'                     =>   2.50,
     'relate/3000'                  =>   2.00,
     'reuse default'                =>  16.00,
     'Razor'                        =>   2.00,
