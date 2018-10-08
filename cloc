@@ -6822,6 +6822,8 @@ sub set_constants {                          # {{{1
             'i'           => 'SWIG'                  ,
             'sv'          => 'Verilog-SystemVerilog' ,
             'svh'         => 'Verilog-SystemVerilog' ,
+            'svg'         => 'SVG'                   ,
+            'SVG'         => 'SVG'                   ,
             'v'           => 'Verilog-SystemVerilog/Coq' ,
             'tcl'         => 'Tcl/Tk'                ,
             'tcsh'        => 'C Shell'               ,
@@ -7833,6 +7835,10 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'SVG'                => [
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
     'Swift'              => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
@@ -8815,6 +8821,7 @@ sub set_constants {                          # {{{1
     'Stylus'                       =>   1.48,
     'superbase 1.3'                =>   2.22,
     'surpass'                      =>  13.33,
+    'SVG'                          =>   1.00,
     'Swift'                        =>   2.50,
     'SWIG'                         =>   2.50,
     'sybase'                       =>   2.00,

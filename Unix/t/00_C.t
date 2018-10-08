@@ -647,6 +647,11 @@ my @Tests = (
                     'args' => '../tests/inputs/stata.do',
                 },
                 {
+                    'name' => 'SVG',
+                    'ref'  => '../tests/outputs/SVG_logo.svg.yaml',
+                    'args' => '../tests/inputs/SVG_logo.svg',
+                },
+                {
                     'name' => 'Swift',
                     'ref'  => '../tests/outputs/tour.swift.yaml',
                     'args' => '../tests/inputs/tour.swift',
