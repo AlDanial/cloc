@@ -3,22 +3,27 @@
 header : 
   cloc_url           : github.com/AlDanial/cloc
   cloc_version       : 1.80
-  elapsed_seconds    : 0.0191028118133545
+  elapsed_seconds    : 0.0753660202026367
   n_files            : 6
   n_lines            : 655
-  files_per_second   : 314.089886799046
-  lines_per_second   : 34288.1459755626
-  report_file        : ../tests/outputs/git_tests/contents_f647093e8.tar.yaml
+  files_per_second   : 79.6114745593278
+  lines_per_second   : 8690.91930605995
+  report_file        : j.yaml.HEAD
 'C' :
   nFiles: 2
   blank: 70
-  comment: 46
-  code: 231
+  comment: 0
+  code: 277
 'C++' :
   nFiles: 1
   blank: 49
-  comment: 55
-  code: 182
+  comment: 0
+  code: 237
+'Python' :
+  nFiles: 1
+  blank: 4
+  comment: 11
+  code: 2
 'Markdown' :
   nFiles: 1
   blank: 0
@@ -29,13 +34,8 @@ header :
   blank: 0
   comment: 1
   code: 2
-'Python' :
-  nFiles: 1
-  blank: 4
-  comment: 11
-  code: 2
 SUM: 
   blank: 123
-  comment: 113
-  code: 419
+  comment: 12
+  code: 520
   nFiles: 6

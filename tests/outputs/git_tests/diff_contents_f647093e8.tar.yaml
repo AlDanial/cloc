@@ -2,155 +2,135 @@
 # github.com/AlDanial/cloc
 header : 
   cloc_url           : github.com/AlDanial/cloc
-  cloc_version       : 1.79
-  elapsed_seconds    : 0.0396749973297119
-  n_files            : 7
-  n_lines            : 662
-  files_per_second   : 176.433534243941
-  lines_per_second   : 16685.5713813556
+  cloc_version       : 1.80
+  elapsed_seconds    : 0.0364840030670166
+  n_files            : 6
+  n_lines            : 655
+  files_per_second   : 164.455637967652
+  lines_per_second   : 17953.0738114687
   report_file        : ../../tests/outputs/git_tests/diff_contents_f647093e8.tar.yaml
 added :
   'C++' :
-    comment : 0
-    code : 0
     nFiles : 0
     blank : 0
+    comment : 0
+    code : 0
+  'Markdown' :
+    blank : 0
+    nFiles : 0
+    code : 0
+    comment : 0
+  'MATLAB' :
+    nFiles : 0
+    blank : 0
+    comment : 0
+    code : 0
+  'Python' :
+    nFiles : 0
+    blank : 0
+    comment : 0
+    code : 0
   'C' :
     nFiles : 0
-    code : 0
-    comment : 0
     blank : 0
-  'Python' :
-    comment : 0
-    nFiles : 0
-    code : 0
-    blank : 0
-  'MATLAB' :
     comment : 0
     code : 0
-    nFiles : 0
-    blank : 0
-  'Fortran 77' :
-    blank : 1
-    comment : 3
-    nFiles : 1
-    code : 3
-  'Markdown' :
-    comment : 0
-    nFiles : 0
-    code : 0
-    blank : 0
 same :
   'C++' :
-    comment : 55
-    code : 182
     nFiles : 1
     blank : 49
-  'C' :
-    nFiles : 2
-    code : 231
-    comment : 46
-    blank : 70
-  'Python' :
-    comment : 11
+    comment : 55
+    code : 182
+  'Markdown' :
+    blank : 0
     nFiles : 1
     code : 2
-    blank : 4
+    comment : 0
   'MATLAB' :
+    nFiles : 1
+    blank : 0
     comment : 1
     code : 2
+  'Python' :
     nFiles : 1
-    blank : 0
-  'Fortran 77' :
-    blank : 0
-    comment : 0
-    nFiles : 0
-    code : 0
-  'Markdown' :
-    comment : 0
-    nFiles : 1
+    blank : 4
+    comment : 11
     code : 2
-    blank : 0
+  'C' :
+    nFiles : 2
+    blank : 70
+    comment : 46
+    code : 231
 modified :
   'C++' :
-    comment : 0
-    code : 0
     nFiles : 0
     blank : 0
-  'C' :
-    nFiles : 0
-    code : 0
     comment : 0
-    blank : 0
-  'Python' :
-    comment : 0
-    nFiles : 0
-    code : 0
-    blank : 0
-  'MATLAB' :
-    comment : 0
-    code : 0
-    nFiles : 0
-    blank : 0
-  'Fortran 77' :
-    blank : 0
-    comment : 0
-    nFiles : 0
     code : 0
   'Markdown' :
-    comment : 0
+    blank : 0
     nFiles : 0
     code : 0
+    comment : 0
+  'MATLAB' :
+    nFiles : 0
     blank : 0
+    comment : 0
+    code : 0
+  'Python' :
+    nFiles : 0
+    blank : 0
+    comment : 0
+    code : 0
+  'C' :
+    nFiles : 0
+    blank : 0
+    comment : 0
+    code : 0
 removed :
   'C++' :
-    comment : 0
-    code : 0
     nFiles : 0
     blank : 0
-  'C' :
-    nFiles : 0
-    code : 0
     comment : 0
-    blank : 0
-  'Python' :
-    comment : 0
-    nFiles : 0
-    code : 0
-    blank : 0
-  'MATLAB' :
-    comment : 0
-    code : 0
-    nFiles : 0
-    blank : 0
-  'Fortran 77' :
-    blank : 0
-    comment : 0
-    nFiles : 0
     code : 0
   'Markdown' :
-    comment : 0
+    blank : 0
     nFiles : 0
     code : 0
+    comment : 0
+  'MATLAB' :
+    nFiles : 0
     blank : 0
+    comment : 0
+    code : 0
+  'Python' :
+    nFiles : 0
+    blank : 0
+    comment : 0
+    code : 0
+  'C' :
+    nFiles : 0
+    blank : 0
+    comment : 0
+    code : 0
 SUM :
   added :
-    comment : 3
-    nFiles : 1
-    code : 3
-    blank : 1
+    comment : 0
+    code : 0
+    nFiles : 0
+    blank : 0
   same :
     comment : 113
-    nFiles : 6
     code : 419
+    nFiles : 6
     blank : 123
   modified :
     comment : 0
-    nFiles : 0
     code : 0
+    nFiles : 0
     blank : 0
   removed :
     comment : 0
-    nFiles : 0
     code : 0
+    nFiles : 0
     blank : 0

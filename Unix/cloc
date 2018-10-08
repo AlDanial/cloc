@@ -1407,6 +1407,7 @@ if ($opt_extract_with) {
 } else {
     # see if any of the inputs need to be auto-uncompressed &/or expanded
     my @updated_ARGS = ();
+    replace_git_hash_with_tarfile(\@ARGV) if $opt_force_git;
     foreach my $Arg (@ARGV) {
         if (is_dir($Arg)) {
             push @updated_ARGS, $Arg;

@@ -1,0 +1,156 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.80
+  elapsed_seconds    : 0.115761041641235
+  n_files            : 7
+  n_lines            : 661
+  files_per_second   : 60.469393681635
+  lines_per_second   : 5710.03846050867
+  report_file        : j.yaml.diff.HEAD~1.HEAD
+added :
+  'C' :
+    nFiles : 2
+    comment : 0
+    blank : 70
+    code : 277
+  'Fortran 90' :
+    nFiles : 0
+    comment : 0
+    blank : 0
+    code : 0
+  'MATLAB' :
+    comment : 1
+    nFiles : 1
+    code : 2
+    blank : 0
+  'C++' :
+    nFiles : 1
+    comment : 0
+    blank : 49
+    code : 237
+  'Markdown' :
+    nFiles : 1
+    comment : 0
+    blank : 0
+    code : 2
+  'Python' :
+    blank : 4
+    code : 2
+    nFiles : 1
+    comment : 11
+same :
+  'C' :
+    nFiles : 0
+    comment : 0
+    blank : 0
+    code : 0
+  'Fortran 90' :
+    nFiles : 0
+    comment : 0
+    blank : 0
+    code : 0
+  'MATLAB' :
+    comment : 0
+    nFiles : 0
+    code : 0
+    blank : 0
+  'C++' :
+    nFiles : 0
+    comment : 0
+    blank : 0
+    code : 0
+  'Markdown' :
+    nFiles : 0
+    comment : 0
+    blank : 0
+    code : 0
+  'Python' :
+    blank : 0
+    code : 0
+    nFiles : 0
+    comment : 0
+modified :
+  'C' :
+    nFiles : 0
+    comment : 0
+    blank : 0
+    code : 0
+  'Fortran 90' :
+    nFiles : 0
+    comment : 0
+    blank : 0
+    code : 0
+  'MATLAB' :
+    comment : 0
+    nFiles : 0
+    code : 0
+    blank : 0
+  'C++' :
+    nFiles : 0
+    comment : 0
+    blank : 0
+    code : 0
+  'Markdown' :
+    nFiles : 0
+    comment : 0
+    blank : 0
+    code : 0
+  'Python' :
+    blank : 0
+    code : 0
+    nFiles : 0
+    comment : 0
+removed :
+  'C' :
+    nFiles : 0
+    comment : 0
+    blank : 0
+    code : 0
+  'Fortran 90' :
+    nFiles : 1
+    comment : 2
+    blank : 1
+    code : 3
+  'MATLAB' :
+    comment : 0
+    nFiles : 0
+    code : 0
+    blank : 0
+  'C++' :
+    nFiles : 0
+    comment : 0
+    blank : 0
+    code : 0
+  'Markdown' :
+    nFiles : 0
+    comment : 0
+    blank : 0
+    code : 0
+  'Python' :
+    blank : 0
+    code : 0
+    nFiles : 0
+    comment : 0
+SUM :
+  added :
+    nFiles : 6
+    comment : 12
+    blank : 123
+    code : 520
+  same :
+    nFiles : 0
+    comment : 0
+    blank : 0
+    code : 0
+  modified :
+    nFiles : 0
+    comment : 0
+    blank : 0
+    code : 0
+  removed :
+    nFiles : 1
+    comment : 2
+    blank : 1
+    code : 3

@@ -21,14 +21,14 @@ my @Tests = (
 
                 {
                     'name' => 'tar file f647093e8',
-                    'args' => 'contents_f647093e8.tar.gz',
+                    'args' => '../../tests/inputs/git_tests/contents_f647093e8.tar.gz',
                     'ref'  => '../tests/outputs/git_tests/contents_f647093e8.tar.yaml',
                     'cd'   => 'cloc_submodule_test',
                 },
 
                 {
                     'name' => 'diff f647093e8 to tar file f647093e8',
-                    'args' => '--git --diff f647093e8 contents_f647093e8.tar.gz',
+                    'args' => '--git --diff f647093e8 ../../tests/inputs/git_tests/contents_f647093e8.tar.gz',
                     'ref'  => '../tests/outputs/git_tests/diff_contents_f647093e8.tar.yaml',
                     'cd'   => 'cloc_submodule_test',
                 },
@@ -38,6 +38,30 @@ my @Tests = (
                     'args' => '--git --diff f15bf042b f647093e8b',
                     'ref'  => '../tests/outputs/git_tests/diff_f15bf042b_f647093e8b.yaml',
                     'cd'   => 'cloc_submodule_test',
+                },
+
+                {
+                    'name' => 'count and diff part I',
+                    'args' => '--strip-str-comments  --git --count-and-diff HEAD~1 HEAD',
+                    'ref'  => '../tests/outputs/git_tests/count_and_diff.yaml.HEAD',
+                    'cd'   => 'cloc_submodule_test',
+                    'results'  => 'results.yaml.HEAD',
+                },
+
+                {
+                    'name' => 'count and diff part II',
+                    'args' => '--strip-str-comments  --git --count-and-diff HEAD~1 HEAD',
+                    'ref'  => '../tests/outputs/git_tests/count_and_diff.yaml.HEAD~1',
+                    'cd'   => 'cloc_submodule_test',
+                    'results'  => 'results.yaml.HEAD~1',
+                },
+
+                {
+                    'name' => 'count and diff part III',
+                    'args' => '--strip-str-comments  --git --count-and-diff HEAD~1 HEAD',
+                    'ref'  => '../tests/outputs/git_tests/count_and_diff.yaml.diff.HEAD~1.HEAD',
+                    'cd'   => 'cloc_submodule_test',
+                    'results'  => 'results.yaml.diff.HEAD~1.HEAD',
                 },
 
             );
@@ -61,8 +85,14 @@ if (!-d 'cloc_submodule_test') {
         chdir($t->{'cd'}) if defined $t->{'cd'};
         print  $Run . $t->{'args'} if $Verbose;
         system($Run . $t->{'args'});
-        ok(-e $results, $t->{'name'} . " created output");
-        my %this = load_yaml($results);
+        my %this = ();
+        if (defined $t->{'results'}) {
+            ok(-e $t->{'results'}, $t->{'name'} . " created output");
+            %this = load_yaml($t->{'results'});
+        } else {
+            ok(-e $results       , $t->{'name'} . " created output");
+            %this = load_yaml($results);
+        }
         unlink $results;
         chdir($work_dir) if defined $t->{'cd'};
         my %ref  = load_yaml($t->{'ref'});
