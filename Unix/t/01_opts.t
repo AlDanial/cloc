@@ -228,6 +228,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/327/results.yaml',
                 },
 
+                {
+                    'name' => 'UTF-8 output file encoding',
+                    'cd'   => '../tests/inputs/issues/318',
+                    'args' => '--by-file --file-encoding utf8 R*.cs',
+                    'ref'  => '../tests/inputs/issues/318/Rcs.yaml',  # results in input dir
+                },
+
 
 #               {
 #                   'name' => '--count-and--diff with --out',
@@ -251,16 +258,23 @@ my $cloc     = "$work_dir/../cloc";   # all-purpose version
 my $Run = "$cloc --quiet --yaml --out $results ";
 foreach my $t (@Tests) {
     chdir($t->{'cd'}) if defined $t->{'cd'};
+    print "Run  dir= ", cwd(), "\n" if $Verbose;
     print  $Run . $t->{'args'} if $Verbose;
     system($Run . $t->{'args'});
     ok(-e $results, $t->{'name'} . " created output");
     my %this = load_yaml($results);
-    unlink $results;
+    unlink $results unless $Verbose;
     chdir($work_dir) if defined $t->{'cd'};
+    print "Load dir= ", cwd(), "\n" if $Verbose;
     my %ref  = load_yaml($t->{'ref'});
 
 #   my $REF = LoadFile($t->{'ref'});  # using official YAML module
 #   is_deeply($REF , \%this, $t->{'name'} . " results match");
+
+#   use Data::Dumper;
+#   print Dumper(\%ref);
+#   print Dumper(\%this);
+
     is_deeply(\%ref, \%this, $t->{'name'} . " results match");
 }
 done_testing();

@@ -46,7 +46,6 @@ use IO::File;
 use List::Util qw( min max );
 use Cwd;
 use POSIX qw { strftime ceil};
-
 # Parallel::ForkManager isn't in the standard distribution.
 # Use it only if installed, and only if --processes=N is given.
 # The module load happens in get_max_processes().
@@ -1001,6 +1000,7 @@ die "--diff requires two arguments; got ", scalar @ARGV, "\n"
 die "--diff arguments are identical; nothing done", "\n"
     if $opt_diff and !$opt_sum_reports and scalar @ARGV == 2
                                        and $ARGV[0] eq $ARGV[1];
+trick_pp_packer_encode() if $ON_WINDOWS and $opt_file_encoding;
 replace_git_hash_with_tarfile(\@ARGV);
 # 1}}}
 # Step 1:  Initialize global constants.        {{{1
@@ -13100,6 +13100,15 @@ sub load_from_config_file {                  # {{{1
 
     }
 } # 1}}}
+sub trick_pp_packer_encode {                 # {{{1
+    use Encode;
+    # PAR::Packer gives 'Unknown PerlIO layer "encoding"' unless it is
+    # forced into using this module.
+    my ($OUT, $JunkFile) = tempfile(UNLINK => 1);  # delete on exit
+    open($OUT, "> :encoding(utf8)", $JunkFile);
+    close($OUT);
+}
+# 1}}}
 # subroutines copied from SLOCCount
 my %php_files    = ();  # really_is_php()
 sub really_is_pascal {                       # {{{1
