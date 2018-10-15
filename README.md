@@ -2393,7 +2393,7 @@ Pull requests for these features will receive extra consideration.
 <a name="Acknowledgments"></a> []({{{1)
 #   [Acknowledgments &#9650;](#___top "click to go to top of document")
 Wolfram Rösler provided most of the code examples in the test suite.
-These examples come from his [Hello World collection](http://www.roesler-ac.de/wolfram/hello.htm).
+These examples come from his [Hello World collection](http://helloworldcollection.de/).
 
 Ismet Kursunoglu found errors with the MUMPS counter and provided
 access to a computer with a large body of MUMPS code to test cloc.
