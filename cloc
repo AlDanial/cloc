@@ -6751,6 +6751,7 @@ sub set_constants {                          # {{{1
             'rexx'        => 'Rexx'                  ,
             'rhtml'       => 'Ruby HTML'             ,
             'rs'          => 'Rust'                  ,
+            'rst'         => 'reStructuredText'      ,
             's'           => 'Assembly'              ,
             'S'           => 'Assembly'              ,
             'SCA'         => 'Visual Fox Pro'        ,
@@ -7713,6 +7714,9 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'reStructuredText'   => [
+                                [ 'remove_between_regex', '^\.\.', '^[^ \n\t\r\f\.]' ]
                             ],
     'Rexx'               => [   [ 'call_regexp_common'  , 'C'      ], ],
     'ReasonML'           => [
@@ -8748,6 +8752,7 @@ sub set_constants {                          # {{{1
     'realizer 2.0'                 =>   2.22,
     'ReasonML'                     =>   2.50,
     'relate/3000'                  =>   2.00,
+    'reStructuredText'             =>   1.50,
     'reuse default'                =>  16.00,
     'Razor'                        =>   2.00,
     'Rexx'                         =>   1.19,
