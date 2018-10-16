@@ -3182,6 +3182,7 @@ sub diff_csv_report {                        # {{{1
     }
     my $DELIM = ",";
        $DELIM = $opt_csv_delimiter if defined $opt_csv_delimiter;
+       $DELIM = "|" if defined $opt_md;
 
     $elapsed_sec = 0.5 unless $elapsed_sec;
 
@@ -3193,8 +3194,22 @@ sub diff_csv_report {                        # {{{1
             $line .= "$symbol $item${DELIM} ";
         }
     }
-    $line .= "\"$URL v $version T=$elapsed_sec s\"";
-    push @results, $line;
+
+    if ($opt_md) {
+        push @results, "cloc|$URL v $version T=$elapsed_sec s";
+        push @results, "--- | ---";
+        push @results, "";
+        push @results, $line;
+        my @col_header  = ();
+        push @col_header, ":-------";
+        foreach (1..16) {
+            push @col_header, "-------:";
+        }
+        push @results, join("|", @col_header) . "|";
+    } else {
+        $line .= "\"$URL v $version T=$elapsed_sec s\"";
+        push @results, $line;
+    }
 
     foreach my $lang_or_file (keys %{$rhhh_count}) {
         $rhhh_count->{$lang_or_file}{'code'}{'added'} = 0 unless
