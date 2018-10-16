@@ -582,6 +582,11 @@ my @Tests = (
                     'args' => '../tests/inputs/LogMain.re',
                 },
                 {
+                    'name' => 'reStructuredText',
+                    'ref'  => '../tests/outputs/reStructuredText.rst.yaml',
+                    'args' => '../tests/inputs/reStructuredText.rst',
+                },
+                {
                     'name' => 'RobotFramework',
                     'ref'  => '../tests/outputs/robotframework.tsv.yaml',
                     'args' => '../tests/inputs/robotframework.tsv',
