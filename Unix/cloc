@@ -6565,6 +6565,7 @@ sub set_constants {                          # {{{1
             'exp'         => 'Expect'                ,
             '4th'         => 'Forth'                 ,
             'fish'        => 'Fish Shell'            ,
+            'fnl'         => 'Fennel'                ,
             'forth'       => 'Forth'                 ,
             'fr'          => 'Forth'                 ,
             'frt'         => 'Forth'                 ,
@@ -7247,6 +7248,10 @@ sub set_constants {                          # {{{1
     'Expect'             => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
+                            ],
+    'Fennel'             => [
+                                [ 'remove_matches'      , '^\s*;'  ],
+                                [ 'remove_inline'       , ';.*$'   ],
                             ],
     'Fish Shell'         => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -8467,6 +8472,7 @@ sub set_constants {                          # {{{1
     'facets'                       =>   4.00,
     'factorylink iv'               =>   2.76,
     'fame'                         =>   2.22,
+    'Fennel'                       =>   2.50,
     'filemaker pro'                =>   2.22,
     'flavors'                      =>   2.76,
     'flex'                         =>   1.74,

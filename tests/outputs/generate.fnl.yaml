@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.81
+  elapsed_seconds    : 0.00580787658691406
+  n_files            : 1
+  n_lines            : 53
+  files_per_second   : 172.179967159278
+  lines_per_second   : 9125.53825944171
+  report_file        : ../outputs/generate.fnl.yaml
+'Fennel' :
+  nFiles: 1
+  blank: 6
+  comment: 3
+  code: 44
+SUM: 
+  blank: 6
+  comment: 3
+  code: 44
+  nFiles: 1
