@@ -143,9 +143,9 @@ if ( $ENV{'HOME'} ) {
 }
 
 my $NN     = chr(27) . "[0m";  # normal
-   $NN     = "" if $ON_WINDOWS or !(-t STDERR); # -t STDERR:  is it a terminal?
+   $NN     = "" if $ON_WINDOWS or !(-t STDOUT); # -t STDOUT:  is it a terminal?
 my $BB     = chr(27) . "[1m";  # bold
-   $BB     = "" if $ON_WINDOWS or !(-t STDERR);
+   $BB     = "" if $ON_WINDOWS or !(-t STDOUT);
 my $script = basename $0;
 my $brief_usage  = "
                        cloc -- Count Lines of Code
