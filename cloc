@@ -3880,7 +3880,29 @@ sub generate_report {                        # {{{1
             }
         }
     } elsif ($opt_csv) {
-        # do nothing
+        my @entries = ();
+        if ($opt_by_file) {
+            push @entries, "SUM";
+            push @entries, "";
+        } else {
+            push @entries, $sum_files;
+            push @entries, "SUM";
+        }
+        if ($opt_by_percent) {
+            my $DEN = compute_denominator($opt_by_percent    ,
+                          $sum_code, $sum_comment, $sum_blank);
+            push @entries, sprintf("%.2f", $sum_blank   / $DEN * 100);
+            push @entries, sprintf("%.2f", $sum_comment / $DEN * 100);
+        } else {
+            push @entries, $sum_blank;
+            push @entries, $sum_comment;
+        }
+        push @entries, $sum_code;
+        if ($opt_3) {
+            push @entries, $sum_scaled;
+            push @entries, $avg_scale ;
+        }
+        push @results, join(",", @entries);
     } else {
 
         if ($BY_FILE) {
