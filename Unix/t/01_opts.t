@@ -235,6 +235,13 @@ my @Tests = (
                     'ref'  => '../tests/inputs/issues/318/Rcs.yaml',  # results in input dir
                 },
 
+                {
+                    'name' => 'distinguish TeX from VB (github issue #341)',
+                    'cd'   => '../tests/inputs/issues/341',
+                    'args' => '.',
+                    'ref'  => '../tests/outputs/issues/341/results.yaml',
+                },
+
 
 #               {
 #                   'name' => '--count-and--diff with --out',

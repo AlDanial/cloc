@@ -1035,6 +1035,7 @@ my %Extension_Collision = (
     'Qt/Glade'                                      => [ 'ui'   ] ,
     'TypeScript/Qt Linguist'                        => [ 'ts'   ] ,
     'Verilog-SystemVerilog/Coq'                     => [ 'v'    ] ,
+    'Visual Basic/TeX'                              => [ 'cls'  ] ,
 );
 my @Autogen_to_ignore = no_autogen_files($list_no_autogen);
 if ($opt_force_lang_def) {
@@ -4295,6 +4296,11 @@ sub print_language_info {                    # {{{1
         push @{$extensions{'Smalltalk'}}    , "cs";
         delete $extensions{'C#/Smalltalk'};
     }
+    if (!$language or $language =~ /^(Visual Basic|TeX)$/i) {
+        push @{$extensions{'Visual Basic'}} , "cls";
+        push @{$extensions{'TeX'}}          , "cls";
+        delete $extensions{'Visual Basic/TeX'};
+    }
     if (!$language or $language =~ /^(Ant)$/i) {
         push @{$extensions{'Ant'}}  , "build.xml";
         delete $extensions{'Ant/XML'};
@@ -5175,6 +5181,8 @@ sub classify_file {                          # {{{1
                 return Qt_or_Glade( $full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'C#/Smalltalk') {
                 return Csharp_or_Smalltalk( $full_file, $rh_Err, $raa_errors);
+            } elsif ($Language_by_Extension{$extension} eq 'Visual Basic/TeX') {
+                return Visual_Basic_or_TeX( $full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'Brainfuck') {
                 if (really_is_bf($full_file)) {
                     return $Language_by_Extension{$extension};
@@ -6614,7 +6622,7 @@ sub set_constants {                          # {{{1
             'clj'         => 'Clojure'               ,
             'cljs'        => 'ClojureScript'         ,
             'cljc'        => 'ClojureC'              ,
-            'cls'         => 'Visual Basic'          , # also Apex Class
+            'cls'         => 'Visual Basic/TeX'      , # also Apex Class
             'CMakeLists.txt' => 'CMake'              ,
             'cmake'       => 'CMake'                 ,
             'cob'         => 'COBOL'                 ,
@@ -11477,6 +11485,39 @@ sub Csharp_or_Smalltalk {                    # {{{1
         $lang = "C#";
     }
     print "<- Csharp_or_Smalltalk($file)=$lang\n" if $opt_v > 2;
+    return $lang;
+} # 1}}}
+sub Visual_Basic_or_TeX {                    # {{{1
+    my ($file        , # in
+        $rh_Err      , # in   hash of error codes
+        $raa_errors  , # out
+       ) = @_;
+
+    print "-> Visual_Basic_or_TeX($file)\n" if $opt_v > 2;
+
+    my $lang = undef;
+    my $IN = new IO::File $file, "r";
+    if (!defined $IN) {
+        push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
+        return $lang;
+    }
+    my $VB_points        = 0;
+    my $tex_points       = 0;
+    while (<$IN>) {
+        next if /^\s*$/;
+        if (/\s*%/ or /\s*\\/) {
+            ++$tex_points       ;
+        } elsif (/^\s*(public|private|end|attribute|version)\s/i) {
+            ++$VB_points       ;
+        }
+    }
+    $IN->close;
+    if ($tex_points > $VB_points) {
+        $lang = "TeX";
+    } else {
+        $lang = "Visual Basic";
+    }
+    print "<- Visual_Basic_or_TeX($file)=$lang\n" if $opt_v > 2;
     return $lang;
 } # 1}}}
 sub html_colored_text {                      # {{{1
