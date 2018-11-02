@@ -1238,7 +1238,7 @@ if ($opt_sum_reports and $opt_diff) {
         @results = combine_diffs(\@ARGV);
     }
     if ($opt_report_file) {
-        write_file($opt_report_file, @results);
+        write_file($opt_report_file, {}, @results);
     } else {
         print "\n", join("\n", @results), "\n";
     }
@@ -1275,7 +1275,7 @@ if ($opt_sum_reports) {
             my $ext  = ".lang";
                $ext  = ".file" unless $type eq "by language";
             next if !$found_lang and  $ext  eq ".lang";
-            write_file($opt_report_file . $ext, @results);
+            write_file($opt_report_file . $ext, {}, @results);
         } else {
             print "\n", join("\n", @results), "\n";
         }
@@ -1635,8 +1635,11 @@ if ($opt_diff_alignment) {
 }
 
 my @ignored_reasons = map { "$_: $Ignored{$_}" } sort keys %Ignored;
-write_file($opt_ignored, @ignored_reasons   ) if $opt_ignored;
-write_file($opt_counted, sort keys %Results_by_File) if $opt_counted;
+write_file($opt_ignored, {"file_type" => "ignored",
+                          "separator" => ": ",
+                          "columns"   => ["file", "reason"],
+                         }, @ignored_reasons   ) if $opt_ignored;
+write_file($opt_counted, {}, sort keys %Results_by_File) if $opt_counted;
 # 1}}}
 # Step 7:  Assemble results.                   {{{1
 #
@@ -1785,8 +1788,11 @@ else {
 }
 
 my @ignored_reasons = map { "$_: $Ignored{$_}" } sort keys %Ignored;
-write_file($opt_ignored, @ignored_reasons   ) if $opt_ignored;
-write_file($opt_counted, sort keys %Results_by_File) if $opt_counted;
+write_file($opt_ignored, {"file_type" => "ignored",
+                          "separator" => ": ",
+                          "columns"   => ["file", "reason"],
+                         }, @ignored_reasons   ) if $opt_ignored;
+write_file($opt_counted, {}, sort keys %Results_by_File) if $opt_counted;
 # 1}}}
 # Step 7:  Assemble results.                   {{{1
 #
@@ -1818,7 +1824,7 @@ if      ($opt_by_file_by_lang) {
 }
 # 1}}}
 }
-if ($opt_report_file) { write_file($opt_report_file, @Lines_Out); }
+if ($opt_report_file) { write_file($opt_report_file, {}, @Lines_Out); }
 else                  { print "\n", join("\n", @Lines_Out), "\n"; }
 if ($opt_count_diff) {
     ++$opt_count_diff;
@@ -2466,7 +2472,7 @@ sub write_alignment_data {                   # {{{1
             push (@output, $pair);
         }
     }
-    write_file($filename, @output);
+    write_file($filename, {}, @output);
 } # 1}}}
 sub exclude_dir_validates {                  # {{{1
     my ($rh_Exclude_Dir) = @_;
@@ -4004,7 +4010,7 @@ sub write_lang_def {                         # {{{1
         }
     }
 
-    write_file($file, @outlines);
+    write_file($file, {}, @outlines);
     print "<- write_lang_def\n" if $opt_v > 2;
 } # 1}}}
 sub read_lang_def {                          # {{{1
@@ -4417,9 +4423,9 @@ sub replace_git_hash_with_tarfile {          # {{{1
 #die;
             $replacement_arg_list{$git_hash{$Right}} = git_archive($Right, \@right_files);
 #           $replacement_arg_list{$git_hash{$Right}} = git_archive($Right, \@Rfiles);
-#write_file("/tmp/Lfiles.txt", sort @Lfiles);
-#write_file("/tmp/Rfiles.txt", sort @Rfiles);
-#write_file("/tmp/files_union.txt", sort keys %files_union);
+#write_file("/tmp/Lfiles.txt", {}, sort @Lfiles);
+#write_file("/tmp/Rfiles.txt", {}, sort @Rfiles);
+#write_file("/tmp/files_union.txt", {}, sort keys %files_union);
 
         } else {
 #print "A DIFF git-to-file or file-to-git Left=$Left Right=$Right\n";
@@ -4646,7 +4652,7 @@ sub make_file_list {                         # {{{1
 
     $nFiles_Found = scalar @file_list;
     printf "%8d text file%s.\n", plural_form($nFiles_Found) unless $opt_quiet;
-    write_file($opt_found, sort @file_list) if $opt_found;
+    write_file($opt_found, {}, sort @file_list) if $opt_found;
 
     my $nFiles_Categorized = 0;
 
@@ -5371,7 +5377,7 @@ sub call_counter {                           # {{{1
         } else {
             $stripped_file = basename $file . ".$opt_strip_comments";
         }
-        write_file($stripped_file, @lines);
+        write_file($stripped_file, {}, @lines);
     }
     if ($opt_html and !$opt_diff) {
         chomp(@original_lines);  # includes blank lines, comments
@@ -5418,10 +5424,16 @@ sub windows_glob {                           # {{{1
           } @_;
 } # 1}}}
 sub write_file {                             # {{{1
-    my ($file  , # in
-        @lines , # in
+    my ($file       , # in
+        $rh_options , # in
+        @lines      , # in
        ) = @_;
 
+    my $local_formatting = 0;
+    foreach my $opt (sort keys %{$rh_options}) {
+#       print "write_file option $opt = $rh_options->{$opt}\n";
+        $local_formatting = 1;
+    }
 #print "write_file 1 [$file]\n";
     # Do ~ expansion (by Tim LaBerge, fixes bug 2787984)
     my $preglob_filename = $file;
@@ -5451,13 +5463,71 @@ sub write_file {                             # {{{1
         $OUT = new IO::File $file, "w";
     }
 
-    if (defined $OUT) {
-        chomp(@lines);
-        print $OUT join("\n", @lines), "\n";
-        $OUT->close;
-    } else {
-        warn "Unable to write to $file\n";
+    my $n_col = undef;
+    if ($local_formatting) {
+        $n_col = scalar @{$rh_options->{'columns'}};
+        if ($opt_xml) {
+            print $OUT '<?xml version="1.0" encoding="UTF-8"?>', "\n";
+            print $OUT "<all_$rh_options->{'file_type'}>\n";
+        } elsif ($opt_yaml) {
+            print $OUT "---\n";
+        } elsif ($opt_md) {
+            print $OUT join("|", @{$rh_options->{'columns'}}) , "\n";
+            print $OUT join("|", map( ":------", 1 .. $n_col)), "\n";
+        }
     }
+
+    if (!defined $OUT) {
+        warn "Unable to write to $file\n";
+        print "<- write_file\n" if $opt_v > 2;
+        return;
+    }
+    chomp(@lines);
+
+    if ($local_formatting) {
+        my @json_lines = ();
+        foreach my $L (@lines) {
+            my @entries;
+            if ($rh_options->{'separator'}) {
+                @entries = split($rh_options->{'separator'}, $L, $n_col);
+            } else {
+                @entries = ( $L );
+            }
+            if ($opt_xml) {
+                print $OUT "  <$rh_options->{'file_type'} ";
+                for (my $i = 0; $i < $n_col; $i++) {
+                    printf $OUT "%s=\"%s\" ", $rh_options->{'columns'}[$i], $entries[$i];
+                }
+                print $OUT "/>\n";
+            } elsif ($opt_yaml or $opt_json) {
+                my @pairs = ();
+                for (my $i = 0; $i < $n_col; $i++) {
+                    push @pairs,
+                        sprintf "\"%s\":\"%s\"", $rh_options->{'columns'}[$i], $entries[$i];
+                }
+                if ($opt_json) {
+                    push @json_lines, join(", ", @pairs );
+                } else {
+                    print $OUT "- {", join(", ", @pairs), "}\n";
+                }
+            } elsif ($opt_csv) {
+                print $OUT join(",", @entries), "\n";
+            } elsif ($opt_md) {
+                print $OUT join("|", @entries), "\n";
+            }
+        }
+        if ($opt_json) {
+            print $OUT "[{", join("}, {", @json_lines), "}]\n";
+        }
+    } else {
+        print $OUT join("\n", @lines), "\n";
+    }
+
+    if ($local_formatting and $opt_xml) {
+        print $OUT "</all_$rh_options->{'file_type'}>\n";
+    }
+    $OUT->close;
+
     if (-r $file) {
         print "Wrote $file" unless $opt_quiet;
         print ", $CLOC_XSL" if $opt_xsl and $opt_xsl eq $CLOC_XSL;
@@ -11577,7 +11647,7 @@ warn "undef rah_diff_R[$i]{type} " unless defined $rah_diff_R->[$i]{type};
     $html_out .= html_end();
 
     my $out_file = "$filename.html";
-    write_file($out_file, ( $html_out ) );
+    write_file($out_file, {}, ( $html_out ) );
 
     print "<- write_comments_to_html\n" if $opt_v > 2;
 } # 1}}}
@@ -12720,9 +12790,9 @@ EO_DIFF_XSL
 EO_DIFF_XSL
 # 2}}}
     if ($opt_diff) {
-        write_file($CLOC_XSL, ( $XSL_DIFF ) );
+        write_file($CLOC_XSL, {}, ( $XSL_DIFF ) );
     } else {
-        write_file($CLOC_XSL, ( $XSL ) );
+        write_file($CLOC_XSL, {}, ( $XSL ) );
     }
     print "<- write_xsl_file\n" if $opt_v > 2;
 } # 1}}}
