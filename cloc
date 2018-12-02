@@ -5971,15 +5971,23 @@ sub rm_comments_in_strings {                 # {{{1
         if $opt_v > 2;
 
     my @save_lines = ();
-    foreach (@{$ra_lines}) {
-
-        my ($line, $string_marker, $start_comment, $end_comment) = @_;
+    foreach my $line (@{$ra_lines}) {
+       #print "line=[$line]\n";
+        if ($line !~ /${string_marker}/) {
+            # short circuit; no strings on this line
+            push @save_lines, $line;
+            next;
+        }
         my @tokens = split(/(${string_marker}.*?${string_marker})/, $line);
         my $new_line = "";
         foreach my $t (@tokens) {
-    #       printf "  t = [$t]\n";
-            $t =~ s/\Q${start_comment}\E/xx/g;
-            $t =~ s/\Q${end_comment}\E/xx/g if $end_comment;
+           #printf "  t0 = [$t]\n";
+            if ($t =~ /${string_marker}.*${string_marker}$/) {
+                # enclosed in quotes; process this token
+                $t =~ s/\Q${start_comment}\E/xx/g;
+                $t =~ s/\Q${end_comment}\E/xx/g if $end_comment;
+            }
+           #printf "  t1 = [$t]\n";
             $new_line .= $t;
         }
 

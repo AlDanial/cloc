@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.81
+  elapsed_seconds    : 0.00793290138244629
+  n_files            : 1
+  n_lines            : 26
+  files_per_second   : 126.057283683467
+  lines_per_second   : 3277.48937577014
+  report_file        : ../../../outputs/issues/350/fs.go.yaml
+'Go' :
+  nFiles: 1
+  blank: 4
+  comment: 4
+  code: 18
+SUM: 
+  blank: 4
+  comment: 4
+  code: 18
+  nFiles: 1

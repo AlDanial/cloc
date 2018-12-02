@@ -242,6 +242,12 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/341/results.yaml',
                 },
 
+                {
+                    'name' => '--strip-str-comments (github issue #350)',
+                    'cd'   => '../tests/inputs/issues/350',
+                    'args' => '--strip-str-comments .',
+                    'ref'  => '../tests/outputs/issues/350/fs.go.yaml',
+                },
 
 #               {
 #                   'name' => '--count-and--diff with --out',
