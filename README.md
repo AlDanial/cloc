@@ -509,50 +509,51 @@ To run cloc on Windows computers, one must first open up a command (aka DOS) win
 <pre>
 prompt> cloc --help
 
-Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report files>
+Usage: cloc [options] &lt;file(s)/dir(s)/git hash(es)&gt; | &lt;set 1&gt; &lt;set 2&gt; | &lt;report files&gt;
 
  Count, or compute differences of, physical lines of source code in the
- given files (may be archives such as compressed tarballs or zip files)
- and/or recursively below the given directories.
+ given files (may be archives such as compressed tarballs or zip files,
+ or git commit hashes or branch names) and/or recursively below the
+ given directories.
 
  Input Options
-   --extract-with=CMD        This option is only needed if cloc is unable
+   --extract-with=&lt;cmd&gt;      This option is only needed if cloc is unable
                              to figure out how to extract the contents of
                              the input file(s) by itself.
-                             Use CMD to extract binary archive files (e.g.:
-                             .tar.gz, .zip, .Z).  Use the literal '>FILE<' as
+                             Use &lt;cmd&gt; to extract binary archive files (e.g.:
+                             .tar.gz, .zip, .Z).  Use the literal '&gt;FILE&lt;' as
                              a stand-in for the actual file(s) to be
                              extracted.  For example, to count lines of code
                              in the input files
                                 gcc-4.2.tar.gz  perl-5.8.8.tar.gz
                              on Unix use
-                               --extract-with='gzip -dc >FILE< | tar xf -'
+                               --extract-with='gzip -dc &gt;FILE&lt; | tar xf -'
                              or, if you have GNU tar,
-                               --extract-with='tar zxf >FILE<'
+                               --extract-with='tar zxf &gt;FILE&lt;'
                              and on Windows use, for example:
-                               --extract-with="\"c:\Program Files\WinZip\WinZip32.exe\" -e -o >FILE< ."
+                               --extract-with="\"c:\Program Files\WinZip\WinZip32.exe\" -e -o &gt;FILE&lt; ."
                              (if WinZip is installed there).
-   --list-file=FILE          Take the list of file and/or directory names to
-                             process from FILE, which has one file/directory
+   --list-file=&lt;file&gt;        Take the list of file and/or directory names to
+                             process from &lt;file&gt;, which has one file/directory
                              name per line.  Only exact matches are counted;
                              relative path names will be resolved starting from
                              the directory where cloc is invoked.
                              See also --exclude-list-file.
-   --vcs=VCS                 Invoke a system call to VCS to obtain a list of
-                             files to work on.  If VCS is 'git', then will
+   --vcs=&lt;VCS&gt;               Invoke a system call to &lt;VCS&gt; to obtain a list of
+                             files to work on.  If &lt;VCS&gt; is 'git', then will
                              invoke 'git ls-files' to get a file list and
                              'git submodule status' to get a list of submodules
                              whose contents will be ignored.  See also --git
                              which accepts git commit hashes and branch names.
-                             If VCS is 'svn' then will invoke 'svn list -R'.
+                             If &lt;VCS&gt; is 'svn' then will invoke 'svn list -R'.
                              The primary benefit is that cloc will then skip
                              files explicitly excluded by the versioning tool
                              in question, ie, those in .gitignore or have the
                              svn:ignore property.
-                             Alternatively VCS may be any system command
+                             Alternatively &lt;VCS&gt; may be any system command
                              that generates a list of files.
                              Note:  cloc must be in a directory which can read
-                             the files as they are returned by VCS.  cloc will
+                             the files as they are returned by &lt;VCS&gt;.  cloc will
                              not download files from remote repositories.
                              'svn list -R' may refer to a remote repository
                              to obtain file names (and therefore may require
@@ -568,43 +569,50 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
    --by-file                 Report results for every source file encountered.
    --by-file-by-lang         Report results for every source file encountered
                              in addition to reporting by language.
-   --count-and-diff SET1 SET2
+   --config &lt;file&gt;           Read command line switches from &lt;file&gt; instead of
+                             the default location of /home/al/.config/cloc/options.txt.
+                             The file should contain one switch, along with
+                             arguments (if any), per line.  Blank lines and lines
+                             beginning with '#' are skipped.  Options given on
+                             the command line take priority over entries read from
+                             the file.
+   --count-and-diff &lt;set1&gt; &lt;set2&gt;
                              First perform direct code counts of source file(s)
-                             of SET1 and SET2 separately, then perform a diff
+                             of &lt;set1&gt; and &lt;set2&gt; separately, then perform a diff
                              of these.  Inputs may be pairs of files, directories,
                              or archives.  If --out or --report-file is given,
                              three output files will be created, one for each
                              of the two counts and one for the diff.  See also
                              --diff, --diff-alignment, --diff-timeout,
                              --ignore-case, --ignore-whitespace.
-   --diff SET1 SET2          Compute differences in code and comments between
-                             source file(s) of SET1 and SET2.  The inputs
+   --diff &lt;set1&gt; &lt;set2&gt;      Compute differences in code and comments between
+                             source file(s) of &lt;set1&gt; and &lt;set2&gt;.  The inputs
                              may be any mix of files, directories, archives,
-                             or git commit hashes (Unix only).
-                             Use --diff-alignment to generate a list showing
-                             which file pairs where compared.  See also
-                             --count-and-diff, --diff-alignment, --diff-timeout,
-                             --ignore-case, --ignore-whitespace.
-   --diff-timeout N          Ignore files which take more than N seconds
-                             to process.  Default is 10 seconds.
-                             (Large files with many repeated lines can cause
-                             Algorithm::Diff::sdiff() to take hours.)
+                             or git commit hashes.  Use --diff-alignment to
+                             generate a list showing which file pairs where
+                             compared.  See also --count-and-diff, --diff-alignment,
+                             --diff-timeout, --ignore-case, --ignore-whitespace.
+   --diff-timeout &lt;N&gt;        Ignore files which take more than &lt;N&gt; seconds
+                             to process.  Default is 10 seconds.  Setting &lt;N&gt;
+                             to 0 allows unlimited time.  (Large files with many
+                             repeated lines can cause Algorithm::Diff::sdiff()
+                             to take hours.)
    --follow-links            [Unix only] Follow symbolic links to directories
                              (sym links to files are always followed).
-   --force-lang=LANG,EXT
-                             Process all files that have a EXT extension
-                             with the counter for language LANG.  For
+   --force-lang=&lt;lang&gt;[,&lt;ext&gt;]
+                             Process all files that have a &lt;ext&gt; extension
+                             with the counter for language &lt;lang&gt;.  For
                              example, to count all .f files with the
                              Fortran 90 counter (which expects files to
                              end with .f90) instead of the default Fortran 77
                              counter, use
                                --force-lang="Fortran 90",f
-                             If EXT is omitted, every file will be counted
-                             with the LANG counter.  This option can be
+                             If &lt;ext&gt; is omitted, every file will be counted
+                             with the &lt;lang&gt; counter.  This option can be
                              specified multiple times (but that is only
-                             useful when EXT is given each time).
+                             useful when &lt;ext&gt; is given each time).
                              See also --script-lang, --lang-no-ext.
-   --force-lang-def=FILE     Load language processing filters from FILE,
+   --force-lang-def=&lt;file&gt;   Load language processing filters from &lt;file&gt;,
                              then use these filters instead of the built-in
                              filters.  Note:  languages which map to the same
                              file extension (for example:
@@ -614,7 +622,8 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
                              processing that is not expressed in language
                              definition files.  Use --read-lang-def to define
                              new language filters without replacing built-in
-                             filters (see also --write-lang-def).
+                             filters (see also --write-lang-def,
+                             --write-lang-def-incl-dup).
    --git                     Forces the inputs to be interpreted as git targets
                              (commit hashes, branch names, et cetera) if these
                              are not first identified as file or directory
@@ -632,14 +641,14 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
    --ignore-case             Ignore changes in case; consider upper- and lower-
                              case letters equivalent when comparing files with
                              --diff.  See also --ignore-whitespace.
-   --lang-no-ext=LANG        Count files without extensions using the LANG
+   --lang-no-ext=&lt;lang&gt;      Count files without extensions using the &lt;lang&gt;
                              counter.  This option overrides internal logic
                              for files without extensions (where such files
                              are checked against known scripting languages
                              by examining the first line for #!).  See also
                              --force-lang, --script-lang.
-   --max-file-size=MB        Skip files larger than MB megabytes when
-                             traversing directories.  By default, MB=100.
+   --max-file-size=&lt;MB&gt;      Skip files larger than &lt;MB&gt; megabytes when
+                             traversing directories.  By default, &lt;MB&gt;=100.
                              cloc's memory requirement is roughly twenty times
                              larger than the largest file so running with
                              files larger than 100 MB on a computer with less
@@ -657,24 +666,25 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
                              This is usually a bad idea and should only be
                              attempted with text files that have embedded
                              binary data.
-   --read-lang-def=FILE      Load new language processing filters from FILE
+   --read-lang-def=&lt;file&gt;    Load new language processing filters from &lt;file&gt;
                              and merge them with those already known to cloc.
-                             If FILE defines a language cloc already knows
+                             If &lt;file&gt; defines a language cloc already knows
                              about, cloc's definition will take precedence.
                              Use --force-lang-def to over-ride cloc's
-                             definitions (see also --write-lang-def ).
-   --script-lang=LANG,S      Process all files that invoke S as a #!
+                             definitions (see also --write-lang-def,
+                             --write-lang-def-incl-dup).
+   --script-lang=&lt;lang&gt;,&lt;s&gt;  Process all files that invoke &lt;s&gt; as a #!
                              scripting language with the counter for language
-                             LANG.  For example, files that begin with
+                             &lt;lang&gt;.  For example, files that begin with
                                 #!/usr/local/bin/perl5.8.8
                              will be counted with the Perl counter by using
                                 --script-lang=Perl,perl5.8.8
                              The language name is case insensitive but the
-                             name of the script language executable, S,
+                             name of the script language executable, &lt;s&gt;,
                              must have the right case.  This option can be
                              specified multiple times.  See also --force-lang,
                              --lang-no-ext.
-   --sdir=DIR                Use DIR as the scratch directory instead of
+   --sdir=&lt;dir&gt;              Use &lt;dir&gt; as the scratch directory instead of
                              letting File::Temp chose the location.  Files
                              written to this location are not removed at
                              the end of the run (as they are with File::Temp).
@@ -682,16 +692,27 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
                              a performance boost at the expense of counting
                              files with identical contents multiple times
                              (if such duplicates exist).
-   --stdin-name=FILE         Give a file name to use to determine the language
+   --stdin-name=&lt;file&gt;       Give a file name to use to determine the language
                              for standard input.  (Use - as the input name to
                              receive source code via STDIN.)
-   --strip-comments=EXT      For each file processed, write to the current
+   --strip-comments=&lt;ext&gt;    For each file processed, write to the current
                              directory a version of the file which has blank
                              and commented lines removed (in-line comments
                              persist).  The name of each stripped file is the
-                             original file name with .EXT appended to it.
+                             original file name with .&lt;ext&gt; appended to it.
                              It is written to the current directory unless
                              --original-dir is on.
+   --strip-str-comments      Replace comment markers embedded in strings with
+                             'xx'.  This attempts to work around a limitation
+                             in Regexp::Common::Comment where comment markers
+                             embedded in strings are seen as actual comment
+                             markers and not strings, often resulting in a
+                             'Complex regular subexpression recursion limit'
+                             warning and incorrect counts.  There are two
+                             disadvantages to using this switch:  1/code count
+                             performance drops, and 2/code generated with
+                             --strip-comments will contain different strings
+                             where ever embedded comments are found.
    --sum-reports             Input arguments are report files previously
                              created with the --report-file option.  Makes
                              a cumulative set of results containing the
@@ -718,7 +739,7 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
                              See also --unix, --show-os.
 
  Filter Options
-   --exclude-dir=D1[,D2,]    Exclude the given comma separated directories
+   --exclude-dir=&lt;D1&gt;[,D2,]  Exclude the given comma separated directories
                              D1, D2, D3, et cetera, from being scanned.  For
                              example  --exclude-dir=.cache,test  will skip
                              all files and subdirectories that have /.cache/
@@ -727,15 +748,16 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
                              and .snapshot are always excluded.
                              This option only works with individual directory
                              names so including file path separators is not
-                             allowed.  Use --fullpath and --not-match-d=REGEX
+                             allowed.  Use --fullpath and --not-match-d=&lt;regex&gt;
                              to supply a regex matching multiple subdirectories.
-   --exclude-ext=EXT1[,EXT2[...]]
+   --exclude-ext=&lt;ext1&gt;[,&lt;ext2&gt;[...]]
                              Do not count files having the given file name
                              extensions.
-   --exclude-lang=L1[,L2,]   Exclude the given comma separated languages
+   --exclude-lang=&lt;L1&gt;[,L2[...]]
+                             Exclude the given comma separated languages
                              L1, L2, L3, et cetera, from being counted.
-   --exclude-list-file=FILE  Ignore files and/or directories whose names
-                             appear in FILE.  FILE should have one file
+   --exclude-list-file=&lt;file&gt;  Ignore files and/or directories whose names
+                             appear in &lt;file&gt;.  &lt;file&gt; should have one file
                              name per line.  Only exact matches are ignored;
                              relative path names will be resolved starting from
                              the directory where cloc is invoked.
@@ -748,9 +770,15 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
                              the path as is passed in to cloc.)
                              Note:  --match-d always looks at the full
                              path and therefore is unaffected by --fullpath.
-   --include-lang=L1[,L2,]   Count only the given comma separated languages
-                             L1, L2, L3, et cetera.
-   --match-d=REGEX           Only count files in directories matching the Perl
+   --include-ext=&lt;ext1&gt;[,ext2[...]]
+                             Count only languages having the given comma
+                             separated file extensions.  Use --show-ext to
+                             see the recognized extensions.
+   --include-lang=&lt;L1&gt;[,L2[...]]
+                             Count only the given comma separated languages
+                             L1, L2, L3, et cetera.  Use --show-lang to see
+                             the list of recognized languages.
+   --match-d=&lt;regex&gt;         Only count files in directories matching the Perl
                              regex.  For example
                                --match-d='/(src|include)/'
                              only counts files in directories containing
@@ -758,7 +786,7 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
                              --match-f, and --not-match-f, --match-d always
                              compares the fully qualified path against the
                              regex.
-   --not-match-d=REGEX       Count all files except those in directories
+   --not-match-d=&lt;regex&gt;     Count all files except those in directories
                              matching the Perl regex.  Only the trailing
                              directory name is compared, for example, when
                              counting in /usr/local/lib, only 'lib' is
@@ -767,17 +795,17 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
                              the regex.
                              Do not include file path separators at the
                              beginning or end of the regex.
-   --match-f=REGEX           Only count files whose basenames match the Perl
+   --match-f=&lt;regex&gt;         Only count files whose basenames match the Perl
                              regex.  For example
                                --match-f='^[Ww]idget'
                              only counts files that start with Widget or widget.
                              Add --fullpath to include parent directories
                              in the regex instead of just the basename.
-   --not-match-f=REGEX       Count all files except those whose basenames
+   --not-match-f=&lt;regex&gt;     Count all files except those whose basenames
                              match the Perl regex.  Add --fullpath to include
                              parent directories in the regex instead of just
                              the basename.
-   --skip-archive=REGEX      Ignore files that end with the given Perl regular
+   --skip-archive=&lt;regex&gt;    Ignore files that end with the given Perl regular
                              expression.  For example, if given
                                --skip-archive='(zip|tar(.(gz|Z|bz2|xz|7z))?)'
                              the code will skip files that end with .zip,
@@ -786,36 +814,42 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
    --skip-win-hidden         On Windows, ignore hidden files.
 
  Debug Options
-   --categorized=FILE        Save names of categorized files to FILE.
-   --counted=FILE            Save names of processed source files to FILE.
-   --diff-alignment=FILE     Write to FILE a list of files and file pairs
+   --categorized=&lt;file&gt;      Save names of categorized files to &lt;file&gt;.
+   --counted=&lt;file&gt;          Save names of processed source files to &lt;file&gt;.
+   --diff-alignment=&lt;file&gt;   Write to &lt;file&gt; a list of files and file pairs
                              showing which files were added, removed, and/or
                              compared during a run with --diff.  This switch
                              forces the --diff mode on.
-   --explain=LANG            Print the filters used to remove comments for
-                             language LANG and exit.  In some cases the
+   --explain=&lt;lang&gt;          Print the filters used to remove comments for
+                             language &lt;lang&gt; and exit.  In some cases the
                              filters refer to Perl subroutines rather than
                              regular expressions.  An examination of the
                              source code may be needed for further explanation.
    --help                    Print this usage information and exit.
-   --found=FILE              Save names of every file found to FILE.
-   --ignored=FILE            Save names of ignored files and the reason they
-                             were ignored to FILE.
+   --found=&lt;file&gt;            Save names of every file found to &lt;file&gt;.
+   --ignored=&lt;file&gt;          Save names of ignored files and the reason they
+                             were ignored to &lt;file&gt;.
    --print-filter-stages     Print processed source code before and after
                              each filter is applied.
-   --show-ext[=EXT]          Print information about all known (or just the
+   --show-ext[=&lt;ext&gt;]        Print information about all known (or just the
                              given) file extensions and exit.
-   --show-lang[=LANG]        Print information about all known (or just the
+   --show-lang[=&lt;lang&gt;]      Print information about all known (or just the
                              given) languages and exit.
    --show-os                 Print the value of the operating system mode
                              and exit.  See also --unix, --windows.
-   -v[=N]                    Verbose switch (optional numeric value).
-   -verbose[=N]              Long form of -v.
+   -v[=&lt;n&gt;]                  Verbose switch (optional numeric value).
+   -verbose[=&lt;n&gt;]            Long form of -v.
    --version                 Print the version of this program and exit.
-   --write-lang-def=FILE     Writes to FILE the language processing filters
+   --write-lang-def=&lt;file&gt;   Writes to &lt;file&gt; the language processing filters
                              then exits.  Useful as a first step to creating
-                             custom language definitions (see also
-                             --force-lang-def, --read-lang-def).
+                             custom language definitions. Note: languages which
+                             map to the same file extension will be excluded.
+                             (See also --force-lang-def, --read-lang-def).
+   --write-lang-def-incl-dup=&lt;file&gt;
+                             Same as --write-lang-def, but includes duplicated
+                             extensions.  This generates a problematic language
+                             definition file because cloc will refuse to use
+                             it until duplicates are removed.
 
  Output Options
    --3                       Print third-generation language output.
@@ -825,48 +859,56 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
    --by-percent  X           Instead of comment and blank line counts, show
                              these values as percentages based on the value
                              of X in the denominator:
-                                X = 'c'   -> # lines of code
-                                X = 'cm'  -> # lines of code + comments
-                                X = 'cb'  -> # lines of code + blanks
-                                X = 'cmb' -> # lines of code + comments + blanks
+                                X = 'c'   -&gt; # lines of code
+                                X = 'cm'  -&gt; # lines of code + comments
+                                X = 'cb'  -&gt; # lines of code + blanks
+                                X = 'cmb' -&gt; # lines of code + comments + blanks
                              For example, if using method 'c' and your code
                              has twice as many lines of comments as lines
                              of code, the value in the comment column will
                              be 200%.  The code column remains a line count.
    --csv                     Write the results as comma separated values.
-   --csv-delimiter=C         Use the character C as the delimiter for comma
+   --csv-delimiter=&lt;C&gt;       Use the character &lt;C&gt; as the delimiter for comma
                              separated files instead of ,.  This switch forces
+   --file-encoding=&lt;E&gt;       Write output files using the &lt;E&gt; encoding instead of
+                             the default ASCII (&lt;E&gt; = 'UTF-7').  Examples: 'UTF-16',
+                             'euc-kr', 'iso-8859-16'.  Known encodings can be
+                             printed with
+                               perl -MEncode -e 'print join("\n", Encode-&gt;encodings(":all")), "\n"'
+   --hide-rate               Do not show line and file processing rates in the
+                             output header. This makes output deterministic.
    --json                    Write the results as JavaScript Object Notation
                              (JSON) formatted output.
    --md                      Write the results as Markdown-formatted text.
-   --out=FILE                Synonym for --report-file=FILE.
-   --progress-rate=N         Show progress update after every N files are
-                             processed (default N=100).  Set N to 0 to
+   --out=&lt;file&gt;              Synonym for --report-file=&lt;file&gt;.
+   --progress-rate=&lt;n&gt;       Show progress update after every &lt;n&gt; files are
+                             processed (default &lt;n&gt;=100).  Set &lt;n&gt; to 0 to
                              suppress progress output (useful when redirecting
                              output to STDOUT).
    --quiet                   Suppress all information messages except for
                              the final report.
-   --report-file=FILE        Write the results to FILE instead of STDOUT.
-   --sql=FILE                Write results as SQL create and insert statements
+   --report-file=&lt;file&gt;      Write the results to &lt;file&gt; instead of STDOUT.
+   --sql=&lt;file&gt;              Write results as SQL create and insert statements
                              which can be read by a database program such as
-                             SQLite.  If FILE is -, output is sent to STDOUT.
+                             SQLite.  If &lt;file&gt; is -, output is sent to STDOUT.
    --sql-append              Append SQL insert statements to the file specified
                              by --sql and do not generate table creation
                              statements.  Only valid with the --sql option.
-   --sql-project=NAME        Use NAME as the project identifier for the
+   --sql-project=&lt;name&gt;      Use &lt;name&gt; as the project identifier for the
                              current run.  Only valid with the --sql option.
-   --sql-style=STYLE         Write SQL statements in the given style instead
-                             of the default SQLite format.  Currently, the
-                             only style option is Oracle.
+   --sql-style=&lt;style&gt;       Write SQL statements in the given style instead
+                             of the default SQLite format.  Styles include
+                             'Oracle' and 'Named_Columns'.
    --sum-one                 For plain text reports, show the SUM: output line
                              even if only one input file is processed.
    --xml                     Write the results in XML.
-   --xsl=FILE                Reference FILE as an XSL stylesheet within
-                             the XML output.  If FILE is 1 (numeric one),
+   --xsl=&lt;file&gt;              Reference &lt;file&gt; as an XSL stylesheet within
+                             the XML output.  If &lt;file&gt; is 1 (numeric one),
                              writes a default stylesheet, cloc.xsl (or
                              cloc-diff.xsl if --diff is also given).
                              This switch forces --xml on.
    --yaml                    Write the results in YAML.
+
 
 </pre>
 [](1}}})
