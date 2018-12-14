@@ -2,23 +2,23 @@
 # github.com/AlDanial/cloc
 header : 
   cloc_url           : github.com/AlDanial/cloc
-  cloc_version       : 1.80
-  elapsed_seconds    : 0.0475900173187256
+  cloc_version       : 1.81
+  elapsed_seconds    : 0.0474441051483154
   n_files            : 7
   n_lines            : 661
-  files_per_second   : 147.089671203916
-  lines_per_second   : 13889.467523684
-  report_file        : j.yaml.HEAD~1
+  files_per_second   : 147.542038744692
+  lines_per_second   : 13932.1839443202
+  report_file        : count_and_diff.yaml.HEAD~1
 'C' :
   nFiles: 2
   blank: 70
-  comment: 0
-  code: 277
+  comment: 46
+  code: 231
 'C++' :
   nFiles: 1
   blank: 49
-  comment: 0
-  code: 237
+  comment: 55
+  code: 182
 'Fortran 90' :
   nFiles: 1
   blank: 1
@@ -29,18 +29,18 @@ header :
   blank: 0
   comment: 0
   code: 2
-'MATLAB' :
-  nFiles: 1
-  blank: 0
-  comment: 1
-  code: 2
 'Python' :
   nFiles: 1
   blank: 4
   comment: 11
   code: 2
+'MATLAB' :
+  nFiles: 1
+  blank: 0
+  comment: 1
+  code: 2
 SUM: 
   blank: 124
-  comment: 14
-  code: 523
+  comment: 115
+  code: 422
   nFiles: 7
