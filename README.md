@@ -1408,6 +1408,15 @@ many lines of source were added, removed, modified or stayed
 the same, and how many lines of comments were added, removed,
 modified or stayed the same.
 
+Differences in blank lines are handled much more coarsely
+because these are stripped by cloc early on.  Unless a
+file pair is identical, cloc will report only differences
+in absolute counts of blank lines.  In other words, one
+can expect to see only entries for 'added' if the second
+file has more blanks than the first, and 'removed' if the
+situation is reversed.  The entry for 'same' will be non-zero
+only when the two files are identical.
+
 In addition to file pairs, one can give cloc pairs of
 directories, or pairs of file archives, or a file archive
 and a directory.  cloc will try to align
