@@ -1538,17 +1538,21 @@ if ( scalar @fh != 2 ) {
     exit 1;
 }
 
-align_by_pairs        (\%{$unique_source_file{$fset_a}}      , # in
-                       \%{$unique_source_file{$fset_b}}      , # in
-                       \@files_added_tot                     , # out
-                       \@files_removed_tot                   , # out
-                       \@file_pairs_tot                      , # out
-                      );
-
+align_by_pairs(\%{$unique_source_file{$fset_a}}      , # in
+               \%{$unique_source_file{$fset_b}}      , # in
+               \@files_added_tot                     , # out
+               \@files_removed_tot                   , # out
+               \@file_pairs_tot                      , # out
+              );
+#use Data::Dumper;
+#print "added : ", Dumper(\@files_added_tot);
+#print "removed : ", Dumper(\@files_removed_tot);
+#print "pairs : ", Dumper(\@file_pairs_tot);
 
 if ( $max_processes == 0) {
     # Multiprocessing is disabled
-    my $part = count_filesets ( $fset_a, $fset_b, \@files_added_tot, \@files_removed_tot, \@file_pairs_tot , 0, \%Language);
+    my $part = count_filesets ( $fset_a, $fset_b, \@files_added_tot,
+                               \@files_removed_tot, \@file_pairs_tot , 0, \%Language);
     %Results_by_File = %{$part->{'results_by_file'}};
     %Results_by_Language= %{$part->{'results_by_language'}};
     %Delta_by_File = %{$part->{'delta_by_file'}};
@@ -1557,11 +1561,13 @@ if ( $max_processes == 0) {
     %alignment = %{$part->{'alignment'}};
     $n_filepairs_compared = $part->{'n_filepairs_compared'};
     push ( @Errors, @{$part->{'errors'}});
-}
-else {
+} else {
     # Multiprocessing is enabled
     # Do not create more processes than the amount of data to be processed
-    my $num_processes = min(max(scalar @files_added_tot,scalar @files_removed_tot,scalar @file_pairs_tot),$max_processes);
+    my $num_processes = min(max(scalar @files_added_tot,
+                                scalar @files_removed_tot,
+                                scalar @file_pairs_tot),
+                            $max_processes);
     # ... but use at least one process.
        $num_processes = 1
             if $num_processes == 0;
@@ -8098,9 +8104,9 @@ sub set_constants {                          # {{{1
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
                                 [ 'remove_jsp_comments' ,          ],
-                                [ 'remove_matches'      , '^\s*//' ],
+                                [ 'remove_matches'      , '^\s*##' ],
+                                [ 'remove_between_general', '#**', '*#' ],
                                 [ 'add_newlines'        ,          ],
-                                [ 'call_regexp_common'  , 'C'      ],
                             ],
     'Vuejs Component'     => [
                                 [ 'remove_html_comments',          ],

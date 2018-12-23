@@ -8094,9 +8094,9 @@ sub set_constants {                          # {{{1
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
                                 [ 'remove_jsp_comments' ,          ],
-                                [ 'remove_matches'      , '^\s*//' ],
+                                [ 'remove_matches'      , '^\s*##' ],
+                                [ 'remove_between_general', '#**', '*#' ],
                                 [ 'add_newlines'        ,          ],
-                                [ 'call_regexp_common'  , 'C'      ],
                             ],
     'Vuejs Component'     => [
                                 [ 'remove_html_comments',          ],

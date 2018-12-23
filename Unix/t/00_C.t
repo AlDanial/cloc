@@ -717,6 +717,11 @@ my @Tests = (
                     'args' => '../tests/inputs/VisualBasic.Net.vba',
                 },
                 {
+                    'name' => 'Velocity Template Language',
+                    'ref'  => '../tests/outputs/vtl.vm.yaml',
+                    'args' => '../tests/inputs/vtl.vm',
+                },
+                {
                     'name' => 'Verilog',
                     'ref'  => '../tests/outputs/verilog.sv.yaml',
                     'args' => '../tests/inputs/verilog.sv',

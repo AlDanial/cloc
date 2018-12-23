@@ -1,0 +1,33 @@
+## https://www.baeldung.com/apache-velocity
+<html>
+  ##...
+    <body>
+        <center>
+ ##     ...
+        <h2>$products.size() Products on Sale!</h2>
+        <br/>
+            We are proud to offer these fine products
+            at these amazing prices.
+##      ...
+        #set( $count = 1 )
+        <table class="gridtable">
+            <tr>
+                <th>Serial #</th>
+                <th>Product Name</th>
+#**
+                <th>Price</th>
+            </tr>
+            #foreach( $product in $products )
+            <tr>
+                <td>$count)</td>
+                <td>$product.getName()</td>
+                <td>$product.getPrice()</td>
+            </tr>
+            #set( $count = $count + 1 )
+            #end
+        </table>
+        <br/>
+        </center>
+    </body>
+    *#
+</html>
