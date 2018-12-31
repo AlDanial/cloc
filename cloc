@@ -6870,6 +6870,7 @@ sub set_constants {                          # {{{1
             'pp'          => 'Pascal/Puppet'         ,
             'psql'        => 'SQL'                   ,
             'py'          => 'Python'                ,
+            'pyw'         => 'Python'                ,
             'ipynb'       => 'IPython Notebook'      ,
             'pyj'         => 'RapydScript'           ,
             'pyx'         => 'Cython'                ,
