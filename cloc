@@ -7033,6 +7033,7 @@ sub set_constants {                          # {{{1
             'dmd'      => 'D'                     ,
             'dtrace'   => 'dtrace'                ,
             'escript'  => 'Erlang'                ,
+            'groovy'   => 'Groovy'                ,
             'idl'      => 'IDL'                   ,
             'kermit'   => 'Kermit'                ,
             'ksh'      => 'Korn Shell'            ,
