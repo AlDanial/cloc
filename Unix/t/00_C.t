@@ -220,6 +220,11 @@ my @Tests = (
                     'args' => '../tests/inputs/FreemarkerTemplate.ftl',
                 },
                 {
+                    'name' => 'FXML',
+                    'ref'  => '../tests/outputs/vbox.fxml.yaml',
+                    'args' => '../tests/inputs/vbox.fxml',
+                },
+                {
                     'name' => 'F#',
                     'ref'  => '../tests/outputs/fsharp.fs.yaml',
                     'args' => '../tests/inputs/fsharp.fs',
