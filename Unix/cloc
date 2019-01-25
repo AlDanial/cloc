@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 # cloc -- Count Lines of Code                  {{{1
-# Copyright (C) 2006-2018 Al Danial <al.danial@gmail.com>
+# Copyright (C) 2006-2019 Al Danial <al.danial@gmail.com>
 # First release August 2006
 #
 # Includes code from:
@@ -6880,6 +6880,7 @@ sub set_constants {                          # {{{1
             'pp'          => 'Pascal/Puppet'         ,
             'psql'        => 'SQL'                   ,
             'py'          => 'Python'                ,
+            'pyw'         => 'Python'                ,
             'ipynb'       => 'IPython Notebook'      ,
             'pyj'         => 'RapydScript'           ,
             'pyx'         => 'Cython'                ,
@@ -7043,6 +7044,7 @@ sub set_constants {                          # {{{1
             'dmd'      => 'D'                     ,
             'dtrace'   => 'dtrace'                ,
             'escript'  => 'Erlang'                ,
+            'groovy'   => 'Groovy'                ,
             'idl'      => 'IDL'                   ,
             'kermit'   => 'Kermit'                ,
             'ksh'      => 'Korn Shell'            ,
