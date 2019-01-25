@@ -31,6 +31,7 @@ transition to GitHub in September 2015.
     *   [Create Custom Language Definitions](#create-custom-language-definitions-)
     *   [Combine Reports](#combine-reports-)
     *   [SQL](#sql-)
+    *   [Custom Column Output](#custom-column-output-)
     *   [Third Generation Language Scale Factors](#third-generation-language-scale-factors-)
 *   [Limitations](#limitations-)
 *   [How to Request Support for Additional Languages](#how-to-request-support-for-additional-languages-)
@@ -2351,6 +2352,148 @@ python     Prolog                         24
 python     Visual Basic                   12
 sqlite     C                          101454
 sqlite     C/C++ Header                 1546
+</pre>
+
+[](1}}})
+<a name="custom_column_output"></a> []({{{1)
+##  [Custom Column Output &#9650;](#___top "click to go to top of document")
+Cloc's default output is a text table with five columns:
+language, file count, number of blank lines, number of comment
+lines and number of code lines.  The switches `--by-file`,
+`--3`, and `--by-percent` generate additional information but
+sometimes even those are insufficient.
+
+The `--sql` option described in the previous section offers the
+ability to create custom output.  This section has a pair of examples
+that show how to create custom columns.
+The first example includes an extra column, **Total**, which is the
+sum of the numbers of blank, comment, and code lines.
+The second shows how to include the language name when running
+with `--by-file`.
+
+**Example 1:  Add a "Totals" column.**
+
+The first step is to run cloc and save the output to a relational database,
+SQLite in this case:
+<pre>
+cloc --sql 1 --sql-project x yaml-cpp-yaml-cpp-0.5.3.tar.gz | sqlite3 counts.db
+</pre>
+(the tar file comes from the
+[YAML-C++](https://github.com/jbeder/yaml-cpp) project).
+
+Second, we craft an SQL query that returns the regular cloc output
+plus an extra column for totals, then save the SQL statement to
+a file, `query_with_totals.sql`:
+<pre>
+-- file query_with_totals.sql
+select Language, count(File)   as files                       ,
+                 sum(nBlank)   as blank                       ,
+                 sum(nComment) as comment                     ,
+                 sum(nCode)    as code                        ,
+                 sum(nBlank)+sum(nComment)+sum(nCode) as Total
+    from t group by Language order by code desc;
+</pre>
+
+Third, we run this query through SQLite using the `counts.db` database.
+We'll include the `-header` switch so that SQLite prints the
+column names:
+
+<pre>
+&gt; cat query_with_totals.sql | sqlite3 -header counts.db
+Language|files|blank|comment|code|Total
+C++|141|12786|17359|60378|90523
+C/C++ Header|110|8566|17420|51502|77488
+Bourne Shell|10|6351|6779|38264|51394
+m4|11|2037|260|17980|20277
+Python|30|1613|2486|4602|8701
+MSBuild script|11|0|0|1711|1711
+CMake|7|155|285|606|1046
+make|5|127|173|464|764
+Markdown|2|30|0|39|69
+</pre>
+
+The extra column for **Total** is there but the format is unappealing.
+Running the output through `sqlite_formatter` yields the desired result:
+
+<pre>
+&gt; cat query_with_totals.sql | sqlite3 -header counts.db | sqlite_formatter
+Language       files blank comment code  Total
+______________ _____ _____ _______ _____ _____
+C++              141 12786   17359 60378 90523
+C/C++ Header     110  8566   17420 51502 77488
+Bourne Shell      10  6351    6779 38264 51394
+m4                11  2037     260 17980 20277
+Python            30  1613    2486  4602  8701
+MSBuild script    11     0       0  1711  1711
+CMake              7   155     285   606  1046
+make               5   127     173   464   764
+Markdown           2    30       0    39    69
+</pre>
+
+**Example 2:  Include a column for "Language" when running with `--by-file`.**
+
+Output from `--by-file` omits each file's language to save screen real estate;
+file paths for large projects can be long and including an extra 20 or so
+characters for a Language column can be excessive.
+
+As an example, here are the first few lines of output using the same
+code base as in Example 1:
+
+<pre>
+&gt; cloc --by-file yaml-cpp-yaml-cpp-0.5.3.tar.gz
+github.com/AlDanial/cloc v 1.81  T=1.14 s (287.9 files/s, 221854.9 lines/s)
+--------------------------------------------------------------------------------------------------------------------------------------------
+File                                                                                                     blank        comment           code
+--------------------------------------------------------------------------------------------------------------------------------------------
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/configure                                                        2580           2264          13691
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/configure                                                  2541           2235          13446
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/fused-src/gtest/gtest.h                                    1972           4681          13408
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/fused-src/gmock/gmock.h                                          1585           3397           9216
+yaml-cpp-yaml-cpp-0.5.3/test/integration/gen_emitter_test.cpp                                              999              0           8760
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/aclocal.m4                                                        987            100           8712
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/m4/libtool.m4                                               760             65           7176
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/build-aux/ltmain.sh                                         959           1533           7169
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/fused-src/gmock-gtest-all.cc                                     1514           3539           6390
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/fused-src/gtest/gtest-all.cc                               1312           2896           5384
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/test/gtest_unittest.cc                                     1226           1091           5098
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/include/gtest/internal/gtest-param-util-generated.h         349            235           4559
+</pre>
+
+The absence of language identification for each file
+is a bit disappointing, but
+this can be remedied with a custom column solution.
+
+The first step, creating a database, matches that from Example 1 so
+we'll go straight to the second step of creating the desired
+SQL query.  We'll store this one in the file `by_file_with_language.sql`:
+
+<pre>
+-- file by_file_with_language.sql
+select File, Language, nBlank   as blank  ,
+                       nComment as comment,
+                       nCode    as code
+    from t order by code desc;
+</pre>
+
+Our desired extra column appears when we pass this custom SQL query
+through our database:
+
+<pre>
+&gt; cat by_file_with_language.sql | sqlite3 -header counts.db | sqlite_formatter
+File                                                                                               Language       blank comment code
+__________________________________________________________________________________________________ ______________ _____ _______ _____
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/configure                                                 Bourne Shell    2580    2264 13691
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/configure                                           Bourne Shell    2541    2235 13446
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/fused-src/gtest/gtest.h                             C/C++ Header    1972    4681 13408
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/fused-src/gmock/gmock.h                                   C/C++ Header    1585    3397  9216
+yaml-cpp-yaml-cpp-0.5.3/test/integration/gen_emitter_test.cpp                                      C++              999       0  8760
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/aclocal.m4                                                m4               987     100  8712
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/m4/libtool.m4                                       m4               760      65  7176
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/build-aux/ltmain.sh                                 Bourne Shell     959    1533  7169
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/fused-src/gmock-gtest-all.cc                              C++             1514    3539  6390
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/fused-src/gtest/gtest-all.cc                        C++             1312    2896  5384
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/test/gtest_unittest.cc                              C++             1226    1091  5098
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/include/gtest/internal/gtest-param-util-generated.h C/C++ Header     349     235  4559
 </pre>
 
 [](1}}})
