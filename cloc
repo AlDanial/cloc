@@ -6714,6 +6714,7 @@ sub set_constants {                          # {{{1
             'fs'          => 'F#/Forth'              ,
             'fsi'         => 'F#'                    ,
             'fsx'         => 'F# Script'             ,
+            'fxml'        => 'FXML'                  ,
             'gnumakefile' => 'make'                  ,
             'Gnumakefile' => 'make'                  ,
             'gd'          => 'GDScript'              ,
@@ -7405,6 +7406,10 @@ sub set_constants {                          # {{{1
                             ],
     'Freemarker Template' => [
                                 [ 'remove_between_general', '<#--', '-->' ],
+                            ],
+    'FXML'               => [
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ],
                             ],
     'F#'                 => [
                                 [ 'remove_between_general', '(*', '*)' ],
@@ -8651,6 +8656,7 @@ sub set_constants {                          # {{{1
     'XHTML'                        =>   1.90,
     'XMI'                          =>   1.90,
     'XML'                          =>   1.90,
+    'FXML'                         =>   1.90,
     'MXML'                         =>   1.90,
     'XSLT'                         =>   1.90,
     'DTD'                          =>   1.90,
