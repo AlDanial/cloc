@@ -7565,10 +7565,18 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Java'               => [
-                                # separate /* inside quoted strings with two
-                                # concatenated strings split between / and *
-                                [ 'replace_between_regex', '(["\'])(.*?/)(\*.*?)\g1',
-                                  '(.*?)' , '"$1$2$1 + $1$3$1$4"'],
+                                # Java seems to have more path globs in strings
+                                # than other languages.  The variations makes
+                                # it tricky to craft a universal fix.
+                                [ 'replace_between_regex', '(["\'])(.*?/\*)\g1',
+                                  '(.*?)' , '"xx"'],
+                                [ 'replace_between_regex', '(["\'])(.*?\*/)\g1',
+                                  '(.*?)' , '"xx"'],
+                               ## separate /* inside quoted strings with two
+                               ## concatenated strings split between / and *
+                               ##    -> defeated by "xx/**/*_xx" issue 365
+                               #[ 'replace_between_regex', '(["\'])(.*?/)(\*.*?)\g1',
+                               #  '(.*?)' , '"$1$2$1 + $1$3$1$4"'],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'JavaScript'         => [

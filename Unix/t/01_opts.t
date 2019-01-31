@@ -249,6 +249,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/350/fs.go.yaml',
                 },
 
+                {
+                    'name' => 'Java comments in strings, issue #365',
+                    'cd'   => '../tests/inputs/issues/365',
+                    'args' => 'RSpecTests.java',
+                    'ref'  => '../tests/outputs/issues/365/results.yaml',
+                },
+
 #               {
 #                   'name' => '--count-and--diff with --out',
 #                   'cd'   => '../tests/inputs/issues/220',

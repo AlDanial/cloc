@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 # cloc -- Count Lines of Code                  {{{1
-# Copyright (C) 2006-2018 Al Danial <al.danial@gmail.com>
+# Copyright (C) 2006-2019 Al Danial <al.danial@gmail.com>
 # First release August 2006
 #
 # Includes code from:
@@ -5999,7 +5999,6 @@ sub rm_comments_in_strings {                 # {{{1
 
         push @save_lines, $new_line;
     }
-
     print "<- rm_comments_in_strings\n" if $opt_v > 2;
     return @save_lines;
 } # 1}}}
@@ -7555,10 +7554,18 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Java'               => [
-                                # separate /* inside quoted strings with two
-                                # concatenated strings split between / and *
-                                [ 'replace_between_regex', '(["\'])(.*?/)(\*.*?)\g1',
-                                  '(.*?)' , '"$1$2$1 + $1$3$1$4"'],
+                                # Java seems to have more path globs in strings
+                                # than other languages.  The variations makes
+                                # it tricky to craft a universal fix.
+                                [ 'replace_between_regex', '(["\'])(.*?/\*)\g1',
+                                  '(.*?)' , '"xx"'],
+                                [ 'replace_between_regex', '(["\'])(.*?\*/)\g1',
+                                  '(.*?)' , '"xx"'],
+                               ## separate /* inside quoted strings with two
+                               ## concatenated strings split between / and *
+                               ##    -> defeated by "xx/**/*_xx" issue 365
+                               #[ 'replace_between_regex', '(["\'])(.*?/)(\*.*?)\g1',
+                               #  '(.*?)' , '"$1$2$1 + $1$3$1$4"'],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'JavaScript'         => [
