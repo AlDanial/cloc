@@ -32,6 +32,8 @@ transition to GitHub in September 2015.
     *   [Combine Reports](#combine-reports-)
     *   [SQL](#sql-)
     *   [Custom Column Output](#custom-column-output-)
+    *   [Wrapping cloc in other scripts](#wrapping-cloc-in-other-scripts-)
+    *   [Count specific git branch](#count-specific-git-branch-)
     *   [Third Generation Language Scale Factors](#third-generation-language-scale-factors-)
 *   [Limitations](#limitations-)
 *   [How to Request Support for Additional Languages](#how-to-request-support-for-additional-languages-)
@@ -2430,6 +2432,11 @@ make               5   127     173   464   764
 Markdown           2    30       0    39    69
 </pre>
 
+The next section,
+[Wrapping cloc in other scripts](#wrapping-cloc-in-other-scripts-),
+shows one way these commands can be combined
+into a new utility program.
+
 **Example 2:  Include a column for "Language" when running with `--by-file`.**
 
 Output from `--by-file` omits each file's language to save screen real estate;
@@ -2495,6 +2502,69 @@ yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/fused-src/gtest/gtest-all.cc     
 yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/test/gtest_unittest.cc                              C++             1226    1091  5098
 yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/include/gtest/internal/gtest-param-util-generated.h C/C++ Header     349     235  4559
 </pre>
+
+[](1}}})
+<a name="wrapping_cloc_in_other_scripts"></a> []({{{1)
+    *   [](#wrapping-cloc-in-other-scripts-)
+##  [Wrapping cloc in other scripts &#9650;](#___top "click to go to top of document")
+
+More complex code counting solutions are possible by wrapping
+cloc in scripts or programs.  The "total lines" column from
+example 1 of [Custom Column Output](#custom-column-output-)
+could be simplified to a single command with this shell script (on Linux):
+
+<pre>
+#!/bin/sh
+#
+# These commands must be in the user's $PATH:
+#   cloc
+#   sqlite3
+#   sqlite_formatter
+#
+if test $# -eq 0 ; then
+    echo "Usage: $0  [cloc arguments]"
+    echo "       Run cloc to count lines of code with an additional"
+    echo "       output column for total lines (code+comment+blank)."
+    exit
+fi
+DBFILE=`tempfile`
+cloc --sql 1 --sql-project x $@ | sqlite3 ${DBFILE}
+SQL="select Language, count(File)   as files                       ,
+                      sum(nBlank)   as blank                       ,
+                      sum(nComment) as comment                     ,
+                      sum(nCode)    as code                        ,
+                      sum(nBlank)+sum(nComment)+sum(nCode) as Total
+         from t group by Language order by code desc;
+"
+echo ${SQL} | sqlite3 -header ${DBFILE} | sqlite_formatter
+rm ${DBFILE}
+</pre>
+
+Saving the lines above to ``total_columns.sh`` and making it
+executable (``chmod +x total_columns.sh``) would let us do
+<pre>
+./total_columns.sh yaml-cpp-yaml-cpp-0.5.3.tar.gz
+</pre>
+to directly get
+<pre>
+Language       files blank comment code  Total
+______________ _____ _____ _______ _____ _____
+C++              141 12786   17359 60378 90523
+C/C++ Header     110  8566   17420 51502 77488
+Bourne Shell      10  6351    6779 38264 51394
+m4                11  2037     260 17980 20277
+Python            30  1613    2486  4602  8701
+MSBuild script    11     0       0  1711  1711
+CMake              7   155     285   606  1046
+make               5   127     173   464   764
+Markdown           2    30       0    39    69
+</pre>
+
+Other examples:
+* Count code from a specific branch of a web-hosted
+git repository and send the results as a .csv email attachment:
+https://github.com/dannyloweatx/checkmarx
+
 
 [](1}}})
 <a name="scale_factors"></a> []({{{1)
