@@ -1,18 +1,15 @@
-       1 text file.
-       1 unique file.                              
-       0 files ignored.
-
 ---
 # github.com/AlDanial/cloc
 header : 
   cloc_url           : github.com/AlDanial/cloc
-  cloc_version       : 1.75
-  elapsed_seconds    : 0.00980782508850098
+  cloc_version       : 1.81
+  elapsed_seconds    : 0.00670599937438965
   n_files            : 1
   n_lines            : 18
-  files_per_second   : 101.959403942922
-  lines_per_second   : 1835.2692709726
-Skylark :
+  files_per_second   : 149.120204785437
+  lines_per_second   : 2684.16368613787
+  report_file        : ../outputs/build.bzl.yaml
+'Starlark' :
   nFiles: 1
   blank: 3
   comment: 4

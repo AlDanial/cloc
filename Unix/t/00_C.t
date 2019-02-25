@@ -407,6 +407,11 @@ my @Tests = (
                     'args' => '../tests/inputs/hello.lua',
                 },
                 {
+                    'name' => 'Lua nested comments',
+                    'ref'  => '../tests/outputs/nested.lua.yaml',
+                    'args' => '../tests/inputs/nested.lua',
+                },
+                {
                     'name' => 'Makefile',
                     'ref'  => '../tests/outputs/Makefile.yaml',
                     'args' => '../tests/inputs/Makefile',
@@ -617,7 +622,7 @@ my @Tests = (
                     'args' => '../tests/inputs/style.scss',
                 },
                 {
-                    'name' => 'Skylark',
+                    'name' => 'Starlark',
                     'ref'  => '../tests/outputs/build.bzl.yaml',
                     'args' => '../tests/inputs/build.bzl',
                 },

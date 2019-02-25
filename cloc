@@ -7633,6 +7633,11 @@ sub set_constants {                          # {{{1
                             ],
 #   'Lua'                => [   [ 'call_regexp_common'  , 'lua'    ], ],
     'Lua'                => [
+    							[ 'remove_between_general', '--[=====[', ']=====]' ],
+    							[ 'remove_between_general', '--[====[', ']====]' ],
+    							[ 'remove_between_general', '--[===[', ']===]' ],
+    							[ 'remove_between_general', '--[==[', ']==]' ],
+    							[ 'remove_between_general', '--[=[', ']=]' ],
                                 [ 'remove_between_general', '--[[', ']]' ],
                                 [ 'remove_matches'      , '^\s*\-\-' ],
                             ],
