@@ -256,6 +256,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/365/results.yaml',
                 },
 
+                {
+                    'name' => 'Arduino IDE 0xA0 characters',
+                    'cd'   => '../tests/inputs/issues/370',
+                    'args' => 'arduino_issue_370.ino',
+                    'ref'  => '../tests/outputs/issues/370/results.yaml',
+                },
+
 #               {
 #                   'name' => '--count-and--diff with --out',
 #                   'cd'   => '../tests/inputs/issues/220',

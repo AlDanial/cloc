@@ -5999,6 +5999,7 @@ sub rm_comments_in_strings {                 # {{{1
 
         push @save_lines, $new_line;
     }
+
     print "<- rm_comments_in_strings\n" if $opt_v > 2;
     return @save_lines;
 } # 1}}}
@@ -6074,11 +6075,32 @@ sub remove_between_regex   {                 # {{{1
     print "<- remove_between_regex\n" if $opt_v > 2;
     return @save_lines;
 } # 1}}}
+sub replace_regex  {                         # {{{1
+    my ($ra_lines, $regex, $replace, ) = @_;
+
+    print "-> replace_regex(regex=$regex, replace=$replace)\n"
+        if $opt_v > 2;
+
+    my $all_lines = join("", @{$ra_lines});
+
+    my @save_lines = ();
+    my $in_comment = 0;
+    foreach (@{$ra_lines}) {
+
+        next if /^\s*$/;
+        s/${regex}/${replace}/g;
+        next if /^\s*$/;
+        push @save_lines, $_;
+    }
+
+    print "<- replace_regex\n" if $opt_v > 2;
+    return @save_lines;
+} # 1}}}
 sub replace_between_regex  {                 # {{{1
     my ($ra_lines, $start_RE, $end_RE, $replace_RE, ) = @_;
     # Start and end regex's may be any length strings.
 
-    print "-> replace_between_regex(start=$start_RE, end=$end_RE)\n"
+    print "-> replace_between_regex(start=$start_RE, end=$end_RE, replace=$replace_RE)\n"
         if $opt_v > 2;
 
     my $all_lines = join("", @{$ra_lines});
@@ -7121,7 +7143,8 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
-    'Arduino Sketch'     => [   # same as C
+    'Arduino Sketch'     => [ # Arduino IDE inserts problematic 0xA0 characters; strip them
+                                [ 'replace_regex' , '\xa0', " " ],
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
