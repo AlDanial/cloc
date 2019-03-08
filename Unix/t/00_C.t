@@ -342,7 +342,7 @@ my @Tests = (
                     'args' => '../tests/inputs/igorpro.ipf',
                 },
                 {
-                    'name' => 'IPython Notebook (JSON count only for now)',
+                    'name' => 'Jupyter Notebook',
                     'ref'  => '../tests/outputs/Trapezoid_Rule.ipynb.yaml',
                     'args' => '../tests/inputs/Trapezoid_Rule.ipynb',
                 },

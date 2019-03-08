@@ -6476,6 +6476,39 @@ sub docstring_to_C {                         # {{{1
     print "<- docstring_to_C\n" if $opt_v > 2;
     return @{$ra_lines};
 } # 1}}}
+sub jupyter_nb {                             # {{{1
+    my ($ra_lines, ) = @_;
+    # Translate .ipynb file content into an equivalent set of code
+    # lines as expected by cloc.
+
+    print "-> jupyter_nb()\n" if $opt_v > 2;
+
+    my @save_lines = ();
+    my $in_code   = 0;
+    my $in_source = 0;
+    foreach (@{$ra_lines}) {
+        if (!$in_code and !$in_source and /^\s*"cell_type":\s*"code",\s*$/) {
+            $in_code = 1;
+        } elsif ($in_code and !$in_source and /^\s*"source":\s*\[\s*$/) {
+            $in_source = 1;
+        } elsif ($in_code and $in_source) {
+            if (/^\s*"\s*\\n",\s*$/) {    #  "\n",  -> empty line
+                next;
+            } elsif (/^\s*"\s*#/) {       #  comment within the code block
+                next;
+            } elsif (/^\s*\]\s*$/) {
+                $in_code   = 0;
+                $in_source = 0;
+            } else {
+                push @save_lines, $_;
+            }
+        }
+    }
+
+    print "<- jupyter_nb\n" if $opt_v > 2;
+
+    return @save_lines;
+} # 1}}}
 sub elixir_doc_to_C {                        # {{{1
     my ($ra_lines, ) = @_;
     # Converts Elixir docs to C comments.
@@ -6942,7 +6975,7 @@ sub set_constants {                          # {{{1
             'psql'        => 'SQL'                   ,
             'py'          => 'Python'                ,
             'pyw'         => 'Python'                ,
-            'ipynb'       => 'IPython Notebook'      ,
+            'ipynb'       => 'Jupyter Notebook'      ,
             'pyj'         => 'RapydScript'           ,
             'pyx'         => 'Cython'                ,
             'qml'         => 'QML'                   ,
@@ -7884,10 +7917,11 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
-    'IPython Notebook'   => [   # these are JSON files; have no comments
+    'Jupyter Notebook'   => [   # these are JSON files; have no comments
                                 # would have to parse JSON for
                                 #      "cell_type": "code"
                                 # to count code lines
+                                [ 'jupyter_nb'                     ],
                                 [ 'remove_matches'      , '^\s*$'  ],
                             ],
     'PHP'                => [
@@ -9173,7 +9207,7 @@ sub set_constants {                          # {{{1
     'ML'                           => 3.00,
     'Modula3'                      => 2.00,
     'PHP'                          => 3.50,
-    'IPython Notebook'             => 4.20,
+    'Jupyter Notebook'             => 4.20,
     'Python'                       => 4.20,
     'RapydScript'                  => 4.20,
     'Starlark'                     => 4.20,
