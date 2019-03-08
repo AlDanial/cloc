@@ -1035,7 +1035,7 @@ my %Extension_Collision = (
     'Qt/Glade'                                      => [ 'ui'   ] ,
     'TypeScript/Qt Linguist'                        => [ 'ts'   ] ,
     'Verilog-SystemVerilog/Coq'                     => [ 'v'    ] ,
-    'Visual Basic/TeX'                              => [ 'cls'  ] ,
+    'Visual Basic/TeX/Apex Class'                   => [ 'cls'  ] ,
 );
 my @Autogen_to_ignore = no_autogen_files($list_no_autogen);
 if ($opt_force_lang_def) {
@@ -4302,10 +4302,11 @@ sub print_language_info {                    # {{{1
         push @{$extensions{'Smalltalk'}}    , "cs";
         delete $extensions{'C#/Smalltalk'};
     }
-    if (!$language or $language =~ /^(Visual Basic|TeX)$/i) {
+    if (!$language or $language =~ /^(Visual\s+Basic|TeX|Apex\s+Class)$/i) {
         push @{$extensions{'Visual Basic'}} , "cls";
         push @{$extensions{'TeX'}}          , "cls";
-        delete $extensions{'Visual Basic/TeX'};
+        push @{$extensions{'Apex Class'}}   , "cls";
+        delete $extensions{'Visual Basic/TeX/Apex Class'};
     }
     if (!$language or $language =~ /^(Ant)$/i) {
         push @{$extensions{'Ant'}}  , "build.xml";
@@ -5187,8 +5188,19 @@ sub classify_file {                          # {{{1
                 return Qt_or_Glade( $full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'C#/Smalltalk') {
                 return Csharp_or_Smalltalk( $full_file, $rh_Err, $raa_errors);
-            } elsif ($Language_by_Extension{$extension} eq 'Visual Basic/TeX') {
-                return Visual_Basic_or_TeX( $full_file, $rh_Err, $raa_errors);
+            } elsif ($Language_by_Extension{$extension} eq 'Visual Basic/TeX/Apex Class') {
+                my $lang_VB_T_A = "";
+                Visual_Basic_or_TeX_or_Apex($full_file ,
+                                            $rh_Err    ,
+                                            $raa_errors,
+                                           \$lang_VB_T_A);
+                if ($lang_VB_T_A) {
+                    return $lang_VB_T_A;
+                } else { # an error happened in Visual_Basic_or_TeX_or_Apex
+                    $rh_ignored->{$full_file} =
+                        'failure in Visual_Basic_or_TeX_or_Apex()';
+                    return $language; # (unknown)
+                }
             } elsif ($Language_by_Extension{$extension} eq 'Brainfuck') {
                 if (really_is_bf($full_file)) {
                     return $Language_by_Extension{$extension};
@@ -6405,6 +6417,43 @@ sub add_newlines {                           # {{{1
     print "<- add_newlines \n" if $opt_v > 2;
     return @save_lines;
 } # 1}}}
+sub docstring_to_C_inwork {                         # {{{1
+    my ($ra_lines, ) = @_;
+    # Converts Python docstrings to C comments.
+    #
+    # A docstring starts a file, or immediately follows a class
+    # or function definition.  Outside of those locations, it is
+    # just a (possibly multiline) string--which counts as code.
+
+    print "-> docstring_to_C()\n" if $opt_v > 2;
+
+    my $in_docstring       = 0;
+    my $start_file_def_or_class = 2;
+    foreach (@{$ra_lines}) {
+        if (!$start_file_def_or_class and /^\s*(class|def)\s/) {
+            $start_file_def_or_class = 1;
+        }
+        if ($start_file_def_or_class == 1 and /:\s*(#.*)?$/) {
+            $start_file_def_or_class = 2;
+        }
+        if ($start_file_def_or_class == 2) {
+            while (/((""")|('''))/) {
+                if (!$in_docstring) {
+                    s{[uU]?((""")|('''))}{/*};
+                    $in_docstring = 1;
+                } else {
+                    s{((""")|('''))}{*/};
+                    $in_docstring = 0;
+                    $start_file_def_or_class = 0;
+                }
+            }
+        }
+    }
+
+    print "<- docstring_to_C\n" if $opt_v > 2;
+
+    return @{$ra_lines};
+} # 1}}}
 sub docstring_to_C {                         # {{{1
     my ($ra_lines, ) = @_;
     # Converts Python docstrings to C comments.
@@ -6657,7 +6706,7 @@ sub set_constants {                          # {{{1
             'clj'         => 'Clojure'               ,
             'cljs'        => 'ClojureScript'         ,
             'cljc'        => 'ClojureC'              ,
-            'cls'         => 'Visual Basic/TeX'      , # also Apex Class
+            'cls'         => 'Visual Basic/TeX/Apex Class' ,
             'CMakeLists.txt' => 'CMake'              ,
             'cmake'       => 'CMake'                 ,
             'cob'         => 'COBOL'                 ,
@@ -7114,7 +7163,11 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
-
+    'Apex Class'         => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'ASP'                => [   [ 'remove_matches'      , '^\s*\47'], ],  # \47 = '
     'ASP.NET'            => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
@@ -8453,6 +8506,7 @@ sub set_constants {                          # {{{1
     'SQL Stored Procedure'         =>   6.15,
     'SQL Data'                     =>   1.00,
     'answer/db'                    =>   6.15,
+    'Apex Class'                   =>   1.50,
     'apl 360/370'                  =>   2.50,
     'apl default'                  =>   2.50,
     'apl*plus'                     =>   2.50,
@@ -11544,13 +11598,14 @@ sub Csharp_or_Smalltalk {                    # {{{1
     print "<- Csharp_or_Smalltalk($file)=$lang\n" if $opt_v > 2;
     return $lang;
 } # 1}}}
-sub Visual_Basic_or_TeX {                    # {{{1
+sub Visual_Basic_or_TeX_or_Apex {                    # {{{1
     my ($file        , # in
         $rh_Err      , # in   hash of error codes
         $raa_errors  , # out
+        $rs_language , # out
        ) = @_;
 
-    print "-> Visual_Basic_or_TeX($file)\n" if $opt_v > 2;
+    print "-> Visual_Basic_or_TeX_or_Apex($file)\n" if $opt_v > 2;
 
     my $lang = undef;
     my $IN = new IO::File $file, "r";
@@ -11560,21 +11615,37 @@ sub Visual_Basic_or_TeX {                    # {{{1
     }
     my $VB_points        = 0;
     my $tex_points       = 0;
+    my $apex_points      = 0;
     while (<$IN>) {
         next if /^\s*$/;
+#print "$_";
         if (/\s*%/ or /\s*\\/) {
-            ++$tex_points       ;
-        } elsif (/^\s*(public|private|end|attribute|version)\s/i) {
-            ++$VB_points       ;
+            ++$tex_points   ;
+        } else {
+            if (/^\s*(public|private)\s/i) {
+                ++$VB_points    ;
+                ++$apex_points  ;
+#print "+VB1 +A1";
+            } elsif (/^\s*(end|attribute|version)\s/i) {
+                ++$VB_points    ;
+#print "+VB2";
+            }
+            if (/[{}]/ or /;\s*$/) {
+                ++$apex_points  ;
+#print "+A2";
+            }
+#print "\n";
         }
     }
     $IN->close;
-    if ($tex_points > $VB_points) {
-        $lang = "TeX";
-    } else {
-        $lang = "Visual Basic";
-    }
-    print "<- Visual_Basic_or_TeX($file)=$lang\n" if $opt_v > 2;
+
+    my %points = ( 'Visual Basic'   => $VB_points   ,
+                   'TeX'            => $tex_points  ,
+                   'Apex Class'     => $apex_points ,);
+
+    ${$rs_language} = (sort { $points{$b} <=> $points{$a} or $a cmp $b } keys %points)[0];
+
+    print "<- Visual_Basic_or_TeX_or_Apex($file: VB=$VB_points, TeX=$tex_points, Apex=$apex_points\n" if $opt_v > 2;
     return $lang;
 } # 1}}}
 sub html_colored_text {                      # {{{1

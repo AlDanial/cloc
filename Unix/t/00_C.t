@@ -10,6 +10,11 @@ my @Tests = (
                     'args' => '../tests/inputs/Lookup.agda',
                 },
                 {
+                    'name' => 'Apex Class',
+                    'ref'  => '../tests/outputs/RemoteSiteHelperTest.cls.yaml',
+                    'args' => '../tests/inputs/RemoteSiteHelperTest.cls',
+                },
+                {
                     'name' => 'AsciiDoc',
                     'ref'  => '../tests/outputs/asciidoctor.adoc.yaml',
                     'args' => '../tests/inputs/asciidoctor.adoc',
@@ -735,6 +740,11 @@ my @Tests = (
                     'name' => 'Verilog',
                     'ref'  => '../tests/outputs/verilog.sv.yaml',
                     'args' => '../tests/inputs/verilog.sv',
+                },
+                {
+                    'name' => 'Visual Basic',
+                    'ref'  => '../tests/outputs/JetCar.cls.yaml',
+                    'args' => '../tests/inputs/JetCar.cls',
                 },
                 {
                     'name' => 'Vuejs Component',
