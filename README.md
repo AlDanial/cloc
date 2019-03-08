@@ -2624,6 +2624,15 @@ lines of comments (lines with both code and comment are counted as code).
 <li>  Embedded languages are not recognized.  For example, an HTML file containing
 JavaScript will be counted entirely as HTML.
 </li>
+<li> Python docstrings can serve several purposes.  They may
+contain documentation,
+comment out blocks of code, or they can be regular strings (when
+they appear on the right hand side of an assignment or as a function argument).
+cloc is unable to infer the meaning of docstrings by context; by default
+cloc treats all docstrings as comments.  The switch
+``--docstring-as--code``
+treats all docstrings as code.
+</li>
 </ol>
 
 [](1}}})

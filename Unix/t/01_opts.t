@@ -263,12 +263,12 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/370/results.yaml',
                 },
 
-#               {
-#                   'name' => 'Python docstrings',
-#                   'cd'   => '../tests/inputs/issues/375',
-#                   'args' => 'docstring.py',
-#                   'ref'  => '../tests/outputs/issues/375/results.yaml',
-#               },
+                {
+                    'name' => 'Python docstrings --docstring-as-code',
+                    'cd'   => '../tests/inputs/issues/375',
+                    'args' => '--docstring-as-code docstring.py',
+                    'ref'  => '../tests/outputs/issues/375/results.yaml',
+                },
 
 #               {
 #                   'name' => '--count-and--diff with --out',

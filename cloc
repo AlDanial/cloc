@@ -255,6 +255,11 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              to 0 allows unlimited time.  (Large files with many
                              repeated lines can cause Algorithm::Diff::sdiff()
                              to take hours.)
+   --docstring-as-code       cloc considers docstrings to be comments, but this is
+                             not always correct as docstrings represent regular
+                             strings when they appear on the right hand side of an
+                             assignment or as function arguments.  This switch
+                             forces docstrings to be counted as code.
    --follow-links            [Unix only] Follow symbolic links to directories
                              (sym links to files are always followed).
    --force-lang=<lang>[,<ext>]
@@ -661,6 +666,7 @@ my (
     $opt_config_file          ,
     $opt_strip_str_comments   ,
     $opt_file_encoding        ,
+    $opt_docstring_as_code    ,
    );
 
 my $getopt_success = GetOptions(             # {{{1
@@ -749,6 +755,7 @@ my $getopt_success = GetOptions(             # {{{1
    "config=s"                                => \$opt_config_file         ,
    "strip_str_comments|strip-str-comments"   => \$opt_strip_str_comments  ,
    "file_encoding|file-encoding=s"           => \$opt_file_encoding       ,
+   "docstring_as_code|docstring-as-code"     => \$opt_docstring_as_code   ,
   );
 # 1}}}
 $config_file = $opt_config_file if defined $opt_config_file;
@@ -835,6 +842,7 @@ load_from_config_file($config_file,          # {{{2
                                                 \$opt_force_git           ,
                                                 \$opt_strip_str_comments  ,
                                                 \$opt_file_encoding       ,
+                                                \$opt_docstring_as_code   ,
 );  # 2}}} Not pretty.  Not at all.
 if ($opt_version) {
     printf "$VERSION\n";
@@ -6417,46 +6425,13 @@ sub add_newlines {                           # {{{1
     print "<- add_newlines \n" if $opt_v > 2;
     return @save_lines;
 } # 1}}}
-sub docstring_to_C_inwork {                         # {{{1
-    my ($ra_lines, ) = @_;
-    # Converts Python docstrings to C comments.
-    #
-    # A docstring starts a file, or immediately follows a class
-    # or function definition.  Outside of those locations, it is
-    # just a (possibly multiline) string--which counts as code.
-
-    print "-> docstring_to_C()\n" if $opt_v > 2;
-
-    my $in_docstring       = 0;
-    my $start_file_def_or_class = 2;
-    foreach (@{$ra_lines}) {
-        if (!$start_file_def_or_class and /^\s*(class|def)\s/) {
-            $start_file_def_or_class = 1;
-        }
-        if ($start_file_def_or_class == 1 and /:\s*(#.*)?$/) {
-            $start_file_def_or_class = 2;
-        }
-        if ($start_file_def_or_class == 2) {
-            while (/((""")|('''))/) {
-                if (!$in_docstring) {
-                    s{[uU]?((""")|('''))}{/*};
-                    $in_docstring = 1;
-                } else {
-                    s{((""")|('''))}{*/};
-                    $in_docstring = 0;
-                    $start_file_def_or_class = 0;
-                }
-            }
-        }
-    }
-
-    print "<- docstring_to_C\n" if $opt_v > 2;
-
-    return @{$ra_lines};
-} # 1}}}
 sub docstring_to_C {                         # {{{1
     my ($ra_lines, ) = @_;
     # Converts Python docstrings to C comments.
+
+    if ($opt_docstring_as_code) {
+        return @{$ra_lines};
+    }
 
     print "-> docstring_to_C()\n" if $opt_v > 2;
 
@@ -13315,6 +13290,7 @@ sub load_from_config_file {                  # {{{1
                                                  $rs_force_git           ,
                                                  $rs_strip_str_comments  ,
                                                  $rs_file_encoding       ,
+                                                 $rs_docstring_as_code   ,
         ) = @_;
         # look for runtime configuration file in
         #    $ENV{'HOME'}/.config/cloc/options.txt         -> POSIX
@@ -13426,6 +13402,7 @@ sub load_from_config_file {                  # {{{1
             else             { ${$rs_show_lang} = $4; }
         } elsif (!defined ${$rs_strip_str_comments}  and /(strip_str_comments|strip-str-comments)/)      { ${$rs_strip_str_comments} = 1;
         } elsif (!defined ${$rs_file_encoding}       and /file_encoding|file-encoding(=|\s+)(\S+)/)      { ${$rs_file_encoding}      = $2;
+        } elsif (!defined ${$rs_docstring_as_code}       and /docstring_as_code|docstring-as-code/)      { ${$rs_docstring_as_code}  = 1;
         }
 
     }
