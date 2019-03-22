@@ -35,6 +35,7 @@ transition to GitHub in September 2015.
     *   [Wrapping cloc in other scripts](#wrapping-cloc-in-other-scripts-)
     *   [Count specific git branch](#count-specific-git-branch-)
     *   [Third Generation Language Scale Factors](#third-generation-language-scale-factors-)
+*   [Complex regular subexpression recursion limit ](#complex-regular-subexpression-recursion-limit-)
 *   [Limitations](#limitations-)
 *   [How to Request Support for Additional Languages](#how-to-request-support-for-additional-languages-)
 *   [Features Currently in Development](#features-currently-in-development-)
@@ -2589,6 +2590,31 @@ The values in cloc's 'scale' and '3rd gen. equiv.' columns should be
 taken with a large grain of salt.
 
 [](1}}})
+<a name="complex_regex_recursion"></a> []({{{1)
+#  [Complex regular subexpression recursion limit &#9650;](#___top "click to go to top of document")
+cloc relies on the Regexp::Common module's regular expressions to remove
+comments from source code.  If comments are malformed, for example the
+``/*`` start comment marker appears in a C program without a corresponding ``*/``
+marker, the regular expression engine could enter a recursive
+loop, eventually triggering the warning
+``Complex regular subexpression recursion limit``.
+
+The most common cause for this warning is the existence of comment markers
+in string literals.  While language compilers and interpreters are smart
+enough to recognize that ``"/*"`` (for example) is a string and not a comment,
+cloc is fooled.  File path globs, as in this line of JavaScript
+<pre>var paths = globArray("**/*.js", {cwd: srcPath});
+</pre>
+are frequent culprits.
+
+In an attempt to overcome this problem, a different
+algorithm which removes comment markers in strings can be enabled
+with the ``--strip-str-comments`` switch.  Doing so, however,
+has drawbacks:  cloc
+will run more slowly and the output of ``--strip-comments``
+will contain strings that no longer match the input source.
+
+[](1}}})
 <a name="Limitations"></a> []({{{1)
 #   [Limitations &#9650;](#___top "click to go to top of document")
 Identifying comments within source code is trickier than one might expect.
@@ -2620,6 +2646,20 @@ xxxxxxx     ");
 where `xxxxxxx` represents cloc's view of commented text.
 Therefore cloc counts the five lines as two lines of C code and three
 lines of comments (lines with both code and comment are counted as code).
+
+If you suspect your code has such strings, use the switch
+``--strip-str-comments`` to switch to the algorithm which removes
+embedded comment markers.  Its use will render the five lines above as
+<pre>printf("  ");
+for (i = 0; i < 100; i++) {
+    a += i;
+}
+printf("  ");
+</pre>
+and therefore return a count of five lines of code.
+See the
+[previous section](#complex-regular-subexpression-recursion-limit-)
+on drawbacks to using ``--strip-str-comments``.
 </li>
 <li>  Embedded languages are not recognized.  For example, an HTML file containing
 JavaScript will be counted entirely as HTML.
