@@ -270,6 +270,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/375/results.yaml',
                 },
 
+                {
+                    'name' => 'Perl v. Prolog',
+                    'cd'   => '../tests/inputs/issues/380',
+                    'args' => 'wrapper.pl',
+                    'ref'  => '../tests/outputs/issues/380/wrapper.pl.yaml',
+                },
+
 #               {
 #                   'name' => '--count-and--diff with --out',
 #                   'cd'   => '../tests/inputs/issues/220',

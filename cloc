@@ -4413,7 +4413,14 @@ sub replace_git_hash_with_tarfile {          # {{{1
 
     my %repo_listing = ();  # $repo_listing{hash}{files} = 1;
     foreach my $hash (sort keys %git_hash) {
-        my $git_list_cmd = "git ls-tree --name-only -r $hash";
+        my $git_list_cmd = "git ls-tree --name-only -r ";
+        if ($hash =~ m/(.*?):(.*?)$/) {
+            # requesting specific file(s) from this hash; grep for them
+            # Note:  this capability not fully implemented yet
+            $git_list_cmd .= "$1|grep '$2'";
+        } else {
+            $git_list_cmd .= $hash;
+        }
         print "$git_list_cmd\n" if $opt_v;
         foreach my $file (`$git_list_cmd`) {
             $file =~ s/\s+$//;
@@ -5998,7 +6005,7 @@ sub rm_comments_in_strings {                 # {{{1
 
     my @save_lines = ();
     foreach my $line (@{$ra_lines}) {
-       #print "line=[$line]\n";
+#print "line=[$line]\n";
         if ($line !~ /${string_marker}/) {
             # short circuit; no strings on this line
             push @save_lines, $line;
@@ -6013,7 +6020,7 @@ sub rm_comments_in_strings {                 # {{{1
                 $t =~ s/\Q${start_comment}\E/xx/g;
                 $t =~ s/\Q${end_comment}\E/xx/g if $end_comment;
             }
-           #printf "  t1 = [$t]\n";
+#printf "  t1 = [$t]\n";
             $new_line .= $t;
         }
 
@@ -11196,13 +11203,19 @@ sub Perl_or_Prolog {                         # {{{1
     my $perl_points = 0;
     my $prolog_points = 0;
     while (<$IN>) {
-        ++$perl_points if  /;\s*$/;
-        ++$perl_points if  /(\{|\})/;
-        ++$perl_points if  /^\s*sub\s+/;
-        ++$perl_points if  /\s*<<'/;  # start HERE block
-        ++$perl_points if  /\$(\w+\->|[_!])/;
+        next if /^\s*$/;
+        if ($. == 1 and /^#!.*?\bperl/) {
+            $perl_points = 100;
+            last;
+        }
+        ++$perl_points   if  /^=(head|over|item|cut)/;
+        ++$perl_points   if  /;\s*$/;
+        ++$perl_points   if  /(\{|\})/;
+        ++$perl_points   if  /^\s*sub\s+/;
+        ++$perl_points   if  /\s*<<'/;  # start HERE block
+        ++$perl_points   if  /\$(\w+\->|[_!])/;
         ++$prolog_points if !/\s*#/ and /\.\s*$/;
-        ++$prolog_points if /:-/;
+        ++$prolog_points if  /:-/;
     }
     $IN->close;
     # print "perl_points=$perl_points   prolog_points=$prolog_points\n";
