@@ -255,6 +255,11 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              to 0 allows unlimited time.  (Large files with many
                              repeated lines can cause Algorithm::Diff::sdiff()
                              to take hours.)
+   --docstring-as-code       cloc considers docstrings to be comments, but this is
+                             not always correct as docstrings represent regular
+                             strings when they appear on the right hand side of an
+                             assignment or as function arguments.  This switch
+                             forces docstrings to be counted as code.
    --follow-links            [Unix only] Follow symbolic links to directories
                              (sym links to files are always followed).
    --force-lang=<lang>[,<ext>]
@@ -661,6 +666,7 @@ my (
     $opt_config_file          ,
     $opt_strip_str_comments   ,
     $opt_file_encoding        ,
+    $opt_docstring_as_code    ,
    );
 
 my $getopt_success = GetOptions(             # {{{1
@@ -749,6 +755,7 @@ my $getopt_success = GetOptions(             # {{{1
    "config=s"                                => \$opt_config_file         ,
    "strip_str_comments|strip-str-comments"   => \$opt_strip_str_comments  ,
    "file_encoding|file-encoding=s"           => \$opt_file_encoding       ,
+   "docstring_as_code|docstring-as-code"     => \$opt_docstring_as_code   ,
   );
 # 1}}}
 $config_file = $opt_config_file if defined $opt_config_file;
@@ -1045,7 +1052,7 @@ my %Extension_Collision = (
     'Qt/Glade'                                      => [ 'ui'   ] ,
     'TypeScript/Qt Linguist'                        => [ 'ts'   ] ,
     'Verilog-SystemVerilog/Coq'                     => [ 'v'    ] ,
-    'Visual Basic/TeX'                              => [ 'cls'  ] ,
+    'Visual Basic/TeX/Apex Class'                   => [ 'cls'  ] ,
 );
 my @Autogen_to_ignore = no_autogen_files($list_no_autogen);
 if ($opt_force_lang_def) {
@@ -4312,10 +4319,11 @@ sub print_language_info {                    # {{{1
         push @{$extensions{'Smalltalk'}}    , "cs";
         delete $extensions{'C#/Smalltalk'};
     }
-    if (!$language or $language =~ /^(Visual Basic|TeX)$/i) {
+    if (!$language or $language =~ /^(Visual\s+Basic|TeX|Apex\s+Class)$/i) {
         push @{$extensions{'Visual Basic'}} , "cls";
         push @{$extensions{'TeX'}}          , "cls";
-        delete $extensions{'Visual Basic/TeX'};
+        push @{$extensions{'Apex Class'}}   , "cls";
+        delete $extensions{'Visual Basic/TeX/Apex Class'};
     }
     if (!$language or $language =~ /^(Ant)$/i) {
         push @{$extensions{'Ant'}}  , "build.xml";
@@ -4414,7 +4422,14 @@ sub replace_git_hash_with_tarfile {          # {{{1
 
     my %repo_listing = ();  # $repo_listing{hash}{files} = 1;
     foreach my $hash (sort keys %git_hash) {
-        my $git_list_cmd = "git ls-tree --name-only -r $hash";
+        my $git_list_cmd = "git ls-tree --name-only -r ";
+        if ($hash =~ m/(.*?):(.*?)$/) {
+            # requesting specific file(s) from this hash; grep for them
+            # Note:  this capability not fully implemented yet
+            $git_list_cmd .= "$1|grep '$2'";
+        } else {
+            $git_list_cmd .= $hash;
+        }
         print "$git_list_cmd\n" if $opt_v;
         foreach my $file (`$git_list_cmd`) {
             $file =~ s/\s+$//;
@@ -5197,8 +5212,19 @@ sub classify_file {                          # {{{1
                 return Qt_or_Glade( $full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'C#/Smalltalk') {
                 return Csharp_or_Smalltalk( $full_file, $rh_Err, $raa_errors);
-            } elsif ($Language_by_Extension{$extension} eq 'Visual Basic/TeX') {
-                return Visual_Basic_or_TeX( $full_file, $rh_Err, $raa_errors);
+            } elsif ($Language_by_Extension{$extension} eq 'Visual Basic/TeX/Apex Class') {
+                my $lang_VB_T_A = "";
+                Visual_Basic_or_TeX_or_Apex($full_file ,
+                                            $rh_Err    ,
+                                            $raa_errors,
+                                           \$lang_VB_T_A);
+                if ($lang_VB_T_A) {
+                    return $lang_VB_T_A;
+                } else { # an error happened in Visual_Basic_or_TeX_or_Apex
+                    $rh_ignored->{$full_file} =
+                        'failure in Visual_Basic_or_TeX_or_Apex()';
+                    return $language; # (unknown)
+                }
             } elsif ($Language_by_Extension{$extension} eq 'Brainfuck') {
                 if (really_is_bf($full_file)) {
                     return $Language_by_Extension{$extension};
@@ -5408,6 +5434,8 @@ sub call_counter {                           # {{{1
 
     print_lines($file, "Original file:", \@lines) if $opt_print_filter_stages;
     @lines = rm_blanks(\@lines, $language, \%EOL_Continuation_re); # remove blank lines
+    print "   call_counter: total_lines=$total_lines  blank_lines=",
+        scalar(@lines), "\n" if $opt_v > 2;
     my $blank_lines = $total_lines - scalar @lines;
     print_lines($file, "Blank lines removed:", \@lines)
         if $opt_print_filter_stages;
@@ -5662,7 +5690,8 @@ sub rm_blanks {                              # {{{1
         }
     }
 
-    print "<- rm_blanks(language=$language)\n" if $opt_v > 2;
+    print "<- rm_blanks(language=$language, n_remain= ",
+        scalar(@out), "\n" if $opt_v > 2;
     return @out;
 } # 1}}}
 sub rm_comments {                            # {{{1
@@ -5719,6 +5748,8 @@ sub rm_comments {                            # {{{1
             }
             next;
         }
+        print "   rm_comments after $subroutine line count=",
+            scalar(@lines), "\n" if $opt_v > 2;
 
 #print "lines after=\n";
 #print Dumper(\@lines);
@@ -6419,6 +6450,10 @@ sub docstring_to_C {                         # {{{1
     my ($ra_lines, ) = @_;
     # Converts Python docstrings to C comments.
 
+    if ($opt_docstring_as_code) {
+        return @{$ra_lines};
+    }
+
     print "-> docstring_to_C()\n" if $opt_v > 2;
 
     my $in_docstring = 0;
@@ -6436,6 +6471,39 @@ sub docstring_to_C {                         # {{{1
 
     print "<- docstring_to_C\n" if $opt_v > 2;
     return @{$ra_lines};
+} # 1}}}
+sub jupyter_nb {                             # {{{1
+    my ($ra_lines, ) = @_;
+    # Translate .ipynb file content into an equivalent set of code
+    # lines as expected by cloc.
+
+    print "-> jupyter_nb()\n" if $opt_v > 2;
+
+    my @save_lines = ();
+    my $in_code   = 0;
+    my $in_source = 0;
+    foreach (@{$ra_lines}) {
+        if (!$in_code and !$in_source and /^\s*"cell_type":\s*"code",\s*$/) {
+            $in_code = 1;
+        } elsif ($in_code and !$in_source and /^\s*"source":\s*\[\s*$/) {
+            $in_source = 1;
+        } elsif ($in_code and $in_source) {
+            if (/^\s*"\s*\\n",\s*$/) {    #  "\n",  -> empty line
+                next;
+            } elsif (/^\s*"\s*#/) {       #  comment within the code block
+                next;
+            } elsif (/^\s*\]\s*$/) {
+                $in_code   = 0;
+                $in_source = 0;
+            } else {
+                push @save_lines, $_;
+            }
+        }
+    }
+
+    print "<- jupyter_nb\n" if $opt_v > 2;
+
+    return @save_lines;
 } # 1}}}
 sub elixir_doc_to_C {                        # {{{1
     my ($ra_lines, ) = @_;
@@ -6667,7 +6735,7 @@ sub set_constants {                          # {{{1
             'clj'         => 'Clojure'               ,
             'cljs'        => 'ClojureScript'         ,
             'cljc'        => 'ClojureC'              ,
-            'cls'         => 'Visual Basic/TeX'      , # also Apex Class
+            'cls'         => 'Visual Basic/TeX/Apex Class' ,
             'CMakeLists.txt' => 'CMake'              ,
             'cmake'       => 'CMake'                 ,
             'cob'         => 'COBOL'                 ,
@@ -6903,7 +6971,7 @@ sub set_constants {                          # {{{1
             'psql'        => 'SQL'                   ,
             'py'          => 'Python'                ,
             'pyw'         => 'Python'                ,
-            'ipynb'       => 'IPython Notebook'      ,
+            'ipynb'       => 'Jupyter Notebook'      ,
             'pyj'         => 'RapydScript'           ,
             'pyx'         => 'Cython'                ,
             'qml'         => 'QML'                   ,
@@ -7116,7 +7184,7 @@ sub set_constants {                          # {{{1
             'Dockerfile.test'   => 'Dockerfile'         ,
             );
 # 1}}}
-%{$rhaa_Filters_by_Language} = (             # {{{1
+%{$rhaa_Filters_by_Language} = (            # {{{1
     '(unknown)'          => [ ],
     'ABAP'               => [   [ 'remove_matches'      , '^\*'    ], ],
     'ActionScript'       => [
@@ -7124,7 +7192,11 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
-
+    'Apex Class'         => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'ASP'                => [   [ 'remove_matches'      , '^\s*\47'], ],  # \47 = '
     'ASP.NET'            => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
@@ -7587,6 +7659,7 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Java'               => [
+                                [ 'replace_regex', '\\\\$', ' '],
                                 # Java seems to have more path globs in strings
                                 # than other languages.  The variations makes
                                 # it tricky to craft a universal fix.
@@ -7841,7 +7914,7 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
-    'IPython Notebook'   => [   # these are JSON files; have no comments
+    'Jupyter Notebook'   => [   # these are JSON files; have no comments
                                 # would have to parse JSON for
                                 #      "cell_type": "code"
                                 # to count code lines
@@ -8286,7 +8359,7 @@ sub set_constants {                          # {{{1
     'Go'                 =>     '\\\\$'         ,
     'IDL'                =>     '\$\\$'         ,
     'Igor Pro'           =>     '\\$'           ,
-    'Java'               =>     '\\\\$'         ,
+#   'Java'               =>     '\\\\$'         ,
     'JavaScript'         =>     '\\\\$'         ,
     'JSON5'              =>     '\\\\$'         ,
     'JSX'                =>     '\\\\$'         ,
@@ -8463,6 +8536,7 @@ sub set_constants {                          # {{{1
     'SQL Stored Procedure'         =>   6.15,
     'SQL Data'                     =>   1.00,
     'answer/db'                    =>   6.15,
+    'Apex Class'                   =>   1.50,
     'apl 360/370'                  =>   2.50,
     'apl default'                  =>   2.50,
     'apl*plus'                     =>   2.50,
@@ -9129,7 +9203,7 @@ sub set_constants {                          # {{{1
     'ML'                           => 3.00,
     'Modula3'                      => 2.00,
     'PHP'                          => 3.50,
-    'IPython Notebook'             => 4.20,
+    'Jupyter Notebook'             => 4.20,
     'Python'                       => 4.20,
     'RapydScript'                  => 4.20,
     'Starlark'                     => 4.20,
@@ -9467,13 +9541,19 @@ sub Perl_or_Prolog {                         # {{{1
     my $perl_points = 0;
     my $prolog_points = 0;
     while (<$IN>) {
-        ++$perl_points if  /;\s*$/;
-        ++$perl_points if  /(\{|\})/;
-        ++$perl_points if  /^\s*sub\s+/;
-        ++$perl_points if  /\s*<<'/;  # start HERE block
-        ++$perl_points if  /\$(\w+\->|[_!])/;
+        next if /^\s*$/;
+        if ($. == 1 and /^#!.*?\bperl/) {
+            $perl_points = 100;
+            last;
+        }
+        ++$perl_points   if  /^=(head|over|item|cut)/;
+        ++$perl_points   if  /;\s*$/;
+        ++$perl_points   if  /(\{|\})/;
+        ++$perl_points   if  /^\s*sub\s+/;
+        ++$perl_points   if  /\s*<<'/;  # start HERE block
+        ++$perl_points   if  /\$(\w+\->|[_!])/;
         ++$prolog_points if !/\s*#/ and /\.\s*$/;
-        ++$prolog_points if /:-/;
+        ++$prolog_points if  /:-/;
     }
     $IN->close;
     # print "perl_points=$perl_points   prolog_points=$prolog_points\n";
@@ -9878,13 +9958,14 @@ sub Csharp_or_Smalltalk {                    # {{{1
     print "<- Csharp_or_Smalltalk($file)=$lang\n" if $opt_v > 2;
     return $lang;
 } # 1}}}
-sub Visual_Basic_or_TeX {                    # {{{1
+sub Visual_Basic_or_TeX_or_Apex {            # {{{1
     my ($file        , # in
         $rh_Err      , # in   hash of error codes
         $raa_errors  , # out
+        $rs_language , # out
        ) = @_;
 
-    print "-> Visual_Basic_or_TeX($file)\n" if $opt_v > 2;
+    print "-> Visual_Basic_or_TeX_or_Apex($file)\n" if $opt_v > 2;
 
     my $lang = undef;
     my $IN = new IO::File $file, "r";
@@ -9894,21 +9975,37 @@ sub Visual_Basic_or_TeX {                    # {{{1
     }
     my $VB_points        = 0;
     my $tex_points       = 0;
+    my $apex_points      = 0;
     while (<$IN>) {
         next if /^\s*$/;
+#print "$_";
         if (/\s*%/ or /\s*\\/) {
-            ++$tex_points       ;
-        } elsif (/^\s*(public|private|end|attribute|version)\s/i) {
-            ++$VB_points       ;
+            ++$tex_points   ;
+        } else {
+            if (/^\s*(public|private)\s/i) {
+                ++$VB_points    ;
+                ++$apex_points  ;
+#print "+VB1 +A1";
+            } elsif (/^\s*(end|attribute|version)\s/i) {
+                ++$VB_points    ;
+#print "+VB2";
+            }
+            if (/[{}]/ or /;\s*$/) {
+                ++$apex_points  ;
+#print "+A2";
+            }
+#print "\n";
         }
     }
     $IN->close;
-    if ($tex_points > $VB_points) {
-        $lang = "TeX";
-    } else {
-        $lang = "Visual Basic";
-    }
-    print "<- Visual_Basic_or_TeX($file)=$lang\n" if $opt_v > 2;
+
+    my %points = ( 'Visual Basic'   => $VB_points   ,
+                   'TeX'            => $tex_points  ,
+                   'Apex Class'     => $apex_points ,);
+
+    ${$rs_language} = (sort { $points{$b} <=> $points{$a} or $a cmp $b } keys %points)[0];
+
+    print "<- Visual_Basic_or_TeX_or_Apex($file: VB=$VB_points, TeX=$tex_points, Apex=$apex_points\n" if $opt_v > 2;
     return $lang;
 } # 1}}}
 sub html_colored_text {                      # {{{1
@@ -10505,6 +10602,15 @@ sub align_by_pairs {                         # {{{1
         @{$ra_added   }     = @files_R;
         @{$ra_removed }     = ();
         @{$ra_compare_list} = ();
+        return;
+    } elsif (scalar(@files_L) == 1 and scalar(@files_R) == 1) {
+        # Special case of comparing one file against another.  In
+        # this case force the pair to be aligned with each other,
+        # otherwise the file naming logic will think one file
+        # was added and the other deleted.
+        @{$ra_added   }     = ();
+        @{$ra_removed }     = ();
+        @{$ra_compare_list} = ( [$files_L[0], $files_R[0]] );
         return;
     }
 #use Data::Dumper::Simple;
@@ -11535,6 +11641,7 @@ sub load_from_config_file {                  # {{{1
                                                  $rs_force_git           ,
                                                  $rs_strip_str_comments  ,
                                                  $rs_file_encoding       ,
+                                                 $rs_docstring_as_code   ,
         ) = @_;
         # look for runtime configuration file in
         #    $ENV{'HOME'}/.config/cloc/options.txt         -> POSIX
@@ -11646,6 +11753,7 @@ sub load_from_config_file {                  # {{{1
             else             { ${$rs_show_lang} = $4; }
         } elsif (!defined ${$rs_strip_str_comments}  and /(strip_str_comments|strip-str-comments)/)      { ${$rs_strip_str_comments} = 1;
         } elsif (!defined ${$rs_file_encoding}       and /file_encoding|file-encoding(=|\s+)(\S+)/)      { ${$rs_file_encoding}      = $2;
+        } elsif (!defined ${$rs_docstring_as_code}       and /docstring_as_code|docstring-as-code/)      { ${$rs_docstring_as_code}  = 1;
         }
 
     }

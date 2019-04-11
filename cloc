@@ -5425,6 +5425,8 @@ sub call_counter {                           # {{{1
 
     print_lines($file, "Original file:", \@lines) if $opt_print_filter_stages;
     @lines = rm_blanks(\@lines, $language, \%EOL_Continuation_re); # remove blank lines
+    print "   call_counter: total_lines=$total_lines  blank_lines=",
+        scalar(@lines), "\n" if $opt_v > 2;
     my $blank_lines = $total_lines - scalar @lines;
     print_lines($file, "Blank lines removed:", \@lines)
         if $opt_print_filter_stages;
@@ -5679,7 +5681,8 @@ sub rm_blanks {                              # {{{1
         }
     }
 
-    print "<- rm_blanks(language=$language)\n" if $opt_v > 2;
+    print "<- rm_blanks(language=$language, n_remain= ",
+        scalar(@out), "\n" if $opt_v > 2;
     return @out;
 } # 1}}}
 sub rm_comments {                            # {{{1
@@ -5736,6 +5739,8 @@ sub rm_comments {                            # {{{1
             }
             next;
         }
+        print "   rm_comments after $subroutine line count=",
+            scalar(@lines), "\n" if $opt_v > 2;
 
 #print "lines after=\n";
 #print Dumper(\@lines);
@@ -7170,7 +7175,7 @@ sub set_constants {                          # {{{1
             'Dockerfile.test'   => 'Dockerfile'         ,
             );
 # 1}}}
-%{$rhaa_Filters_by_Language} = (             # {{{1
+%{$rhaa_Filters_by_Language} = (            # {{{1
     '(unknown)'          => [ ],
     'ABAP'               => [   [ 'remove_matches'      , '^\*'    ], ],
     'ActionScript'       => [
@@ -7645,6 +7650,7 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Java'               => [
+                                [ 'replace_regex', '\\\\$', ' '],
                                 # Java seems to have more path globs in strings
                                 # than other languages.  The variations makes
                                 # it tricky to craft a universal fix.
@@ -8345,7 +8351,7 @@ sub set_constants {                          # {{{1
     'Go'                 =>     '\\\\$'         ,
     'IDL'                =>     '\$\\$'         ,
     'Igor Pro'           =>     '\\$'           ,
-    'Java'               =>     '\\\\$'         ,
+#   'Java'               =>     '\\\\$'         ,
     'JavaScript'         =>     '\\\\$'         ,
     'JSON5'              =>     '\\\\$'         ,
     'JSX'                =>     '\\\\$'         ,
@@ -11620,7 +11626,7 @@ sub Csharp_or_Smalltalk {                    # {{{1
     print "<- Csharp_or_Smalltalk($file)=$lang\n" if $opt_v > 2;
     return $lang;
 } # 1}}}
-sub Visual_Basic_or_TeX_or_Apex {                    # {{{1
+sub Visual_Basic_or_TeX_or_Apex {            # {{{1
     my ($file        , # in
         $rh_Err      , # in   hash of error codes
         $raa_errors  , # out

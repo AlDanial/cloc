@@ -277,6 +277,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/380/wrapper.pl.yaml',
                 },
 
+                {
+                    'name' => 'Java comments and continuation lines issue 381',
+                    'cd'   => '../tests/inputs/issues/381',
+                    'args' => 'issue381.java',
+                    'ref'  => '../tests/outputs/issues/381/issue381.java.yaml',
+                },
+
 #               {
 #                   'name' => '--count-and--diff with --out',
 #                   'cd'   => '../tests/inputs/issues/220',
