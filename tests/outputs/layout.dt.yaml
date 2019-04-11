@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.81
+  elapsed_seconds    : 0.00719904899597168
+  n_files            : 1
+  n_lines            : 244
+  files_per_second   : 138.9072362974
+  lines_per_second   : 33893.3656565657
+  report_file        : ../outputs/layout.dt.yaml
+'DIET' :
+  nFiles: 1
+  blank: 10
+  comment: 4
+  code: 230
+SUM: 
+  blank: 10
+  comment: 4
+  code: 230
+  nFiles: 1

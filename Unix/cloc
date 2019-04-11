@@ -6759,6 +6759,7 @@ sub set_constants {                          # {{{1
             'da'          => 'DAL'                   ,
             'dart'        => 'Dart'                  ,
             'def'         => 'Windows Module Definition',
+            'dt'          => 'DIET'                  ,
             'diff'        => 'diff'                  ,
             'dmap'        => 'NASTRAN DMAP'          ,
             'do'          => 'Stata'                 ,
@@ -7398,6 +7399,11 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'DIET'               => [  # same as Pug
+                                [ 'remove_pug_block'    ,          ],
+                                [ 'remove_matches'      , '^\s*//' ],
+                                [ 'remove_inline'       , '//.*$'  ],
+                            ],
     # diff is kind of weird: anything but a space in the first column
     # will count as code, with the exception of #, ---, +++.  Spaces
     # in the first column denote context lines which aren't part of the
@@ -7918,6 +7924,7 @@ sub set_constants {                          # {{{1
                                 # would have to parse JSON for
                                 #      "cell_type": "code"
                                 # to count code lines
+                                [ 'jupyter_nb'                     ],
                                 [ 'remove_matches'      , '^\s*$'  ],
                             ],
     'PHP'                => [
@@ -8665,6 +8672,7 @@ sub set_constants {                          # {{{1
     'datatrieve'                   =>   4.00,
     'dbase iii'                    =>   2.00,
     'dbase iv'                     =>   1.54,
+    'DIET'                         =>   2.00,
     'diff'                         =>   1.00,
     'decision support default'     =>   2.22,
     'decrally'                     =>   2.00,

@@ -135,6 +135,11 @@ my @Tests = (
                     'args' => '../tests/inputs/C-Ansi.c',
                 },
                 {
+                    'name' => 'DIET',
+                    'ref'  => '../tests/outputs/layout.dt.yaml',
+                    'args' => '../tests/inputs/layout.dt',
+                },
+                {
                     'name' => 'dir 1',
                     'ref'  => '../tests/outputs/foo_bar.yaml',
                     'args' => '../tests/inputs/foo_bar',

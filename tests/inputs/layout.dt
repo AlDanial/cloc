@@ -1,0 +1,244 @@
+!!! 5
+html(lang='en-US')
+  - import std.datetime : Clock;
+  - auto year = Clock.currTime.year;
+  //
+    | Copyright (c) 1999-$#{year} by the D Language Foundation
+    | All Rights Reserved.
+    | https://dlang.org/foundation_overview.html
+  - import std.process : environment;
+  - import std.array : replace;
+  - static import std.string;
+  - string version_id = environment["GIT_TARGET"];
+  - bool noExactSourceCodeLinks = environment["NO_EXACT_SOURCE_CODE_LINKS"] == "1";
+  - bool haveVersion = version_id.startsWith("v");
+  - string version_name = haveVersion ? version_id[1 .. $] : "Prerelease";
+  - string root_dir = info.linkTo(null) ~ (req is null ? "../" : "");
+  - string ddox_dir = haveVersion ? "library/" : "library-prerelease/";
+      
+  head
+    meta(charset='utf-8')
+    - string title;
+    meta(name='keywords', content='D programming language')
+    meta(name='description', content='D Programming Language')
+    block title
+    title #{title} - D Programming Language
+    link(rel='stylesheet', href='#{root_dir}css/codemirror.css')
+    link(rel='stylesheet', href='#{root_dir}css/style.css')
+    link(rel='stylesheet', href='#{root_dir}css/print.css', media='print')
+    link(rel='stylesheet', href='#{root_dir}css/ddox.css')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css')
+    link(rel='shortcut icon', href='#{root_dir}favicon.ico')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js', type='text/javascript')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0, minimum-scale=0.1, maximum-scale=10.0')
+
+  body.std(id='#{info.node.moduleName}')
+    script(type='text/javascript').
+      document.body.className += ' have-javascript';
+    #top
+      .helper
+        .helper.expand-container
+          a.logo(href='#{root_dir}')
+            img#logo(width='125', height='95', alt='D Logo', src='#{root_dir}images/dlogo.svg')
+          a.hamburger.expand-toggle(href="#{root_dir}menu.html", title="Menu")
+            span Menu
+          #cssmenu
+            ul
+              li
+                a(href="https://tour.dlang.org")
+                  span Learn
+              li.expand-container
+                a.expand-toggle(href="#{root_dir}documentation.html")
+                  span Documentation
+                ul
+                  li
+                    a(href="#{root_dir}spec/spec.html") Language Reference
+                  li
+                    a(href="#{root_dir}phobos/index.html") Library Reference
+                  li
+                    a(href="#{root_dir}dmd.html") Command-line Reference
+                  li.menu-divider
+                    a(href="#{root_dir}comparison.html") Feature Overview
+                  li
+                    a(href="#{root_dir}articles.html") Articles
+              li
+                a(href="#{root_dir}download.html")
+                  span Downloads
+              li
+                a(href="https://code.dlang.org")
+                  span Packages
+              li.expand-container
+                a.expand-toggle(href="#{root_dir}community.html")
+                  span Community
+                ul
+                  li
+                    a(href="https://dlang.org/blog") Blog
+                  li
+                    a(href="#{root_dir}orgs-using-d.html") Orgs using D
+                  li
+                    a(href="https://twitter.com/search?q=%23dlang") Twitter
+                  li
+                    a(href="#{root_dir}calendar.html") Calendar
+                  li.menu-divider
+                    a(href="https://forum.dlang.org") Forums
+                  li
+                    a(href="irc://irc.freenode.net/d") IRC
+                  li
+                    a(href="https://wiki.dlang.org") Wiki
+                  li.menu-divider
+                    a(href="https://github.com/dlang") GitHub
+                  li
+                    a(href="#{root_dir}bugstats.html") Issues
+                  li
+                    a(href="https://wiki.dlang.org/Get_involved") Get Involved
+                  li.menu-divider
+                    a(href="#{root_dir}foundation") Foundation
+                  li
+                    a(href="#{root_dir}security.html") Security Team
+                  li
+                    a(href="#{root_dir}foundation/donate.html") Donate
+                  li
+                    a(href="#{root_dir}foundation/sponsors.html") Sponsors
+              li.expand-container
+                a.expand-toggle(href="#{root_dir}resources.html")
+                  span Resources
+                ul
+                  li
+                    a(href="https://wiki.dlang.org/Books") Books
+                  li
+                    a(href="https://wiki.dlang.org/Tutorials") Tutorials
+                  li.menu-divider
+                    a(href="https://wiki.dlang.org/Development_tools") Tools
+                  li
+                    a(href="https://wiki.dlang.org/Editors") Editors
+                  li
+                    a(href="https://wiki.dlang.org/IDEs") IDEs
+                  li
+                    a(href="http://rainers.github.io/visuald/visuald/StartPage.html") Visual D
+                  li.menu-divider
+                    a(href="#{root_dir}acknowledgements.html") Acknowledgments
+                  li
+                    a(href="#{root_dir}dstyle.html") D Style
+                  li
+                    a(href="#{root_dir}glossary.html") Glossary
+                  li
+                    a(href="#{root_dir}sitemap.html") Sitemap
+          .search-container.expand-container
+            a.expand-toggle(href="#{root_dir}search.html", title="Search")
+              span Search
+            #search-box
+              form(method='get', action='https://google.com/search', autocomplete='off')
+                input#domains(type='hidden', name='domains', value='dlang.org')
+                |             
+                input#sourceid(type='hidden', name='sourceid', value='google-search')
+                |             
+                span#search-query
+                  input#q(name='q', placeholder='Search')
+                  input#symbolSearch(style="display: none", type="text", name="symbolSearch", placeholder="API Search", onchange="performSymbolSearch(80);", onkeypress="this.onchange();", onpaste="this.onchange();", oninput="this.onchange();", autofocus)
+                span#search-dropdown
+                  .helper
+                    select#sitesearch(name='sitesearch', size='1')
+                      option(value='dlang.org') Entire D Site
+                      |                     
+                      option(selected='', value='dlang.org/spec') Language
+                      |                     
+                      option(selected='', value='dlang.org/library') Library
+                      |                     
+                      option(value='forum.dlang.org') Forums
+                span#search-submit
+                  button(type='submit')
+                    i.fa.fa-search
+                    span go
+              include ddox.inc.symbol-search.results
+
+    .container
+      .subnav-helper
+      .subnav
+        h2 API Documentation
+        p
+          span.smallprint
+            - if( haveVersion )
+              | version #{version_name}
+        p
+          a(href="#{root_dir}#{ddox_dir}index.html") overview
+        ul
+          block navigation
+      #content.hyphenate
+        #tools
+          div
+            - import ddox.entities : Declaration;
+            - auto modname = info.node.moduleName;
+            - string project = "dlang.org";
+            - string path_prefix, line_suffix, filename;
+            - if( modname )
+              - if( modname.startsWith("core.") || modname.startsWith("object"))
+                - project = "druntime", path_prefix = "src/";
+              - else if( modname.startsWith("dmd.") )
+                - project = "dmd", path_prefix = "src/";
+              - else
+                - project = "phobos", path_prefix = "";
+              - if (info.docGroups.length >= 1 && !noExactSourceCodeLinks)
+                - if (auto decl = cast(Declaration)info.docGroups[0].members[0]) line_suffix = "#L"~to!string(decl.line);
+              - if (info.node.module_.isPackageModule)
+                - filename = replace(modname, ".", "/") ~ "/package.d";
+              - else
+                - filename = replace(modname, ".", "/") ~ ".d";
+
+            - if( modname )
+              .tip.smallprint
+                a(href='https://github.com/dlang/#{project}/blob/#{version_id}/#{path_prefix}#{filename}#{line_suffix}')
+                  | View source code
+                div
+                  | Display the source code in #{filename} from which this
+                  | page was generated on github.
+
+            .tip.smallprint
+              - auto pagename = modname ? path_prefix ~ replace(modname, ".", "/") : "index";
+              a(href="https://issues.dlang.org/enter_bug.cgi?bug_file_loc=http%3A%2F%2Fdlang.org/#{ddox_dir}#{pagename}.html&bug_severity=enhancement&component=#{project}&op_sys=All&priority=P3&product=D&rep_platform=All&short_desc=%5B#{title}%5D&version=D2") Report a bug
+              div
+                | If you spot a problem with this page, click here to create a
+                | Bugzilla issue.
+
+            - if( modname )
+              .tip.smallprint
+                a(href='https://github.com/dlang/#{project}/edit/master/#{path_prefix}#{filename}#{line_suffix}')
+                  | Improve this page
+                div
+                  | Quickly fork, edit online, and submit a pull request for this page.
+                  | Requires a signed-in GitHub account. This works well for small changes.
+                  | If you'd like to make larger changes you may want to consider using
+                  | local clone.
+
+        - auto hidx = std.string.lastIndexOf(title, ' ');
+        - auto node = info.docGroups.length ? info.docGroups[0].members[0] : null;
+        - if (title.endsWith(" - multiple declarations") && node)
+          h1 <code><a href="#{info.linkTo(info.mod)}">#{info.mod.qualifiedName}</a>.#{title[0 .. $-24]}</code> #{title[$-24 ..$]}
+        - else if (hidx > 0 && !title.startsWith("Module ") && node)
+          h1 #{title[0 .. hidx]} <code><a href="#{info.linkTo(node.parent)}">#{node.parent.qualifiedName}</a>.#{node.name}</code>
+        - else if (hidx > 0 && title.startsWith("Module ") && info.mod)
+          h1 Module <code>#{info.mod.qualifiedName}</code>
+        - else
+          h1= title
+        block body
+
+        |     
+        #quickindex.quickindex
+
+        #copyright.smallprint
+          | Copyright &copy; 1999-#{year} by the <a href="#{root_dir}foundation_overview.html">D Language Foundation</a> | Page generated by <a href="https://github.com/rejectedsoftware/ddox">ddox</a>.
+
+    script(type='text/javascript', src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js')
+    |     
+    script(type='text/javascript').
+      window.jQuery || document.write('\x3Cscript src="#{root_dir}js/jquery-1.7.2.min.js">\x3C/script>')
+    |     
+    script(type='text/javascript', src='#{root_dir}js/codemirror-compressed.js')
+    |     
+    script(type='text/javascript', src='#{root_dir}js/run.js')
+    script(type='text/javascript', src='#{root_dir}js/run_examples.js')
+    script(type='text/javascript', src='#{root_dir}js/dlang.js')
+    script(type='text/javascript', src='#{root_dir}js/listanchors.js')
+    script(type="text/javascript", src="#{root_dir}js/ddox.js")
+    script(type='text/javascript').
+      jQuery(document).ready(listanchors);
+      setupDdox();

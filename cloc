@@ -6010,7 +6010,7 @@ sub rm_comments_in_strings {                 # {{{1
 
     my @save_lines = ();
     foreach my $line (@{$ra_lines}) {
-#print "line=[$line]\n";
+       #print "line=[$line]\n";
         if ($line !~ /${string_marker}/) {
             # short circuit; no strings on this line
             push @save_lines, $line;
@@ -6025,7 +6025,7 @@ sub rm_comments_in_strings {                 # {{{1
                 $t =~ s/\Q${start_comment}\E/xx/g;
                 $t =~ s/\Q${end_comment}\E/xx/g if $end_comment;
             }
-#printf "  t1 = [$t]\n";
+           #printf "  t1 = [$t]\n";
             $new_line .= $t;
         }
 
@@ -6750,6 +6750,7 @@ sub set_constants {                          # {{{1
             'da'          => 'DAL'                   ,
             'dart'        => 'Dart'                  ,
             'def'         => 'Windows Module Definition',
+            'dt'          => 'DIET'                  ,
             'diff'        => 'diff'                  ,
             'dmap'        => 'NASTRAN DMAP'          ,
             'do'          => 'Stata'                 ,
@@ -7388,6 +7389,11 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'DIET'               => [  # same as Pug
+                                [ 'remove_pug_block'    ,          ],
+                                [ 'remove_matches'      , '^\s*//' ],
+                                [ 'remove_inline'       , '//.*$'  ],
                             ],
     # diff is kind of weird: anything but a space in the first column
     # will count as code, with the exception of #, ---, +++.  Spaces
@@ -8657,6 +8663,7 @@ sub set_constants {                          # {{{1
     'datatrieve'                   =>   4.00,
     'dbase iii'                    =>   2.00,
     'dbase iv'                     =>   1.54,
+    'DIET'                         =>   2.00,
     'diff'                         =>   1.00,
     'decision support default'     =>   2.22,
     'decrally'                     =>   2.00,
