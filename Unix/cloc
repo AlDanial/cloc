@@ -6025,6 +6025,8 @@ sub rm_comments_in_strings {                 # {{{1
             push @save_lines, $line;
             next;
         }
+        # replace backslashed string markers with 'Q'
+        $line =~ s/\\${string_marker}/Q/g;
         my @tokens = split(/(${string_marker}.*?${string_marker})/, $line);
         my $new_line = "";
         foreach my $t (@tokens) {

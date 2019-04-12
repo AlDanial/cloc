@@ -284,6 +284,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/381/issue381.java.yaml',
                 },
 
+                {
+                    'name' => 'C comments w/ backslashed quote in strings issue 381',
+                    'cd'   => '../tests/inputs/issues/381',
+                    'args' => '--strip-str-comments issue381.c',
+                    'ref'  => '../tests/outputs/issues/381/issue381.c.yaml',
+                },
+
 #               {
 #                   'name' => '--count-and--diff with --out',
 #                   'cd'   => '../tests/inputs/issues/220',
