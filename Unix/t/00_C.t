@@ -757,6 +757,11 @@ my @Tests = (
                     'args' => '../tests/inputs/ItemView.vue',
                 },
                 {
+                    'name' => 'Web Assembly',
+                    'ref'  => '../tests/outputs/type.wast.yaml',
+                    'args' => '../tests/inputs/type.wast',
+                },
+                {
                     'name' => 'Windows Message',
                     'ref'  => '../tests/outputs/ZosMsg.mc.yaml',
                     'args' => '../tests/inputs/ZosMsg.mc',

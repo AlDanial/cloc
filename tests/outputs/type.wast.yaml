@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.81
+  elapsed_seconds    : 0.00589084625244141
+  n_files            : 1
+  n_lines            : 60
+  files_per_second   : 169.754897199288
+  lines_per_second   : 10185.2938319573
+  report_file        : ../outputs/type.wast.yaml
+'Web Assembly' :
+  nFiles: 1
+  blank: 8
+  comment: 20
+  code: 32
+SUM: 
+  blank: 8
+  comment: 20
+  code: 32
+  nFiles: 1
