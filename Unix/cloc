@@ -7108,8 +7108,8 @@ sub set_constants {                          # {{{1
             'vim'         => 'vim script'            ,
             'swift'       => 'Swift'                 ,
             'xaml'        => 'XAML'                  ,
-            'wast'        => 'Web Assembly'          ,
-            'wat'         => 'Web Assembly'          ,
+            'wast'        => 'WebAssembly'           ,
+            'wat'         => 'WebAssembly'           ,
             'wxs'         => 'WiX source'            ,
             'wxi'         => 'WiX include'           ,
             'wxl'         => 'WiX string localization' ,
@@ -8289,7 +8289,7 @@ sub set_constants {                          # {{{1
                                 [ 'add_newlines'        ,          ],
                                 [ 'call_regexp_common'  , 'C'      ],
                             ],
-    'Web Assembly'          => [
+    'WebAssembly'           => [
                                 [ 'remove_matches'      , '^\s*;;' ],
                             ],
     'Windows Message File'  => [
@@ -9184,7 +9184,7 @@ sub set_constants {                          # {{{1
     'watfiv'                       =>   0.94,
     'watfor'                       =>   0.88,
     'web scripts'                  =>   5.33,
-    'Web Assembly'                 =>   0.45,
+    'WebAssembly'                  =>   0.45,
     'whip'                         =>   0.88,
     'Windows Message File'         =>   1.00,
     'Windows Resource File'        =>   1.00,

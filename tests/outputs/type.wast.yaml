@@ -9,7 +9,7 @@ header :
   files_per_second   : 169.754897199288
   lines_per_second   : 10185.2938319573
   report_file        : ../outputs/type.wast.yaml
-'Web Assembly' :
+'WebAssembly' :
   nFiles: 1
   blank: 8
   comment: 20

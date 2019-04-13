@@ -757,7 +757,7 @@ my @Tests = (
                     'args' => '../tests/inputs/ItemView.vue',
                 },
                 {
-                    'name' => 'Web Assembly',
+                    'name' => 'WebAssembly',
                     'ref'  => '../tests/outputs/type.wast.yaml',
                     'args' => '../tests/inputs/type.wast',
                 },
