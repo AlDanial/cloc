@@ -2175,8 +2175,8 @@ sub count_filesets {                         # {{{1
              unless ($counter_type or !$opt_progress_rate or ($nCounted % $opt_progress_rate));
         next if $p_ignored{$file_L};
         # filter out non-included extensions
-        if ($opt_include_ext  and not $Include_Ext{ file_extension($Lang_L) }
-                              and not $Include_Ext{ file_extension($Lang_R) }) {
+        if ($opt_include_ext  and not $Include_Ext{ file_extension($file_L) }
+                              and not $Include_Ext{ file_extension($file_R) }) {
             $p_ignored{$file_L} = "not in --include-lang=$opt_include_ext";
             $p_ignored{$file_R} = "not in --include-lang=$opt_include_ext";
             next;
