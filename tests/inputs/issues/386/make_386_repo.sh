@@ -2,7 +2,7 @@
 git init issue386
 cd issue386/
 
-CCODE=$(cat <<'EOC'
+CCODE=$(cat <<'EOC1'
 /*
  *   Compile:
  *               gcc hello.c -o hello
@@ -14,9 +14,22 @@ main (int argc, char *argv[])
 {
   printf("Hello.\n");
 }
-EOC
+EOC1
 )
-echo "${CCODE}" > hello.c
+echo "${CCODE}" > hello1.c
+
+CCODE=$(cat <<'EOC2'
+//   Compile:
+//               gcc hello.c -o hello
+//               hello
+main (int argc, char *argv[])
+{
+  printf("extra line.\n");
+  printf("Hello.\n");
+}
+EOC2
+)
+echo "${CCODE}" > hello2.c
 
 PCODE=$(cat <<'EOP'
 #!/usr/bin/env python
@@ -28,32 +41,32 @@ EOP
 )
 echo "${PCODE}" > stuff.py
 
-git add hello.c 
+git add hello1.c  hello2.c
 git commit --allow-empty-message -m ''
-git add stuff.py 
+git add stuff.py
 git commit --allow-empty-message -m ''
-git rm hello.c 
+git rm hello1.c
 git commit --allow-empty-message -m ''
-git rm stuff.py
+git rm stuff.py hello2.c
 git commit --allow-empty-message -m ''
 
-HASH4=`git log --oneline -n 1 --skip 0 | perl -p -e 's/\s+//g'`
-HASH3=`git log --oneline -n 1 --skip 1 | perl -p -e 's/\s+//g'`
-HASH2=`git log --oneline -n 1 --skip 2 | perl -p -e 's/\s+//g'`
-HASH1=`git log --oneline -n 1 --skip 3 | perl -p -e 's/\s+//g'`
+HASH4=`git log --oneline -n 1 --skip 0 | perl -p -e 's/\s+$/\n/g'`
+HASH3=`git log --oneline -n 1 --skip 1 | perl -p -e 's/\s+$/\n/g'`
+HASH2=`git log --oneline -n 1 --skip 2 | perl -p -e 's/\s+$/\n/g'`
+HASH1=`git log --oneline -n 1 --skip 3 | perl -p -e 's/\s+$/\n/g'`
 
 echo "HASH4=$HASH4"
 echo "HASH3=$HASH3"
 echo "HASH2=$HASH2"
 echo "HASH1=$HASH1"
 
-# hello.c
+# hello1.c hello2.c
 git archive -o ${HASH1}.tar ${HASH1}
 
-# hello.c stuff.py
+# hello1.c hello2.c stuff.py
 git archive -o ${HASH2}.tar ${HASH2}
 
-# stuff.py
+# hello2.c stuff.py
 git archive -o ${HASH3}.tar ${HASH3}
 
 # empty
