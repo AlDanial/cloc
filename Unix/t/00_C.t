@@ -567,6 +567,11 @@ my @Tests = (
                     'args' => '../tests/inputs/hi.py',
                 },
                 {
+                    'name' => 'Python wheel file',
+                    'ref'  => '../tests/outputs/test-1.0-py2.py3-none-win32.whl.yaml',
+                    'args' => '../tests/inputs/test-1.0-py2.py3-none-win32.whl',
+                },
+                {
                     'name' => 'Qt Linguist',
                     'ref'  => '../tests/outputs/i18n_de.ts.yaml',
                     'args' => '../tests/inputs/i18n_de.ts',

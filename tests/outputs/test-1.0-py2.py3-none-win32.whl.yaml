@@ -1,0 +1,26 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.81
+  elapsed_seconds    : 0.0141270160675049
+  n_files            : 2
+  n_lines            : 5
+  files_per_second   : 141.572713617876
+  lines_per_second   : 353.93178404469
+  report_file        : test-1.0-py2.py3-none-win32.whl.yaml
+'Python' :
+  nFiles: 1
+  blank: 0
+  comment: 0
+  code: 2
+'Bourne Shell' :
+  nFiles: 1
+  blank: 1
+  comment: 0
+  code: 2
+SUM: 
+  blank: 1
+  comment: 0
+  code: 4
+  nFiles: 2

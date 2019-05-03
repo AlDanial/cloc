@@ -2184,8 +2184,8 @@ sub count_filesets {                         # {{{1
              unless ($counter_type or !$opt_progress_rate or ($nCounted % $opt_progress_rate));
         next if $p_ignored{$file_L};
         # filter out non-included extensions
-        if ($opt_include_ext  and not $Include_Ext{ file_extension($Lang_L) }
-                              and not $Include_Ext{ file_extension($Lang_R) }) {
+        if ($opt_include_ext  and not $Include_Ext{ file_extension($file_L) }
+                              and not $Include_Ext{ file_extension($file_R) }) {
             $p_ignored{$file_L} = "not in --include-lang=$opt_include_ext";
             $p_ignored{$file_R} = "not in --include-lang=$opt_include_ext";
             next;
@@ -9256,6 +9256,7 @@ sub set_constants {                          # {{{1
             '.ear'     => 1 ,  # Java
             '.war'     => 1 ,  # contained within .ear
             '.xz'      => 1 ,
+            '.whl'     => 1 ,  # Python wheel files (zip)
             );
 # 1}}}
 } # end sub set_constants()
@@ -10897,7 +10898,7 @@ sub uncompress_archive_cmd {                 # {{{1
         } else {
             $missing = "bzip2";
         }
-    } elsif ($archive_file =~ /\.zip$/i and !$ON_WINDOWS)    {
+    } elsif ($archive_file =~ /\.(whl|zip)$/i and !$ON_WINDOWS)    {
         if (external_utility_exists("unzip")) {
             $extract_cmd = "unzip -qq -d . '$archive_file'";
         } else {
@@ -10911,7 +10912,7 @@ sub uncompress_archive_cmd {                 # {{{1
         } else {
             $missing = "dpkg-deb";
         }
-    } elsif ($ON_WINDOWS and $archive_file =~ /\.zip$/i) {
+    } elsif ($ON_WINDOWS and $archive_file =~ /\.(whl|zip)$/i) {
         # use unzip on Windows (comes with git-for-Windows)
         if (external_utility_exists("unzip")) {
              $extract_cmd = "unzip -qq -d . \"$archive_file\" ";
