@@ -1,3 +1,38 @@
+                Release Notes for cloc version 1.82
+                   https://github.com/AlDanial/cloc
+                           May  3, 2019
+
+New Languages and File Types:
+    o Apex Class
+    o DIET
+    o Fennel
+    o FXML
+    o Jupyter notebook files (.ipynb)
+    o Python wheel files (.whl)
+    o SVG
+    o reStructuredText
+
+Updates:
+    o Handle backslashed quotes in strings to improve --strip-str-comments
+      logic.
+    o Improve Perl v. Prolog identification.
+    o New switch --docstring-as-code to count Python docstrings as code.
+    o Partial support fot Lua nested comments.
+    o Renamed Skylark to Starlark.
+    o Modified Java filter to try to handle embedded comments better.
+    o Recognize groovy as one of the #! languages.
+    o Add .pyw as a file extension for Python.
+    o Update comment definitions for Velocity Template Language.
+    o Override file alignment logic with --diff when only two files are
+      given.
+    o Identify TeX v. Visual Basic for .cls file extension.
+    o Include result summation line with --csv output.
+    o Support --csv, --json, --md, --xml, --yaml output types for the
+      --ignored debug file.
+    o Force IO encoding to allow wider Unicode characters for creating
+      Windows exe's with PAR::Packer
+
+============================================================================
                 Release Notes for cloc version 1.80
                    https://github.com/AlDanial/cloc
                            Oct. 5, 2018

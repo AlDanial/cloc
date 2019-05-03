@@ -184,6 +184,14 @@ to 0 allows unlimited time.
 (Large files with many repeated lines can cause
 Algorithm::Diff::sdiff() to take hours.)
 
+=item B<--docstring-as-code>
+
+cloc considers docstrings to be comments, but this is
+not always correct as docstrings represent regular
+strings when they appear on the right hand side of an
+assignment or as function arguments.  This switch
+forces docstrings to be counted as code.
+
 =item B<--follow-links>
 
 [Unix only] Follow symbolic links to directories (sym links to files
@@ -727,7 +735,7 @@ sloccount(1)
 =head1 AUTHORS
 
 The cloc program was written by Al Danial <al.danial@gmail.com> and
-is Copyright (C) 2006-2018 <al.danial@gmail.com>.
+is Copyright (C) 2006-2019 <al.danial@gmail.com>.
 
 The manual page was originally written by Jari Aalto <jari.aalto@cante.net>.
 

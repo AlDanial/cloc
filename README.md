@@ -5,7 +5,7 @@
 * * *
 cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.
 
-Latest release:  v1.80 (October 5, 2018)
+Latest release:  v1.82 (May 3, 2019)
 
 Hosted at http://cloc.sourceforge.net/ since August 2006, cloc began the
 transition to GitHub in September 2015.
@@ -53,8 +53,8 @@ Step 3:  Invoke cloc to count your source files, directories, archives,
 or git commits.
 The executable name differs depending on whether you use the
 development source version (`cloc`), source for a
-released version (`cloc-1.80.pl`) or a Windows executable
-(`cloc-1.80.exe`).  On this page, `cloc` is the generic term
+released version (`cloc-1.82.pl`) or a Windows executable
+(`cloc-1.82.exe`).  On this page, `cloc` is the generic term
 used to refer to any of these.
 
 **a file**
@@ -359,7 +359,7 @@ and Strawberry Perl 5.24.0.1
 on an Amazon Web Services t2.micro instance running Microsoft Windows Server 2008
 (32 bit for 1.70 and 1.72; 64 bit for 1.74).
 
-Releases 1.74 through 1.80
+Releases 1.74 through 1.82
 were was built on a 32 bit Windows 7 virtual machine (IE11.Win7.For.Windows.VirtualBox.zip
 pulled from https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/)
 using Strawberry Perl 5.26.1.1.
@@ -398,6 +398,9 @@ You are encouraged to run your own virus scanners against the
 executable and also check sites such
 https://www.virustotal.com/ .
 The entries for recent versions are:
+
+cloc-1.82.exe:
+https://www.virustotal.com/#/file/2e5fb443fdefd776d7b6b136a25e5ee2048991e735042897dbd0bf92efb16563/detection
 
 cloc-1.80.exe:
 https://www.virustotal.com/#/file/9e547b01c946aa818ffad43b9ebaf05d3da08ed6ca876ef2b6847be3bf1cf8be/detection
@@ -457,7 +460,7 @@ C:> cpan -i Digest::MD5
 C:> cpan -i Regexp::Common
 C:> cpan -i Algorithm::Diff
 C:> cpan -i PAR::Packer
-C:> pp -M Digest::MD5 -c -x -o cloc-1.80.exe cloc
+C:> pp -M Digest::MD5 -c -x -o cloc-1.82.exe cloc
 </pre>
 
 A variation on the instructions above is if you installed the portable
@@ -930,6 +933,7 @@ Agda                       (agda, lagda)
 AMPLE                      (ample, dofile, startup)
 Ant                        (build.xml, build.xml)
 ANTLR Grammar              (g, g4)
+Apex Class                 (cls)
 Apex Trigger               (trigger)
 Arduino Sketch             (ino, pde)
 AsciiDoc                   (adoc, asciidoc)
@@ -947,8 +951,8 @@ builder                    (xml.builder)
 C                          (c, ec, pgc)
 C Shell                    (csh, tcsh)
 C#                         (cs)
-C++                        (C, c++, cc, cpp, CPP, cxx, inl, pcc)
-C/C++ Header               (H, h, hh, hpp, hxx)
+C++                        (C, c++, cc, CPP, cpp, cxx, inl, pcc)
+C/C++ Header               (h, H, hh, hpp, hxx)
 CCS                        (ccs)
 Chapel                     (chpl)
 Clean                      (dcl, icl)
@@ -956,7 +960,7 @@ Clojure                    (clj)
 ClojureC                   (cljc)
 ClojureScript              (cljs)
 CMake                      (cmake, CMakeLists.txt)
-COBOL                      (CBL, cbl, COB, cob)
+COBOL                      (cbl, CBL, cob, COB)
 CoffeeScript               (coffee)
 ColdFusion                 (cfm)
 ColdFusion CFScript        (cfc)
@@ -970,10 +974,11 @@ Cython                     (pyx)
 D                          (d)
 DAL                        (da)
 Dart                       (dart)
+DIET                       (dt)
 diff                       (diff)
 DITA                       (dita)
 DOORS Extension Language   (dxl)
-DOS Batch                  (BAT, bat, BTM, btm, CMD, cmd)
+DOS Batch                  (bat, BAT, BTM, btm, cmd, CMD)
 Drools                     (drl)
 DTD                        (dtd)
 dtrace                     (d)
@@ -983,18 +988,20 @@ EJS                        (ejs)
 Elixir                     (ex, exs)
 Elm                        (elm)
 Embedded Crystal           (ecr)
-ERB                        (ERB, erb)
+ERB                        (erb, ERB)
 Erlang                     (erl, hrl)
 Expect                     (exp)
 F#                         (fsi, fs, fs)
 F# Script                  (fsx)
+Fennel                     (fnl)
 Fish Shell                 (fish)
 Focus                      (focexec)
 Forth                      (4th, e4, f83, fb, forth, fpm, fr, frt, ft, fth, rx, fs, f, for)
-Fortran 77                 (F, f77, F77, FOR, FTN, ftn, pfo, f, for)
-Fortran 90                 (F90, f90)
+Fortran 77                 (F, f77, F77, FOR, ftn, FTN, pfo, f, for)
+Fortran 90                 (f90, F90)
 Fortran 95                 (f95, F95)
 Freemarker Template        (ftl)
+FXML                       (fxml)
 GDScript                   (gd)
 Gencat NLS                 (msg)
 Glade                      (glade, ui)
@@ -1018,7 +1025,6 @@ Idris                      (idr)
 Igor Pro                   (ipf)
 INI                        (ini)
 InstallShield              (ism)
-IPython Notebook           (ipynb)
 Java                       (java)
 JavaScript                 (es6, js)
 JavaServer Faces           (jsf)
@@ -1028,6 +1034,7 @@ JSON5                      (json5)
 JSP                        (jsp, jspf)
 JSX                        (jsx)
 Julia                      (jl)
+Jupyter Notebook           (ipynb)
 Kermit                     (ksc)
 Korn Shell                 (ksh)
 Kotlin                     (kt, kts)
@@ -1042,7 +1049,7 @@ LiveLink OScript           (oscript)
 Logtalk                    (lgt, logtalk)
 Lua                        (lua)
 m4                         (ac, m4)
-make                       (am, gnumakefile, Gnumakefile, makefile, Makefile, mk)
+make                       (am, gnumakefile, Gnumakefile, Makefile, makefile, mk)
 Mako                       (mako)
 Markdown                   (md)
 Mathematica                (mt, wl, wlt, m)
@@ -1087,7 +1094,7 @@ QML                        (qml)
 Qt                         (ui)
 Qt Linguist                (ts)
 Qt Project                 (pro)
-R                          (R, r)
+R                          (r, R)
 Racket                     (rkt, rktl, scrbl)
 RAML                       (raml)
 RapydScript                (pyj)
@@ -1107,12 +1114,11 @@ Scheme                     (sc, sch, scm, sld, sls, ss)
 sed                        (sed)
 SKILL                      (il)
 SKILL++                    (ils)
-Skylark                    (bzl)
 Slice                      (ice)
 Slim                       (slim)
 Smalltalk                  (st, cs)
 Smarty                     (smarty, tpl)
-Softbridge Basic           (SBL, sbl)
+Softbridge Basic           (sbl, SBL)
 Solidity                   (sol)
 SparForte                  (sp)
 Specman e                  (e)
@@ -1120,14 +1126,16 @@ SQL                        (psql, sql, SQL)
 SQL Data                   (data.sql)
 SQL Stored Procedure       (spc.sql, spoc.sql, sproc.sql, udf.sql)
 Standard ML                (fun, sig, sml)
+Starlark                   (bzl)
 Stata                      (do, DO)
 Stylus                     (styl)
+SVG                        (svg, SVG)
 Swift                      (swift)
 SWIG                       (i)
 Tcl/Tk                     (itk, tcl, tk)
 Teamcenter met             (met)
 Teamcenter mth             (mth)
-TeX                        (bst, dtx, sty, tex)
+TeX                        (bst, dtx, sty, tex, cls)
 TITAN Project File Information (tpd)
 Titanium Style Sheet       (tss)
 TOML                       (toml)
@@ -1139,13 +1147,14 @@ Vala                       (vala)
 Vala Header                (vapi)
 Velocity Template Language (vm)
 Verilog-SystemVerilog      (sv, svh, v)
-VHDL                       (VHD, vhd, VHDL, vhdl)
+VHDL                       (VHD, vhd, vhdl, VHDL)
 vim script                 (vim)
-Visual Basic               (bas, cls, ctl, dsr, frm, vb, VB, vba, VBA, VBS, vbs)
-Visual Fox Pro             (sca, SCA)
+Visual Basic               (bas, ctl, dsr, frm, vb, VB, vba, VBA, VBS, vbs, cls)
+Visual Fox Pro             (SCA, sca)
 Visualforce Component      (component)
 Visualforce Page           (page)
 Vuejs Component            (vue)
+WebAssembly                (wast, wat)
 Windows Message File       (mc)
 Windows Module Definition  (def)
 Windows Resource File      (rc, rc2)
@@ -1157,10 +1166,10 @@ xBase                      (prg)
 xBase Header               (ch)
 XHTML                      (xhtml)
 XMI                        (XMI, xmi)
-XML                        (XML, xml)
+XML                        (xml, XML)
 XQuery                     (xq, xquery)
-XSD                        (XSD, xsd)
-XSLT                       (XSL, xsl, XSLT, xslt)
+XSD                        (xsd, XSD)
+XSLT                       (xsl, XSL, XSLT, xslt)
 Xtend                      (xtend)
 yacc                       (y)
 YAML                       (yaml, yml)
@@ -1172,22 +1181,27 @@ file with the `--read-lang-def` or `--force-lang-def` options.
 
 These file extensions map to multiple languages:
 
-*   `.cl` files could be Lisp or OpenCL
-*   `.cs` files could be C# or Smalltalk
-*   `.d` files could be D or dtrace
-*   `.f` or `.for` files could be Fortran or Forth
-*   `.fs` files could be Forth or F#
-*   `.inc` files could be PHP or Pascal
-*   `.jl` files could be Lisp or Julia
-*   `.m` files could be MATLAB, Mathematica, Mercury, MUMPS, or Objective C
-*   `.pl` files could be Perl or Prolog
-*   `.pp` files could be Pascal or Puppet
-*   `.pro` files could be IDL, Prolog, or a Qt Project
-*   `.ts` files could be TypeScript or Qt Linguist
-*   `.ui` files could be Qt or Glade
-*   `.v` files could be Coq or Verilog/SystemVerilog
-*   `build.xml` files could be Ant or XML
-*   `pom.xml` files could be Maven or XML
+*   `cl`  files could be Lisp or OpenCL
+*   `cls` files could be Visual Basic, TeX or Apex Class
+*   `cs`  files could be C# or Smalltalk
+*   `d`   files could be D or dtrace
+*   `f`   files could be Fortran 77 or Forth
+*   `fnc` files could be Oracle PL or SQL
+*   `for` files could be Fortran 77 or Forth
+*   `fs`  files could be F# or Forth
+*   `inc` files could be PHP or Pascal
+*   `itk` files could be Tcl or Tk
+*   `jl`  files could be Lisp or Julia
+*   `lit` files could be PL or M
+*   `m`   files could be MATLAB, Mathematica, Objective C, MUMPS or Mercury
+*   `p6`  files could be Perl or Prolog
+*   `pl`  files could be Perl or Prolog
+*   `PL`  files could be Perl or Prolog
+*   `pp`  files could be Pascal or Puppet
+*   `pro` files could be IDL, Qt Project, Prolog or ProGuard
+*   `ts`  files could be TypeScript or Qt Linguist
+*   `ui`  files could be Qt or Glade
+*   `v`   files could be Verilog-SystemVerilog or Coq
 
 cloc has subroutines that attempt to identify the correct language based
 on the file's contents for these special cases. Language identification
