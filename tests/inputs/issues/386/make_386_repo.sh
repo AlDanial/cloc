@@ -83,3 +83,6 @@ cloc       --diff ${HASH3}.tar ${HASH4}.tar
 echo '++++++++++++++++++++++++++++++++++++++++++'
 cloc --git --diff ${HASH4}     ${HASH1}
 cloc       --diff ${HASH4}.tar ${HASH1}.tar
+echo '++++++++++++++++++++++++++++++++++++++++++'
+cloc --git --diff ${HASH1}     ${HASH4}
+cloc       --diff ${HASH1}.tar ${HASH4}.tar
