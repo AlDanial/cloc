@@ -2492,7 +2492,7 @@ The first step, creating a database, matches that from Example 1 so
 we'll go straight to the second step of creating the desired
 SQL query.  We'll store this one in the file `by_file_with_language.sql`:
 
-```
+```sql
 -- file by_file_with_language.sql
 select File, Language, nBlank   as blank  ,
                        nComment as comment,
@@ -2523,7 +2523,6 @@ yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/include/gtest/internal/gtest-para
 
 [](1}}})
 <a name="wrapping_cloc_in_other_scripts"></a> []({{{1)
-    *   [](#wrapping-cloc-in-other-scripts-)
 ##  [Wrapping cloc in other scripts &#9650;](#___top "click to go to top of document")
 
 More complex code counting solutions are possible by wrapping
@@ -2620,8 +2619,9 @@ The most common cause for this warning is the existence of comment markers
 in string literals.  While language compilers and interpreters are smart
 enough to recognize that ``"/*"`` (for example) is a string and not a comment,
 cloc is fooled.  File path globs, as in this line of JavaScript
-<pre>var paths = globArray("**/*.js", {cwd: srcPath});
-</pre>
+```js
+var paths = globArray("**/*.js", {cwd: srcPath});
+```
 are frequent culprits.
 
 In an attempt to overcome this problem, a different
