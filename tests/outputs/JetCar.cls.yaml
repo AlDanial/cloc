@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.81
+  elapsed_seconds    : 0.00656890869140625
+  n_files            : 1
+  n_lines            : 62
+  files_per_second   : 152.232288037166
+  lines_per_second   : 9438.4018583043
+  report_file        : JetCar.cls.yaml
+'Visual Basic' :
+  nFiles: 1
+  blank: 19
+  comment: 15
+  code: 28
+SUM: 
+  blank: 19
+  comment: 15
+  code: 28
+  nFiles: 1

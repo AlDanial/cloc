@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.81
+  elapsed_seconds    : 0.00648021697998047
+  n_files            : 1
+  n_lines            : 187
+  files_per_second   : 154.315820456218
+  lines_per_second   : 28857.0584253127
+  report_file        : /home/al/git-cloc/tests/outputs/issues/380/wrapper.pl.yaml
+'Perl' :
+  nFiles: 1
+  blank: 44
+  comment: 72
+  code: 71
+SUM: 
+  blank: 44
+  comment: 72
+  code: 71
+  nFiles: 1

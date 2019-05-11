@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.81
+  elapsed_seconds    : 0.00712394714355469
+  n_files            : 1
+  n_lines            : 37
+  files_per_second   : 140.371619812584
+  lines_per_second   : 5193.7499330656
+  report_file        : RemoteSiteHelperTest.cls.yaml
+'Apex Class' :
+  nFiles: 1
+  blank: 3
+  comment: 6
+  code: 28
+SUM: 
+  blank: 3
+  comment: 6
+  code: 28
+  nFiles: 1

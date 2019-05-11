@@ -235,6 +235,61 @@ my @Tests = (
                     'ref'  => '../tests/inputs/issues/318/Rcs.yaml',  # results in input dir
                 },
 
+                {
+                    'name' => 'distinguish TeX from VB (github issue #341)',
+                    'cd'   => '../tests/inputs/issues/341',
+                    'args' => '.',
+                    'ref'  => '../tests/outputs/issues/341/results.yaml',
+                },
+
+                {
+                    'name' => '--strip-str-comments (github issue #350)',
+                    'cd'   => '../tests/inputs/issues/350',
+                    'args' => '--strip-str-comments .',
+                    'ref'  => '../tests/outputs/issues/350/fs.go.yaml',
+                },
+
+                {
+                    'name' => 'Java comments in strings, issue #365',
+                    'cd'   => '../tests/inputs/issues/365',
+                    'args' => 'RSpecTests.java',
+                    'ref'  => '../tests/outputs/issues/365/results.yaml',
+                },
+
+                {
+                    'name' => 'Arduino IDE 0xA0 characters',
+                    'cd'   => '../tests/inputs/issues/370',
+                    'args' => 'arduino_issue_370.ino',
+                    'ref'  => '../tests/outputs/issues/370/results.yaml',
+                },
+
+                {
+                    'name' => 'Python docstrings --docstring-as-code',
+                    'cd'   => '../tests/inputs/issues/375',
+                    'args' => '--docstring-as-code docstring.py',
+                    'ref'  => '../tests/outputs/issues/375/results.yaml',
+                },
+
+                {
+                    'name' => 'Perl v. Prolog',
+                    'cd'   => '../tests/inputs/issues/380',
+                    'args' => 'wrapper.pl',
+                    'ref'  => '../tests/outputs/issues/380/wrapper.pl.yaml',
+                },
+
+                {
+                    'name' => 'Java comments and continuation lines issue 381',
+                    'cd'   => '../tests/inputs/issues/381',
+                    'args' => 'issue381.java',
+                    'ref'  => '../tests/outputs/issues/381/issue381.java.yaml',
+                },
+
+                {
+                    'name' => 'C comments w/ backslashed quote in strings issue 381',
+                    'cd'   => '../tests/inputs/issues/381',
+                    'args' => '--strip-str-comments issue381.c',
+                    'ref'  => '../tests/outputs/issues/381/issue381.c.yaml',
+                },
 
 #               {
 #                   'name' => '--count-and--diff with --out',

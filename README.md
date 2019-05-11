@@ -5,38 +5,42 @@
 * * *
 cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.
 
-Latest release:  v1.80 (October 5, 2018)
+Latest release:  v1.82 (May 3, 2019)
 
 Hosted at http://cloc.sourceforge.net/ since August 2006, cloc began the
 transition to GitHub in September 2015.
 
-*   [Quick Start](#Quick_Start)
-*   [Overview](#Overview)
+*   [Quick Start](#quick-start-)
+*   [Overview](#overview-)
 *   [Download](https://github.com/AlDanial/cloc/releases/latest)
-    *   [npm, apt-get, yum, dnf, pacman, pkg, port](#apt-get)
-    *   [Stable release](#Stable)
-    *   [Development version](#Dev)
-*   [License](#License)
-*   [Why Use cloc?](#why_use)
-*   [Other Counters](#Other_Counters)
-*   [Basic Use](#Basic_Use)
-*   [Building a Windows Executable](#building_exe)
-*   [Options](#Options)
-*   [Recognized Languages](#Languages)
-*   [How it Works](#How_it_works)
-*   [Advanced Use](#Advanced_Use)
-    *   [Remove Comments from Source Code](#strip_comments)
-    *   [Work with Compressed Archives](#compressed_arch)
-    *   [Differences](#diff)
-    *   [Create Custom Language Definitions](#custom_lang)
-    *   [Combine Reports](#combine_reports)
-    *   [SQL](#sql)
-    *   [Third Generation Language Scale Factors](#scale_factors)
-*   [Limitations](#Limitations)
-*   [How to Request Support for Additional Languages](#AdditionalLanguages)
-*   [Features Currently in Development](#in_progress)
-*   [Acknowledgments](#Acknowledgments)
-*   [Copyright](#Copyright)
+    *   [Install via package manager](#install-via-package-manager)
+    *   [Stable release](#stable-release)
+    *   [Development version](#development-version)
+*   [License](#license-)
+*   [Why Use cloc?](#why-use-cloc-)
+*   [Other Counters](#other-counters-)
+*   [Building a Windows Executable](#building-a-windows-executable-)
+*   [Basic Use](#basic-use-)
+*   [Options](#options-)
+*   [Recognized Languages](#recognized-languages-)
+*   [How it Works](#how-it-works-)
+*   [Advanced Use](#advanced-use-)
+    *   [Remove Comments from Source Code](#remove-comments-from-source-code-)
+    *   [Work with Compressed Archives](#work-with-compressed-archives-)
+    *   [Differences](#differences-)
+    *   [Create Custom Language Definitions](#create-custom-language-definitions-)
+    *   [Combine Reports](#combine-reports-)
+    *   [SQL](#sql-)
+    *   [Custom Column Output](#custom-column-output-)
+    *   [Wrapping cloc in other scripts](#wrapping-cloc-in-other-scripts-)
+    *   [Count specific git branch](#count-specific-git-branch-)
+    *   [Third Generation Language Scale Factors](#third-generation-language-scale-factors-)
+*   [Complex regular subexpression recursion limit ](#complex-regular-subexpression-recursion-limit-)
+*   [Limitations](#limitations-)
+*   [How to Request Support for Additional Languages](#how-to-request-support-for-additional-languages-)
+*   [Features Currently in Development](#features-currently-in-development-)
+*   [Acknowledgments](#acknowledgments-)
+*   [Copyright](#copyright-)
 
 <a name="Quick_Start"></a>      []({{{1)
 # [Quick Start &#9650;](#___top "click to go to top of document")
@@ -49,8 +53,8 @@ Step 3:  Invoke cloc to count your source files, directories, archives,
 or git commits.
 The executable name differs depending on whether you use the
 development source version (`cloc`), source for a
-released version (`cloc-1.80.pl`) or a Windows executable
-(`cloc-1.80.exe`).  On this page, `cloc` is the generic term
+released version (`cloc-1.82.pl`) or a Windows executable
+(`cloc-1.82.exe`).  On this page, `cloc` is the generic term
 used to refer to any of these.
 
 **a file**
@@ -355,7 +359,7 @@ and Strawberry Perl 5.24.0.1
 on an Amazon Web Services t2.micro instance running Microsoft Windows Server 2008
 (32 bit for 1.70 and 1.72; 64 bit for 1.74).
 
-Releases 1.74 through 1.80
+Releases 1.74 through 1.82
 were was built on a 32 bit Windows 7 virtual machine (IE11.Win7.For.Windows.VirtualBox.zip
 pulled from https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/)
 using Strawberry Perl 5.26.1.1.
@@ -394,6 +398,9 @@ You are encouraged to run your own virus scanners against the
 executable and also check sites such
 https://www.virustotal.com/ .
 The entries for recent versions are:
+
+cloc-1.82.exe:
+https://www.virustotal.com/#/file/2e5fb443fdefd776d7b6b136a25e5ee2048991e735042897dbd0bf92efb16563/detection
 
 cloc-1.80.exe:
 https://www.virustotal.com/#/file/9e547b01c946aa818ffad43b9ebaf05d3da08ed6ca876ef2b6847be3bf1cf8be/detection
@@ -453,7 +460,7 @@ C:> cpan -i Digest::MD5
 C:> cpan -i Regexp::Common
 C:> cpan -i Algorithm::Diff
 C:> cpan -i PAR::Packer
-C:> pp -M Digest::MD5 -c -x -o cloc-1.80.exe cloc
+C:> pp -M Digest::MD5 -c -x -o cloc-1.82.exe cloc
 </pre>
 
 A variation on the instructions above is if you installed the portable
@@ -509,50 +516,51 @@ To run cloc on Windows computers, one must first open up a command (aka DOS) win
 <pre>
 prompt> cloc --help
 
-Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report files>
+Usage: cloc [options] &lt;file(s)/dir(s)/git hash(es)&gt; | &lt;set 1&gt; &lt;set 2&gt; | &lt;report files&gt;
 
  Count, or compute differences of, physical lines of source code in the
- given files (may be archives such as compressed tarballs or zip files)
- and/or recursively below the given directories.
+ given files (may be archives such as compressed tarballs or zip files,
+ or git commit hashes or branch names) and/or recursively below the
+ given directories.
 
  Input Options
-   --extract-with=CMD        This option is only needed if cloc is unable
+   --extract-with=&lt;cmd&gt;      This option is only needed if cloc is unable
                              to figure out how to extract the contents of
                              the input file(s) by itself.
-                             Use CMD to extract binary archive files (e.g.:
-                             .tar.gz, .zip, .Z).  Use the literal '>FILE<' as
+                             Use &lt;cmd&gt; to extract binary archive files (e.g.:
+                             .tar.gz, .zip, .Z).  Use the literal '&gt;FILE&lt;' as
                              a stand-in for the actual file(s) to be
                              extracted.  For example, to count lines of code
                              in the input files
                                 gcc-4.2.tar.gz  perl-5.8.8.tar.gz
                              on Unix use
-                               --extract-with='gzip -dc >FILE< | tar xf -'
+                               --extract-with='gzip -dc &gt;FILE&lt; | tar xf -'
                              or, if you have GNU tar,
-                               --extract-with='tar zxf >FILE<'
+                               --extract-with='tar zxf &gt;FILE&lt;'
                              and on Windows use, for example:
-                               --extract-with="\"c:\Program Files\WinZip\WinZip32.exe\" -e -o >FILE< ."
+                               --extract-with="\"c:\Program Files\WinZip\WinZip32.exe\" -e -o &gt;FILE&lt; ."
                              (if WinZip is installed there).
-   --list-file=FILE          Take the list of file and/or directory names to
-                             process from FILE, which has one file/directory
+   --list-file=&lt;file&gt;        Take the list of file and/or directory names to
+                             process from &lt;file&gt;, which has one file/directory
                              name per line.  Only exact matches are counted;
                              relative path names will be resolved starting from
                              the directory where cloc is invoked.
                              See also --exclude-list-file.
-   --vcs=VCS                 Invoke a system call to VCS to obtain a list of
-                             files to work on.  If VCS is 'git', then will
+   --vcs=&lt;VCS&gt;               Invoke a system call to &lt;VCS&gt; to obtain a list of
+                             files to work on.  If &lt;VCS&gt; is 'git', then will
                              invoke 'git ls-files' to get a file list and
                              'git submodule status' to get a list of submodules
                              whose contents will be ignored.  See also --git
                              which accepts git commit hashes and branch names.
-                             If VCS is 'svn' then will invoke 'svn list -R'.
+                             If &lt;VCS&gt; is 'svn' then will invoke 'svn list -R'.
                              The primary benefit is that cloc will then skip
                              files explicitly excluded by the versioning tool
                              in question, ie, those in .gitignore or have the
                              svn:ignore property.
-                             Alternatively VCS may be any system command
+                             Alternatively &lt;VCS&gt; may be any system command
                              that generates a list of files.
                              Note:  cloc must be in a directory which can read
-                             the files as they are returned by VCS.  cloc will
+                             the files as they are returned by &lt;VCS&gt;.  cloc will
                              not download files from remote repositories.
                              'svn list -R' may refer to a remote repository
                              to obtain file names (and therefore may require
@@ -568,43 +576,50 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
    --by-file                 Report results for every source file encountered.
    --by-file-by-lang         Report results for every source file encountered
                              in addition to reporting by language.
-   --count-and-diff SET1 SET2
+   --config &lt;file&gt;           Read command line switches from &lt;file&gt; instead of
+                             the default location of /home/al/.config/cloc/options.txt.
+                             The file should contain one switch, along with
+                             arguments (if any), per line.  Blank lines and lines
+                             beginning with '#' are skipped.  Options given on
+                             the command line take priority over entries read from
+                             the file.
+   --count-and-diff &lt;set1&gt; &lt;set2&gt;
                              First perform direct code counts of source file(s)
-                             of SET1 and SET2 separately, then perform a diff
+                             of &lt;set1&gt; and &lt;set2&gt; separately, then perform a diff
                              of these.  Inputs may be pairs of files, directories,
                              or archives.  If --out or --report-file is given,
                              three output files will be created, one for each
                              of the two counts and one for the diff.  See also
                              --diff, --diff-alignment, --diff-timeout,
                              --ignore-case, --ignore-whitespace.
-   --diff SET1 SET2          Compute differences in code and comments between
-                             source file(s) of SET1 and SET2.  The inputs
+   --diff &lt;set1&gt; &lt;set2&gt;      Compute differences in code and comments between
+                             source file(s) of &lt;set1&gt; and &lt;set2&gt;.  The inputs
                              may be any mix of files, directories, archives,
-                             or git commit hashes (Unix only).
-                             Use --diff-alignment to generate a list showing
-                             which file pairs where compared.  See also
-                             --count-and-diff, --diff-alignment, --diff-timeout,
-                             --ignore-case, --ignore-whitespace.
-   --diff-timeout N          Ignore files which take more than N seconds
-                             to process.  Default is 10 seconds.
-                             (Large files with many repeated lines can cause
-                             Algorithm::Diff::sdiff() to take hours.)
+                             or git commit hashes.  Use --diff-alignment to
+                             generate a list showing which file pairs where
+                             compared.  See also --count-and-diff, --diff-alignment,
+                             --diff-timeout, --ignore-case, --ignore-whitespace.
+   --diff-timeout &lt;N&gt;        Ignore files which take more than &lt;N&gt; seconds
+                             to process.  Default is 10 seconds.  Setting &lt;N&gt;
+                             to 0 allows unlimited time.  (Large files with many
+                             repeated lines can cause Algorithm::Diff::sdiff()
+                             to take hours.)
    --follow-links            [Unix only] Follow symbolic links to directories
                              (sym links to files are always followed).
-   --force-lang=LANG,EXT
-                             Process all files that have a EXT extension
-                             with the counter for language LANG.  For
+   --force-lang=&lt;lang&gt;[,&lt;ext&gt;]
+                             Process all files that have a &lt;ext&gt; extension
+                             with the counter for language &lt;lang&gt;.  For
                              example, to count all .f files with the
                              Fortran 90 counter (which expects files to
                              end with .f90) instead of the default Fortran 77
                              counter, use
                                --force-lang="Fortran 90",f
-                             If EXT is omitted, every file will be counted
-                             with the LANG counter.  This option can be
+                             If &lt;ext&gt; is omitted, every file will be counted
+                             with the &lt;lang&gt; counter.  This option can be
                              specified multiple times (but that is only
-                             useful when EXT is given each time).
+                             useful when &lt;ext&gt; is given each time).
                              See also --script-lang, --lang-no-ext.
-   --force-lang-def=FILE     Load language processing filters from FILE,
+   --force-lang-def=&lt;file&gt;   Load language processing filters from &lt;file&gt;,
                              then use these filters instead of the built-in
                              filters.  Note:  languages which map to the same
                              file extension (for example:
@@ -614,7 +629,8 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
                              processing that is not expressed in language
                              definition files.  Use --read-lang-def to define
                              new language filters without replacing built-in
-                             filters (see also --write-lang-def).
+                             filters (see also --write-lang-def,
+                             --write-lang-def-incl-dup).
    --git                     Forces the inputs to be interpreted as git targets
                              (commit hashes, branch names, et cetera) if these
                              are not first identified as file or directory
@@ -632,14 +648,14 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
    --ignore-case             Ignore changes in case; consider upper- and lower-
                              case letters equivalent when comparing files with
                              --diff.  See also --ignore-whitespace.
-   --lang-no-ext=LANG        Count files without extensions using the LANG
+   --lang-no-ext=&lt;lang&gt;      Count files without extensions using the &lt;lang&gt;
                              counter.  This option overrides internal logic
                              for files without extensions (where such files
                              are checked against known scripting languages
                              by examining the first line for #!).  See also
                              --force-lang, --script-lang.
-   --max-file-size=MB        Skip files larger than MB megabytes when
-                             traversing directories.  By default, MB=100.
+   --max-file-size=&lt;MB&gt;      Skip files larger than &lt;MB&gt; megabytes when
+                             traversing directories.  By default, &lt;MB&gt;=100.
                              cloc's memory requirement is roughly twenty times
                              larger than the largest file so running with
                              files larger than 100 MB on a computer with less
@@ -657,24 +673,25 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
                              This is usually a bad idea and should only be
                              attempted with text files that have embedded
                              binary data.
-   --read-lang-def=FILE      Load new language processing filters from FILE
+   --read-lang-def=&lt;file&gt;    Load new language processing filters from &lt;file&gt;
                              and merge them with those already known to cloc.
-                             If FILE defines a language cloc already knows
+                             If &lt;file&gt; defines a language cloc already knows
                              about, cloc's definition will take precedence.
                              Use --force-lang-def to over-ride cloc's
-                             definitions (see also --write-lang-def ).
-   --script-lang=LANG,S      Process all files that invoke S as a #!
+                             definitions (see also --write-lang-def,
+                             --write-lang-def-incl-dup).
+   --script-lang=&lt;lang&gt;,&lt;s&gt;  Process all files that invoke &lt;s&gt; as a #!
                              scripting language with the counter for language
-                             LANG.  For example, files that begin with
+                             &lt;lang&gt;.  For example, files that begin with
                                 #!/usr/local/bin/perl5.8.8
                              will be counted with the Perl counter by using
                                 --script-lang=Perl,perl5.8.8
                              The language name is case insensitive but the
-                             name of the script language executable, S,
+                             name of the script language executable, &lt;s&gt;,
                              must have the right case.  This option can be
                              specified multiple times.  See also --force-lang,
                              --lang-no-ext.
-   --sdir=DIR                Use DIR as the scratch directory instead of
+   --sdir=&lt;dir&gt;              Use &lt;dir&gt; as the scratch directory instead of
                              letting File::Temp chose the location.  Files
                              written to this location are not removed at
                              the end of the run (as they are with File::Temp).
@@ -682,16 +699,27 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
                              a performance boost at the expense of counting
                              files with identical contents multiple times
                              (if such duplicates exist).
-   --stdin-name=FILE         Give a file name to use to determine the language
+   --stdin-name=&lt;file&gt;       Give a file name to use to determine the language
                              for standard input.  (Use - as the input name to
                              receive source code via STDIN.)
-   --strip-comments=EXT      For each file processed, write to the current
+   --strip-comments=&lt;ext&gt;    For each file processed, write to the current
                              directory a version of the file which has blank
                              and commented lines removed (in-line comments
                              persist).  The name of each stripped file is the
-                             original file name with .EXT appended to it.
+                             original file name with .&lt;ext&gt; appended to it.
                              It is written to the current directory unless
                              --original-dir is on.
+   --strip-str-comments      Replace comment markers embedded in strings with
+                             'xx'.  This attempts to work around a limitation
+                             in Regexp::Common::Comment where comment markers
+                             embedded in strings are seen as actual comment
+                             markers and not strings, often resulting in a
+                             'Complex regular subexpression recursion limit'
+                             warning and incorrect counts.  There are two
+                             disadvantages to using this switch:  1/code count
+                             performance drops, and 2/code generated with
+                             --strip-comments will contain different strings
+                             where ever embedded comments are found.
    --sum-reports             Input arguments are report files previously
                              created with the --report-file option.  Makes
                              a cumulative set of results containing the
@@ -718,7 +746,7 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
                              See also --unix, --show-os.
 
  Filter Options
-   --exclude-dir=D1[,D2,]    Exclude the given comma separated directories
+   --exclude-dir=&lt;D1&gt;[,D2,]  Exclude the given comma separated directories
                              D1, D2, D3, et cetera, from being scanned.  For
                              example  --exclude-dir=.cache,test  will skip
                              all files and subdirectories that have /.cache/
@@ -727,15 +755,16 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
                              and .snapshot are always excluded.
                              This option only works with individual directory
                              names so including file path separators is not
-                             allowed.  Use --fullpath and --not-match-d=REGEX
+                             allowed.  Use --fullpath and --not-match-d=&lt;regex&gt;
                              to supply a regex matching multiple subdirectories.
-   --exclude-ext=EXT1[,EXT2[...]]
+   --exclude-ext=&lt;ext1&gt;[,&lt;ext2&gt;[...]]
                              Do not count files having the given file name
                              extensions.
-   --exclude-lang=L1[,L2,]   Exclude the given comma separated languages
+   --exclude-lang=&lt;L1&gt;[,L2[...]]
+                             Exclude the given comma separated languages
                              L1, L2, L3, et cetera, from being counted.
-   --exclude-list-file=FILE  Ignore files and/or directories whose names
-                             appear in FILE.  FILE should have one file
+   --exclude-list-file=&lt;file&gt;  Ignore files and/or directories whose names
+                             appear in &lt;file&gt;.  &lt;file&gt; should have one file
                              name per line.  Only exact matches are ignored;
                              relative path names will be resolved starting from
                              the directory where cloc is invoked.
@@ -748,9 +777,15 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
                              the path as is passed in to cloc.)
                              Note:  --match-d always looks at the full
                              path and therefore is unaffected by --fullpath.
-   --include-lang=L1[,L2,]   Count only the given comma separated languages
-                             L1, L2, L3, et cetera.
-   --match-d=REGEX           Only count files in directories matching the Perl
+   --include-ext=&lt;ext1&gt;[,ext2[...]]
+                             Count only languages having the given comma
+                             separated file extensions.  Use --show-ext to
+                             see the recognized extensions.
+   --include-lang=&lt;L1&gt;[,L2[...]]
+                             Count only the given comma separated languages
+                             L1, L2, L3, et cetera.  Use --show-lang to see
+                             the list of recognized languages.
+   --match-d=&lt;regex&gt;         Only count files in directories matching the Perl
                              regex.  For example
                                --match-d='/(src|include)/'
                              only counts files in directories containing
@@ -758,7 +793,7 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
                              --match-f, and --not-match-f, --match-d always
                              compares the fully qualified path against the
                              regex.
-   --not-match-d=REGEX       Count all files except those in directories
+   --not-match-d=&lt;regex&gt;     Count all files except those in directories
                              matching the Perl regex.  Only the trailing
                              directory name is compared, for example, when
                              counting in /usr/local/lib, only 'lib' is
@@ -767,17 +802,17 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
                              the regex.
                              Do not include file path separators at the
                              beginning or end of the regex.
-   --match-f=REGEX           Only count files whose basenames match the Perl
+   --match-f=&lt;regex&gt;         Only count files whose basenames match the Perl
                              regex.  For example
                                --match-f='^[Ww]idget'
                              only counts files that start with Widget or widget.
                              Add --fullpath to include parent directories
                              in the regex instead of just the basename.
-   --not-match-f=REGEX       Count all files except those whose basenames
+   --not-match-f=&lt;regex&gt;     Count all files except those whose basenames
                              match the Perl regex.  Add --fullpath to include
                              parent directories in the regex instead of just
                              the basename.
-   --skip-archive=REGEX      Ignore files that end with the given Perl regular
+   --skip-archive=&lt;regex&gt;    Ignore files that end with the given Perl regular
                              expression.  For example, if given
                                --skip-archive='(zip|tar(.(gz|Z|bz2|xz|7z))?)'
                              the code will skip files that end with .zip,
@@ -786,36 +821,42 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
    --skip-win-hidden         On Windows, ignore hidden files.
 
  Debug Options
-   --categorized=FILE        Save names of categorized files to FILE.
-   --counted=FILE            Save names of processed source files to FILE.
-   --diff-alignment=FILE     Write to FILE a list of files and file pairs
+   --categorized=&lt;file&gt;      Save names of categorized files to &lt;file&gt;.
+   --counted=&lt;file&gt;          Save names of processed source files to &lt;file&gt;.
+   --diff-alignment=&lt;file&gt;   Write to &lt;file&gt; a list of files and file pairs
                              showing which files were added, removed, and/or
                              compared during a run with --diff.  This switch
                              forces the --diff mode on.
-   --explain=LANG            Print the filters used to remove comments for
-                             language LANG and exit.  In some cases the
+   --explain=&lt;lang&gt;          Print the filters used to remove comments for
+                             language &lt;lang&gt; and exit.  In some cases the
                              filters refer to Perl subroutines rather than
                              regular expressions.  An examination of the
                              source code may be needed for further explanation.
    --help                    Print this usage information and exit.
-   --found=FILE              Save names of every file found to FILE.
-   --ignored=FILE            Save names of ignored files and the reason they
-                             were ignored to FILE.
+   --found=&lt;file&gt;            Save names of every file found to &lt;file&gt;.
+   --ignored=&lt;file&gt;          Save names of ignored files and the reason they
+                             were ignored to &lt;file&gt;.
    --print-filter-stages     Print processed source code before and after
                              each filter is applied.
-   --show-ext[=EXT]          Print information about all known (or just the
+   --show-ext[=&lt;ext&gt;]        Print information about all known (or just the
                              given) file extensions and exit.
-   --show-lang[=LANG]        Print information about all known (or just the
+   --show-lang[=&lt;lang&gt;]      Print information about all known (or just the
                              given) languages and exit.
    --show-os                 Print the value of the operating system mode
                              and exit.  See also --unix, --windows.
-   -v[=N]                    Verbose switch (optional numeric value).
-   -verbose[=N]              Long form of -v.
+   -v[=&lt;n&gt;]                  Verbose switch (optional numeric value).
+   -verbose[=&lt;n&gt;]            Long form of -v.
    --version                 Print the version of this program and exit.
-   --write-lang-def=FILE     Writes to FILE the language processing filters
+   --write-lang-def=&lt;file&gt;   Writes to &lt;file&gt; the language processing filters
                              then exits.  Useful as a first step to creating
-                             custom language definitions (see also
-                             --force-lang-def, --read-lang-def).
+                             custom language definitions. Note: languages which
+                             map to the same file extension will be excluded.
+                             (See also --force-lang-def, --read-lang-def).
+   --write-lang-def-incl-dup=&lt;file&gt;
+                             Same as --write-lang-def, but includes duplicated
+                             extensions.  This generates a problematic language
+                             definition file because cloc will refuse to use
+                             it until duplicates are removed.
 
  Output Options
    --3                       Print third-generation language output.
@@ -825,48 +866,56 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
    --by-percent  X           Instead of comment and blank line counts, show
                              these values as percentages based on the value
                              of X in the denominator:
-                                X = 'c'   -> # lines of code
-                                X = 'cm'  -> # lines of code + comments
-                                X = 'cb'  -> # lines of code + blanks
-                                X = 'cmb' -> # lines of code + comments + blanks
+                                X = 'c'   -&gt; # lines of code
+                                X = 'cm'  -&gt; # lines of code + comments
+                                X = 'cb'  -&gt; # lines of code + blanks
+                                X = 'cmb' -&gt; # lines of code + comments + blanks
                              For example, if using method 'c' and your code
                              has twice as many lines of comments as lines
                              of code, the value in the comment column will
                              be 200%.  The code column remains a line count.
    --csv                     Write the results as comma separated values.
-   --csv-delimiter=C         Use the character C as the delimiter for comma
+   --csv-delimiter=&lt;C&gt;       Use the character &lt;C&gt; as the delimiter for comma
                              separated files instead of ,.  This switch forces
+   --file-encoding=&lt;E&gt;       Write output files using the &lt;E&gt; encoding instead of
+                             the default ASCII (&lt;E&gt; = 'UTF-7').  Examples: 'UTF-16',
+                             'euc-kr', 'iso-8859-16'.  Known encodings can be
+                             printed with
+                               perl -MEncode -e 'print join("\n", Encode-&gt;encodings(":all")), "\n"'
+   --hide-rate               Do not show line and file processing rates in the
+                             output header. This makes output deterministic.
    --json                    Write the results as JavaScript Object Notation
                              (JSON) formatted output.
    --md                      Write the results as Markdown-formatted text.
-   --out=FILE                Synonym for --report-file=FILE.
-   --progress-rate=N         Show progress update after every N files are
-                             processed (default N=100).  Set N to 0 to
+   --out=&lt;file&gt;              Synonym for --report-file=&lt;file&gt;.
+   --progress-rate=&lt;n&gt;       Show progress update after every &lt;n&gt; files are
+                             processed (default &lt;n&gt;=100).  Set &lt;n&gt; to 0 to
                              suppress progress output (useful when redirecting
                              output to STDOUT).
    --quiet                   Suppress all information messages except for
                              the final report.
-   --report-file=FILE        Write the results to FILE instead of STDOUT.
-   --sql=FILE                Write results as SQL create and insert statements
+   --report-file=&lt;file&gt;      Write the results to &lt;file&gt; instead of STDOUT.
+   --sql=&lt;file&gt;              Write results as SQL create and insert statements
                              which can be read by a database program such as
-                             SQLite.  If FILE is -, output is sent to STDOUT.
+                             SQLite.  If &lt;file&gt; is -, output is sent to STDOUT.
    --sql-append              Append SQL insert statements to the file specified
                              by --sql and do not generate table creation
                              statements.  Only valid with the --sql option.
-   --sql-project=NAME        Use NAME as the project identifier for the
+   --sql-project=&lt;name&gt;      Use &lt;name&gt; as the project identifier for the
                              current run.  Only valid with the --sql option.
-   --sql-style=STYLE         Write SQL statements in the given style instead
-                             of the default SQLite format.  Currently, the
-                             only style option is Oracle.
+   --sql-style=&lt;style&gt;       Write SQL statements in the given style instead
+                             of the default SQLite format.  Styles include
+                             'Oracle' and 'Named_Columns'.
    --sum-one                 For plain text reports, show the SUM: output line
                              even if only one input file is processed.
    --xml                     Write the results in XML.
-   --xsl=FILE                Reference FILE as an XSL stylesheet within
-                             the XML output.  If FILE is 1 (numeric one),
+   --xsl=&lt;file&gt;              Reference &lt;file&gt; as an XSL stylesheet within
+                             the XML output.  If &lt;file&gt; is 1 (numeric one),
                              writes a default stylesheet, cloc.xsl (or
                              cloc-diff.xsl if --diff is also given).
                              This switch forces --xml on.
    --yaml                    Write the results in YAML.
+
 
 </pre>
 [](1}}})
@@ -884,6 +933,7 @@ Agda                       (agda, lagda)
 AMPLE                      (ample, dofile, startup)
 Ant                        (build.xml, build.xml)
 ANTLR Grammar              (g, g4)
+Apex Class                 (cls)
 Apex Trigger               (trigger)
 Arduino Sketch             (ino, pde)
 AsciiDoc                   (adoc, asciidoc)
@@ -901,8 +951,8 @@ builder                    (xml.builder)
 C                          (c, ec, pgc)
 C Shell                    (csh, tcsh)
 C#                         (cs)
-C++                        (C, c++, cc, cpp, CPP, cxx, inl, pcc)
-C/C++ Header               (H, h, hh, hpp, hxx)
+C++                        (C, c++, cc, CPP, cpp, cxx, inl, pcc)
+C/C++ Header               (h, H, hh, hpp, hxx)
 CCS                        (ccs)
 Chapel                     (chpl)
 Clean                      (dcl, icl)
@@ -910,7 +960,7 @@ Clojure                    (clj)
 ClojureC                   (cljc)
 ClojureScript              (cljs)
 CMake                      (cmake, CMakeLists.txt)
-COBOL                      (CBL, cbl, COB, cob)
+COBOL                      (cbl, CBL, cob, COB)
 CoffeeScript               (coffee)
 ColdFusion                 (cfm)
 ColdFusion CFScript        (cfc)
@@ -924,10 +974,11 @@ Cython                     (pyx)
 D                          (d)
 DAL                        (da)
 Dart                       (dart)
+DIET                       (dt)
 diff                       (diff)
 DITA                       (dita)
 DOORS Extension Language   (dxl)
-DOS Batch                  (BAT, bat, BTM, btm, CMD, cmd)
+DOS Batch                  (bat, BAT, BTM, btm, cmd, CMD)
 Drools                     (drl)
 DTD                        (dtd)
 dtrace                     (d)
@@ -937,18 +988,20 @@ EJS                        (ejs)
 Elixir                     (ex, exs)
 Elm                        (elm)
 Embedded Crystal           (ecr)
-ERB                        (ERB, erb)
+ERB                        (erb, ERB)
 Erlang                     (erl, hrl)
 Expect                     (exp)
 F#                         (fsi, fs, fs)
 F# Script                  (fsx)
+Fennel                     (fnl)
 Fish Shell                 (fish)
 Focus                      (focexec)
 Forth                      (4th, e4, f83, fb, forth, fpm, fr, frt, ft, fth, rx, fs, f, for)
-Fortran 77                 (F, f77, F77, FOR, FTN, ftn, pfo, f, for)
-Fortran 90                 (F90, f90)
+Fortran 77                 (F, f77, F77, FOR, ftn, FTN, pfo, f, for)
+Fortran 90                 (f90, F90)
 Fortran 95                 (f95, F95)
 Freemarker Template        (ftl)
+FXML                       (fxml)
 GDScript                   (gd)
 Gencat NLS                 (msg)
 Glade                      (glade, ui)
@@ -972,7 +1025,6 @@ Idris                      (idr)
 Igor Pro                   (ipf)
 INI                        (ini)
 InstallShield              (ism)
-IPython Notebook           (ipynb)
 Java                       (java)
 JavaScript                 (es6, js)
 JavaServer Faces           (jsf)
@@ -982,6 +1034,7 @@ JSON5                      (json5)
 JSP                        (jsp, jspf)
 JSX                        (jsx)
 Julia                      (jl)
+Jupyter Notebook           (ipynb)
 Kermit                     (ksc)
 Korn Shell                 (ksh)
 Kotlin                     (kt, kts)
@@ -996,7 +1049,7 @@ LiveLink OScript           (oscript)
 Logtalk                    (lgt, logtalk)
 Lua                        (lua)
 m4                         (ac, m4)
-make                       (am, gnumakefile, Gnumakefile, makefile, Makefile, mk)
+make                       (am, gnumakefile, Gnumakefile, Makefile, makefile, mk)
 Mako                       (mako)
 Markdown                   (md)
 Mathematica                (mt, wl, wlt, m)
@@ -1036,12 +1089,12 @@ Prolog                     (P, pl, pro)
 Protocol Buffers           (proto)
 Pug                        (pug)
 PureScript                 (purs)
-Python                     (py)
+Python                     (py, pyw)
 QML                        (qml)
 Qt                         (ui)
 Qt Linguist                (ts)
 Qt Project                 (pro)
-R                          (R, r)
+R                          (r, R)
 Racket                     (rkt, rktl, scrbl)
 RAML                       (raml)
 RapydScript                (pyj)
@@ -1061,12 +1114,11 @@ Scheme                     (sc, sch, scm, sld, sls, ss)
 sed                        (sed)
 SKILL                      (il)
 SKILL++                    (ils)
-Skylark                    (bzl)
 Slice                      (ice)
 Slim                       (slim)
 Smalltalk                  (st, cs)
 Smarty                     (smarty, tpl)
-Softbridge Basic           (SBL, sbl)
+Softbridge Basic           (sbl, SBL)
 Solidity                   (sol)
 SparForte                  (sp)
 Specman e                  (e)
@@ -1074,14 +1126,16 @@ SQL                        (psql, sql, SQL)
 SQL Data                   (data.sql)
 SQL Stored Procedure       (spc.sql, spoc.sql, sproc.sql, udf.sql)
 Standard ML                (fun, sig, sml)
+Starlark                   (bzl)
 Stata                      (do, DO)
 Stylus                     (styl)
+SVG                        (svg, SVG)
 Swift                      (swift)
 SWIG                       (i)
 Tcl/Tk                     (itk, tcl, tk)
 Teamcenter met             (met)
 Teamcenter mth             (mth)
-TeX                        (bst, dtx, sty, tex)
+TeX                        (bst, dtx, sty, tex, cls)
 TITAN Project File Information (tpd)
 Titanium Style Sheet       (tss)
 TOML                       (toml)
@@ -1093,13 +1147,14 @@ Vala                       (vala)
 Vala Header                (vapi)
 Velocity Template Language (vm)
 Verilog-SystemVerilog      (sv, svh, v)
-VHDL                       (VHD, vhd, VHDL, vhdl)
+VHDL                       (VHD, vhd, vhdl, VHDL)
 vim script                 (vim)
-Visual Basic               (bas, cls, ctl, dsr, frm, vb, VB, vba, VBA, VBS, vbs)
-Visual Fox Pro             (sca, SCA)
+Visual Basic               (bas, ctl, dsr, frm, vb, VB, vba, VBA, VBS, vbs, cls)
+Visual Fox Pro             (SCA, sca)
 Visualforce Component      (component)
 Visualforce Page           (page)
 Vuejs Component            (vue)
+WebAssembly                (wast, wat)
 Windows Message File       (mc)
 Windows Module Definition  (def)
 Windows Resource File      (rc, rc2)
@@ -1111,10 +1166,10 @@ xBase                      (prg)
 xBase Header               (ch)
 XHTML                      (xhtml)
 XMI                        (XMI, xmi)
-XML                        (XML, xml)
+XML                        (xml, XML)
 XQuery                     (xq, xquery)
-XSD                        (XSD, xsd)
-XSLT                       (XSL, xsl, XSLT, xslt)
+XSD                        (xsd, XSD)
+XSLT                       (xsl, XSL, XSLT, xslt)
 Xtend                      (xtend)
 yacc                       (y)
 YAML                       (yaml, yml)
@@ -1126,22 +1181,27 @@ file with the `--read-lang-def` or `--force-lang-def` options.
 
 These file extensions map to multiple languages:
 
-*   `.cl` files could be Lisp or OpenCL
-*   `.cs` files could be C# or Smalltalk
-*   `.d` files could be D or dtrace
-*   `.f` or `.for` files could be Fortran or Forth
-*   `.fs` files could be Forth or F#
-*   `.inc` files could be PHP or Pascal
-*   `.jl` files could be Lisp or Julia
-*   `.m` files could be MATLAB, Mathematica, Mercury, MUMPS, or Objective C
-*   `.pl` files could be Perl or Prolog
-*   `.pp` files could be Pascal or Puppet
-*   `.pro` files could be IDL, Prolog, or a Qt Project
-*   `.ts` files could be TypeScript or Qt Linguist
-*   `.ui` files could be Qt or Glade
-*   `.v` files could be Coq or Verilog/SystemVerilog
-*   `build.xml` files could be Ant or XML
-*   `pom.xml` files could be Maven or XML
+*   `cl`  files could be Lisp or OpenCL
+*   `cls` files could be Visual Basic, TeX or Apex Class
+*   `cs`  files could be C# or Smalltalk
+*   `d`   files could be D or dtrace
+*   `f`   files could be Fortran 77 or Forth
+*   `fnc` files could be Oracle PL or SQL
+*   `for` files could be Fortran 77 or Forth
+*   `fs`  files could be F# or Forth
+*   `inc` files could be PHP or Pascal
+*   `itk` files could be Tcl or Tk
+*   `jl`  files could be Lisp or Julia
+*   `lit` files could be PL or M
+*   `m`   files could be MATLAB, Mathematica, Objective C, MUMPS or Mercury
+*   `p6`  files could be Perl or Prolog
+*   `pl`  files could be Perl or Prolog
+*   `PL`  files could be Perl or Prolog
+*   `pp`  files could be Pascal or Puppet
+*   `pro` files could be IDL, Qt Project, Prolog or ProGuard
+*   `ts`  files could be TypeScript or Qt Linguist
+*   `ui`  files could be Qt or Glade
+*   `v`   files could be Verilog-SystemVerilog or Coq
 
 cloc has subroutines that attempt to identify the correct language based
 on the file's contents for these special cases. Language identification
@@ -1350,7 +1410,7 @@ Java `.ear` file in Unix and Windows:
 
 [](1}}})
 <a name="diff"></a> []({{{1)
-##  [Differences](#___top "click to go to top of document")
+##  [Differences &#9650;](#___top "click to go to top of document")
 The `--diff` switch allows one to measure the relative change in
 source code and comments between two versions of a file, directory,
 or archive.  Differences reveal much more than absolute code
@@ -1365,6 +1425,15 @@ adding 102 lines of all new source?  The diff option tells how
 many lines of source were added, removed, modified or stayed
 the same, and how many lines of comments were added, removed,
 modified or stayed the same.
+
+Differences in blank lines are handled much more coarsely
+because these are stripped by cloc early on.  Unless a
+file pair is identical, cloc will report only differences
+in absolute counts of blank lines.  In other words, one
+can expect to see only entries for 'added' if the second
+file has more blanks than the first, and 'removed' if the
+situation is reversed.  The entry for 'same' will be non-zero
+only when the two files are identical.
 
 In addition to file pairs, one can give cloc pairs of
 directories, or pairs of file archives, or a file archive
@@ -2303,6 +2372,216 @@ sqlite     C/C++ Header                 1546
 </pre>
 
 [](1}}})
+<a name="custom_column_output"></a> []({{{1)
+##  [Custom Column Output &#9650;](#___top "click to go to top of document")
+Cloc's default output is a text table with five columns:
+language, file count, number of blank lines, number of comment
+lines and number of code lines.  The switches `--by-file`,
+`--3`, and `--by-percent` generate additional information but
+sometimes even those are insufficient.
+
+The `--sql` option described in the previous section offers the
+ability to create custom output.  This section has a pair of examples
+that show how to create custom columns.
+The first example includes an extra column, **Total**, which is the
+sum of the numbers of blank, comment, and code lines.
+The second shows how to include the language name when running
+with `--by-file`.
+
+**Example 1:  Add a "Totals" column.**
+
+The first step is to run cloc and save the output to a relational database,
+SQLite in this case:
+<pre>
+cloc --sql 1 --sql-project x yaml-cpp-yaml-cpp-0.5.3.tar.gz | sqlite3 counts.db
+</pre>
+(the tar file comes from the
+[YAML-C++](https://github.com/jbeder/yaml-cpp) project).
+
+Second, we craft an SQL query that returns the regular cloc output
+plus an extra column for totals, then save the SQL statement to
+a file, `query_with_totals.sql`:
+<pre>
+-- file query_with_totals.sql
+select Language, count(File)   as files                       ,
+                 sum(nBlank)   as blank                       ,
+                 sum(nComment) as comment                     ,
+                 sum(nCode)    as code                        ,
+                 sum(nBlank)+sum(nComment)+sum(nCode) as Total
+    from t group by Language order by code desc;
+</pre>
+
+Third, we run this query through SQLite using the `counts.db` database.
+We'll include the `-header` switch so that SQLite prints the
+column names:
+
+<pre>
+&gt; cat query_with_totals.sql | sqlite3 -header counts.db
+Language|files|blank|comment|code|Total
+C++|141|12786|17359|60378|90523
+C/C++ Header|110|8566|17420|51502|77488
+Bourne Shell|10|6351|6779|38264|51394
+m4|11|2037|260|17980|20277
+Python|30|1613|2486|4602|8701
+MSBuild script|11|0|0|1711|1711
+CMake|7|155|285|606|1046
+make|5|127|173|464|764
+Markdown|2|30|0|39|69
+</pre>
+
+The extra column for **Total** is there but the format is unappealing.
+Running the output through `sqlite_formatter` yields the desired result:
+
+<pre>
+&gt; cat query_with_totals.sql | sqlite3 -header counts.db | sqlite_formatter
+Language       files blank comment code  Total
+______________ _____ _____ _______ _____ _____
+C++              141 12786   17359 60378 90523
+C/C++ Header     110  8566   17420 51502 77488
+Bourne Shell      10  6351    6779 38264 51394
+m4                11  2037     260 17980 20277
+Python            30  1613    2486  4602  8701
+MSBuild script    11     0       0  1711  1711
+CMake              7   155     285   606  1046
+make               5   127     173   464   764
+Markdown           2    30       0    39    69
+</pre>
+
+The next section,
+[Wrapping cloc in other scripts](#wrapping-cloc-in-other-scripts-),
+shows one way these commands can be combined
+into a new utility program.
+
+**Example 2:  Include a column for "Language" when running with `--by-file`.**
+
+Output from `--by-file` omits each file's language to save screen real estate;
+file paths for large projects can be long and including an extra 20 or so
+characters for a Language column can be excessive.
+
+As an example, here are the first few lines of output using the same
+code base as in Example 1:
+
+<pre>
+&gt; cloc --by-file yaml-cpp-yaml-cpp-0.5.3.tar.gz
+github.com/AlDanial/cloc v 1.81  T=1.14 s (287.9 files/s, 221854.9 lines/s)
+--------------------------------------------------------------------------------------------------------------------------------------------
+File                                                                                                     blank        comment           code
+--------------------------------------------------------------------------------------------------------------------------------------------
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/configure                                                        2580           2264          13691
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/configure                                                  2541           2235          13446
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/fused-src/gtest/gtest.h                                    1972           4681          13408
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/fused-src/gmock/gmock.h                                          1585           3397           9216
+yaml-cpp-yaml-cpp-0.5.3/test/integration/gen_emitter_test.cpp                                              999              0           8760
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/aclocal.m4                                                        987            100           8712
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/m4/libtool.m4                                               760             65           7176
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/build-aux/ltmain.sh                                         959           1533           7169
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/fused-src/gmock-gtest-all.cc                                     1514           3539           6390
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/fused-src/gtest/gtest-all.cc                               1312           2896           5384
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/test/gtest_unittest.cc                                     1226           1091           5098
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/include/gtest/internal/gtest-param-util-generated.h         349            235           4559
+</pre>
+
+The absence of language identification for each file
+is a bit disappointing, but
+this can be remedied with a custom column solution.
+
+The first step, creating a database, matches that from Example 1 so
+we'll go straight to the second step of creating the desired
+SQL query.  We'll store this one in the file `by_file_with_language.sql`:
+
+<pre>
+-- file by_file_with_language.sql
+select File, Language, nBlank   as blank  ,
+                       nComment as comment,
+                       nCode    as code
+    from t order by code desc;
+</pre>
+
+Our desired extra column appears when we pass this custom SQL query
+through our database:
+
+<pre>
+&gt; cat by_file_with_language.sql | sqlite3 -header counts.db | sqlite_formatter
+File                                                                                               Language       blank comment code
+__________________________________________________________________________________________________ ______________ _____ _______ _____
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/configure                                                 Bourne Shell    2580    2264 13691
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/configure                                           Bourne Shell    2541    2235 13446
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/fused-src/gtest/gtest.h                             C/C++ Header    1972    4681 13408
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/fused-src/gmock/gmock.h                                   C/C++ Header    1585    3397  9216
+yaml-cpp-yaml-cpp-0.5.3/test/integration/gen_emitter_test.cpp                                      C++              999       0  8760
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/aclocal.m4                                                m4               987     100  8712
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/m4/libtool.m4                                       m4               760      65  7176
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/build-aux/ltmain.sh                                 Bourne Shell     959    1533  7169
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/fused-src/gmock-gtest-all.cc                              C++             1514    3539  6390
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/fused-src/gtest/gtest-all.cc                        C++             1312    2896  5384
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/test/gtest_unittest.cc                              C++             1226    1091  5098
+yaml-cpp-yaml-cpp-0.5.3/test/gmock-1.7.0/gtest/include/gtest/internal/gtest-param-util-generated.h C/C++ Header     349     235  4559
+</pre>
+
+[](1}}})
+<a name="wrapping_cloc_in_other_scripts"></a> []({{{1)
+    *   [](#wrapping-cloc-in-other-scripts-)
+##  [Wrapping cloc in other scripts &#9650;](#___top "click to go to top of document")
+
+More complex code counting solutions are possible by wrapping
+cloc in scripts or programs.  The "total lines" column from
+example 1 of [Custom Column Output](#custom-column-output-)
+could be simplified to a single command with this shell script (on Linux):
+
+<pre>
+#!/bin/sh
+#
+# These commands must be in the user's $PATH:
+#   cloc
+#   sqlite3
+#   sqlite_formatter
+#
+if test $# -eq 0 ; then
+    echo "Usage: $0  [cloc arguments]"
+    echo "       Run cloc to count lines of code with an additional"
+    echo "       output column for total lines (code+comment+blank)."
+    exit
+fi
+DBFILE=`tempfile`
+cloc --sql 1 --sql-project x $@ | sqlite3 ${DBFILE}
+SQL="select Language, count(File)   as files                       ,
+                      sum(nBlank)   as blank                       ,
+                      sum(nComment) as comment                     ,
+                      sum(nCode)    as code                        ,
+                      sum(nBlank)+sum(nComment)+sum(nCode) as Total
+         from t group by Language order by code desc;
+"
+echo ${SQL} | sqlite3 -header ${DBFILE} | sqlite_formatter
+rm ${DBFILE}
+</pre>
+
+Saving the lines above to ``total_columns.sh`` and making it
+executable (``chmod +x total_columns.sh``) would let us do
+<pre>
+./total_columns.sh yaml-cpp-yaml-cpp-0.5.3.tar.gz
+</pre>
+to directly get
+<pre>
+Language       files blank comment code  Total
+______________ _____ _____ _______ _____ _____
+C++              141 12786   17359 60378 90523
+C/C++ Header     110  8566   17420 51502 77488
+Bourne Shell      10  6351    6779 38264 51394
+m4                11  2037     260 17980 20277
+Python            30  1613    2486  4602  8701
+MSBuild script    11     0       0  1711  1711
+CMake              7   155     285   606  1046
+make               5   127     173   464   764
+Markdown           2    30       0    39    69
+</pre>
+
+Other examples:
+* Count code from a specific branch of a web-hosted
+git repository and send the results as a .csv email attachment:
+https://github.com/dannyloweatx/checkmarx
+
+
+[](1}}})
 <a name="scale_factors"></a> []({{{1)
 ##  [Third Generation Language Scale Factors &#9650;](#___top "click to go to top of document")
 
@@ -2323,6 +2602,31 @@ The biggest flaw with this approach is that gearing ratios are defined
 for logical lines of source code not physical lines (which cloc counts).
 The values in cloc's 'scale' and '3rd gen. equiv.' columns should be
 taken with a large grain of salt.
+
+[](1}}})
+<a name="complex_regex_recursion"></a> []({{{1)
+#  [Complex regular subexpression recursion limit &#9650;](#___top "click to go to top of document")
+cloc relies on the Regexp::Common module's regular expressions to remove
+comments from source code.  If comments are malformed, for example the
+``/*`` start comment marker appears in a C program without a corresponding ``*/``
+marker, the regular expression engine could enter a recursive
+loop, eventually triggering the warning
+``Complex regular subexpression recursion limit``.
+
+The most common cause for this warning is the existence of comment markers
+in string literals.  While language compilers and interpreters are smart
+enough to recognize that ``"/*"`` (for example) is a string and not a comment,
+cloc is fooled.  File path globs, as in this line of JavaScript
+<pre>var paths = globArray("**/*.js", {cwd: srcPath});
+</pre>
+are frequent culprits.
+
+In an attempt to overcome this problem, a different
+algorithm which removes comment markers in strings can be enabled
+with the ``--strip-str-comments`` switch.  Doing so, however,
+has drawbacks:  cloc
+will run more slowly and the output of ``--strip-comments``
+will contain strings that no longer match the input source.
 
 [](1}}})
 <a name="Limitations"></a> []({{{1)
@@ -2356,9 +2660,32 @@ xxxxxxx     ");
 where `xxxxxxx` represents cloc's view of commented text.
 Therefore cloc counts the five lines as two lines of C code and three
 lines of comments (lines with both code and comment are counted as code).
+
+If you suspect your code has such strings, use the switch
+``--strip-str-comments`` to switch to the algorithm which removes
+embedded comment markers.  Its use will render the five lines above as
+<pre>printf("  ");
+for (i = 0; i < 100; i++) {
+    a += i;
+}
+printf("  ");
+</pre>
+and therefore return a count of five lines of code.
+See the
+[previous section](#complex-regular-subexpression-recursion-limit-)
+on drawbacks to using ``--strip-str-comments``.
 </li>
 <li>  Embedded languages are not recognized.  For example, an HTML file containing
 JavaScript will be counted entirely as HTML.
+</li>
+<li> Python docstrings can serve several purposes.  They may
+contain documentation,
+comment out blocks of code, or they can be regular strings (when
+they appear on the right hand side of an assignment or as a function argument).
+cloc is unable to infer the meaning of docstrings by context; by default
+cloc treats all docstrings as comments.  The switch
+``--docstring-as--code``
+treats all docstrings as code.
 </li>
 </ol>
 

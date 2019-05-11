@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.81
+  elapsed_seconds    : 0.00791311264038086
+  n_files            : 1
+  n_lines            : 10
+  files_per_second   : 126.372521843929
+  lines_per_second   : 1263.72521843929
+  report_file        : /home/al/git-cloc/tests/outputs/issues/370/results.yaml
+'Arduino Sketch' :
+  nFiles: 1
+  blank: 1
+  comment: 5
+  code: 4
+SUM: 
+  blank: 1
+  comment: 5
+  code: 4
+  nFiles: 1

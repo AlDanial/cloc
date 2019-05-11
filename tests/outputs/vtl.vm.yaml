@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.81
+  elapsed_seconds    : 0.00817298889160156
+  n_files            : 1
+  n_lines            : 33
+  files_per_second   : 122.354259043174
+  lines_per_second   : 4037.69054842474
+  report_file        : ../outputs/vtl.vm.yaml
+'Velocity Template Language' :
+  nFiles: 1
+  blank: 0
+  comment: 20
+  code: 13
+SUM: 
+  blank: 0
+  comment: 20
+  code: 13
+  nFiles: 1

@@ -10,6 +10,11 @@ my @Tests = (
                     'args' => '../tests/inputs/Lookup.agda',
                 },
                 {
+                    'name' => 'Apex Class',
+                    'ref'  => '../tests/outputs/RemoteSiteHelperTest.cls.yaml',
+                    'args' => '../tests/inputs/RemoteSiteHelperTest.cls',
+                },
+                {
                     'name' => 'AsciiDoc',
                     'ref'  => '../tests/outputs/asciidoctor.adoc.yaml',
                     'args' => '../tests/inputs/asciidoctor.adoc',
@@ -130,6 +135,11 @@ my @Tests = (
                     'args' => '../tests/inputs/C-Ansi.c',
                 },
                 {
+                    'name' => 'DIET',
+                    'ref'  => '../tests/outputs/layout.dt.yaml',
+                    'args' => '../tests/inputs/layout.dt',
+                },
+                {
                     'name' => 'dir 1',
                     'ref'  => '../tests/outputs/foo_bar.yaml',
                     'args' => '../tests/inputs/foo_bar',
@@ -180,6 +190,11 @@ my @Tests = (
                     'args' => '../tests/inputs/capture.ecr',
                 },
                 {
+                    'name' => 'Fennel',    
+                    'ref'  => '../tests/outputs/generate.fnl.yaml',
+                    'args' => '../tests/inputs/generate.fnl',
+                },
+                {
                     'name' => 'Fish Shell',
                     'ref'  => '../tests/outputs/git_helpers.fish.yaml',
                     'args' => '../tests/inputs/git_helpers.fish',
@@ -213,6 +228,11 @@ my @Tests = (
                     'name' => 'Freemarker Template',
                     'ref'  => '../tests/outputs/FreemarkerTemplate.ftl.yaml',
                     'args' => '../tests/inputs/FreemarkerTemplate.ftl',
+                },
+                {
+                    'name' => 'FXML',
+                    'ref'  => '../tests/outputs/vbox.fxml.yaml',
+                    'args' => '../tests/inputs/vbox.fxml',
                 },
                 {
                     'name' => 'F#',
@@ -327,7 +347,7 @@ my @Tests = (
                     'args' => '../tests/inputs/igorpro.ipf',
                 },
                 {
-                    'name' => 'IPython Notebook (JSON count only for now)',
+                    'name' => 'Jupyter Notebook',
                     'ref'  => '../tests/outputs/Trapezoid_Rule.ipynb.yaml',
                     'args' => '../tests/inputs/Trapezoid_Rule.ipynb',
                 },
@@ -395,6 +415,11 @@ my @Tests = (
                     'name' => 'Lua',
                     'ref'  => '../tests/outputs/hello.lua.yaml',
                     'args' => '../tests/inputs/hello.lua',
+                },
+                {
+                    'name' => 'Lua nested comments',
+                    'ref'  => '../tests/outputs/nested.lua.yaml',
+                    'args' => '../tests/inputs/nested.lua',
                 },
                 {
                     'name' => 'Makefile',
@@ -542,6 +567,11 @@ my @Tests = (
                     'args' => '../tests/inputs/hi.py',
                 },
                 {
+                    'name' => 'Python wheel file',
+                    'ref'  => '../tests/outputs/test-1.0-py2.py3-none-win32.whl.yaml',
+                    'args' => '../tests/inputs/test-1.0-py2.py3-none-win32.whl',
+                },
+                {
                     'name' => 'Qt Linguist',
                     'ref'  => '../tests/outputs/i18n_de.ts.yaml',
                     'args' => '../tests/inputs/i18n_de.ts',
@@ -607,7 +637,7 @@ my @Tests = (
                     'args' => '../tests/inputs/style.scss',
                 },
                 {
-                    'name' => 'Skylark',
+                    'name' => 'Starlark',
                     'ref'  => '../tests/outputs/build.bzl.yaml',
                     'args' => '../tests/inputs/build.bzl',
                 },
@@ -712,14 +742,29 @@ my @Tests = (
                     'args' => '../tests/inputs/VisualBasic.Net.vba',
                 },
                 {
+                    'name' => 'Velocity Template Language',
+                    'ref'  => '../tests/outputs/vtl.vm.yaml',
+                    'args' => '../tests/inputs/vtl.vm',
+                },
+                {
                     'name' => 'Verilog',
                     'ref'  => '../tests/outputs/verilog.sv.yaml',
                     'args' => '../tests/inputs/verilog.sv',
                 },
                 {
+                    'name' => 'Visual Basic',
+                    'ref'  => '../tests/outputs/JetCar.cls.yaml',
+                    'args' => '../tests/inputs/JetCar.cls',
+                },
+                {
                     'name' => 'Vuejs Component',
                     'ref'  => '../tests/outputs/ItemView.vue.yaml',
                     'args' => '../tests/inputs/ItemView.vue',
+                },
+                {
+                    'name' => 'WebAssembly',
+                    'ref'  => '../tests/outputs/type.wast.yaml',
+                    'args' => '../tests/inputs/type.wast',
                 },
                 {
                     'name' => 'Windows Message',

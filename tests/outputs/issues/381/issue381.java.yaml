@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.81
+  elapsed_seconds    : 0.00729489326477051
+  n_files            : 1
+  n_lines            : 35
+  files_per_second   : 137.082197601072
+  lines_per_second   : 4797.87691603752
+  report_file        : ../../../outputs/issues/381/issue381.java.yaml
+'Java' :
+  nFiles: 1
+  blank: 5
+  comment: 3
+  code: 27
+SUM: 
+  blank: 5
+  comment: 3
+  code: 27
+  nFiles: 1
