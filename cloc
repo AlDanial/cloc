@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "1.82";  # odd number == beta; even number == stable
+my $VERSION = "1.83";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.006;
 # use modules                                  {{{1
@@ -7060,6 +7060,7 @@ sub set_constants {                          # {{{1
 #           'cls'         => 'TeX'                   ,
             'dtx'         => 'TeX'                   ,
             'bst'         => 'TeX'                   ,
+            'thrift'      => 'Thrift'                ,
             'tpl'         => 'Smarty'                ,
             'trigger'     => 'Apex Trigger'          ,
             'ttcn'        => 'TTCN'                  ,
@@ -8139,6 +8140,13 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*%'  ],
                                 [ 'remove_inline'       , '%.*$'   ],
                             ],
+    'Thrift'             => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
     'Titanium Style Sheet'  => [
                                 [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
@@ -9112,6 +9120,7 @@ sub set_constants {                          # {{{1
     'telon'                        =>   5.00,
     'tessaract'                    =>   2.00,
     'the twin'                     =>  13.33,
+    'Thrift'                       =>   2.50,
     'tiief'                        =>   5.71,
     'Titanium Style Sheet'         =>   2.00,
     'TOML'                         =>   2.76,

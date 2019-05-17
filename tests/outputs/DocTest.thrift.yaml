@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.82
+  elapsed_seconds    : 0.00740814208984375
+  n_files            : 1
+  n_lines            : 288
+  files_per_second   : 134.986611740474
+  lines_per_second   : 38876.1441812564
+  report_file        : outputs/DocTest.thrift.yaml
+'Thrift' :
+  nFiles: 1
+  blank: 57
+  comment: 134
+  code: 97
+SUM: 
+  blank: 57
+  comment: 134
+  code: 97
+  nFiles: 1

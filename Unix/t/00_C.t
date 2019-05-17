@@ -707,6 +707,11 @@ my @Tests = (
                     'args' => '../tests/inputs/LaTeX.tex',
                 },
                 {
+                    'name' => 'Thrift',
+                    'ref'  => '../tests/outputs/DocTest.thrift.yaml',
+                    'args' => '../tests/inputs/DocTest.thrift',
+                },
+                {
                     'name' => 'TOML',
                     'ref'  => '../tests/outputs/toml_example.toml.yaml',
                     'args' => '../tests/inputs/toml_example.toml',
