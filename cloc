@@ -4383,7 +4383,8 @@ sub replace_git_hash_with_tarfile {          # {{{1
     #   Regular count:
     #       Simply make a tar file of all files in the git repo.
 
-    print "-> replace_git_hash_with_tarfile()\n" if $opt_v > 2;
+    my $prt_args = join(",", @{$ra_arg_list});
+    print "-> replace_git_hash_with_tarfile($prt_args)\n" if $opt_v > 2;
 #print "ra_arg_list 1: @{$ra_arg_list}\n";
 
     my $hash_regex = qr/^([a-f\d]{5,40}|master|HEAD)$/;
@@ -4437,19 +4438,31 @@ sub replace_git_hash_with_tarfile {          # {{{1
 #use Data::Dumper;
 #print "diff_listing= "; print Dumper(\%diff_listing);
 #print "git_hash= "; print Dumper(\%git_hash);
-#print "repo_listing= "; print Dumper(\%repo_listing);
         if ($git_hash{$Left} and $git_hash{$Right}) {
 #print "A DIFF git-to-git\n";
             # git to git
             # first make a union of all files that have changed in both commits
             my %files_union = ();
 
-            my $git_list_cmd = "git diff-tree -r --no-commit-id --name-only $Left $Right";
-            print "$git_list_cmd\n" if $opt_v;
-            foreach my $file (`$git_list_cmd`) {
-                chomp($file);
+            # Strategy 1:  Union files are what git consinders have changed
+            #              between the two commits.
+##          my $git_list_cmd = "git diff-tree -r --no-commit-id --name-only $Left $Right";
+##          print "$git_list_cmd\n" if $opt_v;
+##          foreach my $file (`$git_list_cmd`) {
+##              chomp($file);
+##              $files_union{$file} = 1;
+##          }
+
+            # Strategy 2:  Union files all files that have changed in both
+            #              commits.
+            foreach my $file (keys %{$repo_listing{$Left }},
+                              keys %{$repo_listing{$Right}}) {
                 $files_union{$file} = 1;
             }
+
+#use Data::Dumper;
+#print "files_union =\n", Dumper(\%files_union);
+#print "repo_listing=\n", Dumper(\%repo_listing);
 
             # then make trucated tar files of those union files which
             # actually exist in each repo
