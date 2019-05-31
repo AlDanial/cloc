@@ -2449,7 +2449,7 @@ sub count_filesets {                         # {{{1
         $p_rbl{$Lang_L}{'comment'} += $comment_count_L;
     }
 
-    print "<- count_files()\n" if $opt_v > 2;
+    print "<- count_filesets()\n" if $opt_v > 2;
     return {
         "ignored" => \%p_ignored,
         "errors"  => \@p_errors,
@@ -3310,7 +3310,13 @@ sub rm_leading_tempdir {                     # {{{1
             last;
         }
     }
-    $clean_filename =~ s{/}{\\}g if $ON_WINDOWS; # then go back from / to \
+    if ($ON_WINDOWS) { # then go back from / to \
+        if ($opt_json) {
+            $clean_filename =~ s{/}{\\\\}g;
+        } else {
+            $clean_filename =~ s{/}{\\}g;
+        }
+    }
     return $clean_filename;
 } # 1}}}
 sub generate_sql    {                        # {{{1
