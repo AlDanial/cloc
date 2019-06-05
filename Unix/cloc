@@ -262,6 +262,7 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              forces docstrings to be counted as code.
    --follow-links            [Unix only] Follow symbolic links to directories
                              (sym links to files are always followed).
+                             See also --stat.
    --force-lang=<lang>[,<ext>]
                              Process all files that have a <ext> extension
                              with the counter for language <lang>.  For
@@ -355,6 +356,14 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              a performance boost at the expense of counting
                              files with identical contents multiple times
                              (if such duplicates exist).
+   --stat                    Some file systems (AFS, CD-ROM, FAT, HPFS, SMB)
+                             do not have directory 'nlink' counts that match
+                             the number of its subdirectories.  Consequently
+                             cloc may undercount or completely skip the
+                             contents of such file systems.  This switch forces
+                             File::Find to stat directories to obtain the
+                             correct count.  File search spead will decrease.
+                             See also --follow-links.
    --stdin-name=<file>       Give a file name to use to determine the language
                              for standard input.  (Use - as the input name to
                              receive source code via STDIN.)
@@ -667,6 +676,7 @@ my (
     $opt_strip_str_comments   ,
     $opt_file_encoding        ,
     $opt_docstring_as_code    ,
+    $opt_stat                 ,
    );
 
 my $getopt_success = GetOptions(             # {{{1
@@ -756,6 +766,7 @@ my $getopt_success = GetOptions(             # {{{1
    "strip_str_comments|strip-str-comments"   => \$opt_strip_str_comments  ,
    "file_encoding|file-encoding=s"           => \$opt_file_encoding       ,
    "docstring_as_code|docstring-as-code"     => \$opt_docstring_as_code   ,
+   "stat"                                    => \$opt_stat                ,
   );
 # 1}}}
 $config_file = $opt_config_file if defined $opt_config_file;
@@ -842,6 +853,8 @@ load_from_config_file($config_file,          # {{{2
                                                 \$opt_force_git           ,
                                                 \$opt_strip_str_comments  ,
                                                 \$opt_file_encoding       ,
+                                                \$opt_docstring_as_code   ,
+                                                \$opt_stat                ,
 );  # 2}}} Not pretty.  Not at all.
 my $HAVE_Parallel_ForkManager = undef;
 if ($opt_processes and $opt_processes > 1) {
@@ -999,6 +1012,7 @@ my $list_no_autogen = 0;
 if (defined $opt_no_autogen and scalar @ARGV == 1 and $ARGV[0] eq "list") {
     $list_no_autogen = 1;
 }
+$File::Find::dont_use_nlink = 1 if $opt_stat;
 
 die $brief_usage unless defined $opt_version         or
                         defined $opt_show_lang       or
@@ -2458,7 +2472,7 @@ sub count_filesets {                         # {{{1
         $p_rbl{$Lang_L}{'comment'} += $comment_count_L;
     }
 
-    print "<- count_files()\n" if $opt_v > 2;
+    print "<- count_filesets()\n" if $opt_v > 2;
     return {
         "ignored" => \%p_ignored,
         "errors"  => \@p_errors,
@@ -3319,7 +3333,13 @@ sub rm_leading_tempdir {                     # {{{1
             last;
         }
     }
-    $clean_filename =~ s{/}{\\}g if $ON_WINDOWS; # then go back from / to \
+    if ($ON_WINDOWS) { # then go back from / to \
+        if ($opt_json) {
+            $clean_filename =~ s{/}{\\\\}g;
+        } else {
+            $clean_filename =~ s{/}{\\}g;
+        }
+    }
     return $clean_filename;
 } # 1}}}
 sub generate_sql    {                        # {{{1
@@ -6992,6 +7012,7 @@ sub set_constants {                          # {{{1
             'pyx'         => 'Cython'                ,
             'qml'         => 'QML'                   ,
             'rb'          => 'Ruby'                  ,
+            'podspec'     => 'Ruby'                  ,
             'rake'        => 'Ruby'                  ,
          #  'resx'        => 'ASP.NET'               ,
             'rex'         => 'Oracle Reports'        ,
@@ -11681,6 +11702,7 @@ sub load_from_config_file {                  # {{{1
                                                  $rs_strip_str_comments  ,
                                                  $rs_file_encoding       ,
                                                  $rs_docstring_as_code   ,
+                                                 $rs_stat                ,
         ) = @_;
         # look for runtime configuration file in
         #    $ENV{'HOME'}/.config/cloc/options.txt         -> POSIX
@@ -11792,7 +11814,8 @@ sub load_from_config_file {                  # {{{1
             else             { ${$rs_show_lang} = $4; }
         } elsif (!defined ${$rs_strip_str_comments}  and /(strip_str_comments|strip-str-comments)/)      { ${$rs_strip_str_comments} = 1;
         } elsif (!defined ${$rs_file_encoding}       and /file_encoding|file-encoding(=|\s+)(\S+)/)      { ${$rs_file_encoding}      = $2;
-        } elsif (!defined ${$rs_docstring_as_code}       and /docstring_as_code|docstring-as-code/)      { ${$rs_docstring_as_code}  = 1;
+        } elsif (!defined ${$rs_docstring_as_code}   and /docstring_as_code|docstring-as-code/)          { ${$rs_docstring_as_code}  = 1;
+        } elsif (!defined ${$rs_stat}                and /stat/)                                         { ${$rs_stat}               = 1;
         }
 
     }
