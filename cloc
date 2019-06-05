@@ -6989,6 +6989,7 @@ sub set_constants {                          # {{{1
             'pyx'         => 'Cython'                ,
             'qml'         => 'QML'                   ,
             'rb'          => 'Ruby'                  ,
+            'podspec'     => 'Ruby'                  ,
             'rake'        => 'Ruby'                  ,
          #  'resx'        => 'ASP.NET'               ,
             'rex'         => 'Oracle Reports'        ,
