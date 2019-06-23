@@ -386,8 +386,9 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              --strip-comments will contain different strings
                              where ever embedded comments are found.
    --sum-reports             Input arguments are report files previously
-                             created with the --report-file option.  Makes
-                             a cumulative set of results containing the
+                             created with the --report-file option in plain
+                             format (eg. not JSON, YAML, XML, or SQL).
+                             Makes a cumulative set of results containing the
                              sum of data from the individual report files.
    --processes=NUM           [Available only on systems with a recent version
                              of the Parallel::ForkManager module.  Not
@@ -411,6 +412,8 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              See also --unix, --show-os.
 
  ${BB}Filter Options${NN}
+   --exclude-content=<regex> Exclude files containing text that matches the given
+                             regular expression.
    --exclude-dir=<D1>[,D2,]  Exclude the given comma separated directories
                              D1, D2, D3, et cetera, from being scanned.  For
                              example  --exclude-dir=.cache,test  will skip
@@ -610,6 +613,7 @@ my (
     $opt_v                    ,
     $opt_vcs                  ,
     $opt_version              ,
+    $opt_exclude_content      ,
     $opt_exclude_lang         ,
     $opt_exclude_list_file    ,
     $opt_exclude_dir          ,
@@ -686,6 +690,7 @@ my $getopt_success = GetOptions(             # {{{1
    "counted=s"                               => \$opt_counted             ,
    "include_ext|include-ext=s"               => \$opt_include_ext         ,
    "include_lang|include-lang=s"             => \$opt_include_lang        ,
+   "exclude_content|exclude-content=s"       => \$opt_exclude_content     ,
    "exclude_lang|exclude-lang=s"             => \$opt_exclude_lang        ,
    "exclude_dir|exclude-dir=s"               => \$opt_exclude_dir         ,
    "exclude_list_file|exclude-list-file=s"   => \$opt_exclude_list_file   ,
@@ -777,6 +782,7 @@ load_from_config_file($config_file,          # {{{2
                                                 \$opt_counted             ,
                                                 \$opt_include_ext         ,
                                                 \$opt_include_lang        ,
+                                                \$opt_exclude_content     ,
                                                 \$opt_exclude_lang        ,
                                                 \$opt_exclude_dir         ,
                                                 \$opt_exclude_list_file   ,
@@ -1520,6 +1526,11 @@ foreach my $FH (@fh) {  # loop over each pair of file sets
                           \%Error_Codes                         ,
                                \@Errors                         ,
                                \%Ignored                        );
+    if ($opt_exclude_content) {
+        exclude_by_regex($opt_exclude_content,              # in
+                        \%{$unique_source_file{$FH}},       # in/out
+                        \%Ignored);                         # out
+    }
     printf "%2d: %8d unique file%s.                          \r",
         $n_set,
         plural_form(scalar keys %unique_source_file)
@@ -1751,6 +1762,11 @@ remove_duplicate_files($fh                          ,   # in
                       \%Error_Codes                 ,   # in
                            \@Errors                 ,   # out
                            \%Ignored                );  # out
+if ($opt_exclude_content) {
+    exclude_by_regex($opt_exclude_content,              # in
+                    \%unique_source_file ,              # in/out
+                    \%Ignored);                         # out
+}
 printf "%8d unique file%s.                              \n",
     plural_form(scalar keys %unique_source_file)
     unless $opt_quiet;
@@ -1769,8 +1785,7 @@ if ( $max_processes == 0) {
     %Results_by_Language= %{$part->{'results_by_language'}};
     %Ignored = ( %Ignored, %{$part->{'ignored'}});
     push ( @Errors, @{$part->{'errors'}});
-}
-else {
+} else {
     # Do not create more processes than the number of files to be processed
     my $num_files = scalar @sorted_files;
     my $num_processes = $num_files >= $max_processes ? $max_processes : $num_files;
@@ -1859,6 +1874,27 @@ if ($opt_count_diff) {
     exit if $opt_count_diff > 3;
     goto Top_of_Processing_Loop;
 }
+sub exclude_by_regex {                       # {{{1
+    my ($regex,
+        $rh_unique_source_file, # in/out
+        $rh_ignored           , # out
+       ) = @_;
+    my @exclude = ();
+    foreach my $file (keys %{$rh_unique_source_file}) {
+        my $line_num = 0;
+        foreach my $line (read_file($file)) {
+            ++$line_num;
+            if ($line =~ /$regex/) {
+                $rh_ignored->{$file} = "line $line_num match for --exclude-content=$regex";
+                push @exclude, $file;
+                last;
+            }
+        }
+    }
+    foreach my $file (@exclude) {
+        delete $rh_unique_source_file->{$file};
+    }
+} # 1}}}
 sub get_max_processes {			                   # {{{1
     # If user has specified valid number of processes, use that.
     if (defined $opt_processes) {
@@ -5620,6 +5656,9 @@ sub write_file {                             # {{{1
         }
         if ($opt_json) {
             print $OUT "[{", join("}, {", @json_lines), "}]\n";
+        }
+        if (!$opt_json and !$opt_yaml and !$opt_xml and !$opt_csv) {
+            print $OUT join("\n", @lines), "\n";
         }
     } else {
         print $OUT join("\n", @lines), "\n";
@@ -13650,6 +13689,7 @@ sub load_from_config_file {                  # {{{1
                                                  $rs_counted             ,
                                                  $rs_include_ext         ,
                                                  $rs_include_lang        ,
+                                                 $rs_exclude_content     ,
                                                  $rs_exclude_lang        ,
                                                  $rs_exclude_dir         ,
                                                  $rs_exclude_list_file   ,
@@ -13753,6 +13793,7 @@ sub load_from_config_file {                  # {{{1
         } elsif (!defined ${$rs_counted}             and /counted(=|\s+)(.*?)$/)                         { ${$rs_counted}            = $2;
         } elsif (!defined ${$rs_include_ext}         and /include_ext|include-ext(=|\s+)(.*?)$/)         { ${$rs_include_ext}        = $2;
         } elsif (!defined ${$rs_include_lang}        and /include_lang|include-lang(=|\s+)(.*?)$/)       { ${$rs_include_lang}       = $2;
+        } elsif (!defined ${$rs_exclude_content}     and /exclude_content|exclude-content(=|\s+)(.*?)$/) { ${$rs_exclude_content}    = $2;
         } elsif (!defined ${$rs_exclude_lang}        and /exclude_lang|exclude-lang(=|\s+)(.*?)$/)       { ${$rs_exclude_lang}       = $2;
         } elsif (!defined ${$rs_exclude_dir}         and /exclude_dir|exclude-dir(=|\s+)(.*?)$/)         { ${$rs_exclude_dir}        = $2;
         } elsif (!defined ${$rs_explain}             and /explain(=|\s+)(.*?)$/)                         { ${$rs_explain}            = $2;

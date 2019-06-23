@@ -291,6 +291,20 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/381/issue381.c.yaml',
                 },
 
+                {
+                    'name' => '--exclude-content issue 396',
+                    'cd'   => '../tests/inputs',
+                    'args' => '--exclude-content Lambda acpclust.R sample.R utilities.R',
+                    'ref'  => '../tests/outputs/issues/396/excl.yaml',
+                },
+
+                {
+                    'name' => '--exclude-content w/--diff issue 396',
+                    'cd'   => '../tests/inputs/issues/280',
+                    'args' => '--exclude-content Copyright --diff L R',
+                    'ref'  => '../tests/outputs/issues/396/excl_diff.yaml',
+                },
+
 #               {
 #                   'name' => '--count-and--diff with --out',
 #                   'cd'   => '../tests/inputs/issues/220',
