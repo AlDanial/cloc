@@ -2002,6 +2002,10 @@ SUM:                         15556         900921        1284892        5831741
 -------------------------------------------------------------------------------
 </pre>
 
+One limitation of the `--sum-reports` feature is that the individual counts must
+be saved in the plain text format.  Counts saved as
+XML, JSON, YAML, or SQL will produce errors if used in a summation.
+
 [](1}}})
 <a name="sql"></a> []({{{1)
 ##  [SQL &#9650;](#___top "click to go to top of document")

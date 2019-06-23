@@ -2561,6 +2561,7 @@ sub combine_results {                        # {{{1
     my $found_language = 0;
 
     foreach my $file (@{$ra_report_files}) {
+        my $n_results_found = 0;
         my $IN = new IO::File $file, "r";
         if (!defined $IN) {
             warn "Unable to read $file; ignoring.\n";
@@ -2574,7 +2575,7 @@ sub combine_results {                        # {{{1
                    (\d+)\s+         # blank
                    (\d+)\s+         # comments
                    (\d+)\s+         # code
-                   (                #    next four entries missing with -nno3
+                   (                #    next four entries missing with -no3
                    x\s+             # x
                    \d+\.\d+\s+      # scale
                    =\s+             # =
@@ -2601,12 +2602,13 @@ sub combine_results {                        # {{{1
                     $rhh_count->{$file}{'code'   } += $5;
                     $rhh_count->{$file}{'scaled' } += $7 if $opt_3;
                 }
+                ++$n_results_found;
             } elsif ($opt_by_file  and
                 m{^(.*?)\s+         # language
                    (\d+)\s+         # blank
                    (\d+)\s+         # comments
                    (\d+)\s+         # code
-                   (                #    next four entries missing with -nno3
+                   (                #    next four entries missing with -no3
                    x\s+             # x
                    \d+\.\d+\s+      # scale
                    =\s+             # =
@@ -2630,8 +2632,11 @@ sub combine_results {                        # {{{1
                     $rhh_count->{$file}{'code'   } += $4;
                     $rhh_count->{$file}{'scaled' } += $6 if $opt_3;
                 }
+                ++$n_results_found;
             }
         }
+        warn "No counts found in $file--is the file format correct?\n"
+            unless $n_results_found;
     }
     print "<- combine_results\n" if $opt_v > 2;
     return $found_language;
