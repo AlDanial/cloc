@@ -12563,12 +12563,14 @@ sub strip_leading_dir {                      # {{{1
        $leading =~ s{\\}{/}g;
         foreach my $F (@filenames) {
             $F =~ s{\\}{/}g;
+			$F =~ s{\Q$leading}{};
         }
     }
-    foreach my $F (@filenames) {
-        $F =~ s{^$leading}{};
-    }
-
+	else{
+		foreach my $F (@filenames) {
+			$F =~ s{^$leading}{};
+		}
+	}
     print "<- strip_leading_dir()\n" if $opt_v > 2;
     return @filenames;
 
