@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.83
+  elapsed_seconds    : 0.0073249340057373
+  n_files            : 1
+  n_lines            : 209
+  files_per_second   : 136.520001301956
+  lines_per_second   : 28532.6802721088
+  report_file        : tests/outputs/class.imba.yaml
+'Imba' :
+  nFiles: 1
+  blank: 71
+  comment: 30
+  code: 108
+SUM: 
+  blank: 71
+  comment: 30
+  code: 108
+  nFiles: 1

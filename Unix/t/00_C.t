@@ -352,6 +352,11 @@ my @Tests = (
                     'args' => '../tests/inputs/Trapezoid_Rule.ipynb',
                 },
                 {
+                    'name' => 'Imba',
+                    'ref'  => '../tests/outputs/class.imba.yaml',
+                    'args' => '../tests/inputs/class.imba',
+                },
+                {
                     'name' => 'INI',
                     'ref'  => '../tests/outputs/wpedia.ini.yaml',
                     'args' => '../tests/inputs/wpedia.ini',

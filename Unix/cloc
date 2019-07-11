@@ -7019,6 +7019,7 @@ sub set_constants {                          # {{{1
             'idl'         => 'IDL'                   ,
             'idr'         => 'Idris'                 ,
             'lidr'        => 'Literate Idris'        ,
+            'imba'        => 'Imba'                  ,
             'prefs'       => 'INI'                   ,
             'lektorproject'=> 'INI'                   ,
             'buildozer.spec'=> 'INI'                   ,
@@ -8080,11 +8081,18 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
-    'Literate Idris'        => [
+    'Literate Idris'     => [
                                 [ 'remove_matches'      , '^[^>]'  ],
                             ],
-    'InstallShield'      => [   [ 'remove_html_comments',          ],
-                                [ 'call_regexp_common'  , 'HTML'   ], ],
+    'InstallShield'      => [
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
+    'Imba'               => [
+                                [ 'remove_matches'      , '^\s*#\s'],
+                                [ 'remove_inline'       , '#\s.*$' ],
+                                [ 'remove_between_regex', '###', '###' ],
+                            ],
     'Jam'                => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
@@ -9259,6 +9267,7 @@ sub set_constants {                          # {{{1
     'iew'                          =>   5.71,
     'ifps/plus'                    =>   2.50,
     'Igor Pro'                     =>   4.00,
+    'Imba'                         =>   3.00,
     'imprs'                        =>   2.00,
     'informix'                     =>   2.58,
     'ingres'                       =>   2.00,
