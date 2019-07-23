@@ -248,13 +248,13 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              may be any mix of files, directories, archives,
                              or git commit hashes.  Use --diff-alignment to
                              generate a list showing which file pairs where
-                             compared.  See also --count-and-diff, --diff-alignment,
-                             --diff-timeout, --ignore-case, --ignore-whitespace.
+                             compared.  See also --count-and-diff, --diff-alignment.
+                             --diff-timeout, --ignore-case, --ignore-whitespace,
    --diff-timeout <N>        Ignore files which take more than <N> seconds
                              to process.  Default is 10 seconds.  Setting <N>
                              to 0 allows unlimited time.  (Large files with many
                              repeated lines can cause Algorithm::Diff::sdiff()
-                             to take hours.)
+                             to take hours.) See also --timeout.
    --docstring-as-code       cloc considers docstrings to be comments, but this is
                              not always correct as docstrings represent regular
                              strings when they appear on the right hand side of an
@@ -390,6 +390,12 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              format (eg. not JSON, YAML, XML, or SQL).
                              Makes a cumulative set of results containing the
                              sum of data from the individual report files.
+   --timeout <N>             Ignore files which take more than <N> seconds
+                             to process at any of the language's filter stages.
+                             The default maximum number of seconds spent on a
+                             filter stage is the number of lines in the file
+                             divided by one thousand.  Setting <N> to 0 allows
+                             unlimited time.  See also --diff-timeout.
    --processes=NUM           [Available only on systems with a recent version
                              of the Parallel::ForkManager module.  Not
                              available on Windows.] Sets the maximum number of
@@ -603,6 +609,7 @@ my (
     $opt_diff                 ,
     $opt_diff_alignment       ,
     $opt_diff_timeout         ,
+    $opt_timeout              ,
     $opt_html                 ,
     $opt_ignored              ,
     $opt_counted              ,
@@ -701,6 +708,7 @@ my $getopt_success = GetOptions(             # {{{1
    "diff"                                    => \$opt_diff                ,
    "diff-alignment|diff_alignment=s"         => \$opt_diff_alignment      ,
    "diff-timeout|diff_timeout=i"             => \$opt_diff_timeout        ,
+   "timeout=i"                               => \$opt_timeout             ,
    "html"                                    => \$opt_html                ,
    "ignored=s"                               => \$opt_ignored             ,
    "quiet"                                   => \$opt_quiet               ,
@@ -793,6 +801,7 @@ load_from_config_file($config_file,          # {{{2
                                                 \$opt_diff                ,
                                                 \$opt_diff_alignment      ,
                                                 \$opt_diff_timeout        ,
+                                                \$opt_timeout             ,
                                                 \$opt_html                ,
                                                 \$opt_ignored             ,
                                                 \$opt_quiet               ,
@@ -905,6 +914,11 @@ if (defined $opt_diff_timeout) {
     $opt_diff_timeout = 2**31 unless $opt_diff_timeout > 0;
 } else {
     $opt_diff_timeout  =10; # seconds
+}
+if (defined $opt_timeout) {
+    # if defined but with a value of <= 0, set to 2^31 seconds = 68 years
+    $opt_timeout = 2**31 unless $opt_timeout > 0;
+    # else is computed dynamically, ref $max_duration_sec
 }
 $opt_csv               = 1  if $opt_csv_delimiter;
 $ON_WINDOWS            = 1  if $opt_force_on_windows;
@@ -5797,7 +5811,10 @@ sub rm_comments {                            # {{{1
         # a corresponding */ can cause huge delays so put a timer on this.
         my $max_duration_sec = scalar(@lines)/1000.0; # est lines per second
            $max_duration_sec = 1.0 if $max_duration_sec < 1;
-#print "max_duration_sec=$max_duration_sec\n";
+        if (defined $opt_timeout) {
+            $max_duration_sec = $opt_timeout if $opt_timeout > 0;
+        }
+#my $T_start = Time::HiRes::time();
         eval {
             local $SIG{ALRM} = sub { die "alarm\n" };
             alarm $max_duration_sec;
@@ -5810,11 +5827,14 @@ sub rm_comments {                            # {{{1
             die unless $@ eq "alarm\n";
             push @{$raa_Errors},
                 [ $Error_Codes{'Line count, exceeded timeout'}, $file ];
+            @lines = ();
             if ($opt_v) {
                 warn "rm_comments($subroutine): exceeded timeout for $file--ignoring\n";
             }
             next;
         }
+#print "end time = ",Time::HiRes::time() - $T_start;
+
         print "   rm_comments after $subroutine line count=",
             scalar(@lines), "\n" if $opt_v > 2;
 
@@ -13709,6 +13729,7 @@ sub load_from_config_file {                  # {{{1
                                                  $rs_diff                ,
                                                  $rs_diff_alignment      ,
                                                  $rs_diff_timeout        ,
+                                                 $rs_timeout             ,
                                                  $rs_html                ,
                                                  $rs_ignored             ,
                                                  $rs_quiet               ,
@@ -13811,7 +13832,8 @@ sub load_from_config_file {                  # {{{1
         } elsif (!defined ${$rs_count_diff}          and /count_and_diff|count-and-diff/)                { ${$rs_count_diff}         = 1;
         } elsif (!defined ${$rs_diff}                and /diff/)                                         { ${$rs_diff}               = 1;
         } elsif (!defined ${$rs_diff_alignment}      and /diff-alignment|diff_alignment(=|\s+)(.*?)$/)   { ${$rs_diff_alignment}     = $2;
-        } elsif (!defined ${$rs_diff_timeout}        and /diff-timeout|diff_timeout(=|\s+)i/)            { ${$rs_diff_timeout}       = $2;
+        } elsif (!defined ${$rs_diff_timeout}        and /diff-timeout|diff_timeout(=|\s+)i/)            { ${$rs_diff_timeout}       = $1;
+        } elsif (!defined ${$rs_timeout}             and /timeout(=|\s+)i/)                              { ${$rs_timeout}            = $1;
         } elsif (!defined ${$rs_html}                and /html/)                                         { ${$rs_html}               = 1;
         } elsif (!defined ${$rs_ignored}             and /ignored(=|\s+)(.*?)$/)                         { ${$rs_ignored}            = $2;
         } elsif (!defined ${$rs_quiet}               and /quiet/)                                        { ${$rs_quiet}              = 1;
