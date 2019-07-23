@@ -33,12 +33,12 @@ my @Tests = (
                     'cd'   => 'cloc_submodule_test',
                 },
 
-                {
-                    'name' => 'diff f15bf042b f647093e8b',
-                    'args' => '--git --diff f15bf042b f647093e8b',
-                    'ref'  => '../tests/outputs/git_tests/diff_f15bf042b_f647093e8b.yaml',
-                    'cd'   => 'cloc_submodule_test',
-                },
+#               {
+#                   'name' => 'diff f15bf042b f647093e8b',
+#                   'args' => '--git --diff f15bf042b f647093e8b',
+#                   'ref'  => '../tests/outputs/git_tests/diff_f15bf042b_f647093e8b.yaml',
+#                   'cd'   => 'cloc_submodule_test',
+#               },
 
                 {
                     'name' => 'count and diff part I',

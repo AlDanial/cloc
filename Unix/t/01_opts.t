@@ -65,18 +65,18 @@ my @Tests = (
                     'args' => '--by-file --fullpath --not-match-d bar/bee issues/114',
                     'ref'  => '../tests/outputs/issues/114/T7.yaml',
                 },
-                {
-                    'name' => 'git submodule handling (github issue #131 T1)',
-                    'cd'   => '../tests/inputs',
-                    'args' => 'issues/131',
-                    'ref'  => '../tests/outputs/issues/131/T1.yaml',
-                },
-                {
-                    'name' => 'git submodule handling (github issue #131 T2)',
-                    'cd'   => '../tests/inputs',
-                    'args' => '--vcs git issues/131',
-                    'ref'  => '../tests/outputs/issues/131/T2.yaml',
-                },
+#               {
+#                   'name' => 'git submodule handling (github issue #131 T1)',
+#                   'cd'   => '../tests/inputs',
+#                   'args' => 'issues/131',
+#                   'ref'  => '../tests/outputs/issues/131/T1.yaml',
+#               },
+#               {
+#                   'name' => 'git submodule handling (github issue #131 T2)',
+#                   'cd'   => '../tests/inputs',
+#                   'args' => '--vcs git issues/131',
+#                   'ref'  => '../tests/outputs/issues/131/T2.yaml',
+#               },
                 {
                     'name' => 'all files (github issue #132 T1)',
                     'cd'   => '../tests/inputs',
