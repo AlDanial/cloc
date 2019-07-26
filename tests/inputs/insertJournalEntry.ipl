@@ -1,0 +1,54 @@
+/*
+https://www.ibm.com/developerworks/community/wikis/home?lang=en#!/wiki/Tivoli+Netcool+Impact/page/Policy+Language+Code+Library
+ */
+//--------------------------------------------------------------------
+//
+// insertJournalEntry- this IPL function will create a journal entry
+//                     of 'text' for event with serial# 'serial' in
+//                     data source 'datasource'.
+//
+//                     The OOB function for creating journal entries
+//                     does not support 2+ entries for same serial
+//                     in same second.
+//
+//--------------------------------------------------------------------
+
+Function insertJournalEntry ( datasource, serial, text )
+{
+
+  UID = 16;  // user impact
+  Chrono = GetDate();
+  randNum = Random(100000);   // this is added to support 2+ entries made for same serial# in same second
+  KeyField = serial + ":" + UID + ":" + Chrono + ":" + randNum;
+
+  // journal entry text (jet) array - 16 "text fields" each varchar(255)
+  jet = { "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" };
+
+  index = 0;
+  while( (Length(text)>0) and (index<Length(jet)) )
+  {
+    jet[index] = Substring(text, 0, 256);
+    if(Length(text)>255)
+    {
+      text = Substring(text, 256, Length(text));
+    }
+    else
+    {
+      text="";
+    }
+    index = index + 1;
+  }
+
+  insertStmt = "insert into alerts.journal ( KeyField,Serial,UID,Chrono,Text1,Text2,Text3,Text4,Text5,Text6,Text7,Text8,Text9,T
+ext10,Text11,Text12,Text13,Text14,Text15,Text16)";
+  insertStmt = insertStmt + " values ( '" + KeyField + "', " + serial + ", " + UID + ", " + Chrono;
+  index=0;
+  while(index<Length(jet))
+  {
+    insertStmt = insertStmt + ",'" + Replace(jet[index], "'", "\"") + "'";
+    index = index + 1;
+  }
+  insertStmt = insertStmt + ")";
+
+  DirectSQL( datasource, insertStmt, False );
+}

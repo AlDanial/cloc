@@ -362,6 +362,11 @@ my @Tests = (
                     'args' => '../tests/inputs/wpedia.ini',
                 },
                 {
+                    'name' => 'IPL',
+                    'ref'  => '../tests/outputs/insertJournalEntry.ipl.yaml',
+                    'args' => '../tests/inputs/insertJournalEntry.ipl',
+                },
+                {
                     'name' => 'Java',
                     'ref'  => '../tests/outputs/Java.java.yaml',
                     'args' => '../tests/inputs/Java.java',

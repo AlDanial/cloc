@@ -7041,10 +7041,11 @@ sub set_constants {                          # {{{1
             'lidr'        => 'Literate Idris'        ,
             'imba'        => 'Imba'                  ,
             'prefs'       => 'INI'                   ,
-            'lektorproject'=> 'INI'                   ,
-            'buildozer.spec'=> 'INI'                   ,
+            'lektorproject'=> 'INI'                  ,
+            'buildozer.spec'=> 'INI'                 ,
             'ini'         => 'INI'                   ,
             'ism'         => 'InstallShield'         ,
+            'ipl'         => 'IPL'                   ,
             'pro'         => 'IDL/Qt Project/Prolog/ProGuard' ,
             'ig'          => 'Modula3'               ,
             'il'          => 'SKILL'                 ,
@@ -8104,14 +8105,19 @@ sub set_constants {                          # {{{1
     'Literate Idris'     => [
                                 [ 'remove_matches'      , '^[^>]'  ],
                             ],
-    'InstallShield'      => [
-                                [ 'remove_html_comments',          ],
-                                [ 'call_regexp_common'  , 'HTML'   ],
-                            ],
     'Imba'               => [
                                 [ 'remove_matches'      , '^\s*#\s'],
                                 [ 'remove_inline'       , '#\s.*$' ],
                                 [ 'remove_between_regex', '###', '###' ],
+                            ],
+    'InstallShield'      => [
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
+    'IPL'                => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Jam'                => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -9300,6 +9306,7 @@ sub set_constants {                          # {{{1
     'interlisp'                    =>   1.38,
     'interpreted basic'            =>   0.75,
     'interpreted c'                =>   0.63,
+    'IPL'                          =>   2.00,
     'iqlisp'                       =>   1.38,
     'iqrp'                         =>   6.15,
     'j2ee'                         =>   1.60,

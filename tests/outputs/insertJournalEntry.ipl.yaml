@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.83
+  elapsed_seconds    : 0.00725007057189941
+  n_files            : 1
+  n_lines            : 54
+  files_per_second   : 137.929691867539
+  lines_per_second   : 7448.20336084712
+  report_file        : insertJournalEntry.ipl.yaml
+'IPL' :
+  nFiles: 1
+  blank: 6
+  comment: 15
+  code: 33
+SUM: 
+  blank: 6
+  comment: 15
+  code: 33
+  nFiles: 1
