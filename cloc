@@ -1077,6 +1077,7 @@ my %Extension_Collision = (
     'TypeScript/Qt Linguist'                        => [ 'ts'   ] ,
     'Verilog-SystemVerilog/Coq'                     => [ 'v'    ] ,
     'Visual Basic/TeX/Apex Class'                   => [ 'cls'  ] ,
+    'Scheme/SaltStack'                              => [ 'sls'  ] ,
 );
 my @Autogen_to_ignore = no_autogen_files($list_no_autogen);
 if ($opt_force_lang_def) {
@@ -4394,6 +4395,11 @@ sub print_language_info {                    # {{{1
         push @{$extensions{'Ant'}}  , "build.xml";
         delete $extensions{'Ant/XML'};
     }
+    if (!$language or $language =~ /^(Scheme|SaltStack)$/i) {
+        push @{$extensions{'Scheme'}}    , "sls";
+        push @{$extensions{'SaltStack'}} , "sls";
+        delete $extensions{'Scheme/SaltStack'};
+    }
     if ($opt_explain) {
         return unless $extensions{$language};
         if ($prefix) {
@@ -5290,6 +5296,8 @@ sub classify_file {                          # {{{1
                 return Qt_or_Glade( $full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'C#/Smalltalk') {
                 return Csharp_or_Smalltalk( $full_file, $rh_Err, $raa_errors);
+            } elsif ($Language_by_Extension{$extension} eq 'Scheme/SaltStack') {
+                return Scheme_or_SaltStack( $full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'Visual Basic/TeX/Apex Class') {
                 my $lang_VB_T_A = "";
                 Visual_Basic_or_TeX_or_Apex($full_file ,
@@ -7354,7 +7362,7 @@ sub set_constants {                          # {{{1
             'ss'          => 'Scheme'                ,
             'scm'         => 'Scheme'                ,
             'sch'         => 'Scheme'                ,
-            'sls'         => 'Scheme'                ,
+            'sls'         => 'Scheme/SaltStack'      ,
             'sld'         => 'Scheme'                ,
             'tsv'         => 'RobotFramework'        ,
             'robot'       => 'RobotFramework'        ,
@@ -8469,6 +8477,10 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'SaltStack'          => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
     'SAS'                => [
                                 [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_between_general', '*', ';' ],
@@ -8482,6 +8494,7 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'Scheme/SaltStack' => [ [ 'die' ,          ], ], # never called
     'Scheme'             => [
                                 [ 'remove_matches'      , '^\s*;'  ],
                                 [ 'remove_inline'       , ';.*$'   ],
@@ -9528,6 +9541,7 @@ sub set_constants {                          # {{{1
     'Fish Shell'                   =>   3.81,
     'C Shell'                      =>   3.81,
     'siebel tools '                =>   6.15,
+    'SaltStack'                    =>   2.00,
     'SAS'                          =>   1.5 ,
     'Sass'                         =>   1.5 ,
     'simplan'                      =>   2.22,
@@ -12167,6 +12181,42 @@ sub Visual_Basic_or_TeX_or_Apex {            # {{{1
 
     print "<- Visual_Basic_or_TeX_or_Apex($file: VB=$VB_points, TeX=$tex_points, Apex=$apex_points\n" if $opt_v > 2;
     return $lang;
+} # 1}}}
+sub Scheme_or_SaltStack {                    # {{{1
+    my ($file        , # in
+        $rh_Err      , # in   hash of error codes
+        $raa_errors  , # out
+       ) = @_;
+
+    print "-> Scheme_or_SaltStack($file)\n" if $opt_v > 2;
+
+    my $lang = undef;
+    my $IN = new IO::File $file, "r";
+    if (!defined $IN) {
+        push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
+        return $lang;
+    }
+    my $Sch_points = 0;
+    my $SS_points  = 0;
+    while (<$IN>) {
+        next if /^\s*$/;
+        if (/{\%.*%}/) {
+            $SS_points += 5;
+        } elsif (/map\.jinja\b/) {
+            $SS_points += 5;
+        } elsif (/\((define|lambda|let|cond|do)\s/) {
+            $Sch_points += 1;
+        } else {
+        }
+    }
+    $IN->close;
+
+    print "<- Scheme_or_SaltStack($file: Scheme=$Sch_points, SaltStack=$SS_points\n" if $opt_v > 2;
+    if ($Sch_points > $SS_points) {
+        return "Scheme";
+    } else {
+        return "SaltStack";
+    }
 } # 1}}}
 sub html_colored_text {                      # {{{1
     # http://www.pagetutor.com/pagetutor/makapage/pics/net216-2.gif

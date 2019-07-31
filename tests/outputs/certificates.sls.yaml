@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.83
+  elapsed_seconds    : 0.00753998756408691
+  n_files            : 1
+  n_lines            : 62
+  files_per_second   : 132.626213438735
+  lines_per_second   : 8222.82523320158
+  report_file        : ../outputs/certificates.sls.yaml
+'SaltStack' :
+  nFiles: 1
+  blank: 6
+  comment: 1
+  code: 55
+SUM: 
+  blank: 6
+  comment: 1
+  code: 55
+  nFiles: 1

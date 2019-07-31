@@ -647,6 +647,16 @@ my @Tests = (
                     'args' => '../tests/inputs/style.scss',
                 },
                 {
+                    'name' => 'SaltStack',
+                    'ref'  => '../tests/outputs/certificates.sls.yaml',
+                    'args' => '../tests/inputs/certificates.sls',
+                },
+                {
+                    'name' => 'Scheme',
+                    'ref'  => '../tests/outputs/scheme.sls.yaml',
+                    'args' => '../tests/inputs/scheme.sls',
+                },
+                {
                     'name' => 'Starlark',
                     'ref'  => '../tests/outputs/build.bzl.yaml',
                     'args' => '../tests/inputs/build.bzl',
