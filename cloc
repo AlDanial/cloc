@@ -164,7 +164,7 @@ Usage:
         Example:    cloc --diff Python-3.5.tar.xz python-3.6/
 
 $script --help  shows full documentation on the options.
-http://$URL has numerous examples and more information.
+https://$URL has numerous examples and more information.
 ";
 my $usage  = "
 Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report files>
@@ -4622,6 +4622,7 @@ sub git_archive {                            # {{{1
         # Avoid "Argument list too long" for the git archive command
         # by splitting the inputs into sets of 10,000 files (issue 273).
         my $FILES_PER_ARCHIVE = 1_000;
+           $FILES_PER_ARCHIVE =   100 if $ON_WINDOWS; # github.com/AlDanial/cloc/issues/404
 
         my $n_files  = scalar(@{$A2});
         $n_sets = $n_files/$FILES_PER_ARCHIVE;
