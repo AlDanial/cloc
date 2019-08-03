@@ -2826,19 +2826,6 @@ sub diff_report     {                        # {{{1
         $first_column = "Report File";
     }
 
-    my $header_line  = sprintf "%s v %s", $URL, $version;
-    my $sum_files    = 1;
-    my $sum_lines    = 1;
-       $header_line .= sprintf("  T=%.2f s (%.1f files/s, %.1f lines/s)",
-                        $elapsed_sec           ,
-                        $sum_files/$elapsed_sec,
-                        $sum_lines/$elapsed_sec) unless $opt_sum_reports or $opt_hide_rate;
-    if ($Style eq "txt") {
-        push @results, output_header($header_line, $hyphen_line, $BY_FILE);
-    } elsif ($Style eq "csv") {
-        die "csv";
-    }
-
     # column headers
     if (!$opt_3 and $BY_FILE) {
         my $spacing_n = $spacing_1 - 11;
@@ -2913,13 +2900,17 @@ sub diff_report     {                        # {{{1
     }
     push @results, $hyphen_line;
     push @results, "SUM:";
+    my $sum_files    = 0;
+    my $sum_lines    = 0;
     foreach my $S (qw(same modified added removed)) {
         my $indent = $spacing_1 - 2;
         my $line .= sprintf " %-${indent}s", $S;
             if ($BY_FILE) {
                 $line .= sprintf "   ";
+                $sum_files += 1;
             } else {
                 $line .= sprintf "  %${spacing_2}s", $sum{'nFiles'}{$S};
+                $sum_files += $sum{'nFiles'}{$S};
             }
         if ($opt_by_percent) {
             my $DEN = compute_denominator($opt_by_percent,
@@ -2939,8 +2930,19 @@ sub diff_report     {                        # {{{1
                 $sum{'comment'}{$S} ,
                 $sum{'code'}{$S}    ;
         }
+        $sum_lines += $sum{'blank'}{$S} + $sum{'comment'}{$S} + $sum{'code'}{$S};
         push @results, $line;
     }
+
+    my $header_line  = sprintf "%s v %s", $URL, $version;
+       $header_line .= sprintf("  T=%.2f s (%.1f files/s, %.1f lines/s)",
+                        $elapsed_sec           ,
+                        $sum_files/$elapsed_sec,
+                        $sum_lines/$elapsed_sec) unless $opt_sum_reports or $opt_hide_rate;
+    if ($Style eq "txt") {
+        unshift @results, output_header($header_line, $hyphen_line, $BY_FILE);
+    }
+
     push @results, $hyphen_line;
     write_xsl_file() if $opt_xsl and $opt_xsl eq $CLOC_XSL;
     print "<- diff_report\n" if $opt_v > 2;
