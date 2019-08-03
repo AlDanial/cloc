@@ -305,6 +305,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/396/excl_diff.yaml',
                 },
 
+                {
+                    'name' => 'Python with /* in strings issue 405',
+                    'cd'   => '../tests/inputs/issues/405',
+                    'args' => 'globs.py',
+                    'ref'  => '../tests/outputs/issues/405/globs.py.yaml',
+                },
+
 #               {
 #                   'name' => '--count-and--diff with --out',
 #                   'cd'   => '../tests/inputs/issues/220',

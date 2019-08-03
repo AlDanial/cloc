@@ -7615,6 +7615,9 @@ sub set_constants {                          # {{{1
             'python3.3'=> 'Python'                ,
             'python3.4'=> 'Python'                ,
             'python3.5'=> 'Python'                ,
+            'python3.6'=> 'Python'                ,
+            'python3.7'=> 'Python'                ,
+            'python3.8'=> 'Python'                ,
             'rexx'     => 'Rexx'                  ,
             'regina'   => 'Rexx'                  ,
             'ruby'     => 'Ruby'                  ,
@@ -8387,6 +8390,8 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'Python'             => [
+                                [ 'remove_matches'      , '/\*'    ],
+                                [ 'remove_matches'      , '\*/'    ],
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'docstring_to_C'                 ],
                                 [ 'call_regexp_common'  , 'C'      ],
