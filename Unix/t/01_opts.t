@@ -312,6 +312,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/405/globs.py.yaml',
                 },
 
+                {
+                    'name' => '--exclude-dir and --follow-link issue 407',
+                    'cd'   => '../tests/inputs/issues/407',
+                    'args' => '--follow-link --exclude-dir Test count_dir',
+                    'ref'  => '../tests/outputs/issues/407/results.yaml',
+                },
+
 #               {
 #                   'name' => '--count-and--diff with --out',
 #                   'cd'   => '../tests/inputs/issues/220',

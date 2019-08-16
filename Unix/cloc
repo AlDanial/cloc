@@ -4999,10 +4999,11 @@ sub manual_find_preprocessor {               # {{{1
     my @ok = ();
 
     foreach my $File (@_) {  # pure file or directory name, no separators
-        my $Dir = dirname $File;
+        my $Dir    = dirname($File);
+        my $Dir_bn = basename($Dir);
 #printf "File=[$File] Dir=[$Dir]\n";
-        if ($Exclude_Dir{$Dir}) {
-            $Ignored{$File} = "--exclude-dir=$Exclude_Dir{$Dir}";
+        if ($Exclude_Dir{basename($Dir_bn)}) {
+            $Ignored{$File} = "--exclude-dir=$Exclude_Dir{$Dir_bn}";
         } else {
             if ($opt_not_match_d) {
                 if ($opt_fullpath) {
