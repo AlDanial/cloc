@@ -313,10 +313,24 @@ my @Tests = (
                 },
 
                 {
-                    'name' => '--exclude-dir and --follow-link issue 407',
+                    'name' => '--exclude-dir and --follow-link issue 407 1/3',
                     'cd'   => '../tests/inputs/issues/407',
                     'args' => '--follow-link --exclude-dir Test count_dir',
-                    'ref'  => '../tests/outputs/issues/407/results.yaml',
+                    'ref'  => '../tests/outputs/issues/407/results1.yaml',
+                },
+
+                {
+                    'name' => '--exclude-dir and --follow-link issue 407 2/3',
+                    'cd'   => '../tests/inputs/issues/407',
+                    'args' => '--exclude-dir Test level2',
+                    'ref'  => '../tests/outputs/issues/407/results2.yaml',
+                },
+
+                {
+                    'name' => '--exclude-dir and --follow-link issue 407 3/3',
+                    'cd'   => '../tests/inputs/issues/407',
+                    'args' => '--follow-link --exclude-dir Test level2',
+                    'ref'  => '../tests/outputs/issues/407/results3.yaml',
                 },
 
 #               {

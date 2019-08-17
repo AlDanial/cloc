@@ -4989,11 +4989,21 @@ sub manual_find_preprocessor {               # {{{1
     my @ok = ();
 
     foreach my $File (@_) {  # pure file or directory name, no separators
-        my $Dir    = dirname($File);
-        my $Dir_bn = basename($Dir);
-#printf "File=[$File] Dir=[$Dir]\n";
-        if ($Exclude_Dir{basename($Dir_bn)}) {
-            $Ignored{$File} = "--exclude-dir=$Exclude_Dir{$Dir_bn}";
+        my $Dir = dirname($File);
+        my $got_exclude_dir = 0;
+        foreach my $d (File::Spec->splitdir( $Dir )) {
+            # tests/inputs/issues/407/level2/level/Test/level2 ->
+            # $d iterates over tests, inputs, issues, 407,
+            #                  level2, level, Test, level2
+            # check every item against %Exclude_Dir
+            if ($Exclude_Dir{$d}) {
+                $got_exclude_dir = $d;
+                last;
+            }
+        }
+        if ($got_exclude_dir) {
+            $Ignored{$File} = "--exclude-dir=$Exclude_Dir{$got_exclude_dir}";
+#print "ignoring $File\n";
         } else {
             if ($opt_not_match_d) {
                 if ($opt_fullpath) {
@@ -5005,7 +5015,7 @@ sub manual_find_preprocessor {               # {{{1
                     }
                 } elsif (basename($Dir) =~ m{$opt_not_match_d}) {
                     $Ignored{$File} = "--not-match-d=$opt_not_match_d";
-print "matched partial\n"
+#print "matched partial\n"
                 } else {
                     push @ok, $File;
                 }

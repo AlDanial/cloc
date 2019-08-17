@@ -1,3 +1,0 @@
-[submodule "tests/inputs/cloc_submodule_test"]
-	path = tests/inputs/issues/131/cloc_submodule_test
-	url = https://github.com/AlDanial/cloc_submodule_test.git
