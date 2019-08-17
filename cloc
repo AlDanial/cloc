@@ -1022,7 +1022,6 @@ my $list_no_autogen = 0;
 if (defined $opt_no_autogen and scalar @ARGV == 1 and $ARGV[0] eq "list") {
     $list_no_autogen = 1;
 }
-$File::Find::dont_use_nlink = 1 if $opt_stat;
 
 die $brief_usage unless defined $opt_version         or
                         defined $opt_show_lang       or
@@ -1042,6 +1041,7 @@ die "--diff arguments are identical; nothing done", "\n"
     if $opt_diff and !$opt_sum_reports and scalar @ARGV == 2
                                        and $ARGV[0] eq $ARGV[1];
 trick_pp_packer_encode() if $ON_WINDOWS and $opt_file_encoding;
+$File::Find::dont_use_nlink = 1 if $opt_stat or top_level_SMB_dir(\@ARGV);
 replace_git_hash_with_tarfile(\@ARGV);
 # 1}}}
 # Step 1:  Initialize global constants.        {{{1
@@ -4439,6 +4439,26 @@ sub print_language_filters {                 # {{{1
     }
     print_language_info($language, "    extensions:");
 } # 1}}}
+sub top_level_SMB_dir {                      # {{{1
+    # Ref https://github.com/AlDanial/cloc/issues/392, if the
+    # user supplies a directory name which is an SMB mount
+    # point, this directory will appear to File::Find as
+    # though it is empty unless $File::Find::dont_use_nlink
+    # is set to 1.  This subroutine checks to see if any SMB
+    # mounts (identified from stat()'s fourth entry, nlink,
+    # having a value of 2) were passed in on the command line.
+
+    my ($ra_arg_list,) = @_;  # in user supplied file name, directory name, git hash, etc
+    foreach my $entry (@{$ra_arg_list}) {
+        next unless -d $entry;
+        # gets here if $entry is a directory; now get its nlink value
+        my @stats = stat($entry);
+        my $nlink = $stats[3];
+        return 1 if $nlink == 2;  # meaning it is an SMB mount
+    }
+    return 0;
+}
+# 1}}}
 sub replace_git_hash_with_tarfile {          # {{{1
     my ($ra_arg_list,) = @_;  # in   file name, directory name and/or git commit hash to examine
     # replace git hashes in $ra_arg_list with tar files
