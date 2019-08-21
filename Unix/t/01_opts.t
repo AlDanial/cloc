@@ -333,6 +333,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/407/results3.yaml',
                 },
 
+                {
+                    'name' => 'doubly counted she-bang line issue 408',
+                    'cd'   => '../tests/inputs/issues/408',
+                    'args' => 'badly_named_ruby.pl',
+                    'ref'  => '../tests/outputs/issues/408/badly_named_ruby.yaml',
+                },
+
 #               {
 #                   'name' => '--count-and--diff with --out',
 #                   'cd'   => '../tests/inputs/issues/220',

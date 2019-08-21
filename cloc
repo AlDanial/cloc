@@ -5896,16 +5896,17 @@ sub rm_comments {                            # {{{1
         print_lines($file, "post $subroutine(@args) blank cleanup:", \@lines)
             if $opt_print_filter_stages;
     }
-    # Exception for scripting languages:  treat the first #! line as code.
-    # Will need to add it back in if it was removed earlier.
-    if (defined $Script_Language{$language} and
-        $original_lines[0] =~ /^#!/ and
-        (scalar(@lines) == 0 or
-         $lines[0] ne $original_lines[0])) {
-        unshift @lines, $original_lines[0];  # add the first line back
-    }
 
     foreach (@lines) { chomp }   # make sure no spurious newlines were added
+
+    # Exception for scripting languages:  treat the first #! line as code.
+    # Will need to add it back in if it was removed earlier.
+	chomp( $original_lines[0] );
+    if (defined $Script_Language{$language} and
+        $original_lines[0] =~ /^#!/ and
+        (!scalar(@lines) or ($lines[0] ne $original_lines[0]))) {
+        unshift @lines, $original_lines[0];  # add the first line back
+    }
 
     print "<- rm_comments\n" if $opt_v > 2;
     return @lines;

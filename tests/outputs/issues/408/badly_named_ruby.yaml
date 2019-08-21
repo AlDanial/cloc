@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.83
+  elapsed_seconds    : 0.00796198844909668
+  n_files            : 1
+  n_lines            : 3
+  files_per_second   : 125.596765982932
+  lines_per_second   : 376.790297948795
+  report_file        : badly_named_ruby.yaml
+'Prolog' :
+  nFiles: 1
+  blank: 1
+  comment: 0
+  code: 2
+SUM: 
+  blank: 1
+  comment: 0
+  code: 2
+  nFiles: 1
