@@ -15,6 +15,11 @@ my @Tests = (
                     'args' => '../tests/inputs/RemoteSiteHelperTest.cls',
                 },
                 {
+                    'name' => 'APL',
+                    'ref'  => '../tests/outputs/rand.apl.yaml',
+                    'args' => '../tests/inputs/rand.apl',
+                },
+                {
                     'name' => 'AsciiDoc',
                     'ref'  => '../tests/outputs/asciidoctor.adoc.yaml',
                     'args' => '../tests/inputs/asciidoctor.adoc',
