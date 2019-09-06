@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.83
+  elapsed_seconds    : 0.00787687301635742
+  n_files            : 1
+  n_lines            : 23
+  files_per_second   : 126.953931836068
+  lines_per_second   : 2919.94043222955
+  report_file        : ../outputs/guestbook.tpl.yaml
+'Smarty' :
+  nFiles: 1
+  blank: 1
+  comment: 1
+  code: 21
+SUM: 
+  blank: 1
+  comment: 1
+  code: 21
+  nFiles: 1

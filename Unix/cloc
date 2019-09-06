@@ -5329,7 +5329,7 @@ sub classify_file {                          # {{{1
                         last;
                     }
                 }
-                if (really_is_php($full_file) or $force_smarty) {
+                if (really_is_smarty($full_file) or $force_smarty) {
                     return 'Smarty';
                 } else {
                     return $language; # (unknown)
@@ -12368,6 +12368,27 @@ sub trick_pp_packer_encode {                 # {{{1
     close($OUT);
 }
 # 1}}}
+sub really_is_smarty {                       # {{{1
+    # Given filename, returns TRUE if its contents look like Smarty template
+    my ($filename, ) = @_;
+
+    print "-> really_is_smarty($filename)\n" if $opt_v > 2;
+
+    my @lines = read_file($filename);
+
+    my $points = 0;
+    foreach my $L (@lines) {
+        if (($L =~ /\{(if|include)\s/) or
+            ($L =~ /\{\/if\}/)         or
+            ($L =~ /(\{\*|\*\})/)      or
+            ($L =~ /\{\$\w/)) {
+            ++$points;
+        }
+        last if $points >= 2;
+    }
+    print "<- really_is_smarty(points=$points)\n" if $opt_v > 2;
+    return $points >= 2;
+} # 1}}}
 # subroutines copied from SLOCCount
 my %php_files    = ();  # really_is_php()
 sub really_is_pascal {                       # {{{1

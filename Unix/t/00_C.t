@@ -682,6 +682,11 @@ my @Tests = (
                     'args' => '../tests/inputs/captcha.cs',
                 },
                 {
+                    'name' => 'Smarty',
+                    'ref'  => '../tests/outputs/guestbook.tpl.yaml',
+                    'args' => '../tests/inputs/guestbook.tpl',
+                },
+                {
                     'name' => 'SparForte',
                     'ref'  => '../tests/outputs/hello.sp.yaml',
                     'args' => '../tests/inputs/hello.sp',
