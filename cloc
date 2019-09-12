@@ -12803,41 +12803,69 @@ sub get_leading_dirs {                       # {{{1
     }
     return undef, undef, 0 unless %unique_filename;
 
-    my %candidate_leading_dir_L = ();
-    my %candidate_leading_dir_R = ();
+####my %candidate_leading_dir_L = ();
+####my %candidate_leading_dir_R = ();
+    my ($L_drop, $R_drop) = (undef, undef);
     foreach my $f (keys %unique_filename) {
         my $fL = $unique_filename{ $f }{'L'};
         my $fR = $unique_filename{ $f }{'R'};
+
+        my @DL = File::Spec->splitdir($fL);
+        my @DR = File::Spec->splitdir($fR);
 #printf "%-36s -> %-36s\n", $fL, $fR;
-        my $ptr_L = length($fL) - 1;
-        my $ptr_R = length($fR) - 1;
-        my @aL    = split '', $fL;
-        my @aR    = split '', $fR;
-        while ($ptr_L >= 0 and $ptr_R >= 0) {
-            last if $aL[$ptr_L] ne $aR[$ptr_R];
-            --$ptr_L;
-            --$ptr_R;
+#print Dumper(@DL, @DR);
+        # find the most number of common directories between L and R
+        if (!defined $L_drop) {
+            $L_drop = dirname $fL;
         }
-#print "ptr_L=$ptr_L   ptr_R=$ptr_R\n";
-        my $leading_dir_L = "";
-           $leading_dir_L = substr($fL, 0, $ptr_L+1) if $ptr_L >= 0;
-        my $leading_dir_R = "";
-           $leading_dir_R = substr($fR, 0, $ptr_R+1) if $ptr_R >= 0;
-#print "leading_dir_L=$leading_dir_L   leading_dir_R=$leading_dir_R\n";
-        ++$candidate_leading_dir_L{$leading_dir_L};
-        ++$candidate_leading_dir_R{$leading_dir_R};
+        if (!defined $R_drop) {
+            $R_drop = dirname $fR;
+        }
+        my $n_path_elements_L = scalar @DL;
+        my $n_path_elements_R = scalar @DR;
+        my $n_path_elem = $n_path_elements_L < $n_path_elements_R ?
+                          $n_path_elements_L : $n_path_elements_R;
+        my ($n_L_drop_this_pair, $n_R_drop_this_pair) = (0, 0);
+        for (my $i = 0; $i < $n_path_elem; $i++) {
+            last if $DL[ $#DL - $i] ne $DR[ $#DR - $i];
+            ++$n_L_drop_this_pair;
+            ++$n_R_drop_this_pair;
+        }
+        my $L_common = File::Spec->catdir( @DL[0..($#DL-$n_L_drop_this_pair)] );
+        my $R_common = File::Spec->catdir( @DR[0..($#DR-$n_R_drop_this_pair)] );
+#print "L_common=$L_common\n";
+#print "R_common=$R_common\n";
+        $L_drop = $L_common if length $L_common < length $L_drop;
+        $R_drop = $R_common if length $R_common < length $R_drop;
+
+########my $ptr_L = length($fL) - 1;
+########my $ptr_R = length($fR) - 1;
+########my @aL    = split '', $fL;
+########my @aR    = split '', $fR;
+########while ($ptr_L >= 0 and $ptr_R >= 0) {
+########    last if $aL[$ptr_L] ne $aR[$ptr_R];
+########    --$ptr_L;
+########    --$ptr_R;
+########}
+########my $leading_dir_L = "";
+########   $leading_dir_L = substr($fL, 0, $ptr_L+1) if $ptr_L >= 0;
+########my $leading_dir_R = "";
+########   $leading_dir_R = substr($fR, 0, $ptr_R+1) if $ptr_R >= 0;
+########++$candidate_leading_dir_L{$leading_dir_L};
+########++$candidate_leading_dir_R{$leading_dir_R};
     }
 #use Data::Dumper::Simple;
 #print Dumper(%candidate_leading_dir_L);
 #print Dumper(%candidate_leading_dir_R);
 #die;
-    my $best_L = (sort {
-               $candidate_leading_dir_L{$b} <=>
-               $candidate_leading_dir_L{$a}} keys %candidate_leading_dir_L)[0];
-    my $best_R = (sort {
-               $candidate_leading_dir_R{$b} <=>
-               $candidate_leading_dir_R{$a}} keys %candidate_leading_dir_R)[0];
-    return $best_L, $best_R, 1;
+    return $L_drop, $R_drop, 1;
+####my $best_L = (sort {
+####           $candidate_leading_dir_L{$b} <=>
+####           $candidate_leading_dir_L{$a}} keys %candidate_leading_dir_L)[0];
+####my $best_R = (sort {
+####           $candidate_leading_dir_R{$b} <=>
+####           $candidate_leading_dir_R{$a}} keys %candidate_leading_dir_R)[0];
+####return $best_L, $best_R, 1;
 } # 1}}}
 sub align_by_pairs {                         # {{{1
     my ($rh_file_list_L        , # in
