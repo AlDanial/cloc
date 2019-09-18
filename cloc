@@ -3381,7 +3381,7 @@ sub rm_leading_tempdir {                     # {{{1
             last;
         }
     }
-    if ($ON_WINDOWS) { # then go back from / to \
+    if ($ON_WINDOWS and $opt_by_file) { # then go back from / to \
         if ($opt_json) {
             $clean_filename =~ s{/}{\\\\}g;
         } else {
