@@ -3297,8 +3297,11 @@ sub diff_csv_report {                        # {{{1
         }
     }
 
+    my $T_elapsed_sec = "T=$elapsed_sec s";
+       $T_elapsed_sec = "" if $opt_hide_rate;
+
     if ($opt_md) {
-        push @results, "cloc|$URL v $version T=$elapsed_sec s";
+        push @results, "cloc|$URL v $version $T_elapsed_sec";
         push @results, "--- | ---";
         push @results, "";
         push @results, $line;
@@ -3309,7 +3312,7 @@ sub diff_csv_report {                        # {{{1
         }
         push @results, join("|", @col_header) . "|";
     } else {
-        $line .= "\"$URL v $version T=$elapsed_sec s\"";
+        $line .= "\"$URL v $version $T_elapsed_sec\"";
         push @results, $line;
     }
 
