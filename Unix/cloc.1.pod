@@ -1,6 +1,6 @@
 #   Copyright
 #
-#      Copyright (C) 2018 Al Danial <al.danial@gmail.com>.
+#      Copyright (C) 2018-2019 Al Danial <al.danial@gmail.com>.
 #      Copyright (C) 2010-2017 Jari Aalto <jari.aalto@cante.net>
 #
 #   License
@@ -275,6 +275,12 @@ such as GNU autoconf.  To see a list of these files
 (then exit), run with B<--no-autogen list>
 See also B<--autoconf>.
 
+==item b<--original-dir>
+
+Only effective in combination with
+B<--strip-comments>.  Write the stripped files
+to the same directory as the original files.
+
 =item B<--read-binary-files>
 
 Process binary files in addition to text files. This is usually a bad
@@ -316,6 +322,17 @@ Skip the file uniqueness check. This will give a performance boost at
 the expense of counting files with identical contents multiple times
 (if such duplicates exist).
 
+=item B<--stat>
+
+Some file systems (AFS, CD-ROM, FAT, HPFS, SMB)
+do not have directory 'nlink' counts that match
+the number of its subdirectories.  Consequently
+cloc may undercount or completely skip the
+contents of such file systems.  This switch forces
+File::Find to stat directories to obtain the
+correct count.  File search spead will decrease.
+See also B<--follow-links>.
+
 =item B<--stdin-name=FILE>
 
 Count lines streamed via I<STDIN> as if they came from a file named FILE.
@@ -333,12 +350,6 @@ B<--original-dir> is on.
 Write the stripped files the same directory as the original files.
 Only effective in combination with B<--strip-comments>.
 
-=item B<--sum-reports>
-
-Input arguments are report files previously created with the
-B<--report-file> option. Makes a cumulative set of results containing
-the sum of data from the individual report files.
-
 =item B<--strip-str-comments>
 
 Replace comment markers embedded in strings with
@@ -352,6 +363,21 @@ disadvantages to using this switch:  1/code count
 performance drops, and 2/code generated with
 B<--strip-comments> will contain different strings
 where ever embedded comments are found.
+
+=item B<--sum-reports>
+
+Input arguments are report files previously created with the
+B<--report-file> option. Makes a cumulative set of results containing
+the sum of data from the individual report files.
+
+B<--timeout=N>
+
+Ignore files which take more than <N> seconds
+to process at any of the language's filter stages.
+The default maximum number of seconds spent on a
+filter stage is the number of lines in the file
+divided by one thousand.  Setting B<N> to 0 allows
+unlimited time.  See also B<--diff-timeout>.
 
 =item B<--processes=NUM>
 
@@ -388,6 +414,11 @@ Microsoft Windows mode.  See also B<--unix>, B<--show-os>.
 =head2 Filter Options
 
 =over 4
+
+=item B<--exclude-content=REGEX>
+
+Exclude files containing text that matches the given
+regular expression.
 
 =item B<--exclude-dir=DIR1[,DIR2 ...]>
 
@@ -613,6 +644,14 @@ Write the results as comma separated values.
 
 Use the character C as the delimiter for comma separated files
 instead of ,.  This switch forces B<--csv> to be on.
+
+=item B<--file-encoding=E>
+
+Write output files using the B<E> encoding instead of
+the default ASCII (B<E> = 'UTF-7').  Examples: 'UTF-16',
+'euc-kr', 'iso-8859-16'.  Known encodings can be
+printed with
+  perl -MEncode -e 'print join("\n", Encode->encodings(":all")), "\n"'
 
 =item B<--hide-rate>
 

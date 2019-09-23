@@ -1,3 +1,48 @@
+                Release Notes for cloc version 1.84
+                   https://github.com/AlDanial/cloc
+                         September 22, 2019
+
+New Languages and File Types:
+    o APL
+    o Apache Thrift
+    o Imba
+    o IPL
+    o SaltStack
+
+Updates:
+    o Improved handling of --git --diff
+    o Add .podspec as a Ruby file extension.
+    o New switch, --stat, to force a stat check of
+      directories. This enables traversal of directory
+      types whose nlink count does not match the count
+      of subdirectories (examples: CD-ROM, FAT, AFS).
+    o Force stat on top level directories.  This is
+      companion logic to the new --stat switch.
+    o Add file extensions defined by the Linguist project.
+    o New switch, --exclude-content, to exclude files if
+      any of their lines match a regex.
+    o New switch, --timeout, to give control over timeouts
+      on direct counts (as opposed to diff timeouts).
+    o On Windows, lower batch size on git archive
+      commands to 100 files (the value is 1,000 on *nix).
+    o Better identification of Smarty .tpl template files.
+
+Bug Fixes:
+    o On Windows, use double quotes for git archive entries.
+    o On Windows, double slash path separators with --by-file
+      and JSON output.
+    o On Windows, replace / with \\ in results only when
+      running with --by-file.
+    o Fix header line metrics for files/sec and lines/sec
+      when doing --diff.
+    o Python:  handle cases of /* or */ embedded in strings
+      (this conflicted with internal logic which replaced
+      docstring triple quotes with C comments).
+    o Fix mishandling of --exclude-dir with --follow-link.
+    o Fix doubly-counted #! line
+    o Support --hide-rate with csv output.
+
+============================================================================
                 Release Notes for cloc version 1.82
                    https://github.com/AlDanial/cloc
                            May  3, 2019
