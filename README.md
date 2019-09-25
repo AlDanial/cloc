@@ -2687,7 +2687,7 @@ See the
 [previous section](#complex-regular-subexpression-recursion-limit-)
 on drawbacks to using ``--strip-str-comments``.
 </li>
-<li>  Embedded languages are not recognized.  For example, an HTML file containing
+<li> Embedded languages are not recognized.  For example, an HTML file containing
 JavaScript will be counted entirely as HTML.
 </li>
 <li> Python docstrings can serve several purposes.  They may
@@ -2698,6 +2698,9 @@ cloc is unable to infer the meaning of docstrings by context; by default
 cloc treats all docstrings as comments.  The switch
 ``--docstring-as--code``
 treats all docstrings as code.
+</li>
+<li> Language definition files read with ``--read-lang-def`` or
+``--force-lang-def`` must be plain ASCII text files.
 </li>
 </ol>
 
