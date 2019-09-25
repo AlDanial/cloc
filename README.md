@@ -8,7 +8,7 @@ cloc counts blank lines, comment lines, and physical lines of source code in man
 Latest release:  v1.84 (September 22, 2019)
 
 cloc moved to GitHub in September 2015 after being hosted
-at http://cloc.sourceforge.net/ since August 2006,
+at http://cloc.sourceforge.net/ since August 2006.
 
 *   [Quick Start](#quick-start-)
 *   [Overview](#overview-)
