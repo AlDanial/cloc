@@ -340,6 +340,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/408/badly_named_ruby.yaml',
                 },
 
+                {
+                    'name' => 'case insensitive file ext 420',
+                    'cd'   => '../tests/inputs/issues/420',
+                    'args' => '--ignore-case-ext .',
+                    'ref'  => '../tests/outputs/issues/420/results.yaml',
+                },
+
 #               {
 #                   'name' => '--count-and--diff with --out',
 #                   'cd'   => '../tests/inputs/issues/220',

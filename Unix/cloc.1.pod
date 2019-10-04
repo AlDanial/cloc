@@ -247,8 +247,19 @@ with B<--diff>.  See also B<--ignore-case>.
 
 =item B<--ignore-case>
 
-Ignore changes in case; consider upper- and lowercase letters equivalent
-when comparing files with B<--diff>.  See also B<--ignore-whitespace>.
+Ignore changes in case within file contents;
+consider upper- and lowercase letters equivalent
+when comparing files with B<--diff>.  See also
+B<--ignore-whitespace>.
+
+=item B<--ignore-case-ext>
+
+Ignore case of file name extensions.  This will
+cause problems counting some languages
+(specifically, .c and .C are associated with C and
+C++; this switch would count .C files as C rather
+than C++ on *nix operating systems).  File name
+case insensitivity is always true on Windows.
 
 =item B<--lang-no-ext=LANG>
 
