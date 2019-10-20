@@ -302,9 +302,16 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              the git system commands cloc issues.
    --ignore-whitespace       Ignore horizontal white space when comparing files
                              with --diff.  See also --ignore-case.
-   --ignore-case             Ignore changes in case; consider upper- and lower-
-                             case letters equivalent when comparing files with
-                             --diff.  See also --ignore-whitespace.
+   --ignore-case             Ignore changes in case within file contents;
+                             consider upper- and lowercase letters equivalent
+                             when comparing files with --diff.  See also
+                             --ignore-whitespace.
+   --ignore-case-ext         Ignore case of file name extensions.  This will
+                             cause problems counting some languages
+                             (specifically, .c and .C are associated with C and
+                             C++; this switch would count .C files as C rather
+                             than C++ on *nix operating systems).  File name
+                             case insensitivity is always true on Windows.
    --lang-no-ext=<lang>      Count files without extensions using the <lang>
                              counter.  This option overrides internal logic
                              for files without extensions (where such files
@@ -4100,8 +4107,9 @@ sub write_lang_def {                         # {{{1
             #                 'remove_between_regex', and
             #                 'remove_matches_2re' have two args
             $line .= sprintf " %s", $filter->[2] if defined $filter->[2];
-            # $filter->[0] == 'replace_between_regex' has three args
+            # $filter->[0] == 'replace_between_regex' has three or four args
             $line .= sprintf " %s", $filter->[3] if defined $filter->[3];
+	    $line .= sprintf " %s", $filter->[4] if defined $filter->[4];
             push @outlines, $line;
         }
 
@@ -4177,6 +4185,11 @@ sub read_lang_def {                          # {{{1
                        \s+(\S+)\s+(\S+)\s*$/x) {
             push @{$rhaa_Filters_by_Language->{$language}}, [
                   $1 , $3 , $4 ]
+
+        } elsif (/^\s{4}filter\s+(replace_between_regex)
+                   \s+(\S+)\s+(\S+)\s+(\S+|\".*\")\s+(\S+)\s*$/x) {
+            push @{$rhaa_Filters_by_Language->{$language}}, [
+                  $1 , $2 , $3 , $4 , $5]
 
         } elsif (/^\s{4}filter\s+(replace_between_regex)
                        \s+(\S+)\s+(\S+)\s+(.*?)\s*$/x) {
@@ -4452,6 +4465,8 @@ sub print_language_filters {                 # {{{1
         printf "    filter %s", $filter->[0];
         printf "  %s", $filter->[1] if defined $filter->[1];
         printf "  %s", $filter->[2] if defined $filter->[2];
+        printf "  %s", $filter->[3] if defined $filter->[3];
+        printf "  %s", $filter->[4] if defined $filter->[4];
         print  "\n";
     }
     print_language_info($language, "    extensions:");
@@ -5566,6 +5581,8 @@ sub call_counter {                           # {{{1
         $ascii = join('', @lines);
     }
 
+    # implement --perl-ignore-data here
+
     my @original_lines = @lines;
     my $total_lines    = scalar @lines;
 
@@ -6157,7 +6174,8 @@ sub remove_between {                         # {{{1
     return split("\n", $all_lines);
 } # 1}}}
 sub rm_comments_in_strings {                 # {{{1
-    my ($ra_lines, $string_marker, $start_comment, $end_comment, ) = @_;
+    my ($ra_lines, $string_marker, $start_comment, $end_comment, $multiline_mode) = @_;
+    $multiline_mode = 0 if not defined $multiline_mode;
     # Replace comments within strings with 'xx'.
 
     print "-> rm_comments_in_strings(string_marker=$string_marker, " .
@@ -6165,28 +6183,58 @@ sub rm_comments_in_strings {                 # {{{1
         if $opt_v > 2;
 
     my @save_lines = ();
+    my $in_ml_string = 0;
     foreach my $line (@{$ra_lines}) {
        #print "line=[$line]\n";
+        my $new_line = "";
         if ($line !~ /${string_marker}/) {
             # short circuit; no strings on this line
+        if ( $in_ml_string ) {
+            $line =~ s/\Q${start_comment}\E/xx/g;
+                $line =~ s/\Q${end_comment}\E/xx/g if $end_comment;
+        }
             push @save_lines, $line;
             next;
         }
         # replace backslashed string markers with 'Q'
         $line =~ s/\\${string_marker}/Q/g;
+    if ( $in_ml_string and $line =~ /^(.*?)(${string_marker})(.*)$/ ) {
+        # A multiline string ends on this line. Process the part
+        # until the end of the multiline string first.
+            my ($lastpart_ml_string, $firstpart_marker, $rest_of_line )  = ($1, $2, $3);
+        $lastpart_ml_string =~ s/\Q${start_comment}\E/xx/g;
+        $lastpart_ml_string =~ s/\Q${end_comment}\E/xx/g if $end_comment;
+        $new_line = $lastpart_ml_string . $firstpart_marker;
+        $line = $rest_of_line;
+        $in_ml_string = 0;
+    }
         my @tokens = split(/(${string_marker}.*?${string_marker})/, $line);
-        my $new_line = "";
         foreach my $t (@tokens) {
            #printf "  t0 = [$t]\n";
             if ($t =~ /${string_marker}.*${string_marker}$/) {
                 # enclosed in quotes; process this token
                 $t =~ s/\Q${start_comment}\E/xx/g;
                 $t =~ s/\Q${end_comment}\E/xx/g if $end_comment;
-            }
-           #printf "  t1 = [$t]\n";
-            $new_line .= $t;
+        }
+        elsif ( $multiline_mode and $t =~ /(${string_marker})/ ) {
+        # Unclosed quote present in line. If multiline_mode is enabled,
+        # consider it the start of a multiline string.
+        my $firstpart_marker = $1;
+                my @sub_token = split(/${string_marker}/, $t );
+        if ( scalar @sub_token == 2 ) {
+                   $t = $sub_token[0] . $firstpart_marker;
+           $sub_token[1] =~ s/\Q${start_comment}\E/xx/g;
+           $sub_token[1] =~ s/\Q${end_comment}\E/xx/g if $end_comment;
+           $t .= $sub_token[1];
+           $in_ml_string = 1;
+        } else {
+            print "Warning: rm_comments_in_string length \@sub_token > 2\n";
         }
 
+        }
+        #printf "  t1 = [$t]\n";
+        $new_line .= $t;
+        }
         push @save_lines, $new_line;
     }
 
@@ -6287,7 +6335,10 @@ sub replace_regex  {                         # {{{1
     return @save_lines;
 } # 1}}}
 sub replace_between_regex  {                 # {{{1
-    my ($ra_lines, $start_RE, $end_RE, $replace_RE, ) = @_;
+    my ($ra_lines, $start_RE, $end_RE, $replace_RE, $multiline_mode ) = @_;
+    # If multiline_mode is enabled, $replace_RE should not refer
+    # to any captured groups in $start_RE.
+    $multiline_mode = 1 if not defined $multiline_mode;
     # Start and end regex's may be any length strings.
 
     print "-> replace_between_regex(start=$start_RE, end=$end_RE, replace=$replace_RE)\n"
@@ -6310,7 +6361,7 @@ sub replace_between_regex  {                 # {{{1
             next if $in_comment;
         }
         next if /^\s*$/;
-        $in_comment = 1 if /^(.*?)${start_RE}/; # $1 may be blank or code
+        $in_comment = 1 if $multiline_mode and /^(.*?)${start_RE}/ ; # $1 may be blank or code
         next if defined $1 and $1 =~ /^\s*$/; # leading blank; all comment
         if ($in_comment) {
             # part code, part comment; strip the comment and keep the code
@@ -8078,7 +8129,11 @@ sub set_constants {                          # {{{1
                                 # separate /* inside quoted strings with two
                                 # concatenated strings split between / and *
                                 [ 'replace_between_regex', '(["\'])(.*?/)(\*.*?)\g1',
-                                  '(.*?)' , '"$1$2$1 + $1$3$1$4"'],
+                                  '(.*?)' , '"$1$2$1 + $1$3$1$4"', 0],
+                                [ 'rm_comments_in_strings', '"""', '/*', '*/', 1],
+                                [ 'rm_comments_in_strings', '"""', '//', '', 1],
+                                [ 'rm_comments_in_strings', "'''", '/*', '*/', 1],
+                                [ 'rm_comments_in_strings', "'''", '//', '', 1],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Grails'             => [
@@ -8099,7 +8154,11 @@ sub set_constants {                          # {{{1
                                 # separate /* inside quoted strings with two
                                 # concatenated strings split between / and *
                                 [ 'replace_between_regex', '(["\'])(.*?/)(\*.*?)\g1',
-                                  '(.*?)' , '"$1$2$1 + $1$3$1$4"'],
+                                  '(.*?)' , '"$1$2$1 + $1$3$1$4"', 0],
+                                [ 'rm_comments_in_strings', '"""', '/*', '*/', 1],
+                                [ 'rm_comments_in_strings', '"""', '//', '', 1],
+                                [ 'rm_comments_in_strings', "'''", '/*', '*/', 1],
+                                [ 'rm_comments_in_strings', "'''", '//', '', 1],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Handlebars'         => [
@@ -8883,7 +8942,7 @@ sub set_constants {                          # {{{1
                                 # separate /* inside quoted strings with two
                                 # concatenated strings split between / and *
                                 [ 'replace_between_regex', '(["\'])(.*?/)(\*.*?)\g1',
-                                  '(.*?)' , '"$1$2$1 + $1$3$1$4"'],
+                                  '(.*?)' , '"$1$2$1 + $1$3$1$4"', 0],
                                 [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_matches'      , '^\s*\x{c2ab}{3}'  ], # doesn't work
                                 # \xCA2B is unicode << character
