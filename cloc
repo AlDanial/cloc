@@ -8116,7 +8116,7 @@ sub set_constants {                          # {{{1
                                 # separate /* inside quoted strings with two
                                 # concatenated strings split between / and *
                                 [ 'replace_between_regex', '(["\'])(.*?/)(\*.*?)\g1',
-                                  '(.*?)' , '"$1$2$1 + $1$3$1$4"'],
+                                  '(.*?)' , '"$1$2$1 + $1$3$1$4"', 0],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Grails'             => [
@@ -8137,7 +8137,7 @@ sub set_constants {                          # {{{1
                                 # separate /* inside quoted strings with two
                                 # concatenated strings split between / and *
                                 [ 'replace_between_regex', '(["\'])(.*?/)(\*.*?)\g1',
-                                  '(.*?)' , '"$1$2$1 + $1$3$1$4"'],
+                                  '(.*?)' , '"$1$2$1 + $1$3$1$4"', 0],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Handlebars'         => [
@@ -8921,7 +8921,7 @@ sub set_constants {                          # {{{1
                                 # separate /* inside quoted strings with two
                                 # concatenated strings split between / and *
                                 [ 'replace_between_regex', '(["\'])(.*?/)(\*.*?)\g1',
-                                  '(.*?)' , '"$1$2$1 + $1$3$1$4"'],
+                                  '(.*?)' , '"$1$2$1 + $1$3$1$4"', 0],
                                 [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_matches'      , '^\s*\x{c2ab}{3}'  ], # doesn't work
                                 # \xCA2B is unicode << character
