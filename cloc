@@ -4097,8 +4097,9 @@ sub write_lang_def {                         # {{{1
             #                 'remove_between_regex', and
             #                 'remove_matches_2re' have two args
             $line .= sprintf " %s", $filter->[2] if defined $filter->[2];
-            # $filter->[0] == 'replace_between_regex' has three args
+            # $filter->[0] == 'replace_between_regex' has three or four args
             $line .= sprintf " %s", $filter->[3] if defined $filter->[3];
+	    $line .= sprintf " %s", $filter->[4] if defined $filter->[4];
             push @outlines, $line;
         }
 
@@ -4176,10 +4177,14 @@ sub read_lang_def {                          # {{{1
                   $1 , $3 , $4 ]
 
         } elsif (/^\s{4}filter\s+(replace_between_regex)
+ \s+(\S+)\s+(\S+)\s+(\S+|\".*\")\s+(\S+)\s*$/x) {
+            push @{$rhaa_Filters_by_Language->{$language}}, [
+                  $1 , $2 , $3 , $4 , $5]
+
+        } elsif (/^\s{4}filter\s+(replace_between_regex)
                        \s+(\S+)\s+(\S+)\s+(.*?)\s*$/x) {
             push @{$rhaa_Filters_by_Language->{$language}}, [
                   $1 , $2 , $3 , $4 ]
-
         } elsif (/^\s{4}filter\s+(\w+)\s*$/) {
             push @{$rhaa_Filters_by_Language->{$language}}, [ $1 ]
 
@@ -6286,7 +6291,10 @@ sub replace_regex  {                         # {{{1
     return @save_lines;
 } # 1}}}
 sub replace_between_regex  {                 # {{{1
-    my ($ra_lines, $start_RE, $end_RE, $replace_RE, ) = @_;
+    my ($ra_lines, $start_RE, $end_RE, $replace_RE, $multiline_mode ) = @_;
+    # If multiline_mode is enabled, $replace_RE should not refer
+    # to any captured groups in $start_RE.
+    $multiline_mode = 1 if not defined $multiline_mode;
     # Start and end regex's may be any length strings.
 
     print "-> replace_between_regex(start=$start_RE, end=$end_RE, replace=$replace_RE)\n"
@@ -6309,7 +6317,7 @@ sub replace_between_regex  {                 # {{{1
             next if $in_comment;
         }
         next if /^\s*$/;
-        $in_comment = 1 if /^(.*?)${start_RE}/; # $1 may be blank or code
+        $in_comment = 1 if $multiline_mode and /^(.*?)${start_RE}/ ; # $1 may be blank or code
         next if defined $1 and $1 =~ /^\s*$/; # leading blank; all comment
         if ($in_comment) {
             # part code, part comment; strip the comment and keep the code
