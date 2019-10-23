@@ -12458,6 +12458,7 @@ sub write_comments_to_html {                 # {{{1
     my $file = $filename . ".html";
 
     my $approx_line_count = scalar @{$rah_diff_L};
+       $approx_line_count = 1 unless $approx_line_count;
     my $n_digits = 1 + int(log($approx_line_count)/2.30258509299405); # log_10
 
     my $html_out = html_header($filename);
