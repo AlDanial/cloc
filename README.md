@@ -2699,8 +2699,12 @@ cloc treats all docstrings as comments.  The switch
 ``--docstring-as--code``
 treats all docstrings as code.
 </li>
-<li> Language definition files read with ``--read-lang-def`` or
-``--force-lang-def`` must be plain ASCII text files.
+<li> Language definition files read with <tt>--read-lang-def</tt> or
+<tt>--force-lang-def</tt> must be plain ASCII text files.
+</li>
+<li> cloc treats compiler pragma's, for example <tt>#if</tt> / <tt>#endif</tt>, as code
+even if these are are used to block lines of source from being compiled;
+the blocked lines still contribute to the code count.
 </li>
 </ol>
 
