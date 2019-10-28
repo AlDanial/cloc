@@ -879,7 +879,7 @@ Usage: cloc [options] &lt;file(s)/dir(s)/git hash(es)&gt; | &lt;set 1&gt; &lt;se
                              be 200%.  The code column remains a line count.
    --csv                     Write the results as comma separated values.
    --csv-delimiter=&lt;C&gt;       Use the character &lt;C&gt; as the delimiter for comma
-                             separated files instead of ,.  This switch forces
+                             separated files instead of ,.  This switch forces --csv to be on.
    --file-encoding=&lt;E&gt;       Write output files using the &lt;E&gt; encoding instead of
                              the default ASCII (&lt;E&gt; = 'UTF-7').  Examples: 'UTF-16',
                              'euc-kr', 'iso-8859-16'.  Known encodings can be
