@@ -2870,7 +2870,8 @@ sub diff_report     {                        # {{{1
                                 ($rhhh_count->{$a}{'code'}{'added'}    +
                                  $rhhh_count->{$a}{'code'}{'same'}     +
                                  $rhhh_count->{$a}{'code'}{'modified'} +
-                                 $rhhh_count->{$a}{'code'}{'removed'})}
+                                 $rhhh_count->{$a}{'code'}{'removed'})
+			        or $a cmp $b }
                           keys %{$rhhh_count}) {
 
         if ($BY_FILE) {
@@ -3755,6 +3756,7 @@ sub generate_report {                        # {{{1
     foreach my $lang_or_file (sort {
                                  $rhh_count->{$b}{'code'} <=>
                                  $rhh_count->{$a}{'code'}
+					 or $a cmp $b
                                }
                           keys %{$rhh_count}) {
         next if $lang_or_file eq "by report file";
@@ -4303,14 +4305,14 @@ sub merge_lang_def {                         # {{{1
 sub print_extension_info {                   # {{{1
     my ($extension,) = @_;
     if ($extension) {  # show information on this extension
-        foreach my $ext (sort {lc $a cmp lc $b } keys %Language_by_Extension) {
+        foreach my $ext (sort {lc $a cmp lc $b or $a cmp $b } keys %Language_by_Extension) {
             # Language_by_Extension{f}    = 'Fortran 77'
             next if $Language_by_Extension{$ext} =~ /Brain/;
             printf "%-15s -> %s\n", $ext, $Language_by_Extension{$ext}
                 if $ext =~ m{$extension}i;
         }
     } else {           # show information on all  extensions
-        foreach my $ext (sort {lc $a cmp lc $b } keys %Language_by_Extension) {
+        foreach my $ext (sort {lc $a cmp lc $b or $a cmp $b } keys %Language_by_Extension) {
             next if $Language_by_Extension{$ext} =~ /Brain/;
             # Language_by_Extension{f}    = 'Fortran 77'
             printf "%-15s -> %s\n", $ext, $Language_by_Extension{$ext};
@@ -4322,14 +4324,14 @@ sub print_language_info {                    # {{{1
         $prefix ,) = @_;
     my %extensions = (); # the subset matched by the given $language value
     if ($language) {  # show information on this language
-        foreach my $ext (sort {lc $a cmp lc $b } keys %Language_by_Extension) {
+        foreach my $ext (sort {lc $a cmp lc $b or $a cmp $b } keys %Language_by_Extension) {
             # Language_by_Extension{f}    = 'Fortran 77'
             push @{$extensions{$Language_by_Extension{$ext}} }, $ext
                 if lc $Language_by_Extension{$ext} eq lc $language;
 #               if $Language_by_Extension{$ext} =~ m{$language}i;
         }
     } else {          # show information on all  languages
-        foreach my $ext (sort {lc $a cmp lc $b } keys %Language_by_Extension) {
+        foreach my $ext (sort {lc $a cmp lc $b  or $a cmp $b } keys %Language_by_Extension) {
             # Language_by_Extension{f}    = 'Fortran 77'
             push @{$extensions{$Language_by_Extension{$ext}} }, $ext
         }
