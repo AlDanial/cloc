@@ -2703,7 +2703,7 @@ treats all docstrings as code.
 <tt>--force-lang-def</tt> must be plain ASCII text files.
 </li>
 <li> cloc treats compiler pragma's, for example <tt>#if</tt> / <tt>#endif</tt>, as code
-even if these are are used to block lines of source from being compiled;
+even if these are used to block lines of source from being compiled;
 the blocked lines still contribute to the code count.
 </li>
 </ol>
