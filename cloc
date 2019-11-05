@@ -1020,7 +1020,7 @@ if (defined $opt_vcs) {
         foreach my $SM (@submodules) {
             $SM =~ s/^\s+//;        # may have leading space
             $SM =~ s/\(\S+\)\s*$//; # may end with something like (heads/master)
-			my ($checksum, $dir) = split(' ', $SM, 2);
+            my ($checksum, $dir) = split(' ', $SM, 2);
             $dir =~ s/\s+$//;
             $Exclude_Dir{$dir} = 1;
         }
@@ -1637,7 +1637,7 @@ if ( $max_processes == 0) {
         # Since files are processed by multiple processes, we can't measure
         # the number of processed files exactly. We approximate this by showing
         # the number of files counted by finished processes.
-	printf "Counting:  %d\r", $tot_counted
+        printf "Counting:  %d\r", $tot_counted
                  if $opt_progress_rate;
 
         foreach my $this_language ( keys %$part_result_by_language ) {
@@ -1832,7 +1832,7 @@ if ( $max_processes == 0) {
         # Since files are processed by multiple processes, we can't measure
         # the number of processed files exactly. We approximate this by showing
         # the number of files counted by finished processes.
-	printf "Counting:  %d\r", $nCounted
+        printf "Counting:  %d\r", $nCounted
                  if $opt_progress_rate;
 
         foreach my $this_language ( keys %$part_result_by_language ) {
@@ -1921,13 +1921,13 @@ sub exclude_by_regex {                       # {{{1
         delete $rh_unique_source_file->{$file};
     }
 } # 1}}}
-sub get_max_processes {			                   # {{{1
+sub get_max_processes {                      # {{{1
     # If user has specified valid number of processes, use that.
     if (defined $opt_processes) {
-		eval "use Parallel::ForkManager 0.7.6;";
-		if ( defined $Parallel::ForkManager::VERSION ) {
-			$HAVE_Parallel_ForkManager = 1;
-		}
+        eval "use Parallel::ForkManager 0.7.6;";
+        if ( defined $Parallel::ForkManager::VERSION ) {
+            $HAVE_Parallel_ForkManager = 1;
+        }
         if ( $opt_processes !~ /^\d+$/ ) {
             print "Error: processes option argument must be numeric.\n";
             exit 1;
@@ -1937,7 +1937,7 @@ sub get_max_processes {			                   # {{{1
                   "Parallel::ForkManager is not installed, or the version is too old.\n";
             exit 1;
         }
-	elsif ( $opt_processes >0 and $ON_WINDOWS ) {
+    elsif ( $opt_processes >0 and $ON_WINDOWS ) {
             print "Error: cannot use multiple processes on Windows systems.\n";
             exit 1;
         }
@@ -2871,8 +2871,8 @@ sub diff_report     {                        # {{{1
                                  $rhhh_count->{$a}{'code'}{'same'}     +
                                  $rhhh_count->{$a}{'code'}{'modified'} +
                                  $rhhh_count->{$a}{'code'}{'removed'})
-			        or $a cmp $b }
-                          keys %{$rhhh_count}) {
+                              or $a cmp $b }
+                                    keys %{$rhhh_count}) {
 
         if ($BY_FILE) {
             push @results, rm_leading_tempdir($lang_or_file, \%TEMP_DIR);
@@ -3756,9 +3756,9 @@ sub generate_report {                        # {{{1
     foreach my $lang_or_file (sort {
                                  $rhh_count->{$b}{'code'} <=>
                                  $rhh_count->{$a}{'code'}
-					 or $a cmp $b
-                               }
-                          keys %{$rhh_count}) {
+                              or $a cmp $b
+                                        }
+                                   keys %{$rhh_count}) {
         next if $lang_or_file eq "by report file";
         my ($factor, $scaled);
         if ($BY_LANGUAGE or $BY_FILE) {
@@ -4101,20 +4101,20 @@ sub write_lang_def {                         # {{{1
             $line .= sprintf " %s", $filter->[2] if defined $filter->[2];
             # $filter->[0] == 'replace_between_regex' has three or four args
             $line .= sprintf " %s", $filter->[3] if defined $filter->[3];
-	    $line .= sprintf " %s", $filter->[4] if defined $filter->[4];
+            $line .= sprintf " %s", $filter->[4] if defined $filter->[4];
             push @outlines, $line;
         }
 
         # file extension won't appear if the extension maps to
         # multiple languages; work around this
-		my $found = 0;
+        my $found = 0;
         foreach my $ext (sort keys %{$rh_Language_by_Extension}) {
             if ($language eq $rh_Language_by_Extension->{$ext}) {
                 push @outlines, sprintf "    extension %s\n", $ext;
-				$found = 1;
+                $found = 1;
             }
         }
-		if (!$found and $opt_write_lang_def_incl_dup) {
+        if (!$found and $opt_write_lang_def_incl_dup) {
             foreach my $multilang (sort keys %Extension_Collision) {
                 my %Languages = map { $_ => 1 } split('/', $multilang);
                 next unless $Languages{$language};
@@ -4122,7 +4122,7 @@ sub write_lang_def {                         # {{{1
                     push @outlines, sprintf "    extension %s\n", $ext;
                 }
             }
-		}
+        }
 
         foreach my $filename (sort keys %{$rh_Language_by_File}) {
             if ($language eq $rh_Language_by_File->{$filename}) {
@@ -4662,7 +4662,7 @@ sub git_archive {                            # {{{1
     print "-> git_archive($A1)\n" if $opt_v > 2;
 
     my $args = undef;
-	my @File_Set = ( );
+    my @File_Set = ( );
     my $n_sets   = 1;
     if (ref $A2 eq 'ARRAY') {
         # Avoid "Argument list too long" for the git archive command
@@ -4675,7 +4675,7 @@ sub git_archive {                            # {{{1
         $n_sets = 1 + int($n_sets) if $n_sets > int($n_sets);
         $n_sets = 1 if !$n_sets;
         foreach my $i (0..$n_sets-1) {
-	        @{$File_Set[$i]} = ( );
+            @{$File_Set[$i]} = ( );
             my $start = $i*$FILES_PER_ARCHIVE;
             my $end   = smaller(($i+1)*$FILES_PER_ARCHIVE, $n_files) - 1;
             # Wrap each file name in single quotes to protect spaces
@@ -4706,11 +4706,11 @@ sub git_archive {                            # {{{1
 #                              @{$A2}[$start .. $end]);
         }
     } else {
-		if (defined $A2) {
-		    push @{$File_Set[0]}, "$A1 $A2";
-		} else {
-		    push @{$File_Set[0]}, "$A1";
-		}
+        if (defined $A2) {
+            push @{$File_Set[0]}, "$A1 $A2";
+        } else {
+            push @{$File_Set[0]}, "$A1";
+        }
     }
 
     my $files_this_commit = join(" ", @{$File_Set[0]});
@@ -4740,7 +4740,7 @@ sub git_archive {                            # {{{1
     print "<- git_archive()\n" if $opt_v > 2;
     return $Tarfile
 } # 1}}}
-sub smaller {						                          # {{{1
+sub smaller {                                                  # {{{1
     my( $a, $b ) = @_;
     return $a < $b ? $a : $b;
 } # 1}}}
@@ -5927,7 +5927,7 @@ sub rm_comments {                            # {{{1
 
     # Exception for scripting languages:  treat the first #! line as code.
     # Will need to add it back in if it was removed earlier.
-	chomp( $original_lines[0] );
+    chomp( $original_lines[0] );
     if (defined $Script_Language{$language} and
         $original_lines[0] =~ /^#!/ and
         (!scalar(@lines) or ($lines[0] ne $original_lines[0]))) {
@@ -6882,16 +6882,16 @@ sub set_constants {                          # {{{1
             'aj'          => 'AspectJ'               ,
             'am'          => 'make'                  ,
             'ample'       => 'AMPLE'                 ,
-			'apl'         => 'APL'                   ,
-			'apla'        => 'APL'                   ,
-			'aplf'        => 'APL'                   ,
-			'aplo'        => 'APL'                   ,
-			'apln'        => 'APL'                   ,
-			'aplc'        => 'APL'                   ,
-			'apli'        => 'APL'                   ,
-			'dyalog'      => 'APL'                   ,
-			'dyapp'       => 'APL'                   ,
-			'mipage'      => 'APL'                   ,
+            'apl'         => 'APL'                   ,
+            'apla'        => 'APL'                   ,
+            'aplf'        => 'APL'                   ,
+            'aplo'        => 'APL'                   ,
+            'apln'        => 'APL'                   ,
+            'aplc'        => 'APL'                   ,
+            'apli'        => 'APL'                   ,
+            'dyalog'      => 'APL'                   ,
+            'dyapp'       => 'APL'                   ,
+            'mipage'      => 'APL'                   ,
             'as'          => 'ActionScript'          ,
             'adoc'        => 'AsciiDoc'              ,
             'asciidoc'    => 'AsciiDoc'              ,
@@ -7085,13 +7085,13 @@ sub set_constants {                          # {{{1
             'graphqls'    => 'GraphQL'               ,
             'gql'         => 'GraphQL'               ,
             'graphql'     => 'GraphQL'               ,
-			'vert'        => 'GLSL'                  ,
-			'tesc'        => 'GLSL'                  ,
-			'tese'        => 'GLSL'                  ,
-			'geom'        => 'GLSL'                  ,
-			'feature'     => 'Cucumber'              ,
-			'frag'        => 'GLSL'                  ,
-			'comp'        => 'GLSL'                  ,
+            'vert'        => 'GLSL'                  ,
+            'tesc'        => 'GLSL'                  ,
+            'tese'        => 'GLSL'                  ,
+            'geom'        => 'GLSL'                  ,
+            'feature'     => 'Cucumber'              ,
+            'frag'        => 'GLSL'                  ,
+            'comp'        => 'GLSL'                  ,
             'g'           => 'ANTLR Grammar'         ,
             'g4'          => 'ANTLR Grammar'         ,
             'go'          => 'Go'                    ,
@@ -8347,11 +8347,11 @@ sub set_constants {                          # {{{1
                             ],
 #   'Lua'                => [   [ 'call_regexp_common'  , 'lua'    ], ],
     'Lua'                => [
-    							[ 'remove_between_general', '--[=====[', ']=====]' ],
-    							[ 'remove_between_general', '--[====[', ']====]' ],
-    							[ 'remove_between_general', '--[===[', ']===]' ],
-    							[ 'remove_between_general', '--[==[', ']==]' ],
-    							[ 'remove_between_general', '--[=[', ']=]' ],
+                                [ 'remove_between_general', '--[=====[', ']=====]' ],
+                                [ 'remove_between_general', '--[====[', ']====]' ],
+                                [ 'remove_between_general', '--[===[', ']===]' ],
+                                [ 'remove_between_general', '--[==[', ']==]' ],
+                                [ 'remove_between_general', '--[=[', ']=]' ],
                                 [ 'remove_between_general', '--[[', ']]' ],
                                 [ 'remove_matches'      , '^\s*\-\-' ],
                             ],
@@ -9850,18 +9850,18 @@ sub set_constants {                          # {{{1
     'OpenCL'                       => 1.50,
     'Xtend'                        => 2.00,
     # aggregates; value is meaningless
-	'C#/Smalltalk'     			   => 1.00,
-	'D/dtrace'         			   => 1.00,
-	'F#/Forth'         			   => 1.00,
-	'Fortran 77/Forth' 			   => 1.00,
-	'Lisp/Julia'       			   => 1.00,
-	'Lisp/OpenCL'      			   => 1.00,
-	'PHP/Pascal'       			   => 1.00,
-	'Pascal/Puppet'    			   => 1.00,
-	'Perl/Prolog'      			   => 1.00,
-	'Verilog-SystemVerilog/Coq'    => 1.00,
-	'MATLAB/Mathematica/Objective C/MUMPS/Mercury' => 1.00,
-	'IDL/Qt Project/Prolog/ProGuard'     => 1.00,
+    'C#/Smalltalk'                    => 1.00,
+    'D/dtrace'                        => 1.00,
+    'F#/Forth'                        => 1.00,
+    'Fortran 77/Forth'                => 1.00,
+    'Lisp/Julia'                      => 1.00,
+    'Lisp/OpenCL'                     => 1.00,
+    'PHP/Pascal'                      => 1.00,
+    'Pascal/Puppet'                   => 1.00,
+    'Perl/Prolog'                     => 1.00,
+    'Verilog-SystemVerilog/Coq'    => 1.00,
+    'MATLAB/Mathematica/Objective C/MUMPS/Mercury' => 1.00,
+    'IDL/Qt Project/Prolog/ProGuard'     => 1.00,
 );
 # 1}}}
 %{$rh_Known_Binary_Archives} = (             # {{{1
@@ -13875,7 +13875,7 @@ sub no_autogen_files {                       # {{{1
     my ($print,) = @_;
     print "-> no_autogen($print)\n" if $opt_v > 2;
 
-	# These sometimes created manually?
+    # These sometimes created manually?
     #               acinclude.m4
     #               configure.ac
     #               Makefile.am
