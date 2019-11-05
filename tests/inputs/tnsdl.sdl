@@ -1,0 +1,23 @@
+PROCEDURE do_something;
+
+RETURNS error_t;
+
+DCL
+    status              error_t := 0, /* this is the result */
+    dummy               dummy_t;      /* dummy variable,
+                                         not impacting the flow */
+
+START;
+
+    /* let's invoke
+       some_function */
+    TASK status := some_function ();
+    DECISION ( status );
+    ( success_ec ):
+        TASK dummy := T;
+    ELSE:
+        TASK printf( @'We failed' );
+    ENDDECISION;
+
+   RETURN status;
+ENDPROCEDURE do_something;

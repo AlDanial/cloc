@@ -747,6 +747,11 @@ my @Tests = (
                     'args' => '../tests/inputs/toml_example.toml',
                 },
                 {
+                    'name' => 'TNSDL',
+                    'ref'  => '../tests/outputs/tnsdl.sdl.yaml',
+                    'args' => '../tests/inputs/tnsdl.sdl',
+                },
+                {
                     'name' => 'TTCN',
                     'ref'  => '../tests/outputs/clusterConf.ttcn.yaml',
                     'args' => '../tests/inputs/clusterConf.ttcn',
