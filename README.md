@@ -37,8 +37,8 @@ at http://cloc.sourceforge.net/ since August 2006.
     *   [Third Generation Language Scale Factors](#third-generation-language-scale-factors-)
 *   [Complex regular subexpression recursion limit ](#complex-regular-subexpression-recursion-limit-)
 *   [Limitations](#limitations-)
-*   [How to Request Support for Additional Languages](#how-to-request-support-for-additional-languages-)
-*   [Features Currently in Development](#features-currently-in-development-)
+*   [Requesting Support for Additional Languages](#requesting-support-for-additional-languages-)
+*   [Reporting Problems](#reporting-problems-)
 *   [Acknowledgments](#acknowledgments-)
 *   [Copyright](#copyright-)
 
@@ -2710,7 +2710,7 @@ the blocked lines still contribute to the code count.
 
 [](1}}})
 <a name="AdditionalLanguages"></a> []({{{1)
-#   [How to Request Support for Additional Languages &#9650;](#___top "click to go to top of document")
+#   [Requesting Support for Additional Languages &#9650;](#___top "click to go to top of document")
 
 If cloc does not recognize a language you are interested in counting,
 create a [GitHub issue](https://github.com/AlDanial/cloc/issues)
@@ -2724,17 +2724,36 @@ with `#!` style program invocations, explain what those are.</li>
 </ol>
 
 [](1}}})
-<a name="in_progress"></a> []({{{1)
-##  [Features Currently in Development &#9650;](#___top "click to go to top of document")
+<a name="reporting_problems"></a> []({{{1)
+#  [Reporting Problems &#9650;](#___top "click to go to top of document")
 
-Here, in no particular order and with no promise of future delivery, are
-features and capabilities currently in development:
+If you encounter a problem with cloc, first check to see if
+you're running with the latest version of the tool:
+<pre>
+  cloc --version
+</pre>
+If the version is older than the most recent release
+at https://github.com/AlDanial/cloc/releases, download the
+latest version and see if it solves your problem.
+
+If the problem happens with the latest release, submit
+a new issue at https://github.com/AlDanial/cloc/issues *only*
+if you can supply enough information for anyone reading the
+issue report to reproduce the problem.
+That means providing
 <ol>
-<li> produce reStructuredText output with `--rst`</li>
-<li> count code (e.g. Javascript) embedded in HTML files </li>
+<li> the operating system you're running on</li>
+<li> the cloc command with all options</li>
+<li> the code you are counting (URL to a public git repo or zip file or
+tar file, et cetera)</li>
 </ol>
+The last item is generally problematic.  If the code base is
+proprietary or amounts to more than a few dozen kilobytes,
+you'll need to try to reconstruct similar inputs or demonstrate
+the problem with an existing public code base.
 
-Pull requests for these features will receive extra consideration.
+Problem reports that cannot be reproduced will be ignored and
+eventually closed.
 
 [](1}}})
 <a name="Acknowledgments"></a> []({{{1)
