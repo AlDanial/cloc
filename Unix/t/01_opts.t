@@ -347,6 +347,14 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/420/results.yaml',
                 },
 
+                {
+                    'name' => 'diff with --exclude-list-file 433',
+                    'cd'   => '../tests/inputs/issues/433',
+                    'args' => '--exclude-list-file excl.txt --by-file --follow-links --diff L R
+                    ',
+                    'ref'  => '../tests/outputs/issues/433/results.yaml',
+                },
+
 #               {
 #                   'name' => '--count-and--diff with --out',
 #                   'cd'   => '../tests/inputs/issues/220',

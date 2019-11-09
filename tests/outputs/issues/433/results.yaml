@@ -1,0 +1,76 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.85
+  elapsed_seconds    : 0.00985193252563477
+  n_files            : 0
+  n_lines            : 20
+  files_per_second   : 0
+  lines_per_second   : 2030.05856444509
+  report_file        : /home/al/git-cloc/tests/outputs/issues/433/results.yaml
+added :
+  'L/hello_1.c' :
+    nFiles : 0
+    blank : 0
+    code : 0
+    comment : 0
+  'R/hello_2.c' :
+    nFiles : 0
+    comment : 2
+    blank : 2
+    code : 7
+same :
+  'L/hello_1.c' :
+    nFiles : 0
+    blank : 0
+    code : 0
+    comment : 0
+  'R/hello_2.c' :
+    nFiles : 0
+    comment : 0
+    blank : 0
+    code : 0
+modified :
+  'L/hello_1.c' :
+    nFiles : 0
+    blank : 0
+    code : 0
+    comment : 0
+  'R/hello_2.c' :
+    nFiles : 0
+    comment : 0
+    blank : 0
+    code : 0
+removed :
+  'L/hello_1.c' :
+    nFiles : 0
+    blank : 2
+    code : 6
+    comment : 1
+  'R/hello_2.c' :
+    nFiles : 0
+    comment : 0
+    blank : 0
+    code : 0
+SUM :
+  added :
+    nFiles : 0
+    code : 7
+    blank : 2
+    comment : 2
+  same :
+    nFiles : 0
+    code : 0
+    blank : 0
+    comment : 0
+  modified :
+    nFiles : 0
+    code : 0
+    blank : 0
+    comment : 0
+  removed :
+    nFiles : 0
+    code : 6
+    blank : 2
+    comment : 1
