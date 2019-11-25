@@ -6227,25 +6227,34 @@ sub rm_comments_in_strings {                 # {{{1
                 # enclosed in quotes; process this token
                 $t =~ s/\Q${start_comment}\E/xx/g;
                 $t =~ s/\Q${end_comment}\E/xx/g if $end_comment;
-        }
-        elsif ( $multiline_mode and $t =~ /(${string_marker})/ ) {
-        # Unclosed quote present in line. If multiline_mode is enabled,
-        # consider it the start of a multiline string.
-        my $firstpart_marker = $1;
+            }
+            elsif ( $multiline_mode and $t =~ /(${string_marker})/ ) {
+                # Unclosed quote present in line. If multiline_mode is enabled,
+                # consider it the start of a multiline string.
+                my $firstpart_marker = $1;
                 my @sub_token = split(/${string_marker}/, $t );
-        if ( scalar @sub_token == 2 ) {
-                   $t = $sub_token[0] . $firstpart_marker;
-           $sub_token[1] =~ s/\Q${start_comment}\E/xx/g;
-           $sub_token[1] =~ s/\Q${end_comment}\E/xx/g if $end_comment;
-           $t .= $sub_token[1];
-           $in_ml_string = 1;
-        } else {
-            print "Warning: rm_comments_in_string length \@sub_token > 2\n";
-        }
 
-        }
-        #printf "  t1 = [$t]\n";
-        $new_line .= $t;
+                if ( scalar @sub_token == 1 ) {
+                    # The line ends with a string marker that starts
+                    # a multiline string.
+                    $t = $sub_token[0] . $firstpart_marker;
+                    $in_ml_string = 1;
+                }
+                elsif ( scalar @sub_token == 2 ) {
+		    # The line has some more content after the string
+		    # marker that starts a multiline string
+                    $t = $sub_token[0] . $firstpart_marker;
+                    $sub_token[1] =~ s/\Q${start_comment}\E/xx/g;
+                    $sub_token[1] =~ s/\Q${end_comment}\E/xx/g if $end_comment;
+                    $t .= $sub_token[1];
+                    $in_ml_string = 1;
+                } else {
+                    print "Warning: rm_comments_in_string length \@sub_token > 2\n";
+                }
+
+            }
+            #printf "  t1 = [$t]\n";
+            $new_line .= $t;
         }
         push @save_lines, $new_line;
     }
