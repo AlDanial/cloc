@@ -6199,27 +6199,31 @@ sub rm_comments_in_strings {                 # {{{1
     foreach my $line (@{$ra_lines}) {
        #print "line=[$line]\n";
         my $new_line = "";
+
         if ($line !~ /${string_marker}/) {
             # short circuit; no strings on this line
-        if ( $in_ml_string ) {
-            $line =~ s/\Q${start_comment}\E/xx/g;
+            if ( $in_ml_string ) {
+                $line =~ s/\Q${start_comment}\E/xx/g;
                 $line =~ s/\Q${end_comment}\E/xx/g if $end_comment;
-        }
+            }
             push @save_lines, $line;
             next;
         }
+
         # replace backslashed string markers with 'Q'
         $line =~ s/\\${string_marker}/Q/g;
-    if ( $in_ml_string and $line =~ /^(.*?)(${string_marker})(.*)$/ ) {
-        # A multiline string ends on this line. Process the part
-        # until the end of the multiline string first.
+
+        if ( $in_ml_string and $line =~ /^(.*?)(${string_marker})(.*)$/ ) {
+            # A multiline string ends on this line. Process the part
+            # until the end of the multiline string first.
             my ($lastpart_ml_string, $firstpart_marker, $rest_of_line )  = ($1, $2, $3);
-        $lastpart_ml_string =~ s/\Q${start_comment}\E/xx/g;
-        $lastpart_ml_string =~ s/\Q${end_comment}\E/xx/g if $end_comment;
-        $new_line = $lastpart_ml_string . $firstpart_marker;
-        $line = $rest_of_line;
-        $in_ml_string = 0;
-    }
+            $lastpart_ml_string =~ s/\Q${start_comment}\E/xx/g;
+            $lastpart_ml_string =~ s/\Q${end_comment}\E/xx/g if $end_comment;
+            $new_line = $lastpart_ml_string . $firstpart_marker;
+            $line = $rest_of_line;
+            $in_ml_string = 0;
+        }
+
         my @tokens = split(/(${string_marker}.*?${string_marker})/, $line);
         foreach my $t (@tokens) {
            #printf "  t0 = [$t]\n";
