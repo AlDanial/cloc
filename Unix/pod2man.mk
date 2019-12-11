@@ -40,7 +40,7 @@ PACKAGE		?= package
 # Optional variables to set
 MANSECT		?= 1
 PODCENTER	?= User Commands
-PODDATE		?= $$(date "+%Y-%m-%d")
+PODDATE		?= $$(date --utc --date="@$${SOURCE_DATE_EPOCH:-$$(date +%s)}" "+%Y-%m-%d")
 
 # Directories
 MANSRC		?=
