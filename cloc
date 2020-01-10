@@ -2810,7 +2810,7 @@ sub diff_report     {                        # {{{1
     if (!$opt_3) {
         $spacing_1 = 19;
         $spacing_2 = 14;
-        $spacing_3 = 28;
+        $spacing_3 = 27;
     }
     $spacing_0 += $column_1_offset;
     $spacing_1 += $column_1_offset;
@@ -2823,7 +2823,7 @@ sub diff_report     {                        # {{{1
                  'txt' => "\%-${spacing_3}s ",
                },
         '3' => { 'xml' => 'files_count="%d" ',
-                 'txt' => '%5d ',
+                 'txt' => '%6d ',
                },
         '4' => { 'xml' => 'blank="%d" comment="%d" code="%d" ',
                  'txt' => "\%${spacing_2}d \%${spacing_2}d \%${spacing_2}d",
@@ -3639,7 +3639,7 @@ sub generate_report {                        # {{{1
     if (!$opt_3) {
         $spacing_1 = 19;
         $spacing_2 = 14;
-        $spacing_3 = 28;
+        $spacing_3 = 27;
     }
     $spacing_0 += $column_1_offset;
     $spacing_1 += $column_1_offset;
@@ -3652,7 +3652,7 @@ sub generate_report {                        # {{{1
                  'txt' => "\%-${spacing_3}s ",
                },
         '3' => { 'xml' => 'files_count="%d" ',
-                 'txt' => '%5d ',
+                 'txt' => '%6d ',
                },
         '4' => { 'xml' => 'blank="%d" comment="%d" code="%d" ',
                  'txt' => "\%${spacing_2}d \%${spacing_2}d \%${spacing_2}d",

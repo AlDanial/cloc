@@ -1094,6 +1094,7 @@ my %Extension_Collision = (
     'Pascal/Puppet'                                 => [ 'pp'   ] ,
     'Perl/Prolog'                                   => [ 'pl', 'PL'  ] ,
     'PHP/Pascal'                                    => [ 'inc'  ] ,
+    'Raku/Prolog'                                   => [ 'p6', 'P6'  ] ,
     'Qt/Glade'                                      => [ 'ui'   ] ,
     'TypeScript/Qt Linguist'                        => [ 'ts'   ] ,
     'Verilog-SystemVerilog/Coq'                     => [ 'v'    ] ,
@@ -2819,7 +2820,7 @@ sub diff_report     {                        # {{{1
     if (!$opt_3) {
         $spacing_1 = 19;
         $spacing_2 = 14;
-        $spacing_3 = 28;
+        $spacing_3 = 27;
     }
     $spacing_0 += $column_1_offset;
     $spacing_1 += $column_1_offset;
@@ -2832,7 +2833,7 @@ sub diff_report     {                        # {{{1
                  'txt' => "\%-${spacing_3}s ",
                },
         '3' => { 'xml' => 'files_count="%d" ',
-                 'txt' => '%5d ',
+                 'txt' => '%6d ',
                },
         '4' => { 'xml' => 'blank="%d" comment="%d" code="%d" ',
                  'txt' => "\%${spacing_2}d \%${spacing_2}d \%${spacing_2}d",
@@ -3648,7 +3649,7 @@ sub generate_report {                        # {{{1
     if (!$opt_3) {
         $spacing_1 = 19;
         $spacing_2 = 14;
-        $spacing_3 = 28;
+        $spacing_3 = 27;
     }
     $spacing_0 += $column_1_offset;
     $spacing_1 += $column_1_offset;
@@ -3661,7 +3662,7 @@ sub generate_report {                        # {{{1
                  'txt' => "\%-${spacing_3}s ",
                },
         '3' => { 'xml' => 'files_count="%d" ',
-                 'txt' => '%5d ',
+                 'txt' => '%6d ',
                },
         '4' => { 'xml' => 'blank="%d" comment="%d" code="%d" ',
                  'txt' => "\%${spacing_2}d \%${spacing_2}d \%${spacing_2}d",
@@ -4390,6 +4391,11 @@ sub print_language_info {                    # {{{1
         push @{$extensions{'Prolog'}}, "pl";
         delete $extensions{'Perl/Prolog'};
     }
+    if (!$language or $language =~ /^(Raku|Prolog)$/i) {
+        push @{$extensions{'Perl'}}  , "p6";
+        push @{$extensions{'Prolog'}}, "p6";
+        delete $extensions{'Perl/Prolog'};
+    }
     if (!$language or $language =~ /^(IDL|Qt Project|Prolog|ProGuard)$/i) {
         push @{$extensions{'IDL'}}       , "pro";
         push @{$extensions{'Qt Project'}}, "pro";
@@ -4745,7 +4751,13 @@ sub git_archive {                            # {{{1
 
     my $files_this_commit = join(" ", @{$File_Set[0]});
     print "   git_archive(file_set[0]=$files_this_commit)\n" if $opt_v > 2;
-    my ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, SUFFIX => $ON_WINDOWS ? '.zip' : '.tar');  # delete on exit
+    my ($Tarfh, $Tarfile);
+    if ($opt_sdir) {
+      File::Path::mkpath($opt_sdir) unless is_dir($opt_sdir);
+      ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, DIR => $opt_sdir, SUFFIX => $ON_WINDOWS ? '.zip' : '.tar');  # delete on exit
+    } else {
+      ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, SUFFIX => $ON_WINDOWS ? '.zip' : '.tar');  # delete on exit
+    }
     my $cmd = "git archive -o $Tarfile $files_this_commit";
     print  $cmd, "\n" if $opt_v;
     system $cmd;
@@ -5334,6 +5346,8 @@ sub classify_file {                          # {{{1
                 return Lisp_or_Julia( $full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'Perl/Prolog') {
                 return Perl_or_Prolog($full_file, $rh_Err, $raa_errors);
+            } elsif ($Language_by_Extension{$extension} eq 'Raku/Prolog') {
+                return Raku_or_Prolog($full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq
                      'IDL/Qt Project/Prolog/ProGuard') {
                 return IDL_or_QtProject($full_file, $rh_Err, $raa_errors);
@@ -6209,27 +6223,31 @@ sub rm_comments_in_strings {                 # {{{1
     foreach my $line (@{$ra_lines}) {
        #print "line=[$line]\n";
         my $new_line = "";
+
         if ($line !~ /${string_marker}/) {
             # short circuit; no strings on this line
-        if ( $in_ml_string ) {
-            $line =~ s/\Q${start_comment}\E/xx/g;
+            if ( $in_ml_string ) {
+                $line =~ s/\Q${start_comment}\E/xx/g;
                 $line =~ s/\Q${end_comment}\E/xx/g if $end_comment;
-        }
+            }
             push @save_lines, $line;
             next;
         }
+
         # replace backslashed string markers with 'Q'
         $line =~ s/\\${string_marker}/Q/g;
-    if ( $in_ml_string and $line =~ /^(.*?)(${string_marker})(.*)$/ ) {
-        # A multiline string ends on this line. Process the part
-        # until the end of the multiline string first.
+
+        if ( $in_ml_string and $line =~ /^(.*?)(${string_marker})(.*)$/ ) {
+            # A multiline string ends on this line. Process the part
+            # until the end of the multiline string first.
             my ($lastpart_ml_string, $firstpart_marker, $rest_of_line )  = ($1, $2, $3);
-        $lastpart_ml_string =~ s/\Q${start_comment}\E/xx/g;
-        $lastpart_ml_string =~ s/\Q${end_comment}\E/xx/g if $end_comment;
-        $new_line = $lastpart_ml_string . $firstpart_marker;
-        $line = $rest_of_line;
-        $in_ml_string = 0;
-    }
+            $lastpart_ml_string =~ s/\Q${start_comment}\E/xx/g;
+            $lastpart_ml_string =~ s/\Q${end_comment}\E/xx/g if $end_comment;
+            $new_line = $lastpart_ml_string . $firstpart_marker;
+            $line = $rest_of_line;
+            $in_ml_string = 0;
+        }
+
         my @tokens = split(/(${string_marker}.*?${string_marker})/, $line);
         foreach my $t (@tokens) {
            #printf "  t0 = [$t]\n";
@@ -6237,25 +6255,34 @@ sub rm_comments_in_strings {                 # {{{1
                 # enclosed in quotes; process this token
                 $t =~ s/\Q${start_comment}\E/xx/g;
                 $t =~ s/\Q${end_comment}\E/xx/g if $end_comment;
-        }
-        elsif ( $multiline_mode and $t =~ /(${string_marker})/ ) {
-        # Unclosed quote present in line. If multiline_mode is enabled,
-        # consider it the start of a multiline string.
-        my $firstpart_marker = $1;
+            }
+            elsif ( $multiline_mode and $t =~ /(${string_marker})/ ) {
+                # Unclosed quote present in line. If multiline_mode is enabled,
+                # consider it the start of a multiline string.
+                my $firstpart_marker = $1;
                 my @sub_token = split(/${string_marker}/, $t );
-        if ( scalar @sub_token == 2 ) {
-                   $t = $sub_token[0] . $firstpart_marker;
-           $sub_token[1] =~ s/\Q${start_comment}\E/xx/g;
-           $sub_token[1] =~ s/\Q${end_comment}\E/xx/g if $end_comment;
-           $t .= $sub_token[1];
-           $in_ml_string = 1;
-        } else {
-            print "Warning: rm_comments_in_string length \@sub_token > 2\n";
-        }
 
-        }
-        #printf "  t1 = [$t]\n";
-        $new_line .= $t;
+                if ( scalar @sub_token == 1 ) {
+                    # The line ends with a string marker that starts
+                    # a multiline string.
+                    $t = $sub_token[0] . $firstpart_marker;
+                    $in_ml_string = 1;
+                }
+                elsif ( scalar @sub_token == 2 ) {
+		    # The line has some more content after the string
+		    # marker that starts a multiline string
+                    $t = $sub_token[0] . $firstpart_marker;
+                    $sub_token[1] =~ s/\Q${start_comment}\E/xx/g;
+                    $sub_token[1] =~ s/\Q${end_comment}\E/xx/g if $end_comment;
+                    $t .= $sub_token[1];
+                    $in_ml_string = 1;
+                } else {
+                    print "Warning: rm_comments_in_string length \@sub_token > 2\n";
+                }
+
+            }
+            #printf "  t1 = [$t]\n";
+            $new_line .= $t;
         }
         push @save_lines, $new_line;
     }
@@ -7351,11 +7378,14 @@ sub set_constants {                          # {{{1
             'pig'         => 'Pig Latin'             ,
             'plh'         => 'Perl'                  ,
             'pl'          => 'Perl/Prolog'           ,
-            'p6'          => 'Perl/Prolog'           ,
             'PL'          => 'Perl/Prolog'           ,
+            'p6'          => 'Raku/Prolog'           ,
+            'P6'          => 'Raku/Prolog'           ,
             'plx'         => 'Perl'                  ,
             'pm'          => 'Perl'                  ,
-            'pm6'         => 'Perl'                  ,
+            'pm6'         => 'Raku'                  ,
+            'raku'        => 'Raku'                  ,
+            'rakumod'     => 'Raku'                  ,
             'pom.xml'     => 'Maven'                 ,
             'pom'         => 'Maven'                 ,
             'yap'         => 'Prolog'                ,
@@ -7749,7 +7779,6 @@ sub set_constants {                          # {{{1
             'make'     => 'make'                  ,
             'octave'   => 'Octave'                ,
             'perl5'    => 'Perl'                  ,
-            'perl6'    => 'Perl'                  ,
             'perl'     => 'Perl'                  ,
             'miniperl' => 'Perl'                  ,
             'php'      => 'PHP'                   ,
@@ -7764,6 +7793,9 @@ sub set_constants {                          # {{{1
             'python3.6'=> 'Python'                ,
             'python3.7'=> 'Python'                ,
             'python3.8'=> 'Python'                ,
+            'perl6'    => 'Raku'                  ,
+            'raku'     => 'Raku'                  ,
+            'rakudo'   => 'Raku'                  ,
             'rexx'     => 'Rexx'                  ,
             'regina'   => 'Rexx'                  ,
             'ruby'     => 'Ruby'                  ,
@@ -8339,6 +8371,8 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
     'Kotlin'             => [
+                                [ 'rm_comments_in_strings', '"""', '/*', '*/', 1],
+                                [ 'rm_comments_in_strings', '"""', '//', '', 1],
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
@@ -8599,6 +8633,12 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*;'  ],
                                 [ 'remove_inline'       , ';.*$'   ],
                             ],
+    'Raku'               => [   [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_below_above'  , '^=head1', '^=cut'  ],
+                                [ 'remove_below_above'  , '^=begin', '^=end'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
+    'Raku/Prolog'        => [ [ 'die' ,          ], ], # never called
     'RAML'               => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
@@ -9664,6 +9704,7 @@ sub set_constants {                          # {{{1
     'R'                            =>   3.00,
     'Rmd'                          =>   3.00,
     'Racket'                       =>   1.50,
+    'Raku'                         =>   4.00,
     'rally'                        =>   2.00,
     'ramis ii'                     =>   2.00,
     'RAML'                         =>   0.90,
@@ -9889,6 +9930,7 @@ sub set_constants {                          # {{{1
     'PHP/Pascal'                      => 1.00,
     'Pascal/Puppet'                   => 1.00,
     'Perl/Prolog'                     => 1.00,
+    'Raku/Prolog'                     => 1.00,
     'Verilog-SystemVerilog/Coq'    => 1.00,
     'MATLAB/Mathematica/Objective C/MUMPS/Mercury' => 1.00,
     'IDL/Qt Project/Prolog/ProGuard'     => 1.00,
