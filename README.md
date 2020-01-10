@@ -2758,7 +2758,7 @@ eventually closed.
 [](1}}})
 <a name="Acknowledgments"></a> []({{{1)
 #   [Acknowledgments &#9650;](#___top "click to go to top of document")
-Wolfram Rösler provided most of the code examples in the test suite.
+[Wolfram Rösler](https://github.com/wolframroesler) provided most of the code examples in the test suite.
 These examples come from his [Hello World collection](http://helloworldcollection.de/).
 
 Ismet Kursunoglu found errors with the MUMPS counter and provided
