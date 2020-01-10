@@ -777,6 +777,11 @@ my @Tests = (
                     'args' => '../tests/inputs/greeter.tsx',
                 },
                 {
+                    'name' => 'Vala',
+                    'ref'  => '../tests/outputs/gnureadline.vala.yaml',
+                    'args' => '../tests/inputs/gnureadline.vala',
+                },
+                {
                     'name' => 'VB.Net',
                     'ref'  => '../tests/outputs/VisualBasic.Net.vba.yaml',
                     'args' => '../tests/inputs/VisualBasic.Net.vba',

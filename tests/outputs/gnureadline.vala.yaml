@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.85
+  elapsed_seconds    : 0.00732588768005371
+  n_files            : 1
+  n_lines            : 14
+  files_per_second   : 136.502229309728
+  lines_per_second   : 1911.03121033619
+  report_file        : gnureadline.vala.yaml
+'Vala' :
+  nFiles: 1
+  blank: 0
+  comment: 5
+  code: 9
+SUM: 
+  blank: 0
+  comment: 5
+  code: 9
+  nFiles: 1
