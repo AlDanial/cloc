@@ -1084,6 +1084,7 @@ my %Extension_Collision = (
     'Pascal/Puppet'                                 => [ 'pp'   ] ,
     'Perl/Prolog'                                   => [ 'pl', 'PL'  ] ,
     'PHP/Pascal'                                    => [ 'inc'  ] ,
+    'Raku/Prolog'                                   => [ 'p6', 'P6'  ] ,
     'Qt/Glade'                                      => [ 'ui'   ] ,
     'TypeScript/Qt Linguist'                        => [ 'ts'   ] ,
     'Verilog-SystemVerilog/Coq'                     => [ 'v'    ] ,
@@ -4380,6 +4381,11 @@ sub print_language_info {                    # {{{1
         push @{$extensions{'Prolog'}}, "pl";
         delete $extensions{'Perl/Prolog'};
     }
+    if (!$language or $language =~ /^(Raku|Prolog)$/i) {
+        push @{$extensions{'Perl'}}  , "p6";
+        push @{$extensions{'Prolog'}}, "p6";
+        delete $extensions{'Perl/Prolog'};
+    }
     if (!$language or $language =~ /^(IDL|Qt Project|Prolog|ProGuard)$/i) {
         push @{$extensions{'IDL'}}       , "pro";
         push @{$extensions{'Qt Project'}}, "pro";
@@ -5330,6 +5336,8 @@ sub classify_file {                          # {{{1
                 return Lisp_or_Julia( $full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'Perl/Prolog') {
                 return Perl_or_Prolog($full_file, $rh_Err, $raa_errors);
+            } elsif ($Language_by_Extension{$extension} eq 'Raku/Prolog') {
+                return Raku_or_Prolog($full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq
                      'IDL/Qt Project/Prolog/ProGuard') {
                 return IDL_or_QtProject($full_file, $rh_Err, $raa_errors);
@@ -7360,11 +7368,14 @@ sub set_constants {                          # {{{1
             'pig'         => 'Pig Latin'             ,
             'plh'         => 'Perl'                  ,
             'pl'          => 'Perl/Prolog'           ,
-            'p6'          => 'Perl/Prolog'           ,
             'PL'          => 'Perl/Prolog'           ,
+            'p6'          => 'Raku/Prolog'           ,
+            'P6'          => 'Raku/Prolog'           ,
             'plx'         => 'Perl'                  ,
             'pm'          => 'Perl'                  ,
-            'pm6'         => 'Perl'                  ,
+            'pm6'         => 'Raku'                  ,
+            'raku'        => 'Raku'                  ,
+            'rakumod'     => 'Raku'                  ,
             'pom.xml'     => 'Maven'                 ,
             'pom'         => 'Maven'                 ,
             'yap'         => 'Prolog'                ,
@@ -7758,7 +7769,6 @@ sub set_constants {                          # {{{1
             'make'     => 'make'                  ,
             'octave'   => 'Octave'                ,
             'perl5'    => 'Perl'                  ,
-            'perl6'    => 'Perl'                  ,
             'perl'     => 'Perl'                  ,
             'miniperl' => 'Perl'                  ,
             'php'      => 'PHP'                   ,
@@ -7773,6 +7783,9 @@ sub set_constants {                          # {{{1
             'python3.6'=> 'Python'                ,
             'python3.7'=> 'Python'                ,
             'python3.8'=> 'Python'                ,
+            'perl6'    => 'Raku'                  ,
+            'raku'     => 'Raku'                  ,
+            'rakudo'   => 'Raku'                  ,
             'rexx'     => 'Rexx'                  ,
             'regina'   => 'Rexx'                  ,
             'ruby'     => 'Ruby'                  ,
@@ -8610,6 +8623,12 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*;'  ],
                                 [ 'remove_inline'       , ';.*$'   ],
                             ],
+    'Raku'               => [   [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_below_above'  , '^=head1', '^=cut'  ],
+                                [ 'remove_below_above'  , '^=begin', '^=end'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
+    'Raku/Prolog'        => [ [ 'die' ,          ], ], # never called
     'RAML'               => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
@@ -9675,6 +9694,7 @@ sub set_constants {                          # {{{1
     'R'                            =>   3.00,
     'Rmd'                          =>   3.00,
     'Racket'                       =>   1.50,
+    'Raku'                         =>   4.00,
     'rally'                        =>   2.00,
     'ramis ii'                     =>   2.00,
     'RAML'                         =>   0.90,
@@ -9900,6 +9920,7 @@ sub set_constants {                          # {{{1
     'PHP/Pascal'                      => 1.00,
     'Pascal/Puppet'                   => 1.00,
     'Perl/Prolog'                     => 1.00,
+    'Raku/Prolog'                     => 1.00,
     'Verilog-SystemVerilog/Coq'    => 1.00,
     'MATLAB/Mathematica/Objective C/MUMPS/Mercury' => 1.00,
     'IDL/Qt Project/Prolog/ProGuard'     => 1.00,
