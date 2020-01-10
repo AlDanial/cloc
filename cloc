@@ -4735,7 +4735,13 @@ sub git_archive {                            # {{{1
 
     my $files_this_commit = join(" ", @{$File_Set[0]});
     print "   git_archive(file_set[0]=$files_this_commit)\n" if $opt_v > 2;
-    my ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, SUFFIX => $ON_WINDOWS ? '.zip' : '.tar');  # delete on exit
+    my ($Tarfh, $Tarfile);
+    if ($opt_sdir) {
+      File::Path::mkpath($opt_sdir) unless is_dir($opt_sdir);
+      ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, DIR => $opt_sdir, SUFFIX => $ON_WINDOWS ? '.zip' : '.tar');  # delete on exit
+    } else {
+      ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, SUFFIX => $ON_WINDOWS ? '.zip' : '.tar');  # delete on exit
+    }
     my $cmd = "git archive -o $Tarfile $files_this_commit";
     print  $cmd, "\n" if $opt_v;
     system $cmd;
