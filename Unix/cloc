@@ -7550,6 +7550,7 @@ sub set_constants {                          # {{{1
             'spc.sql'     => 'SQL Stored Procedure'  ,
             'udf.sql'     => 'SQL Stored Procedure'  ,
             'data.sql'    => 'SQL Data'              ,
+            'sss'         => 'SugarSS'               ,
             'st'          => 'Smalltalk'             ,
             'styl'        => 'Stylus'                ,
             'i'           => 'SWIG'                  ,
@@ -8704,6 +8705,10 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*;'  ],
                                 [ 'remove_inline'       , ';.*$'   ],
                             ],
+    'sed'                => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
     'Slice'             => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
@@ -8760,10 +8765,6 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*--' ],
                                 [ 'remove_inline'       , '--.*$'  ],
                             ],
-    'sed'                => [
-                                [ 'remove_matches'      , '^\s*#'  ],
-                                [ 'remove_inline'       , '#.*$'   ],
-                            ],
     'Smalltalk'          => [
                                 [ 'call_regexp_common'  , 'Smalltalk'      ],
                             ],
@@ -8780,6 +8781,11 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Stylus'             => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'SugarSS'            => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
@@ -9789,6 +9795,7 @@ sub set_constants {                          # {{{1
     'strongly typed default'       =>   0.88,
     'style'                        =>   1.74,
     'Stylus'                       =>   1.48,
+    'SugarSS'                      =>   2.50,
     'superbase 1.3'                =>   2.22,
     'surpass'                      =>  13.33,
     'SVG'                          =>   1.00,

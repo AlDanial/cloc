@@ -712,6 +712,11 @@ my @Tests = (
                     'args' => '../tests/inputs/stata.do',
                 },
                 {
+                    'name' => 'SugarSS',
+                    'ref'  => '../tests/outputs/rules.sss.yaml',
+                    'args' => '../tests/inputs/rules.sss',
+                },
+                {
                     'name' => 'SVG',
                     'ref'  => '../tests/outputs/SVG_logo.svg.yaml',
                     'args' => '../tests/inputs/SVG_logo.svg',

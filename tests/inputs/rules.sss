@@ -1,0 +1,22 @@
+// https://github.com/postcss/sugarss/raw/master/test/cases/rules.sss
+a
+  b
+    color: black
+
+a,
+b
+  color: black
+
+a /* -> */ b // go down
+em
+  color: black
+
+/*
+font:
+  family: serif */
+
+font:
+  family: serif
+
+[attr=;]
+  color: black
