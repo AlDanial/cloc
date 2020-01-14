@@ -354,6 +354,12 @@ my @Tests = (
                     ',
                     'ref'  => '../tests/outputs/issues/433/results.yaml',
                 },
+                {
+                    'name' => 'JavaScript comment in string',
+                    'cd'   => '../tests/inputs/issues/454',
+                    'args' => '--strip-str-comments createServer.js',
+                    'ref'  => '../tests/outputs/issues/454/createServer.js.yaml',
+                },
 
 #               {
 #                   'name' => '--count-and--diff with --out',
