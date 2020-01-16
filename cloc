@@ -4609,20 +4609,22 @@ sub replace_git_hash_with_tarfile {          # {{{1
             # first make a union of all files that have changed in both commits
             my %files_union = ();
 
-            # Strategy 1:  Union files are what git consinders have changed
-            #              between the two commits.
-##          my $git_list_cmd = "git diff-tree -r --no-commit-id --name-only $Left $Right";
-##          print "$git_list_cmd\n" if $opt_v;
-##          foreach my $file (`$git_list_cmd`) {
-##              chomp($file);
-##              $files_union{$file} = 1;
-##          }
-
-            # Strategy 2:  Union files all files that have changed in both
-            #              commits.
-            foreach my $file (keys %{$repo_listing{$Left }},
-                              keys %{$repo_listing{$Right}}) {
-                $files_union{$file} = 1;
+            if($opt_count_diff != 3) {
+                # Strategy 1:  Union files are what git consinders have changed
+                #              between the two commits.
+                my $git_list_cmd = "git diff-tree -r --no-commit-id --name-only $Left $Right";
+                # print "$git_list_cmd\n" if $opt_v;
+                foreach my $file (`$git_list_cmd`) {
+                    chomp($file);
+                    $files_union{$file} = 1;
+                }
+            } else {
+                # Strategy 2:  Union files all files that have changed in both
+                #              commits.
+                foreach my $file (keys %{$repo_listing{$Left }},
+                                  keys %{$repo_listing{$Right}}) {
+                   $files_union{$file} = 1;
+                }
             }
 
 #use Data::Dumper;
@@ -4641,7 +4643,13 @@ sub replace_git_hash_with_tarfile {          # {{{1
 
 #           my @Lfiles= map {$_ =~ s/([\s\(\)\[\]{}';\^\$\?])/\\$1/g; $_}   @left_files;
 #           my @Lfiles= @left_files;
-            $replacement_arg_list{$git_hash{$Left}}  = git_archive($Left , \@left_files);
+            if(scalar(@left_files) > 0) {
+                $replacement_arg_list{$git_hash{$Left}}  = git_archive($Left , \@left_files);
+            } else {
+                # In the right side commit ONLY file(s) was added, so no file(s) will exist in the left side commit.
+                # Create empty TAR to detect added lines of code.
+                $replacement_arg_list{$git_hash{$Left}} = empty_tar();
+            }
 #           $replacement_arg_list{$git_hash{$Left}}  = git_archive($Left , \@Lfiles);
 #           my @Rfiles= map {$_ =~ s/([\s\(\)\[\]{}';\^\$\?])/\\$1/g; $_}   @right_files ;
 #           my @Rfiles= @right_files ;
@@ -4649,7 +4657,14 @@ sub replace_git_hash_with_tarfile {          # {{{1
 #print Dumper('left' , \@left_files);
 #print Dumper('right', \@right_files);
 #die;
-            $replacement_arg_list{$git_hash{$Right}} = git_archive($Right, \@right_files);
+
+            if(scalar(@right_files) > 0) {
+                $replacement_arg_list{$git_hash{$Right}} = git_archive($Right, \@right_files);
+            } else {
+                 # In the left side commit ONLY file(s) was deleted, so file(s) will not exist in right side commit.
+                 # Create empty TAR to detect removed lines of code.
+                 $replacement_arg_list{$git_hash{$Right}} = empty_tar();
+            }
 #           $replacement_arg_list{$git_hash{$Right}} = git_archive($Right, \@Rfiles);
 #write_file("/tmp/Lfiles.txt", {}, sort @Lfiles);
 #write_file("/tmp/Rfiles.txt", {}, sort @Rfiles);
@@ -4694,6 +4709,26 @@ sub replace_git_hash_with_tarfile {          # {{{1
 #print "ra_arg_list 2: @{$ra_arg_list}\n";
     print "<- replace_git_hash_with_tarfile()\n" if $opt_v > 2;
 } # 1}}}
+
+sub empty_tar {
+    my ($Tarfh, $Tarfile);
+    if ($opt_sdir) {
+      File::Path::mkpath($opt_sdir) unless is_dir($opt_sdir);
+      ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, DIR => $opt_sdir, SUFFIX => $ON_WINDOWS ? '.zip' : '.tar');  # delete on exit
+    } else {
+      ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, SUFFIX => $ON_WINDOWS ? '.zip' : '.tar');  # delete on exit
+    }
+    my $cmd = $ON_WINDOWS ? "type nul > $Tarfile" : "touch $Tarfile";
+    print  $cmd, "\n" if $opt_v;
+    system $cmd;
+    if (!-r $Tarfile) {
+        # not readable
+        die "Failed to create empty tarfile.";
+    }
+
+    return $Tarfile;
+}
+
 sub git_archive {                            # {{{1
     # Invoke 'git archive' as a system command to create a tar file
     # using the given argument(s).

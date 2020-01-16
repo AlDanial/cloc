@@ -1,0 +1,56 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.85
+  elapsed_seconds    : 0.123239994049072
+  n_files            : 1
+  n_lines            : 555
+  files_per_second   : 8.11424901239297
+  lines_per_second   : 4503.4082018781
+  report_file        : 04179b6_ae0d26e.yaml
+added :
+  'C++' :
+    comment : 0
+    code : 0
+    blank : 0
+    nFiles : 0
+same :
+  'C++' :
+    comment : 0
+    code : 0
+    blank : 0
+    nFiles : 0
+modified :
+  'C++' :
+    comment : 0
+    code : 0
+    blank : 0
+    nFiles : 0
+removed :
+  'C++' :
+    comment : 114
+    code : 365
+    blank : 76
+    nFiles : 1
+SUM :
+  added :
+    nFiles : 0
+    blank : 0
+    comment : 0
+    code : 0
+  same :
+    nFiles : 0
+    blank : 0
+    comment : 0
+    code : 0
+  modified :
+    nFiles : 0
+    blank : 0
+    comment : 0
+    code : 0
+  removed :
+    nFiles : 1
+    blank : 76
+    comment : 114
+    code : 365
