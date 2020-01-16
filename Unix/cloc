@@ -217,6 +217,10 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              to obtain file names (and therefore may require
                              authentication to the remote repository), but
                              the files themselves must be local.
+                             Setting <VCS> to 'auto' selects between 'git'
+                             and 'svn' (or neither) depending on the presence
+                             of a .git or .svn subdirectory below the directory
+                             where cloc is invoked.
    --unicode                 Check binary files to see if they contain Unicode
                              expanded ASCII text.  This causes performance to
                              drop noticeably.
@@ -1024,6 +1028,15 @@ if ($opt_by_percent and $opt_by_percent !~ m/^(c|cm|cb|cmb)$/i) {
 $opt_by_percent = lc $opt_by_percent;
 
 if (defined $opt_vcs) {
+    if ($opt_vcs eq "auto") {
+        if      (-d ".git") {
+            $opt_vcs = "git";
+        } elsif (-d ".svn") {
+            $opt_vcs = "svn";
+        } else {
+            warn "--vcs auto:  unable to determine versioning system\n";
+        }
+    }
     if      ($opt_vcs eq "git") {
         $opt_vcs = "git ls-files";
         my @submodules = invoke_generator('git submodule status');
