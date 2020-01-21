@@ -11,11 +11,11 @@ RUN perl -MCPAN -e 'install Digest::MD5'
 RUN perl -MCPAN -e 'install Parallel::ForkManager'
 
 COPY cloc /usr/src/
-COPY .git /usr/src/
+COPY .git /usr/src/.git
 COPY tests /usr/src/tests
 COPY Unix /usr/src/Unix
 
 WORKDIR /usr/src/Unix
 
-#RUN tests/make_git_repo.bash
-#RUN make test
+RUN make test
+RUN rm -rf .git

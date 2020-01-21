@@ -1,0 +1,24 @@
+# This workflow will build a container image,
+# on every push and pull request.
+
+on: [push, pull_request]
+
+name: Build to Amazon ECR
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Build image
+      id: build-image
+      env:
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        # Build a docker container
+        docker build .
+        echo "::set-output name=$IMAGE_TAG"
