@@ -17,5 +17,7 @@ COPY Unix /usr/src/Unix
 
 WORKDIR /usr/src/Unix
 
+RUN git clone https://github.com/AlDanial/cloc_submodule_test.git
+
 RUN make test
 RUN rm -rf .git
