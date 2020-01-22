@@ -33,7 +33,7 @@ at http://cloc.sourceforge.net/ since August 2006.
     *   [SQL](#sql-)
     *   [Custom Column Output](#custom-column-output-)
     *   [Wrapping cloc in other scripts](#wrapping-cloc-in-other-scripts-)
-    *   [Count specific git branch](#count-specific-git-branch-)
+    *   [git and UTF8 pathnames](#git-and-UTF8-pathnames-)
     *   [Third Generation Language Scale Factors](#third-generation-language-scale-factors-)
 *   [Complex regular subexpression recursion limit ](#complex-regular-subexpression-recursion-limit-)
 *   [Limitations](#limitations-)
@@ -2592,6 +2592,24 @@ Other examples:
 git repository and send the results as a .csv email attachment:
 https://github.com/dannyloweatx/checkmarx
 
+
+[](1}}})
+<a name="git_and_UTF8_pathnames"></a> []({{{1)
+##  [git and UTF8 pathnames &#9650;](#___top "click to go to top of document")
+
+cloc's ``--git`` option may fail if you work with directory or
+file names with UTF-8 characters (for example, see
+<a href=https://github.com/AlDanial/cloc/issues/457>issue 457</a>).
+The solution,
+https://stackoverflow.com/questions/22827239/how-to-make-git-properly-display-utf-8-encoded-pathnames-in-the-console-window,
+is to apply this git configuration command:
+
+<pre>
+git config --global core.quotepath off
+</pre>
+
+Your console's font will need to be capable of displaying
+Unicode characters.
 
 [](1}}})
 <a name="scale_factors"></a> []({{{1)
