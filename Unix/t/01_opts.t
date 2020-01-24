@@ -313,52 +313,64 @@ my @Tests = (
                 },
 
                 {
-                    'name' => '--exclude-dir and --follow-link issue 407 1/3',
+                    'name' => '--exclude-dir and --follow-link, #407 1/3',
                     'cd'   => '../tests/inputs/issues/407',
                     'args' => '--follow-link --exclude-dir Test count_dir',
                     'ref'  => '../tests/outputs/issues/407/results1.yaml',
                 },
 
                 {
-                    'name' => '--exclude-dir and --follow-link issue 407 2/3',
+                    'name' => '--exclude-dir and --follow-link, #407 2/3',
                     'cd'   => '../tests/inputs/issues/407',
                     'args' => '--exclude-dir Test level2',
                     'ref'  => '../tests/outputs/issues/407/results2.yaml',
                 },
 
                 {
-                    'name' => '--exclude-dir and --follow-link issue 407 3/3',
+                    'name' => '--exclude-dir and --follow-link, #407 3/3',
                     'cd'   => '../tests/inputs/issues/407',
                     'args' => '--follow-link --exclude-dir Test level2',
                     'ref'  => '../tests/outputs/issues/407/results3.yaml',
                 },
 
                 {
-                    'name' => 'doubly counted she-bang line issue 408',
+                    'name' => 'doubly counted she-bang line, #408',
                     'cd'   => '../tests/inputs/issues/408',
                     'args' => 'badly_named_ruby.pl',
                     'ref'  => '../tests/outputs/issues/408/badly_named_ruby.yaml',
                 },
 
                 {
-                    'name' => 'case insensitive file ext 420',
+                    'name' => 'case insensitive file ext, #420',
                     'cd'   => '../tests/inputs/issues/420',
                     'args' => '--ignore-case-ext .',
                     'ref'  => '../tests/outputs/issues/420/results.yaml',
                 },
 
                 {
-                    'name' => 'diff with --exclude-list-file 433',
+                    'name' => 'diff with --exclude-list-file, #433',
                     'cd'   => '../tests/inputs/issues/433',
                     'args' => '--exclude-list-file excl.txt --by-file --follow-links --diff L R
                     ',
                     'ref'  => '../tests/outputs/issues/433/results.yaml',
                 },
                 {
-                    'name' => 'JavaScript comment in string',
+                    'name' => 'JavaScript comment in string, #454',
                     'cd'   => '../tests/inputs/issues/454',
                     'args' => '--strip-str-comments createServer.js',
                     'ref'  => '../tests/outputs/issues/454/createServer.js.yaml',
+                },
+                {
+                    'name' => 'XML with no extension, #456',
+                    'cd'   => '../tests/inputs/issues/456',
+                    'args' => 'XML_no_ext',
+                    'ref'  => '../tests/outputs/issues/456/XML_no_ext.yaml',
+                },
+                {
+                    'name' => 'XML with unusual extension, #456',
+                    'cd'   => '../tests/inputs/issues/456',
+                    'args' => 'XML_weird_ext.profile',
+                    'ref'  => '../tests/outputs/issues/456/XML_weird_ext.profile.yaml',
                 },
 
 #               {

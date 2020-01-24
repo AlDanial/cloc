@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.85
+  elapsed_seconds    : 0.00800895690917969
+  n_files            : 1
+  n_lines            : 5
+  files_per_second   : 124.860204810669
+  lines_per_second   : 624.301024053346
+  report_file        : /home/al/git-cloc/tests/outputs/issues/456/XML_no_ext.yaml
+'XML' :
+  nFiles: 1
+  blank: 0
+  comment: 2
+  code: 3
+SUM: 
+  blank: 0
+  comment: 2
+  code: 3
+  nFiles: 1

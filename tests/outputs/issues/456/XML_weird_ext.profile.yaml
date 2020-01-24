@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.85
+  elapsed_seconds    : 0.00759005546569824
+  n_files            : 1
+  n_lines            : 4
+  files_per_second   : 131.75134286163
+  lines_per_second   : 527.005371446521
+  report_file        : /home/al/git-cloc/tests/outputs/issues/456/XML_weird_ext.profile.yaml
+'XML' :
+  nFiles: 1
+  blank: 0
+  comment: 1
+  code: 3
+SUM: 
+  blank: 0
+  comment: 1
+  code: 3
+  nFiles: 1

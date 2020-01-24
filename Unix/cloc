@@ -5453,9 +5453,9 @@ sub classify_file {                          # {{{1
         # starts with pound bang:
         #   #!/usr/bin/perl
         #   #!/usr/bin/env perl
-        my $script_language = peek_at_first_line($full_file ,
-                                                 $rh_Err    ,
-                                                 $raa_errors);
+        my ($script_language, $L) = peek_at_first_line($full_file ,
+                                                       $rh_Err    ,
+                                                       $raa_errors);
         if (!$script_language) {
             $rh_ignored->{$full_file} = "language unknown (#2)";
             # returns (unknown)
@@ -5472,7 +5472,15 @@ sub classify_file {                          # {{{1
                 # returns (unknown)
             }
         } else {
-            $rh_ignored->{$full_file} = "language unknown (#3)";
+            # #456:  XML files can have a variety of domain-specific file
+            #        extensions.  If the extension is unrecognized, examine
+            #        the first line of the file to see if it is XML
+            if ($L =~ /<\?xml\s/) {
+                $language = "XML";
+                delete $rh_ignored->{$full_file};
+            } else {
+                $rh_ignored->{$full_file} = "language unknown (#3)";
+            }
             # returns (unknown)
         }
     }
@@ -5530,7 +5538,7 @@ sub peek_at_first_line {                     # {{{1
         }
     }
     print "<- peek_at_first_line($file)\n" if $opt_v > 2;
-    return $script_language;
+    return ($script_language, $first_line);
 } # 1}}}
 sub different_files {                        # {{{1
     # See which of the given files are unique by computing each file's MD5
@@ -12283,7 +12291,7 @@ sub really_is_D {                            # {{{1
         $raa_errors  , # out
        ) = @_;
     print "-> really_is_D($file)\n" if $opt_v > 2;
-    my $possible_script = peek_at_first_line($file, $rh_Err, $raa_errors);
+    my ($possible_script, $L) = peek_at_first_line($file, $rh_Err, $raa_errors);
 
     print "<- really_is_D($file)\n" if $opt_v > 2;
     return $possible_script;    # null string if D, otherwise a language
