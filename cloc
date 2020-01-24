@@ -4718,7 +4718,7 @@ sub empty_tar {
     } else {
       ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, SUFFIX => $ON_WINDOWS ? '.zip' : '.tar');  # delete on exit
     }
-    my $cmd = $ON_WINDOWS ? "type nul > $Tarfile" : "touch $Tarfile";
+    my $cmd = $ON_WINDOWS ? "type nul > $Tarfile" : "tar -cf $Tarfile -T /dev/null";
     print  $cmd, "\n" if $opt_v;
     system $cmd;
     if (!-r $Tarfile) {
