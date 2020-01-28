@@ -1,9 +1,9 @@
 # This workflow will build a container image,
-# on every push and pull request.
+# to run all tests (syntax checking + integration tests) on each PR and git push.
 
 on: [push, pull_request]
 
-name: Build to Amazon ECR
+name: Run all tests
 
 jobs:
   deploy:
@@ -14,11 +14,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v1
 
-    - name: Build image
-      id: build-image
+    - name: Run tests
+      id: run-tests
       env:
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        # Build a docker container
+        # Build a docker container to run tests
         docker build .
-        echo "::set-output name=$IMAGE_TAG"
