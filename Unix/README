@@ -28,5 +28,7 @@ Project details
       Perl (version 5.006 or newer). Uses only standard Perl libraries.
       CPAN Algorithm::Diff
       CPAN Regexp::Common
+      CPAN Parallel::ForkManager
+      CPAN Digest::MD5
 
 End of file
