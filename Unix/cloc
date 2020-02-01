@@ -11080,19 +11080,22 @@ sub array_diff {                             # {{{1
         } elsif ($flag eq '+') {  # + = added
             ++$n_R;
             if ($COMMENT_MODE) {
-                # should never get here
-                @{$rah_diff_L} = ();
-                @{$rah_diff_R} = ();
-                push @{$raa_Errors},
-                     [ $Error_Codes{'Diff error (quoted comments?)'}, $file ];
+                # should never get here, but may due to sdiff() bug,
+                # ref https://rt.cpan.org/Public/Bug/Display.html?id=131629
+                # Rather than failing, ignore and continue.  A possible
+                # consequence is counts may be inconsistent.
+#####           @{$rah_diff_L} = ();
+#####           @{$rah_diff_R} = ();
+#####           push @{$raa_Errors},
+#####                [ $Error_Codes{'Diff error (quoted comments?)'}, $file ];
                 if ($opt_v) {
                   warn "array_diff: diff failure (diff says the\n";
                   warn "comment-free file has added lines).\n";
                   warn "$n_sdiff  $line_L\n";
                 }
-                last;
             }
-            $rah_diff_L->[$n_sdiff]{type} = "nonexist";
+####        $rah_diff_L->[$n_sdiff]{type} = "nonexist";
+            $rah_diff_L->[$n_sdiff]{type} = "comment";
             $rah_diff_L->[$n_sdiff]{desc} = "removed";
             $rah_diff_R->[$n_sdiff]{desc} = "added";
             $rah_diff_R->[$n_sdiff]{lnum} = $n_R;

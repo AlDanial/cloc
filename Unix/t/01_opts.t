@@ -372,6 +372,12 @@ my @Tests = (
                     'args' => 'XML_weird_ext.profile',
                     'ref'  => '../tests/outputs/issues/456/XML_weird_ext.profile.yaml',
                 },
+                {
+                    'name' => 'ignore Algorithm::Diff::sdiff() failures, #463',
+                    'cd'   => '../tests/inputs/issues/463',
+                    'args' => '--diff left.C right.C',
+                    'ref'  => '../tests/outputs/issues/463/diff.yaml',
+                },
 
 #               {
 #                   'name' => '--count-and--diff with --out',
