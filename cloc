@@ -195,7 +195,8 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              process from <file>, which has one file/directory
                              name per line.  Only exact matches are counted;
                              relative path names will be resolved starting from
-                             the directory where cloc is invoked.
+                             the directory where cloc is invoked.  Set <file>
+                             to - to read file names from a STDIN pipe.
                              See also --exclude-list-file.
    --vcs=<VCS>               Invoke a system call to <VCS> to obtain a list of
                              files to work on.  If <VCS> is 'git', then will
@@ -13387,9 +13388,15 @@ sub uncompress_archive_cmd {                 # {{{1
 # 1}}}
 sub read_list_file {                         # {{{1
     my ($file, ) = @_;
+    # reads filenames from a STDIN pipe if $file == "-"
 
     print "-> read_list_file($file)\n" if $opt_v > 2;
-    my $IN = new IO::File $file, "r";
+    my $IN;
+    if ($file eq "-") {
+        open($IN, $file);
+    } else {
+        $IN = new IO::File $file, "r";
+    }
     if (!defined $IN) {
         warn "Unable to read $file; ignoring.\n";
         return ();
