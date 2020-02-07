@@ -1,0 +1,96 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.85
+  elapsed_seconds    : 0.0106370449066162
+  n_files            : 3
+  n_lines            : 34
+  files_per_second   : 282.033217527737
+  lines_per_second   : 3196.37646531436
+  report_file        : /home/al/git-cloc/tests/outputs/issues/455/list.yaml
+added :
+  'C++' :
+    blank : 0
+    comment : 0
+    nFiles : 0
+    code : 0
+  'Fortran 90' :
+    comment : 1
+    blank : 0
+    nFiles : 0
+    code : 0
+  'Python' :
+    comment : 0
+    blank : 0
+    nFiles : 0
+    code : 0
+same :
+  'C++' :
+    blank : 0
+    comment : 1
+    nFiles : 0
+    code : 6
+  'Fortran 90' :
+    comment : 3
+    blank : 0
+    nFiles : 0
+    code : 4
+  'Python' :
+    comment : 10
+    blank : 4
+    nFiles : 1
+    code : 3
+modified :
+  'C++' :
+    blank : 0
+    comment : 1
+    nFiles : 1
+    code : 0
+  'Fortran 90' :
+    comment : 0
+    blank : 0
+    nFiles : 1
+    code : 0
+  'Python' :
+    comment : 0
+    blank : 0
+    nFiles : 0
+    code : 0
+removed :
+  'C++' :
+    blank : 0
+    comment : 0
+    nFiles : 0
+    code : 0
+  'Fortran 90' :
+    comment : 0
+    blank : 0
+    nFiles : 0
+    code : 1
+  'Python' :
+    comment : 0
+    blank : 0
+    nFiles : 0
+    code : 0
+SUM :
+  added :
+    comment : 1
+    blank : 0
+    nFiles : 0
+    code : 0
+  same :
+    comment : 14
+    blank : 4
+    nFiles : 1
+    code : 13
+  modified :
+    comment : 1
+    blank : 0
+    nFiles : 2
+    code : 0
+  removed :
+    comment : 0
+    blank : 0
+    nFiles : 0
+    code : 1

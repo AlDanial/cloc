@@ -1,0 +1,3 @@
+tests/inputs/diff/A/d1/hello.f90 | tests/inputs/diff/B/d1/hello.f90
+tests/inputs/diff/A/hello.C | tests/inputs/diff/B/hello.C
+tests/inputs/diff/A/d2/hi.py | tests/inputs/diff/B/d2/hi.py

@@ -1,6 +1,6 @@
 #   Copyright
 #
-#      Copyright (C) 2018-2019 Al Danial <al.danial@gmail.com>.
+#      Copyright (C) 2018-2020 Al Danial <al.danial@gmail.com>.
 #      Copyright (C) 2010-2017 Jari Aalto <jari.aalto@cante.net>
 #
 #   License
@@ -92,6 +92,7 @@ process from FILE, which has one file/directory
 name per line.  Only exact matches are counted;
 relative path names will be resolved starting from
 the directory where cloc is invoked.
+Set FILE to - to read file names from a STDIN pipe.
 See also
 B<--exclude-list-file>.
 

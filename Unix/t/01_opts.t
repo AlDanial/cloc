@@ -378,6 +378,18 @@ my @Tests = (
                     'args' => '--diff left.C right.C',
                     'ref'  => '../tests/outputs/issues/463/diff.yaml',
                 },
+                {
+                    'name' => 'diff list input format 1, #455',
+                    'cd'   => '../',
+                    'args' => '--diff-list-file tests/inputs/issues/455/list.txt',
+                    'ref'  => '../tests/outputs/issues/455/list.yaml',
+                },
+                {
+                    'name' => 'diff list input format 2, #455',
+                    'cd'   => '../',
+                    'args' => '--diff-list-file tests/inputs/issues/455/list_align.txt',
+                    'ref'  => '../tests/outputs/issues/455/list_align.yaml',
+                },
 
 #               {
 #                   'name' => '--count-and--diff with --out',

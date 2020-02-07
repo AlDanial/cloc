@@ -1,0 +1,136 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.85
+  elapsed_seconds    : 0.0118508338928223
+  n_files            : 5
+  n_lines            : 47
+  files_per_second   : 421.91123807991
+  lines_per_second   : 3965.96563795115
+  report_file        : /home/al/git-cloc/tests/outputs/issues/455/list_align.yaml
+added :
+  'C++' :
+    code : 0
+    nFiles : 0
+    blank : 0
+    comment : 0
+  'Java' :
+    blank : 0
+    comment : 0
+    nFiles : 0
+    code : 0
+  'Perl' :
+    nFiles : 1
+    blank : 0
+    comment : 0
+    code : 2
+  'Python' :
+    code : 0
+    comment : 0
+    blank : 0
+    nFiles : 0
+  'Fortran 90' :
+    code : 0
+    nFiles : 0
+    blank : 0
+    comment : 1
+same :
+  'C++' :
+    code : 6
+    nFiles : 0
+    blank : 0
+    comment : 1
+  'Java' :
+    blank : 0
+    comment : 0
+    nFiles : 0
+    code : 0
+  'Perl' :
+    nFiles : 0
+    blank : 0
+    comment : 0
+    code : 0
+  'Python' :
+    code : 3
+    comment : 10
+    blank : 4
+    nFiles : 1
+  'Fortran 90' :
+    code : 4
+    nFiles : 0
+    blank : 0
+    comment : 3
+modified :
+  'C++' :
+    code : 0
+    nFiles : 1
+    blank : 0
+    comment : 1
+  'Java' :
+    blank : 0
+    comment : 0
+    nFiles : 0
+    code : 0
+  'Perl' :
+    nFiles : 0
+    blank : 0
+    comment : 0
+    code : 0
+  'Python' :
+    code : 0
+    comment : 0
+    blank : 0
+    nFiles : 0
+  'Fortran 90' :
+    code : 0
+    nFiles : 1
+    blank : 0
+    comment : 0
+removed :
+  'C++' :
+    code : 0
+    nFiles : 0
+    blank : 0
+    comment : 0
+  'Java' :
+    blank : 0
+    comment : 4
+    nFiles : 1
+    code : 7
+  'Perl' :
+    nFiles : 0
+    blank : 0
+    comment : 0
+    code : 0
+  'Python' :
+    code : 0
+    comment : 0
+    blank : 0
+    nFiles : 0
+  'Fortran 90' :
+    code : 1
+    nFiles : 0
+    blank : 0
+    comment : 0
+SUM :
+  added :
+    comment : 1
+    blank : 0
+    nFiles : 1
+    code : 2
+  same :
+    comment : 14
+    blank : 4
+    nFiles : 1
+    code : 13
+  modified :
+    comment : 1
+    blank : 0
+    nFiles : 2
+    code : 0
+  removed :
+    comment : 4
+    blank : 0
+    nFiles : 1
+    code : 8

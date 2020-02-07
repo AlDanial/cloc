@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 # cloc -- Count Lines of Code                  {{{1
-# Copyright (C) 2006-2019 Al Danial <al.danial@gmail.com>
+# Copyright (C) 2006-2020 Al Danial <al.danial@gmail.com>
 # First release August 2006
 #
 # Includes code from:
@@ -198,6 +198,12 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              the directory where cloc is invoked.  Set <file>
                              to - to read file names from a STDIN pipe.
                              See also --exclude-list-file.
+   --diff-list-file=<file>   Take the pairs of file names to be diff'ed from
+                             <file>, whose format matches the output of
+                             --diff-alignment.  (Run with that option to
+                             see a sample.)  The language identifier at the
+                             end of each line is ignored.  This enables --diff
+                             mode and by-passes file pair alignment logic.
    --vcs=<VCS>               Invoke a system call to <VCS> to obtain a list of
                              files to work on.  If <VCS> is 'git', then will
                              invoke 'git ls-files' to get a file list and
@@ -253,7 +259,8 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              may be any mix of files, directories, archives,
                              or git commit hashes.  Use --diff-alignment to
                              generate a list showing which file pairs where
-                             compared.  See also --count-and-diff, --diff-alignment.
+                             compared.  See also --count-and-diff,
+                             --diff-alignment, --diff-list-file.
                              --diff-timeout, --ignore-case, --ignore-whitespace,
    --diff-timeout <N>        Ignore files which take more than <N> seconds
                              to process.  Default is 10 seconds.  Setting <N>
@@ -620,6 +627,7 @@ my (
     $opt_count_diff           ,
     $opt_diff                 ,
     $opt_diff_alignment       ,
+    $opt_diff_list_file       ,
     $opt_diff_timeout         ,
     $opt_timeout              ,
     $opt_html                 ,
@@ -721,6 +729,7 @@ my $getopt_success = GetOptions(             # {{{1
    "diff"                                    => \$opt_diff                ,
    "diff-alignment|diff_alignment=s"         => \$opt_diff_alignment      ,
    "diff-timeout|diff_timeout=i"             => \$opt_diff_timeout        ,
+   "diff-list-file|diff_list_file=s"         => \$opt_diff_list_file      ,
    "timeout=i"                               => \$opt_timeout             ,
    "html"                                    => \$opt_html                ,
    "ignored=s"                               => \$opt_ignored             ,
@@ -928,7 +937,8 @@ $Exclude_Dir{".git"}   = 1;
 $Exclude_Dir{".bzr"}   = 1;
 $Exclude_Dir{".snapshot"} = 1;  # NetApp backups
 $opt_count_diff        = defined $opt_count_diff ? 1 : 0;
-$opt_diff              = 1  if $opt_diff_alignment;
+$opt_diff              = 1  if $opt_diff_alignment or $opt_diff_list_file;
+$opt_diff_alignment    = 0  if $opt_diff_list_file;
 $opt_exclude_ext       = "" unless $opt_exclude_ext;
 $opt_ignore_whitespace = 0  unless $opt_ignore_whitespace;
 $opt_ignore_case       = 0  unless $opt_ignore_case;
@@ -978,7 +988,7 @@ $opt_vcs = 0 if $opt_force_git;
 
 my @COUNT_DIFF_ARGV        = undef;
 my $COUNT_DIFF_report_file = undef;
-if ($opt_count_diff) {
+if ($opt_count_diff and !$opt_diff_list_file) {
     die "--count-and-diff requires two arguments; got ", scalar @ARGV, "\n"
         if scalar @ARGV != 2;
     # prefix with a dummy term so that $opt_count_diff is the
@@ -1065,16 +1075,19 @@ die $brief_usage unless defined $opt_version         or
                         defined $opt_write_lang_def  or
                         defined $opt_write_lang_def_incl_dup  or
                         defined $opt_list_file       or
+                        defined $opt_diff_list_file  or
                         defined $opt_vcs             or
                         defined $opt_xsl             or
                         defined $opt_explain         or
                         $list_no_autogen             or
                         scalar @ARGV >= 1;
-die "--diff requires two arguments; got ", scalar @ARGV, "\n"
-    if $opt_diff and !$opt_sum_reports and scalar @ARGV != 2;
-die "--diff arguments are identical; nothing done", "\n"
-    if $opt_diff and !$opt_sum_reports and scalar @ARGV == 2
-                                       and $ARGV[0] eq $ARGV[1];
+if (!$opt_diff_list_file) {
+	die "--diff requires two arguments; got ", scalar @ARGV, "\n"
+		if $opt_diff and !$opt_sum_reports and scalar @ARGV != 2;
+	die "--diff arguments are identical; nothing done", "\n"
+		if $opt_diff and !$opt_sum_reports and scalar @ARGV == 2
+										   and $ARGV[0] eq $ARGV[1];
+}
 trick_pp_packer_encode() if $ON_WINDOWS and $opt_file_encoding;
 $File::Find::dont_use_nlink = 1 if $opt_stat or top_level_SMB_dir(\@ARGV);
 replace_git_hash_with_tarfile(\@ARGV);
@@ -1546,11 +1559,39 @@ if ($opt_diff) {
 # Step 4:  Separate code from non-code files.  {{{1
 my @fh            = ();
 my @files_for_set = ();
+my @files_added_tot = ();
+my @files_removed_tot = ();
+my @file_pairs_tot = ();
 # make file lists for each separate argument
+if ($opt_diff_list_file) {
+	@files_for_set = ( (), () );
+    file_pairs_from_file($opt_diff_list_file, # in
+                        \@files_added_tot   , # out
+                        \@files_removed_tot , # out
+                        \@file_pairs_tot    , # out
+                       );
+    foreach my $F (@files_added_tot) {
+		push @{$files_for_set[1]}, $F;
+	}
+    foreach my $F (@files_removed_tot) {
+		push @{$files_for_set[0]}, $F;
+	}
+    foreach my $pair (@file_pairs_tot) {
+		push @{$files_for_set[0]}, $pair->[0];
+		push @{$files_for_set[1]}, $pair->[1];
+	}
+	@ARGV = (1, 2); # place holders
+}
 for (my $i = 0; $i < scalar @ARGV; $i++) {
-    push @fh,
-         make_file_list([ $ARGV[$i] ], \%Error_Codes, \@Errors, \%Ignored);
-    @{$files_for_set[$i]} = @file_list;
+	if ($opt_diff_list_file) {
+		push @fh, make_file_list($files_for_set[$i],
+                                \%Error_Codes, \@Errors, \%Ignored);
+		@{$files_for_set[$i]} = @file_list;
+    } else {
+		push @fh, make_file_list([ $ARGV[$i] ],
+                                \%Error_Codes, \@Errors, \%Ignored);
+		@{$files_for_set[$i]} = @file_list;
+    }
     if ($opt_exclude_list_file) {
         # note: process_exclude_list_file() references global @file_list
         process_exclude_list_file($opt_exclude_list_file,
@@ -1595,9 +1636,6 @@ my %Results_by_File     = ();
 my %Delta_by_Language   = ();
 my %Delta_by_File       = ();
 
-my @files_added_tot = ();
-my @files_removed_tot = ();
-my @file_pairs_tot = ();
 my %alignment = ();
 
 my $fset_a = $fh[0];
@@ -1607,16 +1645,18 @@ my $n_filepairs_compared = 0;
 my $tot_counted = 0;
 
 if ( scalar @fh != 2 ) {
-    print "Error: in correct length fh array when preparing diff at step 6.\n";
-    exit 1;
+	print "Error: incorrect length fh array when preparing diff at step 6.\n";
+	exit 1;
+}
+if (!$opt_diff_list_file) {
+    align_by_pairs(\%{$unique_source_file{$fset_a}}      , # in
+                   \%{$unique_source_file{$fset_b}}      , # in
+                   \@files_added_tot                     , # out
+                   \@files_removed_tot                   , # out
+                   \@file_pairs_tot                      , # out
+                  );
 }
 
-align_by_pairs(\%{$unique_source_file{$fset_a}}      , # in
-               \%{$unique_source_file{$fset_b}}      , # in
-               \@files_added_tot                     , # out
-               \@files_removed_tot                   , # out
-               \@file_pairs_tot                      , # out
-              );
 #use Data::Dumper;
 #print "added : ", Dumper(\@files_added_tot);
 #print "removed : ", Dumper(\@files_removed_tot);
@@ -5825,6 +5865,67 @@ sub write_file {                             # {{{1
 
     print "<- write_file\n" if $opt_v > 2;
 } # 1}}}
+sub file_pairs_from_file {                   # {{{1
+    my ($file             , # in
+        $ra_added         , # out
+        $ra_removed       , # out
+        $ra_compare_list  , # out
+       ) = @_;
+    #
+    # Example valid input format for $file
+    # 1)
+	#   A/d1/hello.f90 | B/d1/hello.f90
+	#   A/hello.C | B/hello.C
+	#   A/d2/hi.py | B/d2/hi.py
+    #
+    # 2)
+	# Files added: 1
+	#   + B/extra_file.pl ; Perl
+	# 
+	# Files removed: 1
+	#   - A/d2/hello.java ; Java
+	# 
+	# File pairs compared: 3
+	#   != A/d1/hello.f90 | B/d1/hello.f90 ; Fortran 90
+	#   != A/hello.C | B/hello.C ; C++
+	#   == A/d2/hi.py | B/d2/hi.py ; Python
+
+    print "-> file_pairs_from_file($file)\n" if $opt_v and $opt_v > 2;
+    @{$ra_compare_list} = ();
+    my @lines = read_file($file);
+    my $mode = "compare";
+    foreach my $L (@lines) {
+        next if $L =~ /^\s*$/ or $L =~ /^\s*#/;
+		chomp($L);
+        if      ($L =~ /^Files\s+(added|removed):/) {
+            $mode = $1;
+        } elsif ($L =~ /^File\s+pairs\s+compared:/) {
+    		$mode = "compare";
+        } elsif ($mode eq "added" or $mode eq "removed") {
+            $L =~ m/^\s*[+-]\s+(.*?)\s+;/;
+            my $F = $1;
+            if (!defined $1) {
+                warn "file_pairs_from_file($file) parse failure\n",
+                     "in $mode mode for '$L', ignoring\n";
+                next;
+            }
+            if ($mode eq "added") {
+                push @{$ra_added}  , $F;
+            } else {
+                push @{$ra_removed}, $F;
+            }
+        } else {
+    		$L =~ m/^\s*([!=]=\s*)?(.*?)\s*\|\s*(.*?)\s*(;.*?)?$/;
+            if (!defined $2 or !defined $3) {
+                warn "file_pairs_from_file($file) parse failure\n",
+                     "in compare mode for '$L', ignoring\n";
+                next;
+            }
+            push @{$ra_compare_list}, ( [$2, $3] );
+        }
+    }
+    print "<- file_pairs_from_file\n" if $opt_v and $opt_v > 2;
+}
 sub read_file  {                             # {{{1
     my ($file, ) = @_;
     my %BoM = (
