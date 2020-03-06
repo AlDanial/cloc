@@ -7166,6 +7166,7 @@ sub set_constants {                          # {{{1
             'da'          => 'DAL'                   ,
             'dart'        => 'Dart'                  ,
             'def'         => 'Windows Module Definition',
+            'dhall'       => 'dhall'                 ,
             'dt'          => 'DIET'                  ,
             'patch'       => 'diff'                  ,
             'diff'        => 'diff'                  ,
@@ -8158,6 +8159,7 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'dhall'              => [   [ 'remove_haskell_comments', '>filename<' ], ],
     'DIET'               => [  # same as Pug
                                 [ 'remove_pug_block'    ,          ],
                                 [ 'remove_matches'      , '^\s*//' ],
@@ -9490,6 +9492,7 @@ sub set_constants {                          # {{{1
     'decision support default'     =>   2.22,
     'decrally'                     =>   2.00,
     'delphi'                       =>   2.76,
+    'dhall'                        =>   2.11,
     'DITA'                         =>   1.90,
     'dl/1'                         =>   2.00,
     'dtrace'                       =>   2.00,

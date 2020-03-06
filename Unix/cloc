@@ -936,6 +936,7 @@ $Exclude_Dir{".hg"}    = 1;
 $Exclude_Dir{".git"}   = 1;
 $Exclude_Dir{".bzr"}   = 1;
 $Exclude_Dir{".snapshot"} = 1;  # NetApp backups
+$Exclude_Dir{".config"} = 1;
 $opt_count_diff        = defined $opt_count_diff ? 1 : 0;
 $opt_diff              = 1  if $opt_diff_alignment or $opt_diff_list_file;
 $opt_diff_alignment    = 0  if $opt_diff_list_file;
@@ -7175,6 +7176,7 @@ sub set_constants {                          # {{{1
             'da'          => 'DAL'                   ,
             'dart'        => 'Dart'                  ,
             'def'         => 'Windows Module Definition',
+            'dhall'       => 'dhall'                 ,
             'dt'          => 'DIET'                  ,
             'patch'       => 'diff'                  ,
             'diff'        => 'diff'                  ,
@@ -8167,6 +8169,7 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'dhall'              => [   [ 'remove_haskell_comments', '>filename<' ], ],
     'DIET'               => [  # same as Pug
                                 [ 'remove_pug_block'    ,          ],
                                 [ 'remove_matches'      , '^\s*//' ],
@@ -9499,6 +9502,7 @@ sub set_constants {                          # {{{1
     'decision support default'     =>   2.22,
     'decrally'                     =>   2.00,
     'delphi'                       =>   2.76,
+    'dhall'                        =>   2.11,
     'DITA'                         =>   1.90,
     'dl/1'                         =>   2.00,
     'dtrace'                       =>   2.00,

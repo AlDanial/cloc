@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.85
+  elapsed_seconds    : 0.00645613670349121
+  n_files            : 1
+  n_lines            : 26
+  files_per_second   : 154.891391853466
+  lines_per_second   : 4027.17618819011
+  report_file        : ../outputs/Prelude.dhall.yaml
+'dhall' :
+  nFiles: 1
+  blank: 6
+  comment: 17
+  code: 3
+SUM: 
+  blank: 6
+  comment: 17
+  code: 3
+  nFiles: 1

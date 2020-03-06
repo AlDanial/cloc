@@ -140,6 +140,11 @@ my @Tests = (
                     'args' => '../tests/inputs/C-Ansi.c',
                 },
                 {
+                    'name' => 'dhall',
+                    'ref'  => '../tests/outputs/Prelude.dhall.yaml',
+                    'args' => '../tests/inputs/Prelude.dhall',
+                },
+                {
                     'name' => 'DIET',
                     'ref'  => '../tests/outputs/layout.dt.yaml',
                     'args' => '../tests/inputs/layout.dt',
