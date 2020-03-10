@@ -7089,6 +7089,9 @@ sub set_constants {                          # {{{1
             'auk'         => 'awk'                   ,
             'awk'         => 'awk'                   ,
             'bash'        => 'Bourne Again Shell'    ,
+            'bzl'         => 'Bazel'                 ,
+            '.bazel'      => 'Bazel'                 ,
+            '.BUILD'      => 'Bazel'                 ,
             'vbhtml'      => 'Visual Basic'          ,
             'frx'         => 'Visual Basic'          ,
             'bas'         => 'Visual Basic'          ,
@@ -7927,6 +7930,8 @@ sub set_constants {                          # {{{1
 # 1}}}
 %{$rh_Language_by_File}      = (             # {{{1
             'build.xml'         => 'Ant/XML'            ,
+            'BUILD'             => 'Bazel'              ,
+            'WORKSPACE'         => 'Bazel'              ,
             'CMakeLists.txt'    => 'CMake'              ,
             'Jamfile'           => 'Jam'                ,
             'Jamrules'          => 'Jam'                ,
@@ -8022,6 +8027,10 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , ';.*$'   ],
                             ],
     'awk'                => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
+    'Bazel'              => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
@@ -9404,6 +9413,7 @@ sub set_constants {                          # {{{1
     'base sas'                     =>   1.51,
     'basic'                        =>   0.75,
     'basic a'                      =>   0.63,
+    'Bazel'                        =>   1.00,
     'bc'                           =>   1.50,
     'berkeley pascal'              =>   0.88,
     'better basic'                 =>   0.88,
@@ -9428,7 +9438,7 @@ sub set_constants {                          # {{{1
     'cellsim'                      =>   1.74,
     'ColdFusion'                   =>   4.00,
     'ColdFusion CFScript'          =>   4.00,
-    'Chapel'                       =>   2.96,  # estimate from some test code bases comparing to Python
+    'Chapel'                       =>   2.96,
     'chili'                        =>   0.75,
     'chill'                        =>   0.75,
     'cics'                         =>   1.74,

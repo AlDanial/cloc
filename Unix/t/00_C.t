@@ -50,6 +50,11 @@ my @Tests = (
                     'args' => '../tests/inputs/C.g4',
                 },
                 {
+                    'name' => 'Bazel',
+                    'ref'  => '../tests/outputs/BUILD.yaml',
+                    'args' => '../tests/inputs/BUILD',
+                },
+                {
                     'name' => 'Blade',
                     'ref'  => '../tests/outputs/master.blade.php.yaml',
                     'args' => '../tests/inputs/master.blade.php',
