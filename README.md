@@ -242,6 +242,10 @@ Language scale factors were derived from Mayes Consulting, LLC web site
 http://softwareestimator.com/IndustryData2.htm.
 [](1}}})
 <a name="apt-get"></a> []({{{1)
+## Run through docker
+```shell
+docker run --rm -w /cloc -v $PWD:/cloc cloc
+```
 ## Install via package manager
 Depending your operating system, one of these installation methods may work for you:
 
