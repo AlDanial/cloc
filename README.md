@@ -244,7 +244,7 @@ http://softwareestimator.com/IndustryData2.htm.
 <a name="apt-get"></a> []({{{1)
 ## Run through docker
 ```shell
-docker run --rm -w /cloc -v $PWD:/cloc cloc
+docker run --rm -w /workdir -v $PWD:/workdir cloc
 ```
 ## Install via package manager
 Depending your operating system, one of these installation methods may work for you:
