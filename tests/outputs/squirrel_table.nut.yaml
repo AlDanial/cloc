@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.85
+  elapsed_seconds    : 0.00813984870910645
+  n_files            : 1
+  n_lines            : 41
+  files_per_second   : 122.852406197827
+  lines_per_second   : 5036.94865411089
+  report_file        : squirrel_table.nut.yaml
+'Squirrel' :
+  nFiles: 1
+  blank: 6
+  comment: 4
+  code: 31
+SUM: 
+  blank: 6
+  comment: 4
+  code: 31
+  nFiles: 1

@@ -717,6 +717,11 @@ my @Tests = (
                     'args' => '../tests/inputs/specman_e2.e',
                 },
                 {
+                    'name' => 'Squirrel',
+                    'ref'  => '../tests/outputs/squirrel_table.nut.yaml',
+                    'args' => '../tests/inputs/squirrel_table.nut',
+                },
+                {
                     'name' => 'Stata',
                     'ref'  => '../tests/outputs/stata.do.yaml',
                     'args' => '../tests/inputs/stata.do',
