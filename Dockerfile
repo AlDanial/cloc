@@ -1,3 +1,4 @@
+# Dockerfile by Sébastien HOUZÉ, https://github.com/shouze
 FROM perl:slim
 
 RUN apt-get update && apt-get install -y \
@@ -27,3 +28,8 @@ RUN make test
 
 #Cleanup of git folder
 RUN rm -rf .git
+
+WORKDIR /tmp
+
+ENTRYPOINT ["/usr/src/cloc"]
+CMD ["--help"]

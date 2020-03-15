@@ -45,7 +45,8 @@ at http://cloc.sourceforge.net/ since August 2006.
 <a name="Quick_Start"></a>      []({{{1)
 # [Quick Start &#9650;](#___top "click to go to top of document")
 
-Step 1:  Download cloc (several methods, see below).
+Step 1:  Download cloc (several methods, see below) or run cloc's 
+[docker image](#Docker-).
 
 Step 2:  Open a terminal (`cmd.exe` on Windows).
 
@@ -241,10 +242,11 @@ and Tye McQueen's Perl module
 Language scale factors were derived from Mayes Consulting, LLC web site
 http://softwareestimator.com/IndustryData2.htm.
 [](1}}})
-<a name="apt-get"></a> []({{{1)
-## Run through docker
+
+<a name="Docker"></a> []({{{1)
+## Run via docker
 ```shell
-docker run --rm -w /workdir -v $PWD:/workdir cloc
+docker run --rm -v $PWD:/tmp aldanial/cloc
 ```
 ## Install via package manager
 Depending your operating system, one of these installation methods may work for you:
