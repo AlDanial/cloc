@@ -8087,7 +8087,10 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
-    'Clojure'            => [   [ 'remove_matches'      , '^\s*;'  ], ],
+    'Clojure'            => [
+                                [ 'remove_matches'      , '^\s*;'  ],
+                                [ 'remove_matches'      , '^\s*#_'  ],
+                            ],
     'ClojureScript'      => [   [ 'remove_matches'      , '^\s*;'  ], ],
     'ClojureC'           => [   [ 'remove_matches'      , '^\s*;'  ], ],
     'CMake'              => [
