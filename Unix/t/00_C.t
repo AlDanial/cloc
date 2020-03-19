@@ -643,8 +643,8 @@ my @Tests = (
                 },
                 {
                     'name' => 'RobotFramework',
-                    'ref'  => '../tests/outputs/robotframework.tsv.yaml',
-                    'args' => '../tests/inputs/robotframework.tsv',
+                    'ref'  => '../tests/outputs/robotframework.robot.yaml',
+                    'args' => '../tests/inputs/robotframework.robot',
                 },
                 {
                     'name' => 'Rmd',

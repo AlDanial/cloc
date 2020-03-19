@@ -7648,7 +7648,6 @@ sub set_constants {                          # {{{1
             'sch'         => 'Scheme'                ,
             'sls'         => 'Scheme/SaltStack'      ,
             'sld'         => 'Scheme'                ,
-            'tsv'         => 'RobotFramework'        ,
             'robot'       => 'RobotFramework'        ,
             'rc'          => 'Windows Resource File' ,
             'rc2'         => 'Windows Resource File' ,
@@ -9296,6 +9295,7 @@ sub set_constants {                          # {{{1
    'tfm'       => 1,
    'tgz'       => 1,  # gzipped tarball
    'tiff'      => 1,
+   'tsv'       => 1,  # tab separated values
    'txt'       => 1,
    'vf'        => 1,
    'wav'       => 1,
