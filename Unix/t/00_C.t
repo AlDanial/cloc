@@ -732,6 +732,11 @@ my @Tests = (
                     'args' => '../tests/inputs/rules.sss',
                 },
                 {
+                    'name' => 'Svelte',
+                    'ref'  => '../tests/outputs/reactive.svelte.yaml',
+                    'args' => '../tests/inputs/reactive.svelte',
+                },
+                {
                     'name' => 'SVG',
                     'ref'  => '../tests/outputs/SVG_logo.svg.yaml',
                     'args' => '../tests/inputs/SVG_logo.svg',

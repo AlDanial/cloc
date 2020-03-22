@@ -7682,6 +7682,7 @@ sub set_constants {                          # {{{1
             'st'          => 'Smalltalk'             ,
             'styl'        => 'Stylus'                ,
             'i'           => 'SWIG'                  ,
+            'svelte'      => 'Svelte'                ,
             'sv'          => 'Verilog-SystemVerilog' ,
             'svh'         => 'Verilog-SystemVerilog' ,
             'svg'         => 'SVG'                   ,
@@ -8937,6 +8938,10 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'Svelte'             => [
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
     'SVG'                => [
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
@@ -9949,6 +9954,7 @@ sub set_constants {                          # {{{1
     'SugarSS'                      =>   2.50,
     'superbase 1.3'                =>   2.22,
     'surpass'                      =>  13.33,
+    'Svelte'                       =>   2.00,
     'SVG'                          =>   1.00,
     'Swift'                        =>   2.50,
     'SWIG'                         =>   2.50,
