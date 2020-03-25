@@ -1,0 +1,5 @@
+Lua
+    filter replace_regex X 
+    filter remove_matches ^\s*\-\-
+    extension lua
+    3rd_gen_scale 4.00

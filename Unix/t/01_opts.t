@@ -202,7 +202,7 @@ my @Tests = (
 
                 {
                     'name' => '--include-ext m,lua (github issue #296)',
-                    'cd'   => '../tests/inputs',
+                    'cd'   => '../tests/inputs/issues/296',
                     'args' => '--include-ext m,lua .',
                     'ref'  => '../tests/outputs/issues/296/results.yaml',
                 },
@@ -389,6 +389,12 @@ my @Tests = (
                     'cd'   => '../',
                     'args' => '--diff-list-file tests/inputs/issues/455/list_align.txt',
                     'ref'  => '../tests/outputs/issues/455/list_align.yaml',
+                },
+                {
+                    'name' => 'replace_regex with null, #472',
+                    'cd'   => '../tests/inputs/issues/472',
+                    'args' => '--force-lang-def lua_def.txt not_really.lua',
+                    'ref'  => '../tests/outputs/issues/472/not_really.lua.yaml',
                 },
 
 #               {

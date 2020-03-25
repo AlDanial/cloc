@@ -4264,6 +4264,10 @@ sub read_lang_def {                          # {{{1
             push @{$rhaa_Filters_by_Language->{$language}}, [
                   $1 , $2 , $3 , $4 ]
 
+        } elsif (/^\s{4}filter\s+(replace_regex)\s+(\S+)\s*$/) {
+            push @{$rhaa_Filters_by_Language->{$language}}, [
+                  $1 , $2 , '' ]
+
         } elsif (/^\s{4}filter\s+(replace_regex)
                        \s+(\S+)\s+(.+?)\s*$/x) {
             push @{$rhaa_Filters_by_Language->{$language}}, [
