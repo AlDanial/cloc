@@ -4264,6 +4264,11 @@ sub read_lang_def {                          # {{{1
             push @{$rhaa_Filters_by_Language->{$language}}, [
                   $1 , $2 , $3 , $4 ]
 
+        } elsif (/^\s{4}filter\s+(replace_regex)
+                       \s+(\S+)\s+(.+?)\s*$/x) {
+            push @{$rhaa_Filters_by_Language->{$language}}, [
+                  $1 , $2 , $3 ]
+
         } elsif (/^\s{4}filter\s+(\w+)\s*$/) {
             push @{$rhaa_Filters_by_Language->{$language}}, [ $1 ]
 
@@ -4331,19 +4336,39 @@ sub merge_lang_def {                         # {{{1
         die "Missing computer language name, line $. of $file\n"
             unless $language;
 
-        if      (/^    filter\s+(\w+)\s*$/) {
+        if      (/^\s{4}filter\s+(remove_between_(general|2re|regex))
+                       \s+(\S+)\s+(\S+)\s*$/x) {
+            next if $already_know_it;
+            push @{$rhaa_Filters_by_Language->{$language}}, [
+                  $1 , $3 , $4 ]
+
+        } elsif (/^\s{4}filter\s+(replace_between_regex)
+                   \s+(\S+)\s+(\S+)\s+(\S+|\".*\")\s+(\S+)\s*$/x) {
+            next if $already_know_it;
+            push @{$rhaa_Filters_by_Language->{$language}}, [
+                  $1 , $2 , $3 , $4 , $5]
+
+        } elsif (/^\s{4}filter\s+(replace_between_regex)
+                       \s+(\S+)\s+(\S+)\s+(.*?)\s*$/x) {
+            next if $already_know_it;
+            push @{$rhaa_Filters_by_Language->{$language}}, [
+                  $1 , $2 , $3 , $4 ]
+
+        } elsif (/^\s{4}filter\s+(replace_regex)
+                       \s+(\S+)\s+(.+?)\s*$/x) {
+            next if $already_know_it;
+            push @{$rhaa_Filters_by_Language->{$language}}, [
+                  $1 , $2 , $3 ]
+
+        } elsif (/^\s{4}filter\s+(\w+)\s*$/) {
             next if $already_know_it;
             push @{$rhaa_Filters_by_Language->{$language}}, [ $1 ]
 
-        } elsif (/^    filter\s+(remove_between_(general|regex))\s+(\S+)\s+(\S+)\s*$/) {
-            next if $already_know_it;
-            push @{$rhaa_Filters_by_Language->{$language}},
-                  [ $1 , $3 , $4 ]
-        } elsif (/^    filter\s+(\w+)\s+(.*?)\s*$/) {
+        } elsif (/^\s{4}filter\s+(\w+)\s+(.*?)\s*$/) {
             next if $already_know_it;
             push @{$rhaa_Filters_by_Language->{$language}}, [ $1 , $2 ]
 
-        } elsif (/^    extension\s+(\S+)\s*$/) {
+        } elsif (/^\s{4}extension\s+(\S+)\s*$/) {
             next if $already_know_it;
             if (defined $rh_Language_by_Extension->{$1}) {
                 die "File extension collision:  $1 ",
@@ -4354,19 +4379,19 @@ sub merge_lang_def {                         # {{{1
             }
             $rh_Language_by_Extension->{$1} = $language;
 
-        } elsif (/^    filename\s+(\S+)\s*$/) {
+        } elsif (/^\s{4}filename\s+(\S+)\s*$/) {
             next if $already_know_it;
             $rh_Language_by_File->{$1} = $language;
 
-        } elsif (/^    script_exe\s+(\S+)\s*$/) {
+        } elsif (/^\s{4}script_exe\s+(\S+)\s*$/) {
             next if $already_know_it;
             $rh_Language_by_Script->{$1} = $language;
 
-        } elsif (/^    3rd_gen_scale\s+(\S+)\s*$/) {
+        } elsif (/^\s{4}3rd_gen_scale\s+(\S+)\s*$/) {
             next if $already_know_it;
             $rh_Scale_Factor->{$language} = $1;
 
-        } elsif (/^    end_of_line_continuation\s+(\S+)\s*$/) {
+        } elsif (/^\s{4}end_of_line_continuation\s+(\S+)\s*$/) {
             next if $already_know_it;
             $rh_EOL_Continuation_re->{$language} = $1;
 
