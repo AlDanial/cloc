@@ -1,0 +1,76 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.85
+  elapsed_seconds    : 0.0108919143676758
+  n_files            : 5
+  n_lines            : 35
+  files_per_second   : 459.056124682602
+  lines_per_second   : 3213.39287277822
+  report_file        : all.yaml
+added :
+  'Fortran 90' :
+    comment : 0
+    nFiles : 0
+    code : 0
+    blank : 0
+  'C++' :
+    comment : 1
+    code : 6
+    blank : 0
+    nFiles : 1
+same :
+  'Fortran 90' :
+    comment : 5
+    nFiles : 1
+    code : 7
+    blank : 0
+  'C++' :
+    comment : 1
+    code : 5
+    blank : 0
+    nFiles : 0
+modified :
+  'Fortran 90' :
+    comment : 1
+    nFiles : 1
+    code : 1
+    blank : 0
+  'C++' :
+    comment : 1
+    code : 0
+    blank : 0
+    nFiles : 1
+removed :
+  'Fortran 90' :
+    comment : 0
+    nFiles : 0
+    code : 0
+    blank : 0
+  'C++' :
+    comment : 2
+    code : 5
+    blank : 0
+    nFiles : 1
+SUM :
+  added :
+    comment : 1
+    code : 6
+    blank : 0
+    nFiles : 1
+  same :
+    comment : 6
+    code : 12
+    blank : 0
+    nFiles : 1
+  modified :
+    comment : 2
+    code : 1
+    blank : 0
+    nFiles : 2
+  removed :
+    comment : 2
+    code : 5
+    blank : 0
+    nFiles : 1

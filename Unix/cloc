@@ -2240,10 +2240,17 @@ sub count_filesets {                         # {{{1
             and not $Include_Ext{ file_extension($f) };
         next if $opt_include_lang
             and not $Include_Language{$Language{$fset_b}{$f}};
-        next if $Language{$fset_b}{$f} eq "(unknown)";
-        next if $Exclude_Language{$fset_b}{$f};
-        $p_alignment{"added"}{sprintf "  + %s ; %s\n", $f, $Language{$fset_b}{$f}} = 1;
-        ++$p_dbl{ $Language{$fset_b}{$f} }{'nFiles'}{'added'};
+        my $this_lang = $Language{$fset_b}{$f};
+        if ($this_lang eq "(unknown)") {
+            $p_ignored{$f} = "uknown language";
+            next;
+        }
+        if ($Exclude_Language{$this_lang}) {
+            $p_ignored{$f} = "--exclude-lang=$this_lang";
+            next;
+        }
+        $p_alignment{"added"}{sprintf "  + %s ; %s\n", $f, $this_lang} = 1;
+        ++$p_dbl{ $this_lang }{'nFiles'}{'added'};
         # Additionally, add contents of file $f to
         # Delta_by_File{$f}{comment/blank/code}{'added'}
         # Delta_by_Language{$lang}{comment/blank/code}{'added'}
@@ -2251,12 +2258,10 @@ sub count_filesets {                         # {{{1
         my ($all_line_count,
             $blank_count   ,
             $comment_count ,
-           ) = call_counter($f, $Language{$fset_b}{$f}, \@p_errors);
-        $p_dbl{ $Language{$fset_b}{$f} }{'comment'}{'added'} +=
-           $comment_count;
-        $p_dbl{ $Language{$fset_b}{$f} }{'blank'}{'added'}   +=
-           $blank_count;
-        $p_dbl{ $Language{$fset_b}{$f} }{'code'}{'added'}    +=
+           ) = call_counter($f, $this_lang, \@p_errors);
+        $p_dbl{ $this_lang }{'comment'}{'added'} += $comment_count;
+        $p_dbl{ $this_lang }{'blank'}{'added'}   += $blank_count;
+        $p_dbl{ $this_lang }{'code'}{'added'}    +=
            $all_line_count - $blank_count - $comment_count;
         $p_dbf{ $f }{'comment'}{'added'} = $comment_count;
         $p_dbf{ $f }{'blank'}{'added'}   = $blank_count;
@@ -2273,10 +2278,17 @@ sub count_filesets {                         # {{{1
             and not $Include_Ext{ file_extension($f) };
         next if $opt_include_lang
             and not $Include_Language{$Language{$fset_a}{$f}};
-        next if $Language{$fset_a}{$f} eq "(unknown)";
-        next if $Exclude_Language{$fset_a}{$f};
-        ++$p_dbl{ $Language{$fset_a}{$f} }{'nFiles'}{'removed'};
-        $p_alignment{"removed"}{sprintf "  - %s ; %s\n", $f, $Language{$fset_a}{$f}} = 1;
+        my $this_lang = $Language{$fset_a}{$f};
+        if ($this_lang eq "(unknown)") {
+            $p_ignored{$f} = "uknown language";
+            next;
+        }
+        if ($Exclude_Language{$this_lang}) {
+            $p_ignored{$f} = "--exclude-lang=$this_lang";
+            next;
+        }
+        ++$p_dbl{ $this_lang }{'nFiles'}{'removed'};
+        $p_alignment{"removed"}{sprintf "  - %s ; %s\n", $f, $this_lang} = 1;
         #printf "%10s -> %s\n", $f, $Language{$fh[$F  ]}{$f};
         # Additionally, add contents of file $f to
         #        Delta_by_File{$f}{comment/blank/code}{'removed'}
@@ -2285,12 +2297,10 @@ sub count_filesets {                         # {{{1
         my ($all_line_count,
             $blank_count   ,
             $comment_count ,
-           ) = call_counter($f, $Language{$fset_a}{$f}, \@p_errors);
-        $p_dbl{ $Language{$fset_a}{$f}}{'comment'}{'removed'} +=
-             $comment_count;
-        $p_dbl{ $Language{$fset_a}{$f}}{'blank'}{'removed'}   +=
-             $blank_count;
-        $p_dbl{ $Language{$fset_a}{$f}}{'code'}{'removed'}    +=
+           ) = call_counter($f, $this_lang, \@p_errors);
+        $p_dbl{ $this_lang}{'comment'}{'removed'} += $comment_count;
+        $p_dbl{ $this_lang}{'blank'}{'removed'}   += $blank_count;
+        $p_dbl{ $this_lang}{'code'}{'removed'}    +=
              $all_line_count - $blank_count - $comment_count;
         $p_dbf{ $f }{'comment'}{'removed'} = $comment_count;
         $p_dbf{ $f }{'blank'}{'removed'}   = $blank_count;

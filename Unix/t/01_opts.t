@@ -396,6 +396,24 @@ my @Tests = (
                     'args' => '--force-lang-def lua_def.txt not_really.lua',
                     'ref'  => '../tests/outputs/issues/472/not_really.lua.yaml',
                 },
+                {
+                    'name' => '--exclude-lang --diff 1/3, #476',
+                    'cd'   => '../tests/inputs/issues/476',
+                    'args' => '--diff A B',
+                    'ref'  => '../tests/outputs/issues/476/all.yaml',
+                },
+                {
+                    'name' => '--exclude-lang --diff 2/3, #476',
+                    'cd'   => '../tests/inputs/issues/476',
+                    'args' => "--exclude-lang 'Fortran 90' --diff A B",
+                    'ref'  => '../tests/outputs/issues/476/no_fortran.yaml',
+                },
+                {
+                    'name' => '--exclude-lang --diff 3/3, #476',
+                    'cd'   => '../tests/inputs/issues/476',
+                    'args' => "--exclude-lang C++ --diff A B",
+                    'ref'  => '../tests/outputs/issues/476/no_cpp.yaml',
+                },
 
 #               {
 #                   'name' => '--count-and--diff with --out',
