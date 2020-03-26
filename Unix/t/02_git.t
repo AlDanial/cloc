@@ -33,12 +33,26 @@ my @Tests = (
                     'cd'   => 'cloc_submodule_test',
                 },
 
-#               {
-#                   'name' => 'diff f15bf042b f647093e8b',
-#                   'args' => '--git --diff f15bf042b f647093e8b',
-#                   'ref'  => '../tests/outputs/git_tests/diff_f15bf042b_f647093e8b.yaml',
-#                   'cd'   => 'cloc_submodule_test',
-#               },
+                {
+                    'name' => 'diff f15bf042b f647093e8b',
+                    'args' => '--git --diff f15bf042b f647093e8b',
+                    'ref'  => '../tests/outputs/git_tests/diff_f15bf042b_f647093e8b.yaml',
+                    'cd'   => 'cloc_submodule_test',
+                },
+
+                {
+                    'name' => 'diff commit with only deleted file',
+                    'args' => '--strip-str-comments --git --diff 04179b6 ae0d26e',
+                    'ref'  => '../tests/outputs/git_tests/04179b6_ae0d26e.yaml',
+                    'cd'   => 'cloc_submodule_test',
+                },
+
+                {
+                    'name' => 'diff commit with only added file',
+                    'args' => '--strip-str-comments --git --diff f15bf04 d9b6726',
+                    'ref'  => '../tests/outputs/git_tests/f15bf04_d9b6726.yaml',
+                    'cd'   => 'cloc_submodule_test',
+                },
 
                 {
                     'name' => 'count and diff part I',
