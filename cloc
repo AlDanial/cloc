@@ -314,6 +314,15 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              commits, or between a git commit and a file,
                              directory, or archive.  Use -v/--verbose to see
                              the git system commands cloc issues.
+   --git-diff-rel            Same as --git --diff, or just --diff if the inputs
+                             are recognized as git targets.  Only files which
+                             have changed in either commit are compared.
+   --git-diff-all            Git diff strategy #2:  compare all files in the
+                             repository between the two commits.
+   --git-diff-simindex       Git diff strategy #3:  use git's similarity index
+                             (git diff -M --name-status) to identify file pairs
+                             to compare.  This is especially useful to compare
+                             files that were renamed between the commits.
    --ignore-whitespace       Ignore horizontal white space when comparing files
                              with --diff.  See also --ignore-case.
    --ignore-case             Ignore changes in case within file contents;
@@ -706,6 +715,9 @@ my (
     $opt_use_sloccount        ,
     $opt_no_autogen           ,
     $opt_force_git            ,
+    $opt_git_diff_rel         ,
+    $opt_git_diff_all         ,
+    $opt_git_diff_simindex    ,
     $opt_config_file          ,
     $opt_strip_str_comments   ,
     $opt_file_encoding        ,
@@ -800,6 +812,9 @@ my $getopt_success = GetOptions(             # {{{1
    "use_sloccount|use-sloccount"             => \$opt_use_sloccount       ,
    "no_autogen|no-autogen"                   => \$opt_no_autogen          ,
    "git"                                     => \$opt_force_git           ,
+   "git_diff_rel|git-diff-rel"               => \$opt_git_diff_rel        ,
+   "git_diff_all|git-diff-all"               => \$opt_git_diff_all        ,
+   "git_diff_simindex|git-diff-simindex"     => \$opt_git_diff_simindex   ,
    "config=s"                                => \$opt_config_file         ,
    "strip_str_comments|strip-str-comments"   => \$opt_strip_str_comments  ,
    "file_encoding|file-encoding=s"           => \$opt_file_encoding       ,
@@ -930,7 +945,14 @@ $Exclude_Dir{".bzr"}   = 1;
 $Exclude_Dir{".snapshot"} = 1;  # NetApp backups
 $Exclude_Dir{".config"} = 1;
 $opt_count_diff        = defined $opt_count_diff ? 1 : 0;
-$opt_diff              = 1  if $opt_diff_alignment or $opt_diff_list_file;
+$opt_diff              = 1  if $opt_diff_alignment    or
+                               $opt_diff_list_file    or
+                               $opt_git_diff_rel      or
+                               $opt_git_diff_all      or
+                               $opt_git_diff_simindex;
+$opt_force_git         = 1  if $opt_git_diff_rel      or
+                               $opt_git_diff_all      or
+                               $opt_git_diff_simindex;
 $opt_diff_alignment    = 0  if $opt_diff_list_file;
 $opt_exclude_ext       = "" unless $opt_exclude_ext;
 $opt_ignore_whitespace = 0  unless $opt_ignore_whitespace;
@@ -1083,7 +1105,8 @@ if (!$opt_diff_list_file) {
 }
 trick_pp_packer_encode() if $ON_WINDOWS and $opt_file_encoding;
 $File::Find::dont_use_nlink = 1 if $opt_stat or top_level_SMB_dir(\@ARGV);
-replace_git_hash_with_tarfile(\@ARGV);
+my @git_similarity = (); # only populated with --git-diff-simindex
+replace_git_hash_with_tarfile(\@ARGV, \@git_similarity);
 # 1}}}
 # Step 1:  Initialize global constants.        {{{1
 #
@@ -1483,7 +1506,7 @@ if ($opt_extract_with) {
 } else {
     # see if any of the inputs need to be auto-uncompressed &/or expanded
     my @updated_ARGS = ();
-    replace_git_hash_with_tarfile(\@ARGV) if $opt_force_git;
+    replace_git_hash_with_tarfile(\@ARGV, \@git_similarity) if $opt_force_git;
     foreach my $Arg (@ARGV) {
         if (is_dir($Arg)) {
             push @updated_ARGS, $Arg;
@@ -4606,7 +4629,9 @@ sub top_level_SMB_dir {                      # {{{1
 }
 # 1}}}
 sub replace_git_hash_with_tarfile {          # {{{1
-    my ($ra_arg_list,) = @_;  # in   file name, directory name and/or git commit hash to examine
+    my ($ra_arg_list,             # in  file name, directory name and/or
+                                  #     git commit hash to examine
+        $ra_git_similarity) = @_; # out only if --opt-git-diff-simindex
     # replace git hashes in $ra_arg_list with tar files
     # Diff mode and count mode behave differently:
     #   Diff:
@@ -4680,6 +4705,9 @@ sub replace_git_hash_with_tarfile {          # {{{1
     # logic for each of the modes
     if ($opt_diff) {
 #print "A DIFF\n";
+        # set the default git diff algorithm
+        $opt_git_diff_rel = 1 unless $opt_git_diff_all or
+                                     $opt_git_diff_simindex;
         # is it git to git, or git to file/dir ?
         my ($Left, $Right) = @{$ra_arg_list};
 
@@ -4692,7 +4720,9 @@ sub replace_git_hash_with_tarfile {          # {{{1
             # first make a union of all files that have changed in both commits
             my %files_union = ();
 
-##          if (1) {
+            my @left_files  = ();
+            my @right_files = ();
+            if ($opt_git_diff_rel) {
                 # Strategy 1:  Union files are what git consinders have changed
                 #              between the two commits.
                 my $git_list_cmd = "git diff-tree -r --no-commit-id --name-only $Left $Right";
@@ -4701,13 +4731,22 @@ sub replace_git_hash_with_tarfile {          # {{{1
                     chomp($file);
                     $files_union{$file} = 1;
                 }
-##          } else {
-##              # Strategy 2:  Union files all files in both repos.
-##              foreach my $file (keys %{$repo_listing{$Left }},
-##                                keys %{$repo_listing{$Right}}) {
-##                 $files_union{$file} = 1;
-##              }
-##          }
+            } elsif ($opt_git_diff_all) {
+                # Strategy 2:  Union files all files in both repos.
+                foreach my $file (keys %{$repo_listing{$Left }},
+                                  keys %{$repo_listing{$Right}}) {
+                   $files_union{$file} = 1;
+                }
+            } elsif ($opt_git_diff_simindex) {
+                # Strategy 3:  Use git's own similarity index to figure
+                #              out which files to compare.
+                git_similarity_index($Left              , # in
+                                     $Right             , # in
+                                    \@left_files        , # out
+                                    \@right_files       , # out
+                                     $ra_git_similarity); # out
+
+            }
 
 #use Data::Dumper;
 #print "files_union =\n", Dumper(\%files_union);
@@ -4715,8 +4754,6 @@ sub replace_git_hash_with_tarfile {          # {{{1
 
             # then make trucated tar files of those union files which
             # actually exist in each repo
-            my @left_files  = ();
-            my @right_files = ();
             foreach my $file (sort keys %files_union) {
                 push @left_files , $file if $repo_listing{$Left }{$file};
                 push @right_files, $file if $repo_listing{$Right}{$file};
@@ -4790,6 +4827,23 @@ sub replace_git_hash_with_tarfile {          # {{{1
 
 #print "ra_arg_list 2: @{$ra_arg_list}\n";
     print "<- replace_git_hash_with_tarfile()\n" if $opt_v > 2;
+} # 1}}}
+sub git_similarity_index {                   # {{{
+    my ($git_hash_Left    ,       # in
+        $git_hash_Right   ,       # in
+        $ra_left_files    ,       # out
+        $ra_right_files   ,       # out
+        $ra_git_similarity) = @_; # out
+    die "this option is not yet implemented";
+    print "-> git_similarity_index($git_hash_Left, $git_hash_Right)\n" if $opt_v > 2;
+    my $cmd = "git diff -M --name-status $git_hash_Left $git_hash_Right";
+    print  $cmd, "\n" if $opt_v;
+    open(GSIM, "$cmd |") or die "Unable to run $cmd  $!";
+    while (<GSIM>) {
+        print "git similarity> $_";
+    }
+    close(GSIM);
+    print "<- git_similarity_index\n" if $opt_v > 2;
 } # 1}}}
 sub empty_tar {                              # {{{1
     my ($Tarfh, $Tarfile);
