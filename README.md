@@ -251,7 +251,9 @@ http://softwareestimator.com/IndustryData2.htm.
 docker run --rm -v $PWD:/tmp aldanial/cloc
 ```
 ## Install via package manager
-Depending your operating system, one of these installation methods may work for you:
+Depending your operating system, one of these installation methods may
+work for you (all but the last two entries for Windows require
+a Perl interpreter):
 
     npm install -g cloc                    # https://www.npmjs.com/package/cloc
     sudo apt install cloc                  # Debian, Ubuntu
