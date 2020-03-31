@@ -46,7 +46,9 @@ at http://cloc.sourceforge.net/ since August 2006.
 # [Quick Start &#9650;](#___top "click to go to top of document")
 
 Step 1:  Download cloc (several methods, see below) or run cloc's 
-[docker image](#Docker-).
+[docker image](#Docker-).  The Windows executable has no requirements.
+The source version of cloc requires a Perl interpreter, and the
+Docker version of cloc requires a Docker installation.
 
 Step 2:  Open a terminal (`cmd.exe` on Windows).
 
