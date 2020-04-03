@@ -7210,6 +7210,7 @@ sub set_constants {                          # {{{1
             'master'      => 'ASP.NET'               ,
             'sitemap'     => 'ASP.NET'               ,
             'cshtml'      => 'Razor'                 ,
+            'razor'       => 'Razor'                 , # Client-side Blazor
             'nawk'        => 'awk'                   ,
             'mawk'        => 'awk'                   ,
             'gawk'        => 'awk'                   ,

@@ -25,6 +25,11 @@ my @Tests = (
                     'args' => '../tests/inputs/asciidoctor.adoc',
                 },
                 {
+                    'name' => 'ASP.NET',
+                    'ref'  => '../tests/outputs/page_layout.aspx.yaml',
+                    'args' => '../tests/inputs/page_layout.aspx',
+                },
+                {
                     'name' => 'Assembly 1',
                     'ref'  => '../tests/outputs/Assembler-Intel.asm.yaml',
                     'args' => '../tests/inputs/Assembler-Intel.asm',
