@@ -414,6 +414,12 @@ my @Tests = (
                     'args' => "--exclude-lang C++ --diff A B",
                     'ref'  => '../tests/outputs/issues/476/no_cpp.yaml',
                 },
+                {
+                    'name' => '--include-lang --diff, #482',
+                    'cd'   => '../tests/inputs/issues/482',
+                    'args' => '--include-lang C --diff A B',
+                    'ref'  => '../tests/outputs/issues/482/results.yaml',
+                },
 
 #               {
 #                   'name' => '--count-and--diff with --out',
