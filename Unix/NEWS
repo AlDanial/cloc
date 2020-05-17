@@ -1,3 +1,51 @@
+                Release Notes for cloc version 1.86
+                   https://github.com/AlDanial/cloc
+                             May 17, 2020
+
+New Languages and File Types:
+    o ASP.NET Core Blazor WASM (*.razor)
+    o Bazel
+    o dhall
+    o Raku (renamed from Perl6)
+    o Squirrel
+    o SugarSS
+    o Svelte
+    o TNSDL
+    o Remove .tsv as a RobotFramework extension
+    o Add .inl as a C++ extension.
+    o Add #_ as a Closure comment marker.
+
+Updates:
+    o Provide alternate algorithms for --git --diff:
+      --git-diff-rel computes differences of only files that have changed
+                     between the two git commits (this is now the default
+                     action with "--git --diff")
+      --git-diff-all computes differences between all files in the repo
+                     between the two git commits (this was the default
+                     action with "--git --diff" behavior in 1.84)
+    o New cloc releases will be accompanied by Docker instances on
+      Dockerhub.
+    o Support reading file names from a STDIN pipe.
+    o Check unrecognized files to see if they contain XML.
+    o Switch --vcs supports an 'auto' option to automatically determine
+      if one is counting in a subversion or git repository.
+    o Expand git archives in user-provided scratch directory with --sdir.
+    o Mask comment markers in Kotlin raw strings.
+    o Make output more deterministic with secondary sort of results.
+    o Avoid computation of log(0).
+    o Improve --strip-str-comments logic.
+    o Improve handling of triple quotes (Python, Groovy, Gradle).
+    o New switch --diff-list-file, to perform diff's using a provided
+      list file containing file pairs to compare.
+    o New switch --ignore-case-ext to ignore upper/lowercase of
+      file extension.
+
+Bug Fixes:
+    o Fix --exclude-list-file with --diff.
+    o Fix creation of empty tar file if this happens during --git --diff.
+    o Restore --exclude-lang functionality with --diff.
+
+============================================================================
                 Release Notes for cloc version 1.84
                    https://github.com/AlDanial/cloc
                          September 22, 2019

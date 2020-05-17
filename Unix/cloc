@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "1.85";  # odd number == beta; even number == stable
+my $VERSION = "1.86";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.006;
 # use modules                                  {{{1
@@ -147,6 +147,13 @@ my $NN     = chr(27) . "[0m";  # normal
 my $BB     = chr(27) . "[1m";  # bold
    $BB     = "" if $ON_WINDOWS or !(-t STDOUT);
 my $script = basename $0;
+
+#  Intended for v1.88:
+#  --git-diff-simindex       Git diff strategy #3:  use git's similarity index
+#                            (git diff -M --name-status) to identify file pairs
+#                            to compare.  This is especially useful to compare
+#                            files that were renamed between the commits.
+
 my $brief_usage  = "
                        cloc -- Count Lines of Code
 
@@ -319,10 +326,6 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              have changed in either commit are compared.
    --git-diff-all            Git diff strategy #2:  compare all files in the
                              repository between the two commits.
-   --git-diff-simindex       Git diff strategy #3:  use git's similarity index
-                             (git diff -M --name-status) to identify file pairs
-                             to compare.  This is especially useful to compare
-                             files that were renamed between the commits.
    --ignore-whitespace       Ignore horizontal white space when comparing files
                              with --diff.  See also --ignore-case.
    --ignore-case             Ignore changes in case within file contents;
@@ -814,7 +817,7 @@ my $getopt_success = GetOptions(             # {{{1
    "git"                                     => \$opt_force_git           ,
    "git_diff_rel|git-diff-rel"               => \$opt_git_diff_rel        ,
    "git_diff_all|git-diff-all"               => \$opt_git_diff_all        ,
-   "git_diff_simindex|git-diff-simindex"     => \$opt_git_diff_simindex   ,
+#  "git_diff_simindex|git-diff-simindex"     => \$opt_git_diff_simindex   ,
    "config=s"                                => \$opt_config_file         ,
    "strip_str_comments|strip-str-comments"   => \$opt_strip_str_comments  ,
    "file_encoding|file-encoding=s"           => \$opt_file_encoding       ,

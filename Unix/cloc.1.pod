@@ -96,6 +96,14 @@ Set FILE to - to read file names from a STDIN pipe.
 See also
 B<--exclude-list-file>.
 
+=item B<--diff-list-file=FILE>
+
+Take the pairs of file names to be diff'ed from
+FILE, whose format matches the output of
+B<--diff-alignment>.  (Run with that option to
+see a sample.)  The language identifier at the
+end of each line is ignored.  This enables B<--diff>
+mode and by-passes file pair alignment logic.
 
 =item B<--vcs=VCS>
 
@@ -103,7 +111,7 @@ Invoke a system call to VCS to obtain a list of
 files to work on.  If VCS is 'git', then will
 invoke 'git ls-files' to get a file list and
 'git submodule status' to get a list of submodules
-whose contents will be ignored.  See also --git
+whose contents will be ignored.  See also B<--git>
 which accepts git commit hashes and branch names.
 If VCS is 'svn' then will invoke 'svn list -R'.
 The primary benefit is that cloc will then skip
@@ -119,6 +127,10 @@ not download files from remote repositories.
 to obtain file names (and therefore may require
 authentication to the remote repository), but
 the files themselves must be local.
+Setting VCS to 'auto' selects between 'git'
+and 'svn' (or neither) depending on the presence
+of a .git or .svn subdirectory below the directory
+where cloc is invoked.
 
 =item B<--unicode>
 
@@ -252,6 +264,17 @@ Ignore changes in case within file contents;
 consider upper- and lowercase letters equivalent
 when comparing files with B<--diff>.  See also
 B<--ignore-whitespace>.
+
+=item B<--git-diff-rel>
+
+Same as B<--git --diff>, or just B<--diff> if the inputs
+are recognized as git targets.  Only files which
+have changed in either commit are compared.
+
+=item B<--git-diff-all>
+
+Git diff strategy #2:  compare all files in the
+repository between the two commits.
 
 =item B<--ignore-case-ext>
 
