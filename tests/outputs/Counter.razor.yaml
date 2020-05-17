@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.85
+  elapsed_seconds    : 0.00778079032897949
+  n_files            : 1
+  n_lines            : 22
+  files_per_second   : 128.521648536847
+  lines_per_second   : 2827.47626781063
+  report_file        : tests/outputs/Counter.razor.yaml
+'Razor' :
+  nFiles: 1
+  blank: 6
+  comment: 3
+  code: 13
+SUM: 
+  blank: 6
+  comment: 3
+  code: 13
+  nFiles: 1

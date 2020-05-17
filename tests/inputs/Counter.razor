@@ -1,0 +1,22 @@
+@*
+    https://docs.microsoft.com/en-us/aspnet/core/tutorials/build-your-first-blazor-app?view=aspnetcore-3.1
+*@
+@page "/counter"
+
+<h1>Counter</h1>
+
+<p>Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+    private int currentCount = 0;
+
+    [Parameter]
+    public int IncrementAmount { get; set; } = 1;
+
+    private void IncrementCount()
+    {
+        currentCount += IncrementAmount;
+    }
+}
