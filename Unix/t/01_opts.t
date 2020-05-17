@@ -414,6 +414,8 @@ my @Tests = (
                     'args' => "--exclude-lang C++ --diff A B",
                     'ref'  => '../tests/outputs/issues/476/no_cpp.yaml',
                 },
+                # Next test, 482, requires an empty directory B.  Git
+                # does not like this so create it at runtime.
                 {
                     'name' => '--include-lang --diff, #482',
                     'cd'   => '../tests/inputs/issues/482',
@@ -433,6 +435,11 @@ my @Tests = (
 # Silently fail if file/dir already exists.
 mkdir "../tests/inputs/issues/132/ignore_git";
 cp    "../tests/inputs/hi.py", "../tests/inputs/issues/132/ignore_git/";
+
+my $missing_dir = "../tests/inputs/issues/482/B";
+if (!-d $missing_dir) {
+    mkdir $missing_dir;
+}
 
 my $Verbose = 0;
 
