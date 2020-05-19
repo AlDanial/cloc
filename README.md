@@ -5,7 +5,7 @@
 * * *
 cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.
 
-Latest release:  v1.84 (September 22, 2019)
+Latest release:  v1.86 (May 18, 2020)
 
 cloc moved to GitHub in September 2015 after being hosted
 at http://cloc.sourceforge.net/ since August 2006.
@@ -45,7 +45,7 @@ at http://cloc.sourceforge.net/ since August 2006.
 <a name="Quick_Start"></a>      []({{{1)
 # [Quick Start &#9650;](#___top "click to go to top of document")
 
-Step 1:  Download cloc (several methods, see below) or run cloc's 
+Step 1:  Download cloc (several methods, see below) or run cloc's
 [docker image](#Docker-).  The Windows executable has no requirements.
 The source version of cloc requires a Perl interpreter, and the
 Docker version of cloc requires a Docker installation.
@@ -56,8 +56,8 @@ Step 3:  Invoke cloc to count your source files, directories, archives,
 or git commits.
 The executable name differs depending on whether you use the
 development source version (`cloc`), source for a
-released version (`cloc-1.82.pl`) or a Windows executable
-(`cloc-1.82.exe`).  On this page, `cloc` is the generic term
+released version (`cloc-1.86.pl`) or a Windows executable
+(`cloc-1.86.exe`).  On this page, `cloc` is the generic term
 used to refer to any of these.
 
 **a file**
@@ -362,24 +362,23 @@ and Digest::MD5 installed locally.
 # [Building a Windows Executable &#9650;](#___top "click to go to top of document")
 
 The Windows downloads
-<tt>cloc-1.70.exe</tt> and
-<tt>cloc-1.72.exe</tt> were
-built with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm)
-and Strawberry Perl 5.24.0.1
+<tt>cloc-1.86.exe</tt> was built on a 64 bit Windows 10 virtual machine
+downloaded from https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/
+using
+[Strawberry Perl](http://strawberryperl.com/)
+5.30.2 and
+[PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm)
+to build the `.exe`.
+
+Releases 1.74 through 1.84
+were was built on a 32 bit Windows 7 virtual machine
+using Strawberry Perl 5.26.1.1, while
+1.70 and 1.72 were built with Strawberry Perl 5.24.0.1
 on an Amazon Web Services t2.micro instance running Microsoft Windows Server 2008
 (32 bit for 1.70 and 1.72; 64 bit for 1.74).
 
-Releases 1.74 through 1.84
-were was built on a 32 bit Windows 7 virtual machine (IE11.Win7.For.Windows.VirtualBox.zip
-pulled from https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/)
-using Strawberry Perl 5.26.1.1.
-
-The <tt>cloc-1.66.exe</tt> executable was built with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm)
-on a 32 bit Windows 7 VirtualBox image
-pulled from https://dev.windows.com/en-us/microsoft-edge/tools/vms/linux/
-and running on an Ubuntu 15.10 host.
-The virtual machine ran
-[Strawberry Perl](http://strawberryperl.com/) version 5.22.1.
+The <tt>cloc-1.66.exe</tt> executable was built
+on a 32 bit Windows 7 VirtualBox image.
 Windows executables of cloc versions
 1.60 and earlier were built with
 [perl2exe](http://www.indigostar.com/perl2exe.htm) on a 32 bit Windows
@@ -401,13 +400,15 @@ run the cloc source file.
 On centrally-managed corporate Windows machines, however, this
 this may be difficult or impossible.
 
-The Windows executable distributed with cloc
-is provided as
+The Windows executable distributed with cloc is provided as
 a best-effort of a virus and malware-free `.exe`.
 You are encouraged to run your own virus scanners against the
 executable and also check sites such
 https://www.virustotal.com/ .
 The entries for recent versions are:
+
+cloc-1.86.exe:
+https://www.virustotal.com/gui/file/1b2e189df1834411b34534db446330d1c379b4bc008af3042ee9ade818c6a1c8/detection
 
 cloc-1.84.exe:
 https://www.virustotal.com/gui/file/e73d490c1e4ae2f50ee174005614029b4fa2610dcb76988714839d7be68479af/detection
@@ -473,7 +474,7 @@ C:> cpan -i Digest::MD5
 C:> cpan -i Regexp::Common
 C:> cpan -i Algorithm::Diff
 C:> cpan -i PAR::Packer
-C:> pp -M Digest::MD5 -c -x -o cloc-1.84.exe cloc-1.84.pl
+C:> pp -M Digest::MD5 -c -x -o cloc-1.86.exe cloc-1.86.pl
 </pre>
 
 A variation on the instructions above is if you installed the portable
