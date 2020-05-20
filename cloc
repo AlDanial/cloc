@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "1.86";  # odd number == beta; even number == stable
+my $VERSION = "1.87";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.006;
 # use modules                                  {{{1
@@ -2281,7 +2281,7 @@ sub count_filesets {                         # {{{1
             and not $Include_Language{$Language{$fset_b}{$f}};
         my $this_lang = $Language{$fset_b}{$f};
         if ($this_lang eq "(unknown)") {
-            $p_ignored{$f} = "uknown language";
+            $p_ignored{$f} = "unknown language";
             next;
         }
         if ($Exclude_Language{$this_lang}) {
@@ -2320,7 +2320,7 @@ sub count_filesets {                         # {{{1
              or  not defined $Include_Language{$Language{$fset_a}{$f}});
         my $this_lang = $Language{$fset_a}{$f};
         if ($this_lang eq "(unknown)") {
-            $p_ignored{$f} = "uknown language";
+            $p_ignored{$f} = "unknown language";
             next;
         }
         if ($Exclude_Language{$this_lang}) {
@@ -4676,7 +4676,7 @@ sub replace_git_hash_with_tarfile {          # {{{1
     #            git archive -o tarfile2 *git_hash2* \
     #               <union of files that changed and exist in this commit>
     #          To avoid "Argument list too long" error, repeat the git
-    #          achive step with chunks of 30,000 files at a time then
+    #          archive step with chunks of 30,000 files at a time then
     #          merge the tar files as the final step.
     #   Regular count:
     #       Simply make a tar file of all files in the git repo.
@@ -4777,7 +4777,7 @@ sub replace_git_hash_with_tarfile {          # {{{1
 #print "files_union =\n", Dumper(\%files_union);
 #print "repo_listing=\n", Dumper(\%repo_listing);
 
-            # then make trucated tar files of those union files which
+            # then make truncated tar files of those union files which
             # actually exist in each repo
             foreach my $file (sort keys %files_union) {
                 push @left_files , $file if $repo_listing{$Left }{$file};
