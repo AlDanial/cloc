@@ -9,7 +9,7 @@ header :
   files_per_second   : 177.905666779776
   lines_per_second   : 8361.56633864947
   report_file        : qsort_demo.m.yaml
-Objective C :
+Objective-C :
   nFiles: 1
   blank: 11
   comment: 11

@@ -301,7 +301,7 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              then use these filters instead of the built-in
                              filters.  Note:  languages which map to the same
                              file extension (for example:
-                             MATLAB/Mathematica/Objective C/MUMPS/Mercury;
+                             MATLAB/Mathematica/Objective-C/MUMPS/Mercury;
                              Pascal/PHP; Lisp/OpenCL; Lisp/Julia; Perl/Prolog)
                              will be ignored as these require additional
                              processing that is not expressed in language
@@ -1136,7 +1136,7 @@ my %Extension_Collision = (
     'IDL/Qt Project/Prolog/ProGuard'                => [ 'pro'  ] ,
     'Lisp/Julia'                                    => [ 'jl'   ] ,
     'Lisp/OpenCL'                                   => [ 'cl'   ] ,
-    'MATLAB/Mathematica/Objective C/MUMPS/Mercury'  => [ 'm'    ] ,
+    'MATLAB/Mathematica/Objective-C/MUMPS/Mercury'  => [ 'm'    ] ,
     'Pascal/Puppet'                                 => [ 'pp'   ] ,
     'Perl/Prolog'                                   => [ 'pl', 'PL'  ] ,
     'PHP/Pascal'                                    => [ 'inc'  ] ,
@@ -4503,12 +4503,12 @@ sub print_language_info {                    # {{{1
     }
 
     # add exceptions (one file extension mapping to multiple languages)
-    if (!$language or $language =~ /^(Objective C|MATLAB|Mathematica|MUMPS|Mercury)$/i) {
-        push @{$extensions{'Objective C'}}, "m";
+    if (!$language or $language =~ /^(Objective-C|MATLAB|Mathematica|MUMPS|Mercury)$/i) {
+        push @{$extensions{'Objective-C'}}, "m";
         push @{$extensions{'MATLAB'}}     , "m";
         push @{$extensions{'Mathematica'}}, "m";
         push @{$extensions{'MUMPS'}}      , "m";
-        delete $extensions{'MATLAB/Mathematica/Objective C/MUMPS/Mercury'};
+        delete $extensions{'MATLAB/Mathematica/Objective-C/MUMPS/Mercury'};
     }
     if (!$language or $language =~ /^(Lisp|OpenCL)$/i) {
         push @{$extensions{'Lisp'}}  , "cl";
@@ -5503,7 +5503,7 @@ sub classify_file {                          # {{{1
         }
         if (defined $Language_by_Extension{$extension}) {
             if ($Language_by_Extension{$extension} eq
-                'MATLAB/Mathematica/Objective C/MUMPS/Mercury') {
+                'MATLAB/Mathematica/Objective-C/MUMPS/Mercury') {
                 my $lang_M_or_O = "";
                 matlab_or_objective_C($full_file ,
                                       $rh_Err    ,
@@ -7591,8 +7591,8 @@ sub set_constants {                          # {{{1
             'mli'         => 'OCaml'                 ,
             'mly'         => 'OCaml'                 ,
             'mll'         => 'OCaml'                 ,
-            'm'           => 'MATLAB/Mathematica/Objective C/MUMPS/Mercury' ,
-            'mm'          => 'Objective C++'         ,
+            'm'           => 'MATLAB/Mathematica/Objective-C/MUMPS/Mercury' ,
+            'mm'          => 'Objective-C++'         ,
             'msg'         => 'Gencat NLS'            ,
             'nbp'         => 'Mathematica'           ,
             'mathematica' => 'Mathematica'           ,
@@ -8741,13 +8741,13 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
-    'Objective C'        => [
+    'Objective-C'        => [
 #                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
-    'Objective C++'      => [
+    'Objective-C++'      => [
 #                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
@@ -8770,7 +8770,7 @@ sub set_constants {                          # {{{1
                                   '\[(comment|\/\/)?\]\s*:?\s*(<\s*>|#)?\s*\(.*?', '.*?\)' ],
                                 # http://stackoverflow.com/questions/4823468/comments-in-markdown
                             ],
-    'MATLAB/Mathematica/Objective C/MUMPS/Mercury' => [ [ 'die' ,          ], ], # never called
+    'MATLAB/Mathematica/Objective-C/MUMPS/Mercury' => [ [ 'die' ,          ], ], # never called
     'MUMPS'              => [   [ 'remove_matches'      , '^\s*;'  ], ],
     'Mustache'           => [
                                 [ 'remove_between_general', '{{!', '}}' ],
@@ -9375,8 +9375,8 @@ sub set_constants {                          # {{{1
     'make'               =>     '\\\\$'         ,
     'MATLAB'             =>     '\.\.\.\s*$'    ,
     'MXML'               =>     '\\\\$'         ,
-    'Objective C'        =>     '\\\\$'         ,
-    'Objective C++'      =>     '\\\\$'         ,
+    'Objective-C'        =>     '\\\\$'         ,
+    'Objective-C++'      =>     '\\\\$'         ,
     'OCaml'              =>     '\\\\$'         ,
     'Octave'             =>     '\.\.\.\s*$'    ,
     'Qt Project'         =>     '\\\\$'         ,
@@ -9933,8 +9933,8 @@ sub set_constants {                          # {{{1
     'object logo'                  =>   2.76,
     'object pascal'                =>   2.76,
     'object star'                  =>   5.00,
-    'Objective C'                  =>   2.96,
-    'Objective C++'                =>   2.96,
+    'Objective-C'                  =>   2.96,
+    'Objective-C++'                =>   2.96,
     'objectoriented default'       =>   2.76,
     'objectview'                   =>   3.20,
     'OCaml'                        =>   3.00,
@@ -10246,7 +10246,7 @@ sub set_constants {                          # {{{1
     'Perl/Prolog'                     => 1.00,
     'Raku/Prolog'                     => 1.00,
     'Verilog-SystemVerilog/Coq'    => 1.00,
-    'MATLAB/Mathematica/Objective C/MUMPS/Mercury' => 1.00,
+    'MATLAB/Mathematica/Objective-C/MUMPS/Mercury' => 1.00,
     'IDL/Qt Project/Prolog/ProGuard'     => 1.00,
 );
 # 1}}}
@@ -12035,7 +12035,7 @@ sub plural_form {                            # {{{1
     else         { return ($n, "s"); }
 } # 1}}}
 sub matlab_or_objective_C {                  # {{{1
-    # Decide if code is MATLAB, Mathematica, Objective C, MUMPS, or Mercury
+    # Decide if code is MATLAB, Mathematica, Objective-C, MUMPS, or Mercury
     my ($file        , # in
         $rh_Err      , # in   hash of error codes
         $raa_errors  , # out
@@ -12047,7 +12047,7 @@ sub matlab_or_objective_C {                  # {{{1
     #   some lines start with "%"
     #   high marks for lines that start with [
     #
-    # Objective C markers:
+    # Objective-C markers:
     #   must have at least two brace characters, { }
     #   has /* ... */ style comments
     #   some lines start with @
@@ -12109,14 +12109,14 @@ printf ".m:  \\w \\w  obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $ob
 printf ".m:  ;      obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mathematica_points, $mumps_points, $mercury_points if $DEBUG;
         }
         if (m{^\s*#(include|import)}) {
-            # Objective C without a doubt
+            # Objective-C without a doubt
             $objective_C_points = 1000;
             $matlab_points      = 0;
 printf ".m: #includ obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mathematica_points, $mumps_points, $mercury_points if $DEBUG;
             $has_braces         = 2;
             last;
         } elsif (m{^\s*@(interface|implementation|protocol|public|protected|private|end)\s}o) {
-            # Objective C without a doubt
+            # Objective-C without a doubt
             $objective_C_points = 1000;
             $matlab_points      = 0;
 printf ".m: keyword obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $objective_C_points, $matlab_points, $mathematica_points, $mumps_points, $mercury_points if $DEBUG;
@@ -12149,7 +12149,7 @@ printf "END LOOP    obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $obje
     my %points = ( 'MATLAB'      => $matlab_points     ,
                    'Mathematica' => $mathematica_points     ,
                    'MUMPS'       => $mumps_points      ,
-                   'Objective C' => $objective_C_points,
+                   'Objective-C' => $objective_C_points,
                    'Mercury'     => $mercury_points    , );
 
     ${$rs_language} = (sort { $points{$b} <=> $points{$a} or $a cmp $b } keys %points)[0];

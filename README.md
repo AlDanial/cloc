@@ -637,7 +637,7 @@ Usage: cloc [options] &lt;file(s)/dir(s)/git hash(es)&gt; | &lt;set 1&gt; &lt;se
                              then use these filters instead of the built-in
                              filters.  Note:  languages which map to the same
                              file extension (for example:
-                             MATLAB/Mathematica/Objective C/MUMPS/Mercury;
+                             MATLAB/Mathematica/Objective-C/MUMPS/Mercury;
                              Pascal/PHP; Lisp/OpenCL; Lisp/Julia; Perl/Prolog)
                              will be ignored as these require additional
                              processing that is not expressed in language
@@ -1084,8 +1084,8 @@ NASTRAN DMAP               (dmap)
 Nemerle                    (n)
 Nim                        (nim, nim.cfg, nimble, nimrod, nims)
 Nix                        (nix)
-Objective C                (m)
-Objective C++              (mm)
+Objective-C                (m)
+Objective-C++              (mm)
 OCaml                      (eliom, eliomi, ml, ml4, mli, mll, mly)
 OpenCL                     (cl)
 Oracle Forms               (fmt)
@@ -1220,7 +1220,7 @@ These file extensions map to multiple languages:
 *   `itk` files could be Tcl or Tk
 *   `jl`  files could be Lisp or Julia
 *   `lit` files could be PL or M
-*   `m`   files could be MATLAB, Mathematica, Objective C, MUMPS or Mercury
+*   `m`   files could be MATLAB, Mathematica, Objective-C, MUMPS or Mercury
 *   `p6`  files could be Perl or Prolog
 *   `pl`  files could be Perl or Prolog
 *   `PL`  files could be Perl or Prolog
@@ -1234,7 +1234,7 @@ cloc has subroutines that attempt to identify the correct language based
 on the file's contents for these special cases. Language identification
 accuracy is a function of how much code the file contains; .m files with
 just one or two lines for example, seldom have enough information to
-correctly distinguish between MATLAB, Mercury, MUMPS, or Objective C.
+correctly distinguish between MATLAB, Mercury, MUMPS, or Objective-C.
 
 Languages with file extension collisions are difficult to customize with
 `--read-lang-def` or `--force-lang-def` as they have no mechanism to
@@ -1522,7 +1522,7 @@ CSS
  modified                      1              0              0              1
  added                         0              0              0              0
  removed                       0              0              0              0
-Objective C
+Objective-C
  same                          7              0             61            635
  modified                      0              0              0              0
  added                         0              0              0              0
@@ -1929,7 +1929,7 @@ Prolog                          12            438              2           1146
 JSON                            14              1              0           1037
 yacc                             1             85             76            998
 DOS Batch                       44            199            148            895
-Objective C                      7             98             61            635
+Objective-C                      7             98             61            635
 Expect                           6            104            161            565
 Windows Message File             1            102             11            489
 CSS                              1             98             19            328
@@ -1996,7 +1996,7 @@ Bourne Again Shell                28            307            386           161
 Prolog                            13            447             42           1594
 JSON                              19              1              0           1396
 CSS                                4            151            181            790
-Objective C                        7             98             61            635
+Objective-C                        7             98             61            635
 Windows Resource File             20            120            145            604
 Expect                             6            104            161            565
 Windows Message File               3            104             19            500
@@ -2385,7 +2385,7 @@ python     Assembly                    12298
 python     make                         2953
 python     HTML                         2344
 python     Windows Module Definition    2081
-python     Objective C                   635
+python     Objective-C                   635
 python     Expect                        565
 python     DOS Batch                     506
 python     CSS                           328

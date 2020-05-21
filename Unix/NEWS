@@ -557,7 +557,7 @@ Updates:
     o Change --sql schema by adding fields File_dirname, File_basename to 
       table 't' of SQL output to simplify obtaining per-directory metrics
     o Escape embedded single quotes in file names (bug #127) for SQL output.
-    o Improved language detection for Objective C (earlier misidentified
+    o Improved language detection for Objective-C (earlier misidentified
       as MATLAB or other .m languages).
     o Sort duplicate file lists by full path instead of basename to give
       repeatable output.
@@ -712,7 +712,7 @@ New Languages:
 Updates:
     o Improved handling of UTF-16 (both little and big endian).
     o use Time::HiRes if available.
-    o Improved logic that distinguishes between Objective C,
+    o Improved logic that distinguishes between Objective-C,
       MUMPS and MATLAB files.
     o Added information about duplicate files to output created
       by --ignored.
@@ -793,7 +793,7 @@ New options and features:
     processing filters with custom settings.  The problem with this
     option is that it overwrites internal logic that handles languages
     which map to the same file extension.  Currently these are
-        MATLAB/Objective C/MUMPS   -> .m
+        MATLAB/Objective-C/MUMPS   -> .m
         Pascal/PHP                 -> .inc
         Lisp/OpenCL                -> .cl
     The logic needed to handle these extension collisions is not
@@ -920,7 +920,7 @@ New options and features:
 New Languages:
     o CMake
     o Cython
-    o Objective C++
+    o Objective-C++
     o Ocaml
     o Smarty
 
