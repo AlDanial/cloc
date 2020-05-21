@@ -7552,6 +7552,7 @@ sub set_constants {                          # {{{1
             'liquid'      => 'liquid'                ,
             'lsp'         => 'Lisp'                  ,
             'lisp'        => 'Lisp'                  ,
+            'll'          => 'LLVM IR'               ,
             'lgt'         => 'Logtalk'               ,
             'logtalk'     => 'Logtalk'               ,
             'wlua'        => 'Lua'                   ,
@@ -8690,6 +8691,10 @@ sub set_constants {                          # {{{1
     'Lisp/OpenCL'        => [ [ 'die' ,          ], ], # never called
     'Lisp/Julia'         => [ [ 'die' ,          ], ], # never called
     'LiveLink OScript'   => [   [ 'remove_matches'      , '^\s*//' ], ],
+    'LLVM IR'            => [
+                                [ 'remove_matches'      , '^\s*;'  ],
+                                [ 'remove_inline'       , ';.*$'   ],
+                            ],
     'Logtalk'            => [  # same filters as Prolog
                                 [ 'remove_matches'      , '^\s*\%' ],
                                 [ 'call_regexp_common'  , 'C'      ],
@@ -9863,6 +9868,7 @@ sub set_constants {                          # {{{1
     'liquid'                       =>   3.00,
     'Lisp'                         =>   1.25,
     'LiveLink OScript'             =>   3.5 ,
+    'LLVM IR'                      =>   0.90,
     'loglisp'                      =>   1.38,
     'Logtalk'                      =>   2.00,
     'loops'                        =>   3.81,

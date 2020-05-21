@@ -437,6 +437,11 @@ my @Tests = (
                     'args' => '../tests/inputs/Hello.lidr',
                 },
                 {
+                    'name' => 'LLVM IR',
+                    'ref'  => '../tests/outputs/DIEnumerator-10.0.ll.yaml',
+                    'args' => '../tests/inputs/DIEnumerator-10.0.ll',
+                },
+                {
                     'name' => 'Logtalk',
                     'ref'  => '../tests/outputs/logtalk.lgt.yaml',
                     'args' => '../tests/inputs/logtalk.lgt',

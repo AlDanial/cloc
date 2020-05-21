@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.87
+  elapsed_seconds    : 0.00652503967285156
+  n_files            : 1
+  n_lines            : 11
+  files_per_second   : 153.255773165741
+  lines_per_second   : 1685.81350482315
+  report_file        : ../outputs/DIEnumerator-10.0.ll.yaml
+'LLVM IR' :
+  nFiles: 1
+  blank: 2
+  comment: 6
+  code: 3
+SUM: 
+  blank: 2
+  comment: 6
+  code: 3
+  nFiles: 1
