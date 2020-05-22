@@ -230,7 +230,7 @@ Load language processing filters from FILE,
 then use these filters instead of the built-in
 filters.  Note:  languages which map to the same
 file extension (for example:
-MATLAB/Objective C/MUMPS;  Pascal/PHP;
+MATLAB/Objective-C/MUMPS;  Pascal/PHP;
 Lisp/OpenCL; Lisp/Julia; Perl/Prolog) will be ignored as
 these require additional processing that is not expressed in
 language definition files.
