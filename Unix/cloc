@@ -7591,6 +7591,7 @@ sub set_constants {                          # {{{1
             'mc'          => 'Windows Message File'  ,
             'met'         => 'Teamcenter met'        ,
             'mg'          => 'Modula3'               ,
+            'meson.build' => 'Meson'                 ,
             'mk'          => 'make'                  ,
 #           'mli'         => 'ML'                    , # ML not implemented
 #           'ml'          => 'ML'                    ,
@@ -8103,6 +8104,7 @@ sub set_constants {                          # {{{1
             'Jamrules'          => 'Jam'                ,
             'Makefile'          => 'make'               ,
             'makefile'          => 'make'               ,
+            'meson.build'       => 'Meson'              ,
             'gnumakefile'       => 'make'               ,
             'Gnumakefile'       => 'make'               ,
             'pom.xml'           => 'Maven/XML'          ,
@@ -8721,6 +8723,10 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*\-\-' ],
                             ],
     'make'               => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
+    'Meson'              => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
@@ -9384,6 +9390,7 @@ sub set_constants {                          # {{{1
     'Lua'                =>     '\\\\$'         ,
     'make'               =>     '\\\\$'         ,
     'MATLAB'             =>     '\.\.\.\s*$'    ,
+    'Meson'              =>     '\\\\$'         ,
     'MXML'               =>     '\\\\$'         ,
     'Objective-C'        =>     '\\\\$'         ,
     'Objective-C++'      =>     '\\\\$'         ,
@@ -9908,6 +9915,7 @@ sub set_constants {                          # {{{1
     'mdl'                          =>   2.22,
     'mentor'                       =>   1.51,
     'mesa'                         =>   0.75,
+    'Meson'                        =>   1.00,
     'microfocus cobol'             =>   1.00,
     'microforth'                   =>   1.25,
     'microsoft c'                  =>   0.63,

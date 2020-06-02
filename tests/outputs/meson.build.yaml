@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.87
+  elapsed_seconds    : 0.00704503059387207
+  n_files            : 1
+  n_lines            : 70
+  files_per_second   : 141.944025178517
+  lines_per_second   : 9936.08176249619
+  report_file        : tests/inputs/meson.build.yaml
+'Meson' :
+  nFiles: 1
+  blank: 13
+  comment: 9
+  code: 48
+SUM: 
+  blank: 13
+  comment: 9
+  code: 48
+  nFiles: 1
