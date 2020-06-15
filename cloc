@@ -7581,6 +7581,7 @@ sub set_constants {                          # {{{1
             'mc'          => 'Windows Message File'  ,
             'met'         => 'Teamcenter met'        ,
             'mg'          => 'Modula3'               ,
+            'mojom'       => 'Mojo'                  ,
             'meson.build' => 'Meson'                 ,
             'mk'          => 'make'                  ,
 #           'mli'         => 'ML'                    , # ML not implemented
@@ -8742,6 +8743,7 @@ sub set_constants {                          # {{{1
     'Modula3'            => [   [ 'call_regexp_common'  , 'Pascal' ], ],
         # Modula 3 comments are (* ... *) so applying the Pascal filter
         # which also treats { ... } as a comment is not really correct.
+    'Mojo'               => [   [ 'call_regexp_common' , 'C++' ], ],
     'Nemerle'            => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
@@ -10230,6 +10232,7 @@ sub set_constants {                          # {{{1
     'Octave'                       => 4.00,
     'ML'                           => 3.00,
     'Modula3'                      => 2.00,
+    'Mojo'                         => 2.00,
     'PHP'                          => 3.50,
     'Jupyter Notebook'             => 4.20,
     'Python'                       => 4.20,
