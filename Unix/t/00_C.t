@@ -498,7 +498,7 @@ my @Tests = (
                 },
                 {
                     'name' => 'Mojo',
-                    'ref'  => '../tests/outputs/Mojo.yaml',
+                    'ref'  => '../tests/outputs/Mojo.mojom.yaml',
                     'args' => '../tests/inputs/Mojo.mojom',
                 },
                 {
