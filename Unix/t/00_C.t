@@ -497,6 +497,11 @@ my @Tests = (
                     'args' => '../tests/inputs/meson.build',
                 },
                 {
+                    'name' => 'Mojo',
+                    'ref'  => '../tests/outputs/Mojo.yaml',
+                    'args' => '../tests/inputs/Mojo.mojom',
+                },
+                {
                     'name' => 'Mumps',
                     'ref'  => '../tests/outputs/Mumps.mps.yaml',
                     'args' => '../tests/inputs/Mumps.mps',
