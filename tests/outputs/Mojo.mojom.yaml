@@ -8,7 +8,7 @@ header :
   n_lines            : 27
   files_per_second   : 35.8975359676826
   lines_per_second   : 969.23347112743
-  report_file        : .\tests\outputs\example_mojo.mojom.yaml
+  report_file        : ./tests/outputs/example_mojo.mojom.yaml
 'Mojo' :
   nFiles: 1
   blank: 6

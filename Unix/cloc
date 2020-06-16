@@ -7591,6 +7591,7 @@ sub set_constants {                          # {{{1
             'mc'          => 'Windows Message File'  ,
             'met'         => 'Teamcenter met'        ,
             'mg'          => 'Modula3'               ,
+            'mojom'       => 'Mojo'                  ,
             'meson.build' => 'Meson'                 ,
             'mk'          => 'make'                  ,
 #           'mli'         => 'ML'                    , # ML not implemented
@@ -7929,6 +7930,8 @@ sub set_constants {                          # {{{1
             'web.release.config'=> 'XML'                   ,
             'web.debug.config'=> 'XML'                   ,
             'web.config'  => 'XML'                   ,
+            'wxml'        => 'WXML'                  ,
+            'wxss'        => 'WXSS'                  ,
             'vxml'        => 'XML'                   ,
             'vstemplate'  => 'XML'                   ,
             'vssettings'  => 'XML'                   ,
@@ -8752,6 +8755,7 @@ sub set_constants {                          # {{{1
     'Modula3'            => [   [ 'call_regexp_common'  , 'Pascal' ], ],
         # Modula 3 comments are (* ... *) so applying the Pascal filter
         # which also treats { ... } as a comment is not really correct.
+    'Mojo'               => [   [ 'call_regexp_common' , 'C++' ], ],
     'Nemerle'            => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
@@ -9325,6 +9329,15 @@ sub set_constants {                          # {{{1
     'WiX string localization' => [
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
+    'WXML'               => [
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
+    'WXSS'               => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C'      ],
                             ],
     'XMI'                => [
                                 [ 'remove_html_comments',          ],
@@ -10215,6 +10228,8 @@ sub set_constants {                          # {{{1
     'WiX include'                  =>   1.90,
     'WiX string localization'      =>   1.90,
     'wizard'                       =>   2.86,
+    'WXML'                         =>   1.90,
+    'WXSS'                         =>   1.00,
     'xBase'                        =>   2.00,
     'xBase Header'                 =>   2.00,
     'xlisp'                        =>   1.25,
@@ -10240,6 +10255,7 @@ sub set_constants {                          # {{{1
     'Octave'                       => 4.00,
     'ML'                           => 3.00,
     'Modula3'                      => 2.00,
+    'Mojo'                         => 2.00,
     'PHP'                          => 3.50,
     'Jupyter Notebook'             => 4.20,
     'Python'                       => 4.20,

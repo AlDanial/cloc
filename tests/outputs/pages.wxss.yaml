@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.87
+  elapsed_seconds    : 0.00998592376708984
+  n_files            : 1
+  n_lines            : 4
+  files_per_second   : 100.140960748735
+  lines_per_second   : 400.563842994938
+  report_file        : ../outputs/pages.wxss.yaml
+'WXSS' :
+  nFiles: 1
+  blank: 0
+  comment: 0
+  code: 4
+SUM: 
+  blank: 0
+  comment: 0
+  code: 4
+  nFiles: 1

@@ -7920,6 +7920,8 @@ sub set_constants {                          # {{{1
             'web.release.config'=> 'XML'                   ,
             'web.debug.config'=> 'XML'                   ,
             'web.config'  => 'XML'                   ,
+            'wxml'        => 'WXML'                  ,
+            'wxss'        => 'WXSS'                  ,
             'vxml'        => 'XML'                   ,
             'vstemplate'  => 'XML'                   ,
             'vssettings'  => 'XML'                   ,
@@ -9318,6 +9320,15 @@ sub set_constants {                          # {{{1
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
                             ],
+    'WXML'               => [
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
+    'WXSS'               => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C'      ],
+                            ],
     'XMI'                => [
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
@@ -10207,6 +10218,8 @@ sub set_constants {                          # {{{1
     'WiX include'                  =>   1.90,
     'WiX string localization'      =>   1.90,
     'wizard'                       =>   2.86,
+    'WXML'                         =>   1.90,
+    'WXSS'                         =>   1.00,
     'xBase'                        =>   2.00,
     'xBase Header'                 =>   2.00,
     'xlisp'                        =>   1.25,

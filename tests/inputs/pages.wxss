@@ -1,0 +1,4 @@
+// https://developers.weixin.qq.com/miniprogram/en/dev/reference/wxs/07basiclibrary.html
+console.log(undefined === JSON.stringify());
+console.log(undefined === JSON.stringify(undefined));
+console.log("null"===JSON.stringify(null));

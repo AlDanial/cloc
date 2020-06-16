@@ -877,6 +877,16 @@ my @Tests = (
                     'args' => '../tests/inputs/ZosNet.rc',
                 },
                 {
+                    'name' => 'WXML',
+                    'ref'  => '../tests/outputs/pages.wxml.yaml',
+                    'args' => '../tests/inputs/pages.wxml',
+                },
+                {
+                    'name' => 'WXSS',
+                    'ref'  => '../tests/outputs/pages.wxss.yaml',
+                    'args' => '../tests/inputs/pages.wxss',
+                },
+                {
                     'name' => 'xBase',
                     'ref'  => '../tests/outputs/harbour_xbase.prg.yaml',
                     'args' => '../tests/inputs/harbour_xbase.prg',
