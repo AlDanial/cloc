@@ -1,0 +1,27 @@
+// Mojo files usually start with a multiline comment and/or copyright
+// statement.  They are otherwise quite close to C++ files.
+
+module example_service.mojom;
+
+import "mojo/public/mojom/base/time.mojom";
+import "some/other/project/base.mojom";
+
+enum BasicEnum {
+  kField1,
+  kField2,
+};
+
+struct BasicStruct {
+  // Comment about a field.
+  mojo_base.mojom.TimeDelta duration;
+};
+
+[annotation]
+interface ExampleInterface {
+  // Returns a thing from a place using its arguments.
+  DecodeInput(array<uint8> input_data, BasicEnum value, bool flag,
+              int64 size_of_the_thing)
+      => (BasicStruct? result_maybe);
+
+  Frobnicate(map<StringPair, map<int32, array<map<string, string>?>?>?> ridiculous) => (array<unit64, 2> guid);
+};
