@@ -11948,7 +11948,26 @@ sub unicode_to_ascii {                       # {{{1
     else                   { return '' }  # neither big or little endian UTF-16
 
     my @ascii              = ();
-    for (my $i = $offset; $i < $length; $i += 2) { push @ascii, $unicode[$i]; }
+    for (my $i = $offset; $i < $length; $i += 2) {
+        # some compound characters are made of HT (9), LF (10), or CR (13)
+        # True HT, LF, CR are followed by 00; only add those.
+        my $L = $unicode[$i];
+        if (ord($L) == 9 or ord($L) == 10 or ord($L) == 13) {
+            my $companion;
+            if ($points_1) {
+                $companion = $unicode[$i+1];
+            } else {
+                $companion = $unicode[$i-1];
+            }
+            if (ord($companion) == 0) {
+                push @ascii, $L;
+            } else {
+                push @ascii, " ";  # no clue what this letter is
+            }
+        } else {
+            push @ascii, $L;
+        }
+    }
     return join("", @ascii);
 } # 1}}}
 sub uncompress_archive_cmd {                 # {{{1

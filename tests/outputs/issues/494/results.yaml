@@ -1,0 +1,26 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.87
+  elapsed_seconds    : 0.0113317966461182
+  n_files            : 2
+  n_lines            : 166
+  files_per_second   : 176.494519135686
+  lines_per_second   : 14649.0450882619
+  report_file        : ../../../outputs/issues/494/results.yaml
+'P_EDI_Book.sql' :
+  blank: 24
+  comment: 36
+  code: 23
+  language: SQL
+'P_EDI_BookF8.sql' :
+  blank: 24
+  comment: 36
+  code: 23
+  language: SQL
+SUM: 
+  blank: 48
+  comment: 72
+  code: 46
+  nFiles: 2

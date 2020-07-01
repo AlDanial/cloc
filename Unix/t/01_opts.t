@@ -423,12 +423,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/482/results.yaml',
                 },
 
-#               {
-#                   'name' => '--count-and--diff with --out',
-#                   'cd'   => '../tests/inputs/issues/220',
-#                   'args' => '--count-and-diff ../../aa ../../dd',
-#                   'ref'  => '../tests/outputs/issues/220/rpt.yaml.diff..._.._aa..._.._dd',
-#               },
+                {
+                    'name' => '--unicode #494',
+                    'cd'   => '../tests/inputs/issues/494',
+                    'args' => '--unicode --by-file P*.sql',
+                    'ref'  => '../tests/outputs/issues/494/results.yaml',
+                },
+
             );
 
 # Create test input for issue #132 which needs data not in the git repo.
