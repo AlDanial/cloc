@@ -14518,7 +14518,7 @@ sub load_from_config_file {                  # {{{1
         } elsif (!defined ${$rs_processes}           and /processes(=|\s+)(\d+)/)                        { ${$rs_processes}          = $2;
         } elsif (!defined ${$rs_unicode}             and /unicode/)                                      { ${$rs_unicode}            = 1;
         } elsif (!defined ${$rs_3}                   and /3/)                                            { ${$rs_3}                  = 1;
-        } elsif (!defined ${$rs_vcs}                 and /vcs(=|\s+)s/)                                  { ${$rs_vcs}                = $2;
+        } elsif (!defined ${$rs_vcs}                 and /vcs(=|\s+)(\S+)/)                              { ${$rs_vcs}                = $2;
         } elsif (!defined ${$rs_version}             and /version/)                                      { ${$rs_version}            = 1;
         } elsif (!defined ${$rs_write_lang_def}      and /write_lang_def|write-lang-def(=|\s+)(.*?)$/)   { ${$rs_write_lang_def}     = $2;
         } elsif (!defined ${$rs_write_lang_def_incl_dup} and /write_lang_def_incl_dup|write-lang-def-incl-dup(=|\s+)(.*?)$/) { ${$rs_write_lang_def_incl_dup} = $2;
