@@ -35,6 +35,7 @@ at http://cloc.sourceforge.net/ since August 2006.
     *   [Wrapping cloc in other scripts](#wrapping-cloc-in-other-scripts-)
     *   [git and UTF8 pathnames](#git-and-UTF8-pathnames-)
     *   [Third Generation Language Scale Factors](#third-generation-language-scale-factors-)
+    *   [options.txt configuration tile](#optionstxt-configuration-file-)
 *   [Complex regular subexpression recursion limit ](#complex-regular-subexpression-recursion-limit-)
 *   [Limitations](#limitations-)
 *   [Requesting Support for Additional Languages](#requesting-support-for-additional-languages-)
@@ -2653,6 +2654,33 @@ The biggest flaw with this approach is that gearing ratios are defined
 for logical lines of source code not physical lines (which cloc counts).
 The values in cloc's 'scale' and '3rd gen. equiv.' columns should be
 taken with a large grain of salt.
+
+[](1}}})
+<a name="options_txt"></a> []({{{1)
+##  [options.txt configuration file &#9650;](#___top "click to go to top of document")
+
+If you find yourself using the same command line switches every
+time you invoke cloc, you can save some typing by adding those
+switches to the ``options.txt`` runtime configuration file.
+cloc will look for this file in the following locations:
+<pre>
+# Linux, NetBSD, FreeBSD, Mac OSX:
+/home/USERNAME/.config/cloc/options.txt
+
+# Windows
+C:\Users\USERNAME\AppData\cloc\options.txt
+</pre>
+
+Place each switch and arguments, if any, on a line by itself.
+Lines prefixed with ``#`` symbol are ignored as comments and
+blank lines are skipped.  Leading hyphens on the switches are
+optional.  Here's a sample file:
+<pre>
+# options.txt
+--vcs git
+v      # verbose level 1
+exclude-ext svg,html
+</pre>
 
 [](1}}})
 <a name="complex_regex_recursion"></a> []({{{1)
