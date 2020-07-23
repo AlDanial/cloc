@@ -367,6 +367,11 @@ my @Tests = (
                     'args' => '../tests/inputs/igorpro.ipf',
                 },
                 {
+                    'name' => 'Jinja Templates',
+                    'ref'  => '../tests/outputs/child_template.jinja2.yaml',
+                    'args' => '../tests/inputs/child_template.jinja2',
+                },
+                {
                     'name' => 'Jupyter Notebook',
                     'ref'  => '../tests/outputs/Trapezoid_Rule.ipynb.yaml',
                     'args' => '../tests/inputs/Trapezoid_Rule.ipynb',

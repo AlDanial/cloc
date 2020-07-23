@@ -7525,6 +7525,8 @@ sub set_constants {                          # {{{1
             'jsf'         => 'JavaServer Faces'      ,
             'jsx'         => 'JSX'                   ,
             'xhtml'       => 'XHTML'                 ,
+            'jinja'       => 'Jinja Template'        ,
+            'jinja2'      => 'Jinja Template'        ,
             'yyp'         => 'JSON'                  ,
             'webmanifest' => 'JSON'                  ,
             'webapp'      => 'JSON'                  ,
@@ -8653,6 +8655,9 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'Jinja Template'     => [
+                                [ 'remove_between_general', '{#', '#}' ],
                             ],
     'JSX'                => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
@@ -9868,6 +9873,7 @@ sub set_constants {                          # {{{1
     'Java'                         =>   1.36,
     'JavaScript'                   =>   1.48,
     'JavaServer Faces'             =>   1.5 ,
+    'Jinja Template'               =>   1.5 ,
     'JSON'                         =>   2.50,
     'JSON5'                        =>   2.50,
     'JSP'                          =>   1.48,
