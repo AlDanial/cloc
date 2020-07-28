@@ -272,7 +272,7 @@ a Perl interpreter):
 **Note**: I don't control any of these packages.
 If you encounter a bug in cloc using one of the above
 packages, try with cloc pulled from the latest stable release here
-on github (link follows below) before submitting a problem report.
+on GitHub (link follows below) before submitting a problem report.
 [](1}}})
 <a name="Stable"></a> []({{{1)
 ## Stable release
@@ -351,7 +351,7 @@ Additionally, cloc will use Digest::MD5 to validate uniqueness among
 equally-sized input files if Digest::MD5 is installed locally.
 
 A parallel processing option, <tt>--processes=<i>N</i></tt>, was introduced with
-cloc version 1.76 to enable faster runs on multicored machines.  However,
+cloc version 1.76 to enable faster runs on multi-core machines.  However,
 to use it, one must have the module Parallel::ForkManager installed.
 This module does not work reliably on Windows so parallel processing
 will only work on Unix-like operating systems.
@@ -1280,7 +1280,7 @@ A more detailed description:
     (anything that begins with #!). If it is shell script, the file is
     classified by that scripting language (if the language is
     recognized). If the file does not have a recognized extension or is
-    not a recognzied scripting language, the file is ignored.
+    not a recognized scripting language, the file is ignored.
 5.  All remaining files in the candidate list should now be source files
     for known programming languages. For each of these files:
 
@@ -1481,7 +1481,7 @@ option runs much more slowly than an absolute code count.
 To see how cloc aligns files between the two archives, use the
 `--diff-alignment` option
 <pre>
-cloc --diff-aligment=align.txt gcc-4.4.0.tar.bz2  gcc-4.5.0.tar.bz2
+cloc --diff-alignment=align.txt gcc-4.4.0.tar.bz2  gcc-4.5.0.tar.bz2
 </pre>
 to produce the file `align.txt` which shows the file pairs as well
 as files added and deleted.  The symbols `==` and `!=` before each
@@ -2896,7 +2896,7 @@ provided the
 [Slovakian](http://newknowledgez.com/cloc.html) translation.
 
 Erik Gooven Arellano Casillas provided an update to the MXML counter to
-recognize Actionscript comments.
+recognize ActionScript comments.
 
 [Gianluca Casati](http://g14n.info) created the
 [cloc CPAN package](https://metacpan.org/pod/App::cloc).
