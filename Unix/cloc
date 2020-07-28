@@ -1606,8 +1606,13 @@ if ($opt_diff_list_file) {
 		push @{$files_for_set[0]}, $F;
 	}
     foreach my $pair (@file_pairs_tot) {
-		push @{$files_for_set[0]}, $pair->[0];
-		push @{$files_for_set[1]}, $pair->[1];
+        if ($ON_WINDOWS) {
+            push @{$files_for_set[0]}, lc $pair->[0];
+            push @{$files_for_set[1]}, lc $pair->[1];
+        } else {
+            push @{$files_for_set[0]}, $pair->[0];
+            push @{$files_for_set[1]}, $pair->[1];
+        }
 	}
 	@ARGV = (1, 2); # place holders
 }
@@ -4695,7 +4700,7 @@ sub replace_git_hash_with_tarfile {          # {{{1
     print "-> replace_git_hash_with_tarfile($prt_args)\n" if $opt_v > 2;
 #print "ra_arg_list 1: @{$ra_arg_list}\n";
 
-    my $hash_regex = qr/^([a-f\d]{5,40}|master|HEAD)$/;
+    my $hash_regex = qr/^([a-f\d]{5,40}|master|HEAD)(~\d+)?$/;
     my %replacement_arg_list = ();
 
     # early exit if none of the inputs look like git hashes
@@ -5096,6 +5101,7 @@ sub make_file_list {                         # {{{1
     my $nFiles_Categorized = 0;
 
     foreach my $file (@file_list) {
+        $file = lc $file if $ON_WINDOWS;
         printf "classifying $file\n" if $opt_v > 2;
 
         my $basename = basename $file;
@@ -11724,6 +11730,11 @@ sub align_by_pairs {                         # {{{1
     my @files_L = sort keys %{$rh_file_list_L};
     my @files_R = sort keys %{$rh_file_list_R};
     return () unless @files_L or  @files_R;  # at least one must have stuff
+    if ($ON_WINDOWS or $opt_ignore_case_ext) {
+        foreach (@files_L) { $_ = lc $_; }
+        foreach (@files_R) { $_ = lc $_; }
+    }
+
     if      ( @files_L and !@files_R) {
         # left side has stuff, right side is empty; everything deleted
         @{$ra_added   }     = ();

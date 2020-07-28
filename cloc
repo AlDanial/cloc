@@ -4692,7 +4692,7 @@ sub replace_git_hash_with_tarfile {          # {{{1
     print "-> replace_git_hash_with_tarfile($prt_args)\n" if $opt_v > 2;
 #print "ra_arg_list 1: @{$ra_arg_list}\n";
 
-    my $hash_regex = qr/^([a-f\d]{5,40}|master|HEAD)$/;
+    my $hash_regex = qr/^([a-f\d]{5,40}|master|HEAD)(~\d+)?$/;
     my %replacement_arg_list = ();
 
     # early exit if none of the inputs look like git hashes
