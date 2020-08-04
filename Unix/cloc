@@ -12835,102 +12835,102 @@ sub load_from_config_file {                  # {{{1
         next if /^\s*$/ or /^\s*#/;
         s/\s*--//;
         s/^\s+//;
-        if      (!defined ${$rs_by_file}             and /^by_file|by-file/)                              { ${$rs_by_file}            = 1;
-        } elsif (!defined ${$rs_by_file_by_lang}     and /^by_file_by_lang|by-file-by-lang/)              { ${$rs_by_file_by_lang}    = 1;
-        } elsif (!defined ${$rs_categorized}         and /^categorized(=|\s+)(.*?)$/)                     { ${$rs_categorized}        = $2;
-        } elsif (!defined ${$rs_counted}             and /^counted(=|\s+)(.*?)$/)                         { ${$rs_counted}            = $2;
-        } elsif (!defined ${$rs_include_ext}         and /^include_ext|include-ext(=|\s+)(.*?)$/)         { ${$rs_include_ext}        = $2;
-        } elsif (!defined ${$rs_include_lang}        and /^include_lang|include-lang(=|\s+)(.*?)$/)       { ${$rs_include_lang}       = $2;
-        } elsif (!defined ${$rs_exclude_content}     and /^exclude_content|exclude-content(=|\s+)(.*?)$/) { ${$rs_exclude_content}    = $2;
-        } elsif (!defined ${$rs_exclude_lang}        and /^exclude_lang|exclude-lang(=|\s+)(.*?)$/)       { ${$rs_exclude_lang}       = $2;
-        } elsif (!defined ${$rs_exclude_dir}         and /^exclude_dir|exclude-dir(=|\s+)(.*?)$/)         { ${$rs_exclude_dir}        = $2;
-        } elsif (!defined ${$rs_explain}             and /^explain(=|\s+)(.*?)$/)                         { ${$rs_explain}            = $2;
-        } elsif (!defined ${$rs_extract_with}        and /^extract_with|extract-with(=|\s+)(.*?)$/)       { ${$rs_extract_with}       = $2;
-        } elsif (!defined ${$rs_found}               and /^found(=|\s+)(.*?)$/)                           { ${$rs_found}              = $2;
-        } elsif (!defined ${$rs_count_diff}          and /^count_and_diff|count-and-diff/)                { ${$rs_count_diff}         = 1;
-        } elsif (!defined ${$rs_diff}                and /^diff/)                                         { ${$rs_diff}               = 1;
-        } elsif (!defined ${$rs_diff_alignment}      and /^diff-alignment|diff_alignment(=|\s+)(.*?)$/)   { ${$rs_diff_alignment}     = $2;
-        } elsif (!defined ${$rs_diff_timeout}        and /^diff-timeout|diff_timeout(=|\s+)i/)            { ${$rs_diff_timeout}       = $1;
-        } elsif (!defined ${$rs_timeout}             and /^timeout(=|\s+)i/)                              { ${$rs_timeout}            = $1;
-        } elsif (!defined ${$rs_html}                and /^html/)                                         { ${$rs_html}               = 1;
-        } elsif (!defined ${$rs_ignored}             and /^ignored(=|\s+)(.*?)$/)                         { ${$rs_ignored}            = $2;
-        } elsif (!defined ${$rs_quiet}               and /^quiet/)                                        { ${$rs_quiet}              = 1;
-        } elsif (!defined ${$rs_force_lang_def}      and /^force_lang_def|force-lang-def(=|\s+)(.*?)$/)   { ${$rs_force_lang_def}     = $2;
-        } elsif (!defined ${$rs_read_lang_def}       and /^read_lang_def|read-lang-def(=|\s+)(.*?)$/)     { ${$rs_read_lang_def}      = $2;
-        } elsif (!defined ${$rs_progress_rate}       and /^progress_rate|progress-rate(=|\s+)(\d+)/)      { ${$rs_progress_rate}      = $2;
-        } elsif (!defined ${$rs_print_filter_stages} and /^print_filter_stages|print-filter-stages/)      { ${$rs_print_filter_stages}= 1;
-        } elsif (!defined ${$rs_report_file}         and /^report_file|report-file(=|\s+)(.*?)$/)         { ${$rs_report_file}        = $2;
-        } elsif (!defined ${$rs_report_file}         and /^out(=|\s+)(.*?)$/)                             { ${$rs_report_file}        = $2;
-        } elsif (!defined ${$rs_sdir}                and /^sdir(=|\s+)(.*?)$/)                            { ${$rs_sdir}               = $2;
-        } elsif (!defined ${$rs_skip_uniqueness}     and /^skip_uniqueness|skip-uniqueness/)              { ${$rs_skip_uniqueness}    = 1;
-        } elsif (!defined ${$rs_strip_comments}      and /^strip_comments|strip-comments(=|\s+)(.*?)$/)   { ${$rs_strip_comments}     = $2;
-        } elsif (!defined ${$rs_original_dir}        and /^original_dir|original-dir/)                    { ${$rs_original_dir}       = 1;
-        } elsif (!defined ${$rs_sum_reports}         and /^sum_reports|sum-reports/)                      { ${$rs_sum_reports}        = 1;
-        } elsif (!defined ${$rs_hide_rate}           and /^hid_rate|hide-rate/)                           { ${$rs_hide_rate}          = 1;
-        } elsif (!defined ${$rs_processes}           and /^processes(=|\s+)(\d+)/)                        { ${$rs_processes}          = $2;
-        } elsif (!defined ${$rs_unicode}             and /^unicode/)                                      { ${$rs_unicode}            = 1;
-        } elsif (!defined ${$rs_3}                   and /^3/)                                            { ${$rs_3}                  = 1;
-        } elsif (!defined ${$rs_vcs}                 and /^vcs(=|\s+)(\S+)/)                              { ${$rs_vcs}                = $2;
-        } elsif (!defined ${$rs_version}             and /^version/)                                      { ${$rs_version}            = 1;
-        } elsif (!defined ${$rs_write_lang_def}      and /^write_lang_def|write-lang-def(=|\s+)(.*?)$/)   { ${$rs_write_lang_def}     = $2;
-        } elsif (!defined ${$rs_write_lang_def_incl_dup} and /^write_lang_def_incl_dup|write-lang-def-incl-dup(=|\s+)(.*?)$/) { ${$rs_write_lang_def_incl_dup} = $2;
-        } elsif (!defined ${$rs_xml}                 and /^xml/)                                          { ${$rs_xml}                = 1;
-        } elsif (!defined ${$rs_xsl}                 and /^xsl(=|\s+)(.*?)$/)                             { ${$rs_xsl}                = $2;
-        } elsif (!defined ${$rs_lang_no_ext}         and /^lang_no_ext|lang-no-ext(=|\s+)(.*?)$/)         { ${$rs_lang_no_ext}        = $2;
-        } elsif (!defined ${$rs_yaml}                and /^yaml/)                                         { ${$rs_yaml}               = 1;
-        } elsif (!defined ${$rs_csv}                 and /^csv/)                                          { ${$rs_csv}                = 1;
-        } elsif (!defined ${$rs_csv_delimiter}       and /^csv_delimeter|csv-delimiter(=|\s+)(.*?)$/)     { ${$rs_csv_delimiter}      = $2;
-        } elsif (!defined ${$rs_json}                and /^json/)                                         { ${$rs_json}               = 1;
-        } elsif (!defined ${$rs_md}                  and /^md/)                                           { ${$rs_md}                 = 1;
-        } elsif (!defined ${$rs_fullpath}            and /^fullpath/)                                     { ${$rs_fullpath}           = 1;
-        } elsif (!defined ${$rs_match_f}             and /^match_f|match-f(=|\s+)(.*?)$/)                 { ${$rs_match_f}            = $2;
-        } elsif (!defined ${$rs_not_match_f}         and /^not_match_f|not-match-f(=|\s+)(.*?)$/)         { ${$rs_not_match_f}        = $2;
-        } elsif (!defined ${$rs_match_d}             and /^match_d|match-d(=|\s+)(.*?)$/)                 { ${$rs_match_d}            = $2;
-        } elsif (!defined ${$rs_not_match_d}         and /^not_match_d|not-match-d(=|\s+)(.*?)$/)         { ${$rs_not_match_d}        = $2;
-        } elsif (!defined ${$rs_list_file}           and /^list_file|list-file(=|\s+)(.*?)$/)             { ${$rs_list_file}          = $2;
-        } elsif (!defined ${$rs_help}                and /^help/)                                         { ${$rs_help}               = 1;
-        } elsif (!defined ${$rs_skip_win_hidden}     and /^skip_win_hidden|skip-win-hidden/)              { ${$rs_skip_win_hidden}    = 1;
-        } elsif (!defined ${$rs_read_binary_files}   and /^read_binary_files|read-binary-files/)          { ${$rs_read_binary_files}  = 1;
-        } elsif (!defined ${$rs_sql}                 and /^sql(=|\s+)(.*?)$/)                             { ${$rs_sql}                = $2;
-        } elsif (!defined ${$rs_sql_project}         and /^sql_project|sql-project(=|\s+)(.*?)$/)         { ${$rs_sql_project}        = $2;
-        } elsif (!defined ${$rs_sql_append}          and /^sql_append|sql-append/)                        { ${$rs_sql_append}         = 1;
-        } elsif (!defined ${$rs_sql_style}           and /^sql_style|sql-style(=|\s+)(.*?)$/)             { ${$rs_sql_style}          = $2;
-        } elsif (!defined ${$rs_inline}              and /^inline/)                                       { ${$rs_inline}             = 1;
-        } elsif (!defined ${$rs_exclude_ext}         and /^exclude_ext|exclude-ext(=|\s+)(.*?)$/)         { ${$rs_exclude_ext}        = $2;
-        } elsif (!defined ${$rs_ignore_whitespace}   and /^ignore_whitespace|ignore-whitespace/)          { ${$rs_ignore_whitespace}  = 1;
-        } elsif (!defined ${$rs_ignore_case_ext}     and /^ignore_case_ext|ignore-case-ext/)              { ${$rs_ignore_case_ext}    = 1;
-        } elsif (!defined ${$rs_ignore_case}         and /^ignore_case|ignore-case/)                      { ${$rs_ignore_case}        = 1;
-        } elsif (!defined ${$rs_follow_links}        and /^follow_links|follow-links/)                    { ${$rs_follow_links}       = 1;
-        } elsif (!defined ${$rs_autoconf}            and /^autoconf/)                                     { ${$rs_autoconf}           = 1;
-        } elsif (!defined ${$rs_sum_one}             and /^sum_one|sum-one/)                              { ${$rs_sum_one}            = 1;
-        } elsif (!defined ${$rs_by_percent}          and /^by_percent|by-percent(=|\s+)(.*?)$/)           { ${$rs_by_percent}         = $2;
-        } elsif (!defined ${$rs_stdin_name}          and /^stdin_name|stdin-name(=|\s+)(.*?)$/)           { ${$rs_stdin_name}         = $2;
-        } elsif (!defined ${$rs_force_on_windows}    and /^windows/)                                      { ${$rs_force_on_windows}   = 1;
-        } elsif (!defined ${$rs_force_on_unix}       and /^unix/)                                         { ${$rs_force_on_unix}      = 1;
-        } elsif (!defined ${$rs_show_os}             and /^show_os|show-os/)                              { ${$rs_show_os}            = 1;
-        } elsif (!defined ${$rs_skip_archive}        and /^skip_archive|skip-archive(=|\s+)(.*?)$/)       { ${$rs_skip_archive}       = $2;
-        } elsif (!defined ${$rs_max_file_size}       and /^max_file_size|max-file-size(=|\s+)(\d+)/)      { ${$rs_max_file_size}      = $2;
-        } elsif (!defined ${$rs_use_sloccount}       and /^use_sloccount|use-sloccount/)                  { ${$rs_use_sloccount}      = 1;
-        } elsif (!defined ${$rs_no_autogen}          and /^no_autogen|no-autogen/)                        { ${$rs_no_autogen}         = 1;
-        } elsif (!defined ${$rs_force_git}           and /^git/)                                         { ${$rs_force_git}          = 1;
-        } elsif (!defined ${$rs_exclude_list_file}   and /^exclude_list_file|exclude-list-file(=|\s+)(.*?)$/)
+        if      (!defined ${$rs_by_file}             and /^(by_file|by-file)/)                                { ${$rs_by_file}            = 1;
+        } elsif (!defined ${$rs_by_file_by_lang}     and /^(by_file_by_lang|by-file-by-lang)/)                { ${$rs_by_file_by_lang}    = 1;
+        } elsif (!defined ${$rs_categorized}         and /^categorized(=|\s+)(.*?)$/)                         { ${$rs_categorized}        = $2;
+        } elsif (!defined ${$rs_counted}             and /^counted(=|\s+)(.*?)$/)                             { ${$rs_counted}            = $2;
+        } elsif (!defined ${$rs_include_ext}         and /^(?:include_ext|include-ext)(=|\s+)(.*?)$/)         { ${$rs_include_ext}        = $2;
+        } elsif (!defined ${$rs_include_lang}        and /^(?:include_lang|include-lang)(=|\s+)(.*?)$/)       { ${$rs_include_lang}       = $2;
+        } elsif (!defined ${$rs_exclude_content}     and /^(?:exclude_content|exclude-content)(=|\s+)(.*?)$/) { ${$rs_exclude_content}    = $2;
+        } elsif (!defined ${$rs_exclude_lang}        and /^(?:exclude_lang|exclude-lang)(=|\s+)(.*?)$/)       { ${$rs_exclude_lang}       = $2;
+        } elsif (!defined ${$rs_exclude_dir}         and /^(?:exclude_dir|exclude-dir)(=|\s+)(.*?)$/)         { ${$rs_exclude_dir}        = $2;
+        } elsif (!defined ${$rs_explain}             and /^explain(=|\s+)(.*?)$/)                             { ${$rs_explain}            = $2;
+        } elsif (!defined ${$rs_extract_with}        and /^(?:extract_with|extract-with)(=|\s+)(.*?)$/)       { ${$rs_extract_with}       = $2;
+        } elsif (!defined ${$rs_found}               and /^found(=|\s+)(.*?)$/)                               { ${$rs_found}              = $2;
+        } elsif (!defined ${$rs_count_diff}          and /^(count_and_diff|count-and-diff)/)                  { ${$rs_count_diff}         = 1;
+        } elsif (!defined ${$rs_diff}                and /^diff/)                                             { ${$rs_diff}               = 1;
+        } elsif (!defined ${$rs_diff_alignment}      and /^(?:diff-alignment|diff_alignment)(=|\s+)(.*?)$/)   { ${$rs_diff_alignment}     = $2;
+        } elsif (!defined ${$rs_diff_timeout}        and /^(?:diff-timeout|diff_timeout)(=|\s+)i/)            { ${$rs_diff_timeout}       = $1;
+        } elsif (!defined ${$rs_timeout}             and /^timeout(=|\s+)i/)                                  { ${$rs_timeout}            = $1;
+        } elsif (!defined ${$rs_html}                and /^html/)                                             { ${$rs_html}               = 1;
+        } elsif (!defined ${$rs_ignored}             and /^ignored(=|\s+)(.*?)$/)                             { ${$rs_ignored}            = $2;
+        } elsif (!defined ${$rs_quiet}               and /^quiet/)                                            { ${$rs_quiet}              = 1;
+        } elsif (!defined ${$rs_force_lang_def}      and /^(?:force_lang_def|force-lang-def)(=|\s+)(.*?)$/)   { ${$rs_force_lang_def}     = $2;
+        } elsif (!defined ${$rs_read_lang_def}       and /^(?:read_lang_def|read-lang-def)(=|\s+)(.*?)$/)     { ${$rs_read_lang_def}      = $2;
+        } elsif (!defined ${$rs_progress_rate}       and /^(?:progress_rate|progress-rate)(=|\s+)(\d+)/)      { ${$rs_progress_rate}      = $2;
+        } elsif (!defined ${$rs_print_filter_stages} and /^(print_filter_stages|print-filter-stages)/)        { ${$rs_print_filter_stages}= 1;
+        } elsif (!defined ${$rs_report_file}         and /^(?:report_file|report-file)(=|\s+)(.*?)$/)         { ${$rs_report_file}        = $2;
+        } elsif (!defined ${$rs_report_file}         and /^out(=|\s+)(.*?)$/)                                 { ${$rs_report_file}        = $2;
+        } elsif (!defined ${$rs_sdir}                and /^sdir(=|\s+)(.*?)$/)                                { ${$rs_sdir}               = $2;
+        } elsif (!defined ${$rs_skip_uniqueness}     and /^(skip_uniqueness|skip-uniqueness)/)                { ${$rs_skip_uniqueness}    = 1;
+        } elsif (!defined ${$rs_strip_comments}      and /^(?:strip_comments|strip-comments)(=|\s+)(.*?)$/)   { ${$rs_strip_comments}     = $2;
+        } elsif (!defined ${$rs_original_dir}        and /^(original_dir|original-dir)/)                      { ${$rs_original_dir}       = 1;
+        } elsif (!defined ${$rs_sum_reports}         and /^(sum_reports|sum-reports)/)                        { ${$rs_sum_reports}        = 1;
+        } elsif (!defined ${$rs_hide_rate}           and /^(hid_rate|hide-rate)/)                             { ${$rs_hide_rate}          = 1;
+        } elsif (!defined ${$rs_processes}           and /^processes(=|\s+)(\d+)/)                            { ${$rs_processes}          = $2;
+        } elsif (!defined ${$rs_unicode}             and /^unicode/)                                          { ${$rs_unicode}            = 1;
+        } elsif (!defined ${$rs_3}                   and /^3/)                                                { ${$rs_3}                  = 1;
+        } elsif (!defined ${$rs_vcs}                 and /^vcs(=|\s+)(\S+)/)                                  { ${$rs_vcs}                = $2;
+        } elsif (!defined ${$rs_version}             and /^version/)                                          { ${$rs_version}            = 1;
+        } elsif (!defined ${$rs_write_lang_def}      and /^(?:write_lang_def|write-lang-def)(=|\s+)(.*?)$/)   { ${$rs_write_lang_def}     = $2;
+        } elsif (!defined ${$rs_write_lang_def_incl_dup} and /^(?:write_lang_def_incl_dup|write-lang-def-incl-dup)(=|\s+)(.*?)$/) { ${$rs_write_lang_def_incl_dup} = $2;
+        } elsif (!defined ${$rs_xml}                 and /^xml/)                                              { ${$rs_xml}                = 1;
+        } elsif (!defined ${$rs_xsl}                 and /^xsl(=|\s+)(.*?)$/)                                 { ${$rs_xsl}                = $2;
+        } elsif (!defined ${$rs_lang_no_ext}         and /^(?:lang_no_ext|lang-no-ext)(=|\s+)(.*?)$/)         { ${$rs_lang_no_ext}        = $2;
+        } elsif (!defined ${$rs_yaml}                and /^yaml/)                                             { ${$rs_yaml}               = 1;
+        } elsif (!defined ${$rs_csv}                 and /^csv/)                                              { ${$rs_csv}                = 1;
+        } elsif (!defined ${$rs_csv_delimiter}       and /^(?:csv_delimeter|csv-delimiter)(=|\s+)(.*?)$/)     { ${$rs_csv_delimiter}      = $2;
+        } elsif (!defined ${$rs_json}                and /^json/)                                             { ${$rs_json}               = 1;
+        } elsif (!defined ${$rs_md}                  and /^md/)                                               { ${$rs_md}                 = 1;
+        } elsif (!defined ${$rs_fullpath}            and /^fullpath/)                                         { ${$rs_fullpath}           = 1;
+        } elsif (!defined ${$rs_match_f}             and /^(?:match_f|match-f)(=|\s+)(.*?)$/)                 { ${$rs_match_f}            = $2;
+        } elsif (!defined ${$rs_not_match_f}         and /^(?:not_match_f|not-match-f)(=|\s+)(.*?)$/)         { ${$rs_not_match_f}        = $2;
+        } elsif (!defined ${$rs_match_d}             and /^(?:match_d|match-d)(=|\s+)(.*?)$/)                 { ${$rs_match_d}            = $2;
+        } elsif (!defined ${$rs_not_match_d}         and /^(?:not_match_d|not-match-d)(=|\s+)(.*?)$/)         { ${$rs_not_match_d}        = $2;
+        } elsif (!defined ${$rs_list_file}           and /^(?:list_file|list-file)(=|\s+)(.*?)$/)             { ${$rs_list_file}          = $2;
+        } elsif (!defined ${$rs_help}                and /^help/)                                             { ${$rs_help}               = 1;
+        } elsif (!defined ${$rs_skip_win_hidden}     and /^(skip_win_hidden|skip-win-hidden)/)                { ${$rs_skip_win_hidden}    = 1;
+        } elsif (!defined ${$rs_read_binary_files}   and /^(read_binary_files|read-binary-files)/)            { ${$rs_read_binary_files}  = 1;
+        } elsif (!defined ${$rs_sql}                 and /^sql(=|\s+)(.*?)$/)                                 { ${$rs_sql}                = $2;
+        } elsif (!defined ${$rs_sql_project}         and /^(?:sql_project|sql-project)(=|\s+)(.*?)$/)         { ${$rs_sql_project}        = $2;
+        } elsif (!defined ${$rs_sql_append}          and /^(sql_append|sql-append)/)                          { ${$rs_sql_append}         = 1;
+        } elsif (!defined ${$rs_sql_style}           and /^(?:sql_style|sql-style)(=|\s+)(.*?)$/)             { ${$rs_sql_style}          = $2;
+        } elsif (!defined ${$rs_inline}              and /^inline/)                                           { ${$rs_inline}             = 1;
+        } elsif (!defined ${$rs_exclude_ext}         and /^(?:exclude_ext|exclude-ext)(=|\s+)(.*?)$/)         { ${$rs_exclude_ext}        = $2;
+        } elsif (!defined ${$rs_ignore_whitespace}   and /^(ignore_whitespace|ignore-whitespace)/)            { ${$rs_ignore_whitespace}  = 1;
+        } elsif (!defined ${$rs_ignore_case_ext}     and /^(ignore_case_ext|ignore-case-ext)/)                { ${$rs_ignore_case_ext}    = 1;
+        } elsif (!defined ${$rs_ignore_case}         and /^(ignore_case|ignore-case)/)                        { ${$rs_ignore_case}        = 1;
+        } elsif (!defined ${$rs_follow_links}        and /^(follow_links|follow-links)/)                      { ${$rs_follow_links}       = 1;
+        } elsif (!defined ${$rs_autoconf}            and /^autoconf/)                                         { ${$rs_autoconf}           = 1;
+        } elsif (!defined ${$rs_sum_one}             and /^(sum_one|sum-one)/)                                { ${$rs_sum_one}            = 1;
+        } elsif (!defined ${$rs_by_percent}          and /^(?:by_percent|by-percent)(=|\s+)(.*?)$/)           { ${$rs_by_percent}         = $2;
+        } elsif (!defined ${$rs_stdin_name}          and /^(?:stdin_name|stdin-name)(=|\s+)(.*?)$/)           { ${$rs_stdin_name}         = $2;
+        } elsif (!defined ${$rs_force_on_windows}    and /^windows/)                                          { ${$rs_force_on_windows}   = 1;
+        } elsif (!defined ${$rs_force_on_unix}       and /^unix/)                                             { ${$rs_force_on_unix}      = 1;
+        } elsif (!defined ${$rs_show_os}             and /^(show_os|show-os)/)                                { ${$rs_show_os}            = 1;
+        } elsif (!defined ${$rs_skip_archive}        and /^(?:skip_archive|skip-archive)(=|\s+)(.*?)$/)       { ${$rs_skip_archive}       = $2;
+        } elsif (!defined ${$rs_max_file_size}       and /^(?:max_file_size|max-file-size)(=|\s+)(\d+)/)      { ${$rs_max_file_size}      = $2;
+        } elsif (!defined ${$rs_use_sloccount}       and /^(use_sloccount|use-sloccount)/)                    { ${$rs_use_sloccount}      = 1;
+        } elsif (!defined ${$rs_no_autogen}          and /^(no_autogen|no-autogen)/)                          { ${$rs_no_autogen}         = 1;
+        } elsif (!defined ${$rs_force_git}           and /^git/)                                              { ${$rs_force_git}          = 1;
+        } elsif (!defined ${$rs_exclude_list_file}   and /^(?:exclude_list_file|exclude-list-file)(=|\s+)(.*?)$/)
                                                                    { ${$rs_exclude_list_file}  = $2;
         } elsif (!defined ${$rs_v} and /(verbose|v)((=|\s+)(\d+))?/) {
             if (!defined $4) { ${$rs_v} =  0; }
             else             { ${$rs_v} = $4; }
-        } elsif (!defined $ra_script_lang and /script_lang|script-lang(=|\s+)(.*?)$/)         {
+        } elsif (!defined $ra_script_lang and /^(?:script_lang|script-lang)(=|\s+)(.*?)$/)         {
                                                             push @{$ra_script_lang}          , $2;
-        } elsif (!defined $ra_force_lang  and /force_lang|force-lang(=|\s+)(.*?)$/)           {
+        } elsif (!defined $ra_force_lang  and /^(?:force_lang|force-lang)(=|\s+)(.*?)$/)           {
                                                             push @{$ra_force_lang}           , $2;
-        } elsif (!defined ${$rs_show_ext}          and /(show_ext|show-ext)((=|\s+)(.*))?$/)  {
+        } elsif (!defined ${$rs_show_ext}          and /^(show_ext|show-ext)((=|\s+)(.*))?$/)  {
             if (!defined $4) { ${$rs_show_ext} =  0; }
             else             { ${$rs_show_ext} = $4; }
-        } elsif (!defined ${$rs_show_lang}         and /(show_lang|show-lang)((=|\s+)(.*))?s/){
+        } elsif (!defined ${$rs_show_lang}         and /^(show_lang|show-lang)((=|\s+)(.*))?s/){
             if (!defined $4) { ${$rs_show_lang} =  0; }
             else             { ${$rs_show_lang} = $4; }
-        } elsif (!defined ${$rs_strip_str_comments}  and /(strip_str_comments|strip-str-comments)/)      { ${$rs_strip_str_comments} = 1;
-        } elsif (!defined ${$rs_file_encoding}       and /file_encoding|file-encoding(=|\s+)(\S+)/)      { ${$rs_file_encoding}      = $2;
-        } elsif (!defined ${$rs_docstring_as_code}   and /docstring_as_code|docstring-as-code/)          { ${$rs_docstring_as_code}  = 1;
+        } elsif (!defined ${$rs_strip_str_comments}  and /^(strip_str_comments|strip-str-comments)/)     { ${$rs_strip_str_comments} = 1;
+        } elsif (!defined ${$rs_file_encoding}       and /^(?:file_encoding|file-encoding)(=|\s+)(\S+)/) { ${$rs_file_encoding}      = $2;
+        } elsif (!defined ${$rs_docstring_as_code}   and /^(docstring_as_code|docstring-as-code)/)       { ${$rs_docstring_as_code}  = 1;
         } elsif (!defined ${$rs_stat}                and /stat/)                                         { ${$rs_stat}               = 1;
         }
 
