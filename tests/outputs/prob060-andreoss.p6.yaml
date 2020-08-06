@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.87
+  elapsed_seconds    : 0.00777983665466309
+  n_files            : 1
+  n_lines            : 70
+  files_per_second   : 128.537403082958
+  lines_per_second   : 8997.61821580706
+  report_file        : ../outputs/prob060-andreoss.p6.yaml
+'Raku' :
+  nFiles: 1
+  blank: 19
+  comment: 12
+  code: 39
+SUM: 
+  blank: 19
+  comment: 12
+  code: 39
+  nFiles: 1

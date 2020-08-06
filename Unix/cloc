@@ -10638,6 +10638,19 @@ sub Perl_or_Prolog {                         # {{{1
         $file, $perl_points, $prolog_points if $opt_v > 2;
     return $lang;
 } # 1}}}
+sub Raku_or_Prolog {                         # {{{1
+    my ($file        , # in
+        $rh_Err      , # in   hash of error codes
+        $raa_errors  , # out
+       ) = @_;
+
+    print "-> Raku_or_Prolog\n" if $opt_v > 2;
+    my $lang = Perl_or_Prolog($file, $rh_Err, $raa_errors);
+    $lang = "Raku" if $lang eq "Perl";
+
+    print "<- Raku_or_Prolog\n" if $opt_v > 2;
+    return $lang;
+} # 1}}}
 sub IDL_or_QtProject {                       # {{{1
     # IDL, QtProject, Prolog, or ProGuard
     my ($file        , # in
