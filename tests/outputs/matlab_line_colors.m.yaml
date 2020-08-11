@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.87
+  elapsed_seconds    : 0.00687313079833984
+  n_files            : 1
+  n_lines            : 31
+  files_per_second   : 145.49410295546
+  lines_per_second   : 4510.31719161926
+  report_file        : ../outputs/matlab_line_colors.m.yaml
+'MATLAB' :
+  nFiles: 1
+  blank: 3
+  comment: 10
+  code: 18
+SUM: 
+  blank: 3
+  comment: 10
+  code: 18
+  nFiles: 1

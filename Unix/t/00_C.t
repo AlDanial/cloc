@@ -497,6 +497,11 @@ my @Tests = (
                     'args' => '../tests/inputs/Lanczos.m',
                 },
                 {
+                    'name' => 'MATLAB 3',
+                    'ref'  => '../tests/outputs/matlab_line_colors.m.yaml',
+                    'args' => '../tests/inputs/matlab_line_colors.m',
+                },
+                {
                     'name' => 'Meson',
                     'ref'  => '../tests/outputs/meson.build.yaml',
                     'args' => '../tests/inputs/meson.build',
