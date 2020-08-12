@@ -8748,6 +8748,7 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
     'MATLAB'             => [
+                                [ 'remove_between_general', '%{', '%}' ],
                                 [ 'remove_matches'      , '^\s*%'  ],
                                 [ 'remove_inline'       , '%.*$'   ],
                             ],
@@ -12098,7 +12099,8 @@ sub read_list_file {                         # {{{1
     if ($file eq "-") {
         open($IN, $file);
     } else {
-        $IN = new IO::File $file, "r";
+        $IN = IO::File->new($file, 'r');
+#       $IN = IO::File->new($file, 'r:utf8');
     }
     if (!defined $IN) {
         warn "Unable to read $file; ignoring.\n";
