@@ -263,6 +263,7 @@ a Perl interpreter):
     sudo pacman -S cloc                    # Arch
     sudo emerge -av dev-util/cloc          # Gentoo https://packages.gentoo.org/packages/dev-util/cloc
     sudo apk add cloc                      # Alpine Linux
+    doas pkg_add cloc                      # OpenBSD
     sudo pkg install cloc                  # FreeBSD
     sudo port install cloc                 # Mac OS X with MacPorts
     brew install cloc                      # Mac OS X with Homebrew
