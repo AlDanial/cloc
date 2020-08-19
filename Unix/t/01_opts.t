@@ -430,6 +430,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/494/results.yaml',
                 },
 
+                {
+                    'name' => '--diff-list-file #513',
+                    'cd'   => '../tests/inputs/issues/513',
+                    'args' => '--diff-list-file diff_list.txt',
+                    'ref'  => '../tests/outputs/issues/513/results.yaml',
+                },
+
             );
 
 # Create test input for issue #132 which needs data not in the git repo.

@@ -1,0 +1,9 @@
+Files added:  
+  + L/empty.c ; unused
+  + R/hello_2.c ; unused
+
+Files removed:  
+  - L/hello_1.c ; unused
+
+File pairs compared:  
+  == L/locale_facets.h | R/locale_facets.h ; unused

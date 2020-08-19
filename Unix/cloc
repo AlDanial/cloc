@@ -210,7 +210,7 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              --diff-alignment.  (Run with that option to
                              see a sample.)  The language identifier at the
                              end of each line is ignored.  This enables --diff
-                             mode and by-passes file pair alignment logic.
+                             mode and bypasses file pair alignment logic.
    --vcs=<VCS>               Invoke a system call to <VCS> to obtain a list of
                              files to work on.  If <VCS> is 'git', then will
                              invoke 'git ls-files' to get a file list and
@@ -2295,6 +2295,12 @@ sub count_filesets {                         # {{{1
         next if $opt_include_lang
             and not $Include_Language{$Language{$fset_b}{$f}};
         my $this_lang = $Language{$fset_b}{$f};
+        if (!defined  $Language{$fset_b}{$f}) {
+            # shouldn't happen but could get here if using
+            # --diff-list-file which bypasses earlier checks
+            $p_ignored{$f} = "empty or uncharacterizeable file";
+            next;
+        }
         if ($this_lang eq "(unknown)") {
             $p_ignored{$f} = "unknown language";
             next;
