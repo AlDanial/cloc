@@ -14518,6 +14518,8 @@ sub load_from_config_file {                  # {{{1
     }
     print "Reading options from $config_file.\n" if defined $opt_v;
 
+    my $has_force_lang = @{$ra_force_lang};
+    my $has_script_lang = @{$ra_script_lang};
     my @lines = read_file($config_file);
     foreach (@lines) {
         next if /^\s*$/ or /^\s*#/;
@@ -14606,9 +14608,9 @@ sub load_from_config_file {                  # {{{1
         } elsif (!defined ${$rs_v} and /(verbose|v)((=|\s+)(\d+))?/) {
             if (!defined $4) { ${$rs_v} =  0; }
             else             { ${$rs_v} = $4; }
-        } elsif (!defined $ra_script_lang and /^(?:script_lang|script-lang)(=|\s+)(.*?)$/)         {
+        } elsif (!$has_script_lang and /^(?:script_lang|script-lang)(=|\s+)(.*?)$/)         {
                                                             push @{$ra_script_lang}          , $2;
-        } elsif (!defined $ra_force_lang  and /^(?:force_lang|force-lang)(=|\s+)(.*?)$/)           {
+        } elsif (!$has_force_lang and /^(?:force_lang|force-lang)(=|\s+)(.*?)$/)           {
                                                             push @{$ra_force_lang}           , $2;
         } elsif (!defined ${$rs_show_ext}          and /^(show_ext|show-ext)((=|\s+)(.*))?$/)  {
             if (!defined $4) { ${$rs_show_ext} =  0; }
