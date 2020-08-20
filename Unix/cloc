@@ -12851,8 +12851,8 @@ sub load_from_config_file {                  # {{{1
     }
     print "Reading options from $config_file.\n" if defined $opt_v;
 
-    my @has_force_lang = @{$ra_force_lang};
-    my @has_script_lang = @{$ra_script_lang};
+    my $has_force_lang = @{$ra_force_lang};
+    my $has_script_lang = @{$ra_script_lang};
     my @lines = read_file($config_file);
     foreach (@lines) {
         next if /^\s*$/ or /^\s*#/;
