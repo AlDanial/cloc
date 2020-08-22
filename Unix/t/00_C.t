@@ -447,6 +447,16 @@ my @Tests = (
                     'args' => '../tests/inputs/DIEnumerator-10.0.ll',
                 },
                 {
+                    'name' => 'Logos 1',
+                    'ref'  => '../tests/outputs/logos.x.yaml',
+                    'args' => '../tests/inputs/logos.x',
+                },
+                {
+                    'name' => 'Logos 2',
+                    'ref'  => '../tests/outputs/logos.xm.yaml',
+                    'args' => '../tests/inputs/logos.xm',
+                },
+                {
                     'name' => 'Logtalk',
                     'ref'  => '../tests/outputs/logtalk.lgt.yaml',
                     'args' => '../tests/inputs/logtalk.lgt',
