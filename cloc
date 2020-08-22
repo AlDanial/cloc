@@ -7637,6 +7637,7 @@ sub set_constants {                          # {{{1
             'nim'         => 'Nim'                   ,
             'nix'         => 'Nix'                   ,
             'nut'         => 'Squirrel'              ,
+            'odin'        => 'Odin'                  ,
             'oscript'     => 'LiveLink OScript'      ,
             'bod'         => 'Oracle PL/SQL'         ,
             'spc'         => 'Oracle PL/SQL'         ,
@@ -8829,6 +8830,11 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
+    'Odin'               => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'Oracle Forms'       => [   [ 'call_regexp_common'  , 'C'      ], ],
     'Oracle Reports'     => [   [ 'call_regexp_common'  , 'C'      ], ],
     'Oracle PL/SQL'      => [
@@ -9989,6 +9995,7 @@ sub set_constants {                          # {{{1
     'objectoriented default'       =>   2.76,
     'objectview'                   =>   3.20,
     'OCaml'                        =>   3.00,
+    'Odin'                         =>   2.00,
     'ogl'                          =>   1.00,
     'omnis 7'                      =>   2.00,
     'oodl'                         =>   2.76,

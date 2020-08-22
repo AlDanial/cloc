@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.87
+  elapsed_seconds    : 0.00814199447631836
+  n_files            : 1
+  n_lines            : 178
+  files_per_second   : 122.820029282577
+  lines_per_second   : 21861.9652122987
+  report_file        : ../outputs/demo.odin.yaml
+'Odin' :
+  nFiles: 1
+  blank: 32
+  comment: 56
+  code: 90
+SUM: 
+  blank: 32
+  comment: 56
+  code: 90
+  nFiles: 1

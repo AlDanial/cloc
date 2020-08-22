@@ -557,6 +557,11 @@ my @Tests = (
                     'args' => '../tests/inputs/qsort_demo.m',
                 },
                 {
+                    'name' => 'Odin',
+                    'ref'  => '../tests/outputs/demo.odin.yaml',
+                    'args' => '../tests/inputs/demo.odin',
+                },
+                {
                     'name' => 'Oracle PL/SQL',
                     'ref'  => '../tests/outputs/bubs_tak_ard.prc.yaml',
                     'args' => '../tests/inputs/bubs_tak_ard.prc',
