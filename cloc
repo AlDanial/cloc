@@ -13782,25 +13782,32 @@ sub read_list_file {                         # {{{1
     # reads filenames from a STDIN pipe if $file == "-"
 
     print "-> read_list_file($file)\n" if $opt_v > 2;
-    my $IN;
-    if ($file eq "-") {
-        open($IN, $file);
-    } else {
-        $IN = IO::File->new($file, 'r');
-#       $IN = IO::File->new($file, 'r:utf8');
-    }
-    if (!defined $IN) {
-        warn "Unable to read $file; ignoring.\n";
-        return ();
-    }
     my @entry = ();
-    while (<$IN>) {
-        next if /^\s*$/ or /^\s*#/; # skip empty or commented lines
-        s/\cM$//;  # DOS to Unix
-        chomp;
-        push @entry, $_;
+
+    if ($file eq "-") {
+        # read from a STDIN pipe
+        my $IN;
+        open($IN, $file);
+        if (!defined $IN) {
+            warn "Unable to read $file; ignoring.\n";
+            return ();
+        }
+        while (<$IN>) {
+            next if /^\s*$/ or /^\s*#/; # skip empty or commented lines
+            s/\cM$//;  # DOS to Unix
+            chomp;
+            push @entry, $_;
+        }
+        $IN->close;
+    } else {
+        # read from an actual file
+        foreach my $line (read_file($file)) {
+            next if $line =~ /^\s*$/ or $line =~ /^\s*#/;
+            $line =~ s/\cM$//;  # DOS to Unix
+            chomp $line;
+            push @entry, $line;
+        }
     }
-    $IN->close;
 
     print "<- read_list_file\n" if $opt_v > 2;
     return @entry;

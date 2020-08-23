@@ -437,6 +437,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/513/results.yaml',
                 },
 
+                {
+                    'name' => '--list-file BOM #502',
+                    'cd'   => '../tests/inputs/issues/502',
+                    'args' => '--list-file FileCounter20200715140433.txt',
+                    'ref'  => '../tests/outputs/issues/502/results.yaml',
+                },
+
             );
 
 # Create test input for issue #132 which needs data not in the git repo.
