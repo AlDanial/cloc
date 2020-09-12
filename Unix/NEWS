@@ -1,3 +1,33 @@
+                Release Notes for cloc version 1.88
+                   https://github.com/AlDanial/cloc
+                            Sept. 12, 2020
+
+New Languages and File Types:
+    o LLVM IR
+    o Logos
+    o Meson
+    o Mojo
+    o Odin
+    o Jinja Templates
+    o WXML
+    o WXSS
+
+Updates:
+    o Support MATLAB block comments.
+    o More flexible matching of git hashes.
+    o Case insensitive diff file alignment on Windows.
+    o Add .BAS as a Visual Basic extension
+    o Rename Objective C to Objective-C
+
+Bug Fixes:
+    o Add missing Raku_or_Prolog() subroutine.
+    o Handle UTF encoded list files (file given to --list-file).
+    o Improved support for options parsing from config file.
+    o Catch unidentified files via --diff-list-file.
+    o Don't insert extra newlines when stripping with --unicode.
+
+============================================================================
+                Release Notes for cloc version 1.86
                 Release Notes for cloc version 1.86
                    https://github.com/AlDanial/cloc
                              May 17, 2020

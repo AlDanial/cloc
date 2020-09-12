@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "1.87";  # odd number == beta; even number == stable
+my $VERSION = "1.88";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.006;
 # use modules                                  {{{1
@@ -5030,7 +5030,6 @@ sub make_file_list {                         # {{{1
 
     my @dir_list = ();
     foreach my $file_or_dir (@{$ra_arg_list}) {
-#print "make_file_list file_or_dir=$file_or_dir\n";
         my $size_in_bytes = 0;
         if (!-r $file_or_dir) {
             push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file_or_dir];
@@ -12964,7 +12963,7 @@ sub load_from_config_file {                  # {{{1
             else             { ${$rs_v} = $4; }
         } elsif (!$has_script_lang and /^(?:script_lang|script-lang)(=|\s+)(.*?)$/)         {
                                                             push @{$ra_script_lang}          , $2;
-        } elsif (!$has_force_lang  and /^(?:force_lang|force-lang)(=|\s+)(.*?)$/)           {
+        } elsif (!$has_force_lang and /^(?:force_lang|force-lang)(=|\s+)(.*?)$/)           {
                                                             push @{$ra_force_lang}           , $2;
         } elsif (!defined ${$rs_show_ext}          and /^(show_ext|show-ext)((=|\s+)(.*))?$/)  {
             if (!defined $4) { ${$rs_show_ext} =  0; }

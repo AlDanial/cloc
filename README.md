@@ -5,7 +5,7 @@
 * * *
 cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.
 
-Latest release:  v1.86 (May 18, 2020)
+Latest release:  v1.88 (Sept. 12, 2020)
 
 cloc moved to GitHub in September 2015 after being hosted
 at http://cloc.sourceforge.net/ since August 2006.
@@ -57,8 +57,8 @@ Step 3:  Invoke cloc to count your source files, directories, archives,
 or git commits.
 The executable name differs depending on whether you use the
 development source version (`cloc`), source for a
-released version (`cloc-1.86.pl`) or a Windows executable
-(`cloc-1.86.exe`).  On this page, `cloc` is the generic term
+released version (`cloc-1.88.pl`) or a Windows executable
+(`cloc-1.88.exe`).  On this page, `cloc` is the generic term
 used to refer to any of these.
 
 **a file**
@@ -364,25 +364,23 @@ and Digest::MD5 installed locally.
 # [Building a Windows Executable &#9650;](#___top "click to go to top of document")
 
 The Windows downloads
-<tt>cloc-1.86.exe</tt> was built on a 64 bit Windows 10 virtual machine
-downloaded from https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/
+<tt>cloc-1.88.exe</tt> was built on a 64 bit Windows 10 computer
 using
 [Strawberry Perl](http://strawberryperl.com/)
 5.30.2 and
-[PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm)
+[PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.050/lib/pp.pm)
 to build the `.exe`.
 
-Releases 1.74 through 1.84
+Release 1.86 was built on a 64 bit Windows 10 virtual machine
+downloaded from https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/;
+releases 1.74 through 1.84
 were was built on a 32 bit Windows 7 virtual machine
 using Strawberry Perl 5.26.1.1, while
 1.70 and 1.72 were built with Strawberry Perl 5.24.0.1
 on an Amazon Web Services t2.micro instance running Microsoft Windows Server 2008
 (32 bit for 1.70 and 1.72; 64 bit for 1.74).
-
-The <tt>cloc-1.66.exe</tt> executable was built
-on a 32 bit Windows 7 VirtualBox image.
-Windows executables of cloc versions
-1.60 and earlier were built with
+Release 1.66 was built on a 32 bit Windows 7 VirtualBox image.
+Windows executables of cloc versions 1.60 and earlier were built with
 [perl2exe](http://www.indigostar.com/perl2exe.htm) on a 32 bit Windows
 XP computer. A small modification was made to the cloc source code
 before passing it to perl2exe; lines 87 and 88 were uncommented:
@@ -408,6 +406,9 @@ You are encouraged to run your own virus scanners against the
 executable and also check sites such
 https://www.virustotal.com/ .
 The entries for recent versions are:
+
+cloc-1.88.exe:
+https://www.virustotal.com/gui/file/97d5d2631d1cccdbfd99267ab8a4cf5968816bbe52c0f9324e72e768857f642d/detection
 
 cloc-1.86.exe:
 https://www.virustotal.com/gui/file/1b2e189df1834411b34534db446330d1c379b4bc008af3042ee9ade818c6a1c8/detection
@@ -1050,6 +1051,7 @@ Java                       (java)
 JavaScript                 (_js, bones, es6, jake, jakefile, js, jsb, jscad, jsfl, jsm, jss, mjs, njs, pac, sjs, ssjs, xsjs, xsjslib)
 JavaServer Faces           (jsf)
 JCL                        (jcl)
+Jinja Template             (jinja, jinja2)
 JSON                       (arcconfig, avsc, composer.lock, geojson, gltf, har, htmlhintrc, json, json-tmlanguage, jsonl, mcmeta, mcmod.info, tern-config, tern-project, tfstate, tfstate.backup, topojson, watchmanconfig, webapp, webmanifest, yyp)
 JSON5                      (json5)
 JSP                        (jsp, jspf)
@@ -1068,6 +1070,7 @@ Lisp                       (asd, el, lisp, lsp, cl, jl)
 Literate Idris             (lidr)
 LiveLink OScript           (oscript)
 LLVM IR                    (ll)
+Logos                      (x, xm)
 Logtalk                    (lgt, logtalk)
 Lua                        (lua, nse, p8, pd_lua, rbxs, wlua)
 m4                         (ac, m4)
@@ -1079,6 +1082,7 @@ MATLAB                     (m)
 Maven                      (pom, pom.xml)
 Meson                      (meson.build)
 Modula3                    (i3, ig, m3, mg)
+Mojo                       (mojom)
 MSBuild script             (csproj, vbproj, vcproj, wdproj, wixproj)
 MUMPS                      (mps, m)
 Mustache                   (mustache)
@@ -1091,6 +1095,7 @@ Nix                        (nix)
 Objective-C                (m)
 Objective-C++              (mm)
 OCaml                      (eliom, eliomi, ml, ml4, mli, mll, mly)
+Odin                       (odin)
 OpenCL                     (cl)
 Oracle Forms               (fmt)
 Oracle PL/SQL              (bod, fnc, prc, spc, trg)
@@ -1180,7 +1185,7 @@ Velocity Template Language (vm)
 Verilog-SystemVerilog      (sv, svh, v)
 VHDL                       (VHD, vhd, VHDL, vhdl, vhf, vhi, vho, vhs, vht, vhw)
 vim script                 (vim)
-Visual Basic               (bas, ctl, dsr, frm, frx, VB, vb, VBA, vba, vbhtml, VBS, vbs, cls)
+Visual Basic               (BAS, bas, ctl, dsr, frm, FRX, frx, VB, vb, VBA, vba, VBHTML, vbhtml, VBS, vbs, cls)
 Visual Fox Pro             (SCA, sca)
 Visualforce Component      (component)
 Visualforce Page           (page)
@@ -1192,6 +1197,8 @@ Windows Resource File      (rc, rc2)
 WiX include                (wxi)
 WiX source                 (wxs)
 WiX string localization    (wxl)
+WXML                       (wxml)
+WXSS                       (wxss)
 XAML                       (xaml)
 xBase                      (prg, prw)
 xBase Header               (ch)
