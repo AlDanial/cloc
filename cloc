@@ -964,14 +964,14 @@ $opt_ignore_case_ext   = 0  unless $opt_ignore_case_ext;
 $opt_lang_no_ext       = 0  unless $opt_lang_no_ext;
 $opt_follow_links      = 0  unless $opt_follow_links;
 if (defined $opt_diff_timeout) {
-    # if defined but with a value of <= 0, set to 2^31 seconds = 68 years
-    $opt_diff_timeout = 2**31 unless $opt_diff_timeout > 0;
+    # if defined but with a value of <= 0, set to 2^31-1 seconds = 68 years
+    $opt_diff_timeout = 2**31-1 unless $opt_diff_timeout > 0;
 } else {
     $opt_diff_timeout  =10; # seconds
 }
 if (defined $opt_timeout) {
-    # if defined but with a value of <= 0, set to 2^31 seconds = 68 years
-    $opt_timeout = 2**31 unless $opt_timeout > 0;
+    # if defined but with a value of <= 0, set to 2^31-1 seconds = 68 years
+    $opt_timeout = 2**31-1 unless $opt_timeout > 0;
     # else is computed dynamically, ref $max_duration_sec
 }
 $opt_csv               = 1  if $opt_csv_delimiter;
