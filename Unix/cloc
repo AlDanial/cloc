@@ -1600,9 +1600,11 @@ if ($opt_diff_list_file) {
                         \@file_pairs_tot    , # out
                        );
     foreach my $F (@files_added_tot) {
+        $F = lc $F if $ON_WINDOWS;
 		push @{$files_for_set[1]}, $F;
 	}
     foreach my $F (@files_removed_tot) {
+        $F = lc $F if $ON_WINDOWS;
 		push @{$files_for_set[0]}, $F;
 	}
     foreach my $pair (@file_pairs_tot) {
@@ -5227,13 +5229,14 @@ sub remove_duplicate_files {                 # {{{1
         ++$n;
         my ($size_in_bytes, $language, $file) = split(/,/, $_, 3);
         if (!defined($size_in_bytes) or
-            !defined($language)      or 
+            !defined($language)      or
             !defined($file)) {
             print "-> remove_duplicate_files skipping error line [$_]\n"
                 if $opt_v;
             next;
         }
         chomp($file);
+        $file =~ s{\\}{/}g if $ON_WINDOWS;
         $rh_Language->{$file} = $language;
         push @{$files_by_size{$size_in_bytes}}, $file;
         if ($opt_skip_uniqueness) {
@@ -11594,7 +11597,13 @@ sub strip_leading_dir {                      # {{{1
         }
     }
     foreach my $F (@filenames) {
-        $F =~ s{^$leading}{};
+#print "strip_leading_dir F before $F\n";
+        if ($ON_WINDOWS) {
+            $F =~ s{^$leading}{}i;
+        } else {
+            $F =~ s{^$leading}{};
+        }
+#print "strip_leading_dir F after  $F\n";
     }
 
     print "<- strip_leading_dir()\n" if $opt_v > 2;
@@ -11729,6 +11738,8 @@ sub get_leading_dirs {                       # {{{1
         $L_drop = $L_common if length $L_common < length $L_drop;
         $R_drop = $R_common if length $R_common < length $R_drop;
 
+        $L_drop = $L_drop . "/" if $L_drop;
+        $R_drop = $R_drop . "/" if $R_drop;
 ########my $ptr_L = length($fL) - 1;
 ########my $ptr_R = length($fR) - 1;
 ########my @aL    = split '', $fL;
@@ -11746,9 +11757,12 @@ sub get_leading_dirs {                       # {{{1
 ########++$candidate_leading_dir_R{$leading_dir_R};
     }
 #use Data::Dumper::Simple;
-#print Dumper(%candidate_leading_dir_L);
-#print Dumper(%candidate_leading_dir_R);
-#die;
+    if ($ON_WINDOWS) {
+        $L_drop =~ s{\\}{/}g;
+        $R_drop =~ s{\\}{/}g;
+    }
+#print "L_drop=$L_drop\n";
+#print "R_drop=$R_drop\n";
     return $L_drop, $R_drop, 1;
 ####my $best_L = (sort {
 ####           $candidate_leading_dir_L{$b} <=>
@@ -11771,9 +11785,13 @@ sub align_by_pairs {                         # {{{1
     my @files_L = sort keys %{$rh_file_list_L};
     my @files_R = sort keys %{$rh_file_list_R};
     return () unless @files_L or  @files_R;  # at least one must have stuff
-    if ($ON_WINDOWS or $opt_ignore_case_ext) {
-        foreach (@files_L) { $_ = lc $_; }
-        foreach (@files_R) { $_ = lc $_; }
+    if ($ON_WINDOWS) {
+        foreach (@files_L) { $_ =~ s{\\}{/}g; }
+        foreach (@files_R) { $_ =~ s{\\}{/}g; }
+        if ($opt_ignore_case_ext) {
+            foreach (@files_L) { $_ = lc $_; }
+            foreach (@files_R) { $_ = lc $_; }
+        }
     }
 
     if      ( @files_L and !@files_R) {

@@ -458,6 +458,20 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/520/doc_as_code.yaml',
                 },
 
+                {
+                    'name' => 'diff alignment on Windows #521 1/2',
+                    'cd'   => '../tests/inputs/issues/521',
+                    'args' => '--diff "Test 188" ../521/Test188New',
+                    'ref'  => '../tests/outputs/issues/521/uniq.yaml',
+                },
+
+                {
+                    'name' => 'diff alignment on Windows #521 2/2',
+                    'cd'   => '../tests/inputs/issues/521',
+                    'args' => '--skip-uniqueness --diff "Test 188" ../521/Test188New',
+                    'ref'  => '../tests/outputs/issues/521/skip_uniq.yaml',
+                },
+
             );
 
 # Create test input for issue #132 which needs data not in the git repo.
