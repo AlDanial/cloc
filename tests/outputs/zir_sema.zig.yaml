@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.89
+  elapsed_seconds    : 0.00783014297485352
+  n_files            : 1
+  n_lines            : 140
+  files_per_second   : 127.711588819195
+  lines_per_second   : 17879.6224346873
+  report_file        : ../outputs/zir_sema.zig.yaml
+'Zig' :
+  nFiles: 1
+  blank: 2
+  comment: 10
+  code: 128
+SUM: 
+  blank: 2
+  comment: 10
+  code: 128
+  nFiles: 1

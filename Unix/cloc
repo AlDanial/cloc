@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "1.88";  # odd number == beta; even number == stable
+my $VERSION = "1.89";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.006;
 # use modules                                  {{{1
@@ -8067,6 +8067,7 @@ sub set_constants {                          # {{{1
             'clang-format'=> 'YAML'                  ,
             'yaml'        => 'YAML'                  ,
             'yml'         => 'YAML'                  ,
+            'zig'         => 'Zig'                   ,
             'zsh'         => 'zsh'                   ,
             );
 # 1}}}
@@ -9401,6 +9402,10 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
     'MSBuild script'    => [    [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
+    'Zig'                => [
+                                [ 'remove_matches'      , '^\s*//'  ],
+                                [ 'remove_inline'       , '//.*$'   ],
+                            ],
     'zsh'                => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
@@ -10305,6 +10310,7 @@ sub set_constants {                          # {{{1
     'Lua'                          => 4.00,
     'OpenCL'                       => 1.50,
     'Xtend'                        => 2.00,
+    'Zig'                          => 2.50,
     # aggregates; value is meaningless
     'C#/Smalltalk'                    => 1.00,
     'D/dtrace'                        => 1.00,

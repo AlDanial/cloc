@@ -946,6 +946,11 @@ my @Tests = (
                     'ref'  => '../tests/outputs/Xtend.xtend.yaml',
                     'args' => '../tests/inputs/Xtend.xtend',
                 },
+                {
+                    'name' => 'Zig',
+                    'ref'  => '../tests/outputs/zir_sema.zig.yaml',
+                    'args' => '../tests/inputs/zir_sema.zig',
+                },
             );
 
 my $Verbose = 0;
