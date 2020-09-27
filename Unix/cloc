@@ -7340,6 +7340,7 @@ sub set_constants {                          # {{{1
             'csh'         => 'C Shell'               ,
             'cson'        => 'CSON'                  ,
             'css'         => "CSS"                   ,
+            'csv'         => "CSV"                   ,
             'ctl'         => 'Visual Basic'          ,
             'cu'          => 'CUDA'                  ,
             'cuh'         => 'CUDA'                  , # CUDA header file
@@ -8324,6 +8325,9 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C'      ],
                             ],
+    'CSV'                => [  # comma separated value files have no comments;
+                                [ 'remove_matches'      , '^\s*$'  ],
+                            ], # included simply to allow diff's
     'COBOL'              => [   [ 'remove_cobol_comments',         ], ],
     'CoffeeScript'       => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -9499,7 +9503,6 @@ sub set_constants {                          # {{{1
    'bdf'       => 1,
    'bmp'       => 1,
    'bz2'       => 1,  # bzip2(1) compressed file
-   'csv'       => 1,  # comma separated values
    'desktop'   => 1,
    'dic'       => 1,
    'doc'       => 1,
@@ -9731,6 +9734,7 @@ sub set_constants {                          # {{{1
     'csp'                          =>   1.51,
     'cssl'                         =>   1.74,
     'CSS'                          =>   1.0,
+    'CSV'                          =>   0.1,
     'Cucumber'                     =>   3.00,
     'CUDA'                         =>   1.00,
     'culprit'                      =>   1.57,

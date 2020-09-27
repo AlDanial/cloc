@@ -1,0 +1,158 @@
+files,language,blank,comment,code,"github.com/AlDanial/cloc v 1.89  T=0.15 s (1625.6 files/s, 119625.7 lines/s)"
+2,ANTLR Grammar,200,59,1012
+3,R,95,312,698
+1,C/C++ Header,191,780,617
+11,C++,132,183,603
+2,Forth,17,84,529
+4,TypeScript,53,39,416
+1,Logtalk,59,57,368
+7,C,110,72,354
+2,Windows Message File,89,9,348
+2,TeX,36,64,265
+1,Racket,32,159,247
+1,SVG,19,4,242
+1,Glade,0,22,232
+1,DIET,10,4,230
+1,Windows Resource File,42,45,218
+3,Assembly,40,140,204
+2,make,49,85,139
+1,Zig,2,10,128
+5,Bourne Shell,17,7,123
+2,Idris,38,90,117
+1,ECPP,26,34,116
+2,Prolog,43,8,114
+1,Ruby,11,30,111
+1,Hoon,0,10,110
+1,Imba,71,30,108
+1,Thrift,57,134,97
+1,Xtend,17,52,91
+1,Lean,36,20,90
+1,Odin,32,56,90
+2,Smalltalk,19,5,85
+1,Vuejs Component,10,2,85
+5,Java,13,28,81
+1,Scheme,10,18,78
+1,MXML,23,5,74
+2,Perl,44,72,73
+3,Visual Basic,48,57,72
+3,MATLAB,3,11,68
+1,Oracle PL/SQL,0,15,67
+1,Haml,5,16,66
+1,Swift,23,13,65
+1,Fish Shell,14,47,62
+1,RAML,5,3,62
+1,Verilog-SystemVerilog,4,20,62
+1,Clean,10,30,58
+1,Qt Linguist,0,4,57
+1,SaltStack,6,1,55
+1,Dockerfile,4,1,53
+1,Meson,13,9,48
+1,Fennel,6,3,44
+1,JCL,0,18,44
+1,HCL,14,36,43
+1,Nim,5,13,43
+1,Nix,15,15,43
+1,Sass,14,0,43
+3,Go,14,41,40
+1,Raku,19,12,39
+3,SQL,24,36,39
+1,Agda,10,3,38
+3,COBOL,5,8,35
+4,Haskell,23,26,35
+1,RobotFramework,9,5,35
+1,AsciiDoc,17,27,34
+1,EJS,0,11,34
+1,IPL,6,15,33
+1,PO File,9,18,33
+1,GLSL,10,14,32
+1,WebAssembly,8,20,32
+2,Mustache,5,7,31
+2,Specman e,4,12,31
+1,Squirrel,6,4,31
+7,Python,16,54,30
+1,ASP.NET,8,0,29
+1,Apex Class,3,6,28
+1,Cucumber,3,2,28
+1,Drools,7,16,28
+1,Freemarker Template,0,2,27
+1,Puppet,2,2,27
+1,Bazel,7,1,26
+2,PHP,11,13,26
+1,LFE,15,21,25
+1,Objective-C,11,11,25
+1,Scala,8,8,25
+1,Brainfuck,1,3,24
+6,Fortran 90,1,18,24
+1,Haxe,26,99,24
+1,Lisp,5,26,24
+3,C#,8,7,23
+1,Blade,10,5,22
+1,JSON,0,0,22
+1,JSON5,0,4,22
+2,Mathematica,24,17,22
+1,Stata,7,7,22
+1,TOML,8,4,22
+1,Jupyter Notebook,0,126,21
+1,Smarty,1,1,21
+1,YAML,0,1,20
+1,BrightScript,0,3,19
+1,Igor Pro,4,6,19
+1,PL/M,1,5,19
+1,Solidity,0,2,19
+1,TTCN,11,16,19
+2,XSLT,0,4,19
+4,Pascal,4,15,18
+1,Windows Module Definition,1,1,18
+1,Gradle,0,2,17
+1,Mojo,6,4,17
+2,Razor,6,7,17
+2,Logos,6,3,16
+1,Gencat NLS,1,4,15
+5,JavaScript,3,0,15
+1,Pig Latin,19,40,15
+1,SWIG,4,4,15
+1,TNSDL,5,3,15
+1,Embedded Crystal,4,4,14
+1,F#,3,6,14
+1,GraphQL,1,2,14
+2,IDL,25,7,14
+1,SugarSS,5,4,13
+1,Velocity Template Language,0,20,13
+1,Starlark,3,4,11
+1,Jinja Template,0,6,10
+1,Slim,0,3,10
+1,reStructuredText,6,4,10
+1,Kotlin,0,3,9
+1,Mako,3,8,9
+1,Svelte,2,2,9
+1,Vala,0,5,9
+3,XML,0,5,9
+1,F# Script,1,2,8
+1,FXML,2,3,8
+1,SparForte,6,8,8
+1,WXML,3,2,8
+1,Elixir,3,10,7
+2,Fortran 77,1,8,7
+1,INI,2,3,7
+3,Lua,9,33,7
+1,Chapel,7,35,6
+2,Julia,4,15,5
+1,PL/I,0,7,5
+1,APL,3,6,4
+1,Arduino Sketch,1,5,4
+1,ReasonML,2,8,4
+1,Rmd,10,19,4
+1,WXSS,0,0,4
+1,Groovy,0,3,3
+1,LLVM IR,2,6,3
+1,Literate Idris,2,2,3
+1,ProGuard,7,14,3
+1,Tcl/Tk,1,2,3
+1,dhall,6,17,3
+1,ColdFusion,1,2,2
+1,DOS Batch,1,2,2
+1,Focus,1,2,1
+1,MUMPS,0,2,1
+1,XQuery,0,1,1
+1,xBase,0,9,1
+243,SUM,2381,4182,11319

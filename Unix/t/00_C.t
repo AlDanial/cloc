@@ -100,11 +100,6 @@ my @Tests = (
                     'args' => '../tests/inputs/Chapel.chpl',
                 },
                 {
-                    'name' => 'Cucumber',
-                    'ref'  => '../tests/outputs/cucumber.feature.yaml',
-                    'args' => '../tests/inputs/cucumber.feature',
-                },
-                {
                     'name' => 'Clean',
                     'ref'  => '../tests/outputs/iclean.icl.yaml',
                     'args' => '../tests/inputs/iclean.icl',
@@ -148,6 +143,16 @@ my @Tests = (
                     'name' => 'C simple',
                     'ref'  => '../tests/outputs/C-Ansi.c.yaml',
                     'args' => '../tests/inputs/C-Ansi.c',
+                },
+                {
+                    'name' => 'CSV',
+                    'ref'  => '../tests/outputs/cloc_counts.csv.yaml',
+                    'args' => '../tests/inputs/cloc_counts.csv',
+                },
+                {
+                    'name' => 'Cucumber',
+                    'ref'  => '../tests/outputs/cucumber.feature.yaml',
+                    'args' => '../tests/inputs/cucumber.feature',
                 },
                 {
                     'name' => 'dhall',
