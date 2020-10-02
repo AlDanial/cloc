@@ -224,6 +224,7 @@ NetBSD, OpenBSD, Mac OS X, AIX, HP-UX, Solaris, IRIX, z/OS, and Windows.
 (To run the Perl source version of cloc on Windows one needs
 [ActiveState Perl](http://www.activestate.com/activeperl) 5.6.1 or
 higher, [Strawberry Perl](http://strawberryperl.com/),
+Windows Subsystem for Linux,
 [Cygwin](http://www.cygwin.com/),
 [MobaXTerm](http://mobaxterm.mobatek.net/) with the Perl plug-in
 installed,
@@ -561,8 +562,15 @@ Usage: cloc [options] &lt;file(s)/dir(s)/git hash(es)&gt; | &lt;set 1&gt; &lt;se
                              process from &lt;file&gt;, which has one file/directory
                              name per line.  Only exact matches are counted;
                              relative path names will be resolved starting from
-                             the directory where cloc is invoked.
+                             the directory where cloc is invoked.  Set &lt;file&gt;
+                             to - to read file names from a STDIN pipe.
                              See also --exclude-list-file.
+   --diff-list-file=&lt;file&gt;   Take the pairs of file names to be diff'ed from
+                             &lt;file&gt;, whose format matches the output of
+                             --diff-alignment.  (Run with that option to
+                             see a sample.)  The language identifier at the
+                             end of each line is ignored.  This enables --diff
+                             mode and bypasses file pair alignment logic.
    --vcs=&lt;VCS&gt;               Invoke a system call to &lt;VCS&gt; to obtain a list of
                              files to work on.  If &lt;VCS&gt; is 'git', then will
                              invoke 'git ls-files' to get a file list and
@@ -583,6 +591,10 @@ Usage: cloc [options] &lt;file(s)/dir(s)/git hash(es)&gt; | &lt;set 1&gt; &lt;se
                              to obtain file names (and therefore may require
                              authentication to the remote repository), but
                              the files themselves must be local.
+                             Setting &lt;VCS&gt; to 'auto' selects between 'git'
+                             and 'svn' (or neither) depending on the presence
+                             of a .git or .svn subdirectory below the directory
+                             where cloc is invoked.
    --unicode                 Check binary files to see if they contain Unicode
                              expanded ASCII text.  This causes performance to
                              drop noticeably.
@@ -614,15 +626,24 @@ Usage: cloc [options] &lt;file(s)/dir(s)/git hash(es)&gt; | &lt;set 1&gt; &lt;se
                              may be any mix of files, directories, archives,
                              or git commit hashes.  Use --diff-alignment to
                              generate a list showing which file pairs where
-                             compared.  See also --count-and-diff, --diff-alignment,
-                             --diff-timeout, --ignore-case, --ignore-whitespace.
+                             compared.  When comparing git branches, only files
+                             which have changed in either commit are compared.
+                             See also --git, --count-and-diff, --diff-alignment,
+                             --diff-list-file, --diff-timeout, --ignore-case,
+                             --ignore-whitespace.
    --diff-timeout &lt;N&gt;        Ignore files which take more than &lt;N&gt; seconds
                              to process.  Default is 10 seconds.  Setting &lt;N&gt;
                              to 0 allows unlimited time.  (Large files with many
                              repeated lines can cause Algorithm::Diff::sdiff()
-                             to take hours.)
+                             to take hours.) See also --timeout.
+   --docstring-as-code       cloc considers docstrings to be comments, but this is
+                             not always correct as docstrings represent regular
+                             strings when they appear on the right hand side of an
+                             assignment or as function arguments.  This switch
+                             forces docstrings to be counted as code.
    --follow-links            [Unix only] Follow symbolic links to directories
                              (sym links to files are always followed).
+                             See also --stat.
    --force-lang=&lt;lang&gt;[,&lt;ext&gt;]
                              Process all files that have a &lt;ext&gt; extension
                              with the counter for language &lt;lang&gt;.  For
@@ -660,11 +681,23 @@ Usage: cloc [options] &lt;file(s)/dir(s)/git hash(es)&gt; | &lt;set 1&gt; &lt;se
                              commits, or between a git commit and a file,
                              directory, or archive.  Use -v/--verbose to see
                              the git system commands cloc issues.
+   --git-diff-rel            Same as --git --diff, or just --diff if the inputs
+                             are recognized as git targets.  Only files which
+                             have changed in either commit are compared.
+   --git-diff-all            Git diff strategy #2:  compare all files in the
+                             repository between the two commits.
    --ignore-whitespace       Ignore horizontal white space when comparing files
                              with --diff.  See also --ignore-case.
-   --ignore-case             Ignore changes in case; consider upper- and lower-
-                             case letters equivalent when comparing files with
-                             --diff.  See also --ignore-whitespace.
+   --ignore-case             Ignore changes in case within file contents;
+                             consider upper- and lowercase letters equivalent
+                             when comparing files with --diff.  See also
+                             --ignore-whitespace.
+   --ignore-case-ext         Ignore case of file name extensions.  This will
+                             cause problems counting some languages
+                             (specifically, .c and .C are associated with C and
+                             C++; this switch would count .C files as C rather
+                             than C++ on *nix operating systems).  File name
+                             case insensitivity is always true on Windows.
    --lang-no-ext=&lt;lang&gt;      Count files without extensions using the &lt;lang&gt;
                              counter.  This option overrides internal logic
                              for files without extensions (where such files
@@ -716,6 +749,14 @@ Usage: cloc [options] &lt;file(s)/dir(s)/git hash(es)&gt; | &lt;set 1&gt; &lt;se
                              a performance boost at the expense of counting
                              files with identical contents multiple times
                              (if such duplicates exist).
+   --stat                    Some file systems (AFS, CD-ROM, FAT, HPFS, SMB)
+                             do not have directory 'nlink' counts that match
+                             the number of its subdirectories.  Consequently
+                             cloc may undercount or completely skip the
+                             contents of such file systems.  This switch forces
+                             File::Find to stat directories to obtain the
+                             correct count.  File search spead will decrease.
+                             See also --follow-links.
    --stdin-name=&lt;file&gt;       Give a file name to use to determine the language
                              for standard input.  (Use - as the input name to
                              receive source code via STDIN.)
@@ -738,9 +779,16 @@ Usage: cloc [options] &lt;file(s)/dir(s)/git hash(es)&gt; | &lt;set 1&gt; &lt;se
                              --strip-comments will contain different strings
                              where ever embedded comments are found.
    --sum-reports             Input arguments are report files previously
-                             created with the --report-file option.  Makes
-                             a cumulative set of results containing the
+                             created with the --report-file option in plain
+                             format (eg. not JSON, YAML, XML, or SQL).
+                             Makes a cumulative set of results containing the
                              sum of data from the individual report files.
+   --timeout &lt;N&gt;             Ignore files which take more than &lt;N&gt; seconds
+                             to process at any of the language's filter stages.
+                             The default maximum number of seconds spent on a
+                             filter stage is the number of lines in the file
+                             divided by one thousand.  Setting &lt;N&gt; to 0 allows
+                             unlimited time.  See also --diff-timeout.
    --processes=NUM           [Available only on systems with a recent version
                              of the Parallel::ForkManager module.  Not
                              available on Windows.] Sets the maximum number of
@@ -763,6 +811,8 @@ Usage: cloc [options] &lt;file(s)/dir(s)/git hash(es)&gt; | &lt;set 1&gt; &lt;se
                              See also --unix, --show-os.
 
  Filter Options
+   --exclude-content=&lt;regex&gt; Exclude files containing text that matches the given
+                             regular expression.
    --exclude-dir=&lt;D1&gt;[,D2,]  Exclude the given comma separated directories
                              D1, D2, D3, et cetera, from being scanned.  For
                              example  --exclude-dir=.cache,test  will skip
@@ -932,8 +982,6 @@ Usage: cloc [options] &lt;file(s)/dir(s)/git hash(es)&gt; | &lt;set 1&gt; &lt;se
                              cloc-diff.xsl if --diff is also given).
                              This switch forces --xml on.
    --yaml                    Write the results in YAML.
-
-
 </pre>
 [](1}}})
 <a name="Languages"></a> []({{{1)
