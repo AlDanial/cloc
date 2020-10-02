@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.89
+  elapsed_seconds    : 0.00776505470275879
+  n_files            : 1
+  n_lines            : 39
+  files_per_second   : 128.782093401701
+  lines_per_second   : 5022.50164266634
+  report_file        : ../outputs/server_side.aspx.yaml
+'ASP.NET' :
+  nFiles: 1
+  blank: 8
+  comment: 15
+  code: 16
+SUM: 
+  blank: 8
+  comment: 15
+  code: 16
+  nFiles: 1

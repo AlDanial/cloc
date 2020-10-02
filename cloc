@@ -8150,6 +8150,8 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C'      ],
+                                [ 'remove_between_general', '<%--', '--%>' ],
+                                [ 'remove_between_general', '<!--', '-->' ],
                             ],
     'Ada'                => [   [ 'remove_matches'      , '^\s*--' ], ],
     'ADSO/IDSM'          => [   [ 'remove_matches'      , '^\s*\*[\+\!]' ], ],
@@ -8997,6 +8999,7 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
+                                [ 'remove_between_general', '<!--', '-->' ],
                             ],
     'reStructuredText'   => [
                                 [ 'remove_between_regex', '^\.\.', '^[^ \n\t\r\f\.]' ]
