@@ -7943,6 +7943,7 @@ sub set_constants {                          # {{{1
             'web.release.config'=> 'XML'             ,
             'web.debug.config'=> 'XML'               ,
             'web.config'  => 'XML'                   ,
+            'mpx'         => 'MPX'                   ,
             'wxml'        => 'WXML'                  ,
             'wxss'        => 'WXSS'                  ,
             'vxml'        => 'XML'                   ,
@@ -9365,6 +9366,11 @@ sub set_constants {                          # {{{1
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
                             ],
+    'MPX'               => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C'      ],
+                            ],
     'WXML'               => [
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
@@ -10272,6 +10278,7 @@ sub set_constants {                          # {{{1
     'wizard'                       =>   2.86,
     'WXML'                         =>   1.90,
     'WXSS'                         =>   1.00,
+    'MPX'                          =>   1.00,
     'xBase'                        =>   2.00,
     'xBase Header'                 =>   2.00,
     'xlisp'                        =>   1.25,
