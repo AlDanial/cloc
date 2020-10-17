@@ -472,6 +472,27 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/521/skip_uniq.yaml',
                 },
 
+                {
+                    'name' => '--summary-cutoff (f:1) #528 1/3',
+                    'cd'   => '../tests/inputs/issues/528',
+                    'args' => '--summary-cutoff f:1 .',
+                    'ref'  => '../tests/outputs/issues/528/cutoff_files_1.yaml',
+                },
+
+                {
+                    'name' => '--summary-cutoff (c:10) #528 2/3',
+                    'cd'   => '../tests/inputs/issues/528',
+                    'args' => '--summary-cutoff c:10 .',
+                    'ref'  => '../tests/outputs/issues/528/cutoff_code_10.yaml',
+                },
+
+                {
+                    'name' => '--summary-cutoff (c:50%) #528 3/3',
+                    'cd'   => '../tests/inputs/issues/528',
+                    'args' => '--summary-cutoff c:50% .',
+                    'ref'  => '../tests/outputs/issues/528/cutoff_code_50pct.yaml',
+                },
+
             );
 
 # Create test input for issue #132 which needs data not in the git repo.

@@ -395,7 +395,7 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              cloc may undercount or completely skip the
                              contents of such file systems.  This switch forces
                              File::Find to stat directories to obtain the
-                             correct count.  File search spead will decrease.
+                             correct count.  File search speed will decrease.
                              See also --follow-links.
    --stdin-name=<file>       Give a file name to use to determine the language
                              for standard input.  (Use - as the input name to
@@ -572,11 +572,11 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              while others were produced without it.)
    --by-percent  X           Instead of comment and blank line counts, show
                              these values as percentages based on the value
-                             of X in the denominator:
-                                X = 'c'   -> # lines of code
-                                X = 'cm'  -> # lines of code + comments
-                                X = 'cb'  -> # lines of code + blanks
-                                X = 'cmb' -> # lines of code + comments + blanks
+                             of X in the denominator, where X is
+                                 c    meaning lines of code
+                                 cm   meaning lines of code + comments
+                                 cb   meaning lines of code + blanks
+                                 cmb  meaning lines of code + comments + blanks
                              For example, if using method 'c' and your code
                              has twice as many lines of comments as lines
                              of code, the value in the comment column will
@@ -602,6 +602,16 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
    --quiet                   Suppress all information messages except for
                              the final report.
    --report-file=<file>      Write the results to <file> instead of STDOUT.
+   --summary-cutoff=X:N      Aggregate to 'Other' results having X lines
+                             below N where X is one of
+                                c   meaning lines of code
+                                f   meaning files
+                                m   meaning lines of comments
+                                cm  meaning lines of code + comments
+                             Appending a percent sign to N changes
+                             the calculation from straight count to 
+                             percentage.
+                             Ignored with --diff or --by-file.
    --sql=<file>              Write results as SQL create and insert statements
                              which can be read by a database program such as
                              SQLite.  If <file> is -, output is sent to STDOUT.
@@ -726,6 +736,7 @@ my (
     $opt_file_encoding        ,
     $opt_docstring_as_code    ,
     $opt_stat                 ,
+    $opt_summary_cutoff       ,
    );
 
 my $getopt_success = GetOptions(             # {{{1
@@ -823,6 +834,7 @@ my $getopt_success = GetOptions(             # {{{1
    "file_encoding|file-encoding=s"           => \$opt_file_encoding       ,
    "docstring_as_code|docstring-as-code"     => \$opt_docstring_as_code   ,
    "stat"                                    => \$opt_stat                ,
+   "summary_cutoff|summary-cutoff=s"         => \$opt_summary_cutoff      ,
   );
 # 1}}}
 $config_file = $opt_config_file if defined $opt_config_file;
@@ -1084,6 +1096,10 @@ if (defined $opt_vcs) {
 my $list_no_autogen = 0;
 if (defined $opt_no_autogen and scalar @ARGV == 1 and $ARGV[0] eq "list") {
     $list_no_autogen = 1;
+}
+if ($opt_summary_cutoff) {
+    my $error = summary_cutoff_error($opt_summary_cutoff);
+    die "$error\n" if $error;
 }
 
 die $brief_usage unless defined $opt_version         or
@@ -1975,6 +1991,10 @@ write_file($opt_ignored, {"file_type" => "ignored",
                           "separator" => ": ",
                           "columns"   => ["file", "reason"],
                          }, @ignored_reasons   ) if $opt_ignored;
+if ($opt_summary_cutoff) {
+    %Results_by_Language = apply_cutoff($opt_summary_cutoff,
+                                       \%Results_by_Language);
+}
 write_file($opt_counted, {}, sort keys %Results_by_File) if $opt_counted;
 # 1}}}
 # Step 7:  Assemble results.                   {{{1
@@ -2014,6 +2034,82 @@ if ($opt_count_diff) {
     exit if $opt_count_diff > 3;
     goto Top_of_Processing_Loop;
 }
+sub summary_cutoff_error {                   # {{{
+    my ($parameter) = @_;
+    print "-> summary_cutoff_is_ok($parameter)\n" if $opt_v > 2;
+    my %known_keys = ( 'c' => 1, 'f' => 1, 'm' => 1, 'cm' => 1 );
+    my $result = "";
+    my $by_pct = 0;
+    my ($key, $value);
+    if ($parameter !~ /:/) {
+        $result = "expected a colon in --summary-cutoff argument";
+    } else {
+        ($key, $value) = split(':', $parameter, 2);
+        if ($value =~ /%$/) {
+            $by_pct = 1;
+            $value =~ s/%$//;
+        }
+        if (!$known_keys{$key}) {
+            $result = "--summary-cutoff argument:  '$key' is not 'c', 'f', 'm' or 'cm'";
+        }
+        if ($value !~ /^\d+(\.\d*)?$/) {
+            $result = "--summary-cutoff argument:  '$value' is not a number";
+        }
+    }
+    print "<- summary_cutoff_is_ok($result)\n" if $opt_v > 2;
+    return $result;
+} # 1}}}
+sub apply_cutoff {                           # {{{1
+    my ($criterion,
+        $rhh_by_lang) = @_;
+    
+    my %aggregated_Results_by_Language = ();
+    my $by_pct = 0;
+    my ($key, $value) = split(':', $criterion, 2);
+    if ($value =~ /%$/) {
+        $by_pct = 1;
+        $value =~ s/%$//;
+    }
+
+    my %sum = ();
+    if ($by_pct) {
+        foreach my $lang (keys %{$rhh_by_lang}) {
+            foreach my $category (qw(nFiles comment blank code)) {
+                $sum{$category} += $rhh_by_lang->{$lang}{$category};
+            }
+        }
+        if      ($key eq 'c') {
+            $value *= $sum{'code'}/100;
+        } elsif ($key eq 'f') {
+            $value *= $sum{'nFiles'}/100;
+        } elsif ($key eq 'm') {
+            $value *= $sum{'comment'}/100;
+        } elsif ($key eq 'cm') {
+            $value *= ($sum{'code'} + $sum{'comment'})/100;
+        }
+    }
+
+    foreach my $lang (keys %{$rhh_by_lang}) {
+        my %sum = ();
+        my $agg_lang = $lang;
+        if      ($key eq 'c') {
+            $agg_lang = 'Other' if $rhh_by_lang->{$lang}{'code'}    <= $value;
+        } elsif ($key eq 'f') {
+            $agg_lang = 'Other' if $rhh_by_lang->{$lang}{'nFiles'}  <= $value;
+        } elsif ($key eq 'm') {
+            $agg_lang = 'Other' if $rhh_by_lang->{$lang}{'comment'} <= $value;
+        } elsif ($key eq 'cm') {
+            $agg_lang = 'Other' if $rhh_by_lang->{$lang}{'code'} +
+                                      $rhh_by_lang->{$lang}{'comment'} <= $value;
+        }
+        foreach my $category (qw(nFiles comment blank code)) {
+            $aggregated_Results_by_Language{$agg_lang}{$category} += 
+                $rhh_by_lang->{$lang}{$category};
+        }
+    }
+
+    return %aggregated_Results_by_Language;
+} # 1}}}
 sub exclude_by_regex {                       # {{{1
     my ($regex,
         $rh_unique_source_file, # in/out
@@ -10021,6 +10117,7 @@ sub set_constants {                          # {{{1
     'Oracle Forms'                 =>   2.67,
     'Oracle Developer/2000'        =>   3.48,
     'oscar'                        =>   0.75,
+    'Other'                        =>   1.00,
     'pacbase'                      =>   1.67,
     'pace'                         =>   2.00,
     'paradox/pal'                  =>   2.22,

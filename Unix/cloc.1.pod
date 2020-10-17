@@ -659,12 +659,11 @@ others were produced without it.)
 
 Instead of comment and blank line counts, show
 these values as percentages based on the
-value of X in the denominator:
-
-    X = 'c'   -> # lines of code
-    X = 'cm'  -> # lines of code + comments
-    X = 'cb'  -> # lines of code + blanks
-    X = 'cmb' -> # lines of code + comments + blanks
+value of X in the denominator, where X is one of
+    c   meaning lines of code
+    cm  meaning lines of code + comments
+    cb  meaning lines of code + blanks
+    cmb meaning lines of code + comments + blanks
 
 For example, if using method 'c' and your code
 has twice as many lines of comments as lines
@@ -718,6 +717,19 @@ Suppress all information messages except for the final report.
 =item B<--report-file=FILE>
 
 Write the results to FILE instead of standard output.
+
+=item B<--summary-cutoff=X:N>
+
+Aggregate to 'Other' results having X lines
+below N where X is one of
+    c   meaning lines of code
+    f   meaning files
+    m   meaning lines of comments
+    cm  meaning lines of code + comments
+Appending a percent sign to N changes
+the calculation from straight count to 
+percentage.
+Ignored with --diff or --by-file.
 
 =item B<--sql=FILE>
 

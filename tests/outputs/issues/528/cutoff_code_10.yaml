@@ -1,0 +1,36 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.89
+  elapsed_seconds    : 0.014768123626709
+  n_files            : 8
+  n_lines            : 184
+  files_per_second   : 541.707274547157
+  lines_per_second   : 12459.2673145846
+  report_file        : /home/al/git-cloc/tests/outputs/issues/528/cutoff_code_10.yaml
+'MATLAB' :
+  nFiles: 3
+  blank: 3
+  comment: 11
+  code: 68
+'Objective-C' :
+  nFiles: 1
+  blank: 11
+  comment: 11
+  code: 25
+'Other' :
+  nFiles: 3
+  blank: 1
+  comment: 10
+  code: 13
+'Mathematica' :
+  nFiles: 1
+  blank: 12
+  comment: 8
+  code: 11
+SUM: 
+  blank: 27
+  comment: 40
+  code: 117
+  nFiles: 8

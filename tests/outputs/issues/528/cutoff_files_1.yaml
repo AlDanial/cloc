@@ -1,0 +1,31 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.89
+  elapsed_seconds    : 0.0106549263000488
+  n_files            : 8
+  n_lines            : 184
+  files_per_second   : 750.826404117252
+  lines_per_second   : 17269.0072946968
+  report_file        : /home/al/git-cloc/tests/outputs/issues/528/cutoff_files_1.yaml
+'MATLAB' :
+  nFiles: 3
+  blank: 3
+  comment: 11
+  code: 68
+'Other' :
+  nFiles: 3
+  blank: 23
+  comment: 21
+  code: 42
+'Fortran 77' :
+  nFiles: 2
+  blank: 1
+  comment: 8
+  code: 7
+SUM: 
+  blank: 27
+  comment: 40
+  code: 117
+  nFiles: 8

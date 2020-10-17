@@ -1,0 +1,26 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.89
+  elapsed_seconds    : 0.0111649036407471
+  n_files            : 8
+  n_lines            : 184
+  files_per_second   : 716.531038459074
+  lines_per_second   : 16480.2138845587
+  report_file        : /home/al/git-cloc/tests/outputs/issues/528/cutoff_code_50pct.yaml
+'MATLAB' :
+  nFiles: 3
+  blank: 3
+  comment: 11
+  code: 68
+'Other' :
+  nFiles: 5
+  blank: 24
+  comment: 29
+  code: 49
+SUM: 
+  blank: 27
+  comment: 40
+  code: 117
+  nFiles: 8
