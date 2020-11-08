@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.89
+  elapsed_seconds    : 0.00797295570373535
+  n_files            : 1
+  n_lines            : 60
+  files_per_second   : 125.424000478455
+  lines_per_second   : 7525.44002870728
+  report_file        : ../outputs/tictactoe3d.ring.yaml
+'Ring' :
+  nFiles: 1
+  blank: 11
+  comment: 11
+  code: 38
+SUM: 
+  blank: 11
+  comment: 11
+  code: 38
+  nFiles: 1

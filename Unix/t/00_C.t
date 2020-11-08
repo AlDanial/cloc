@@ -677,6 +677,11 @@ my @Tests = (
                     'args' => '../tests/inputs/md5.rkt',
                 },
                 {
+                    'name' => 'Ring',
+                    'ref'  => '../tests/outputs/tictactoe3d.ring.yaml',
+                    'args' => '../tests/inputs/tictactoe3d.ring',
+                },
+                {
                     'name' => 'Raku',
                     'ref'  => '../tests/outputs/prob060-andreoss.p6.yaml',
                     'args' => '../tests/inputs/prob060-andreoss.p6',
