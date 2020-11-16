@@ -385,6 +385,13 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              letting File::Temp chose the location.  Files
                              written to this location are not removed at
                              the end of the run (as they are with File::Temp).
+   --skip-leading=<N[,ext]>  Skip the first <N> lines of each file.  If a
+                             comma separated list of extensions is also given,
+                             only skip lines from those file types.  Example:
+                               --skip-leading=10,cpp,h
+                             will skip the first ten lines of *.cpp and *.h
+                             files.  This is useful for ignoring boilerplate
+                             text.
    --skip-uniqueness         Skip the file uniqueness check.  This will give
                              a performance boost at the expense of counting
                              files with identical contents multiple times
@@ -737,6 +744,7 @@ my (
     $opt_docstring_as_code    ,
     $opt_stat                 ,
     $opt_summary_cutoff       ,
+    $opt_skip_leading         ,
    );
 
 my $getopt_success = GetOptions(             # {{{1
@@ -835,6 +843,7 @@ my $getopt_success = GetOptions(             # {{{1
    "docstring_as_code|docstring-as-code"     => \$opt_docstring_as_code   ,
    "stat"                                    => \$opt_stat                ,
    "summary_cutoff|summary-cutoff=s"         => \$opt_summary_cutoff      ,
+   "skip_leading|skip-leading:s"             => \$opt_skip_leading        ,
   );
 # 1}}}
 $config_file = $opt_config_file if defined $opt_config_file;
@@ -5910,11 +5919,12 @@ sub call_counter {                           # {{{1
        ) = @_;
 
     # Logic:  pass the file through the following filters:
-    #         1. remove blank lines
-    #         2. remove comments using each filter defined for this language
+    #         1. remove leading lines (if --skip-leading)
+    #         2. remove blank lines
+    #         3. remove comments using each filter defined for this language
     #            (example:  SQL has two, remove_starts_with(--) and
     #             remove_c_comments() )
-    #         3. compute comment lines as
+    #         4. compute comment lines as
     #               total lines - blank lines - lines left over after all
     #                   comment filters have been applied
 
@@ -5943,6 +5953,17 @@ sub call_counter {                           # {{{1
     }
 
     # implement --perl-ignore-data here
+
+    if ($opt_skip_leading) {
+        my $strip = 1;
+        my ($N, @exts) = split(/,/, $opt_skip_leading);
+        if (@exts) {
+            # only apply if this file's extension is listed
+            my $this_file_ext = file_extension($file);
+            $strip = grep(/^${this_file_ext}$/, @exts);
+        }
+        @lines = remove_first_n($N, \@lines) if $strip;
+    }
 
     my @original_lines = @lines;
     my $total_lines    = scalar @lines;
@@ -6366,6 +6387,20 @@ sub rm_comments {                            # {{{1
 
     print "<- rm_comments\n" if $opt_v > 2;
     return @lines;
+} # 1}}}
+sub remove_first_n {                         # {{{1
+    my ($n, $ra_lines, ) = @_;
+    print "-> remove_first_n\n" if $opt_v > 2;
+
+    my @save_lines = ();
+    if (scalar @{$ra_lines} > $n) {
+        for (my $i = $n; $i < scalar @{$ra_lines}; $i++) {
+            push @save_lines, $ra_lines->[$i];
+        }
+    }
+
+    print "<- remove_first_n\n" if $opt_v > 2;
+    return @save_lines;
 } # 1}}}
 sub remove_f77_comments {                    # {{{1
     my ($ra_lines, ) = @_;

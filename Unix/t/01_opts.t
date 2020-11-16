@@ -493,6 +493,34 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/528/cutoff_code_50pct.yaml',
                 },
 
+                {
+                    'name' => '--skip-leading 2 #530 1/4',
+                    'cd'   => '../tests/inputs/issues/530',
+                    'args' => '--skip-leading 2 .',
+                    'ref'  => '../tests/outputs/issues/530/case_1.yaml',
+                },
+
+                {
+                    'name' => '--skip-leading 100 #530 2/4',
+                    'cd'   => '../tests/inputs/issues/530',
+                    'args' => '--skip-leading 100 .',
+                    'ref'  => '../tests/outputs/issues/530/case_2.yaml',
+                },
+
+                {
+                    'name' => '--skip-leading 2,c,h #530 3/4',
+                    'cd'   => '../tests/inputs/issues/530',
+                    'args' => '--skip-leading 2,c,h .',
+                    'ref'  => '../tests/outputs/issues/530/case_3.yaml',
+                },
+
+                {
+                    'name' => '--skip-leading 2,C,H #530 4/4',
+                    'cd'   => '../tests/inputs/issues/530',
+                    'args' => '--skip-leading 2,C,H .',
+                    'ref'  => '../tests/outputs/issues/530/case_4.yaml',
+                },
+
             );
 
 # Create test input for issue #132 which needs data not in the git repo.
