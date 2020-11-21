@@ -68,12 +68,11 @@ $HAVE_Time_HiRes = 1 if defined $Time::HiRes::VERSION;
 my $HAVE_Rexexp_Common;
 # Regexp::Common isn't in the standard distribution.  It will
 # be installed in a temp directory if necessary.
-BEGIN {
-    if (eval "use Regexp::Common;") {
-        $HAVE_Rexexp_Common = 1;
-    } else {
-        $HAVE_Rexexp_Common = 0;
-    }
+eval "use Regexp::Common qw ( comment ) ";
+if (defined $Regexp::Common::VERSION) {
+	$HAVE_Rexexp_Common = 1;
+} else {
+	$HAVE_Rexexp_Common = 0;
 }
 
 my $HAVE_Algorith_Diff = 0;
@@ -10514,31 +10513,22 @@ sub check_scale_existence {                  # {{{1
 } # 1}}}
 sub Install_Regexp_Common {                  # {{{1
     # Installs portions of Damian Conway's & Abigail's Regexp::Common
-    # module, version 2013031301 into a temporary directory for the
+    # module, version 2017060201 into a temporary directory for the
     # duration of this run.
     my %Regexp_Common_Contents = ();
 $Regexp_Common_Contents{'Common'} = <<'EOCommon'; # {{{2
 package Regexp::Common;
 
-use 5.00473;
+use 5.10.0;
 use strict;
 
-BEGIN {
-    # This makes sure 'use warnings' doesn't bomb out on 5.005_*;
-    # warnings won't be enabled on those old versions though.
-    # Since all other files use this file, we can use 'use warnings'
-    # elsewhere as well, but *AFTER* 'use Regexp::Common'.
-    if ($] < 5.006) {
-        $INC {"warnings.pm"} = 1;
-        no strict 'refs';
-        *{"warnings::unimport"} = sub {0};
-    }
-}
-
 use warnings;
-use vars qw /$VERSION %RE %sub_interface $AUTOLOAD/;
+no  warnings 'syntax';
 
-$VERSION = '2013031301';
+our $VERSION = '2017060201';
+our %RE;
+our %sub_interface;
+our $AUTOLOAD;
 
 
 sub _croak {
@@ -10793,28 +10783,626 @@ sub _clone_with {
 }
 
 1;
-#
-# This software is Copyright (c) 2001 - 2011, Damian Conway and Abigail.
-#
-# This module is free software, and maybe used under any of the following
-# licenses:
-#
-#  1) The Perl Artistic License.     See the file COPYRIGHT.AL.
-#  2) The Perl Artistic License 2.0. See the file COPYRIGHT.AL2.
-#  3) The BSD Licence.               See the file COPYRIGHT.BSD.
-#  4) The MIT Licence.               See the file COPYRIGHT.MIT.
+
+__END__
+
+=pod
+
+=head1 NAME
+
+Regexp::Common - Provide commonly requested regular expressions
+
+=head1 SYNOPSIS
+
+ # STANDARD USAGE 
+
+ use Regexp::Common;
+
+ while (<>) {
+     /$RE{num}{real}/               and print q{a number};
+     /$RE{quoted}/                  and print q{a ['"`] quoted string};
+    m[$RE{delimited}{-delim=>'/'}]  and print q{a /.../ sequence};
+     /$RE{balanced}{-parens=>'()'}/ and print q{balanced parentheses};
+     /$RE{profanity}/               and print q{a #*@%-ing word};
+ }
+
+
+ # SUBROUTINE-BASED INTERFACE
+
+ use Regexp::Common 'RE_ALL';
+
+ while (<>) {
+     $_ =~ RE_num_real()              and print q{a number};
+     $_ =~ RE_quoted()                and print q{a ['"`] quoted string};
+     $_ =~ RE_delimited(-delim=>'/')  and print q{a /.../ sequence};
+     $_ =~ RE_balanced(-parens=>'()'} and print q{balanced parentheses};
+     $_ =~ RE_profanity()             and print q{a #*@%-ing word};
+ }
+
+
+ # IN-LINE MATCHING...
+
+ if ( $RE{num}{int}->matches($text) ) {...}
+
+
+ # ...AND SUBSTITUTION
+
+ my $cropped = $RE{ws}{crop}->subs($uncropped);
+
+
+ # ROLL-YOUR-OWN PATTERNS
+
+ use Regexp::Common 'pattern';
+
+ pattern name   => ['name', 'mine'],
+         create => '(?i:J[.]?\s+A[.]?\s+Perl-Hacker)',
+         ;
+
+ my $name_matcher = $RE{name}{mine};
+
+ pattern name    => [ 'lineof', '-char=_' ],
+         create  => sub {
+                        my $flags = shift;
+                        my $char = quotemeta $flags->{-char};
+                        return '(?:^$char+$)';
+                    },
+         match   => sub {
+                        my ($self, $str) = @_;
+                        return $str !~ /[^$self->{flags}{-char}]/;
+                    },
+         subs   => sub {
+                        my ($self, $str, $replacement) = @_;
+                        $_[1] =~ s/^$self->{flags}{-char}+$//g;
+                   },
+         ;
+
+ my $asterisks = $RE{lineof}{-char=>'*'};
+
+ # DECIDING WHICH PATTERNS TO LOAD.
+
+ use Regexp::Common qw /comment number/;  # Comment and number patterns.
+ use Regexp::Common qw /no_defaults/;     # Don't load any patterns.
+ use Regexp::Common qw /!delimited/;      # All, but delimited patterns.
+
+
+=head1 DESCRIPTION
+
+By default, this module exports a single hash (C<%RE>) that stores or generates
+commonly needed regular expressions (see L<"List of available patterns">).
+
+There is an alternative, subroutine-based syntax described in
+L<"Subroutine-based interface">.
+
+
+=head2 General syntax for requesting patterns
+
+To access a particular pattern, C<%RE> is treated as a hierarchical hash of
+hashes (of hashes...), with each successive key being an identifier. For
+example, to access the pattern that matches real numbers, you 
+specify:
+
+        $RE{num}{real}
+        
+and to access the pattern that matches integers: 
+
+        $RE{num}{int}
+
+Deeper layers of the hash are used to specify I<flags>: arguments that
+modify the resulting pattern in some way. The keys used to access these
+layers are prefixed with a minus sign and may have a value; if a value
+is given, it's done by using a multidimensional key.
+For example, to access the pattern that
+matches base-2 real numbers with embedded commas separating
+groups of three digits (e.g. 10,101,110.110101101):
+
+        $RE{num}{real}{-base => 2}{-sep => ','}{-group => 3}
+
+Through the magic of Perl, these flag layers may be specified in any order
+(and even interspersed through the identifier keys!)
+so you could get the same pattern with:
+
+        $RE{num}{real}{-sep => ','}{-group => 3}{-base => 2}
+
+or:
+
+        $RE{num}{-base => 2}{real}{-group => 3}{-sep => ','}
+
+or even:
+
+        $RE{-base => 2}{-group => 3}{-sep => ','}{num}{real}
+
+etc.
+
+Note, however, that the relative order of amongst the identifier keys
+I<is> significant. That is:
+
+        $RE{list}{set}
+
+would not be the same as:
+
+        $RE{set}{list}
+
+=head2 Flag syntax
+
+In versions prior to 2.113, flags could also be written as
+C<{"-flag=value"}>. This no longer works, although C<{"-flag$;value"}>
+still does. However, C<< {-flag => 'value'} >> is the preferred syntax.
+
+=head2 Universal flags
+
+Normally, flags are specific to a single pattern.
+However, there is two flags that all patterns may specify.
+
+=over 4
+
+=item C<-keep>
+
+By default, the patterns provided by C<%RE> contain no capturing
+parentheses. However, if the C<-keep> flag is specified (it requires
+no value) then any significant substrings that the pattern matches
+are captured. For example:
+
+        if ($str =~ $RE{num}{real}{-keep}) {
+                $number   = $1;
+                $whole    = $3;
+                $decimals = $5;
+        }
+
+Special care is needed if a "kept" pattern is interpolated into a
+larger regular expression, as the presence of other capturing
+parentheses is likely to change the "number variables" into which significant
+substrings are saved.
+
+See also L<"Adding new regular expressions">, which describes how to create
+new patterns with "optional" capturing brackets that respond to C<-keep>.
+
+=item C<-i>
+
+Some patterns or subpatterns only match lowercase or uppercase letters.
+If one wants the do case insensitive matching, one option is to use
+the C</i> regexp modifier, or the special sequence C<(?i)>. But if the
+functional interface is used, one does not have this option. The 
+C<-i> switch solves this problem; by using it, the pattern will do
+case insensitive matching.
+
+=back
+
+=head2 OO interface and inline matching/substitution
+
+The patterns returned from C<%RE> are objects, so rather than writing:
+
+        if ($str =~ /$RE{some}{pattern}/ ) {...}
+
+you can write:
+
+        if ( $RE{some}{pattern}->matches($str) ) {...}
+
+For matching this would seem to have no great advantage apart from readability
+(but see below).
+
+For substitutions, it has other significant benefits. Frequently you want to
+perform a substitution on a string without changing the original. Most people
+use this:
+
+        $changed = $original;
+        $changed =~ s/$RE{some}{pattern}/$replacement/;
+
+The more adept use:
+
+        ($changed = $original) =~ s/$RE{some}{pattern}/$replacement/;
+
+Regexp::Common allows you do write this:
+
+        $changed = $RE{some}{pattern}->subs($original=>$replacement);
+
+Apart from reducing precedence-angst, this approach has the added
+advantages that the substitution behaviour can be optimized from the 
+regular expression, and the replacement string can be provided by
+default (see L<"Adding new regular expressions">).
+
+For example, in the implementation of this substitution:
+
+        $cropped = $RE{ws}{crop}->subs($uncropped);
+
+the default empty string is provided automatically, and the substitution is
+optimized to use:
+
+        $uncropped =~ s/^\s+//;
+        $uncropped =~ s/\s+$//;
+
+rather than:
+
+        $uncropped =~ s/^\s+|\s+$//g;
+
+
+=head2 Subroutine-based interface
+
+The hash-based interface was chosen because it allows regexes to be
+effortlessly interpolated, and because it also allows them to be
+"curried". For example:
+
+        my $num = $RE{num}{int};
+
+        my $commad     = $num->{-sep=>','}{-group=>3};
+        my $duodecimal = $num->{-base=>12};
+
+
+However, the use of tied hashes does make the access to Regexp::Common
+patterns slower than it might otherwise be. In contexts where impatience
+overrules laziness, Regexp::Common provides an additional
+subroutine-based interface.
+
+For each (sub-)entry in the C<%RE> hash (C<$RE{key1}{key2}{etc}>), there
+is a corresponding exportable subroutine: C<RE_key1_key2_etc()>. The name of
+each subroutine is the underscore-separated concatenation of the I<non-flag>
+keys that locate the same pattern in C<%RE>. Flags are passed to the subroutine
+in its argument list. Thus:
+
+        use Regexp::Common qw( RE_ws_crop RE_num_real RE_profanity );
+
+        $str =~ RE_ws_crop() and die "Surrounded by whitespace";
+
+        $str =~ RE_num_real(-base=>8, -sep=>" ") or next;
+
+        $offensive = RE_profanity(-keep);
+        $str =~ s/$offensive/$bad{$1}++; "<expletive deleted>"/ge;
+
+Note that, unlike the hash-based interface (which returns objects), these
+subroutines return ordinary C<qr>'d regular expressions. Hence they do not
+curry, nor do they provide the OO match and substitution inlining described
+in the previous section.
+
+It is also possible to export subroutines for all available patterns like so:
+
+        use Regexp::Common 'RE_ALL';
+
+Or you can export all subroutines with a common prefix of keys like so:
+
+        use Regexp::Common 'RE_num_ALL';
+
+which will export C<RE_num_int> and C<RE_num_real> (and if you have
+create more patterns who have first key I<num>, those will be exported
+as well). In general, I<RE_key1_..._keyn_ALL> will export all subroutines
+whose pattern names have first keys I<key1> ... I<keyn>.
+
+
+=head2 Adding new regular expressions
+
+You can add your own regular expressions to the C<%RE> hash at run-time,
+using the exportable C<pattern> subroutine. It expects a hash-like list of 
+key/value pairs that specify the behaviour of the pattern. The various
+possible argument pairs are:
+
+=over 4
+
+=item C<name =E<gt> [ @list ]>
+
+A required argument that specifies the name of the pattern, and any
+flags it may take, via a reference to a list of strings. For example:
+
+         pattern name => [qw( line of -char )],
+                 # other args here
+                 ;
+
+This specifies an entry C<$RE{line}{of}>, which may take a C<-char> flag.
+
+Flags may also be specified with a default value, which is then used whenever
+the flag is specified without an explicit value (but not when the flag is
+omitted). For example:
+
+         pattern name => [qw( line of -char=_ )],
+                 # default char is '_'
+                 # other args here
+                 ;
+
+
+=item C<create =E<gt> $sub_ref_or_string>
+
+A required argument that specifies either a string that is to be returned
+as the pattern:
+
+        pattern name    => [qw( line of underscores )],
+                create  => q/(?:^_+$)/
+                ;
+
+or a reference to a subroutine that will be called to create the pattern:
+
+        pattern name    => [qw( line of -char=_ )],
+                create  => sub {
+                                my ($self, $flags) = @_;
+                                my $char = quotemeta $flags->{-char};
+                                return '(?:^$char+$)';
+                            },
+                ;
+
+If the subroutine version is used, the subroutine will be called with 
+three arguments: a reference to the pattern object itself, a reference
+to a hash containing the flags and their values,
+and a reference to an array containing the non-flag keys. 
+
+Whatever the subroutine returns is stringified as the pattern.
+
+No matter how the pattern is created, it is immediately postprocessed to
+include or exclude capturing parentheses (according to the value of the
+C<-keep> flag). To specify such "optional" capturing parentheses within
+the regular expression associated with C<create>, use the notation
+C<(?k:...)>. Any parentheses of this type will be converted to C<(...)>
+when the C<-keep> flag is specified, or C<(?:...)> when it is not.
+It is a Regexp::Common convention that the outermost capturing parentheses
+always capture the entire pattern, but this is not enforced.
+
+
+=item C<match =E<gt> $sub_ref>
+
+An optional argument that specifies a subroutine that is to be called when
+the C<$RE{...}-E<gt>matches(...)> method of this pattern is invoked.
+
+The subroutine should expect two arguments: a reference to the pattern object
+itself, and the string to be matched against.
+
+It should return the same types of values as a C<m/.../> does.
+
+     pattern name    => [qw( line of -char )],
+             create  => sub {...},
+             match   => sub {
+                             my ($self, $str) = @_;
+                             $str !~ /[^$self->{flags}{-char}]/;
+                        },
+             ;
+
+
+=item C<subs =E<gt> $sub_ref>
+
+An optional argument that specifies a subroutine that is to be called when
+the C<$RE{...}-E<gt>subs(...)> method of this pattern is invoked.
+
+The subroutine should expect three arguments: a reference to the pattern object
+itself, the string to be changed, and the value to be substituted into it.
+The third argument may be C<undef>, indicating the default substitution is
+required.
+
+The subroutine should return the same types of values as an C<s/.../.../> does.
+
+For example:
+
+     pattern name    => [ 'lineof', '-char=_' ],
+             create  => sub {...},
+             subs    => sub {
+                          my ($self, $str, $ignore_replacement) = @_;
+                          $_[1] =~ s/^$self->{flags}{-char}+$//g;
+                        },
+             ;
+
+Note that such a subroutine will almost always need to modify C<$_[1]> directly.
+
+
+=item C<version =E<gt> $minimum_perl_version>
+
+If this argument is given, it specifies the minimum version of perl required
+to use the new pattern. Attempts to use the pattern with earlier versions of
+perl will generate a fatal diagnostic.
+
+=back
+
+=head2 Loading specific sets of patterns.
+
+By default, all the sets of patterns listed below are made available.
+However, it is possible to indicate which sets of patterns should
+be made available - the wanted sets should be given as arguments to
+C<use>. Alternatively, it is also possible to indicate which sets of
+patterns should not be made available - those sets will be given as
+argument to the C<use> statement, but are preceded with an exclaimation
+mark. The argument I<no_defaults> indicates none of the default patterns
+should be made available. This is useful for instance if all you want
+is the C<pattern()> subroutine.
+
+Examples:
+
+ use Regexp::Common qw /comment number/;  # Comment and number patterns.
+ use Regexp::Common qw /no_defaults/;     # Don't load any patterns.
+ use Regexp::Common qw /!delimited/;      # All, but delimited patterns.
+
+It's also possible to load your own set of patterns. If you have a
+module C<Regexp::Common::my_patterns> that makes patterns available,
+you can have it made available with
+
+ use Regexp::Common qw /my_patterns/;
+
+Note that the default patterns will still be made available - only if
+you use I<no_defaults>, or mention one of the default sets explicitly,
+the non mentioned defaults aren't made available.
+
+=head2 List of available patterns
+
+The patterns listed below are currently available. Each set of patterns
+has its own manual page describing the details. For each pattern set
+named I<name>, the manual page I<Regexp::Common::name> describes the
+details.
+
+Currently available are:
+
+=over 4
+
+=item Regexp::Common::balanced
+
+Provides regexes for strings with balanced parenthesized delimiters.
+
+=item Regexp::Common::comment
+
+Provides regexes for comments of various languages (43 languages
+currently).
+
+=item Regexp::Common::delimited
+
+Provides regexes for delimited strings.
+
+=item Regexp::Common::lingua
+
+Provides regexes for palindromes.
+
+=item Regexp::Common::list
+
+Provides regexes for lists.
+
+=item Regexp::Common::net
+
+Provides regexes for IPv4, IPv6, and MAC addresses.
+
+=item Regexp::Common::number
+
+Provides regexes for numbers (integers and reals).
+
+=item Regexp::Common::profanity
+
+Provides regexes for profanity.
+
+=item Regexp::Common::whitespace
+
+Provides regexes for leading and trailing whitespace.
+
+=item Regexp::Common::zip
+
+Provides regexes for zip codes.
+
+=back
+
+=head2 Forthcoming patterns and features
+
+Future releases of the module will also provide patterns for the following:
+
+        * email addresses 
+        * HTML/XML tags
+        * more numerical matchers,
+        * mail headers (including multiline ones),
+        * more URLS
+        * telephone numbers of various countries
+        * currency (universal 3 letter format, Latin-1, currency names)
+        * dates
+        * binary formats (e.g. UUencoded, MIMEd)
+
+If you have other patterns or pattern generators that you think would be
+generally useful, please send them to the maintainer -- preferably as source
+code using the C<pattern> subroutine. Submissions that include a set of
+tests will be especially welcome.
+
+
+=head1 DIAGNOSTICS
+
+=over 4
+
+=item C<Can't export unknown subroutine %s>
+
+The subroutine-based interface didn't recognize the requested subroutine.
+Often caused by a spelling mistake or an incompletely specified name.
+
+        
+=item C<Can't create unknown regex: $RE{...}>
+
+Regexp::Common doesn't have a generator for the requested pattern.
+Often indicates a misspelt or missing parameter.
+
+=item
+C<Perl %f does not support the pattern $RE{...}.
+You need Perl %f or later>
+
+The requested pattern requires advanced regex features (e.g. recursion)
+that not available in your version of Perl. Time to upgrade.
+
+=item C<< pattern() requires argument: name => [ @list ] >>
+
+Every user-defined pattern specification must have a name.
+
+=item C<< pattern() requires argument: create => $sub_ref_or_string >>
+
+Every user-defined pattern specification must provide a pattern creation
+mechanism: either a pattern string or a reference to a subroutine that
+returns the pattern string.
+
+=item C<Base must be between 1 and 36>
+
+The C<< $RE{num}{real}{-base=>'I<N>'} >> pattern uses the characters [0-9A-Z]
+to represent the digits of various bases. Hence it only produces
+regular expressions for bases up to hexatricensimal.
+
+=item C<Must specify delimiter in $RE{delimited}>
+
+The pattern has no default delimiter.
+You need to write: C<< $RE{delimited}{-delim=>I<X>'} >> for some character I<X>
+
+=back
+
+=head1 ACKNOWLEDGEMENTS
+
+Deepest thanks to the many people who have encouraged and contributed to this
+project, especially: Elijah, Jarkko, Tom, Nat, Ed, and Vivek.
+
+Further thanks go to: Alexandr Ciornii, Blair Zajac, Bob Stockdale,
+Charles Thomas, Chris Vertonghen, the CPAN Testers, David Hand,
+Fany, Geoffrey Leach, Hermann-Marcus Behrens, Jerome Quelin, Jim Cromie,
+Lars Wilke, Linda Julien, Mike Arms, Mike Castle, Mikko, Murat Uenalan,
+RafaE<235>l Garcia-Suarez, Ron Savage, Sam Vilain, Slaven Rezic, Smylers,
+Tim Maher, and all the others I've forgotten.
+
+=head1 AUTHOR
+
+Damian Conway (damian@conway.org)
+
+=head1 MAINTENANCE
+
+This package is maintained by Abigail S<(I<regexp-common@abigail.be>)>.
+
+=head1 BUGS AND IRRITATIONS
+
+Bound to be plenty.
+
+For a start, there are many common regexes missing.
+Send them in to I<regexp-common@abigail.be>.
+
+There are some POD issues when installing this module using a pre-5.6.0 perl;
+some manual pages may not install, or may not install correctly using a perl
+that is that old. You might consider upgrading your perl.
+
+=head1 NOT A BUG
+
+=over 4
+
+=item *
+
+The various patterns are not anchored. That is, a pattern like 
+C<< $RE {num} {int} >> will match against "abc4def", because a 
+substring of the subject matches. This is by design, and not a
+bug. If you want the pattern to be anchored, use something like:
+
+ my $integer = $RE {num} {int};
+ $subj =~ /^$integer$/ and print "Matches!\n";
+
+=back
+
+=head1 LICENSE and COPYRIGHT
+
+This software is Copyright (c) 2001 - 2017, Damian Conway and Abigail.
+
+This module is free software, and maybe used under any of the following
+licenses:
+
+ 1) The Perl Artistic License.     See the file COPYRIGHT.AL.
+ 2) The Perl Artistic License 2.0. See the file COPYRIGHT.AL2.
+ 3) The BSD License.               See the file COPYRIGHT.BSD.
+ 4) The MIT License.               See the file COPYRIGHT.MIT.
 EOCommon
 # 2}}}
 $Regexp_Common_Contents{'Common/comment'} = <<'EOC';   # {{{2
 package Regexp::Common::comment;
 
-use Regexp::Common qw /pattern clean no_defaults/;
+use 5.10.0;
 
 use strict;
 use warnings;
+no  warnings 'syntax';
 
-use vars qw /$VERSION/;
-$VERSION = '2010010201';
+use Regexp::Common qw /pattern clean no_defaults/;
+
+our $VERSION = '2017060201';
 
 my @generic = (
     {languages => [qw /ABC Forth/],
@@ -10853,7 +11441,7 @@ my @generic = (
      from_to   => [['<?_c', '_c?>']],
     },
 
-    {languages => [qw /C++/, 'C#', qw /AspectJ Cg ECMAScript FPL Java JavaScript JSX Stylus/],
+    {languages => [qw /C++/, 'C#', qw /Cg ECMAScript FPL Java JavaScript/],
      to_eol    => ['//'],
      from_to   => [[qw {/* */}]]},
 
@@ -10887,7 +11475,7 @@ my @generic = (
 
     {languages => [qw /Oberon/],
      from_to   => [[qw /(* *)/]]},
-
+     
     {languages => [[qw /Pascal Delphi/], [qw /Pascal Free/], [qw /Pascal GPC/]],
      to_eol    => ['//'],
      from_to   => [[qw !{ }!], [qw !(* *)!]]},
@@ -11016,7 +11604,6 @@ foreach my $info (@plain_or_nested) {
                      exists $_ [1] -> {-keep} ? qr /($prefix$re)/
                                               : qr  /$prefix$re/
                 },
-            version => 5.006,
             ;
 }
 
@@ -11032,9 +11619,9 @@ foreach my $group (@generic) {
                 ;
     }
 }
+                
 
-
-
+    
 #
 # Other languages.
 #
@@ -11106,7 +11693,6 @@ pattern name    =>  [qw /comment Beatnik/],
                               $s  >= 5 && $s < 18})XXX|)}x;
             $re;
         },
-        version  => 5.008,
         ;
 }
 
@@ -11121,26 +11707,737 @@ pattern name    =>  [qw /comment Fortran fixed/],
 
 
 # http://www.csis.ul.ie/cobol/Course/COBOLIntro.htm
-# Traditionally, comments in COBOL were indicated with an asterisk in
+# Traditionally, comments in COBOL were indicated with an asteriks in
 # the seventh column. Modern compilers may be more lenient.
 pattern name    =>  [qw /comment COBOL/],
         create  =>  '(?<=^......)(?k:(?k:[*])(?k:[^\n]*)(?k:\n))',
-        version =>  '5.008',
         ;
 
 1;
+
+
+__END__
+
+=pod
+
+=head1 NAME
+
+Regexp::Common::comment -- provide regexes for comments.
+
+=head1 SYNOPSIS
+
+    use Regexp::Common qw /comment/;
+
+    while (<>) {
+        /$RE{comment}{C}/       and  print "Contains a C comment\n";
+        /$RE{comment}{C++}/     and  print "Contains a C++ comment\n";
+        /$RE{comment}{PHP}/     and  print "Contains a PHP comment\n";
+        /$RE{comment}{Java}/    and  print "Contains a Java comment\n";
+        /$RE{comment}{Perl}/    and  print "Contains a Perl comment\n";
+        /$RE{comment}{awk}/     and  print "Contains an awk comment\n";
+        /$RE{comment}{HTML}/    and  print "Contains an HTML comment\n";
+    }
+
+    use Regexp::Common qw /comment RE_comment_HTML/;
+
+    while (<>) {
+        $_ =~ RE_comment_HTML() and  print "Contains an HTML comment\n";
+    }
+
+=head1 DESCRIPTION
+
+Please consult the manual of L<Regexp::Common> for a general description
+of the works of this interface.
+
+Do not use this module directly, but load it via I<Regexp::Common>.
+
+This modules gives you regular expressions for comments in various
+languages.
+
+=head2 THE LANGUAGES
+
+Below, the comments of each of the languages are described.
+The patterns are available as C<$RE{comment}{I<LANG>}>, foreach
+language I<LANG>. Some languages have variants; it's described
+at the individual languages how to get the patterns for the variants.
+Unless mentioned otherwise,
+C<{-keep}> sets C<$1>, C<$2>, C<$3> and C<$4> to the entire comment,
+the opening marker, the content of the comment, and the closing marker
+(for many languages, the latter is a newline) respectively.
+
+=over 4
+
+=item ABC
+
+Comments in I<ABC> start with a backslash (C<\>), and last till
+the end of the line.
+See L<http://homepages.cwi.nl/%7Esteven/abc/>.
+
+=item Ada
+
+Comments in I<Ada> start with C<-->, and last till the end of the line.
+
+=item Advisor
+
+I<Advisor> is a language used by the HP product I<glance>. Comments for
+this language start with either C<#> or C<//>, and last till the
+end of the line.
+
+=item Advsys
+
+Comments for the I<Advsys> language start with C<;> and last till
+the end of the line. See also L<http://www.wurb.com/if/devsys/12>.
+
+=item Alan
+
+I<Alan> comments start with C<-->, and last till the end of the line.
+See also L<http://w1.132.telia.com/~u13207378/alan/manual/alanTOC.html>.
+
+=item Algol 60
+
+Comments in the I<Algol 60> language start with the keyword C<comment>,
+and end with a C<;>. See L<http://www.masswerk.at/algol60/report.htm>.
+
+=item Algol 68
+
+In I<Algol 68>, comments are either delimited by C<#>, or by one of the
+keywords C<co> or C<comment>. The keywords should not be part of another
+word. See L<http://westein.arb-phys.uni-dortmund.de/~wb/a68s.txt>.
+With C<{-keep}>, only C<$1> will be set, returning the entire comment.
+
+=item ALPACA
+
+The I<ALPACA> language has comments starting with C</*> and ending with C<*/>.
+
+=item awk
+
+The I<awk> programming language uses comments that start with C<#>
+and end at the end of the line.
+
+=item B
+
+The I<B> language has comments starting with C</*> and ending with C<*/>.
+
+=item BASIC
+
+There are various forms of BASIC around. Currently, we only support the
+variant supported by I<mvEnterprise>, whose pattern is available as
+C<$RE{comment}{BASIC}{mvEnterprise}>. Comments in this language start with a
+C<!>, a C<*> or the keyword C<REM>, and end till the end of the line. See
+L<http://www.rainingdata.com/products/beta/docs/mve/50/ReferenceManual/Basic.pdf>.
+
+=item Beatnik
+
+The esotoric language I<Beatnik> only uses words consisting of letters.
+Words are scored according to the rules of Scrabble. Words scoring less
+than 5 points, or 18 points or more are considered comments (although
+the compiler might mock at you if you score less than 5 points).
+Regardless whether C<{-keep}>, C<$1> will be set, and set to the
+entire comment. This pattern requires I<perl 5.8.0> or newer.
+
+=item beta-Juliet
+
+The I<beta-Juliet> programming language has comments that start with
+C<//> and that continue till the end of the line. See also
+L<http://www.catseye.mb.ca/esoteric/b-juliet/index.html>.
+
+=item Befunge-98
+
+The esotoric language I<Befunge-98> uses comments that start and end
+with a C<;>. See L<http://www.catseye.mb.ca/esoteric/befunge/98/spec98.html>.
+
+=item BML                 
+
+I<BML>, or I<Better Markup Language> is an HTML templating language that
+uses comments starting with C<< <?c_ >>, and ending with C<< c_?> >>.
+See L<http://www.livejournal.com/doc/server/bml.index.html>.               
+
+=item Brainfuck
+
+The minimal language I<Brainfuck> uses only eight characters, 
+C<E<lt>>, C<E<gt>>, C<[>, C<]>, C<+>, C<->, C<.> and C<,>.
+Any other characters are considered comments. With C<{-keep}>,
+C<$1> is set to the entire comment.
+
+=item C
+
+The I<C> language has comments starting with C</*> and ending with C<*/>.
+
+=item C--
+
+The I<C--> language has comments starting with C</*> and ending with C<*/>.
+See L<http://cs.uas.arizona.edu/classes/453/programs/C--Spec.html>.
+
+=item C++
+
+The I<C++> language has two forms of comments. Comments that start with
+C<//> and last till the end of the line, and comments that start with
+C</*>, and end with C<*/>. If C<{-keep}> is used, only C<$1> will be
+set, and set to the entire comment.
+
+=item C#
+
+The I<C#> language has two forms of comments. Comments that start with
+C<//> and last till the end of the line, and comments that start with
+C</*>, and end with C<*/>. If C<{-keep}> is used, only C<$1> will be
+set, and set to the entire comment.
+See L<http://msdn.microsoft.com/library/default.asp?url=/library/en-us/csspec/html/vclrfcsharpspec_C.asp>.
+
+=item Caml
+
+Comments in I<Caml> start with C<(*>, end with C<*)>, and can be nested.
+See L<http://www.cs.caltech.edu/courses/cs134/cs134b/book.pdf> and
+L<http://pauillac.inria.fr/caml/index-eng.html>.
+
+=item Cg
+
+The I<Cg> language has two forms of comments. Comments that start with
+C<//> and last till the end of the line, and comments that start with
+C</*>, and end with C<*/>. If C<{-keep}> is used, only C<$1> will be
+set, and set to the entire comment.
+See L<http://developer.nvidia.com/attach/3722>.
+
+=item CLU
+
+In C<CLU>, a comment starts with a procent sign (C<%>), and ends with the
+next newline. See L<ftp://ftp.lcs.mit.edu:/pub/pclu/CLU-syntax.ps> and
+L<http://www.pmg.lcs.mit.edu/CLU.html>.
+
+=item COBOL
+
+Traditionally, comments in I<COBOL> are indicated by an asteriks in the
+seventh column. This is what the pattern matches. Modern compiler may
+more lenient though. See L<http://www.csis.ul.ie/cobol/Course/COBOLIntro.htm>,
+and L<http://www.csis.ul.ie/cobol/default.htm>.
+
+=item CQL
+
+Comments in the chess query language (I<CQL>) start with a semi colon
+(C<;>) and last till the end of the line. See L<http://www.rbnn.com/cql/>.
+
+=item Crystal Report
+
+The formula editor in I<Crystal Reports> uses comments that start
+with C<//>, and end with the end of the line.
+
+=item Dylan
+
+There are two types of comments in I<Dylan>. They either start with
+C<//>, or are nested comments, delimited with C</*> and C<*/>.
+Under C<{-keep}>, only C<$1> will be set, returning the entire comment.
+This pattern requires I<perl 5.6.0> or newer.
+
+=item ECMAScript
+
+The I<ECMAScript> language has two forms of comments. Comments that start with
+C<//> and last till the end of the line, and comments that start with
+C</*>, and end with C<*/>. If C<{-keep}> is used, only C<$1> will be
+set, and set to the entire comment. I<JavaScript> is Netscapes implementation
+of I<ECMAScript>. See
+L<http://www.ecma-international.org/publications/files/ecma-st/Ecma-262.pdf>,
+and L<http://www.ecma-international.org/publications/standards/Ecma-262.htm>.
+
+=item Eiffel
+
+I<Eiffel> comments start with C<-->, and last till the end of the line.
+
+=item False
+
+In I<False>, comments start with C<{> and end with C<}>.
+See L<http://wouter.fov120.com/false/false.txt>
+
+=item FPL
+
+The I<FPL> language has two forms of comments. Comments that start with
+C<//> and last till the end of the line, and comments that start with
+C</*>, and end with C<*/>. If C<{-keep}> is used, only C<$1> will be
+set, and set to the entire comment.
+
+=item Forth
+
+Comments in Forth start with C<\>, and end with the end of the line.
+See also L<http://docs.sun.com/sb/doc/806-1377-10>.
+
+=item Fortran
+
+There are two forms of I<Fortran>. There's free form I<Fortran>, which
+has comments that start with C<!>, and end at the end of the line.
+The pattern for this is given by C<$RE{Fortran}>. Fixed form I<Fortran>,
+which has been obsoleted, has comments that start with C<C>, C<c> or
+C<*> in the first column, or with C<!> anywhere, but the sixth column.
+The pattern for this are given by C<$RE{Fortran}{fixed}>.
+
+See also L<http://www.cray.com/craydoc/manuals/007-3692-005/html-007-3692-005/>.
+
+=item Funge-98
+
+The esotoric language I<Funge-98> uses comments that start and end with
+a C<;>.
+
+=item fvwm2
+
+Configuration files for I<fvwm2> have comments starting with a
+C<#> and lasting the rest of the line.
+
+=item Haifu
+
+I<Haifu>, an esotoric language using haikus, has comments starting and
+ending with a C<,>.
+See L<http://www.dangermouse.net/esoteric/haifu.html>.
+
+=item Haskell
+
+There are two types of comments in I<Haskell>. They either start with
+at least two dashes, or are nested comments, delimited with C<{-> and C<-}>.
+Under C<{-keep}>, only C<$1> will be set, returning the entire comment.
+This pattern requires I<perl 5.6.0> or newer.
+
+=item HTML
+
+In I<HTML>, comments only appear inside a I<comment declaration>.
+A comment declaration starts with a C<E<lt>!>, and ends with a
+C<E<gt>>. Inside this declaration, we have zero or more comments.
+Comments starts with C<--> and end with C<-->, and are optionally
+followed by whitespace. The pattern C<$RE{comment}{HTML}> recognizes
+those comment declarations (and hence more than a comment).
+Note that this is not the same as something that starts with
+C<E<lt>!--> and ends with C<--E<gt>>, because the following will
+be matched completely:
+
+    <!--  First  Comment   --
+      --> Second Comment <!--
+      --  Third  Comment   -->
+
+Do not be fooled by what your favourite browser thinks is an HTML
+comment.
+
+If C<{-keep}> is used, the following are returned:
+
+=over 4
+
+=item $1
+
+captures the entire comment declaration.
+
+=item $2
+
+captures the MDO (markup declaration open), C<E<lt>!>.
+
+=item $3
+
+captures the content between the MDO and the MDC.
+
+=item $4
+
+captures the (last) comment, without the surrounding dashes.
+
+=item $5
+
+captures the MDC (markup declaration close), C<E<gt>>.
+
+=back
+
+=item Hugo
+
+There are two types of comments in I<Hugo>. They either start with
+C<!> (which cannot be followed by a C<\>), or are nested comments,
+delimited with C<!\> and C<\!>.
+Under C<{-keep}>, only C<$1> will be set, returning the entire comment.
+This pattern requires I<perl 5.6.0> or newer.
+
+=item Icon
+
+I<Icon> has comments that start with C<#> and end at the next new line.
+See L<http://www.toolsofcomputing.com/IconHandbook/IconHandbook.pdf>,
+L<http://www.cs.arizona.edu/icon/index.htm>, and
+L<http://burks.bton.ac.uk/burks/language/icon/index.htm>.
+
+=item ILLGOL
+
+The esotoric language I<ILLGOL> uses comments starting with I<NB> and lasting
+till the end of the line.
+See L<http://www.catseye.mb.ca/esoteric/illgol/index.html>.
+
+=item INTERCAL
+
+Comments in INTERCAL are single line comments. They start with one of
+the keywords C<NOT> or C<N'T>, and can optionally be preceded by the
+keywords C<DO> and C<PLEASE>. If both keywords are used, C<PLEASE>
+precedes C<DO>. Keywords are separated by whitespace.
+
+=item J
+
+The language I<J> uses comments that start with C<NB.>, and that last till
+the end of the line. See
+L<http://www.jsoftware.com/books/help/primer/contents.htm>, and
+L<http://www.jsoftware.com/>.
+
+=item Java
+
+The I<Java> language has two forms of comments. Comments that start with
+C<//> and last till the end of the line, and comments that start with
+C</*>, and end with C<*/>. If C<{-keep}> is used, only C<$1> will be
+set, and set to the entire comment.
+
+=item JavaDoc
+
+The I<Javadoc> documentation syntax is demarked with a subset of
+ordinary Java comments to separate it from code.  Comments start with
+C</**> end with C<*/>.  If C<{-keep}> is used, only C<$1> will be set,
+and set to the entire comment. See
+L<http://www.oracle.com/technetwork/java/javase/documentation/index-137868.html#format>.
+
+=item JavaScript
+
+The I<JavaScript> language has two forms of comments. Comments that start with
+C<//> and last till the end of the line, and comments that start with
+C</*>, and end with C<*/>. If C<{-keep}> is used, only C<$1> will be
+set, and set to the entire comment. I<JavaScript> is Netscapes implementation
+of I<ECMAScript>.
+See L<http://www.mozilla.org/js/language/E262-3.pdf>,
+and L<http://www.mozilla.org/js/language/>.
+
+=item LaTeX
+
+The documentation language I<LaTeX> uses comments starting with C<%>
+and ending at the end of the line.
+
+=item Lisp
+
+Comments in I<Lisp> start with a semi-colon (C<;>) and last till the
+end of the line.
+
+=item LPC
+
+The I<LPC> language has comments starting with C</*> and ending with C<*/>.
+
+=item LOGO
+
+Comments for the language I<LOGO> start with C<;>, and last till the end
+of the line.
+
+=item lua
+
+Comments for the I<lua> language start with C<-->, and last till the end
+of the line. See also L<http://www.lua.org/manual/manual.html>.
+
+=item M, MUMPS
+
+In C<M> (aka C<MUMPS>), comments start with a semi-colon, and last
+till the end of a line. The language specification requires the 
+semi-colon to be preceded by one or more I<linestart character>s.
+Those characters default to a space, but that's configurable. This
+requirement, of preceding the comment with linestart characters is
+B<not> tested for. See
+L<ftp://ftp.intersys.com/pub/openm/ism/ism64docs.zip>,
+L<http://mtechnology.intersys.com/mproducts/openm/index.html>, and
+L<http://mcenter.com/mtrc/index.html>.
+
+=item m4
+
+By default, the preprocessor language I<m4> uses single line comments,
+that start with a C<#> and continue to the end of the line, including
+the newline. The pattern C<$RE {comment} {m4}> matches such comments.
+In I<m4>, it is possible to change the starting token though.
+See L<http://wolfram.schneider.org/bsd/7thEdManVol2/m4/m4.pdf>,
+L<http://www.cs.stir.ac.uk/~kjt/research/pdf/expl-m4.pdf>, and
+L<http://www.gnu.org/software/m4/manual/>.
+
+=item Modula-2
+
+In C<Modula-2>, comments start with C<(*>, and end with C<*)>. Comments
+may be nested. See L<http://www.modula2.org/>.
+
+=item Modula-3
+
+In C<Modula-3>, comments start with C<(*>, and end with C<*)>. Comments
+may be nested. See L<http://www.m3.org/>.
+
+=item mutt
+
+Configuration files for I<mutt> have comments starting with a
+C<#> and lasting the rest of the line.
+
+=item Nickle
+
+The I<Nickle> language has one line comments starting with C<#>
+(like Perl), or multiline comments delimited by C</*> and C<*/>
+(like C). Under C<-keep>, only C<$1> will be set. See also
+L<http://www.nickle.org>.
+
+=item Oberon
+
+Comments in I<Oberon> start with C<(*> and end with C<*)>.
+See L<http://www.oberon.ethz.ch/oreport.html>.
+
+=item Pascal
+
+There are many implementations of Pascal. This modules provides
+pattern for comments of several implementations.
+
+=over 4
+
+=item C<$RE{comment}{Pascal}>
+
+This is the pattern that recognizes comments according to the Pascal ISO 
+standard. This standard says that comments start with either C<{>, or
+C<(*>, and end with C<}> or C<*)>. This means that C<{*)> and C<(*}>
+are considered to be comments. Many Pascal applications don't allow this.
+See L<http://www.pascal-central.com/docs/iso10206.txt>
+
+=item C<$RE{comment}{Pascal}{Alice}>
+
+The I<Alice Pascal> compiler accepts comments that start with C<{>
+and end with C<}>. Comments are not allowed to contain newlines.
+See L<http://www.templetons.com/brad/alice/language/>.
+
+=item C<$RE{comment}{Pascal}{Delphi}>, C<$RE{comment}{Pascal}{Free}>
+and C<$RE{comment}{Pascal}{GPC}>
+
+The I<Delphi Pascal>, I<Free Pascal> and the I<Gnu Pascal Compiler>
+implementations of Pascal all have comments that either start with
+C<//> and last till the end of the line, are delimited with C<{>
+and C<}> or are delimited with C<(*> and C<*)>. Patterns for those
+comments are given by C<$RE{comment}{Pascal}{Delphi}>, 
+C<$RE{comment}{Pascal}{Free}> and C<$RE{comment}{Pascal}{GPC}>
+respectively. These patterns only set C<$1> when C<{-keep}> is used,
+which will then include the entire comment.
+
+See L<http://info.borland.com/techpubs/delphi5/oplg/>, 
+L<http://www.freepascal.org/docs-html/ref/ref.html> and
+L<http://www.gnu-pascal.de/gpc/>.
+
+=item C<$RE{comment}{Pascal}{Workshop}>
+
+The I<Workshop Pascal> compiler, from SUN Microsystems, allows comments
+that are delimited with either C<{> and C<}>, delimited with
+C<(*)> and C<*>), delimited with C</*>, and C<*/>, or starting
+and ending with a double quote (C<">). When C<{-keep}> is used,
+only C<$1> is set, and returns the entire comment.
+
+See L<http://docs.sun.com/db/doc/802-5762>.
+
+=back
+
+=item PEARL
+
+Comments in I<PEARL> start with a C<!> and last till the end of the
+line, or start with C</*> and end with C<*/>. With C<{-keep}>, 
+C<$1> will be set to the entire comment.
+
+=item PHP
+
+Comments in I<PHP> start with either C<#> or C<//> and last till the
+end of the line, or are delimited by C</*> and C<*/>. With C<{-keep}>,
+C<$1> will be set to the entire comment.
+
+=item PL/B
+
+In I<PL/B>, comments start with either C<.> or C<;>, and end with the 
+next newline. See L<http://www.mmcctech.com/pl-b/plb-0010.htm>.
+
+=item PL/I
+
+The I<PL/I> language has comments starting with C</*> and ending with C<*/>.
+
+=item PL/SQL
+
+In I<PL/SQL>, comments either start with C<--> and run till the end
+of the line, or start with C</*> and end with C<*/>.
+
+=item Perl
+
+I<Perl> uses comments that start with a C<#>, and continue till the end
+of the line.
+
+=item Portia
+
+The I<Portia> programming language has comments that start with C<//>,
+and last till the end of the line.
+
+=item Python
+
+I<Python> uses comments that start with a C<#>, and continue till the end
+of the line.
+
+=item Q-BAL
+
+Comments in the I<Q-BAL> language start with C<`> (a backtick), and
+contine till the end of the line.
+
+=item QML
+
+In C<QML>, comments start with C<#> and last till the end of the line.
+See L<http://www.questionmark.com/uk/qml/overview.doc>.
+
+=item R
+
+The statistical language I<R> uses comments that start with a C<#> and
+end with the following new line. See L<http://www.r-project.org/>.
+
+=item REBOL
+
+Comments for the I<REBOL> language start with C<;> and last till the
+end of the line.
+
+=item Ruby
+
+Comments in I<Ruby> start with C<#> and last till the end of the time.
+
+=item Scheme
+
+I<Scheme> comments start with C<;>, and last till the end of the line.
+See L<http://schemers.org/>.
+
+=item shell
+
+Comments in various I<shell>s start with a C<#> and end at the end of
+the line.
+
+=item Shelta
+
+The esotoric language I<Shelta> uses comments that start and end with
+a C<;>. See L<http://www.catseye.mb.ca/esoteric/shelta/index.html>.
+
+=item SLIDE
+
+The I<SLIDE> language has two froms of comments. First there is the
+line comment, which starts with a C<#> and includes the rest of the
+line (just like Perl). Second, there is the multiline, nested comment,
+which are delimited by C<(*> and C<*)>. Under C{-keep}>, only 
+C<$1> is set, and is set to the entire comment. See
+L<http://www.cs.berkeley.edu/~ug/slide/docs/slide/spec/spec_frame_intro.shtml>.
+
+=item slrn
+
+Configuration files for I<slrn> have comments starting with a
+C<%> and lasting the rest of the line.
+
+=item Smalltalk
+
+I<Smalltalk> uses comments that start and end with a double quote, C<">.
+
+=item SMITH
+
+Comments in the I<SMITH> language start with C<;>, and last till the
+end of the line.
+
+=item Squeak
+
+In the Smalltalk variant I<Squeak>, comments start and end with
+C<">. Double quotes can appear inside comments by doubling them.
+
+=item SQL
+
+Standard I<SQL> uses comments starting with two or more dashes, and
+ending at the end of the line. 
+
+I<MySQL> does not follow the standard. Instead, it allows comments
+that start with a C<#> or C<-- > (that's two dashes and a space)
+ending with the following newline, and comments starting with 
+C</*>, and ending with the next C<;> or C<*/> that isn't inside
+single or double quotes. A pattern for this is returned by
+C<$RE{comment}{SQL}{MySQL}>. With C<{-keep}>, only C<$1> will
+be set, and it returns the entire comment.
+
+=item Tcl
+
+In I<Tcl>, comments start with C<#> and continue till the end of the line.
+
+=item TeX
+
+The documentation language I<TeX> uses comments starting with C<%>
+and ending at the end of the line.
+
+=item troff
+
+The document formatting language I<troff> uses comments starting
+with C<\">, and continuing till the end of the line.
+
+=item Ubercode
+
+The Windows programming language I<Ubercode> uses comments that start with
+C<//> and continue to the end of the line. See L<http://www.ubercode.com>.
+
+=item vi
+
+In configuration files for the editor I<vi>, one can use comments
+starting with C<">, and ending at the end of the line.
+
+=item *W
+
+In the language I<*W>, comments start with C<||>, and end with C<!!>.
+
+=item zonefile
+
+Comments in DNS I<zonefile>s start with C<;>, and continue till the
+end of the line.
+
+=item ZZT-OOP
+
+The in-game language I<ZZT-OOP> uses comments that start with a C<'> 
+character, and end at the following newline. See
+L<http://dave2.rocketjump.org/rad/zzthelp/lang.html>.
+
+=back
+
+=head1 REFERENCES
+
+=over 4
+
+=item B<[Go 90]>
+
+Charles F. Goldfarb: I<The SGML Handbook>. Oxford: Oxford University
+Press. B<1990>. ISBN 0-19-853737-9. Ch. 10.3, pp 390-391.
+
+=back
+
+=head1 SEE ALSO
+
+L<Regexp::Common> for a general description of how to use this interface.
+
+=head1 AUTHOR
+
+Damian Conway (damian@conway.org)
+
+=head1 MAINTENANCE
+
+This package is maintained by Abigail S<(I<regexp-common@abigail.be>)>.
+
+=head1 BUGS AND IRRITATIONS
+
+Bound to be plenty.
+
+For a start, there are many common regexes missing.
+Send them in to I<regexp-common@abigail.be>.
+
+=head1 LICENSE and COPYRIGHT
+
+This software is Copyright (c) 2001 - 2017, Damian Conway and Abigail.
+
+This module is free software, and maybe used under any of the following
+licenses:
+
+ 1) The Perl Artistic License.     See the file COPYRIGHT.AL.
+ 2) The Perl Artistic License 2.0. See the file COPYRIGHT.AL2.
+ 3) The BSD License.               See the file COPYRIGHT.BSD.
+ 4) The MIT License.               See the file COPYRIGHT.MIT.
+
+=cut
 EOC
 # 2}}}
 $Regexp_Common_Contents{'Common/balanced'} = <<'EOB';   # {{{2
 package Regexp::Common::balanced; {
 
-use Regexp::Common qw /pattern clean no_defaults/;
+use 5.10.0;
 
 use strict;
 use warnings;
+no  warnings 'syntax';
 
-use vars qw /$VERSION/;
-$VERSION = '2013030901';
+use Regexp::Common qw /pattern clean no_defaults/;
+
+our $VERSION = '2017060201';
 
 my %closer = ( '{'=>'}', '('=>')', '['=>']', '<'=>'>' );
 my %cache;
@@ -11201,60 +12498,164 @@ pattern name    => [qw /balanced -parens=() -begin= -end=/],
             }
             return nested @$flag {qw /-begin -end/};
         },
-        version => 5.010,
         ;
 
 }
 
 1;
-# This software is Copyright (c) 2001 - 2013, Damian Conway and Abigail.
-#
-# This module is free software, and maybe used under any of the following
-# licenses:
-#
-#  1) The Perl Artistic License.     See the file COPYRIGHT.AL.
-#  2) The Perl Artistic License 2.0. See the file COPYRIGHT.AL2.
-#  3) The BSD Licence.               See the file COPYRIGHT.BSD.
-#  4) The MIT Licence.               See the file COPYRIGHT.MIT.
+
+__END__
+
+=pod
+
+=head1 NAME
+
+Regexp::Common::balanced -- provide regexes for strings with balanced
+parenthesized delimiters or arbitrary delimiters.
+
+=head1 SYNOPSIS
+
+    use Regexp::Common qw /balanced/;
+
+    while (<>) {
+        /$RE{balanced}{-parens=>'()'}/
+                                   and print q{balanced parentheses\n};
+    }
+
+
+=head1 DESCRIPTION
+
+Please consult the manual of L<Regexp::Common> for a general description
+of the works of this interface.
+
+Do not use this module directly, but load it via I<Regexp::Common>.
+
+=head2 C<$RE{balanced}{-parens}>
+
+Returns a pattern that matches a string that starts with the nominated
+opening parenthesis or bracket, contains characters and properly nested
+parenthesized subsequences, and ends in the matching parenthesis.
+
+More than one type of parenthesis can be specified:
+
+        $RE{balanced}{-parens=>'(){}'}
+
+in which case all specified parenthesis types must be correctly balanced within
+the string.
+
+Since version 2013030901, C<< $1 >> will always be set (to the entire
+matched substring), regardless whether C<< {-keep} >> is used or not.
+
+=head2 C<< $RE{balanced}{-begin => "begin"}{-end => "end"} >>
+
+Returns a pattern that matches a string that is properly balanced
+using the I<begin> and I<end> strings as start and end delimiters.
+Multiple sets of begin and end strings can be given by separating
+them by C<|>s (which can be escaped with a backslash).
+
+    qr/$RE{balanced}{-begin => "do|if|case"}{-end => "done|fi|esac"}/
+
+will match properly balanced strings that either start with I<do> and
+end with I<done>, start with I<if> and end with I<fi>, or start with
+I<case> and end with I<esac>.
+
+If I<-end> contains less cases than I<-begin>, the last case of I<-end>
+is repeated. If it contains more cases than I<-begin>, the extra cases
+are ignored. If either of I<-begin> or I<-end> isn't given, or is empty,
+I<< -begin => '(' >> and I<< -end => ')' >> are assumed.
+
+Since version 2013030901, C<< $1 >> will always be set (to the entire
+matched substring), regardless whether C<< {-keep} >> is used or not.
+
+=head2 Note
+
+Since version 2013030901 the pattern will make of the recursive construct
+C<< (?-1) >>, instead of using the problematic C<< (??{ }) >> construct.
+This fixes an problem that was introduced in the 5.17 development track.
+
+=head1 SEE ALSO
+
+L<Regexp::Common> for a general description of how to use this interface.
+
+=head1 AUTHOR
+
+Damian Conway (damian@conway.org)
+
+=head1 MAINTENANCE
+
+This package is maintained by Abigail S<(I<regexp-common@abigail.be>)>.
+
+=head1 BUGS AND IRRITATIONS
+
+Bound to be plenty.
+
+For a start, there are many common regexes missing.
+Send them in to I<regexp-common@abigail.be>.
+
+=head1 LICENSE and COPYRIGHT
+
+This software is Copyright (c) 2001 - 2017, Damian Conway and Abigail.
+
+This module is free software, and maybe used under any of the following
+licenses:
+
+ 1) The Perl Artistic License.     See the file COPYRIGHT.AL.
+ 2) The Perl Artistic License 2.0. See the file COPYRIGHT.AL2.
+ 3) The BSD License.               See the file COPYRIGHT.BSD.
+ 4) The MIT License.               See the file COPYRIGHT.MIT.
+
+=cut
 EOB
 # 2}}}
-$Regexp_Common_Contents{'Common/delimited'} = <<'EOD';   # {{{3
+$Regexp_Common_Contents{'Common/delimited'} = <<'EOD';   # {{{2
 package Regexp::Common::delimited;
 
-use Regexp::Common qw /pattern clean no_defaults/;
+use 5.10.0;
 
 use strict;
 use warnings;
+no  warnings 'syntax';
 
-use vars qw /$VERSION/;
-$VERSION = '2010010201';
+use Regexp::Common qw /pattern clean no_defaults/;
+
+use charnames ':full';
+
+our $VERSION = '2017060201';
 
 sub gen_delimited {
 
-    my ($dels, $escs) = @_;
+    my ($dels, $escs, $cdels) = @_;
     # return '(?:\S*)' unless $dels =~ /\S/;
-    if (length $escs) {
-        $escs .= substr ($escs, -1) x (length ($dels) - length ($escs));
+    if (defined $escs && length $escs) {
+        $escs  .= substr  ($escs, -1) x (length ($dels) - length  ($escs));
     }
+    if (defined $cdels && length $cdels) {
+        $cdels .= substr ($cdels, -1) x (length ($dels) - length ($cdels));
+    }
+    else {
+        $cdels = $dels;
+    }
+
     my @pat = ();
-    my $i;
-    for ($i=0; $i < length $dels; $i++) {
-        my $del = quotemeta substr ($dels, $i, 1);
-        my $esc = length($escs) ? quotemeta substr ($escs, $i, 1) : "";
-        if ($del eq $esc) {
-            push @pat,
-                 "(?k:$del)(?k:[^$del]*(?:(?:$del$del)[^$del]*)*)(?k:$del)";
+    for (my $i = 0; $i < length $dels; $i ++) {
+        my $del  = quotemeta substr  ($dels, $i, 1);
+        my $cdel = quotemeta substr ($cdels, $i, 1);
+        my $esc  = defined $escs && length ($escs)
+                           ? quotemeta substr ($escs, $i, 1) : "";
+        if ($cdel eq $esc) {
+            push @pat =>
+                "(?k:$del)(?k:[^$cdel]*(?:(?:$cdel$cdel)[^$cdel]*)*)(?k:$cdel)";
         }
         elsif (length $esc) {
-            push @pat,
-                 "(?k:$del)(?k:[^$esc$del]*(?:$esc.[^$esc$del]*)*)(?k:$del)";
+            push @pat =>
+                "(?k:$del)(?k:[^$esc$cdel]*(?:$esc.[^$esc$cdel]*)*)(?k:$cdel)";
         }
         else {
-            push @pat, "(?k:$del)(?k:[^$del]*)(?k:$del)";
+            push @pat => "(?k:$del)(?k:[^$cdel]*)(?k:$cdel)";
         }
     }
     my $pat = join '|', @pat;
-    return "(?k:$pat)";
+    return "(?k:(?|$pat))";
 }
 
 sub _croak {
@@ -11262,31 +12663,320 @@ sub _croak {
     goto &Carp::croak;
 }
 
-pattern name   => [qw( delimited -delim= -esc=\\ )],
-        create => sub {my $flags = $_[1];
-                       _croak 'Must specify delimiter in $RE{delimited}'
-                             unless length $flags->{-delim};
-                       return gen_delimited (@{$flags}{-delim, -esc});
-                  },
+pattern name    => [qw( delimited -delim= -esc=\\ -cdelim= )],
+        create  => sub {my $flags = $_[1];
+                        _croak 'Must specify delimiter in $RE{delimited}'
+                              unless length $flags->{-delim};
+                        return gen_delimited (@{$flags}{-delim, -esc, -cdelim});
+                   },
         ;
 
-pattern name   => [qw( quoted -esc=\\ )],
-        create => sub {my $flags = $_[1];
-                       return gen_delimited (q{"'`}, $flags -> {-esc});
-                  },
+pattern name    => [qw( quoted -esc=\\ )],
+        create  => sub {my $flags = $_[1];
+                        return gen_delimited (q{"'`}, $flags -> {-esc});
+                   },
         ;
 
+
+my @bracket_pairs;
+if ($] >= 5.014) {
+    #
+    # List from http://xahlee.info/comp/unicode_matching_brackets.html
+    #
+    @bracket_pairs =
+        map {ref $_ ? $_ :
+                /!/ ? [(do {my $x = $_; $x =~ s/!/TOP/;    $x},
+                        do {my $x = $_; $x =~ s/!/BOTTOM/; $x})]
+                    : [(do {my $x = $_; $x =~ s/\?/LEFT/;  $x},
+                        do {my $x = $_; $x =~ s/\?/RIGHT/; $x})]}
+            "? PARENTHESIS",
+            "? SQUARE BRACKET",
+            "? CURLY BRACKET",
+            "? DOUBLE QUOTATION MARK",
+            "? SINGLE QUOTATION MARK",
+            "SINGLE ?-POINTING ANGLE QUOTATION MARK",
+            "?-POINTING DOUBLE ANGLE QUOTATION MARK",
+            "FULLWIDTH ? PARENTHESIS",
+            "FULLWIDTH ? SQUARE BRACKET",
+            "FULLWIDTH ? CURLY BRACKET",
+            "FULLWIDTH ? WHITE PARENTHESIS",
+            "? WHITE PARENTHESIS",
+            "? WHITE SQUARE BRACKET",
+            "? WHITE CURLY BRACKET",
+            "? CORNER BRACKET",
+            "? ANGLE BRACKET",
+            "? DOUBLE ANGLE BRACKET",
+            "? BLACK LENTICULAR BRACKET",
+            "? TORTOISE SHELL BRACKET",
+            "? BLACK TORTOISE SHELL BRACKET",
+            "? WHITE CORNER BRACKET",
+            "? WHITE LENTICULAR BRACKET",
+            "? WHITE TORTOISE SHELL BRACKET",
+            "HALFWIDTH ? CORNER BRACKET",
+            "MATHEMATICAL ? WHITE SQUARE BRACKET",
+            "MATHEMATICAL ? ANGLE BRACKET",
+            "MATHEMATICAL ? DOUBLE ANGLE BRACKET",
+            "MATHEMATICAL ? FLATTENED PARENTHESIS",
+            "MATHEMATICAL ? WHITE TORTOISE SHELL BRACKET",
+            "? CEILING",
+            "? FLOOR",
+            "Z NOTATION ? IMAGE BRACKET",
+            "Z NOTATION ? BINDING BRACKET",
+            [   "HEAVY SINGLE TURNED COMMA QUOTATION MARK ORNAMENT",
+                "HEAVY SINGLE " .   "COMMA QUOTATION MARK ORNAMENT", ],
+            [   "HEAVY DOUBLE TURNED COMMA QUOTATION MARK ORNAMENT",
+                "HEAVY DOUBLE " .   "COMMA QUOTATION MARK ORNAMENT", ],
+            "MEDIUM ? PARENTHESIS ORNAMENT",
+            "MEDIUM FLATTENED ? PARENTHESIS ORNAMENT",
+            "MEDIUM ? CURLY BRACKET ORNAMENT",
+            "MEDIUM ?-POINTING ANGLE BRACKET ORNAMENT",
+            "HEAVY ?-POINTING ANGLE QUOTATION MARK ORNAMENT",
+            "HEAVY ?-POINTING ANGLE BRACKET ORNAMENT",
+            "LIGHT ? TORTOISE SHELL BRACKET ORNAMENT",
+            "ORNATE ? PARENTHESIS",
+            "! PARENTHESIS",
+            "! SQUARE BRACKET",
+            "! CURLY BRACKET",
+            "! TORTOISE SHELL BRACKET",
+            "PRESENTATION FORM FOR VERTICAL ? CORNER BRACKET",
+            "PRESENTATION FORM FOR VERTICAL ? WHITE CORNER BRACKET",
+            "PRESENTATION FORM FOR VERTICAL ? TORTOISE SHELL BRACKET",
+            "PRESENTATION FORM FOR VERTICAL ? BLACK LENTICULAR BRACKET",
+            "PRESENTATION FORM FOR VERTICAL ? WHITE LENTICULAR BRACKET",
+            "PRESENTATION FORM FOR VERTICAL ? ANGLE BRACKET",
+            "PRESENTATION FORM FOR VERTICAL ? DOUBLE ANGLE BRACKET",
+            "PRESENTATION FORM FOR VERTICAL ? SQUARE BRACKET",
+            "PRESENTATION FORM FOR VERTICAL ? CURLY BRACKET",
+            "?-POINTING ANGLE BRACKET",
+            "? ANGLE BRACKET WITH DOT",
+            "?-POINTING CURVED ANGLE BRACKET",
+            "SMALL ? PARENTHESIS",
+            "SMALL ? CURLY BRACKET",
+            "SMALL ? TORTOISE SHELL BRACKET",
+            "SUPERSCRIPT ? PARENTHESIS",
+            "SUBSCRIPT ? PARENTHESIS",
+            "? SQUARE BRACKET WITH UNDERBAR",
+            [    "LEFT SQUARE BRACKET WITH TICK IN TOP CORNER",
+                "RIGHT SQUARE BRACKET WITH TICK IN BOTTOM CORNER", ],
+            [    "LEFT SQUARE BRACKET WITH TICK IN BOTTOM CORNER",
+                "RIGHT SQUARE BRACKET WITH TICK IN TOP CORNER", ],
+            "? SQUARE BRACKET WITH QUILL",
+            "TOP ? HALF BRACKET",
+            "BOTTOM ? HALF BRACKET",
+            "? S-SHAPED BAG DELIMITER",
+            [    "LEFT ARC LESS-THAN BRACKET",
+                "RIGHT ARC GREATER-THAN BRACKET",  ],
+            [    "DOUBLE LEFT ARC GREATER-THAN BRACKET",
+                "DOUBLE RIGHT ARC LESS-THAN BRACKET",  ],
+            "? SIDEWAYS U BRACKET",
+            "? DOUBLE PARENTHESIS",
+            "? WIGGLY FENCE",
+            "? DOUBLE WIGGLY FENCE",
+            "? LOW PARAPHRASE BRACKET",
+            "? RAISED OMISSION BRACKET",
+            "? SUBSTITUTION BRACKET",
+            "? DOTTED SUBSTITUTION BRACKET",
+            "? TRANSPOSITION BRACKET",
+            [   "OGHAM FEATHER MARK",
+                "OGHAM REVERSED FEATHER MARK",  ],
+            [   "TIBETAN MARK GUG RTAGS GYON",
+                "TIBETAN MARK GUG RTAGS GYAS",  ],
+            [   "TIBETAN MARK ANG KHANG GYON",
+                "TIBETAN MARK ANG KHANG GYAS",  ],
+    ;
+
+    #
+    # Filter out unknown characters; this may run on an older version
+    # of Perl with an old version of Unicode.
+    #
+    @bracket_pairs = grep {defined charnames::string_vianame ($$_ [0]) &&
+                           defined charnames::string_vianame ($$_ [1])}
+                     @bracket_pairs;
+
+    if (@bracket_pairs) {
+        my  $delims = join "" => map {charnames::string_vianame ($$_ [0])}
+                                     @bracket_pairs;
+        my $cdelims = join "" => map {charnames::string_vianame ($$_ [1])}
+                                     @bracket_pairs;
+
+        pattern name   => [qw (bquoted -esc=\\)],
+                create => sub {my $flags = $_ [1];
+                               return gen_delimited ($delims, $flags -> {-esc},
+                                                    $cdelims);
+                          },
+                version => 5.014,
+                ;
+    }
+}
+
+
+#
+# Return the Unicode names of the pairs of matching delimiters.
+#
+sub bracket_pairs {@bracket_pairs}
 
 1;
-# This software is Copyright (c) 2001 - 2009, Damian Conway and Abigail.
-#
-# This module is free software, and maybe used under any of the following
-# licenses:
-#
-#  1) The Perl Artistic License.     See the file COPYRIGHT.AL.
-#  2) The Perl Artistic License 2.0. See the file COPYRIGHT.AL2.
-#  3) The BSD Licence.               See the file COPYRIGHT.BSD.
-#  4) The MIT Licence.               See the file COPYRIGHT.MIT.
+
+__END__
+
+=pod
+
+=head1 NAME
+
+Regexp::Common::delimited -- provides a regex for delimited strings
+
+=head1 SYNOPSIS
+
+    use Regexp::Common qw /delimited/;
+
+    while (<>) {
+        /$RE{delimited}{-delim=>'"'}/  and print 'a \" delimited string';
+        /$RE{delimited}{-delim=>'/'}/  and print 'a \/ delimited string';
+    }
+
+
+=head1 DESCRIPTION
+
+Please consult the manual of L<Regexp::Common> for a general description
+of the works of this interface.
+
+Do not use this module directly, but load it via I<Regexp::Common>.
+
+=head2 C<$RE{delimited}{-delim}{-cdelim}{-esc}>
+
+Returns a pattern that matches a single-character-delimited substring,
+with optional internal escaping of the delimiter.
+
+When C<-delim => I<S>> is specified, each character in the sequence I<S> is
+a possible delimiter. There is no default delimiter, so this flag must always
+be specified.
+
+By default, the closing delimiter is the same character as the opening
+delimiter. If this is not wanted, for instance, if you want to match
+a string with symmetric delimiters, you can specify the closing delimiter(s)
+with C<-cdelim => I<S>>. Each character in I<S> is matched with the
+corresponding character supplied with the C<-delim> option. If the C<-cdelim>
+option has less characters than the C<-delim> option, the last character
+is repeated as often as necessary. If the C<-cdelim> option has more 
+characters than the C<-delim> option, the extra characters are ignored.
+
+If C<-esc => I<S>> is specified, each character in the sequence I<S> is
+the delimiter for the corresponding character in the C<-delim=I<S>> list.
+The default escape is backslash.
+
+For example:
+
+   $RE{delimited}{-delim=>'"'}               # match "a \" delimited string"
+   $RE{delimited}{-delim=>'"'}{-esc=>'"'}    # match "a "" delimited string"
+   $RE{delimited}{-delim=>'/'}               # match /a \/ delimited string/
+   $RE{delimited}{-delim=>q{'"}}             # match "string" or 'string'
+   $RE{delimited}{-delim=>"("}{-cdelim=>")"} # match (string)
+
+Under C<-keep> (See L<Regexp::Common>):
+
+=over 4
+
+=item $1
+
+captures the entire match
+
+=item $2
+
+captures the opening delimiter
+
+=item $3
+
+captures delimited portion of the string
+
+=item $4
+
+captures the closing delimiter
+
+=back
+
+=head2 $RE{quoted}{-esc}
+
+A synonym for C<< $RE {delimited} {-delim => q {'"`}} {...} >>.
+
+=head2 $RE {bquoted} {-esc}
+
+This is a pattern which matches delimited strings, where the delimiters
+are a set of matching brackets. Currently, this comes 85 pairs. This
+includes the 60 pairs of bidirection paired brackets, as listed
+in L<< http://www.unicode.org/Public/UNIDATA/BidiBrackets.txt >>.
+
+The other 25 pairs are the quotation marks, the double quotation
+marks, the single and double pointing quoation marks, the heavy
+single and double commas, 4 pairs of top-bottom parenthesis and
+brackets, 9 pairs of presentation form for vertical brackets,
+and the low paraphrase, raised omission, substitution, double
+substitution, and transposition brackets.
+
+In a future update, pairs may be added (or deleted).
+
+This pattern requires perl 5.14.0 or higher.
+
+For a full list of bracket pairs, inspect the output of 
+C<< Regexp::Common::delimited::bracket_pair () >>, which returns
+a list of two element arrays, each holding the Unicode names of
+matching pair of delimiters.
+
+The C<< {-esc => I<S> } >> works as in the C<< $RE {delimited} >> pattern.
+
+If C<< {-keep} >> is given, the following things will be captured:
+
+=over 4
+
+=item $1
+
+captures the entire match
+
+=item $2
+
+captures the opening delimiter
+
+=item $3
+
+captures delimited portion of the string
+
+=item $4
+
+captures the closing delimiter
+
+=back
+
+=head1 SEE ALSO
+
+L<Regexp::Common> for a general description of how to use this interface.
+
+=head1 AUTHOR
+
+Damian Conway (damian@conway.org)
+
+=head1 MAINTENANCE
+
+This package is maintained by Abigail S<(I<regexp-common@abigail.be>)>.
+
+=head1 BUGS AND IRRITATIONS
+
+Bound to be plenty.
+
+For a start, there are many common regexes missing.
+Send them in to I<regexp-common@abigail.be>.
+
+=head1 LICENSE and COPYRIGHT
+
+This software is Copyright (c) 2001 - 2017, Damian Conway and Abigail.
+
+This module is free software, and maybe used under any of the following
+licenses:
+
+ 1) The Perl Artistic License.     See the file COPYRIGHT.AL.
+ 2) The Perl Artistic License 2.0. See the file COPYRIGHT.AL2.
+ 3) The BSD License.               See the file COPYRIGHT.BSD.
+ 4) The MIT License.               See the file COPYRIGHT.MIT.
+
+=cut
 EOD
 # 2}}}
     my $problems        = 0;
