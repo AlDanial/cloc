@@ -521,6 +521,20 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/530/case_4.yaml',
                 },
 
+                {
+                    'name' => '--force-lang-def #537 1/2',
+                    'cd'   => '../tests/inputs/issues/537',
+                    'args' => '--force-lang-def my_define.txt sourceCounter.vsql',
+                    'ref'  => '../tests/outputs/issues/537/results_force.yaml',
+                },
+
+                {
+                    'name' => '--read-lang-def #537 2/2',
+                    'cd'   => '../tests/inputs/issues/537',
+                    'args' => '--read-lang-def my_define.txt sourceCounter.vsql',
+                    'ref'  => '../tests/outputs/issues/537/results_read.yaml',
+                },
+
             );
 
 # Create test input for issue #132 which needs data not in the git repo.

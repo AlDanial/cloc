@@ -4423,11 +4423,10 @@ sub read_lang_def {                          # {{{1
 
 
     print "-> read_lang_def($file)\n" if $opt_v > 2;
-    my $IN = new IO::File $file, "r";
-    die "Unable to read $file.\n" unless defined $IN;
 
     my $language = "";
-    while (<$IN>) {
+    my @lines = read_file($file);
+    foreach (@lines) {
         next if /^\s*#/ or /^\s*$/;
 
         if (/^(\w+.*?)\s*$/) {
@@ -4494,7 +4493,6 @@ sub read_lang_def {                          # {{{1
         }
 
     }
-    $IN->close;
     print "<- read_lang_def\n" if $opt_v > 2;
 } # 1}}}
 sub merge_lang_def {                         # {{{1
@@ -4512,12 +4510,11 @@ sub merge_lang_def {                         # {{{1
 
 
     print "-> merge_lang_def($file)\n" if $opt_v > 2;
-    my $IN = new IO::File $file, "r";
-    die "Unable to read $file.\n" unless defined $IN;
 
     my $language        = "";
     my $already_know_it = undef;
-    while (<$IN>) {
+    my @lines = read_file($file);
+    foreach (@lines) {
         next if /^\s*#/ or /^\s*$/;
 
         if (/^(\w+.*?)\s*$/) {
@@ -4592,7 +4589,6 @@ sub merge_lang_def {                         # {{{1
         }
 
     }
-    $IN->close;
     print "<- merge_lang_def\n" if $opt_v > 2;
 } # 1}}}
 sub print_extension_info {                   # {{{1

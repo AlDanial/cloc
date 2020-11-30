@@ -1,0 +1,7 @@
+﻿VERTICA_SQL
+    filter call_regexp_common C
+    filter remove_matches ^\s*--
+    filter remove_inline --.*$
+    extension VSQL
+    extension vsql
+    3rd_gen_scale 2.29

@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.89
+  elapsed_seconds    : 0.00664687156677246
+  n_files            : 1
+  n_lines            : 36
+  files_per_second   : 150.44671616629
+  lines_per_second   : 5416.08178198644
+  report_file        : ../../../outputs/issues/results_read.yaml
+'VERTICA_SQL' :
+  nFiles: 1
+  blank: 9
+  comment: 14
+  code: 13
+SUM: 
+  blank: 9
+  comment: 14
+  code: 13
+  nFiles: 1
