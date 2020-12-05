@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.89
+  elapsed_seconds    : 0.00657892227172852
+  n_files            : 1
+  n_lines            : 5
+  files_per_second   : 152.000579836196
+  lines_per_second   : 760.002899180981
+  report_file        : ../../../outputs/issues/539/nested_comments.elm.yaml
+'Elm' :
+  nFiles: 1
+  blank: 0
+  comment: 3
+  code: 2
+SUM: 
+  blank: 0
+  comment: 3
+  code: 2
+  nFiles: 1

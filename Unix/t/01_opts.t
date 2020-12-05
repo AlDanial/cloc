@@ -542,6 +542,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/538/add.elm.yaml',
                 },
 
+                {
+                    'name' => 'Elm nested block comments',
+                    'cd'   => '../tests/inputs/issues/539',
+                    'args' => 'nested_comments.elm',
+                    'ref'  => '../tests/outputs/issues/539/nested_comments.elm.yaml',
+                },
+
             );
 
 # Create test input for issue #132 which needs data not in the git repo.

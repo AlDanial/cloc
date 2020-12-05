@@ -7260,7 +7260,8 @@ sub determine_lit_type {                     # {{{1
   return 0;
 } # 1}}}
 sub remove_haskell_comments {                # {{{1
-    # Bulk of code taken from SLOCCount's haskell_count script.
+    # SLOCCount's haskell_count script with modifications to handle
+    # Elm empty and nested block comments.
     # Strips out {- .. -} and -- comments and counts the rest.
     # Pragmas, {-#...}, are counted as SLOC.
     # BUG: Doesn't handle strings with embedded block comment markers gracefully.
@@ -7272,12 +7273,16 @@ sub remove_haskell_comments {                # {{{1
     my @save_lines = ();
     my $in_comment = 0;
     my $incomment  = 0;
-    my ($literate, $inlitblock) = (0,0);
+    my $inlitblock = 0;
+    my $literate   = 0;
+    my $is_elm     = 0;
 
+    $is_elm   = 1 if $file =~ /\.elm$/;
     $literate = 1 if $file =~ /\.lhs$/;
-    if($literate) { $literate = determine_lit_type($file) }
+    if ($literate) { $literate = determine_lit_type($file) }
 
     foreach (@{$ra_lines}) {
+        chomp;
         if ($literate == 1) {
             if (!s/^>//) { s/.*//; }
         } elsif ($literate == 2) {
@@ -7289,17 +7294,39 @@ sub remove_haskell_comments {                # {{{1
             }
         }
 
-        s/{--}//;
-        if ($incomment) {
-            if (m/\-\}/) { s/^.*?\-\}//;  $incomment = 0;}
-            else { s/.*//; }
+        # keep pragmas
+        if (/^\s*{-#/) {
+            push @save_lines, $_;
+            next;
         }
-        if (!$incomment) {
+
+        # Elm allows nested comments so track nesting depth
+        # with $incomment.
+
+        my $n_open  = () = $_ =~ /{-/g;
+        my $n_close = () = $_ =~ /-}/g;
+        s/{-.*?-}//g;
+
+        if ($incomment) {
+            if (m/\-\}/) {
+                s/^.*?\-\}//;
+                if ($is_elm) {
+                    $incomment += $n_open - $n_close;
+                } else {
+                    $incomment = 0;
+                }
+            } else {
+                s/.*//;
+            }
+        } else {
             s/--.*//;
-            s!{-[^#].*?-}!!g;
             if (m/{-/ && (!m/{-#/)) {
-              s/{-.*//;
-              $incomment = 1;
+                s/{-.*//;
+                if ($is_elm) {
+                    $incomment += $n_open - $n_close;
+                } else {
+                    $incomment = 1;
+                }
             }
         }
         if (m/\S/) { push @save_lines, $_; }
