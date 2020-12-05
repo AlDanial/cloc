@@ -7289,6 +7289,7 @@ sub remove_haskell_comments {                # {{{1
             }
         }
 
+        s/{--}//;
         if ($incomment) {
             if (m/\-\}/) { s/^.*?\-\}//;  $incomment = 0;}
             else { s/.*//; }

@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.89
+  elapsed_seconds    : 0.00626897811889648
+  n_files            : 1
+  n_lines            : 3
+  files_per_second   : 159.51563094242
+  lines_per_second   : 478.546892827261
+  report_file        : ../../../outputs/issues/538/add.elm.yaml
+'Elm' :
+  nFiles: 1
+  blank: 0
+  comment: 2
+  code: 1
+SUM: 
+  blank: 0
+  comment: 2
+  code: 1
+  nFiles: 1

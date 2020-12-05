@@ -535,6 +535,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/537/results_read.yaml',
                 },
 
+                {
+                    'name' => 'Elm empty comment',
+                    'cd'   => '../tests/inputs/issues/538',
+                    'args' => 'add.elm',
+                    'ref'  => '../tests/outputs/issues/538/add.elm.yaml',
+                },
+
             );
 
 # Create test input for issue #132 which needs data not in the git repo.
