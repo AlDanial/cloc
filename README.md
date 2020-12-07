@@ -198,12 +198,12 @@ SUM:                            39           1564           1365           3945
 # [Overview &#9650;](#___top "click to go to top of document")
 
 Translations:
-[Arabic](http://www.garciniacambogiareviews.ca/translations/aldanial-cloc/),
+<!--- [Arabic](http://www.garciniacambogiareviews.ca/translations/aldanial-cloc/), --->
 [Armenian](http://students.studybay.com/?p=34),
 [Belarussian](http://www.besteonderdelen.nl/blog/?p=5426),
-[Bulgarian](http://www.ajoft.com/wpaper/aj-cloc.html),
+<!--- [Bulgarian](http://www.ajoft.com/wpaper/aj-cloc.html), --->
 [Hungarian](http://www.forallworld.com/cloc-grof-sornyi-kodot/),
-[]( [Polish](http://www.trevister.com/blog/cloc.html), )
+<!--- []( [Polish](http://www.trevister.com/blog/cloc.html), ) --->
 []( [Russian](http://someblogscience.com/cloc.html), )
 [Portuguese](https://www.homeyou.com/~edu/cloc),
 [Serbo-Croatian](http://science.webhostinggeeks.com/cloc),
@@ -257,19 +257,19 @@ Depending your operating system, one of these installation methods may
 work for you (all but the last two entries for Windows require
 a Perl interpreter):
 
-    npm install -g cloc                    # https://www.npmjs.com/package/cloc
-    sudo apt install cloc                  # Debian, Ubuntu
-    sudo yum install cloc                  # Red Hat, Fedora
-    sudo dnf install cloc                  # Fedora 22 or later
-    sudo pacman -S cloc                    # Arch
-    sudo emerge -av dev-util/cloc          # Gentoo https://packages.gentoo.org/packages/dev-util/cloc
-    sudo apk add cloc                      # Alpine Linux
-    doas pkg_add cloc                      # OpenBSD
-    sudo pkg install cloc                  # FreeBSD
-    sudo port install cloc                 # Mac OS X with MacPorts
-    brew install cloc                      # Mac OS X with Homebrew
-    choco install cloc                     # Windows with Chocolatey
-    scoop install cloc                     # Windows with Scoop
+    npm install -g cloc              # https://www.npmjs.com/package/cloc
+    sudo apt install cloc            # Debian, Ubuntu
+    sudo yum install cloc            # Red Hat, Fedora
+    sudo dnf install cloc            # Fedora 22 or later
+    sudo pacman -S cloc              # Arch
+    sudo emerge -av dev-util/cloc    # Gentoo https://packages.gentoo.org/packages/dev-util/cloc
+    sudo apk add cloc                # Alpine Linux
+    doas pkg_add cloc                # OpenBSD
+    sudo pkg install cloc            # FreeBSD
+    sudo port install cloc           # Mac OS X with MacPorts
+    brew install cloc                # Mac OS X with Homebrew
+    choco install cloc               # Windows with Chocolatey
+    scoop install cloc               # Windows with Scoop
 
 **Note**: I don't control any of these packages.
 If you encounter a bug in cloc using one of the above
@@ -382,7 +382,7 @@ on an Amazon Web Services t2.micro instance running Microsoft Windows Server 200
 (32 bit for 1.70 and 1.72; 64 bit for 1.74).
 Release 1.66 was built on a 32 bit Windows 7 VirtualBox image.
 Windows executables of cloc versions 1.60 and earlier were built with
-[perl2exe](http://www.indigostar.com/perl2exe.htm) on a 32 bit Windows
+[perl2exe](http://www.indigostar.com/perl2exe/) on a 32 bit Windows
 XP computer. A small modification was made to the cloc source code
 before passing it to perl2exe; lines 87 and 88 were uncommented:
 
@@ -461,7 +461,7 @@ cloc is to use [ActiveState's Perl Development Kit](http://www.activestate.com/p
 It includes a utility, `perlapp`, which can build stand-alone
 Windows, Mac, and Linux binaries of Perl source code.
 
-[perl2exe](http://www.indigostar.com/perl2exe.php)
+[perl2exe](http://www.indigostar.com/perl2exe/)
 will also do the trick.  If you do have `perl2exe`, modify lines
 84-87 in the cloc source code for a minor code
 modification that is necessary to make a cloc Windows executable.
@@ -2957,9 +2957,10 @@ recognize ActionScript comments.
 [Gianluca Casati](http://g14n.info) created the
 [cloc CPAN package](https://metacpan.org/pod/App::cloc).
 
+<!--- broken link
 Mary Stefanova provided the
 [Polish](http://www.trevister.com/blog/cloc.html)
-translation.
+translation. --->
 
 Ryan Lindeman implemented the `--by-percent` feature.
 
@@ -2985,9 +2986,10 @@ provided the
 [Romanian](http://www.bildelestore.dk/blog/cloc-contele-de-linii-de-cod/)
 translation.
 
+<!--- broken link
 The [Garcinia Cambogia Review Team](http://www.garciniacambogiareviews.ca/)
 provided the
-[Arabic translation](http://www.garciniacambogiareviews.ca/translations/aldanial-cloc/).
+[Arabic translation](http://www.garciniacambogiareviews.ca/translations/aldanial-cloc/). --->
 
 Gajk Melikyan provided the
 provided the
