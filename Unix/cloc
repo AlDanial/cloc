@@ -1609,6 +1609,8 @@ my @file_list = ();  # global variable updated in files()
 my %Ignored   = ();  # files that are not counted (language not recognized or
                      # problems reading the file)
 my @Lines_Out = ();
+my %upper_lower_map = ();  # global variable (needed only on Windows) to
+                           # track case of original filename
 if ($opt_diff) {
 # Step 4:  Separate code from non-code files.  {{{1
 my @fh            = ();
@@ -1625,11 +1627,19 @@ if ($opt_diff_list_file) {
                         \@file_pairs_tot    , # out
                        );
     foreach my $F (@files_added_tot) {
-        $F = lc $F if $ON_WINDOWS;
+        if ($ON_WINDOWS) {
+            my $lc = lc $F;
+            $upper_lower_map{$lc} = $F;
+            $F = $lc;
+        }
 		push @{$files_for_set[1]}, $F;
 	}
     foreach my $F (@files_removed_tot) {
-        $F = lc $F if $ON_WINDOWS;
+        if ($ON_WINDOWS) {
+            my $lc = lc $F;
+            $upper_lower_map{$lc} = $F;
+            $F = $lc;
+        }
 		push @{$files_for_set[0]}, $F;
 	}
     foreach my $pair (@file_pairs_tot) {
@@ -3846,9 +3856,22 @@ sub generate_report {                        # {{{1
         $elapsed_sec, # in
         $report_type, # in  "by language" | "by report file" | "by file"
         $rhh_count  , # in  count{TYPE}{nFiles|code|blank|comment|scaled}
+                      #       where TYPE = name of language, source file,
+                      #                    or report file
         $rh_scale   , # in
        ) = @_;
 
+    my %orig_case = ();
+    if ($ON_WINDOWS and $report_type eq "by file") {
+        # restore the original upper/lowercase version of the file name
+        foreach my $lc_file (sort keys %{$rhh_count}) {
+            foreach my $cat (sort keys %{$rhh_count->{$lc_file}}) {
+                $orig_case{ $upper_lower_map{$lc_file} }{$cat} =
+                           $rhh_count->{$lc_file}{$cat};
+            }
+        }
+        $rhh_count = \%orig_case;
+    }
     print "-> generate_report\n" if $opt_v > 2;
     my $DELIM = ",";
        $DELIM = $opt_csv_delimiter if defined $opt_csv_delimiter;
@@ -5209,7 +5232,11 @@ sub make_file_list {                         # {{{1
     my $nFiles_Categorized = 0;
 
     foreach my $file (@file_list) {
-        $file = lc $file if $ON_WINDOWS;
+        if ($ON_WINDOWS) {
+            my $lc = lc $file;
+            $upper_lower_map{$lc} = $file;
+            $file = $lc;
+        }
         printf "classifying $file\n" if $opt_v > 2;
 
         my $basename = basename $file;

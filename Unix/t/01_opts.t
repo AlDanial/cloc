@@ -549,6 +549,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/539/nested_comments.elm.yaml',
                 },
 
+                {
+                    'name' => 'preserve upper/lowercase filenames on Windows',
+                    'cd'   => '../tests/inputs/issues/540',
+                    'args' => '--windows --by-file Hello.f',
+                    'ref'  => '../tests/outputs/issues/540/Hello.f.yaml',
+                },
+
             );
 
 # Create test input for issue #132 which needs data not in the git repo.
