@@ -536,24 +536,31 @@ my @Tests = (
                 },
 
                 {
-                    'name' => 'Elm empty comment',
+                    'name' => 'Elm empty comment, #538',
                     'cd'   => '../tests/inputs/issues/538',
                     'args' => 'add.elm',
                     'ref'  => '../tests/outputs/issues/538/add.elm.yaml',
                 },
 
                 {
-                    'name' => 'Elm nested block comments',
+                    'name' => 'Elm nested block comments, #539',
                     'cd'   => '../tests/inputs/issues/539',
                     'args' => 'nested_comments.elm',
                     'ref'  => '../tests/outputs/issues/539/nested_comments.elm.yaml',
                 },
 
                 {
-                    'name' => 'preserve upper/lowercase filenames on Windows',
+                    'name' => 'preserve upper/lowercase filenames on Windows, #540',
                     'cd'   => '../tests/inputs/issues/540',
                     'args' => '--windows --by-file Hello.f',
                     'ref'  => '../tests/outputs/issues/540/Hello.f.yaml',
+                },
+
+                {
+                    'name' => 'accept all file extensions in user-provided language definitions, #542',
+                    'cd'   => '../tests/inputs/issues/542',
+                    'args' => '--read-lang-def txt_lang_def.txt txt_lang_def.txt',
+                    'ref'  => '../tests/outputs/issues/542/results.yaml',
                 },
 
             );

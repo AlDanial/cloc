@@ -1265,6 +1265,13 @@ foreach my $pair (@opt_script_lang) {
     $Language_by_Script{$script_name} = $Recognized_Language_lc{$lang_lc};
 }
 
+# If user provided a language definition file, make sure those
+# extensions aren't rejected.
+foreach my $ext (%Language_by_Extension) {
+    next unless defined $Not_Code_Extension{$ext};
+    delete $Not_Code_Extension{$ext};
+}
+
 # If user provided file extensions to ignore, add these to
 # the exclusion list.
 foreach my $ext (map { $_ => 1 } split(/,/, $opt_exclude_ext ) ) {
