@@ -9750,7 +9750,6 @@ sub set_constants {                          # {{{1
    '.cvsignore'  => 1,
    'Entries'     => 1,
    'FAQ'         => 1,
-   'iconfig.h'   => 1, # Skip "iconfig.h" files; they're used in Imakefiles.
    'INSTALL'     => 1,
    'MAINTAINERS' => 1,
    'MD5SUMS'     => 1,
