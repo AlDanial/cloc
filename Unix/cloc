@@ -1635,7 +1635,7 @@ if ($opt_diff_list_file) {
                        );
     foreach my $F (@files_added_tot) {
         if ($ON_WINDOWS) {
-            my $lc = lc $F;
+            (my $lc = lc $F) =~ s{\\}{/}g;
             $upper_lower_map{$lc} = $F;
             $F = $lc;
         }
@@ -1643,7 +1643,7 @@ if ($opt_diff_list_file) {
 	}
     foreach my $F (@files_removed_tot) {
         if ($ON_WINDOWS) {
-            my $lc = lc $F;
+            (my $lc = lc $F) =~ s{\\}{/}g;
             $upper_lower_map{$lc} = $F;
             $F = $lc;
         }
@@ -3041,6 +3041,19 @@ sub diff_report     {                        # {{{1
         $rhhh_count , # in  count{TYPE}{nFiles|code|blank|comment}{a|m|r|s}
         $rh_scale   , # in
        ) = @_;
+    my %orig_case = ();
+    if ($ON_WINDOWS and $report_type eq "by file") {
+        # restore the original upper/lowercase version of the file name
+        foreach my $lc_file (sort keys %{$rhhh_count}) {
+          foreach my $cat (sort keys %{$rhhh_count->{$lc_file}}) {
+            foreach my $S (qw(added same modified removed)) {
+                $orig_case{ $upper_lower_map{$lc_file} }{$cat}{$S} =
+                           $rhhh_count->{$lc_file}{$cat}{$S};
+            }
+          }
+        }
+        $rhhh_count = \%orig_case;
+    }
 
 #use Data::Dumper;
 #print "diff_report: ", Dumper($rhhh_count), "\n";
@@ -3252,14 +3265,16 @@ sub xml_yaml_or_json_header {                # {{{1
        $type        = "diff_" if $opt_diff;
     my $report_file = "";
     if ($opt_report_file) {
+        my $Fname = $opt_report_file;
+        # $Fname =~ s{\\}{\\\\}g if $ON_WINDOWS;
         if ($opt_sum_reports) {
             if ($by_file) {
-                $report_file = "  <report_file>$opt_report_file.file</report_file>"
+                $report_file = "  <report_file>$Fname.file</report_file>"
             } else {
-                $report_file = "  <report_file>$opt_report_file.lang</report_file>"
+                $report_file = "  <report_file>$Fname.lang</report_file>"
             }
         } else {
-            $report_file = "  <report_file>$opt_report_file</report_file>"
+            $report_file = "  <report_file>$Fname</report_file>"
         }
     }
     if ($opt_xml) {
@@ -5240,7 +5255,7 @@ sub make_file_list {                         # {{{1
 
     foreach my $file (@file_list) {
         if ($ON_WINDOWS) {
-            my $lc = lc $file;
+            (my $lc = lc $file) =~ s{\\}{/}g;
             $upper_lower_map{$lc} = $file;
             $file = $lc;
         }
