@@ -3266,7 +3266,7 @@ sub xml_yaml_or_json_header {                # {{{1
     my $report_file = "";
     if ($opt_report_file) {
         my $Fname = $opt_report_file;
-        # $Fname =~ s{\\}{\\\\}g if $ON_WINDOWS;
+        $Fname =~ s{\\}{\\\\}g if $ON_WINDOWS;
         if ($opt_sum_reports) {
             if ($by_file) {
                 $report_file = "  <report_file>$Fname.file</report_file>"
@@ -3303,14 +3303,16 @@ sub xml_yaml_or_json_header {                # {{{1
   ${Q}files_per_second${Q}   : $file_rate${C}
   ${Q}lines_per_second${Q}   : $line_rate";
         if ($opt_report_file) {
+            my $Fname = $opt_report_file;
+            $Fname =~ s{\\}{\\\\}g if $ON_WINDOWS;
             if ($opt_sum_reports) {
                 if ($by_file) {
-                    $header .= "$C\n  ${Q}report_file${Q}        : ${Q}$opt_report_file.file${Q}"
+                    $header .= "$C\n  ${Q}report_file${Q}        : ${Q}$Fname.file${Q}"
                 } else {
-                    $header .= "$C\n  ${Q}report_file${Q}        : ${Q}$opt_report_file.lang${Q}"
+                    $header .= "$C\n  ${Q}report_file${Q}        : ${Q}$Fname.lang${Q}"
                 }
             } else {
-                $header .= "$C\n  ${Q}report_file${Q}        : ${Q}$opt_report_file${Q}";
+                $header .= "$C\n  ${Q}report_file${Q}        : ${Q}$Fname${Q}";
             }
         }
         $header .= "${close_B}${C}";
