@@ -5122,9 +5122,9 @@ sub git_archive {                            # {{{1
     my ($Tarfh, $Tarfile);
     if ($opt_sdir) {
       File::Path::mkpath($opt_sdir) unless is_dir($opt_sdir);
-      ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, DIR => $opt_sdir, SUFFIX => $ON_WINDOWS ? '.zip' : '.tar');  # delete on exit
+      ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, DIR => $opt_sdir, SUFFIX => '.tar');  # delete on exit
     } else {
-      ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, SUFFIX => $ON_WINDOWS ? '.zip' : '.tar');  # delete on exit
+      ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, SUFFIX => '.tar');  # delete on exit
     }
     my $cmd = "git archive -o $Tarfile $files_this_commit";
     print  $cmd, "\n" if $opt_v;
@@ -5134,20 +5134,49 @@ sub git_archive {                            # {{{1
         die "Failed to create tarfile of files from git.";
     }
     if ($n_sets > 1) {
-        foreach my $i (1..$n_sets-1) {
-            my $files_this_commit = join(" ", @{$File_Set[$i]});
-            my $cmd = "git archive -o ${Tarfile}_extra $files_this_commit";
+        if ($ON_WINDOWS) {
+            my @tar_files = ( $Tarfile );
+            my $start_dir = cwd;
+            foreach my $i (1..$n_sets-1) {
+                my $fname = sprintf "%s_extra_%08d", $Tarfile, $i;
+                my $files_this_commit = join(" ", @{$File_Set[$i]});
+                my $cmd = "git archive -o $fname $files_this_commit";
+                print  $cmd, "\n" if $opt_v;
+                system $cmd;
+                push @tar_files, $fname;
+            }
+            # Windows tar can't combine tar files so expand
+            # them all to one directory then re-tar
+            my $extract_dir = tempdir( CLEANUP => 0 );  # 1 = delete on exit
+            chdir "$extract_dir";
+            foreach my $T (@tar_files) {
+                next unless -f $T and -s $T;
+                my $cmd = "tar -x -f \"$T\"";
+                print  $cmd, "\n" if $opt_v;
+                system $cmd;
+                unlink "$T";
+            }
+            chdir "..";
+            $Tarfile .= ".final.tar";
+            my $cmd = "tar -c -f \"${Tarfile}\" \"$extract_dir\"";
             print  $cmd, "\n" if $opt_v;
             system $cmd;
-            # and merge into the first one
-            # TODO:  on Windows switch to .tar instead of .zip
-               $cmd = "tar -A -f ${Tarfile} ${Tarfile}_extra";
-            print  $cmd, "\n" if $opt_v;
-            system $cmd;
+            chdir "$start_dir";
+        } else {
+            foreach my $i (1..$n_sets-1) {
+                my $files_this_commit = join(" ", @{$File_Set[$i]});
+                my $cmd = "git archive -o ${Tarfile}_extra $files_this_commit";
+                print  $cmd, "\n" if $opt_v;
+                system $cmd;
+                # and merge into the first one
+                $cmd = "tar -A -f ${Tarfile} ${Tarfile}_extra";
+                print  $cmd, "\n" if $opt_v;
+                system $cmd;
+            }
+            unlink "${Tarfile}_extra";
         }
-        unlink "${Tarfile}_extra";
     }
-    print "<- git_archive()\n" if $opt_v > 2;
+    print "<- git_archive() made $Tarfile\n" if $opt_v > 2;
     return $Tarfile
 } # 1}}}
 sub smaller {                                # {{{1
