@@ -7676,6 +7676,7 @@ sub set_constants {                          # {{{1
             'comp'        => 'GLSL'                  ,
             'g'           => 'ANTLR Grammar'         ,
             'g4'          => 'ANTLR Grammar'         ,
+            'gleam'       => 'Gleam'                 ,
             'go'          => 'Go'                    ,
             'gsp'         => 'Grails'                ,
             'jenkinsfile' => 'Groovy'                ,
@@ -8737,6 +8738,10 @@ sub set_constants {                          # {{{1
     'Glade'              => [
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
+    'Gleam'              => [
+                                [ 'remove_matches'      , '^\s*//' ],
+                                [ 'remove_inline'       , '//.*$'  ],
                             ],
     'GLSL'               => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
@@ -10069,6 +10074,7 @@ sub set_constants {                          # {{{1
     'geode 2.0'                    =>   5.00,
     'gfa basic'                    =>   2.35,
     'Glade'                        =>   2.00,
+    'Gleam'                        =>   2.50,
     'GLSL'                         =>   2.00,
     'gml'                          =>   1.74,
     'golden common lisp'           =>   1.25,

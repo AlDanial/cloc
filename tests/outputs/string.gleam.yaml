@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.89
+  elapsed_seconds    : 0.00691604614257812
+  n_files            : 1
+  n_lines            : 68
+  files_per_second   : 144.591285162714
+  lines_per_second   : 9832.20739106453
+  report_file        : string.gleam.yaml
+'Gleam' :
+  nFiles: 1
+  blank: 6
+  comment: 41
+  code: 21
+SUM: 
+  blank: 6
+  comment: 41
+  code: 21
+  nFiles: 1

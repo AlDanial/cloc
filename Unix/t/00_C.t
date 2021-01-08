@@ -285,6 +285,11 @@ my @Tests = (
                     'args' => '../tests/inputs/glade-search-popover.ui',
                 },
                 {
+                    'name' => 'Gleam',
+                    'ref'  => '../tests/outputs/string.gleam.yaml',
+                    'args' => '../tests/inputs/string.gleam',
+                },
+                {
                     'name' => 'GLSL',
                     'ref'  => '../tests/outputs/blur.glsl.yaml',
                     'args' => '../tests/inputs/blur.glsl',
