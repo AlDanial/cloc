@@ -7594,7 +7594,7 @@ sub set_constants {                          # {{{1
             'DO'          => 'Stata'                 ,
             'pascal'      => 'Pascal'                ,
             'lpr'         => 'Pascal'                ,
-            'dfm'         => 'Pascal'                ,
+            'dfm'         => 'Delphi Form'           ,
             'dpr'         => 'Pascal'                ,
             'dita'        => 'DITA'                  ,
             'drl'         => 'Drools'                ,
@@ -8611,6 +8611,11 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'dhall'              => [   [ 'remove_haskell_comments', '>filename<' ], ],
+    'Delphi Form'        => [ # same as Pascal
+                                [ 'remove_between_regex', '\{[^$]', '}' ],
+                                [ 'remove_between_general', '(*', '*)' ],
+                                [ 'remove_matches'      , '^\s*//' ],
+                            ],
     'DIET'               => [  # same as Pug
                                 [ 'remove_pug_block'    ,          ],
                                 [ 'remove_matches'      , '^\s*//' ],
@@ -10016,6 +10021,7 @@ sub set_constants {                          # {{{1
     'datatrieve'                   =>   4.00,
     'dbase iii'                    =>   2.00,
     'dbase iv'                     =>   1.54,
+    'Delphi Form'                  =>   2.00,
     'DIET'                         =>   2.00,
     'diff'                         =>   1.00,
     'decision support default'     =>   2.22,
