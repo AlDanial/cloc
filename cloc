@@ -5173,6 +5173,20 @@ sub smaller {                                # {{{1
     my( $a, $b ) = @_;
     return $a < $b ? $a : $b;
 } # 1}}}
+sub lower_on_Windows {                       # {{{1
+    # If on Unix(-like), do nothing, just return the input.
+    # If on Windows, return a lowercase version of the file
+    # and also update %upper_lower_map with this new entry.
+    # Needed in make_file_list() because the full file list
+    # isn't known until the end of that routine--where
+    # %upper_lower_map is ordinarily populated.
+    my ($path,) = @_;
+    return $path unless $ON_WINDOWS;
+    my $lower = lc $path;
+    $upper_lower_map{$lower} = $path;
+    return $lower;
+}
+# }}}
 sub make_file_list {                         # {{{1
     my ($ra_arg_list,  # in   file and/or directory names to examine
         $rh_Err     ,  # in   hash of error codes
@@ -5200,13 +5214,14 @@ sub make_file_list {                         # {{{1
     my @dir_list = ();
     foreach my $file_or_dir (@{$ra_arg_list}) {
         my $size_in_bytes = 0;
+        my $F = lower_on_Windows($file_or_dir);
         if (!-r $file_or_dir) {
-            push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file_or_dir];
+            push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $F];
             next;
         }
         if (is_file($file_or_dir)) {
             if (!(-s $file_or_dir)) {   # 0 sized file, named pipe, socket
-                $rh_ignored->{$file_or_dir} = 'zero sized file';
+                $rh_ignored->{$F} = 'zero sized file';
                 next;
             } elsif (-B $file_or_dir and !$opt_read_binary_files) {
                 # avoid binary files unless user insists on reading them
@@ -5214,11 +5229,11 @@ sub make_file_list {                         # {{{1
                     # only ignore if not a Unicode file w/trivial
                     # ASCII transliteration
                     if (!unicode_file($file_or_dir)) {
-                        $rh_ignored->{$file_or_dir} = 'binary file';
+                        $rh_ignored->{$upper_lower_map{$F}} = 'binary file';
                         next;
                     }
                 } else {
-                    $rh_ignored->{$file_or_dir} = 'binary file';
+                    $rh_ignored->{$upper_lower_map{$F}} = 'binary file';
                     next;
                 }
             }
@@ -5226,8 +5241,8 @@ sub make_file_list {                         # {{{1
         } elsif (is_dir($file_or_dir)) {
             push @dir_list, $file_or_dir;
         } else {
-            push @{$raa_errors}, [$rh_Err->{'Neither file nor directory'} , $file_or_dir];
-            $rh_ignored->{$file_or_dir} = 'not file, not directory';
+            push @{$raa_errors}, [$rh_Err->{'Neither file nor directory'} , $F];
+            $rh_ignored->{$F} = 'not file, not directory';
         }
     }
 
@@ -5237,8 +5252,9 @@ sub make_file_list {                         # {{{1
         my ($volume, $directories, $filename) = File::Spec->splitpath( $File );
         my $ignore_this_file = 0;
         foreach my $Sub_Dir ( File::Spec->splitdir($directories) ) {
+            my $SD = lower_on_Windows($Sub_Dir);
             if ($Exclude_Dir{$Sub_Dir}) {
-                $Ignored{$Sub_Dir} = "($File) --exclude-dir=$Sub_Dir";
+                $Ignored{$SD} = "($File) --exclude-dir=$Sub_Dir";
                 $ignore_this_file = 1;
                 last;
             }
@@ -5247,10 +5263,11 @@ sub make_file_list {                         # {{{1
     }
     @file_list = @new_file_list;
     foreach my $dir (@dir_list) {
+        my $D = lower_on_Windows($dir);
 #print "make_file_list dir=$dir  Exclude_Dir{$dir}=$Exclude_Dir{$dir}\n";
         # populates global variable @file_list
         if ($Exclude_Dir{$dir}) {
-            $Ignored{$dir} = "--exclude-dir=$Exclude_Dir{$dir}";
+            $Ignored{$D} = "--exclude-dir=$Exclude_Dir{$dir}";
             next;
         }
         find({wanted     => \&files            ,
@@ -5275,6 +5292,7 @@ sub make_file_list {                         # {{{1
     my $nFiles_Categorized = 0;
 
     foreach my $file (@file_list) {
+        my $F = lower_on_Windows($file);
         if ($ON_WINDOWS) {
             (my $lc = lc $file) =~ s{\\}{/}g;
             $upper_lower_map{$lc} = $file;
@@ -5284,11 +5302,11 @@ sub make_file_list {                         # {{{1
 
         my $basename = basename $file;
         if ($Not_Code_Filename{$basename}) {
-            $rh_ignored->{$file} = "listed in " . '$' .
+            $rh_ignored->{$F} = "listed in " . '$' .
                 "Not_Code_Filename{$basename}";
             next;
         } elsif ($basename =~ m{~$}) {
-            $rh_ignored->{$file} = "temporary editor file";
+            $rh_ignored->{$F} = "temporary editor file";
             next;
         }
 
@@ -5305,10 +5323,10 @@ sub make_file_list {                         # {{{1
                                            $rh_ignored);
         }
         if (!defined $size_in_bytes) {
-            $rh_ignored->{$file} = "no longer readable";
+            $rh_ignored->{$F} = "no longer readable";
             next;
         } elsif (!defined $language) {
-            $rh_ignored->{$file} = "unable to associate with a language";
+            $rh_ignored->{$F} = "unable to associate with a language";
             next;
         }
         printf $fh "%d,%s,%s\n", $size_in_bytes, $language, $file;
