@@ -7083,7 +7083,7 @@ sub really_is_bf {                           # {{{1
         }
         # if ($ind) { print "YES: $L"; } else { print "NO : $L"; }
     }
-    my $ratio = $n_bf_indicators/scalar(@lines);
+    my $ratio = scalar(@lines) > 0 ? $n_bf_indicators / scalar(@lines) : 0;
     my $decision = ($ratio > 0.5) || ($n_bf_indicators > 5);
     printf "<- really_is_bf(Y/N=%d %s, R=%.3f, N=%d)\n",
             $decision, $file, $ratio, $n_bf_indicators if $opt_v > 2;
