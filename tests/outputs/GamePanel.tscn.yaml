@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.89
+  elapsed_seconds    : 0.00651192665100098
+  n_files            : 1
+  n_lines            : 46
+  files_per_second   : 153.564383260718
+  lines_per_second   : 7063.96162999304
+  report_file        : ../outputs/GamePanel.tscn
+'Godot Scene' :
+  nFiles: 1
+  blank: 4
+  comment: 8
+  code: 34
+SUM: 
+  blank: 4
+  comment: 8
+  code: 34
+  nFiles: 1

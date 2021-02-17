@@ -1,0 +1,46 @@
+; https://github.com/zacryol/spindle-of-serendipity/raw/develop/godot/game/GamePanel.tscn
+[gd_scene load_steps=19 format=2]
+
+[ext_resource path="res://game/components/PlayersPanel.tscn" type="PackedScene" id=1]
+[ext_resource path="res://game/components/Keyboard.tscn" type="PackedScene" id=2]
+[ext_resource path="res://game/components/EntryDisplay.tscn" type="PackedScene" id=3]
+[ext_resource path="res://game/components/Spindle.tscn" type="PackedScene" id=4]
+[ext_resource path="res://game/GamePanel.gd" type="Script" id=5]
+[ext_resource path="res://GameTheme.theme" type="Theme" id=6]
+[ext_resource path="res://game/VScreen.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Xolonium-Bold.otf" type="DynamicFontData" id=8]
+[ext_resource path="res://game/RoundSign.gd" type="Script" id=9]
+[ext_resource path="res://tex/star_04.png" type="Texture" id=10]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.0862745, 0.0862745, 0.101961, 0.631373 )
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+shadow_color = Color( 0.0862745, 0.0862745, 0.101961, 0.74902 )
+shadow_size = 50
+
+; [sub_resource type="DynamicFont" id=2]
+; size = 100
+; outline_size = 5
+; outline_color = Color( 0, 0, 0, 1 )
+; use_mipmaps = true
+; use_filter = true
+; font_data = ExtResource( 8 )
+
+[sub_resource type="Animation" id=3]
+resource_name = "In"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("Main:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 0.329877 ),
+"update": 0,
+"values": [ Vector2( 1280, 0 ), Vector2( 0, 0 ) ]
+}

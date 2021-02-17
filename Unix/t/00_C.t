@@ -305,6 +305,16 @@ my @Tests = (
                     'args' => '--no-autogen ../tests/inputs/hello_app*.go',
                 },
                 {
+                    'name' => 'Godot Resource',
+                    'ref'  => '../tests/outputs/door.tres.yaml',
+                    'args' => '../tests/inputs/door.tres',
+                },
+                {
+                    'name' => 'Godot Scene',
+                    'ref'  => '../tests/outputs/GamePanel.tscn.yaml',
+                    'args' => '../tests/inputs/GamePanel.tscn',
+                },
+                {
                     'name' => 'Groovy',
                     # issue #139; avoid
                     # Complex regular subexpression recursion limit (32766) exceeded

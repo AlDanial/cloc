@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.89
+  elapsed_seconds    : 0.00702595710754395
+  n_files            : 1
+  n_lines            : 30
+  files_per_second   : 142.329363059486
+  lines_per_second   : 4269.88089178459
+  report_file        : ../outputs/door.tres.yaml
+'Godot Resource' :
+  nFiles: 1
+  blank: 2
+  comment: 8
+  code: 20
+SUM: 
+  blank: 2
+  comment: 8
+  code: 20
+  nFiles: 1
