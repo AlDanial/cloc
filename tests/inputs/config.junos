@@ -1,0 +1,137 @@
+## Last commit: 2017-02-16 10:48:24 PST by root
+# based on https://github.com/Juniper/Intro-to-Using-Ansible-with-Junos-OS/raw/master/library/config.conf
+version 14.2R6.5;
+groups {
+    re0 {
+        system {
+            /* host-name be-mx480-1-re0; */
+        }
+        interfaces {
+            fxp0 {
+/*
+                unit 0 {
+                    family inet {
+                        filter {
+                            group 1; */
+                        }
+                        address **.***.*.**/22;
+                    }
+                }
+            }
+        }
+    }
+    re1 {
+        system {
+            host-name be-mx480-1-re1;
+        }
+        interfaces {
+            fxp0 {
+                unit 0 {
+                    family inet {
+                        filter {
+                            group 1;
+                        }
+                        address **.***.*.**/22;
+                    }
+                }
+            }
+        }
+    }
+    global {
+        system {
+            domain-name ********;
+            domain-search [ ******** ];
+            backup-router **.***.*.*** destination *.*.*.*;
+            time-zone America/Los_Angeles;
+            debugger-on-panic;
+            debugger-on-break;
+            dump-on-panic;
+            authentication-order [ radius password ];
+            root-authentication {
+                encrypted-password ******
+            }
+            name-server {
+                ***.***.*.**;
+                ***.***.**.***;
+                ***.**.**.***;
+                ***.**.**.***;
+            }
+            radius-server {
+                ***.***.**.***
+                ***.***.**.**
+            }
+            login {
+                class superuser-local {
+                    permissions all;
+                }
+                user labadmin {
+                    uid 2003;
+                    class superuser;
+                    shell csh;
+                    authentication {
+                        encrypted-password ****
+                    }
+                }
+            }
+            services {
+                finger;
+                ftp;
+                rlogin;
+                rsh;
+                ssh;
+                telnet;
+                xnm-clear-text;
+                netconf {
+                    ssh;
+                }
+            }
+            syslog {
+                user * {
+                    any emergency;
+                }
+                file messages {
+                    any warning;
+                    authorization info;
+                    archive world-readable;
+                }
+                file security {
+                    interactive-commands any;
+                    archive world-readable;
+                }
+            }
+            processes {
+                routing enable;
+                ntp enable;
+                management enable;
+                watchdog enable;
+                snmp enable;
+                inet-process enable;
+                mib-process enable;
+            }
+            ntp {
+                boot-server ***.**.**.*;
+                server ***.**.**.*;
+            }
+        }
+        snmp {
+            location "Software lab";
+            interface fxp0.0;
+            community public {
+                authorization read-only;
+            }
+            community private {
+                authorization read-write;
+            }
+        }
+        routing-options {
+            static {
+                route 10.***.*.*/16 {
+                    next-hop 10.***.*.***;
+                    retain;
+                    no-readvertise;
+                }
+            }
+        }
+    }
+}
+apply-groups [ global re0 re1 ];
