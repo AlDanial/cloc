@@ -402,7 +402,7 @@ my @Tests = (
                     'args' => '../tests/inputs/Trapezoid_Rule.ipynb',
                 },
                 {
-                    'name' => 'Junos',
+                    'name' => 'Juniper Junos',
                     'ref'  => '../tests/outputs/config.junos.yaml',
                     'args' => '../tests/inputs/config.junos',
                 },

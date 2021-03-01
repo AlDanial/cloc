@@ -3,13 +3,13 @@
 header : 
   cloc_url           : github.com/AlDanial/cloc
   cloc_version       : 1.89
-  elapsed_seconds    : 0.00749301910400391
+  elapsed_seconds    : 0.0077509880065918
   n_files            : 1
   n_lines            : 137
-  files_per_second   : 133.457553773705
-  lines_per_second   : 18283.6848669976
+  files_per_second   : 129.01581051984
+  lines_per_second   : 17675.1660412181
   report_file        : ../outputs/config.junos.yaml
-'Junos' :
+'Juniper Junos' :
   nFiles: 1
   blank: 0
   comment: 8

@@ -7801,7 +7801,7 @@ sub set_constants {                          # {{{1
             'json5'       => 'JSON5'                 ,
             'jsp'         => 'JSP'                   , # Java server pages
             'jspf'        => 'JSP'                   , # Java server pages
-            'junos'       => 'Junos'                 ,
+            'junos'       => 'Juniper Junos'         ,
             'vm'          => 'Velocity Template Language' ,
             'ksc'         => 'Kermit'                ,
             'ksh'         => 'Korn Shell'            ,
@@ -8971,7 +8971,7 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
-    'Junos'              => [
+    'Juniper Junos'      => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_inline'       , '#.*$'   ],
@@ -10220,7 +10220,7 @@ sub set_constants {                          # {{{1
     'joss'                         =>   0.75,
     'jovial'                       =>   0.75,
     'jsp'                          =>   1.36,
-    'Junos'                        =>   2.00,
+    'Juniper Junos'                =>   2.00,
     'kappa'                        =>   2.00,
     'kbms'                         =>   1.63,
     'kcl'                          =>   1.25,
