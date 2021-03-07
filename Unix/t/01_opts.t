@@ -565,10 +565,21 @@ my @Tests = (
 
             );
 
+# Special cases:
+
 # Create test input for issue #132 which needs data not in the git repo.
 # Silently fail if file/dir already exists.
 mkdir "../tests/inputs/issues/132/ignore_git";
 cp    "../tests/inputs/hi.py", "../tests/inputs/issues/132/ignore_git/";
+
+# Issues #540, #544 regarding case preservation on file systems
+# that are case insensitive:  git issues a warning about the
+# link hello.f -> Hello.f.  Per https://github.com/mitchblank,
+# remove it from git and make it at runtime.
+my $work_dir = getcwd;
+chdir( "../tests/inputs/issues/540/" );
+symlink("Hello.f", "hello.f");
+chdir( $work_dir );
 
 my $missing_dir = "../tests/inputs/issues/482/B";
 if (!-d $missing_dir) {
@@ -578,7 +589,6 @@ if (!-d $missing_dir) {
 my $Verbose = 0;
 
 my $results = 'results.yaml';
-my $work_dir = getcwd;
 my $cloc     = "$work_dir/../cloc";   # all-purpose version
 #my $cloc     = "$work_dir/cloc";      # Unix-tuned version
 my $Run = "$cloc --quiet --yaml --out $results ";
