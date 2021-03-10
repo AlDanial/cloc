@@ -800,7 +800,7 @@ my $getopt_success = GetOptions(             # {{{1
    "lang_no_ext|lang-no-ext=s"               => \$opt_lang_no_ext         ,
    "yaml"                                    => \$opt_yaml                ,
    "csv"                                     => \$opt_csv                 ,
-   "csv_delimeter|csv-delimiter=s"           => \$opt_csv_delimiter       ,
+   "csv_delimiter|csv-delimiter=s"           => \$opt_csv_delimiter       ,
    "json"                                    => \$opt_json                ,
    "md"                                      => \$opt_md                  ,
    "fullpath"                                => \$opt_fullpath            ,
@@ -1005,6 +1005,7 @@ if (defined $opt_timeout) {
     $opt_timeout = 2**31-1 unless $opt_timeout > 0;
     # else is computed dynamically, ref $max_duration_sec
 }
+$opt_csv               = 0  unless defined $opt_csv;
 $opt_csv               = 1  if $opt_csv_delimiter;
 $ON_WINDOWS            = 1  if $opt_force_on_windows;
 $ON_WINDOWS            = 0  if $opt_force_on_unix;
@@ -1381,14 +1382,29 @@ if (defined $opt_skip_archive) {
 
 if ($opt_sum_reports and $opt_diff) {
     my @results = ();
+    if ($opt_csv and !defined($opt_csv_delimiter)) {
+        $opt_csv_delimiter = ",";
+    }
     if ($opt_list_file) { # read inputs from the list file
         my @list = read_list_file($opt_list_file);
-        @results = combine_diffs(\@list);
+        if ($opt_csv) {
+            @results = combine_csv_diffs($opt_csv_delimiter, \@list);
+        } else {
+            @results = combine_diffs(\@list);
+        }
     } elsif ($opt_vcs) { # read inputs from the VCS generator
         my @list = invoke_generator($opt_vcs, \@ARGV);
-        @results = combine_diffs(\@list);
+        if ($opt_csv) {
+            @results = combine_csv_diffs($opt_csv_delimiter, \@list);
+        } else {
+            @results = combine_diffs(\@list);
+        }
     } else { # get inputs from the command line
-        @results = combine_diffs(\@ARGV);
+        if ($opt_csv) {
+            @results = combine_csv_diffs($opt_csv_delimiter, \@ARGV);
+        } else {
+            @results = combine_diffs(\@ARGV);
+        }
     }
     if ($opt_report_file) {
         write_file($opt_report_file, {}, @results);
@@ -12908,6 +12924,7 @@ EO_DIFF_XSL
     print "<- write_xsl_file\n" if $opt_v > 2;
 } # 1}}}
 sub normalize_file_names {                   # {{{1
+    print "-> normalize_file_names\n" if $opt_v > 2;
     my (@files, ) = @_;
 
     # Returns a hash of file names reduced to a canonical form
@@ -12938,12 +12955,14 @@ sub normalize_file_names {                   # {{{1
         $F_norm =~ s{/+$}{};
         $normalized{ $F_norm } = $F;
     }
+    print "<- normalize_file_names\n" if $opt_v > 2;
     return %normalized;
 } # 1}}}
 sub combine_diffs {                          # {{{1
     # subroutine by Andy (awalshe@sf.net)
     # https://sourceforge.net/tracker/?func=detail&aid=3261017&group_id=174787&atid=870625
     my ($ra_files) = @_;
+    print "-> combine_diffs\n" if $opt_v > 2;
 
     my $res   = "$URL v $VERSION\n";
     my $dl    = '-';
@@ -13022,6 +13041,60 @@ sub combine_diffs {                          # {{{1
     }
     $res .= sprintf("%s\n", "-" x $width);
 
+    print "<- combine_diffs\n" if $opt_v > 2;
+    return $res;
+} # 1}}}
+sub combine_csv_diffs {                      # {{{1
+    my ($delimiter, $ra_files) = @_;
+    print "-> combine_csv_diffs\n" if $opt_v > 2;
+
+    my %sum = ();  # sum{ language } = array of 17 values
+    foreach my $file (@{$ra_files}) {
+        my $IN = new IO::File $file, "r";
+        if (!defined $IN) {
+            warn "Unable to read $file; ignoring.\n";
+            next;
+        }
+
+        my $sec;
+        while (<$IN>) {
+            next if /^Language${delimiter}\s==\sfiles${delimiter}/;
+            chomp;
+            my @words = split(/$delimiter/);
+            my $n_col = scalar(@words);
+            if ($n_col != 18) {
+                warn "combine_csv_diffs(): Parse failure line $. of $file\n";
+                warn "Expected 18 columns, got $n_col\n";
+                die;
+            }
+            my $Lang = $words[0];
+            my @count = map { int($_) } @words[1..16];
+            if (defined $sum{$Lang}) {
+                for (my $i = 0; $i < 16; $i++) {
+                    $sum{$Lang}[$i] += $count[$i];
+                }
+            } else {
+                @{$sum{$Lang}} = @count;
+            }
+        }
+        $IN->close;
+    }
+
+    my @header = ("Language", "== files", "!= files", "+ files", "- files",
+                  "== blank", "!= blank", "+ blank", "- blank", "== comment",
+                  "!= comment", "+ comment", "- comment", "== code",
+                  "!= code", "+ code", "- code", "$URL v $VERSION" );
+
+    my $res = join("$delimiter ", @header) . "$delimiter\n";
+    foreach my $Lang (sort keys %sum) {
+        $res .= $Lang . "$delimiter ";
+        for (my $i = 0; $i < 16; $i++) {
+            $res .= $sum{$Lang}[$i] . "$delimiter ";
+        }
+        $res .= "\n";
+    }
+
+    print "<- combine_csv_diffs\n" if $opt_v > 2;
     return $res;
 } # 1}}}
 sub get_time {                               # {{{1
@@ -13263,7 +13336,7 @@ sub load_from_config_file {                  # {{{1
         } elsif (!defined ${$rs_lang_no_ext}         and /^(?:lang_no_ext|lang-no-ext)(=|\s+)(.*?)$/)         { ${$rs_lang_no_ext}        = $2;
         } elsif (!defined ${$rs_yaml}                and /^yaml/)                                             { ${$rs_yaml}               = 1;
         } elsif (!defined ${$rs_csv}                 and /^csv/)                                              { ${$rs_csv}                = 1;
-        } elsif (!defined ${$rs_csv_delimiter}       and /^(?:csv_delimeter|csv-delimiter)(=|\s+)(.*?)$/)     { ${$rs_csv_delimiter}      = $2;
+        } elsif (!defined ${$rs_csv_delimiter}       and /^(?:csv_delimiter|csv-delimiter)(=|\s+)(.*?)$/)     { ${$rs_csv_delimiter}      = $2;
         } elsif (!defined ${$rs_json}                and /^json/)                                             { ${$rs_json}               = 1;
         } elsif (!defined ${$rs_md}                  and /^md/)                                               { ${$rs_md}                 = 1;
         } elsif (!defined ${$rs_fullpath}            and /^fullpath/)                                         { ${$rs_fullpath}           = 1;
