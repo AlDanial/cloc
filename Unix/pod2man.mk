@@ -41,6 +41,12 @@ PACKAGE		?= package
 MANSECT		?= 1
 PODCENTER	?= User Commands
 PODDATE		?= $$(date --utc --date="@$${SOURCE_DATE_EPOCH:-$$(date +%s)}" "+%Y-%m-%d")
+detected_OS = $(shell uname)
+ifeq ($(detected_OS),Darwin)
+	# Mac OS X;  "PODDATE ?=" doesn't work
+	PODDATE = $(shell date -u "+%Y-%m-%d")
+endif
+# add other OS exceptions as they arise
 
 # Directories
 MANSRC		?=
