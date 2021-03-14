@@ -15,7 +15,6 @@ to create a man page:
 
 
 Note!  Updates are applied to this stripped down version of
-cloc only for packaged releases (current one is 1.72).  During
-development, this version is not maintained.  Do not supply
-pull requests for this file!  Only update the cloc in the
-parent directory.
+cloc only for packaged releases.72).  During development,
+this version is not maintained.  Do not supply pull requests
+for this file!  Only update the cloc in the parent directory.
