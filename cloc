@@ -7890,6 +7890,8 @@ sub set_constants {                          # {{{1
             'csproj'      => 'MSBuild script'        ,
             'vcproj'      => 'MSBuild script'        ,
             'wixproj'     => 'MSBuild script'        ,
+            'btproj'      => 'MSBuild script'        ,
+            'msbuild'     => 'MSBuild script'        ,
             'mps'         => 'MUMPS'                 ,
             'mth'         => 'Teamcenter mth'        ,
             'n'           => 'Nemerle'               ,
