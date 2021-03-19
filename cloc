@@ -7896,6 +7896,7 @@ sub set_constants {                          # {{{1
             'wixproj'     => 'MSBuild script'        ,
             'btproj'      => 'MSBuild script'        ,
             'msbuild'     => 'MSBuild script'        ,
+            'sln'         => 'Visual Studio Solution',
             'mps'         => 'MUMPS'                 ,
             'mth'         => 'Teamcenter mth'        ,
             'n'           => 'Nemerle'               ,
@@ -9746,6 +9747,11 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
     'MSBuild script'    => [    [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
+    'Visual Studio Solution' => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
     'Zig'                => [
                                 [ 'remove_matches'      , '^\s*//'  ],
                                 [ 'remove_inline'       , '//.*$'   ],
@@ -10211,6 +10217,7 @@ sub set_constants {                          # {{{1
     'XSD'                          =>   1.90,
     'NAnt script'                  =>   1.90,
     'MSBuild script'               =>   1.90,
+    'Visual Studio Solution'       =>   1.00,
     'HLSL'                         =>   2.00,
     'HTML 2'                       =>   5.00,
     'HTML 3'                       =>   5.33,
