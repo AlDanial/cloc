@@ -7542,6 +7542,8 @@ sub set_constants {                          # {{{1
             'bf'          => 'Brainfuck'             ,
             'brs'         => 'BrightScript'          ,
             'bzl'         => 'Starlark'              ,
+            'btp'         => 'BizTalk Pipeline'      ,
+            'odx'         => 'BizTalk Orchestration' ,
             'cpy'         => 'COBOL'                 ,
             'cobol'       => 'COBOL'                 ,
             'ccp'         => 'COBOL'                 ,
@@ -9387,6 +9389,15 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
+    'BizTalk Pipeline' =>   [
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
+    'BizTalk Orchestration' => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
     'Solidity'           => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
@@ -10627,6 +10638,8 @@ sub set_constants {                          # {{{1
     'Python'                       => 4.20,
     'RapydScript'                  => 4.20,
     'Starlark'                     => 4.20,
+    'BizTalk Pipeline'             => 1.00,
+    'BizTalk Orchestration'        => 1.00,
     'Cython'                       => 3.80,
     'Ruby'                         => 4.20,
     'Ruby HTML'                    => 4.00,
