@@ -1870,7 +1870,8 @@ if ($opt_diff_alignment) {
     write_alignment_data ( $opt_diff_alignment, $n_filepairs_compared, \%alignment ) ;
 }
 
-my @ignored_reasons = map { "$_: $Ignored{$_}" } sort keys %Ignored;
+my $separator = defined $opt_csv_delimiter ? $opt_csv_delimiter : ": ";
+my @ignored_reasons = map { "${_}${separator} $Ignored{$_}" } sort keys %Ignored;
 write_file($opt_ignored, {"file_type" => "ignored",
                           "separator" => ": ",
                           "columns"   => ["file", "reason"],
@@ -2027,9 +2028,10 @@ if ( $max_processes == 0) {
     $pm->wait_all_children();
 }
 
-my @ignored_reasons = map { "$_: $Ignored{$_}" } sort keys %Ignored;
+my $separator = defined $opt_csv_delimiter ? $opt_csv_delimiter : ": ";
+my @ignored_reasons = map { "${_}${separator} $Ignored{$_}" } sort keys %Ignored;
 write_file($opt_ignored, {"file_type" => "ignored",
-                          "separator" => ": ",
+                          "separator" => $separator,
                           "columns"   => ["file", "reason"],
                          }, @ignored_reasons   ) if $opt_ignored;
 if ($opt_summary_cutoff) {
@@ -4326,7 +4328,8 @@ sub generate_report {                        # {{{1
             push @entries, $sum_scaled;
             push @entries, $avg_scale ;
         }
-        push @results, join(",", @entries);
+        my $separator = defined $opt_csv_delimiter ? $opt_csv_delimiter : ",";
+        push @results, join($separator, @entries);
     } else {
 
         if ($BY_FILE) {
@@ -5211,6 +5214,7 @@ sub make_file_list {                         # {{{1
         ) = @_;
     print "-> make_file_list(@{$ra_arg_list})\n" if $opt_v > 2;
 
+    my $separator = defined $opt_csv_delimiter ? $opt_csv_delimiter : ",";
     my ($fh, $filename);
     if ($opt_categorized) {
         $filename = $opt_categorized;
@@ -5345,7 +5349,8 @@ sub make_file_list {                         # {{{1
             $rh_ignored->{$F} = "unable to associate with a language";
             next;
         }
-        printf $fh "%d,%s,%s\n", $size_in_bytes, $language, $file;
+        printf $fh "%d%s%s%s%s\n", $size_in_bytes, $separator,
+                                   $language, $separator, $file;
         ++$nFiles_Categorized;
         #printf "classified %d files\n", $nFiles_Categorized
         #    unless (!$opt_progress_rate or
