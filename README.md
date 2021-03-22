@@ -526,7 +526,10 @@ SUM:                              3434         176974         243934         903
 
 </pre>
 
-To run cloc on Windows computers, one must first open up a command (aka DOS) window and invoke cloc.exe from the command line there.
+To run cloc on Windows computers, open up a command (aka DOS) window
+and invoke cloc.exe from the command line there.
+Alternatively, try ClocViewer, the GUI wrapper around cloc found at
+https://github.com/Roemer/ClocViewer.
 [](1}}})
 <a name="Options"></a> []({{{1)
 # [Options &#9650;](#___top "click to go to top of document")
