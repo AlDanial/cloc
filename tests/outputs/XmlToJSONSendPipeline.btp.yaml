@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.89
+  elapsed_seconds    : 0.0107660293579102
+  n_files            : 1
+  n_lines            : 55
+  files_per_second   : 92.8847550713083
+  lines_per_second   : 5108.66152892196
+  report_file        : ../outputs/XmlToJSONSendPipeline.btp.yaml
+'BizTalk Pipeline' :
+  nFiles: 1
+  blank: 0
+  comment: 0
+  code: 55
+SUM: 
+  blank: 0
+  comment: 0
+  code: 55
+  nFiles: 1

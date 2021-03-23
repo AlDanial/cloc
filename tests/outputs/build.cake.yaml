@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.89
+  elapsed_seconds    : 0.00746011734008789
+  n_files            : 1
+  n_lines            : 40
+  files_per_second   : 134.04614892937
+  lines_per_second   : 5361.84595717482
+  report_file        : ../outputs/build.cake.yaml
+'Cake Build Script' :
+  nFiles: 1
+  blank: 6
+  comment: 6
+  code: 28
+SUM: 
+  blank: 6
+  comment: 6
+  code: 28
+  nFiles: 1

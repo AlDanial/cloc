@@ -65,6 +65,16 @@ my @Tests = (
                     'args' => '../tests/inputs/BUILD',
                 },
                 {
+                    'name' => 'BizTalk Orchestration',
+                    'ref'  => '../tests/outputs/ProcessPO.odx.yaml',
+                    'args' => '../tests/inputs/ProcessPO.odx',
+                },
+                {
+                    'name' => 'BizTalk Pipeline',
+                    'ref'  => '../tests/outputs/XmlToJSONSendPipeline.btp.yaml',
+                    'args' => '--unicode ../tests/inputs/XmlToJSONSendPipeline.btp',
+                },
+                {
                     'name' => 'Blade',
                     'ref'  => '../tests/outputs/master.blade.php.yaml',
                     'args' => '../tests/inputs/master.blade.php',
@@ -85,6 +95,11 @@ my @Tests = (
                     'ref'  => '../tests/outputs/C-Ansi.c.yaml',
                 },
                 {
+                    'name' => 'C# 1',
+                    'ref'  => '../tests/outputs/C#.cs.yaml',
+                    'args' => '../tests/inputs/C#.cs',
+                },
+                {
                     'name' => 'C# 2',
                     'ref'  => '../tests/outputs/wokka.cs.yaml',
                     'args' => '../tests/inputs/wokka.cs',
@@ -95,9 +110,19 @@ my @Tests = (
                     'args' => '../tests/inputs/assembly.cs',
                 },
                 {
+                    'name' => 'C# Designer',
+                    'ref'  => '../tests/outputs/csharp-designer.designer.cs.yaml',
+                    'args' => '../tests/inputs/csharp-designer.designer.cs',
+                },
+                {
                     'name' => 'C/C++ header',
                     'ref'  => '../tests/outputs/locale_facets.h.yaml',
                     'args' => '../tests/inputs/locale_facets.h',
+                },
+                {
+                    'name' => 'Cake Build Script',
+                    'ref'  => '../tests/outputs/build.cake.yaml',
+                    'args' => '../tests/inputs/build.cake',
                 },
                 {
                     'name' => 'Chapel',
@@ -128,11 +153,6 @@ my @Tests = (
                     'name' => 'ColdFusion',
                     'ref'  => '../tests/outputs/ColdFusion.cfm.yaml',
                     'args' => '../tests/inputs/ColdFusion.cfm',
-                },
-                {
-                    'name' => 'C#',
-                    'ref'  => '../tests/outputs/C#.cs.yaml',
-                    'args' => '../tests/inputs/C#.cs',
                 },
                 {
                     'name' => 'C++',
@@ -912,6 +932,11 @@ my @Tests = (
                     'args' => '../tests/inputs/JetCar.cls',
                 },
                 {
+                    'name' => 'Visual Studio Solution',
+                    'ref'  => '../tests/outputs/vs_solution.sln.yaml',
+                    'args' => '../tests/inputs/vs_solution.sln',
+                },
+                {
                     'name' => 'Vuejs Component',
                     'ref'  => '../tests/outputs/ItemView.vue.yaml',
                     'args' => '../tests/inputs/ItemView.vue',
@@ -920,6 +945,11 @@ my @Tests = (
                     'name' => 'WebAssembly',
                     'ref'  => '../tests/outputs/type.wast.yaml',
                     'args' => '../tests/inputs/type.wast',
+                },
+                {
+                    'name' => 'Web Services Description',
+                    'ref'  => '../tests/outputs/webservice.wsdl.yaml',
+                    'args' => '../tests/inputs/webservice.wsdl',
                 },
                 {
                     'name' => 'Windows Message',

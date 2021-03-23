@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.89
+  elapsed_seconds    : 0.00700807571411133
+  n_files            : 1
+  n_lines            : 58
+  files_per_second   : 142.692522283459
+  lines_per_second   : 8276.16629244063
+  report_file        : ../outputs/csharp-designer.designer.cs.yaml
+'C# Designer' :
+  nFiles: 1
+  blank: 8
+  comment: 22
+  code: 28
+SUM: 
+  blank: 8
+  comment: 22
+  code: 28
+  nFiles: 1

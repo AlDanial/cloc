@@ -1,0 +1,94 @@
+﻿#if __DESIGNER_DATA
+#error Do not define __DESIGNER_DATA.
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<om:MetaModel MajorVersion="1" MinorVersion="3" Core="2b131234-7959-458d-834f-2dc0769ce683" ScheduleModel="66366196-361d-448d-976f-cab5e87496d2" xmlns:om="http://schemas.microsoft.com/BizTalk/2003/DesignerData">
+    <om:Element Type="Module" OID="ea5a519c-7132-4909-a82e-52fcc2c7f48d" LowerBound="1.1" HigherBound="42.1">
+        <om:Property Name="ReportToAnalyst" Value="True" />
+        <om:Property Name="Name" Value="BTSJSON" />
+        <om:Property Name="Signal" Value="False" />
+        <om:Element Type="PortType" OID="30bf9479-f8dc-4f4e-a1d1-267e27f14bac" ParentLink="Module_PortType" LowerBound="4.1" HigherBound="11.1">
+            <om:Property Name="Synchronous" Value="False" />
+            <om:Property Name="TypeModifier" Value="Internal" />
+            <om:Property Name="ReportToAnalyst" Value="True" />
+            <om:Property Name="Name" Value="PortType_1" />
+            <om:Property Name="Signal" Value="False" />
+            <om:Element Type="OperationDeclaration" OID="9c523d5a-3294-42a6-88f3-4ae49ae83db0" ParentLink="PortType_OperationDeclaration" LowerBound="6.1" HigherBound="10.1">
+                <om:Property Name="OperationType" Value="OneWay" />
+                <om:Property Name="ReportToAnalyst" Value="True" />
+                <om:Property Name="Name" Value="Operation_1" />
+                <om:Property Name="Signal" Value="False" />
+                <om:Element Type="MessageRef" OID="5b477a6e-462a-4c09-a6bd-9e9b26ae5ad1" ParentLink="OperationDeclaration_RequestMessageRef" LowerBound="8.13" HigherBound="8.15">
+                    <om:Property Name="Ref" Value="BTSJSON.PO" />
+                    <om:Property Name="ReportToAnalyst" Value="True" />
+                    <om:Property Name="Name" Value="Request" />
+                    <om:Property Name="Signal" Value="False" />
+                </om:Element>
+            </om:Element>
+        </om:Element>
+        <om:Element Type="ServiceDeclaration" OID="e74dc54e-2016-4417-a28b-4c3e45dff411" ParentLink="Module_ServiceDeclaration" LowerBound="18.1" HigherBound="41.1">
+            <om:Property Name="InitializedTransactionType" Value="False" />
+            <om:Property Name="IsInvokable" Value="False" />
+            <om:Property Name="TypeModifier" Value="Internal" />
+            <om:Property Name="ReportToAnalyst" Value="True" />
+            <om:Property Name="Name" Value="ProcessPO" />
+            <om:Property Name="Signal" Value="False" />
+            <om:Element Type="MessageDeclaration" OID="f706cdf4-1710-4dc4-a4b6-6004486cda37" ParentLink="ServiceDeclaration_MessageDeclaration" LowerBound="25.1" HigherBound="26.1">
+                <om:Property Name="Type" Value="BTSJSON.PO" />
+                <om:Property Name="ParamDirection" Value="In" />
+                <om:Property Name="ReportToAnalyst" Value="True" />
+                <om:Property Name="Name" Value="PurchaseOrder" />
+                <om:Property Name="Signal" Value="True" />
+            </om:Element>
+            <om:Element Type="MessageDeclaration" OID="b4715502-31b6-45fe-b7fc-820880b05a6b" ParentLink="ServiceDeclaration_MessageDeclaration" LowerBound="26.1" HigherBound="27.1">
+                <om:Property Name="Type" Value="BTSJSON.Invoice" />
+                <om:Property Name="ParamDirection" Value="In" />
+                <om:Property Name="ReportToAnalyst" Value="True" />
+                <om:Property Name="Name" Value="InvoiceMsg" />
+                <om:Property Name="Signal" Value="True" />
+            </om:Element>
+        </om:Element>
+    </om:Element>
+</om:MetaModel>
+#endif // __DESIGNER_DATA
+[Microsoft.XLANGs.BaseTypes.BPELExportable(false)]
+module BTSJSON
+{
+    internal porttype PortType_1
+    {
+        oneway Operation_1
+        {
+            PO
+        };
+    };
+    internal porttype PortType_2
+    {
+        oneway Operation_1
+        {
+            Invoice
+        };
+    };
+    [Microsoft.XLANGs.BaseTypes.BPELExportable(false)]
+    internal service ProcessPO
+    {
+        [Microsoft.XLANGs.BaseTypes.LogicalBinding()]
+        port implements PortType_1 ReceiveJSONPO;
+        [Microsoft.XLANGs.BaseTypes.LogicalBinding()]
+        port uses PortType_2 SendJSONInvoice;
+        message PO PurchaseOrder;
+        message Invoice InvoiceMsg;
+        body ()
+        {
+            [Microsoft.XLANGs.BaseTypes.DesignerPosition("d478ac91-37ac-418c-b2c8-2f778319667c")]
+            activate receive (ReceiveJSONPO.Operation_1, PurchaseOrder);
+            [Microsoft.XLANGs.BaseTypes.DesignerPosition("959a30c2-92c8-47d1-8df6-7243e961bb23")]
+            construct InvoiceMsg
+            {
+                [Microsoft.XLANGs.BaseTypes.DesignerPosition("ac70f963-dad1-4533-85c1-e8ecd4117659")]
+                transform (InvoiceMsg) = BTSJSON.POToInvoice (PurchaseOrder);
+            }
+            [Microsoft.XLANGs.BaseTypes.DesignerPosition("61187953-153a-45c9-bc90-b537e4765026")]
+            send (SendJSONInvoice.Operation_1, InvoiceMsg);
+        }
+    }
+}
+

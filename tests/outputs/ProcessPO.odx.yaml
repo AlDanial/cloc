@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.89
+  elapsed_seconds    : 0.00744009017944336
+  n_files            : 1
+  n_lines            : 94
+  files_per_second   : 134.406973018009
+  lines_per_second   : 12634.2554636929
+  report_file        : ../outputs/ProcessPO.odx.yaml
+'BizTalk Orchestration' :
+  nFiles: 1
+  blank: 1
+  comment: 3
+  code: 90
+SUM: 
+  blank: 1
+  comment: 3
+  code: 90
+  nFiles: 1

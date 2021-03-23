@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.89
+  elapsed_seconds    : 0.00689792633056641
+  n_files            : 1
+  n_lines            : 40
+  files_per_second   : 144.971104659201
+  lines_per_second   : 5798.84418636804
+  report_file        : ../outputs/webservice.wsdl.yaml
+'Web Services Description' :
+  nFiles: 1
+  blank: 4
+  comment: 0
+  code: 36
+SUM: 
+  blank: 4
+  comment: 0
+  code: 36
+  nFiles: 1
