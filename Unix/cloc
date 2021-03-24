@@ -1633,7 +1633,8 @@ my %Ignored   = ();  # files that are not counted (language not recognized or
                      # problems reading the file)
 my @Lines_Out = ();
 my %upper_lower_map = ();  # global variable (needed only on Windows) to
-                           # track case of original filename
+                           # track case of original filename, populated in
+                           # make_file_list() if $ON_WINDOWS
 if ($opt_diff) {
 # Step 4:  Separate code from non-code files.  {{{1
 my @fh            = ();
@@ -5245,6 +5246,7 @@ sub make_file_list {                         # {{{1
     foreach my $file_or_dir (@{$ra_arg_list}) {
         my $size_in_bytes = 0;
         my $F = lower_on_Windows($file_or_dir);
+        my $ul_F = $upper_lower_map{$F} ? $ON_WINDOWS : $F;
         if (!-r $file_or_dir) {
             push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $F];
             next;
@@ -5259,11 +5261,11 @@ sub make_file_list {                         # {{{1
                     # only ignore if not a Unicode file w/trivial
                     # ASCII transliteration
                     if (!unicode_file($file_or_dir)) {
-                        $rh_ignored->{$upper_lower_map{$F}} = 'binary file';
+                        $rh_ignored->{$ul_F} = 'binary file';
                         next;
                     }
                 } else {
-                    $rh_ignored->{$upper_lower_map{$F}} = 'binary file';
+                    $rh_ignored->{$ul_F} = 'binary file';
                     next;
                 }
             }
@@ -6327,6 +6329,7 @@ sub file_pairs_from_file {                   # {{{1
 }
 sub read_file  {                             # {{{1
     my ($file, ) = @_;
+    print "-> read_file($file)\n" if $opt_v and $opt_v > 2;
     my %BoM = (
         "fe ff"           => 2 ,
         "ff fe"           => 2 ,
@@ -6345,7 +6348,6 @@ sub read_file  {                             # {{{1
         "2b 2f 76 38 2d"  => 5 ,
         );
 
-    print "-> read_file($file)\n" if $opt_v and $opt_v > 2;
     my @lines = ();
     my $IN = new IO::File $file, "r";
     if (defined $IN) {
@@ -12367,14 +12369,18 @@ sub unicode_to_ascii {                       # {{{1
     #   byte   4:  ord of ASCII character
     #   byte 3+i:    0
     #   byte 4+i:  ord of ASCII character
+    #
+    print "-> unicode_to_ascii()\n" if $opt_v > 2;
 
     my $length  = length $string;
 #print "length=$length\n";
     return '' if $length <= 3;
     my @unicode = split(//, $string);
 
-    # check the first 100 characters for big or little endian UTF-16 encoding
-    my $max_peek = $length < 200 ? $length : 200;
+    # check the first 100 characters (= 200 bytes) for big or
+    # little endian UTF-16 encoding
+    my $max_peek     = $length < 200 ? $length : 200;
+    my $max_for_pass = $length < 200 ? 0.9*$max_peek/2 : 90;
     my @view_1   = ();
     for (my $i = 2; $i < $max_peek; $i += 2) { push @view_1, $unicode[$i] }
     my @view_2   = ();
@@ -12395,11 +12401,16 @@ sub unicode_to_ascii {                       # {{{1
     }
 #print "points 1: $points_1\n";
 #print "points 2: $points_2\n";
+#print "max_peek    : $max_peek\n";
+#print "max_for_pass: $max_for_pass\n";
 
     my $offset = undef;
-    if    ($points_1 > 90) { $offset = 2; }
-    elsif ($points_2 > 90) { $offset = 3; }
-    else                   { return '' }  # neither big or little endian UTF-16
+    if    ($points_1 > $max_for_pass) { $offset = 2; }
+    elsif ($points_2 > $max_for_pass) { $offset = 3; }
+    else                   {
+        print "<- unicode_to_ascii() a p1=$points_1 p2=$points_2\n" if $opt_v > 2;
+        return '';
+    }  # neither big or little endian UTF-16
 
     my @ascii              = ();
     for (my $i = $offset; $i < $length; $i += 2) {
@@ -12422,6 +12433,7 @@ sub unicode_to_ascii {                       # {{{1
             push @ascii, $L;
         }
     }
+    print "<- unicode_to_ascii() b p1=$points_1 p2=$points_2\n" if $opt_v > 2;
     return join("", @ascii);
 } # 1}}}
 sub uncompress_archive_cmd {                 # {{{1

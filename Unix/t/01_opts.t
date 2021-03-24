@@ -563,6 +563,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/542/results.yaml',
                 },
 
+                {
+                    'name' => 'small unicode files, #580',
+                    'cd'   => '../tests/inputs/issues/580',
+                    'args' => '--unicode encodingtest.cs',
+                    'ref'  => '../tests/outputs/issues/580/encodingtest.cs.yaml',
+                },
+
             );
 
 # Special cases:

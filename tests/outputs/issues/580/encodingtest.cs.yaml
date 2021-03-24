@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.89
+  elapsed_seconds    : 0.00690698623657227
+  n_files            : 1
+  n_lines            : 3
+  files_per_second   : 144.780945806006
+  lines_per_second   : 434.342837418019
+  report_file        : ../../../outputs/issues/580/encodingtest.cs.yaml
+'C#' :
+  nFiles: 1
+  blank: 0
+  comment: 0
+  code: 3
+SUM: 
+  blank: 0
+  comment: 0
+  code: 3
+  nFiles: 1
