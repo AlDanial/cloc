@@ -197,21 +197,6 @@ SUM:                            39           1564           1365           3945
 <a name="Overview"></a>      []({{{1)
 # [Overview &#9650;](#___top "click to go to top of document")
 
-Translations:
-<!--- [Arabic](http://www.garciniacambogiareviews.ca/translations/aldanial-cloc/), --->
-[Armenian](http://students.studybay.com/?p=34),
-[Belarussian](http://www.besteonderdelen.nl/blog/?p=5426),
-<!--- [Bulgarian](http://www.ajoft.com/wpaper/aj-cloc.html), --->
-[Hungarian](http://www.forallworld.com/cloc-grof-sornyi-kodot/),
-<!--- []( [Polish](http://www.trevister.com/blog/cloc.html), ) --->
-[]( [Russian](http://someblogscience.com/cloc.html), )
-[Portuguese](https://www.homeyou.com/~edu/cloc),
-[Serbo-Croatian](http://science.webhostinggeeks.com/cloc),
-[Romanian](http://www.bildelestore.dk/blog/cloc-contele-de-linii-de-cod/),
-[Slovakian](http://newknowledgez.com/cloc.html),
-[Tamil](http://healthcareadministrationdegree.co/socialwork/aldanial-cloc/)
-[]( [Ukrainian](http://blog.kudoybook.com/cloc/) )
-
 cloc counts blank lines, comment lines, and physical lines of source
 code in [many programming languages](#Languages). Given two versions of
 a code base, cloc can compute differences in blank, comment, and source
