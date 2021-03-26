@@ -1142,7 +1142,7 @@ my $nFiles_Found = 0;  # updated in make_file_list
 my (%Language_by_Extension, %Language_by_Script,
     %Filters_by_Language, %Not_Code_Extension, %Not_Code_Filename,
     %Language_by_File, %Scale_Factor, %Known_Binary_Archives,
-    %EOL_Continuation_re,
+    %Language_by_Prefix, %EOL_Continuation_re,
    );
 my $ALREADY_SHOWED_HEADER = 0;
 my $ALREADY_SHOWED_XML_SECTION = 0;
@@ -1192,6 +1192,7 @@ if ($opt_force_lang_def) {
         \%Language_by_Extension, # Language_by_Extension{f}    = 'Fortran 77'
         \%Language_by_Script   , # Language_by_Script{sh}      = 'Bourne Shell'
         \%Language_by_File     , # Language_by_File{makefile}  = 'make'
+        \%Language_by_Prefix   , # Language_by_Prefix{Dockerfile}  = 'Dockerfile'
         \%Filters_by_Language  , # Filters_by_Language{Bourne Shell}[0] =
                                  #      [ 'remove_matches' , '^\s*#'  ]
         \%Not_Code_Extension   , # Not_Code_Extension{jpg}     = 1
@@ -5708,7 +5709,7 @@ sub classify_file {                          # {{{1
         } else {
             return $Language_by_File{$file};
         }
-    }
+    } 
 
     if ($file =~ /\.([^\.]+)$/) { # has an extension
       print "$full_file extension=[$1]\n" if $opt_v > 2;
@@ -5858,6 +5859,11 @@ sub classify_file {                          # {{{1
         } else { # has an unmapped file extension
             $look_at_first_line = 1;
         }
+      }
+      # if all else fails look at the prefix instead of extension
+      ( my $stem = $file ) =~ s/^(.*?)\.\S+$/$1/;
+      if ($stem and defined($Language_by_Prefix{$stem})) {
+          return $Language_by_Prefix{$stem}
       }
     } elsif (defined $Language_by_File{lc $file}) {
         return $Language_by_File{lc $file};
@@ -7473,6 +7479,7 @@ sub set_constants {                          # {{{1
     my ($rh_Language_by_Extension , # out
         $rh_Language_by_Script    , # out
         $rh_Language_by_File      , # out
+        $rh_Language_by_Prefix    , # out
         $rhaa_Filters_by_Language , # out
         $rh_Not_Code_Extension    , # out
         $rh_Not_Code_Filename     , # out
@@ -8419,8 +8426,10 @@ sub set_constants {                          # {{{1
             'Rakefile'          => 'Ruby'               ,
             'rakefile'          => 'Ruby'               ,
             'Dockerfile'        => 'Dockerfile'         ,
-            'Dockerfile.build'  => 'Dockerfile'         ,
-            'Dockerfile.test'   => 'Dockerfile'         ,
+            );
+# 1}}}
+%{$rh_Language_by_Prefix}     = (             # {{{1
+            'Dockerfile'        => 'Dockerfile'         ,
             );
 # 1}}}
 %{$rhaa_Filters_by_Language} = (            # {{{1
