@@ -1,6 +1,6 @@
 The contents of the cloc/Unix/ directory are intended for
 cloc package maintainers on distributions such as Ubuntu,
-Debian, Fedora, Gentoo, Mint, SUSE, FreeBSD, Mac OSX.
+Debian, Fedora, Gentoo, Mint, SUSE, FreeBSD, macOS.
 
 Each time cloc is released, the cloc executable in this
 directory is updated to the latest version, minus the

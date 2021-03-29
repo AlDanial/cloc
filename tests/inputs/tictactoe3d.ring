@@ -17,7 +17,7 @@
 	load "opengl21lib.ring"		# RingOpenGL  Library
 
 #==============================================================
-# To Support MacOS X
+# To Support macOS
 	al_run_main()	
 	func al_game_start 	# Called by al_run_main()
 		main()		# Now we call our main function

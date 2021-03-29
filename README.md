@@ -205,7 +205,7 @@ standard distribution of Perl v5.6 and higher (code from some external
 modules is [embedded within
 cloc](https://github.com/AlDanial/cloc#regexp_common)) and so is
 quite portable. cloc is known to run on many flavors of Linux, FreeBSD,
-NetBSD, OpenBSD, Mac OS X, AIX, HP-UX, Solaris, IRIX, z/OS, and Windows.
+NetBSD, OpenBSD, macOS, AIX, HP-UX, Solaris, IRIX, z/OS, and Windows.
 (To run the Perl source version of cloc on Windows one needs
 [ActiveState Perl](http://www.activestate.com/activeperl) 5.6.1 or
 higher, [Strawberry Perl](http://strawberryperl.com/),
@@ -251,8 +251,8 @@ a Perl interpreter):
     sudo apk add cloc                # Alpine Linux
     doas pkg_add cloc                # OpenBSD
     sudo pkg install cloc            # FreeBSD
-    sudo port install cloc           # Mac OS X with MacPorts
-    brew install cloc                # Mac OS X with Homebrew
+    sudo port install cloc           # macOS with MacPorts
+    brew install cloc                # macOS with Homebrew
     choco install cloc               # Windows with Chocolatey
     scoop install cloc               # Windows with Scoop
 
@@ -293,7 +293,7 @@ cloc has many features that make it easy to use, thorough, extensible, and porta
 6.  Has numerous troubleshooting options.
 7.  Handles file and directory names with spaces and other unusual characters.
 8.  Has no dependencies outside the standard Perl distribution.
-9.  Runs on Linux, FreeBSD, NetBSD, OpenBSD, Mac OS X, AIX, HP-UX, Solaris, IRIX, and z/OS systems that have Perl 5.6 or higher. The source version runs on Windows with either ActiveState Perl, Strawberry Perl, Cygwin, or MobaXTerm+Perl plugin. Alternatively on Windows one can run the Windows binary which has no dependencies.
+9.  Runs on Linux, FreeBSD, NetBSD, OpenBSD, macOS, AIX, HP-UX, Solaris, IRIX, and z/OS systems that have Perl 5.6 or higher. The source version runs on Windows with either ActiveState Perl, Strawberry Perl, Cygwin, or MobaXTerm+Perl plugin. Alternatively on Windows one can run the Windows binary which has no dependencies.
 [](1}}})
 
 <a name="Other_Counters"></a> []({{{1)
@@ -2708,7 +2708,7 @@ time you invoke cloc, you can save some typing by adding those
 switches to the ``options.txt`` runtime configuration file.
 cloc will look for this file in the following locations:
 <pre>
-# Linux, NetBSD, FreeBSD, Mac OSX:
+# Linux, NetBSD, FreeBSD, macOS:
 /home/USERNAME/.config/cloc/options.txt
 
 # Windows
