@@ -13,7 +13,7 @@ A concise description of the problem you found with cloc.
 **cloc; OS; OS version**
  - cloc version:
  - If running the cloc source, Perl version:
- - OS (eg Linux, Windows, Mac OS, etc):
+ - OS (eg Linux, Windows, macOS, etc):
  - OS version:
 
 **To Reproduce**

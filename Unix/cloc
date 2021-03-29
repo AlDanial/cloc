@@ -2230,7 +2230,7 @@ sub get_max_processes {                      # {{{1
         }
     }
 
-    # Set to number of cores on MacOS
+    # Set to number of cores on macOS
     if ( $^O =~ /darwin/i and -x '/usr/sbin/sysctl') {
        my $numavcores_macos = `/usr/sbin/sysctl -n hw.physicalcpu`;
        chomp $numavcores_macos;

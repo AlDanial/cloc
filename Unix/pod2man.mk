@@ -28,7 +28,7 @@
 #	    man:
 #		    make -f pod2man.mk PACKAGE=$(PACKAGE) makeman
 #
-#	    build: man
+#	    build: man  
 
 ifneq (,)
     This makefile requires GNU Make.
@@ -43,7 +43,7 @@ PODCENTER	?= User Commands
 PODDATE		?= $$(date --utc --date="@$${SOURCE_DATE_EPOCH:-$$(date +%s)}" "+%Y-%m-%d")
 detected_OS = $(shell uname)
 ifeq ($(detected_OS),Darwin)
-	# Mac OS X;  "PODDATE ?=" doesn't work
+	# macOS;  "PODDATE ?=" doesn't work
 	PODDATE = $(shell date -u "+%Y-%m-%d")
 endif
 # add other OS exceptions as they arise
