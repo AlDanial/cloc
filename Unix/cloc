@@ -616,7 +616,7 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                                 m   meaning lines of comments
                                 cm  meaning lines of code + comments
                              Appending a percent sign to N changes
-                             the calculation from straight count to 
+                             the calculation from straight count to
                              percentage.
                              Ignored with --diff or --by-file.
    --sql=<file>              Write results as SQL create and insert statements
@@ -1136,11 +1136,11 @@ die $brief_usage unless defined $opt_version         or
                         $list_no_autogen             or
                         scalar @ARGV >= 1;
 if (!$opt_diff_list_file) {
-	die "--diff requires two arguments; got ", scalar @ARGV, "\n"
-		if $opt_diff and !$opt_sum_reports and scalar @ARGV != 2;
-	die "--diff arguments are identical; nothing done", "\n"
-		if $opt_diff and !$opt_sum_reports and scalar @ARGV == 2
-										   and $ARGV[0] eq $ARGV[1];
+    die "--diff requires two arguments; got ", scalar @ARGV, "\n"
+        if $opt_diff and !$opt_sum_reports and scalar @ARGV != 2;
+    die "--diff arguments are identical; nothing done", "\n"
+        if $opt_diff and !$opt_sum_reports and scalar @ARGV == 2
+                                           and $ARGV[0] eq $ARGV[1];
 }
 trick_pp_packer_encode() if $ON_WINDOWS and $opt_file_encoding;
 $File::Find::dont_use_nlink = 1 if $opt_stat or top_level_SMB_dir(\@ARGV);
@@ -1153,7 +1153,7 @@ my $nFiles_Found = 0;  # updated in make_file_list
 my (%Language_by_Extension, %Language_by_Script,
     %Filters_by_Language, %Not_Code_Extension, %Not_Code_Filename,
     %Language_by_File, %Scale_Factor, %Known_Binary_Archives,
-    %EOL_Continuation_re,
+    %Language_by_Prefix, %EOL_Continuation_re,
    );
 my $ALREADY_SHOWED_HEADER = 0;
 my $ALREADY_SHOWED_XML_SECTION = 0;
@@ -1203,6 +1203,7 @@ if ($opt_force_lang_def) {
         \%Language_by_Extension, # Language_by_Extension{f}    = 'Fortran 77'
         \%Language_by_Script   , # Language_by_Script{sh}      = 'Bourne Shell'
         \%Language_by_File     , # Language_by_File{makefile}  = 'make'
+        \%Language_by_Prefix   , # Language_by_Prefix{Dockerfile}  = 'Dockerfile'
         \%Filters_by_Language  , # Filters_by_Language{Bourne Shell}[0] =
                                  #      [ 'remove_matches' , '^\s*#'  ]
         \%Not_Code_Extension   , # Not_Code_Extension{jpg}     = 1
@@ -1644,7 +1645,7 @@ my @files_removed_tot = ();
 my @file_pairs_tot = ();
 # make file lists for each separate argument
 if ($opt_diff_list_file) {
-	@files_for_set = ( (), () );
+    @files_for_set = ( (), () );
     file_pairs_from_file($opt_diff_list_file, # in
                         \@files_added_tot   , # out
                         \@files_removed_tot , # out
@@ -1656,16 +1657,16 @@ if ($opt_diff_list_file) {
             $upper_lower_map{$lc} = $F;
             $F = $lc;
         }
-		push @{$files_for_set[1]}, $F;
-	}
+        push @{$files_for_set[1]}, $F;
+    }
     foreach my $F (@files_removed_tot) {
         if ($ON_WINDOWS) {
             (my $lc = lc $F) =~ s{\\}{/}g;
             $upper_lower_map{$lc} = $F;
             $F = $lc;
         }
-		push @{$files_for_set[0]}, $F;
-	}
+        push @{$files_for_set[0]}, $F;
+    }
     foreach my $pair (@file_pairs_tot) {
         if ($ON_WINDOWS) {
             push @{$files_for_set[0]}, lc $pair->[0];
@@ -1674,18 +1675,18 @@ if ($opt_diff_list_file) {
             push @{$files_for_set[0]}, $pair->[0];
             push @{$files_for_set[1]}, $pair->[1];
         }
-	}
-	@ARGV = (1, 2); # place holders
+    }
+    @ARGV = (1, 2); # place holders
 }
 for (my $i = 0; $i < scalar @ARGV; $i++) {
-	if ($opt_diff_list_file) {
-		push @fh, make_file_list($files_for_set[$i],
+    if ($opt_diff_list_file) {
+        push @fh, make_file_list($files_for_set[$i],
                                 \%Error_Codes, \@Errors, \%Ignored);
-		@{$files_for_set[$i]} = @file_list;
+        @{$files_for_set[$i]} = @file_list;
     } else {
-		push @fh, make_file_list([ $ARGV[$i] ],
+        push @fh, make_file_list([ $ARGV[$i] ],
                                 \%Error_Codes, \@Errors, \%Ignored);
-		@{$files_for_set[$i]} = @file_list;
+        @{$files_for_set[$i]} = @file_list;
     }
     if ($opt_exclude_list_file) {
         # note: process_exclude_list_file() references global @file_list
@@ -1761,8 +1762,8 @@ my $n_filepairs_compared = 0;
 my $tot_counted = 0;
 
 if ( scalar @fh != 2 ) {
-	print "Error: incorrect length fh array when preparing diff at step 6.\n";
-	exit 1;
+    print "Error: incorrect length fh array when preparing diff at step 6.\n";
+    exit 1;
 }
 if (!$opt_diff_list_file) {
     align_by_pairs(\%{$unique_source_file{$fset_a}}      , # in
@@ -2117,7 +2118,7 @@ sub summary_cutoff_error {                   # {{{
 sub apply_cutoff {                           # {{{1
     my ($criterion,
         $rhh_by_lang) = @_;
-    
+
     my %aggregated_Results_by_Language = ();
     my $by_pct = 0;
     my ($key, $value) = split(':', $criterion, 2);
@@ -2158,7 +2159,7 @@ sub apply_cutoff {                           # {{{1
                                       $rhh_by_lang->{$lang}{'comment'} <= $value;
         }
         foreach my $category (qw(nFiles comment blank code)) {
-            $aggregated_Results_by_Language{$agg_lang}{$category} += 
+            $aggregated_Results_by_Language{$agg_lang}{$category} +=
                 $rhh_by_lang->{$lang}{$category};
         }
     }
@@ -5869,6 +5870,11 @@ sub classify_file {                          # {{{1
             $look_at_first_line = 1;
         }
       }
+      # if all else fails look at the prefix instead of extension
+      ( my $stem = $file ) =~ s/^(.*?)\.\S+$/$1/;
+      if ($stem and defined($Language_by_Prefix{$stem})) {
+          return $Language_by_Prefix{$stem}
+      }
     } elsif (defined $Language_by_File{lc $file}) {
         return $Language_by_File{lc $file};
     } elsif ($opt_lang_no_ext and
@@ -6233,6 +6239,8 @@ sub write_file {                             # {{{1
                         sprintf "\"%s\":\"%s\"", $rh_options->{'columns'}[$i], $entries[$i];
                 }
                 if ($opt_json) {
+                    # JSON can't literal '\x' in filenames, #575
+                    $pairs[0] =~ s/\\x//g;
                     push @json_lines, join(", ", @pairs );
                 } else {
                     print $OUT "- {", join(", ", @pairs), "}\n";
@@ -6244,7 +6252,7 @@ sub write_file {                             # {{{1
             }
         }
         if ($opt_json) {
-            print $OUT "[{", join("}, {", @json_lines), "}]\n";
+            print $OUT "[{", join("},\n {", @json_lines), "}]\n";
         }
         if (!$opt_json and !$opt_yaml and !$opt_xml and !$opt_csv) {
             print $OUT join("\n", @lines), "\n";
@@ -6275,21 +6283,21 @@ sub file_pairs_from_file {                   # {{{1
     #
     # Example valid input format for $file
     # 1)
-	#   A/d1/hello.f90 | B/d1/hello.f90
-	#   A/hello.C | B/hello.C
-	#   A/d2/hi.py | B/d2/hi.py
+    #   A/d1/hello.f90 | B/d1/hello.f90
+    #   A/hello.C | B/hello.C
+    #   A/d2/hi.py | B/d2/hi.py
     #
     # 2)
-	# Files added: 1
-	#   + B/extra_file.pl ; Perl
-	# 
-	# Files removed: 1
-	#   - A/d2/hello.java ; Java
-	# 
-	# File pairs compared: 3
-	#   != A/d1/hello.f90 | B/d1/hello.f90 ; Fortran 90
-	#   != A/hello.C | B/hello.C ; C++
-	#   == A/d2/hi.py | B/d2/hi.py ; Python
+    # Files added: 1
+    #   + B/extra_file.pl ; Perl
+    #
+    # Files removed: 1
+    #   - A/d2/hello.java ; Java
+    #
+    # File pairs compared: 3
+    #   != A/d1/hello.f90 | B/d1/hello.f90 ; Fortran 90
+    #   != A/hello.C | B/hello.C ; C++
+    #   == A/d2/hi.py | B/d2/hi.py ; Python
 
     print "-> file_pairs_from_file($file)\n" if $opt_v and $opt_v > 2;
     @{$ra_compare_list} = ();
@@ -6297,11 +6305,11 @@ sub file_pairs_from_file {                   # {{{1
     my $mode = "compare";
     foreach my $L (@lines) {
         next if $L =~ /^\s*$/ or $L =~ /^\s*#/;
-		chomp($L);
+        chomp($L);
         if      ($L =~ /^Files\s+(added|removed):/) {
             $mode = $1;
         } elsif ($L =~ /^File\s+pairs\s+compared:/) {
-    		$mode = "compare";
+            $mode = "compare";
         } elsif ($mode eq "added" or $mode eq "removed") {
             $L =~ m/^\s*[+-]\s+(.*?)\s+;/;
             my $F = $1;
@@ -6316,7 +6324,7 @@ sub file_pairs_from_file {                   # {{{1
                 push @{$ra_removed}, $F;
             }
         } else {
-    		$L =~ m/^\s*([!=]=\s*)?(.*?)\s*\|\s*(.*?)\s*(;.*?)?$/;
+            $L =~ m/^\s*([!=]=\s*)?(.*?)\s*\|\s*(.*?)\s*(;.*?)?$/;
             if (!defined $2 or !defined $3) {
                 warn "file_pairs_from_file($file) parse failure\n",
                      "in compare mode for '$L', ignoring\n";
@@ -6807,8 +6815,8 @@ sub rm_comments_in_strings {                 # {{{1
                     $in_ml_string = 1;
                 }
                 elsif ( scalar @sub_token == 2 ) {
-		    # The line has some more content after the string
-		    # marker that starts a multiline string
+                    # The line has some more content after the string
+                    # marker that starts a multiline string
                     $t = $sub_token[0] . $firstpart_marker;
                     $sub_token[1] =~ s/\Q${start_comment}\E/xx/g;
                     $sub_token[1] =~ s/\Q${end_comment}\E/xx/g if $end_comment;
@@ -7483,6 +7491,7 @@ sub set_constants {                          # {{{1
     my ($rh_Language_by_Extension , # out
         $rh_Language_by_Script    , # out
         $rh_Language_by_File      , # out
+        $rh_Language_by_Prefix    , # out
         $rhaa_Filters_by_Language , # out
         $rh_Not_Code_Extension    , # out
         $rh_Not_Code_Filename     , # out
@@ -8429,8 +8438,11 @@ sub set_constants {                          # {{{1
             'Rakefile'          => 'Ruby'               ,
             'rakefile'          => 'Ruby'               ,
             'Dockerfile'        => 'Dockerfile'         ,
-            'Dockerfile.build'  => 'Dockerfile'         ,
-            'Dockerfile.test'   => 'Dockerfile'         ,
+            'Dockerfile.m4'     => 'Dockerfile'         ,
+            );
+# 1}}}
+%{$rh_Language_by_Prefix}     = (             # {{{1
+            'Dockerfile'        => 'Dockerfile'         ,
             );
 # 1}}}
 %{$rhaa_Filters_by_Language} = (            # {{{1
