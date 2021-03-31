@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.89
+  elapsed_seconds    : 0.00695490837097168
+  n_files            : 1
+  n_lines            : 25
+  files_per_second   : 143.783346474238
+  lines_per_second   : 3594.58366185595
+  report_file        : ../../../outputs/issues/579/csharp-autogen.cs.yaml
+'C# Generated' :
+  nFiles: 1
+  blank: 2
+  comment: 16
+  code: 7
+SUM: 
+  blank: 2
+  comment: 16
+  code: 7
+  nFiles: 1

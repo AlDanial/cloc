@@ -746,7 +746,7 @@ Usage: cloc [options] &lt;file(s)/dir(s)/git hash(es)&gt; | &lt;set 1&gt; &lt;se
                              cloc may undercount or completely skip the
                              contents of such file systems.  This switch forces
                              File::Find to stat directories to obtain the
-                             correct count.  File search spead will decrease.
+                             correct count.  File search speed will decrease.
                              See also --follow-links.
    --stdin-name=&lt;file&gt;       Give a file name to use to determine the language
                              for standard input.  (Use - as the input name to
