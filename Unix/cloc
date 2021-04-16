@@ -7650,6 +7650,8 @@ sub set_constants {                          # {{{1
             'ado'         => 'Stata'                 ,
             'do'          => 'Stata'                 ,
             'DO'          => 'Stata'                 ,
+            'Dockerfile'  => 'Dockerfile'            ,
+            'dockerfile'  => 'Dockerfile'            ,
             'pascal'      => 'Pascal'                ,
             'lpr'         => 'Pascal'                ,
             'dfm'         => 'Delphi Form'           ,
@@ -8443,6 +8445,7 @@ sub set_constants {                          # {{{1
             'rakefile'          => 'Ruby'               ,
             'Dockerfile'        => 'Dockerfile'         ,
             'Dockerfile.m4'     => 'Dockerfile'         ,
+            'Dockerfile.cmake'  => 'Dockerfile'         ,
             );
 # 1}}}
 %{$rh_Language_by_Prefix}     = (             # {{{1
