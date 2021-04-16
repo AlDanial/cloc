@@ -144,7 +144,7 @@ SUM:                            34           1538            736           4761
 
 Say you have a directory with three different git-managed projects,
 Project0, Project1, and Project2.  You can use your shell's looping
-capability to count the code in each.  This example uses bash:
+capability to count the code in each.  This example uses bash (scroll down for cmd.exe example):
 <pre>
 prompt> for d in ./*/ ; do (cd "$d" && echo "$d" && cloc --vcs git); done
 ./Project0/
@@ -191,6 +191,11 @@ YAML                             1              0              2             12
 -------------------------------------------------------------------------------
 SUM:                            39           1564           1365           3945
 -------------------------------------------------------------------------------
+</pre>
+
+**each subdirectory of a particular directory (Windows/cmd.exe)**
+<pre>
+for /D %I in (.\*) do cd %I && cloc --vcs git && cd ..
 </pre>
 
 [](1}}})
