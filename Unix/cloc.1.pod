@@ -159,8 +159,6 @@ reporting by language.
 
 =item B<--config FILE>
 
-First perform direct code counts of source file(s)
-
 Read command line switches from FILE instead of
 the default location of ~/.config/cloc/options.txt.
 The file should contain one switch, along with

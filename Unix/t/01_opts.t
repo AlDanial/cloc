@@ -577,6 +577,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/579/csharp-autogen.cs.yaml',
                 },
 
+                {
+                    'name' => 'config file from list file directory, #577',
+                    'cd'   => '../tests/inputs/issues/577',
+                    'args' => '--diff-list-file diff_list_file.txt',
+                    'ref'  => '../tests/outputs/issues/577/diff_list.yaml',
+                },
+
             );
 
 # Special cases:

@@ -50,41 +50,16 @@ use POSIX qw { strftime ceil};
 # Digest::MD5 isn't in the standard distribution. Use it only if installed.
 my $HAVE_Digest_MD5 = 1;
 use Digest::MD5;
-##eval "use Digest::MD5;";
-##if (defined $Digest::MD5::VERSION) {
-##    $HAVE_Digest_MD5 = 1;
-##} else {
-##    warn "Digest::MD5 not installed; will skip file uniqueness checks.\n";
-##}
 
 # Time::HiRes became standard with Perl 5.8
 my $HAVE_Time_HiRes = 1;
 use Time::HiRes;
-##eval "use Time::HiRes;";
-##$HAVE_Time_HiRes = 1 if defined $Time::HiRes::VERSION;
 
 my $HAVE_Rexexp_Common = 1;
 use Regexp::Common;
-### Regexp::Common isn't in the standard distribution.  It will
-### be installed in a temp directory if necessary.
-##BEGIN {
-##    if (eval "use Regexp::Common;") {
-##        $HAVE_Rexexp_Common = 1;
-##    } else {
-##        $HAVE_Rexexp_Common = 0;
-##    }
-##}
 
 my $HAVE_Algorith_Diff = 1;
 use Algorithm::Diff qw ( sdiff );
-### Algorithm::Diff isn't in the standard distribution.  It will
-### be installed in a temp directory if necessary.
-##eval "use Algorithm::Diff qw ( sdiff ) ";
-##if (defined $Algorithm::Diff::VERSION) {
-##    $HAVE_Algorith_Diff = 1;
-##} else {
-##    Install_Algorithm_Diff();
-##}
 # print "2 HAVE_Algorith_Diff = $HAVE_Algorith_Diff\n";
 # test_alg_diff($ARGV[$#ARGV - 1], $ARGV[$#ARGV]); die;
 # die "Hre=$HAVE_Rexexp_Common  Had=$HAVE_Algorith_Diff";
@@ -141,6 +116,7 @@ if ( $ENV{'HOME'} ) {
 } elsif ( $ENV{'APPDATA'} and $ON_WINDOWS ) {
     $config_file = File::Spec->catfile( $ENV{'APPDATA'}, 'cloc');
 }
+# $config_file may be updated by check_alternate_config_files()
 
 my $NN     = chr(27) . "[0m";  # normal
    $NN     = "" if $ON_WINDOWS or !(-t STDOUT); # -t STDOUT:  is it a terminal?
@@ -204,13 +180,14 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              relative path names will be resolved starting from
                              the directory where cloc is invoked.  Set <file>
                              to - to read file names from a STDIN pipe.
-                             See also --exclude-list-file.
+                             See also --exclude-list-file, --config.
    --diff-list-file=<file>   Take the pairs of file names to be diff'ed from
                              <file>, whose format matches the output of
                              --diff-alignment.  (Run with that option to
                              see a sample.)  The language identifier at the
                              end of each line is ignored.  This enables --diff
                              mode and bypasses file pair alignment logic.
+                             See also --config.
    --vcs=<VCS>               Invoke a system call to <VCS> to obtain a list of
                              files to work on.  If <VCS> is 'git', then will
                              invoke 'git ls-files' to get a file list and
@@ -252,6 +229,11 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              beginning with '#' are skipped.  Options given on
                              the command line take priority over entries read from
                              the file.
+                             If a directory is also given with any of these
+                             switches: --list-file, --exclude-list-file,
+                             --read-lang-def, --force-lang-def, --diff-list-file
+                             and a config file exists in that directory, it will
+                             take priority over $config_file.
    --count-and-diff <set1> <set2>
                              First perform direct code counts of source file(s)
                              of <set1> and <set2> separately, then perform a diff
@@ -308,7 +290,7 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              definition files.  Use --read-lang-def to define
                              new language filters without replacing built-in
                              filters (see also --write-lang-def,
-                             --write-lang-def-incl-dup).
+                             --write-lang-def-incl-dup, --config).
    --git                     Forces the inputs to be interpreted as git targets
                              (commit hashes, branch names, et cetera) if these
                              are not first identified as file or directory
@@ -369,7 +351,7 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              about, cloc's definition will take precedence.
                              Use --force-lang-def to over-ride cloc's
                              definitions (see also --write-lang-def,
-                             --write-lang-def-incl-dup).
+                             --write-lang-def-incl-dup, --config).
    --script-lang=<lang>,<s>  Process all files that invoke <s> as a #!
                              scripting language with the counter for language
                              <lang>.  For example, files that begin with
@@ -1120,6 +1102,15 @@ if (defined $opt_no_autogen and scalar @ARGV == 1 and $ARGV[0] eq "list") {
 if ($opt_summary_cutoff) {
     my $error = summary_cutoff_error($opt_summary_cutoff);
     die "$error\n" if $error;
+}
+
+if (!$opt_config_file) {
+    # if not explicitly given, look for a config file in other
+    # possible locations
+    my $other_loc = check_alternate_config_files($opt_list_file,
+        $opt_exclude_list_file, $opt_read_lang_def, $opt_force_lang_def,
+        $opt_diff_list_file);
+    $opt_config_file = $other_loc if $other_loc;
 }
 
 die $brief_usage unless defined $opt_version         or
@@ -2257,7 +2248,7 @@ sub exclude_autogenerated_files {            # {{{1
             push @file_list_minus_autogen, $file;
             next;
         }
-        my $first_line = first_line($file, $rh_Err, $raa_errors);
+        my $first_line = first_line($file, 1, $rh_Err, $raa_errors);
         if ($first_line =~ m{^//\s+Code\s+generated\s+.*?\s+DO\s+NOT\s+EDIT\.$}) {
             $rh_Ignored->{$file} = 'Go autogenerated file';
         } else {
@@ -4894,7 +4885,8 @@ sub replace_git_hash_with_tarfile {          # {{{1
     }
     return unless %git_hash;
 
-    my $have_tar_git = external_utility_exists($ON_WINDOWS ? "unzip" : "tar --version") &&
+#   my $have_tar_git = external_utility_exists($ON_WINDOWS ? "unzip" : "tar --version") &&
+    my $have_tar_git = external_utility_exists("tar --version") &&
                        external_utility_exists("git --version");
     if (!$have_tar_git) {
         warn "One or more inputs looks like a git hash but " .
@@ -13514,7 +13506,29 @@ sub really_is_smarty {                       # {{{1
     print "<- really_is_smarty(points=$points)\n" if $opt_v > 2;
     return $points >= 2;
 } # 1}}}
-# subroutines copied from SLOCCount
+sub check_alternate_config_files {           # {{{1
+    my ($list_file, $exclude_list_file, $read_lang_def,
+        $force_lang_def, $diff_list_file, ) = @_;
+    my $found_it = "";
+    foreach my $file ($list_file,
+                      $exclude_list_file,
+                      $read_lang_def,
+                      $force_lang_def,
+                      $diff_list_file ) {
+        next unless defined $file;
+        my $dir = dirname $file;
+        next unless -r $dir and -d $dir;
+        my $bn = basename $config_file;
+        if (-r "$dir/$bn") {
+            $found_it = "$dir/$bn";
+            print "Using configuration file $found_it\n" if $opt_v;
+            last;
+        }
+    }
+    return $found_it;
+}
+# 1}}}
+# really_is_pascal, really_is_incpascal, really_is_php from SLOCCount
 my %php_files    = ();  # really_is_php()
 sub really_is_pascal {                       # {{{1
 # Given filename, returns TRUE if its contents really are Pascal.

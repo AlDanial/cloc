@@ -1,0 +1,56 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.89
+  elapsed_seconds    : 0.00794696807861328
+  n_files            : 1
+  n_lines            : 101
+  files_per_second   : 125.834153366135
+  lines_per_second   : 12709.2494899796
+  report_file        : ../../../outputs/issues/577/diff_list.yaml
+added :
+  'Swift' :
+    nFiles : 0
+    comment : 0
+    blank : 0
+    code : 0
+same :
+  'Swift' :
+    nFiles : 1
+    comment : 13
+    blank : 23
+    code : 65
+modified :
+  'Swift' :
+    nFiles : 0
+    comment : 0
+    blank : 0
+    code : 0
+removed :
+  'Swift' :
+    nFiles : 0
+    comment : 0
+    blank : 0
+    code : 0
+SUM :
+  added :
+    blank : 0
+    code : 0
+    comment : 0
+    nFiles : 0
+  same :
+    blank : 23
+    code : 65
+    comment : 13
+    nFiles : 1
+  modified :
+    blank : 0
+    code : 0
+    comment : 0
+    nFiles : 0
+  removed :
+    blank : 0
+    code : 0
+    comment : 0
+    nFiles : 0

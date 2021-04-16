@@ -35,7 +35,7 @@ at http://cloc.sourceforge.net/ since August 2006.
     *   [Wrapping cloc in other scripts](#wrapping-cloc-in-other-scripts-)
     *   [git and UTF8 pathnames](#git-and-UTF8-pathnames-)
     *   [Third Generation Language Scale Factors](#third-generation-language-scale-factors-)
-    *   [options.txt configuration tile](#optionstxt-configuration-file-)
+    *   [options.txt configuration file](#optionstxt-configuration-file-)
 *   [Complex regular subexpression recursion limit ](#complex-regular-subexpression-recursion-limit-)
 *   [Limitations](#limitations-)
 *   [Requesting Support for Additional Languages](#requesting-support-for-additional-languages-)
@@ -2709,7 +2709,7 @@ taken with a large grain of salt.
 If you find yourself using the same command line switches every
 time you invoke cloc, you can save some typing by adding those
 switches to the ``options.txt`` runtime configuration file.
-cloc will look for this file in the following locations:
+cloc will look for this file in the following default locations:
 <pre>
 # Linux, NetBSD, FreeBSD, macOS:
 /home/USERNAME/.config/cloc/options.txt
@@ -2728,6 +2728,23 @@ optional.  Here's a sample file:
 v      # verbose level 1
 exclude-ext svg,html
 </pre>
+
+The path to the ``options.txt`` file can also be specified
+with the ``--config FILE`` switch.
+
+Finally, if cloc finds an ``options.txt`` file in the same
+directory as files given by any of these switches (in the
+listed priority), it will use that configuration file
+from that location:
+
+1. ``--list-file``
+1. ``--exclude-list-file``
+1. ``--read-lang-def``
+1. ``--force-lang-def``
+1. ``--diff-list-file``
+
+Run with ``--verbose`` to have cloc tell you which, if
+any, ``options.txt`` file it uses.
 
 [](1}}})
 <a name="complex_regex_recursion"></a> []({{{1)
