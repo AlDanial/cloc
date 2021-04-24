@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.89
+  elapsed_seconds    : 0.00774002075195312
+  n_files            : 1
+  n_lines            : 231
+  files_per_second   : 129.198620009857
+  lines_per_second   : 29844.881222277
+  report_file        : ../outputs/RedBlackTree.res.yaml
+'ReScript' :
+  nFiles: 1
+  blank: 31
+  comment: 43
+  code: 157
+SUM: 
+  blank: 31
+  comment: 43
+  code: 157
+  nFiles: 1

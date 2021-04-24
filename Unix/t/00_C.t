@@ -742,6 +742,11 @@ my @Tests = (
                     'args' => '../tests/inputs/LogMain.re',
                 },
                 {
+                    'name' => 'ReScript',
+                    'ref'  => '../tests/outputs/RedBlackTree.res.yaml',
+                    'args' => '../tests/inputs/RedBlackTree.res',
+                },
+                {
                     'name' => 'reStructuredText',
                     'ref'  => '../tests/outputs/reStructuredText.rst.yaml',
                     'args' => '../tests/inputs/reStructuredText.rst',
