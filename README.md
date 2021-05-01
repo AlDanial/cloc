@@ -5,7 +5,7 @@
 * * *
 cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.
 
-Latest release:  v1.88 (Sept. 12, 2020)
+Latest release:  v1.90 (May 1, 2021)
 
 cloc moved to GitHub in September 2015 after being hosted
 at http://cloc.sourceforge.net/ since August 2006.
@@ -57,8 +57,8 @@ Step 3:  Invoke cloc to count your source files, directories, archives,
 or git commits.
 The executable name differs depending on whether you use the
 development source version (`cloc`), source for a
-released version (`cloc-1.88.pl`) or a Windows executable
-(`cloc-1.88.exe`).  On this page, `cloc` is the generic term
+released version (`cloc-1.90.pl`) or a Windows executable
+(`cloc-1.90.exe`).  On this page, `cloc` is the generic term
 used to refer to any of these.
 
 **a file**
@@ -355,7 +355,8 @@ and Digest::MD5 installed locally.
 # [Building a Windows Executable &#9650;](#___top "click to go to top of document")
 
 The Windows downloads
-<tt>cloc-1.88.exe</tt> was built on a 64 bit Windows 10 computer
+<tt>cloc-1.90.exe</tt> and
+<tt>cloc-1.88.exe</tt> were built on a 64 bit Windows 10 computer
 using
 [Strawberry Perl](http://strawberryperl.com/)
 5.30.2 and
@@ -397,6 +398,9 @@ You are encouraged to run your own virus scanners against the
 executable and also check sites such
 https://www.virustotal.com/ .
 The entries for recent versions are:
+
+cloc-1.90.exe:
+https://www.virustotal.com/gui/file/d655caae55486f9bac39f7e3c7b7553bcfcfe2b88914c79bfc328055f22b8a37/detection
 
 cloc-1.88.exe:
 https://www.virustotal.com/gui/file/97d5d2631d1cccdbfd99267ab8a4cf5968816bbe52c0f9324e72e768857f642d/detection
@@ -468,7 +472,7 @@ C:> cpan -i Digest::MD5
 C:> cpan -i Regexp::Common
 C:> cpan -i Algorithm::Diff
 C:> cpan -i PAR::Packer
-C:> pp -M Digest::MD5 -c -x -o cloc-1.86.exe cloc-1.86.pl
+C:> pp -M Digest::MD5 -c -x -o cloc-1.90.exe cloc-1.90.pl
 </pre>
 
 A variation on the instructions above is if you installed the portable
@@ -1006,6 +1010,8 @@ Assembly                   (a51, asm, nasm, S, s)
 AutoHotkey                 (ahk, ahkl)
 awk                        (auk, awk, gawk, mawk, nawk)
 Bazel                      (bazel, BUILD)
+BizTalk Orchestration      (odx)
+BizTalk Pipeline           (btp)
 Blade                      (blade, blade.php)
 Bourne Again Shell         (bash)
 Bourne Shell               (sh)
@@ -1014,8 +1020,10 @@ builder                    (xml.builder)
 C                          (c, cats, ec, idc, pgc)
 C Shell                    (csh, tcsh)
 C#                         (cs)
+C# Designer                (designer.cs)
 C++                        (C, c++, cc, CPP, cpp, cxx, h++, inl, ipp, pcc, tcc, tpp)
 C/C++ Header               (H, h, hh, hpp, hxx)
+Cake Build Script          (cake)
 CCS                        (ccs)
 Chapel                     (chpl)
 Clean                      (dcl, icl)
@@ -1031,16 +1039,19 @@ Coq                        (v)
 Crystal                    (cr)
 CSON                       (cson)
 CSS                        (css)
+CSV                        (csv)
 Cucumber                   (feature)
 CUDA                       (cu, cuh)
 Cython                     (pxd, pxi, pyx)
 D                          (d)
 DAL                        (da)
 Dart                       (dart)
+Delphi Form                (dfm)
 dhall                      (dhall)
 DIET                       (dt)
 diff                       (diff, patch)
 DITA                       (dita)
+Dockerfile                 (Dockerfile, dockerfile)
 DOORS Extension Language   (dxl)
 DOS Batch                  (BAT, bat, BTM, btm, CMD, cmd)
 Drools                     (drl)
@@ -1069,8 +1080,11 @@ FXML                       (fxml)
 GDScript                   (gd)
 Gencat NLS                 (msg)
 Glade                      (glade, ui)
+Gleam                      (gleam)
 GLSL                       (comp, fp, frag, frg, fsh, fshader, geo, geom, glsl, glslv, gshader, tesc, tese, vert, vrx, vsh, vshader)
 Go                         (go)
+Godot Resource             (tres)
+Godot Scene                (tscn)
 Gradle                     (gradle, gradle.kts)
 Grails                     (gsp)
 GraphQL                    (gql, graphql, graphqls)
@@ -1101,6 +1115,7 @@ JSON5                      (json5)
 JSP                        (jsp, jspf)
 JSX                        (jsx)
 Julia                      (jl)
+Juniper Junos              (junos)
 Jupyter Notebook           (ipynb)
 Kermit                     (ksc)
 Korn Shell                 (ksh)
@@ -1127,7 +1142,7 @@ Maven                      (pom, pom.xml)
 Meson                      (meson.build)
 Modula3                    (i3, ig, m3, mg)
 Mojo                       (mojom)
-MSBuild script             (csproj, vbproj, vcproj, wdproj, wixproj)
+MSBuild script             (btproj, csproj, msbuild, vcproj, wdproj, wixproj)
 MUMPS                      (mps, m)
 Mustache                   (mustache)
 MXML                       (mxml)
@@ -1144,7 +1159,7 @@ OpenCL                     (cl)
 Oracle Forms               (fmt)
 Oracle PL/SQL              (bod, fnc, prc, spc, trg)
 Oracle Reports             (rex)
-Pascal                     (dfm, dpr, lpr, p, pas, pascal)
+Pascal                     (dpr, lpr, p, pas, pascal)
 Pascal/Puppet              (pp)
 Patran Command Language    (pcl, ses)
 Perl                       (ack, al, cpanfile, makefile.pl, perl, ph, plh, plx, pm, psgi, rexfile, pl, p6)
@@ -1174,8 +1189,10 @@ RAML                       (raml)
 RapydScript                (pyj)
 Razor                      (cshtml, razor)
 ReasonML                   (re, rei)
+ReScript                   (res, resi)
 reStructuredText           (rest, rest.txt, rst, rst.txt)
 Rexx                       (pprx, rexx)
+Ring                       (rform, rh, ring)
 Rmd                        (Rmd)
 RobotFramework             (robot)
 Ruby                       (appraisals, berksfile, brewfile, builder, buildfile, capfile, dangerfile, deliverfile, eye, fastfile, gemfile, gemfile.lock, gemspec, god, guardfile, irbrc, jarfile, jbuilder, mavenfile, mspec, podfile, podspec, pryrc, puppetfile, rabl, rake, rb, rbuild, rbw, rbx, ru, snapfile, thor, thorfile, vagrantfile, watchr)
@@ -1225,15 +1242,20 @@ TypeScript                 (tsx, ts)
 Unity-Prefab               (mat, prefab)
 Vala                       (vala)
 Vala Header                (vapi)
+VB for Applications        (VBA, vba)
 Velocity Template Language (vm)
 Verilog-SystemVerilog      (sv, svh, v)
 VHDL                       (VHD, vhd, VHDL, vhdl, vhf, vhi, vho, vhs, vht, vhw)
 vim script                 (vim)
-Visual Basic               (BAS, bas, ctl, dsr, frm, FRX, frx, VB, vb, VBA, vba, VBHTML, vbhtml, VBS, vbs, cls)
+Visual Basic               (BAS, bas, ctl, dsr, frm, FRX, frx, VBHTML, vbhtml, vbp, vbw, cls)
+Visual Basic .NET          (VB, vb, vbproj)
+Visual Basic Script        (VBS, vbs)
 Visual Fox Pro             (SCA, sca)
+Visual Studio Solution     (sln)
 Visualforce Component      (component)
 Visualforce Page           (page)
 Vuejs Component            (vue)
+Web Services Description   (wsdl)
 WebAssembly                (wast, wat)
 Windows Message File       (mc)
 Windows Module Definition  (def)
@@ -1255,6 +1277,7 @@ XSLT                       (XSL, xsl, XSLT, xslt)
 Xtend                      (xtend)
 yacc                       (y, yacc)
 YAML                       (clang-format, clang-tidy, gemrc, glide.lock, mir, reek, rviz, sublime-syntax, syntax, yaml, yaml-tmlanguage, yml, yml.mysql)
+Zig                        (zig)
 zsh                        (zsh)
 </pre>
 

@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "1.89";  # odd number == beta; even number == stable
+my $VERSION = "1.90";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.006;
 # use modules                                  {{{1
@@ -464,7 +464,7 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              name per line.  Only exact matches are ignored;
                              relative path names will be resolved starting from
                              the directory where cloc is invoked.
-                             See also --list-file.
+                             See also --list-file, --config.
    --fullpath                Modifies the behavior of --match-f, --not-match-f,
                              and --not-match-d to include the file's path
                              in the regex, not just the file's basename.
