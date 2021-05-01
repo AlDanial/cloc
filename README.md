@@ -2842,6 +2842,8 @@ treats all docstrings as code.
 even if these are used to block lines of source from being compiled;
 the blocked lines still contribute to the code count.
 </li>
+<li> On Windows, cloc  will fail with ``Can't cd to ... No such file or directory at <embedded>/File/Find.pm`` if the code being scanned has file paths longer than 255 characters.  A work-around is to run cloc from the Windows Subsystem for Linux (WSL).
+</li>
 </ol>
 
 [](1}}})
