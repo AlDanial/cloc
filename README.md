@@ -2805,7 +2805,7 @@ xxxxxxx
 xxxxxxx
 xxxxxxx     ");
 </pre>
-where `xxxxxxx` represents cloc's view of commented text.
+where <tt>xxxxxxx</tt> represents cloc's view of commented text.
 Therefore cloc counts the five lines as two lines of C code and three
 lines of comments (lines with both code and comment are counted as code).
 
@@ -2832,7 +2832,7 @@ comment out blocks of code, or they can be regular strings (when
 they appear on the right hand side of an assignment or as a function argument).
 cloc is unable to infer the meaning of docstrings by context; by default
 cloc treats all docstrings as comments.  The switch
-``--docstring-as--code``
+<tt>--docstring-as--code</tt>
 treats all docstrings as code.
 </li>
 <li> Language definition files read with <tt>--read-lang-def</tt> or
@@ -2842,7 +2842,10 @@ treats all docstrings as code.
 even if these are used to block lines of source from being compiled;
 the blocked lines still contribute to the code count.
 </li>
-<li> On Windows, cloc  will fail with ``Can't cd to ... No such file or directory at <embedded>/File/Find.pm`` if the code being scanned has file paths longer than 255 characters.  A work-around is to run cloc from the Windows Subsystem for Linux (WSL).
+<li> On Windows, cloc  will fail with <tt>Can't cd to ... No such file or
+directory at <embedded>/File/Find.pm</tt> if the code being scanned has
+file paths longer than 255 characters.  A work-around is to run cloc
+from the Windows Subsystem for Linux (WSL).
 </li>
 </ol>
 
