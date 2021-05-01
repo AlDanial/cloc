@@ -94,7 +94,8 @@ relative path names will be resolved starting from
 the directory where cloc is invoked.
 Set FILE to - to read file names from a STDIN pipe.
 See also
-B<--exclude-list-file>.
+B<--exclude-list-file>,
+B<--config>.
 
 =item B<--diff-list-file=FILE>
 
@@ -104,6 +105,8 @@ B<--diff-alignment>.  (Run with that option to
 see a sample.)  The language identifier at the
 end of each line is ignored.  This enables B<--diff>
 mode and by-passes file pair alignment logic.
+See also
+B<--config>.
 
 =item B<--vcs=VCS>
 
@@ -166,7 +169,14 @@ arguments (if any), per line.  Blank lines and lines
 beginning with '#' are skipped.  Options given on
 the command line take priority over entries read from
 the file.
-
+If a directory is also given with any of these
+switches: --list-file,
+B<--exclude-list-file>,
+B<--read-lang-def>,
+B<--force-lang-def>,
+B<--diff-list-file>
+and a config file exists in that directory, it will
+take priority over ~/.config/cloc/options.txt.
 
 =item B<--count-and-diff SET1 SET2>
 
@@ -251,6 +261,17 @@ commits, or between a git commit and a file,
 directory, or archive.  Use -v/--verbose to see
 the git system commands cloc issues.
 
+=item B<--git-diff-rel>
+
+Same as B<--git --diff>, or just B<--diff> if the inputs
+are recognized as git targets.  Only files which
+have changed in either commit are compared.
+
+=item B<--git-diff-all>
+
+Git diff strategy #2:  compare all files in the
+repository between the two commits.
+
 =item B<--ignore-whitespace>
 
 Ignore horizontal white space when comparing files
@@ -262,17 +283,6 @@ Ignore changes in case within file contents;
 consider upper- and lowercase letters equivalent
 when comparing files with B<--diff>.  See also
 B<--ignore-whitespace>.
-
-=item B<--git-diff-rel>
-
-Same as B<--git --diff>, or just B<--diff> if the inputs
-are recognized as git targets.  Only files which
-have changed in either commit are compared.
-
-=item B<--git-diff-all>
-
-Git diff strategy #2:  compare all files in the
-repository between the two commits.
 
 =item B<--ignore-case-ext>
 
@@ -308,7 +318,7 @@ such as GNU autoconf.  To see a list of these files
 (then exit), run with B<--no-autogen list>
 See also B<--autoconf>.
 
-==item b<--original-dir>
+==item B<--original-dir>
 
 Only effective in combination with
 B<--strip-comments>.  Write the stripped files
@@ -349,6 +359,19 @@ Use DIR as the scratch directory instead of letting I<File::Temp> chose
 the location. Files written to this location are not removed at the
 end of the run (as they are with I<File::Temp>).
 
+=item B<--skip-leading=N[,ext]>
+
+ Skip the first <N> lines of each file.  If a
+comma separated list of extensions is also given,
+only skip lines from those file types.  Example:
+
+	--skip-leading=10,cpp,h
+
+will skip the first ten lines of *.cpp and *.h
+files.  This is useful for ignoring boilerplate
+text.
+
+
 =item B<--skip-uniqueness>
 
 Skip the file uniqueness check. This will give a performance boost at
@@ -374,14 +397,9 @@ Count lines streamed via I<STDIN> as if they came from a file named FILE.
 
 For each file processed, write to the current directory a version of
 the file which has blank and commented lines removed (in-line comments
-persist). The name of each stripped file is the original file name with 
-C<.EXT> appended to it. It is written to the current directory unless 
+persist). The name of each stripped file is the original file name with
+C<.EXT> appended to it. It is written to the current directory unless
 B<--original-dir> is on.
-
-=item B<--original-dir>
-
-Write the stripped files the same directory as the original files.
-Only effective in combination with B<--strip-comments>.
 
 =item B<--strip-str-comments>
 
@@ -483,7 +501,8 @@ appear in FILE.  FILE should have one file
 name per line.  Only exact matches are ignored;
 relative path names will be resolved starting from
 the directory where cloc is invoked.
-See also B<--list-file>.
+See also B<--list-file>,
+B<--config>.
 
 =item B<--fullpath>
 
@@ -545,7 +564,9 @@ in the regex instead of just the basename.
 
 Ignore files that end with the given Perl regular
 expression.  For example, if given
-  --skip-archive='(zip|tar(\.(gz|Z|bz2|xz|7z))?)'
+
+	--skip-archive='(zip|tar(\.(gz|Z|bz2|xz|7z))?)'
+
 the code will skip files that end with .zip,
 .tar, .tar.gz, .tar.Z, .tar.bz2, .tar.xz, and
 .tar.7z.
@@ -630,9 +651,9 @@ Print the version of this program and exit.
 =item B<--write-lang-def=FILE>
 
 Writes to FILE the language processing filters then exits. Useful as a
-first step to creating custom language definitions. 
+first step to creating custom language definitions.
 Note: languages which map to the same file extension will be excluded.
-See also B<--force-lang-def>, B<--read-lang-def>.  
+See also B<--force-lang-def>, B<--read-lang-def>.
 
 =item B<--write-lang-def-incl-dup=FILE>
 
@@ -725,7 +746,7 @@ below N where X is one of
     m   meaning lines of comments
     cm  meaning lines of code + comments
 Appending a percent sign to N changes
-the calculation from straight count to 
+the calculation from straight count to
 percentage.
 Ignored with --diff or --by-file.
 
