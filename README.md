@@ -2855,7 +2855,7 @@ comment out blocks of code, or they can be regular strings (when
 they appear on the right hand side of an assignment or as a function argument).
 cloc is unable to infer the meaning of docstrings by context; by default
 cloc treats all docstrings as comments.  The switch
-<tt>--docstring-as--code</tt>
+<tt>--docstring-as-code</tt>
 treats all docstrings as code.
 </li>
 <li> Language definition files read with <tt>--read-lang-def</tt> or
