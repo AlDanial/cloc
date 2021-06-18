@@ -677,9 +677,24 @@ my @Tests = (
                     'args' => '../tests/inputs/find.plm',
                 },
                 {
-                    'name' => 'Puppet',
+                    'name' => 'Puppet class',
                     'ref'  => '../tests/outputs/modules1-ntp1.pp.yaml',
                     'args' => '../tests/inputs/modules1-ntp1.pp',
+                },
+                {
+                    'name' => 'Puppet function without arguments',
+                    'ref'  => '../tests/outputs/modules1-func1.pp.yaml',
+                    'args' => '../tests/inputs/modules1-func1.pp',
+                },
+                {
+                    'name' => 'Puppet function with arguments',
+                    'ref'  => '../tests/outputs/modules1-func2.pp.yaml',
+                    'args' => '../tests/inputs/modules1-func2.pp',
+                },
+                {
+                    'name' => 'Puppet typealias',
+                    'ref'  => '../tests/outputs/modules1-typealias.pp.yaml',
+                    'args' => '../tests/inputs/modules1-typealias.pp',
                 },
                 {
                     'name' => 'Python',
