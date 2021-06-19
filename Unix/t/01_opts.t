@@ -584,6 +584,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/577/diff_list.yaml',
                 },
 
+                {
+                    'name' => '--force-lang-def without XML definition, #596',
+                    'cd'   => '../tests/inputs/issues/596',
+                    'args' => '--force-lang-def def.txt .',
+                    'ref'  => '../tests/outputs/issues/596/results.yaml',
+                },
+
             );
 
 # Special cases:

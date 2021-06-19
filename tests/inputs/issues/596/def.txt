@@ -1,0 +1,4 @@
+Yarn
+    filter remove_matches ^\s*#
+    filename yarn.lock
+    3rd_gen_scale 2.11

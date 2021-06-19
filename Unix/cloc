@@ -2299,6 +2299,13 @@ sub count_files {                            # {{{1
             $p_ignored{$file} = "--exclude-lang=$Language{$file}";
             next;
         }
+        if ($opt_force_lang_def and ($Language{$file} eq "XML") and
+            !defined $Filters_by_Language{XML}) {
+            # XML check is attempted for all unidentified text files.
+            # This can't be done if user forces language definition
+            # that excludes XML.  GH #596
+            next;
+        }
 
         my $Filters_by_Language_Language_file = ! @{$Filters_by_Language{$Language{$file}} };
         if ($Filters_by_Language_Language_file) {
