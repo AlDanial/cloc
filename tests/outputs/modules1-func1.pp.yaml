@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.90
+  elapsed_seconds    : 0.00691103935241699
+  n_files            : 1
+  n_lines            : 5
+  files_per_second   : 144.696036154138
+  lines_per_second   : 723.48018077069
+  report_file        : tests/outputs/modules1-func1.pp.yaml
+'Puppet' :
+  nFiles: 1
+  blank: 0
+  comment: 2
+  code: 3
+SUM: 
+  blank: 0
+  comment: 2
+  code: 3
+  nFiles: 1

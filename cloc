@@ -11226,6 +11226,8 @@ sub pascal_or_puppet {                       # {{{1
         ++$pascal_points if /writeln/;
 
         ++$puppet_points if /^\s*class\s+/ and not /class\s+operator\s+/;
+        ++$puppet_points if /^\s*function\s+[a-z][a-z0-9]+::[a-z][a-z0-9]+\s*/;
+        ++$puppet_points if /^\s*type\s+[A-Z]\w+::[A-Z]\w+\s+/;
         ++$puppet_points if /^\s*case\s+/;
         ++$puppet_points if /^\s*package\s+/;
         ++$puppet_points if /^\s*file\s+/;
