@@ -5444,12 +5444,13 @@ sub remove_duplicate_files {                 # {{{1
     # Where files are equally sized, compare their MD5 checksums.
     print "-> remove_duplicate_files\n" if $opt_v > 2;
 
+    my $separator = defined $opt_csv_delimiter ? $opt_csv_delimiter : ",";
     my $n = 0;
     my %files_by_size = (); # files_by_size{ # bytes } = [ list of files ]
     seek($fh, 0, 0); # rewind to beginning of the temp file
     while (<$fh>) {
         ++$n;
-        my ($size_in_bytes, $language, $file) = split(/,/, $_, 3);
+        my ($size_in_bytes, $language, $file) = split(/$separator/, $_, 3);
         if (!defined($size_in_bytes) or
             !defined($language)      or
             !defined($file)) {

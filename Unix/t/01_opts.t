@@ -591,6 +591,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/596/results.yaml',
                 },
 
+                {
+                    'name' => '--csv-delimiter="#", #597',
+                    'cd'   => '../tests/inputs/issues/597',
+                    'args' => '--csv-delimiter="#" .',
+                    'ref'  => '../tests/outputs/issues/597/results.yaml',
+                },
+
             );
 
 # Special cases:
