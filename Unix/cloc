@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "1.90";  # odd number == beta; even number == stable
+my $VERSION = "1.91";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.006;
 # use modules                                  {{{1
@@ -8095,6 +8095,7 @@ sub set_constants {                          # {{{1
             'pl1'         => 'PL/I'                  ,
             'plm'         => 'PL/M'                  ,
             'lit'         => 'PL/M'                  ,
+            'puml'        => 'PlantUML'              ,
             'po'          => 'PO File'               ,
             'pbt'         => 'PowerBuilder'          ,
             'sra'         => 'PowerBuilder'          ,
@@ -9244,6 +9245,10 @@ sub set_constants {                          # {{{1
                             ],
     'PL/M'               => [
                                 [ 'call_regexp_common'  , 'C'      ],
+                            ],
+    'PlantUML'           => [
+                                [ 'remove_between_general', "/'", "'/" ],
+                                [ 'remove_matches'      , "^\\s*'" ],
                             ],
     'Perl'               => [   [ 'remove_below'        , '^__(END|DATA)__'],
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -10414,6 +10419,7 @@ sub set_constants {                          # {{{1
     'PL/I'                         =>   1.38,
     'pl/1'                         =>   1.38,
     'PL/M'                         =>   1.13,
+    'PlantUML'                     =>   2.00,
     'pl/s'                         =>   0.88,
     'Oracle PL/SQL'                =>   2.58,
     'pl/sql'                       =>   2.58,

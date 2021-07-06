@@ -677,6 +677,11 @@ my @Tests = (
                     'args' => '../tests/inputs/find.plm',
                 },
                 {
+                    'name' => 'PlantUML',
+                    'ref'  => '../tests/outputs/plantuml.puml.yaml',
+                    'args' => '../tests/inputs/plantuml.puml',
+                },
+                {
                     'name' => 'Puppet class',
                     'ref'  => '../tests/outputs/modules1-ntp1.pp.yaml',
                     'args' => '../tests/inputs/modules1-ntp1.pp',

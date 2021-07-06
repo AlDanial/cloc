@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.91
+  elapsed_seconds    : 0.00668501853942871
+  n_files            : 1
+  n_lines            : 12
+  files_per_second   : 149.588216412854
+  lines_per_second   : 1795.05859695424
+  report_file        : ../outputs/plantuml.puml.yaml
+'PlantUML' :
+  nFiles: 1
+  blank: 2
+  comment: 5
+  code: 5
+SUM: 
+  blank: 2
+  comment: 5
+  code: 5
+  nFiles: 1
