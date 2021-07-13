@@ -78,6 +78,13 @@ my @Tests = (
                     'results'  => 'results.yaml.diff.HEAD~1.HEAD',
                 },
 
+                {
+                    'name' => 'file size filter with --vcs, #599',
+                    'args' => '--vcs=git --max-file-size 0.0001 .',
+                    'ref'  => '../tests/outputs/issues/599/results.yaml',
+                    'cd'   => 'cloc_submodule_test',
+                },
+
             );
 
 my $Verbose = 0;

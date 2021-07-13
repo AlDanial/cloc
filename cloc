@@ -836,7 +836,7 @@ my $getopt_success = GetOptions(             # {{{1
    "unix"                                    => \$opt_force_on_unix       ,
    "show_os|show-os"                         => \$opt_show_os             ,
    "skip_archive|skip-archive=s"             => \$opt_skip_archive        ,
-   "max_file_size|max-file-size=i"           => \$opt_max_file_size       ,
+   "max_file_size|max-file-size=f"           => \$opt_max_file_size       ,
    "use_sloccount|use-sloccount"             => \$opt_use_sloccount       ,
    "no_autogen|no-autogen"                   => \$opt_no_autogen          ,
    "git"                                     => \$opt_force_git           ,
@@ -5440,6 +5440,26 @@ sub invoke_generator {                       # {{{1
             push @post_filter, $F unless basename($F) =~ m{$opt_not_match_f};
             next;
         }
+        my $nBytes = -s $F ;
+        if (!$nBytes) {
+            $Ignored{$F} = 'zero sized file';
+            printf "files(%s)  zero size\n", $F if $opt_v > 5;
+        }
+        next unless $nBytes;
+        if ($nBytes > $opt_max_file_size*1024**2) {
+            $Ignored{$F} = "file size of " .
+                $nBytes/1024**2 . " MB exceeds max file size of " .
+                "$opt_max_file_size MB";
+            printf "file(%s)  exceeds $opt_max_file_size MB\n",
+                $F if $opt_v > 5;
+            next;
+        }
+        my $is_bin = -B $F ;
+        printf "files(%s)  size=%d  -B=%d\n",
+            $F, $nBytes, $is_bin if $opt_v > 5;
+        $is_bin = 0 if $opt_unicode and unicode_file($_);
+        $is_bin = 0 if $opt_read_binary_files;
+        next if $is_bin;
         push @post_filter, $F;
     }
     print "<- invoke_generator\n" if $opt_v > 2;
