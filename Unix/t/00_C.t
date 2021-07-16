@@ -652,21 +652,6 @@ my @Tests = (
                     'args' => '../tests/inputs/script1-hadoop.pig',
                 },
                 {
-                    'name' => 'ProGuard',
-                    'ref'  => '../tests/outputs/proguard-project-app.pro.yaml',
-                    'args' => '../tests/inputs/proguard-project-app.pro',
-                },
-                {
-                    'name' => 'Prolog',
-                    'ref'  => '../tests/outputs/birds.pro.yaml',
-                    'args' => '../tests/inputs/birds.pro',
-                },
-                {
-                    'name' => 'PO File',
-                    'ref'  => '../tests/outputs/en_AU.po.yaml',
-                    'args' => '../tests/inputs/en_AU.po',
-                },
-                {
                     'name' => 'PL/I',
                     'ref'  => '../tests/outputs/hello.pl1.yaml',
                     'args' => '../tests/inputs/hello.pl1',
@@ -680,6 +665,26 @@ my @Tests = (
                     'name' => 'PlantUML',
                     'ref'  => '../tests/outputs/plantuml.puml.yaml',
                     'args' => '../tests/inputs/plantuml.puml',
+                },
+                {
+                    'name' => 'PO File',
+                    'ref'  => '../tests/outputs/en_AU.po.yaml',
+                    'args' => '../tests/inputs/en_AU.po',
+                },
+                {
+                    'name' => 'ProGuard',
+                    'ref'  => '../tests/outputs/proguard-project-app.pro.yaml',
+                    'args' => '../tests/inputs/proguard-project-app.pro',
+                },
+                {
+                    'name' => 'Prolog',
+                    'ref'  => '../tests/outputs/birds.pro.yaml',
+                    'args' => '../tests/inputs/birds.pro',
+                },
+                {
+                    'name' => 'Properties',
+                    'ref'  => '../tests/outputs/wiki.properties.yaml',
+                    'args' => '../tests/inputs/wiki.properties',
                 },
                 {
                     'name' => 'Puppet class',
