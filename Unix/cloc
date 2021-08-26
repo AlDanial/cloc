@@ -4495,6 +4495,8 @@ sub read_lang_def {                          # {{{1
     foreach (@lines) {
         next if /^\s*#/ or /^\s*$/;
 
+        $_ = lc $_ if $ON_WINDOWS and /^\s+(filename|extension)\s/;
+
         if (/^(\w+.*?)\s*$/) {
             $language = $1;
             next;
@@ -4582,6 +4584,8 @@ sub merge_lang_def {                         # {{{1
     my @lines = read_file($file);
     foreach (@lines) {
         next if /^\s*#/ or /^\s*$/;
+
+        $_ = lc $_ if $ON_WINDOWS and /^\s+(filename|extension)\s/;
 
         if (/^(\w+.*?)\s*$/) {
             $language = $1;
