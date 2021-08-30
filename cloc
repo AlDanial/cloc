@@ -12447,6 +12447,7 @@ sub unicode_to_ascii {                       # {{{1
         if (ord($L) == 9 or ord($L) == 10 or ord($L) == 13) {
             my $companion;
             if ($points_1) {
+                last if $i+1 >= $length;
                 $companion = $unicode[$i+1];
             } else {
                 $companion = $unicode[$i-1];

@@ -598,6 +598,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/597/results.yaml',
                 },
 
+                {
+                    'name' => '--unicode (uninitialized value), #606',
+                    'cd'   => '../tests/inputs/issues/606',
+                    'args' => '--unicode in',
+                    'ref'  => '../tests/outputs/issues/606/results.yaml',
+                },
+
             );
 
 # Special cases:
