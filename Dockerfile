@@ -1,9 +1,12 @@
 # Dockerfile by Sébastien HOUZÉ, https://github.com/shouze
 FROM perl:slim AS base
 
-RUN apt-get update && apt-get install -y \
-    unzip \
+RUN export DEBIAN_FRONTEND=noninteractive \
+ && apt-get update \
+ && apt-get install -y --no-install-recommends \
+    ca-certificates \
     git \
+    unzip \
  && rm -rf /var/lib/apt/lists/*
 
 #Install all dependencies
