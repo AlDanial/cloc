@@ -1,5 +1,5 @@
 # Dockerfile by Sébastien HOUZÉ, https://github.com/shouze
-FROM perl:slim
+FROM perl:slim AS base
 
 RUN apt-get update && apt-get install -y \
     unzip \
@@ -14,6 +14,11 @@ RUN perl -MCPAN -e 'install Parallel::ForkManager'
 
 #Copy source code
 COPY cloc /usr/src/
+
+####################
+FROM base AS test
+
+#Copy test code
 COPY .git /usr/src/.git
 COPY tests /usr/src/tests
 COPY Unix /usr/src/Unix
@@ -26,8 +31,8 @@ RUN git clone https://github.com/AlDanial/cloc_submodule_test.git
 #Run tests
 RUN make test
 
-#Cleanup of git folder
-RUN rm -rf .git
+####################
+From base AS final
 
 WORKDIR /tmp
 
