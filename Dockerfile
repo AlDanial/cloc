@@ -7,10 +7,12 @@ RUN apt-get update && apt-get install -y \
  && rm -rf /var/lib/apt/lists/*
 
 #Install all dependencies
-RUN perl -MCPAN -e 'install Algorithm::Diff'
-RUN perl -MCPAN -e 'install Regexp::Common'
-RUN perl -MCPAN -e 'install Digest::MD5'
-RUN perl -MCPAN -e 'install Parallel::ForkManager'
+RUN cpanm \
+      Algorithm::Diff \
+      Digest::MD5 \
+      Parallel::ForkManager \
+      Regexp::Common \
+ && rm -rf $HOME/.cpanm
 
 #Copy source code
 COPY cloc /usr/src/
