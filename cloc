@@ -8183,7 +8183,7 @@ sub set_constants {                          # {{{1
             'rc2'         => 'Windows Resource File' ,
             'sas'         => 'SAS'                   ,
             'sass'        => 'Sass'                  ,
-            'scss'        => 'Sass'                  ,
+            'scss'        => 'SCSS'                  ,
             'sh'          => 'Bourne Shell'          ,
             'smarty'      => 'Smarty'                ,
             'sml'         => 'Standard ML'           ,
