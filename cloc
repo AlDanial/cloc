@@ -7946,6 +7946,7 @@ sub set_constants {                          # {{{1
             'mg'          => 'Modula3'               ,
             'mojom'       => 'Mojo'                  ,
             'meson.build' => 'Meson'                 ,
+            'metal'       => 'Metal'                 ,
             'mk'          => 'make'                  ,
 #           'mli'         => 'ML'                    , # ML not implemented
 #           'ml'          => 'ML'                    ,
@@ -9185,6 +9186,10 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '%.*$'   ],
                                 [ 'remove_matches'      , '^\s*%'  ],
                             ],
+    'Metal'              => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
     'Modula3'            => [   [ 'call_regexp_common'  , 'Pascal' ], ],
         # Modula 3 comments are (* ... *) so applying the Pascal filter
         # which also treats { ... } as a comment is not really correct.
@@ -9903,6 +9908,7 @@ sub set_constants {                          # {{{1
     'make'               =>     '\\\\$'         ,
     'MATLAB'             =>     '\.\.\.\s*$'    ,
     'Meson'              =>     '\\\\$'         ,
+    'Metal'              =>     '\\\\$'         ,
     'MXML'               =>     '\\\\$'         ,
     'Objective-C'        =>     '\\\\$'         ,
     'Objective-C++'      =>     '\\\\$'         ,
@@ -10394,6 +10400,7 @@ sub set_constants {                          # {{{1
     'mentor'                       =>   1.51,
     'mesa'                         =>   0.75,
     'Meson'                        =>   1.00,
+    'Metal'                        =>   1.51,
     'microfocus cobol'             =>   1.00,
     'microforth'                   =>   1.25,
     'microsoft c'                  =>   0.63,
