@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.91
+  elapsed_seconds    : 0.00755500793457031
+  n_files            : 1
+  n_lines            : 63
+  files_per_second   : 132.362534713456
+  lines_per_second   : 8338.83968694774
+  report_file        : ../outputs/RenderTest.metal.yaml
+'Metal' :
+  nFiles: 1
+  blank: 13
+  comment: 10
+  code: 40
+SUM: 
+  blank: 13
+  comment: 10
+  code: 40
+  nFiles: 1
