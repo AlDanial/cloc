@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.91
+  elapsed_seconds    : 0.00863790512084961
+  n_files            : 1
+  n_lines            : 26
+  files_per_second   : 115.76881037814
+  lines_per_second   : 3009.98906983163
+  report_file        : ../../../outputs/issues/613/nav.scss.yaml
+'SCSS' :
+  nFiles: 1
+  blank: 2
+  comment: 4
+  code: 20
+SUM: 
+  blank: 2
+  comment: 4
+  code: 20
+  nFiles: 1

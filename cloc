@@ -8188,7 +8188,7 @@ sub set_constants {                          # {{{1
             'rc2'         => 'Windows Resource File' ,
             'sas'         => 'SAS'                   ,
             'sass'        => 'Sass'                  ,
-            'scss'        => 'Sass'                  ,
+            'scss'        => 'SCSS'                  ,
             'sh'          => 'Bourne Shell'          ,
             'smarty'      => 'Smarty'                ,
             'sml'         => 'Standard ML'           ,
@@ -9475,8 +9475,9 @@ sub set_constants {                          # {{{1
                                 [ 'remove_between_general', '*', ';' ],
                             ],
     'Sass'               => [
-                                [ 'remove_matches'      , '^\s*//' ],
-                                [ 'remove_inline'       , '//.*$'  ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Scala'              => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
@@ -9487,6 +9488,11 @@ sub set_constants {                          # {{{1
     'Scheme'             => [
                                 [ 'remove_matches'      , '^\s*;'  ],
                                 [ 'remove_inline'       , ';.*$'   ],
+                            ],
+    'SCSS'               => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'sed'                => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -10562,6 +10568,7 @@ sub set_constants {                          # {{{1
     'SaltStack'                    =>   2.00,
     'SAS'                          =>   1.5 ,
     'Sass'                         =>   1.5 ,
+    'SCSS'                         =>   1.5 ,
     'simplan'                      =>   2.22,
     'simscript'                    =>   1.74,
     'simula'                       =>   1.74,

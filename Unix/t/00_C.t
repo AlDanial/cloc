@@ -797,7 +797,7 @@ my @Tests = (
                     'args' => '../tests/inputs/messages.rb',
                 },
                 {
-                    'name' => 'Sass',
+                    'name' => 'SCSS',
                     'ref'  => '../tests/outputs/style.scss.yaml',
                     'args' => '../tests/inputs/style.scss',
                 },

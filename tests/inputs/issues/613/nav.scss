@@ -1,0 +1,26 @@
+// https://blog.logrocket.com/the-definitive-guide-to-scss/
+nav {
+  background-color:#333;
+  padding:1em;
+  ul {
+    margin:0;
+    padding:0;
+    list-style:none;
+    li {
+      display:inline-block;
+    }
+  }
+}
+
+button {
+  background-color: #535353;
+  color: #000;
+  &:hover {
+    background-color: #000;
+/*
+    background-color: #050;
+*/
+    color: #fff;
+  }
+
+}

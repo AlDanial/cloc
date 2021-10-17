@@ -612,6 +612,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/611/cmakelists.txt.yaml',
                 },
 
+                {
+                    'name' => 'SCSS separate from Sass, #613',
+                    'cd'   => '../tests/inputs/issues/613',
+                    'args' => '.',
+                    'ref'  => '../tests/outputs/issues/613/nav.scss.yaml',
+                },
+
             );
 
 # Special cases:

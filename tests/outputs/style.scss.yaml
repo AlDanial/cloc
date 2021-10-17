@@ -2,20 +2,20 @@
 # github.com/AlDanial/cloc
 header : 
   cloc_url           : github.com/AlDanial/cloc
-  cloc_version       : 1.71
-  elapsed_seconds    : 0.00503396987915039
+  cloc_version       : 1.91
+  elapsed_seconds    : 0.00746607780456543
   n_files            : 1
   n_lines            : 57
-  files_per_second   : 198.650374159326
-  lines_per_second   : 11323.0713270816
-  report_file        : ../tests/outputs/style.scss.yaml
-Sass :
+  files_per_second   : 133.939134600032
+  lines_per_second   : 7634.53067220182
+  report_file        : outputs/style.scss.yaml
+'SCSS' :
   nFiles: 1
   blank: 14
-  comment: 0
-  code: 43
+  comment: 4
+  code: 39
 SUM: 
   blank: 14
-  comment: 0
-  code: 43
+  comment: 4
+  code: 39
   nFiles: 1
