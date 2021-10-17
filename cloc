@@ -5654,7 +5654,7 @@ sub files {                                  # {{{1
     if ($opt_match_d    ) { return unless $Dir =~ m{$opt_match_d}     }
 
     my $nBytes = -s $_ ;
-    if (!$nBytes) {
+    if (!$nBytes and -f $File::Find::name) {
         $Ignored{$File::Find::name} = 'zero sized file';
         printf "files(%s)  zero size\n", $File::Find::name if $opt_v > 5;
     }
@@ -5673,6 +5673,10 @@ sub files {                                  # {{{1
         $File::Find::name, $nBytes, $is_dir, $is_bin if $opt_v > 5;
     $is_bin = 0 if $opt_unicode and unicode_file($_);
     $is_bin = 0 if $opt_read_binary_files;
+    if ($is_bin) {
+        $Ignored{$File::Find::name} = "binary file";
+        printf "files(%s)  binary file\n", $File::Find::name if $opt_v > 5;
+    }
     return if $is_dir or $is_bin;
     ++$nFiles_Found;
     printf "%8d files\r", $nFiles_Found
