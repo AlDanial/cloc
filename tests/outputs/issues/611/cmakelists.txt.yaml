@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.91
+  elapsed_seconds    : 0.00787496566772461
+  n_files            : 1
+  n_lines            : 337
+  files_per_second   : 126.9846805934
+  lines_per_second   : 42793.8373599758
+  report_file        : ../../../outputs/issues/611/cmakelists.txt.yaml
+'CMake' :
+  nFiles: 1
+  blank: 36
+  comment: 40
+  code: 261
+SUM: 
+  blank: 36
+  comment: 40
+  code: 261
+  nFiles: 1

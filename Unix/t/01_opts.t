@@ -605,6 +605,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/606/results.yaml',
                 },
 
+                {
+                    'name' => 'CMakeLists.txt on Windows (lowercase file), #611',
+                    'cd'   => '../tests/inputs/issues/611',
+                    'args' => '.',
+                    'ref'  => '../tests/outputs/issues/611/cmakelists.txt.yaml',
+                },
+
             );
 
 # Special cases:
