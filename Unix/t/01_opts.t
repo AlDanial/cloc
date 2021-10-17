@@ -619,6 +619,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/613/nav.scss.yaml',
                 },
 
+                {
+                    'name' => 'sequence of Assembly filters, #619',
+                    'cd'   => '../tests/inputs/issues/619',
+                    'args' => '.',
+                    'ref'  => '../tests/outputs/issues/619/RA.s.yaml',
+                },
+
             );
 
 # Special cases:

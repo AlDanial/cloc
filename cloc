@@ -8574,8 +8574,8 @@ sub set_constants {                          # {{{1
                             ],
     'Assembly'           => [
                                 [ 'remove_matches'      , '^\s*#'  ],
-                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_matches'      , '^\s*;'  ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_matches'      , '^\s*\@' ],
                                 [ 'remove_matches'      , '^\s*\|' ],
                                 [ 'remove_matches'      , '^\s*!'  ],
