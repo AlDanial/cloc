@@ -8827,8 +8827,8 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
     'DOS Batch'          => [   
-                                [ 'remove_matches'      , '^\s*rem', ],
-                                [ 'remove_matches'      , '^\s*::', ],
+                                [ 'remove_matches'      , '^\s*rem' ],
+                                [ 'remove_matches'      , '^\s*::'  ],
                             ],
     'DTD'                => [   [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
