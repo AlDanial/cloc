@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.91
+  elapsed_seconds    : 0.00748491287231445
+  n_files            : 1
+  n_lines            : 38
+  files_per_second   : 133.602089571256
+  lines_per_second   : 5076.87940370772
+  report_file        : ../outputs/fractal.um.yaml
+'Umka' :
+  nFiles: 1
+  blank: 7
+  comment: 5
+  code: 26
+SUM: 
+  blank: 7
+  comment: 5
+  code: 26
+  nFiles: 1

@@ -942,6 +942,11 @@ my @Tests = (
                     'args' => '../tests/inputs/greeter.tsx',
                 },
                 {
+                    'name' => 'Umka',
+                    'ref'  => '../tests/outputs/fractal.um.yaml',
+                    'args' => '../tests/inputs/fractal.um',
+                },
+                {
                     'name' => 'Vala',
                     'ref'  => '../tests/outputs/gnureadline.vala.yaml',
                     'args' => '../tests/inputs/gnureadline.vala',

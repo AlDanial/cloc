@@ -1,0 +1,38 @@
+/*
+ https://github.com/vtereshkov/umka-lang/raw/master/examples/fractal/fractal.um
+*/
+// Fractal demo in Umka (adapted from a Wren version by Robert Nystrom)
+
+fn main() {
+    const (
+        yMin = -0.2
+        yMax =  0.1
+        xMin = -1.5
+        xMax = -1.1
+    )
+
+    for yPixel := 0; yPixel < 40; yPixel++ {
+      y0 := (yPixel / 40.0) * (yMax - yMin) + yMin
+      
+      for xPixel := 0; xPixel < 79; xPixel++ {
+        x0 := (xPixel / 78.0) * (xMax - xMin) + xMin
+        x, y := x0, y0
+        pixel := ' '       
+        
+        for iter := 0; iter < 80; iter++ {
+          x, y = x * x - y * y + x0, 2 * x * y + y0
+
+          // Stop if the point escaped
+          if x * x + y * y > 4 {
+            const pixels = " .:;+=xX$&"
+            pixel = pixels[iter / 8]
+            break
+          }
+        }
+
+        printf("%c", pixel)
+      }
+
+      printf("\n")
+    }
+}
