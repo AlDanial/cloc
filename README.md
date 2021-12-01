@@ -40,6 +40,7 @@ at http://cloc.sourceforge.net/ since August 2006.
 *   [Limitations](#limitations-)
 *   [Requesting Support for Additional Languages](#requesting-support-for-additional-languages-)
 *   [Reporting Problems](#reporting-problems-)
+*   [Citation](#citation-)
 *   [Acknowledgments](#acknowledgments-)
 *   [Copyright](#copyright-)
 
@@ -2920,6 +2921,25 @@ the problem with an existing public code base.
 
 Problem reports that cannot be reproduced will be ignored and
 eventually closed.
+
+[](1}}})
+<a name="citation"></a> []({{{1)
+#  [Citation &#9650;](#___top "click to go to top of document")
+
+Please use the following bibtex entry to cite cloc in a publication:
+
+<pre>
+@software{adanial_cloc,
+  author       = {Albert Danial},
+  title        = {cloc},
+  version      = {1.90},
+  year         = 2021,
+  url          = {https://github.com/AlDanial/cloc}
+}
+</pre>
+
+(Update the version number and corresponding year if this
+entry is outdated.)
 
 [](1}}})
 <a name="Acknowledgments"></a> []({{{1)
