@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.91
+  elapsed_seconds    : 0.00743508338928223
+  n_files            : 1
+  n_lines            : 14
+  files_per_second   : 134.497482764149
+  lines_per_second   : 1882.96475869809
+  report_file        : ../../../outputs/issues/628/results.yaml
+'GraphQL' :
+  nFiles: 1
+  blank: 2
+  comment: 4
+  code: 8
+SUM: 
+  blank: 2
+  comment: 4
+  code: 8
+  nFiles: 1

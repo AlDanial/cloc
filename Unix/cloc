@@ -8933,6 +8933,8 @@ sub set_constants {                          # {{{1
                             ],
     'GraphQL'            => [
                                 [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'docstring_to_C'                 ],
+                                [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
     'Groovy'             => [

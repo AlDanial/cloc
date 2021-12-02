@@ -626,6 +626,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/619/RA.s.yaml',
                 },
 
+                {
+                    'name' => 'GraphQL descriptions, #628',
+                    'cd'   => '../tests/inputs/issues/628',
+                    'args' => '.',
+                    'ref'  => '../tests/outputs/issues/628/results.yaml',
+                },
+
             );
 
 # Special cases:

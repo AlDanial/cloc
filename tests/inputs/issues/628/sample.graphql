@@ -1,0 +1,14 @@
+# inline comment
+
+"""
+multi line comment
+"""
+
+query HeroNameAndFriends {
+  hero {
+    name
+    friends {
+      name
+    }
+  }
+}
