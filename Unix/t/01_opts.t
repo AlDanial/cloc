@@ -6,6 +6,7 @@ use File::Copy "cp";
 use Cwd;
 #use YAML qw(LoadFile);
 my @Tests = (
+
                 {
                     'name' => '--exclude-dir 1 (baseline for github issue #82)',
                     'args' => '--exclude-dir cc ../tests/inputs/dd',
@@ -631,6 +632,13 @@ my @Tests = (
                     'cd'   => '../tests/inputs/issues/628',
                     'args' => '.',
                     'ref'  => '../tests/outputs/issues/628/results.yaml',
+                },
+
+                {
+                    'name' => 'diff with dir of excluded extensions, #625',
+                    'cd'   => '../tests/inputs/issues/625',
+                    'args' => '--diff old new',
+                    'ref'  => '../tests/outputs/issues/625/results.yaml',
                 },
 
             );

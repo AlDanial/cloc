@@ -5378,6 +5378,9 @@ sub make_file_list {                         # {{{1
         } elsif (!defined $language) {
             $rh_ignored->{$F} = "unable to associate with a language";
             next;
+        } elsif ($language eq "(unknown)") {
+            # entry should already be in %{$rh_ignored}
+            next;
         }
         printf $fh "%d%s%s%s%s\n", $size_in_bytes, $separator,
                                    $language, $separator, $file;
@@ -5673,7 +5676,7 @@ sub files {                                  # {{{1
         $File::Find::name, $nBytes, $is_dir, $is_bin if $opt_v > 5;
     $is_bin = 0 if $opt_unicode and unicode_file($_);
     $is_bin = 0 if $opt_read_binary_files;
-    if ($is_bin) {
+    if ($is_bin and !$is_dir) {
         $Ignored{$File::Find::name} = "binary file";
         printf "files(%s)  binary file\n", $File::Find::name if $opt_v > 5;
     }
