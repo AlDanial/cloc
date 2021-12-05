@@ -1,6 +1,6 @@
 #   Copyright
 #
-#      Copyright (C) 2018-2020 Al Danial <al.danial@gmail.com>.
+#      Copyright (C) 2018-2021 Al Danial <al.danial@gmail.com>.
 #      Copyright (C) 2010-2017 Jari Aalto <jari.aalto@cante.net>
 #
 #   License
@@ -840,7 +840,7 @@ sloccount(1)
 =head1 AUTHORS
 
 The cloc program was written by Al Danial <al.danial@gmail.com> and
-is Copyright (C) 2006-2019 <al.danial@gmail.com>.
+is Copyright (C) 2006-2021 <al.danial@gmail.com>.
 
 The manual page was originally written by Jari Aalto <jari.aalto@cante.net>.
 

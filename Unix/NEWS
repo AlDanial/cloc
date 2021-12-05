@@ -1,4 +1,37 @@
+                Release Notes for cloc version 1.92
+                   https://github.com/AlDanial/cloc
+                             Dec. 5, 2021
 
+New Languages and File Types:
+    o GraphQL
+    o Metal Shading Language
+    o PlantUML
+    o Properties
+    o Umka
+
+Updates:
+    o The .bzl and .bazel extensions are now associated with Starlark.
+    o Added support for Puppet functions and type aliases.
+    o Removed reliance on XML definition with --force-lang-def
+    o Fixed broken --csv-delimiter handling.
+    o Fixed broken interaction of --vcs=git with --max-file-size;
+      support floating point value for --max-file-size.
+    o Improved support for uniform handling of uppercase and
+      lowercase filenames and extensions on Windows.
+    o Recognize CMakeLists.txt on Windows.
+    o Fixed handling of --unicode for small files.
+    o Updated Dockerfile to produce a smaller image.
+    o Improved contents of --ignored file (now includes skipped
+      binary files and does not include directory names).
+    o Identify SCSS separately from Sass.
+    o Updated Sass filters to handle C++ style comments.
+    o Improved support for Assembly.
+    o Recognize :: comments in DOS batch files.
+    o Properly handle explicitly-excluded files (for example,
+      .gitignore) with --diff.
+
+
+============================================================================
                 Release Notes for cloc version 1.90
                    https://github.com/AlDanial/cloc
                              May 1, 2021
