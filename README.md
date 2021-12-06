@@ -8,9 +8,9 @@ cloc counts blank lines, comment lines, and physical lines of source code in man
 Latest release:  v1.92 (Dec. 5, 2021)
 
 <a href="https://github.com/AlDanial/cloc/graphs/contributors" alt="Contributors">
-        <img src="https://img.shields.io/github/contributors/badges/shields" /></a>
-[![DOI](https://zenodo.org/badge/42029482.svg)](https://zenodo.org/badge/latestdoi/42029482)
-<img src="https://img.shields.io/badge/Perl-39457E?style=for-the-badge&logo=perl&logoColor=white" />
+    <img src="https://img.shields.io/github/contributors/AlDanial/cloc" /></a>
+<a href="https://zenodo.org/badge/latestdoi/42029482">
+    <img src="https://zenodo.org/badge/42029482.svg" alt="DOI"></a>
 <img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg>" />
 
 cloc moved to GitHub in September 2015 after being hosted
