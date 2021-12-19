@@ -7688,6 +7688,7 @@ sub set_constants {                          # {{{1
 # bash or sh scripts
             'da'          => 'DAL'                   ,
             'dart'        => 'Dart'                  ,
+            'dsc'         => 'DenizenScript'         ,
             'def'         => 'Windows Module Definition',
             'dhall'       => 'dhall'                 ,
             'dt'          => 'DIET'                  ,
@@ -8759,6 +8760,10 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'DenizenScript'      => [ # same as YAML
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
                             ],
     'dhall'              => [   [ 'remove_haskell_comments', '>filename<' ], ],
     'Delphi Form'        => [ # same as Pascal
@@ -10196,6 +10201,7 @@ sub set_constants {                          # {{{1
     'D'                            =>   1.70,
     'DAL'                          =>   1.50,
     'Dart'                         =>   2.00,
+    'DenizenScript'                =>   1.00, # scaling is unknown.
     'data base default'            =>   2.00,
     'dataflex'                     =>   2.00,
     'datatrieve'                   =>   4.00,
