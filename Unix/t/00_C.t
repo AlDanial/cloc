@@ -892,6 +892,11 @@ my @Tests = (
                     'args' => '../tests/inputs/swig_example.i',
                 },
                 {
+                    'name' => 'TableGen',
+                    'ref'  => '../tests/outputs/TableGen-ARM.yaml',
+                    'args' => '../tests/inputs/TableGen-ARM.td',
+                },
+                {
                     'name' => 'Tcl/Tk',
                     'ref'  => '../tests/outputs/Tk.yaml',
                     'args' => '../tests/inputs/Tk',

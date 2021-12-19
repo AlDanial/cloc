@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.92
+  elapsed_seconds    : 0.0062708854675293
+  n_files            : 1
+  n_lines            : 1493
+  files_per_second   : 159.46711276709
+  lines_per_second   : 238084.399361265
+  report_file        : ../tests/outputs/TableGen-ARM.yaml
+'TableGen' :
+  nFiles: 1
+  blank: 241
+  comment: 128
+  code: 1124
+SUM: 
+  blank: 241
+  comment: 128
+  code: 1124
+  nFiles: 1
