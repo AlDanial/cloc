@@ -180,6 +180,11 @@ my @Tests = (
                     'args' => '../tests/inputs/cucumber.feature',
                 },
                 {
+                    'name' => 'DenizenScript',
+                    'ref'  => '../tests/outputs/double_doors.dsc.yaml',
+                    'args' => '../tests/inputs/double_doors.dsc',
+                },
+                {
                     'name' => 'dhall',
                     'ref'  => '../tests/outputs/Prelude.dhall.yaml',
                     'args' => '../tests/inputs/Prelude.dhall',

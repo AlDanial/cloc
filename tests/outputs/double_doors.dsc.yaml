@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.92
+  elapsed_seconds    : 0.00667405128479004
+  n_files            : 1
+  n_lines            : 21
+  files_per_second   : 149.834029936055
+  lines_per_second   : 3146.51462865716
+  report_file        : ../outputs/double_doors.dsc.yaml
+'DenizenScript' :
+  nFiles: 1
+  blank: 0
+  comment: 6
+  code: 15
+SUM: 
+  blank: 0
+  comment: 6
+  code: 15
+  nFiles: 1
