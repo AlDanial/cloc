@@ -8216,6 +8216,7 @@ sub set_constants {                          # {{{1
             'svg'         => 'SVG'                   ,
             'SVG'         => 'SVG'                   ,
             'v'           => 'Verilog-SystemVerilog/Coq' ,
+            'td'          => 'TableGen'              ,
             'tcl'         => 'Tcl/Tk'                ,
             'tcsh'        => 'C Shell'               ,
             'tk'          => 'Tcl/Tk'                ,
@@ -9637,6 +9638,11 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
+    'TableGen'           => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'Tcl/Tk'             => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
@@ -10633,6 +10639,7 @@ sub set_constants {                          # {{{1
     'synon/2e'                     =>   4.21,
     'systemw'                      =>   2.22,
     'tandem access language'       =>   0.88,
+    'TableGen'                     =>   2.00,
     'Tcl/Tk'                       =>   4.00,
     'Teamcenter def'               =>   1.00,
     'Teamcenter met'               =>   1.00,
