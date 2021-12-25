@@ -318,7 +318,7 @@ such as GNU autoconf.  To see a list of these files
 (then exit), run with B<--no-autogen list>
 See also B<--autoconf>.
 
-==item B<--original-dir>
+=item B<--original-dir>
 
 Only effective in combination with
 B<--strip-comments>.  Write the stripped files
