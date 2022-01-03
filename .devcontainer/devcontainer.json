@@ -2,6 +2,8 @@
     "build": { "dockerfile": "Dockerfile" },
     "extensions": [
         "mhutchie.git-graph",
-        "eamodio.gitlens"
+        "eamodio.gitlens",
+        "richterger.perl",
+        "cfgweb.vscode-perl"
     ]
 }

@@ -10,6 +10,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     unzip \
     locales \
     locales \
+    exuberant-ctags \
+    build-essential \
  && rm -rf /var/lib/apt/lists/*
 
 # Generate locale
@@ -25,4 +27,6 @@ RUN cpanm \
       Digest::MD5 \
       Parallel::ForkManager \
       Regexp::Common \
+      Perl::LanguageServer \
+      Perl::Tidy \
  && rm -rf $HOME/.cpanm
