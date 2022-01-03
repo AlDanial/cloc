@@ -2,12 +2,15 @@ To run the tests:
   cd ../Unix
   make test
 
+Unless you see a clear error message, all tests have been executed
+successfully.
+
 Tests 21 through 24 in t/01_opts.t exercise cloc's ability to work
 with git submodules (specifically, to ignore code in these).  If 
-you're working with a git repo clone you will need to update the
+you're working with a git repo clone you will need to clone the
 submodule via
-  git submodule init
-  git submodule update
-issued within your cloc working directory to get the tests to pass.
-The submodule will populate the directory
-tests/inputs/issues/131/cloc_submodule_test/
+  cd ../Unix
+  git clone https://github.com/AlDanial/cloc_submodule_test.git
+  
+If the directory already exists, then update by
+  git pull
