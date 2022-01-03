@@ -3,19 +3,19 @@
 header : 
   cloc_url           : github.com/AlDanial/cloc
   cloc_version       : 1.92
-  elapsed_seconds    : 0.0206189155578613
+  elapsed_seconds    : 0.0224268436431885
   n_files            : 1
-  n_lines            : 34
-  files_per_second   : 48.499155893712
-  lines_per_second   : 1648.97130038621
+  n_lines            : 43
+  files_per_second   : 44.5894222080476
+  lines_per_second   : 1917.34515494605
   report_file        : results.yaml
 'X++' :
   nFiles: 1
   blank: 5
-  comment: 0
+  comment: 9
   code: 29
 SUM: 
   blank: 5
-  comment: 0
+  comment: 9
   code: 29
   nFiles: 1

@@ -23,9 +23,18 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #hello
+        #/**
+        # * This is a javadoc like documentation comment.
+        # *
+        # * This comment counts as 6 lines,
+        # * because it has two lines in the long description.
+        # */
         #public string hello()
         #{
-        #    return "Hello World!";
+        #    // This is comment line #6
+        #    return "Hello World!"; /* This comment is not counted, because it is not a line of its own.
+        #                              This counts as comment #7
+        #                              And this is comment #8 */
         #}
       ENDSOURCE
     ENDMETHODS
