@@ -1038,8 +1038,8 @@ my @Tests = (
                 },
                 {
                     'name' => 'X++',
-                    'ref'  => '../tests/outputs/xplusplus.xpo.yaml',
-                    'args' => '../tests/inputs/xplusplus.xpo',
+                    'ref'  => '../tests/outputs/X++.xpo.yaml',
+                    'args' => '../tests/inputs/X++.xpo',
                 },
                 {
                     'name' => 'XML',
