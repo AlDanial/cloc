@@ -1,4 +1,12 @@
 #!/usr/bin/env perl
+#
+# TODO wonderbird: Before creating the pull request, delete this file.
+#
+# Collection of X++ tests.
+#
+# These tests are used during development of the X++ language definition.
+# This file makes it easy to run a subset of tests for TDDing the feature.
+#
 use warnings;
 use strict;
 use Test::More;
@@ -6,19 +14,16 @@ use Cwd;
 my @Tests = (
                 {
                     'name' => 'X++',
-                    'ref'  => './tests/outputs/xplusplus.xpo.yaml', # TODO Delete this line
-                    'args' => './tests/inputs/xplusplus.xpo', # TODO Delete this line
-#                    'ref'  => '../tests/outputs/xplusplus.xpo.yaml', # final code # TODO Activate this line
-#                    'args' => '../tests/inputs/xplusplus.xpo', # final code # TODO Activate this line
+                    'ref'  => './tests/outputs/xplusplus.xpo.yaml',
+                    'args' => './tests/inputs/xplusplus.xpo',
                 },
             );
 
-my $Verbose = 0;
+my $Verbose = 1;
 
 my $results  = 'results.yaml';
 my $work_dir = getcwd;
-#my $cloc     = "$work_dir/../cloc";   # all-purpose version # TODO uncomment this line
-my $cloc     = "$work_dir/cloc";      # Unix-tuned version # TODO comment this line
+my $cloc     = "$work_dir/cloc";
 my $Run = "$cloc --quiet --yaml --out $results ";
 foreach my $t (@Tests) {
     print  $Run . $t->{'args'} if $Verbose;

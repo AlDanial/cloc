@@ -2,20 +2,20 @@
 # github.com/AlDanial/cloc
 header : 
   cloc_url           : github.com/AlDanial/cloc
-  cloc_version       : 1.67
-  elapsed_seconds    : 0.00519108772277832
+  cloc_version       : 1.92
+  elapsed_seconds    : 0.0206189155578613
   n_files            : 1
-  n_lines            : 13
-  files_per_second   : 192.63785422312
-  lines_per_second   : 2504.29210490056
-  report_file        : xplusplus.xpo.yaml
-X++ :
+  n_lines            : 34
+  files_per_second   : 48.499155893712
+  lines_per_second   : 1648.97130038621
+  report_file        : results.yaml
+'X++' :
   nFiles: 1
   blank: 5
   comment: 0
-  code: 19
+  code: 29
 SUM: 
   blank: 5
   comment: 0
-  code: 19
+  code: 29
   nFiles: 1

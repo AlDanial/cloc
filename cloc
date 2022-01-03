@@ -8303,6 +8303,7 @@ sub set_constants {                          # {{{1
             'wsdl'        => 'Web Services Description',
             'x'           => 'Logos'                 ,
             'xm'          => 'Logos'                 ,
+            'xpo'         => 'X++'                   , # Microsoft Dynamics AX 4.0 export format
             'xmi'         => 'XMI'                   ,
             'XMI'         => 'XMI'                   ,
             'zcml'        => 'XML'                   ,
@@ -9873,6 +9874,13 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C'      ],
                             ],
+    'X++'                => [
+                                [ 'remove_matches', '\s*#\s*//' ],
+                                [ 'remove_between_regex', '#\s*/\*', '\*/' ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'XMI'                => [
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
@@ -9980,6 +9988,7 @@ sub set_constants {                          # {{{1
     'lex'                =>     '\\\\$'         ,
     'Vala'               =>     '\\\\$'         ,
     'Vala Header'        =>     '\\\\$'         ,
+    'X++'                =>     '\\\\$'         ,
     'zsh'                =>     '\\\\$'         ,
     );
 # 1}}}
@@ -10712,6 +10721,7 @@ sub set_constants {                          # {{{1
     'xBase'                        =>   2.00,
     'xBase Header'                 =>   2.00,
     'xlisp'                        =>   1.25,
+    'X++'                          =>   1.51, # This is a guess. Copied from C++, because the overhead for C++ headers might be equivalent to the overhead of structuring elements in XPO files
     'XAML'                         =>   1.90,
     'XQuery'                       =>   2.50,
     'yacc'                         =>   1.51,
@@ -14674,7 +14684,7 @@ my @generic = (
      from_to   => [['<?_c', '_c?>']],
     },
 
-    {languages => [qw /C++/, 'C#', qw /Cg ECMAScript FPL Java JavaScript/],
+    {languages => [qw /C++/, 'C#', 'X++', qw /Cg ECMAScript FPL Java JavaScript/],
      to_eol    => ['//'],
      from_to   => [[qw {/* */}]]},
 
