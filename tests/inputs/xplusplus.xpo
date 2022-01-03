@@ -26,15 +26,19 @@ Formatversion: 1
         #/**
         # * This is a javadoc like documentation comment.
         # *
-        # * This comment counts as 6 lines,
+        # * This entire comment counts as 6 lines,
         # * because it has two lines in the long description.
         # */
         #public string hello()
         #{
-        #    // This is comment line #6
+        #    // This is comment line #7. The next line should be counted as an empty line.
+        #
         #    return "Hello World!"; /* This comment is not counted, because it is not a line of its own.
-        #                              This counts as comment #7
-        #                              And this is comment #8 */
+        #                              This counts as comment #8
+        #                              And this is comment #9 */
+        #
+        #    // Comment #10. Two more empty lines - one above this line, one below.
+        #
         #}
       ENDSOURCE
     ENDMETHODS

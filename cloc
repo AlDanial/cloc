@@ -6465,16 +6465,29 @@ sub rm_blanks {                              # {{{1
     } else {
         # removes blank lines
         if (defined $rh_EOL_continuation_re->{$language}) {
-            @out = remove_matches_2re($ra_in, '^\s*$',
+            @out = remove_matches_2re($ra_in, blank_regex($language),
                                       $rh_EOL_continuation_re->{$language});
         } else {
-            @out = remove_matches($ra_in, '^\s*$');
+            @out = remove_matches($ra_in, blank_regex($language));
         }
     }
 
     print "<- rm_blanks(language=$language, n_remain= ",
         scalar(@out), "\n" if $opt_v > 2;
     return @out;
+} # 1}}}
+sub blank_regex {                            # {{{1
+    my ($language) = @_;
+
+    print "-> blank_regex(language=$language)\n" if $opt_v > 2;
+    
+    my $blank_regex = '^\s*$';
+    if ($language eq "X++") {
+        $blank_regex = '^\s*#?\s*$';
+    }
+
+    print "<- blank_regex(language=$language) = \"", $blank_regex, "\"\n" if $opt_v > 2;
+    return $blank_regex;
 } # 1}}}
 sub rm_comments {                            # {{{1
     my ($ra_lines , # in, must be free of blank lines
