@@ -4,6 +4,7 @@
         "mhutchie.git-graph",
         "eamodio.gitlens",
         "richterger.perl",
-        "cfgweb.vscode-perl"
+        "cfgweb.vscode-perl",
+        "gruntfuggly.todo-tree"
     ]
 }
