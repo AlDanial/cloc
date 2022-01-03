@@ -1,0 +1,34 @@
+Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: CLS
+
+; Microsoft Dynamics Class: HelloWorld nicht geladen
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #HelloWorld
+    Id 42000
+    PROPERTIES
+      Name                #HelloWorld
+      Extends             #
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #class HelloWorld
+        #{
+        #}
+      ENDSOURCE
+      SOURCE #hello
+        #public string hello()
+        #{
+        #    return "Hello World!";
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: END
