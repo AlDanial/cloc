@@ -6150,9 +6150,9 @@ sub call_counter {                           # {{{1
 
     print_lines($file, "Original file:", \@lines) if $opt_print_filter_stages;
     @lines = rm_blanks(\@lines, $language, \%EOL_Continuation_re); # remove blank lines
-    print "   call_counter: total_lines=$total_lines  blank_lines=",
-        scalar(@lines), "\n" if $opt_v > 2;
     my $blank_lines = $total_lines - scalar @lines;
+    print "   call_counter: total_lines=$total_lines  blank_lines=",
+        $blank_lines, "\n" if $opt_v > 2;
     print_lines($file, "Blank lines removed:", \@lines)
         if $opt_print_filter_stages;
 
