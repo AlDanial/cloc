@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 # cloc -- Count Lines of Code                  {{{1
-# Copyright (C) 2006-2021 Al Danial <al.danial@gmail.com>
+# Copyright (C) 2006-2022 Al Danial <al.danial@gmail.com>
 # First release August 2006
 #
 # Includes code from:
@@ -7995,6 +7995,7 @@ sub set_constants {                          # {{{1
             'wixproj'     => 'MSBuild script'        ,
             'btproj'      => 'MSBuild script'        ,
             'msbuild'     => 'MSBuild script'        ,
+            'ixx'         => 'Visual Studio Module'  ,
             'sln'         => 'Visual Studio Solution',
             'mps'         => 'MUMPS'                 ,
             'mth'         => 'Teamcenter mth'        ,
@@ -9922,6 +9923,11 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
     'MSBuild script'    => [    [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
+    'Visual Studio Module' => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'Visual Studio Solution' => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_html_comments',          ],
@@ -10352,6 +10358,7 @@ sub set_constants {                          # {{{1
     'XSD'                          =>   1.90,
     'NAnt script'                  =>   1.90,
     'MSBuild script'               =>   1.90,
+    'Visual Studio Module'         =>   1.00,
     'Visual Studio Solution'       =>   1.00,
     'HLSL'                         =>   2.00,
     'HTML 2'                       =>   5.00,

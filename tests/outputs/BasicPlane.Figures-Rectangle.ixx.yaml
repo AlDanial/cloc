@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.92
+  elapsed_seconds    : 0.00741195678710938
+  n_files            : 1
+  n_lines            : 17
+  files_per_second   : 134.917138445703
+  lines_per_second   : 2293.59135357694
+  report_file        : ../outputs/BasicPlane.Figures-Rectangle.ixx.yaml
+'Visual Studio Module' :
+  nFiles: 1
+  blank: 3
+  comment: 5
+  code: 9
+SUM: 
+  blank: 3
+  comment: 5
+  code: 9
+  nFiles: 1
