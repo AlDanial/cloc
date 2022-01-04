@@ -41,6 +41,18 @@ Formatversion: 1
         #
         #}
       ENDSOURCE
+  SOURCE #someJob
+    #/**
+    # * For exported job files, the indentation is only 4 whitespaces.
+    # *
+    # * I have to admit that I have never seen a source file mixing these two different
+    # * indentation styles. This is only for the test case.
+    # */
+    #public string someJob()
+    #{
+    #    return nothingIsDoneHere();
+    #}
+  ENDSOURCE      
     ENDMETHODS
   ENDCLASS
 
