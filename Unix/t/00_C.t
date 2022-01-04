@@ -982,6 +982,11 @@ my @Tests = (
                     'args' => '../tests/inputs/JetCar.cls',
                 },
                 {
+                    'name' => 'Visual Studio Module',
+                    'ref'  => '../tests/outputs/BasicPlane.Figures-Rectangle.ixx.yaml',
+                    'args' => '../tests/inputs/BasicPlane.Figures-Rectangle.ixx',
+                },
+                {
                     'name' => 'Visual Studio Solution',
                     'ref'  => '../tests/outputs/vs_solution.sln.yaml',
                     'args' => '../tests/inputs/vs_solution.sln',
