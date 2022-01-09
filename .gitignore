@@ -1,2 +1,6 @@
 cloc-?.??.*
 release_notes-?.??.txt
+
+# Visual Studio Code and extensions
+.vstags
+.vscode/perl-lang

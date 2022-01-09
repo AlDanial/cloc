@@ -1,0 +1,14 @@
+{
+    // Further information: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "perl",
+            "request": "launch",
+            "name": "Perl-Debug",
+            "program": "${workspaceFolder}/${relativeFile}",
+            "stopOnEntry": true,
+            "reloadModules": true
+        }
+    ]
+}
