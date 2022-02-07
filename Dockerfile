@@ -37,7 +37,7 @@ RUN git clone https://github.com/AlDanial/cloc_submodule_test.git
 RUN make test
 
 ####################
-From base AS final
+FROM base AS final
 
 WORKDIR /tmp
 

@@ -1042,6 +1042,11 @@ my @Tests = (
                     'args' => '../tests/inputs/harbour_xbase.prg',
                 },
                 {
+                    'name' => 'X++',
+                    'ref'  => '../tests/outputs/X++.xpo.yaml',
+                    'args' => '../tests/inputs/X++.xpo',
+                },
+                {
                     'name' => 'XML',
                     'ref'  => '../tests/outputs/XML.xml.yaml',
                     'args' => '../tests/inputs/XML.xml',
