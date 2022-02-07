@@ -2089,7 +2089,10 @@ if      ($opt_by_file_by_lang) {
 # 1}}}
 }
 if ($opt_report_file) { write_file($opt_report_file, {}, @Lines_Out); }
-else                  { print "\n", join("\n", @Lines_Out), "\n"; }
+else {
+    print "\n" unless $opt_quiet;
+    print join("\n", @Lines_Out), "\n";
+}
 if ($opt_count_diff) {
     ++$opt_count_diff;
     exit if $opt_count_diff > 3;
@@ -4035,6 +4038,7 @@ sub generate_report {                        # {{{1
             }
         }
     } else {
+        $header_line =~ s/,// if $opt_csv;
         push @results, output_header($header_line, $hyphen_line, $BY_FILE);
     }
 
