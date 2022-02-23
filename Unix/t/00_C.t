@@ -482,6 +482,11 @@ my @Tests = (
                     'args' => '../tests/inputs/dlist.lean',
                 },
                 {
+                    'name' => 'Lem',
+                    'ref'  => '../tests/outputs/machineDefFreshIds.lem.yaml',
+                    'args' => '../tests/inputs/machineDefFreshIds.lem',
+                },
+                {
                     'name' => 'LFE',
                     'ref'  => '../tests/outputs/ping_pong.lfe.yaml',
                     'args' => '../tests/inputs/ping_pong.lfe',

@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.92
+  elapsed_seconds    : 0.00672507286071777
+  n_files            : 1
+  n_lines            : 50
+  files_per_second   : 148.69727372638
+  lines_per_second   : 7434.863686319
+  report_file        : ../outputs/machineDefFreshIds.lem.yaml
+'Lem' :
+  nFiles: 1
+  blank: 11
+  comment: 24
+  code: 15
+SUM: 
+  blank: 11
+  comment: 24
+  code: 15
+  nFiles: 1

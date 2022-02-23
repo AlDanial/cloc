@@ -1,0 +1,50 @@
+open import Pervasives_extra
+(* https://raw.githubusercontent.com/rems-project/lem/master/examples/ppcmem-model/machineDefFreshIds.lem *)
+
+(*========================================================================*)
+(*                                                                        *)
+(*                ppcmem executable model                                 *)
+(*                                                                        *)
+(*          Susmit Sarkar, University of Cambridge                        *)
+(*          Peter Sewell, University of Cambridge                         *)
+(*          Jade Alglave, Oxford University                               *)
+(*          Luc Maranget, INRIA Rocquencourt                              *)
+(*                                                                        *)
+(*  This file is copyright 2010,2011 Institut National de Recherche en    *)
+(*  Informatique et en Automatique (INRIA), and Susmit Sarkar, Peter      *)
+(*  Sewell, and Jade Alglave.                                             *)
+(*                                                                        *)
+(*  All rights reserved.                                                  *)
+(*                                                                        *)
+(*                                                                        *)
+(*                                                                        *)
+(*                                                                        *)
+(*                                                                        *)
+(*========================================================================*)
+
+(* emacs fontification -*-caml-*- *)
+
+(*: \section{Fresh Identifiers} :*)
+
+(*: Generation of fresh ids, for flexible unification variables, events, and instruction instances. :*)
+
+open import MachineDefUtils
+
+type flexsym = nat
+type ioid = nat
+
+let compare_flexsym = compare_num
+
+type id_state = 
+    <| flexsym_state : flexsym;
+    ioid_state : ioid;
+  |>
+
+let initial_id_state = 
+  <| flexsym_state = 0; ioid_state = 0 |>
+
+let gen_ioid ist = 
+  (ist.ioid_state, <| ist with ioid_state = ist.ioid_state + 1 |>)
+
+let gen_flexsym ist = 
+  (ist.flexsym_state, <| ist with flexsym_state = ist.flexsym_state + 1 |>)

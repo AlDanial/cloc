@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "1.92";  # odd number == beta; even number == stable
+my $VERSION = "1.93";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.10.0;
 # use modules                                  {{{1
@@ -6140,9 +6140,9 @@ sub call_counter {                           # {{{1
 
     print_lines($file, "Original file:", \@lines) if $opt_print_filter_stages;
     @lines = rm_blanks(\@lines, $language, \%EOL_Continuation_re); # remove blank lines
-    print "   call_counter: total_lines=$total_lines  blank_lines=",
-        scalar(@lines), "\n" if $opt_v > 2;
     my $blank_lines = $total_lines - scalar @lines;
+    print "   call_counter: total_lines=$total_lines  blank_lines=",
+        $blank_lines, "\n" if $opt_v > 2;
     print_lines($file, "Blank lines removed:", \@lines)
         if $opt_print_filter_stages;
 
@@ -6455,16 +6455,29 @@ sub rm_blanks {                              # {{{1
     } else {
         # removes blank lines
         if (defined $rh_EOL_continuation_re->{$language}) {
-            @out = remove_matches_2re($ra_in, '^\s*$',
+            @out = remove_matches_2re($ra_in, blank_regex($language),
                                       $rh_EOL_continuation_re->{$language});
         } else {
-            @out = remove_matches($ra_in, '^\s*$');
+            @out = remove_matches($ra_in, blank_regex($language));
         }
     }
 
     print "<- rm_blanks(language=$language, n_remain= ",
         scalar(@out), "\n" if $opt_v > 2;
     return @out;
+} # 1}}}
+sub blank_regex {                            # {{{1
+    my ($language) = @_;
+
+    print "-> blank_regex(language=$language)\n" if $opt_v > 2;
+    
+    my $blank_regex = '^\s*$';
+    if ($language eq "X++") {
+        $blank_regex = '^\s*#?\s*$';
+    }
+
+    print "<- blank_regex(language=$language) = \"", $blank_regex, "\"\n" if $opt_v > 2;
+    return $blank_regex;
 } # 1}}}
 sub rm_comments {                            # {{{1
     my ($ra_lines , # in, must be free of blank lines
@@ -7908,6 +7921,7 @@ sub set_constants {                          # {{{1
             'lhs'         => 'Haskell'               ,
             'lex'         => 'lex'                   ,
             'l'           => 'lex'                   ,
+            'lem'         => 'Lem'                   ,
             'less'        => 'LESS'                  ,
             'lfe'         => 'LFE'                   ,
             'liquid'      => 'liquid'                ,
@@ -8294,6 +8308,7 @@ sub set_constants {                          # {{{1
             'wsdl'        => 'Web Services Description',
             'x'           => 'Logos'                 ,
             'xm'          => 'Logos'                 ,
+            'xpo'         => 'X++'                   , # Microsoft Dynamics AX 4.0 export format
             'xmi'         => 'XMI'                   ,
             'XMI'         => 'XMI'                   ,
             'zcml'        => 'XML'                   ,
@@ -9128,6 +9143,9 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*--' ],
                                 [ 'remove_inline'       , '--.*$'  ],
                             ],
+    'Lem'                => [
+                                [ 'remove_OCaml_comments',         ],
+                            ],
     'LESS'               => [
 #                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
@@ -9864,6 +9882,13 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C'      ],
                             ],
+    'X++'                => [
+                                [ 'remove_matches', '\s*#\s*//' ],
+                                [ 'remove_between_regex', '#\s*/\*', '\*/' ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'XMI'                => [
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
@@ -9976,6 +10001,7 @@ sub set_constants {                          # {{{1
     'lex'                =>     '\\\\$'         ,
     'Vala'               =>     '\\\\$'         ,
     'Vala Header'        =>     '\\\\$'         ,
+    'X++'                =>     '\\\\$'         ,
     'zsh'                =>     '\\\\$'         ,
     );
 # 1}}}
@@ -10400,6 +10426,7 @@ sub set_constants {                          # {{{1
     'lattice c'                    =>   0.63,
     'Lean'                         =>   3.00,
     'LESS'                         =>   1.50,
+    'Lem'                          =>   3.00,
     'LFE'                          =>   1.25,
     'liana'                        =>   0.63,
     'lilith'                       =>   1.13,
@@ -10709,6 +10736,7 @@ sub set_constants {                          # {{{1
     'xBase'                        =>   2.00,
     'xBase Header'                 =>   2.00,
     'xlisp'                        =>   1.25,
+    'X++'                          =>   1.51, # This is a guess. Copied from C++, because the overhead for C++ headers might be equivalent to the overhead of structuring elements in XPO files
     'XAML'                         =>   1.90,
     'XQuery'                       =>   2.50,
     'yacc'                         =>   1.51,
