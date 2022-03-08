@@ -7770,6 +7770,7 @@ sub set_constants {                          # {{{1
             'gnumakefile' => 'make'                  ,
             'Gnumakefile' => 'make'                  ,
             'gd'          => 'GDScript'              ,
+            'gdshader'    => 'Godot Shaders'         ,
             'vshader'     => 'GLSL'                  ,
             'vsh'         => 'GLSL'                  ,
             'vrx'         => 'GLSL'                  ,
@@ -8915,6 +8916,10 @@ sub set_constants {                          # {{{1
                             ],
     'Godot Resource'     => [
                                 [ 'remove_matches'      , '^\s*;'  ],
+                            ],
+    'Godot Shaders'      => [
+                                [ 'remove_matches'      , '^\s*//' ],
+                                [ 'remove_inline'       , '//.*$'  ],
                             ],
     'GDScript'           => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -10325,6 +10330,7 @@ sub set_constants {                          # {{{1
     'GDScript'                     =>   2.50,
     'Godot Scene'                  =>   2.50,
     'Godot Resource'               =>   2.50,
+    'Godot Shaders'                =>   2.50,
     'Go'                           =>   2.50,
     'Gradle'                       =>   4.00,
     'Grails'                       =>   1.48,

@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.93
+  elapsed_seconds    : 0.00944209098815918
+  n_files            : 1
+  n_lines            : 15
+  files_per_second   : 105.908744287049
+  lines_per_second   : 1588.63116430573
+  report_file        : ../outputs/example_2d.gdshader.yaml
+'Godot Shaders' :
+  nFiles: 1
+  blank: 3
+  comment: 3
+  code: 9
+SUM: 
+  blank: 3
+  comment: 3
+  code: 9
+  nFiles: 1
