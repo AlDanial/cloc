@@ -7795,6 +7795,7 @@ sub set_constants {                          # {{{1
             'fsh'         => 'GLSL'                  ,
             'frg'         => 'GLSL'                  ,
             'fp'          => 'GLSL'                  ,
+            'fbs'         => 'Flatbuffers'           ,
             'glsl'        => 'GLSL'                  ,
             'graphqls'    => 'GraphQL'               ,
             'gql'         => 'GraphQL'               ,
@@ -8924,6 +8925,12 @@ sub set_constants {                          # {{{1
     'F# Script'          => [
                                 [ 'call_regexp_common'  , 'Pascal' ],
                                 [ 'remove_matches'      , '^\s*//' ],
+                            ],
+    'Flatbuffers'        => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                                [ 'remove_inline'       , '//.*$'  ],
                             ],
     'Godot Scene'        => [
                                 [ 'remove_matches'      , '^\s*;'  ],
@@ -10325,6 +10332,7 @@ sub set_constants {                          # {{{1
     'Freemarker Template'          =>   1.48,
     'F#'                           =>   2.50,
     'F# Script'                    =>   2.50,
+    'Flatbuffers'                  =>   2.50,
     'g2'                           =>   1.63,
     'gamma'                        =>   5.00,
     'genascript'                   =>   2.96,

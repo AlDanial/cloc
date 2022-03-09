@@ -300,6 +300,11 @@ my @Tests = (
                     'args' => '../tests/inputs/fsharp_script.fsx',
                 },
                 {
+                    'name' => 'Flatbuffers',
+                    'ref'  => '../tests/outputs/flatbuffers.fbs.yaml',
+                    'args' => '../tests/inputs/flatbuffers.fbs',
+                },
+                {
                     'name' => 'Gencat NLS',
                     'ref'  => '../tests/outputs/Gencat-NLS.msg.yaml',
                     'args' => '../tests/inputs/Gencat-NLS.msg',
