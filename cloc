@@ -7885,6 +7885,7 @@ sub set_constants {                          # {{{1
             'pac'         => 'JavaScript'            ,
             'njs'         => 'JavaScript'            ,
             'mjs'         => 'JavaScript'            ,
+            'cjs'         => 'JavaScript'            ,
             'jss'         => 'JavaScript'            ,
             'jsm'         => 'JavaScript'            ,
             'jsfl'        => 'JavaScript'            ,
