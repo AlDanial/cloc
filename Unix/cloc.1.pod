@@ -521,7 +521,7 @@ see the recognized extensions.
 
 =item B<--include-lang=L1[,L2 ...]>
 
-Count only the given comma separated languages
+Count only the given comma separated, case-insensitive languages
 L1, L2, L3, et cetera.
 
 =item B<--match-d=REGEX>

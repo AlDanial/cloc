@@ -641,6 +641,20 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/625/results.yaml',
                 },
 
+                {
+                    'name' => 'case insensitive --include-lang, #637',
+                    'cd'   => '../tests/inputs/issues/637',
+                    'args' => '--include-lang python,perl --follow-links A B',
+                    'ref'  => '../tests/outputs/issues/637/straight_incl_lang.yaml',
+                },
+
+                {
+                    'name' => 'case insensitive --include-lang --diff, #637',
+                    'cd'   => '../tests/inputs/issues/637',
+                    'args' => '--include-lang python,perl --follow-links --diff A B',
+                    'ref'  => '../tests/outputs/issues/637/diff_incl_lang.yaml',
+                },
+
             );
 
 # Special cases:

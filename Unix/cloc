@@ -478,9 +478,9 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              separated file extensions.  Use --show-ext to
                              see the recognized extensions.
    --include-lang=<L1>[,L2[...]]
-                             Count only the given comma separated languages
-                             L1, L2, L3, et cetera.  Use --show-lang to see
-                             the list of recognized languages.
+                             Count only the given comma separated, case-
+                             insensitive languages L1, L2, L3, et cetera.  Use
+                             --show-lang to see the list of recognized languages.
    --match-d=<regex>         Only count files in directories matching the Perl
                              regex.  For example
                                --match-d='/(src|include)/'
@@ -947,8 +947,8 @@ die unless exclude_dir_validates(\%Exclude_Dir);
 my %Include_Ext = ();
    %Include_Ext = map { $_ => 1 } split(/,/, $opt_include_ext)
         if $opt_include_ext;
-my %Include_Language = ();
-   %Include_Language = map { $_ => 1 } split(/,/, $opt_include_lang)
+my %Include_Language = (); # keys are lower case language names
+   %Include_Language = map { lc($_) => 1 } split(/,/, $opt_include_lang)
         if $opt_include_lang;
 # Forcibly exclude .svn, .cvs, .hg, .git, .bzr directories.  The contents of these
 # directories often conflict with files of interest.
@@ -1718,7 +1718,7 @@ foreach my $FH (@fh) {  # loop over each pair of file sets
         foreach my $file (keys %{$unique_source_file{$FH}}) {
             my $keep_file = 0;
             foreach my $keep_lang (keys %Include_Language) {
-                if ($Language{$FH}{$file} eq $keep_lang) {
+                if (lc($Language{$FH}{$file}) eq $keep_lang) {
                     $keep_file = 1;
                     last;
                 }
@@ -2294,7 +2294,7 @@ sub count_files {                            # {{{1
             $p_ignored{$file} = "not in --include-ext=$opt_include_ext";
             next;
         }
-        if ($opt_include_lang and not $Include_Language{$Language{$file}}) {
+        if ($opt_include_lang and not $Include_Language{lc($Language{$file})}) {
             $p_ignored{$file} = "not in --include-lang=$opt_include_lang";
             next;
         }
@@ -2438,7 +2438,7 @@ sub count_filesets {                         # {{{1
         next if $opt_include_ext
             and not $Include_Ext{ file_extension($f) };
         next if $opt_include_lang
-            and not $Include_Language{$Language{$fset_b}{$f}};
+            and not $Include_Language{lc($Language{$fset_b}{$f})};
         my $this_lang = $Language{$fset_b}{$f};
         if (!defined  $Language{$fset_b}{$f}) {
             # shouldn't happen but could get here if using
@@ -2483,7 +2483,7 @@ sub count_filesets {                         # {{{1
             and not $Include_Ext{ file_extension($f) };
         next if $opt_include_lang
             and (not defined $Language{$fset_a}{$f}
-             or  not defined $Include_Language{$Language{$fset_a}{$f}});
+             or  not defined $Include_Language{lc($Language{$fset_a}{$f})});
         my $this_lang = $Language{$fset_a}{$f};
         if ($this_lang eq "(unknown)") {
             $p_ignored{$f} = "unknown language";
@@ -2538,13 +2538,13 @@ sub count_filesets {                         # {{{1
         # filter out non-included extensions
         if ($opt_include_ext  and not $Include_Ext{ file_extension($file_L) }
                               and not $Include_Ext{ file_extension($file_R) }) {
-            $p_ignored{$file_L} = "not in --include-lang=$opt_include_ext";
-            $p_ignored{$file_R} = "not in --include-lang=$opt_include_ext";
+            $p_ignored{$file_L} = "not in --include-ext=$opt_include_ext";
+            $p_ignored{$file_R} = "not in --include-ext=$opt_include_ext";
             next;
         }
         # filter out non-included languages
-        if ($opt_include_lang and not $Include_Language{$Lang_L}
-                              and not $Include_Language{$Lang_R}) {
+        if ($opt_include_lang and not $Include_Language{lc($Lang_L)}
+                              and not $Include_Language{lc($Lang_R)}) {
             $p_ignored{$file_L} = "not in --include-lang=$opt_include_lang";
             $p_ignored{$file_R} = "not in --include-lang=$opt_include_lang";
             next;
@@ -7781,6 +7781,7 @@ sub set_constants {                          # {{{1
             'fsh'         => 'GLSL'                  ,
             'frg'         => 'GLSL'                  ,
             'fp'          => 'GLSL'                  ,
+            'fbs'         => 'Flatbuffers'           ,
             'glsl'        => 'GLSL'                  ,
             'graphqls'    => 'GraphQL'               ,
             'gql'         => 'GraphQL'               ,
@@ -7870,6 +7871,7 @@ sub set_constants {                          # {{{1
             'pac'         => 'JavaScript'            ,
             'njs'         => 'JavaScript'            ,
             'mjs'         => 'JavaScript'            ,
+            'cjs'         => 'JavaScript'            ,
             'jss'         => 'JavaScript'            ,
             'jsm'         => 'JavaScript'            ,
             'jsfl'        => 'JavaScript'            ,
@@ -8910,6 +8912,12 @@ sub set_constants {                          # {{{1
     'F# Script'          => [
                                 [ 'call_regexp_common'  , 'Pascal' ],
                                 [ 'remove_matches'      , '^\s*//' ],
+                            ],
+    'Flatbuffers'        => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                                [ 'remove_inline'       , '//.*$'  ],
                             ],
     'Godot Scene'        => [
                                 [ 'remove_matches'      , '^\s*;'  ],
@@ -10311,6 +10319,7 @@ sub set_constants {                          # {{{1
     'Freemarker Template'          =>   1.48,
     'F#'                           =>   2.50,
     'F# Script'                    =>   2.50,
+    'Flatbuffers'                  =>   2.50,
     'g2'                           =>   1.63,
     'gamma'                        =>   5.00,
     'genascript'                   =>   2.96,

@@ -1,0 +1,26 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.93
+  elapsed_seconds    : 0.00884604454040527
+  n_files            : 2
+  n_lines            : 19
+  files_per_second   : 226.089750154974
+  lines_per_second   : 2147.85262647225
+  report_file        : ../../../outputs/issues/637/straight_incl_lang.yaml
+'Python' :
+  nFiles: 1
+  blank: 4
+  comment: 10
+  code: 3
+'Perl' :
+  nFiles: 1
+  blank: 0
+  comment: 0
+  code: 2
+SUM: 
+  blank: 4
+  comment: 10
+  code: 5
+  nFiles: 2
