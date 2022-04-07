@@ -655,6 +655,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/637/diff_incl_lang.yaml',
                 },
 
+                {
+                    'name' => 'empty Unicode file w/only BOM, #644',
+                    'cd'   => '../tests/inputs/issues/644',
+                    'args' => 'UInt8.cs',
+                    'ref'  => '../tests/outputs/issues/644/results.yaml',
+                },
+
             );
 
 # Special cases:

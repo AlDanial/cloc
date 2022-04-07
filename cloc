@@ -6000,8 +6000,12 @@ sub first_line {                             # {{{1
         print "<- first_line($file, $n_lines)\n" if $opt_v > 2;
         return $line;
     }
+    # issue 644: Unicode files can have non-zero $n_lines
+    # but empty <$IN> contents
     for (my $i = 0; $i < $n_lines; $i++) {
-        chomp($line .= <$IN>);
+        my $L = <$IN>;
+        last unless defined $L;
+        chomp($line .= $L);
     }
     $IN->close;
     print "<- first_line($file, $n_lines, '$line')\n" if $opt_v > 2;

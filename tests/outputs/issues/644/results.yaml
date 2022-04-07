@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.93
+  elapsed_seconds    : 0.0103890895843506
+  n_files            : 1
+  n_lines            : 1
+  files_per_second   : 96.2548250143431
+  lines_per_second   : 96.2548250143431
+  report_file        : ../../../outputs/issues/644/results.yaml
+'C#' :
+  nFiles: 1
+  blank: 1
+  comment: 0
+  code: 0
+SUM: 
+  blank: 1
+  comment: 0
+  code: 0
+  nFiles: 1
