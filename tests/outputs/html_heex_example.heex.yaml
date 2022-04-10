@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.93
+  elapsed_seconds    : 0.00759506225585938
+  n_files            : 1
+  n_lines            : 10
+  files_per_second   : 131.664490205927
+  lines_per_second   : 1316.64490205927
+  report_file        : ../outputs/html_heex_example.heex.yaml
+'HTML EEx' :
+  nFiles: 1
+  blank: 1
+  comment: 4
+  code: 5
+SUM: 
+  blank: 1
+  comment: 4
+  code: 5
+  nFiles: 1

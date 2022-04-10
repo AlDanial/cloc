@@ -402,6 +402,11 @@ my @Tests = (
                     'args' => '../tests/inputs/arvo.hoon',
                 },
                 {
+                    'name' => 'HTML EEx',
+                    'ref'  => '../tests/outputs/html_heex_example.heex.yaml',
+                    'args' => '../tests/inputs/html_heex_example.heex',
+                },
+                {
                     'name' => 'IDL 1',
                     'ref'  => '../tests/outputs/IDL.idl.yaml',
                     'args' => '../tests/inputs/IDL.idl',

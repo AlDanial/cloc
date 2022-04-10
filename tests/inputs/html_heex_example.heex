@@ -1,0 +1,10 @@
+<%= for entry <- entries do %>
+  <article class="dummy">
+    <% # this is a nice comment about progress %>
+    <progress value={entry.progress} max="100"> <%= entry.progress %>% </progress>
+<%!-- a
+multiline
+       comment --%>
+  </article>
+<% end %>
+

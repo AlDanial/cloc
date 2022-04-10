@@ -7840,6 +7840,7 @@ sub set_constants {                          # {{{1
             'html.hl'     => 'HTML'                  ,
             'htm'         => 'HTML'                  ,
             'html'        => 'HTML'                  ,
+            'heex'        => 'HTML EEx'              ,
             'i3'          => 'Modula3'               ,
             'ice'         => 'Slice'                 ,
             'icl'         => 'Clean'                 ,
@@ -9038,6 +9039,10 @@ sub set_constants {                          # {{{1
     'HTML'               => [
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
+    'HTML EEx'           => [
+                                [ 'remove_matches'       , '^\s*<% #' ],
+                                [ 'remove_between_general', '<%!--', '--%>' ],
                             ],
     'Hoon'               => [
                                 [ 'remove_matches'      , '^\s*:[:><]' ],
@@ -10361,6 +10366,7 @@ sub set_constants {                          # {{{1
     'Haxe'                         =>   2.00,
     'Hoon'                         =>   2.00,
     'HTML'                         =>   1.90,
+    'HTML EEx'                     =>   3.00,
     'XHTML'                        =>   1.90,
     'XMI'                          =>   1.90,
     'XML'                          =>   1.90,
