@@ -7710,6 +7710,7 @@ sub set_constants {                          # {{{1
             'da'          => 'DAL'                   ,
             'dart'        => 'Dart'                  ,
             'dsc'         => 'DenizenScript'         ,
+            'derw'        => 'Derw'                  ,
             'def'         => 'Windows Module Definition',
             'dhall'       => 'dhall'                 ,
             'dt'          => 'DIET'                  ,
@@ -8792,6 +8793,11 @@ sub set_constants {                          # {{{1
     'DenizenScript'      => [ # same as YAML
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
+                            ],
+    'Derw'               => [
+                                [ 'remove_matches'      , '^\s*--' ],
+                                [ 'remove_between_general', '{-', '-}' ],
+                                [ 'remove_inline'       , '--.*$'  ],
                             ],
     'dhall'              => [   [ 'remove_haskell_comments', '>filename<' ], ],
     'Delphi Form'        => [ # same as Pascal
@@ -10270,7 +10276,7 @@ sub set_constants {                          # {{{1
     'diff'                         =>   1.00,
     'decision support default'     =>   2.22,
     'decrally'                     =>   2.00,
-    'delphi'                       =>   2.76,
+    'Derw'                         =>   3.00,
     'dhall'                        =>   2.11,
     'DITA'                         =>   1.90,
     'dl/1'                         =>   2.00,

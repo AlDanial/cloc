@@ -1,0 +1,20 @@
+-- https://github.com/eeue56/derw/blob/main/examples/complex_union.derw
+type Animal =
+    Dog { name: string }
+    | Cat { lives: number }
+
+sayHiToPet: Animal -> string
+sayHiToPet pet =
+    case pet of
+        Dog { name } ->
+            `Good boy ${name}!`
+	{-
+        Cat { lives } ->
+            "You have " + lives + " lives remaining."
+	-}
+
+main: void
+main =
+    Dog { name: "roof" }
+        |> sayHiToPet
+        |> console.log

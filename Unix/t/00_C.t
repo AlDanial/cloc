@@ -185,6 +185,11 @@ my @Tests = (
                     'args' => '../tests/inputs/double_doors.dsc',
                 },
                 {
+                    'name' => 'Derw',
+                    'ref'  => '../tests/outputs/complex_union.derw.yaml',
+                    'args' => '../tests/inputs/complex_union.derw',
+                },
+                {
                     'name' => 'dhall',
                     'ref'  => '../tests/outputs/Prelude.dhall.yaml',
                     'args' => '../tests/inputs/Prelude.dhall',

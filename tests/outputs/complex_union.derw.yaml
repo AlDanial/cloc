@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.93
+  elapsed_seconds    : 0.00703787803649902
+  n_files            : 1
+  n_lines            : 20
+  files_per_second   : 142.088282123378
+  lines_per_second   : 2841.76564246756
+  report_file        : ../outputs/complex_union.derw.yaml
+'Derw' :
+  nFiles: 1
+  blank: 2
+  comment: 5
+  code: 13
+SUM: 
+  blank: 2
+  comment: 5
+  code: 13
+  nFiles: 1
