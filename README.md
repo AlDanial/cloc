@@ -232,6 +232,13 @@ Alternatively one can use the Windows binary of cloc
 generated with [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.019/lib/pp.pm)
 to run on Windows computers that have neither Perl nor Cygwin.)
 
+In addition to counting code in individual text files, directories,
+and git repositories, cloc can also count code in archive files such
+as ``.tar`` (including compressed versions), ``.zip``, Python
+wheel ``.whl``, Jupyter notebook ``.ipynb``, source RPMs ``.rpm``
+or ``.src`` (requires ``rpm2cpio``),
+and Debian ``.deb`` files (requires ``dpkg-deb``).
+
 cloc contains code from David Wheeler's
 [SLOCCount](http://www.dwheeler.com/sloccount/),
 Damian Conway and Abigail's Perl module
