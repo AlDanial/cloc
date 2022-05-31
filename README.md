@@ -321,6 +321,7 @@ cloc has many features that make it easy to use, thorough, extensible, and porta
 If cloc does not suit your needs here are other freely available counters to consider:
 
 *   [loc](https://github.com/cgag/loc/)
+*   [gcloc](https://github.com/JoaoDanielRufino/gcloc)
 *   [gocloc](https://github.com/hhatto/gocloc/)
 *   [Ohcount](https://github.com/blackducksoftware/ohcount/)
 *   [scc](https://github.com/boyter/scc/)
