@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.93
+  elapsed_seconds    : 0.00682711601257324
+  n_files            : 1
+  n_lines            : 58
+  files_per_second   : 146.474733717479
+  lines_per_second   : 8495.53455561376
+  report_file        : futhark.fut.yaml
+'Futhark' :
+  nFiles: 1
+  blank: 7
+  comment: 35
+  code: 16
+SUM: 
+  blank: 7
+  comment: 35
+  code: 16
+  nFiles: 1

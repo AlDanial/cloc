@@ -7785,6 +7785,7 @@ sub set_constants {                          # {{{1
             'fs'          => 'F#/Forth'              ,
             'fsi'         => 'F#'                    ,
             'fsx'         => 'F# Script'             ,
+            'fut'         => 'Futhark'               ,
             'fxml'        => 'FXML'                  ,
             'gnumakefile' => 'make'                  ,
             'Gnumakefile' => 'make'                  ,
@@ -8926,6 +8927,9 @@ sub set_constants {                          # {{{1
     'Freemarker Template' => [
                                 [ 'remove_between_general', '<#--', '-->' ],
                             ],
+    'Futhark'            => [
+                                [ 'remove_matches'      , '^\s*--'  ],
+                            ],
     'FXML'               => [
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
@@ -9999,6 +10003,7 @@ sub set_constants {                          # {{{1
     'D'                  =>     '\\\\$'         ,
     'Dart'               =>     '\\\\$'         ,
     'Expect'             =>     '\\\\$'         ,
+    'Futhark'            =>     '\\\\$'         ,
     'Gencat NLS'         =>     '\\\\$'         ,
     'Go'                 =>     '\\\\$'         ,
     'IDL'                =>     '\$\\$'         ,
@@ -10346,6 +10351,7 @@ sub set_constants {                          # {{{1
     'foxpro 2.5'                   =>   2.35,
     'framework'                    =>  13.33,
     'Freemarker Template'          =>   1.48,
+    'Futhark'                      =>   3.00, # Guessed from value of ML
     'F#'                           =>   2.50,
     'F# Script'                    =>   2.50,
     'Flatbuffers'                  =>   2.50,

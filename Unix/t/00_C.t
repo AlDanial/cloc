@@ -290,6 +290,11 @@ my @Tests = (
                     'args' => '../tests/inputs/FreemarkerTemplate.ftl',
                 },
                 {
+                    'name' => 'Futhark',
+                    'ref'  => '../tests/outputs/futhark.fut.yaml',
+                    'args' => '../tests/inputs/futhark.fut',
+                },
+                {
                     'name' => 'FXML',
                     'ref'  => '../tests/outputs/vbox.fxml.yaml',
                     'args' => '../tests/inputs/vbox.fxml',
