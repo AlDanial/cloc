@@ -2,12 +2,12 @@
 # github.com/AlDanial/cloc
 header : 
   cloc_url           : github.com/AlDanial/cloc
-  cloc_version       : 1.89
-  elapsed_seconds    : 0.00649213790893555
+  cloc_version       : 1.93
+  elapsed_seconds    : 0.00708508491516113
   n_files            : 1
   n_lines            : 4
-  files_per_second   : 154.032464193904
-  lines_per_second   : 616.129856775615
+  files_per_second   : 141.141568799004
+  lines_per_second   : 564.566275196016
   report_file        : ../../../outputs/issues/542/results.yaml
 'Text File' :
   nFiles: 1

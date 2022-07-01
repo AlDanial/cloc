@@ -942,6 +942,11 @@ my @Tests = (
                     'args' => '../tests/inputs/LaTeX.tex',
                 },
                 {
+                    'name' => 'Text',
+                    'ref'  => '../tests/outputs/plain_text.txt.yaml',
+                    'args' => '../tests/inputs/plain_text.txt',
+                },
+                {
                     'name' => 'Thrift',
                     'ref'  => '../tests/outputs/DocTest.thrift.yaml',
                     'args' => '../tests/inputs/DocTest.thrift',
