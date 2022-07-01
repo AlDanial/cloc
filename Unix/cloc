@@ -7771,6 +7771,7 @@ sub set_constants {                          # {{{1
             'fs'          => 'F#/Forth'              ,
             'fsi'         => 'F#'                    ,
             'fsx'         => 'F# Script'             ,
+            'fut'         => 'Futhark'               ,
             'fxml'        => 'FXML'                  ,
             'gnumakefile' => 'make'                  ,
             'Gnumakefile' => 'make'                  ,
@@ -8251,6 +8252,8 @@ sub set_constants {                          # {{{1
 #           'cls'         => 'TeX'                   ,
             'dtx'         => 'TeX'                   ,
             'bst'         => 'TeX'                   ,
+            'txt'         => 'Text'                  ,
+            'text'        => 'Text'                  ,
             'tres'        => 'Godot Resource'        ,
             'tscn'        => 'Godot Scene'           ,
             'thrift'      => 'Thrift'                ,
@@ -8911,6 +8914,9 @@ sub set_constants {                          # {{{1
                             ],
     'Freemarker Template' => [
                                 [ 'remove_between_general', '<#--', '-->' ],
+                            ],
+    'Futhark'            => [
+                                [ 'remove_matches'      , '^\s*--'  ],
                             ],
     'FXML'               => [
                                 [ 'remove_html_comments',          ],
@@ -9695,6 +9701,9 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*%'  ],
                                 [ 'remove_inline'       , '%.*$'   ],
                             ],
+    'Text'               => [
+                                [ 'remove_matches'      , '^\s*$'  ],
+                            ],
     'Thrift'             => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
@@ -9985,6 +9994,7 @@ sub set_constants {                          # {{{1
     'D'                  =>     '\\\\$'         ,
     'Dart'               =>     '\\\\$'         ,
     'Expect'             =>     '\\\\$'         ,
+    'Futhark'            =>     '\\\\$'         ,
     'Gencat NLS'         =>     '\\\\$'         ,
     'Go'                 =>     '\\\\$'         ,
     'IDL'                =>     '\$\\$'         ,
@@ -10053,6 +10063,7 @@ sub set_constants {                          # {{{1
    'bdf'       => 1,
    'bmp'       => 1,
    'bz2'       => 1,  # bzip2(1) compressed file
+   'csv'       => 1,
    'desktop'   => 1,
    'dic'       => 1,
    'doc'       => 1,
@@ -10061,6 +10072,7 @@ sub set_constants {                          # {{{1
    'fig'       => 1,
    'gif'       => 1,
    'gz'        => 1,
+   'h5'        => 1,  # hierarchical data format
    'hdf'       => 1,  # hierarchical data format
    'in'        => 1,  # Debatable.
    'jpg'       => 1,
@@ -10075,20 +10087,22 @@ sub set_constants {                          # {{{1
    'pdf'       => 1,
    'pfb'       => 1,
    'png'       => 1,
+   'ppt'       => 1,
+   'pptx'      => 1,
    'ps'        => 1,  # Postscript is _USUALLY_ generated automatically.
    'sgm'       => 1,
    'sgml'      => 1,
    'so'        => 1,  # Dynamically-loaded object code.
    'Tag'       => 1,
-   'text'      => 1,
    'tfm'       => 1,
    'tgz'       => 1,  # gzipped tarball
    'tiff'      => 1,
    'tsv'       => 1,  # tab separated values
-   'txt'       => 1,
    'vf'        => 1,
    'wav'       => 1,
    'xbm'       => 1,
+   'xls'       => 1,
+   'xlsx'      => 1,
    'xpm'       => 1,
    'Y'         => 1,  # file compressed with "Yabba"
    'Z'         => 1,  # file compressed with "compress"
@@ -10332,6 +10346,7 @@ sub set_constants {                          # {{{1
     'foxpro 2.5'                   =>   2.35,
     'framework'                    =>  13.33,
     'Freemarker Template'          =>   1.48,
+    'Futhark'                      =>   3.00, # Guessed from value of ML
     'F#'                           =>   2.50,
     'F# Script'                    =>   2.50,
     'Flatbuffers'                  =>   2.50,
@@ -10706,6 +10721,7 @@ sub set_constants {                          # {{{1
     'Teamcenter met'               =>   1.00,
     'Teamcenter mth'               =>   1.00,
     'TeX'                          =>   1.50,
+    'Text'                         =>   0.50,
     'telon'                        =>   5.00,
     'tessaract'                    =>   2.00,
     'the twin'                     =>  13.33,
