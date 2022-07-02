@@ -1140,6 +1140,10 @@ if (!$opt_diff_list_file) {
 trick_pp_packer_encode() if $ON_WINDOWS and $opt_file_encoding;
 $File::Find::dont_use_nlink = 1 if $opt_stat or top_level_SMB_dir(\@ARGV);
 my @git_similarity = (); # only populated with --git-diff-simindex
+my %git_metadata   = ();
+get_git_metadata(\@ARGV, \%git_metadata) if $opt_force_git;
+#use Data::Dumper;
+#print Dumper(\%git_metadata);
 replace_git_hash_with_tarfile(\@ARGV, \@git_similarity);
 # 1}}}
 # Step 1:  Initialize global constants.        {{{1
@@ -3317,6 +3321,16 @@ sub xml_yaml_or_json_header {                # {{{1
         $header .= "\n$report_file"
             if $opt_report_file;
         $header .= "\n</header>";
+        if (%git_metadata) {
+            foreach my $target (keys %git_metadata) {
+                $header .= "\n<source>";
+                $header .= "\n  <target>$target</target>";
+                $header .= "\n  <origin>$git_metadata{$target}{'origin'}</origin>";
+                $header .= "\n  <branch>$git_metadata{$target}{'branch'}</branch>";
+                $header .= "\n  <commit>$git_metadata{$target}{'commit'}</commit>";
+                $header .= "\n</source>";
+            }
+        }
     } elsif ($opt_yaml or $opt_json) {
         my ($Q, $open_B, $close_B, $start, $C) = yaml_to_json_separators();
         $header = "${start}${Q}header${Q} : $open_B
@@ -4855,6 +4869,27 @@ sub top_level_SMB_dir {                      # {{{1
     return 0;
 }
 # 1}}}
+sub get_git_metadata {                       # {{{1
+    my ($ra_arg_list,             # in  file name, directory name and/or
+                                  #     git commit hash to examine
+        $rh_git_metadata) = @_;   # out repo info
+    # Capture git information where possible--origin, branch, commit hash.
+    my $prt_args = join(",", @{$ra_arg_list});
+    print "-> get_git_metadata($prt_args)\n" if $opt_v > 2;
+    foreach my $arg (@{$ra_arg_list}) {
+        next if -f $arg;
+        my $origin = `git remote get-url origin 2>&1`;
+        next if $origin =~ /^fatal:/;
+        chomp($rh_git_metadata->{$arg}{"origin"} = $origin);
+        chomp($rh_git_metadata->{$arg}{"branch"} = `git symbolic-ref --short HEAD`);
+        if (-d $arg) {
+            chomp($rh_git_metadata->{$arg}{"commit"}   = `git rev-parse HEAD`);
+        } else {
+            chomp($rh_git_metadata->{$arg}{"commit"}   = `git rev-parse $arg`);
+        }
+    }
+    print "<- get_git_metadata()\n" if $opt_v > 2;
+} # 1}}}
 sub replace_git_hash_with_tarfile {          # {{{1
     my ($ra_arg_list,             # in  file name, directory name and/or
                                   #     git commit hash to examine
