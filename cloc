@@ -362,6 +362,8 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              such as GNU autoconf.  To see a list of these files
                              (then exit), run with --no-autogen list
                              See also --autoconf.
+   --no-recurse              Count files in the given directories without
+                             recursively descending below them.
    --original-dir            [Only effective in combination with
                              --strip-comments]  Write the stripped files
                              to the same directory as the original files.
@@ -751,6 +753,7 @@ my (
     $opt_stat                 ,
     $opt_summary_cutoff       ,
     $opt_skip_leading         ,
+    $opt_no_recurse           ,
    );
 
 my $getopt_success = GetOptions(             # {{{1
@@ -850,6 +853,7 @@ my $getopt_success = GetOptions(             # {{{1
    "stat"                                    => \$opt_stat                ,
    "summary_cutoff|summary-cutoff=s"         => \$opt_summary_cutoff      ,
    "skip_leading|skip-leading:s"             => \$opt_skip_leading        ,
+   "no_recurse|no-recurse"                   => \$opt_no_recurse          ,
   );
 # 1}}}
 $config_file = $opt_config_file if defined $opt_config_file;
@@ -5324,9 +5328,15 @@ sub make_file_list {                         # {{{1
             $Ignored{$D} = "--exclude-dir=$Exclude_Dir{$dir}";
             next;
         }
-        find({wanted     => \&files            ,
-              preprocess => \&find_preprocessor,
-              follow     =>  $opt_follow_links }, $dir);
+        if ($opt_no_recurse) {
+            opendir(DIR, $dir);
+            push @file_list, grep(-f $_, readdir(DIR));
+            closedir(DIR);
+        } else {
+            find({wanted     => \&files            ,
+                  preprocess => \&find_preprocessor,
+                  follow     =>  $opt_follow_links }, $dir);
+        }
     }
     if ($opt_follow_links) {
         # giving { 'follow' => 1 } to find() makes it skip the

@@ -662,6 +662,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/644/results.yaml',
                 },
 
+                {
+                    'name' => '--no-recurse, #657',
+                    'cd'   => '../tests/inputs/issues/657',
+                    'args' => '--no-recurse .',
+                    'ref'  => '../tests/outputs/issues/657/results.yaml',
+                },
+
             );
 
 # Special cases:
