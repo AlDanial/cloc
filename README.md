@@ -249,6 +249,8 @@ and Tye McQueen's Perl module
 [Algorithm::Diff](http://search.cpan.org/%7Etyemq/Algorithm-Diff-1.1902/lib/Algorithm/Diff.pm).
 Language scale factors were derived from Mayes Consulting, LLC web site
 http://softwareestimator.com/IndustryData2.htm.
+
+New releases nominally appear every six months.
 [](1}}})
 
 <a name="Docker"></a> []({{{1)
