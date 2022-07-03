@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.93
+  elapsed_seconds    : 0.00660109519958496
+  n_files            : 1
+  n_lines            : 24
+  files_per_second   : 151.490013363672
+  lines_per_second   : 3635.76032072814
+  report_file        : ../outputs/traffic_light.fsl.yaml
+'Finite State Language' :
+  nFiles: 1
+  blank: 7
+  comment: 3
+  code: 14
+SUM: 
+  blank: 7
+  comment: 3
+  code: 14
+  nFiles: 1

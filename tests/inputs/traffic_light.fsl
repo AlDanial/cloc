@@ -1,0 +1,24 @@
+machine_name: "Traffic light";
+
+flow: down;
+
+arrange [Green Yellow];
+
+Off 'Enable' -> Red;
+Red 'Next' => Green 'Next' => Yellow 'Next' => Red;
+
+[Red Yellow Green] ~> Off;
+
+// visual styling
+
+state Red    : { background-color: pink;        corners: rounded; };
+state Yellow : { background-color: lightyellow; corners: rounded; };
+state Green  : { background-color: lightgreen;  corners: rounded; };
+
+state Off : {
+/*
+  background-color : steelblue;
+  text-color  */      : white;
+  shape            : octagon;
+  linestyle        : dashed;
+};

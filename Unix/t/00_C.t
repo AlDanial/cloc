@@ -255,6 +255,11 @@ my @Tests = (
                     'args' => '../tests/inputs/generate.fnl',
                 },
                 {
+                    'name' => 'Finite State Language',
+                    'ref'  => '../tests/outputs/traffic_light.fsl.yaml',
+                    'args' => '../tests/inputs/traffic_light.fsl',
+                },
+                {
                     'name' => 'Fish Shell',
                     'ref'  => '../tests/outputs/git_helpers.fish.yaml',
                     'args' => '../tests/inputs/git_helpers.fish',
