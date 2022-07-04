@@ -5,7 +5,7 @@
 * * *
 cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.
 
-Latest release:  v1.92 (Dec. 5, 2021)
+Latest release:  v1.94 (July 4, 2022)
 
 <a href="https://github.com/AlDanial/cloc/graphs/contributors" alt="Contributors">
     <img src="https://img.shields.io/github/contributors/AlDanial/cloc" /></a>
@@ -64,8 +64,8 @@ Step 3:  Invoke cloc to count your source files, directories, archives,
 or git commits.
 The executable name differs depending on whether you use the
 development source version (`cloc`), source for a
-released version (`cloc-1.92.pl`) or a Windows executable
-(`cloc-1.92.exe`).  On this page, `cloc` is the generic term
+released version (`cloc-1.94.pl`) or a Windows executable
+(`cloc-1.94.exe`).  On this page, `cloc` is the generic term
 used to refer to any of these.
 
 **a file**
@@ -372,6 +372,7 @@ and Digest::MD5 installed locally.
 # [Building a Windows Executable &#9650;](#___top "click to go to top of document")
 
 The Windows downloads
+<tt>cloc-1.94.exe</tt>,
 <tt>cloc-1.92.exe</tt>,
 <tt>cloc-1.90.exe</tt> and
 <tt>cloc-1.88.exe</tt> were built on a 64 bit Windows 10 computer
@@ -416,6 +417,9 @@ You are encouraged to run your own virus scanners against the
 executable and also check sites such
 https://www.virustotal.com/ .
 The entries for recent versions are:
+
+cloc-1.94.exe:
+https://www.virustotal.com/gui/file/b48a6002fb75fa66ec5d0c05a5c4d51f2ad22b5b025b7eb4e3945d18419c0952?nocache=1
 
 cloc-1.92.exe:
 https://www.virustotal.com/gui/file/2668fcf8609c431e8934fe9e1866bc620c58d198c4eb262f1d3ef31ef4a690f7
@@ -493,7 +497,7 @@ C:> cpan -i Digest::MD5
 C:> cpan -i Regexp::Common
 C:> cpan -i Algorithm::Diff
 C:> cpan -i PAR::Packer
-C:> pp -M Digest::MD5 -c -x -o cloc-1.92.exe cloc-1.92.pl
+C:> pp -M Digest::MD5 -c -x -o cloc-1.94.exe cloc-1.94.pl
 </pre>
 
 A variation on the instructions above is if you installed the portable
@@ -1068,6 +1072,8 @@ D                          (d)
 DAL                        (da)
 Dart                       (dart)
 Delphi Form                (dfm)
+DenizenScript              (dsc)
+Derw                       (derw)
 dhall                      (dhall)
 DIET                       (dt)
 diff                       (diff, patch)
@@ -1090,6 +1096,7 @@ Expect                     (exp)
 F#                         (fsi, fs, fs)
 F# Script                  (fsx)
 Fennel                     (fnl)
+Finite State Language      (fsl, jssm)
 Fish Shell                 (fish)
 Flatbuffers                (fbs)
 Focus                      (focexec)
@@ -1108,6 +1115,7 @@ GLSL                       (comp, fp, frag, frg, fsh, fshader, geo, geom, glsl, 
 Go                         (go)
 Godot Resource             (tres)
 Godot Scene                (tscn)
+Godot Shaders              (gdshader)
 Gradle                     (gradle, gradle.kts)
 Grails                     (gsp)
 GraphQL                    (gql, graphql, graphqls)
@@ -1121,6 +1129,7 @@ HCL                        (hcl, nomad, tf, tfvars)
 HLSL                       (cg, cginc, fxh, hlsl, hlsli, shader)
 Hoon                       (hoon)
 HTML                       (htm, html, html.hl, xht)
+HTML EEx                   (heex)
 IDL                        (dlm, idl, pro)
 Idris                      (idr)
 Igor Pro                   (ipf)
@@ -1129,7 +1138,7 @@ INI                        (buildozer.spec, ini, lektorproject, prefs)
 InstallShield              (ism)
 IPL                        (ipl)
 Java                       (java)
-JavaScript                 (_js, bones, es6, jake, jakefile, js, jsb, jscad, jsfl, jsm, jss, mjs, njs, pac, sjs, ssjs, xsjs, xsjslib)
+JavaScript                 (_js, bones, cjs, es6, jake, jakefile, js, jsb, jscad, jsfl, jsm, jss, mjs, njs, pac, sjs, ssjs, xsjs, xsjslib)
 JavaServer Faces           (jsf)
 JCL                        (jcl)
 Jinja Template             (jinja, jinja2)
@@ -1144,6 +1153,7 @@ Kermit                     (ksc)
 Korn Shell                 (ksh)
 Kotlin                     (kt, ktm, kts)
 Lean                       (hlean, lean)
+Lem                        (lem)
 LESS                       (less)
 lex                        (l, lex)
 LFE                        (lfe)
@@ -1186,6 +1196,9 @@ Oracle Reports             (rex)
 Pascal                     (dpr, lpr, p, pas, pascal)
 Pascal/Puppet              (pp)
 Patran Command Language    (pcl, ses)
+PEG                        (peg)
+peg.js                     (pegjs)
+peggy                      (peggy)
 Perl                       (ack, al, cpanfile, makefile.pl, perl, ph, plh, plx, pm, psgi, rexfile, pl, p6)
 PHP                        (aw, ctp, phakefile, php, php3, php4, php5, php_cs, php_cs.dist, phps, phpt, phtml)
 PHP/Pascal                 (inc)
@@ -1254,16 +1267,18 @@ Svelte                     (svelte)
 SVG                        (SVG, svg)
 Swift                      (swift)
 SWIG                       (i)
-TableGen                   (tb)
+TableGen                   (td)
 Tcl/Tk                     (itk, tcl, tk)
 Teamcenter met             (met)
 Teamcenter mth             (mth)
 TeX                        (aux, bbx, bib, bst, cbx, dtx, ins, lbx, ltx, mkii, mkiv, mkvi, sty, tex, cls)
+Text                       (text, txt)
 Thrift                     (thrift)
 TITAN Project File Information (tpd)
 Titanium Style Sheet       (tss)
 TNSDL                      (cii, cin, in1, in2, in3, in4, inf, interface, rou, sdl, sdt, spd, ssc, sst)
 TOML                       (toml)
+tspeg                      (jspeg, tspeg)
 TTCN                       (ttcn, ttcn2, ttcn3, ttcnpp)
 Twig                       (twig)
 TypeScript                 (tsx, ts)
@@ -1280,6 +1295,7 @@ Visual Basic               (BAS, bas, ctl, dsr, frm, FRX, frx, VBHTML, vbhtml, v
 Visual Basic .NET          (VB, vb, vbproj)
 Visual Basic Script        (VBS, vbs)
 Visual Fox Pro             (SCA, sca)
+Visual Studio Module       (ixx)
 Visual Studio Solution     (sln)
 Visualforce Component      (component)
 Visualforce Page           (page)
@@ -1294,6 +1310,7 @@ WiX source                 (wxs)
 WiX string localization    (wxl)
 WXML                       (wxml)
 WXSS                       (wxss)
+X++                        (xpo)
 XAML                       (xaml)
 xBase                      (prg, prw)
 xBase Header               (ch)
