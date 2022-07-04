@@ -1,0 +1,55 @@
+/*
+Exerpt from
+  https://github.com/StoneCypher/short_offer/raw/main/src/peg/sdp_parser.pegjs
+*/
+
+IceChar24
+  = a:IceChar b:IceChar c:IceChar d:IceChar e:IceChar f:IceChar
+    g:IceChar h:IceChar i:IceChar j:IceChar k:IceChar l:IceChar
+    m:IceChar n:IceChar o:IceChar p:IceChar q:IceChar r:IceChar
+    s:IceChar t:IceChar u:IceChar v:IceChar w:IceChar x:IceChar
+  { return [a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x].join(''); }
+
+
+
+IceChar32
+  = a:IceChar  b:IceChar  c:IceChar  d:IceChar  e:IceChar  f:IceChar
+    g:IceChar  h:IceChar  i:IceChar  j:IceChar  k:IceChar  l:IceChar
+    m:IceChar  n:IceChar  o:IceChar  p:IceChar  q:IceChar  r:IceChar
+    s:IceChar  t:IceChar  u:IceChar  v:IceChar  w:IceChar  x:IceChar
+    y:IceChar  z:IceChar  aa:IceChar ab:IceChar ac:IceChar ad:IceChar
+    ae:IceChar af:IceChar
+  { return [a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,aa,ab,ac,ad,ae,af].join(''); }
+
+// 
+// 
+// GUID
+//   = a:Hex8 '-' b:Hex4 '-' c:Hex4 '-' d:Hex4 '-' e:Hex12
+//   { return [a,b,c,d,e].join(''); }
+// 
+// 
+// 
+// IP4
+//   = a:Decimal '.' b:Decimal '.' c:Decimal '.' d:Decimal
+//   { return ((((( (a*256n) +b) *256n) +c) *256n) +d).toString(); }
+// 
+// 
+// 
+M_h16
+  = d:(":" h16) { return `:${d[1]}`; }
+
+
+
+/* cribbed from https://git.insoft.cz/insoft/modified-sip.js/-/blob/3081a21bd47215679f7f1dac8c771ae6f3d7193b/src/grammar/src/grammar.pegjs
+IP6
+  = a:h16 ":" b:h16 ":" c:h16 ":" d:h16 ":" e:h16 ":" f:h16 ":" g:ls32 { return `${a}:${b}:${c}:${d}:${e}:${f}:${g}`; }
+  /      "::" b:h16 ":" c:h16 ":" d:h16 ":" e:h16 ":" f:h16 ":" g:ls32 { return `::${b}:${c}:${d}:${e}:${f}:${g}`; }
+  /      "::" b:h16 ":" c:h16 ":" d:h16 ":" e:h16 ":" f:ls32           { return `::${b}:${c}:${d}:${e}:${f}`; }
+  /      "::" b:h16 ":" c:h16 ":" d:h16 ":" e:ls32                     { return `::${b}:${c}:${d}:${e}`; }
+  /      "::" b:h16 ":" c:h16 ":" d:ls32                               { return `::${b}:${c}:${d}`; }
+ */      "::" b:h16 ":" c:ls32                                         { return `::${b}:${c}`; }
+  /      "::" b:ls32                                                   { return `::${b}`; }
+  /      "::" b:h16                                                    { return `::${b}`; }
+
+
+  // truncated

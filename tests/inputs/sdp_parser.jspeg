@@ -1,0 +1,55 @@
+/*
+Exerpt from
+  https://github.com/StoneCypher/short_offer/raw/main/src/peg/sdp_parser.pegjs
+*/
+{
+
+
+
+  function not_null(n) {
+    return n === null? '' : n;
+  }
+
+
+
+  function ast(kind, value) {
+
+    const uses_short_nl = false; // todo
+
+    let retval = {
+      kind,
+      value,
+      uses_short_nl,
+      loc: location()
+    };
+
+    if (kind === 'standard_moz_origin') {
+      retval.moz_ver = value[0].value;
+      retval.sess    = value[1];
+      value          = '';
+    }
+
+    if (['standard_origin',
+         'standard_local_candidate',
+         'standard_guid_local_candidate',
+         'standard_guid_local_candidate_ffus',
+         'standard_remote_candidate',
+         'standard_remote_candidate_ffus',
+         'standard_agen_tcp_candidate',
+         'standard_agen_tcp6_candidate',
+         'standard_agen_udp4_candidate',
+         'standard_agen_udp6_host_candidate'
+        ].includes(kind)) {
+      retval.items = value;
+      retval.value = '';
+    }
+
+    return retval;
+
+  }
+
+
+
+}
+
+// truncated

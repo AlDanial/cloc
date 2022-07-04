@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.93
+  elapsed_seconds    : 0.00704693794250488
+  n_files            : 1
+  n_lines            : 55
+  files_per_second   : 141.905606116994
+  lines_per_second   : 7804.80833643469
+  report_file        : ../outputs/sdp_parser.jspeg.yaml
+'tspeg' :
+  nFiles: 1
+  blank: 16
+  comment: 5
+  code: 34
+SUM: 
+  blank: 16
+  comment: 5
+  code: 34
+  nFiles: 1

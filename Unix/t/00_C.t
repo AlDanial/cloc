@@ -682,6 +682,31 @@ my @Tests = (
                     'args' => '../tests/inputs/hello.pas',
                 },
                 {
+                    'name' => 'PEG',
+                    'ref'  => '../tests/outputs/sdp_parser.peg.yaml',
+                    'args' => '../tests/inputs/sdp_parser.peg',
+                },
+                {
+                    'name' => 'pegjs',
+                    'ref'  => '../tests/outputs/sdp_parser.pegjs.yaml',
+                    'args' => '../tests/inputs/sdp_parser.pegjs',
+                },
+                {
+                    'name' => 'peggy',
+                    'ref'  => '../tests/outputs/sdp_parser.peggy.yaml',
+                    'args' => '../tests/inputs/sdp_parser.peggy',
+                },
+                {
+                    'name' => 'tspeg 1',
+                    'ref'  => '../tests/outputs/sdp_parser.tspeg.yaml',
+                    'args' => '../tests/inputs/sdp_parser.tspeg',
+                },
+                {
+                    'name' => 'tspeg 2',
+                    'ref'  => '../tests/outputs/sdp_parser.jspeg.yaml',
+                    'args' => '../tests/inputs/sdp_parser.jspeg',
+                },
+                {
                     'name' => 'PHP',
                     'ref'  => '../tests/outputs/test1.inc.yaml',
                     'args' => '../tests/inputs/test1.inc',

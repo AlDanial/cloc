@@ -1,0 +1,55 @@
+/*
+Exerpt from
+  https://github.com/StoneCypher/short_offer/raw/main/src/peg/sdp_parser.pegjs
+*/
+
+
+AIceUFrag8
+  = 'a=ice-ufrag:' data:IceChar8 CapAtSeparator
+  { return ast('a_ice_ufrag_8', data); }
+
+
+
+AFingerprint
+  = 'a=fingerprint:sha-256 ' data:CHex64 CapAtSeparator
+  { return ast('a_fingerprint_sha1_256', data); }
+
+
+
+AGroupBundle0
+  = 'a=group:BUNDLE 0' CapAtSeparator
+  { return ast('a_group_bundle_0'); }
+
+
+
+CClaimIp4
+  = 'c=IN IP4 ' data:IP4 CapAtSeparator
+  { return ast('c_claim_ip4', data); }
+
+
+
+StandardMApplication
+  = 'm=application ' data:Decimal ' UDP/DTLS/SCTP webrtc-datachannel' CapAtSeparator
+  { return ast('standard_m_application', data); }
+
+
+
+UnknownRule
+  = us:UntilSeparator
+  { return ast('unknown_line', us); }
+
+
+
+UntilSeparator
+  = rl:[^'\r\n']* '\r\n'
+  { return rl.join(''); }
+
+            /*
+
+CapAtSeparator
+  = '\r\n'
+
+            */
+
+// UnknownTerminatingString
+  = uts:.* { return ast( 'unknown_terminate', uts.join('') ); }

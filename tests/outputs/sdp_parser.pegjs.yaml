@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.93
+  elapsed_seconds    : 0.00680398941040039
+  n_files            : 1
+  n_lines            : 50
+  files_per_second   : 146.972597939589
+  lines_per_second   : 7348.62989697947
+  report_file        : ../outputs/sdp_parser.pegjs.yaml
+'peg.js' :
+  nFiles: 1
+  blank: 18
+  comment: 9
+  code: 23
+SUM: 
+  blank: 18
+  comment: 9
+  code: 23
+  nFiles: 1
