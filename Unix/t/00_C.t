@@ -412,6 +412,11 @@ my @Tests = (
                     'args' => '../tests/inputs/nomad_job.hcl',
                 },
                 {
+                    'name' => 'HolyC',
+                    'ref'  => '../tests/outputs/Once.HC.yaml',
+                    'args' => '../tests/inputs/Once.HC',
+                },
+                {
                     'name' => 'Hoon',
                     'ref'  => '../tests/outputs/arvo.hoon.yaml',
                     'args' => '../tests/inputs/arvo.hoon',

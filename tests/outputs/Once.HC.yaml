@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.94
+  elapsed_seconds    : 0.00722098350524902
+  n_files            : 1
+  n_lines            : 58
+  files_per_second   : 138.48529071879
+  lines_per_second   : 8032.14686168983
+  report_file        : ../outputs/Once.HC.yaml
+'HolyC' :
+  nFiles: 1
+  blank: 4
+  comment: 14
+  code: 40
+SUM: 
+  blank: 4
+  comment: 14
+  code: 40
+  nFiles: 1
