@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.94
+  elapsed_seconds    : 0.0084228515625
+  n_files            : 1
+  n_lines            : 32
+  files_per_second   : 118.724637681159
+  lines_per_second   : 3799.1884057971
+  report_file        : ../outputs/variable_length.carbon.yaml
+'Carbon' :
+  nFiles: 1
+  blank: 11
+  comment: 6
+  code: 15
+SUM: 
+  blank: 11
+  comment: 6
+  code: 15
+  nFiles: 1

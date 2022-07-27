@@ -165,6 +165,11 @@ my @Tests = (
                     'args' => '../tests/inputs/C++-uppercase.CPP',
                 },
                 {
+                    'name' => 'Carbon',
+                    'ref'  => '../tests/outputs/variable_length.carbon.yaml',
+                    'args' => '../tests/inputs/variable_length.carbon',
+                },
+                {
                     'name' => 'C simple',
                     'ref'  => '../tests/outputs/C-Ansi.c.yaml',
                     'args' => '../tests/inputs/C-Ansi.c',
