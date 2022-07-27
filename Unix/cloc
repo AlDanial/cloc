@@ -8288,7 +8288,7 @@ sub set_constants {                          # {{{1
             'tcl'         => 'Tcl/Tk'                ,
             'tcsh'        => 'C Shell'               ,
             'tk'          => 'Tcl/Tk'                ,
-            'teal'        => 'Teal'                  ,
+            'teal'        => 'TEAL'                  ,
             'mkvi'        => 'TeX'                   ,
             'mkiv'        => 'TeX'                   ,
             'mkii'        => 'TeX'                   ,
@@ -9773,7 +9773,7 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
-    'Teal'               => [
+    'TEAL'               => [
                                 [ 'remove_matches'      , '^\s*//' ],
                             ],
     'Teamcenter met'     => [   [ 'call_regexp_common'  , 'C'      ], ],
@@ -10728,7 +10728,7 @@ sub set_constants {                          # {{{1
     'SWIG'                         =>   2.50,
     'TableGen'                     =>   2.00,
     'Tcl/Tk'                       =>   4.00,
-    'Teal'                         =>   0.50,
+    'TEAL'                         =>   0.50,
     'Teamcenter def'               =>   1.00,
     'Teamcenter met'               =>   1.00,
     'Teamcenter mth'               =>   1.00,

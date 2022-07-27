@@ -9,7 +9,7 @@ header :
   files_per_second   : 97.284037667579
   lines_per_second   : 6809.88263673053
   report_file        : ../outputs/htlc.teal.yaml
-'Teal' :
+'TEAL' :
   nFiles: 1
   blank: 16
   comment: 37
