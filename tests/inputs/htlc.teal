@@ -1,0 +1,70 @@
+// https://developer.algorand.org/docs/get-details/dapps/avm/teal/#looping-and-subroutines
+// Are used to comment in TEAL
+// htlc.teal
+// Push the CloseRemainderTo property of the current transaction onto the stack
+txn CloseRemainderTo
+
+// Push addr2 onto the stack as the intended recipient
+addr SOEI4UA72A7ZL5P25GNISSVWW724YABSGZ7GHW5ERV4QKK2XSXLXGXPG5Y
+
+// The == operator is used to verify that both of these are the same
+// This pops the two values off the stack and pushes the result 0 or 1
+==
+
+// Push the current transaction’s Receiver property onto the stack
+// In this example it should be addr2
+txn Receiver
+
+// Push addr2 on the stack using the addr constant
+addr SOEI4UA72A7ZL5P25GNISSVWW724YABSGZ7GHW5ERV4QKK2XSXLXGXPG5Y
+
+// Use the == to verify that these are equal which pops off the top two values of the stack
+// and returns 0 or 1
+==
+
+// The stack should currently have two values from the two top conditions
+// These will be either 0s or 1s
+// Push the && operator which will AND the two previous conditions and return
+// either 0 or 1, which leaves one value on the stack either a 0 or a 1
+&&
+
+// Push the first argument to the transaction onto the stack
+arg 0
+
+// The len operator pops the arg off the stack and 
+// pushes the length of the argument onto the stack
+len
+
+// Push a constant int of value 46 onto the stack
+int 46
+
+// The == operator verifies that the length of the argument
+// is equal to 46. This pops the two values and returns a 0 or 1
+// The stack now contains two values with a value of 0 or 1
+==
+
+// The && operator will AND the two values in the stack
+// which pops both values off the stack and returns a 0 or 1
+// The stack should now only have one value on the stack, 0 or 1
+&&
+
+// arg 0 is pushed back onto the stack
+// This represents the hashed passcode
+arg 0
+
+// The sha256 operator pops the arg 0 off the stack
+// and pushes the hash value of the argument onto the stack
+sha256
+
+// The constant byte array of the base64 version of our secret is pushed onto the stack
+byte base64 QzYhq9JlYbn2QdOMrhyxVlNtNjeyvyJc/I8d8VAGfGc=
+
+// The == operator pops the two values and pushes 0 or 1 onto the stack
+// If arg0 is equal to the secret this value will be 1 and if not it will be 0
+==
+
+// Two values are now on the stack. The && operator is used 
+// to pop the last two values and push either 0 or 1
+// This will AND all previous conditions to this one.
+// The stack should only have a 0 or 1 value now
+&&

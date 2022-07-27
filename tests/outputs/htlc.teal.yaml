@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.94
+  elapsed_seconds    : 0.0102791786193848
+  n_files            : 1
+  n_lines            : 70
+  files_per_second   : 97.284037667579
+  lines_per_second   : 6809.88263673053
+  report_file        : ../outputs/htlc.teal.yaml
+'Teal' :
+  nFiles: 1
+  blank: 16
+  comment: 37
+  code: 17
+SUM: 
+  blank: 16
+  comment: 37
+  code: 17
+  nFiles: 1
