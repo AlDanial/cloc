@@ -512,6 +512,11 @@ my @Tests = (
                     'args' => '../tests/inputs/julia.jl',
                 },
                 {
+                    'name' => 'kvlang',
+                    'ref'  => '../tests/outputs/kvlang.kv.yaml',
+                    'args' => '../tests/inputs/kvlang.kv',
+                },
+                {
                     'name' => 'Kotlin',
                     'ref'  => '../tests/outputs/hello.kt.yaml',
                     'args' => '../tests/inputs/hello.kt',
