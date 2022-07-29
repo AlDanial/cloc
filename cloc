@@ -7984,6 +7984,7 @@ sub set_constants {                          # {{{1
             'jspf'        => 'JSP'                   , # Java server pages
             'junos'       => 'Juniper Junos'         ,
             'vm'          => 'Velocity Template Language' ,
+            'kv'          => 'kvlang'                ,
             'ksc'         => 'Kermit'                ,
             'ksh'         => 'Korn Shell'            ,
             'ktm'         => 'Kotlin'                ,
@@ -9249,6 +9250,9 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
+    'kvlang'             => [
+                                ["remove_matches", '^\s*#[^:]'],
+                            ],
     'Kotlin'             => [
                                 [ 'rm_comments_in_strings', '"""', '/*', '*/', 1],
                                 [ 'rm_comments_in_strings', '"""', '//', '', 1],
@@ -10134,6 +10138,7 @@ sub set_constants {                          # {{{1
     'Bourne Again Shell' =>     '\\\\$'         ,
     'Bourne Shell'       =>     '\\\\$'         ,
     'C Shell'            =>     '\\\\$'         ,
+    'kvlang'             =>     '\\\\$'         ,
     'Kermit'             =>     '\\\\$'         ,
     'Korn Shell'         =>     '\\\\$'         ,
     'Starlark'           =>     '\\\\$'         ,
@@ -10480,6 +10485,7 @@ sub set_constants {                          # {{{1
     'klo'                          =>   1.25,
     'knowol'                       =>   1.63,
     'krl'                          =>   1.38,
+    'kvlang'                       =>   2.00,
     'Kermit'                       =>   2.00,
     'Korn Shell'                   =>   3.81,
     'Kotlin'                       =>   2.00,
