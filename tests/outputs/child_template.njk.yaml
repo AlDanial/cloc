@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.95
+  elapsed_seconds    : 0.00661802291870117
+  n_files            : 1
+  n_lines            : 16
+  files_per_second   : 151.102529000648
+  lines_per_second   : 2417.64046401038
+  report_file        : ../outputs/child_template.njk.yaml
+'Nunjucks' :
+  nFiles: 1
+  blank: 0
+  comment: 6
+  code: 10
+SUM: 
+  blank: 0
+  comment: 6
+  code: 10
+  nFiles: 1

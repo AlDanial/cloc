@@ -662,6 +662,11 @@ my @Tests = (
                     'args' => '../tests/inputs/darwin-configuration.nix',
                 },
                 {
+                    'name' => 'Nunjucks',
+                    'ref'  => '../tests/outputs/child_template.njk.yaml',
+                    'args' => '../tests/inputs/child_template.njk',
+                },
+                {
                     'name' => 'Objective-C',
                     'ref'  => '../tests/outputs/qsort_demo.m.yaml',
                     'args' => '../tests/inputs/qsort_demo.m',
