@@ -5526,7 +5526,7 @@ sub remove_duplicate_files {                 # {{{1
     seek($fh, 0, 0); # rewind to beginning of the temp file
     while (<$fh>) {
         ++$n;
-        my ($size_in_bytes, $language, $file) = split(/$separator/, $_, 3);
+        my ($size_in_bytes, $language, $file) = split(/\Q$separator\E/, $_, 3);
         if (!defined($size_in_bytes) or
             !defined($language)      or
             !defined($file)) {
