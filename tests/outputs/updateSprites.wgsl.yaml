@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.95
+  elapsed_seconds    : 0.00713205337524414
+  n_files            : 1
+  n_lines            : 89
+  files_per_second   : 140.212074613893
+  lines_per_second   : 12478.8746406365
+  report_file        : ../outputs/updateSprites.wgsl.yaml
+'WGSL' :
+  nFiles: 1
+  blank: 5
+  comment: 8
+  code: 76
+SUM: 
+  blank: 5
+  comment: 8
+  code: 76
+  nFiles: 1

@@ -2917,6 +2917,10 @@ directory at <embedded>/File/Find.pm</tt> if the code being scanned has
 file paths longer than 255 characters.  A work-around is to run cloc
 from the Windows Subsystem for Linux (WSL).
 </li>
+<li> cloc's comment match code uses regular expressions
+which cannot properly account for nested comments using
+the same comment markers (such as <tt>/*  /*  */  */</tt>).
+</li>
 </ol>
 
 [](1}}})

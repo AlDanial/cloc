@@ -8493,6 +8493,7 @@ sub set_constants {                          # {{{1
             'xaml'        => 'XAML'                  ,
             'wast'        => 'WebAssembly'           ,
             'wat'         => 'WebAssembly'           ,
+            'wgsl'        => 'WGSL'                  ,
             'wxs'         => 'WiX source'            ,
             'wxi'         => 'WiX include'           ,
             'wxl'         => 'WiX string localization' ,
@@ -10000,6 +10001,11 @@ sub set_constants {                          # {{{1
     'WebAssembly'           => [
                                 [ 'remove_matches'      , '^\s*;;' ],
                             ],
+    'WGSL'               => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'Windows Message File'  => [
                                 [ 'remove_matches'      , '^\s*;\s*//' ],
                                 [ 'call_regexp_common'  , 'C'          ],
@@ -10712,6 +10718,7 @@ sub set_constants {                          # {{{1
     'web scripts'                  =>   5.33,
     'Web Services Description'     =>   1.00,
     'WebAssembly'                  =>   0.45,
+    'WGSL'                         =>   2.50,
     'Windows Message File'         =>   1.00,
     'Windows Resource File'        =>   1.00,
     'Windows Module Definition'    =>   1.00,

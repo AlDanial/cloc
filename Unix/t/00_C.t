@@ -1097,6 +1097,11 @@ my @Tests = (
                     'args' => '../tests/inputs/webservice.wsdl',
                 },
                 {
+                    'name' => 'WGSL',
+                    'ref'  => '../tests/outputs/updateSprites.wgsl.yaml',
+                    'args' => '../tests/inputs/updateSprites.wgsl',
+                },
+                {
                     'name' => 'Windows Message',
                     'ref'  => '../tests/outputs/ZosMsg.mc.yaml',
                     'args' => '../tests/inputs/ZosMsg.mc',
