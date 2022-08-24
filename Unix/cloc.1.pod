@@ -588,7 +588,8 @@ On Windows, ignore hidden files.
 
 =item B<--categorized=FILE>
 
-Save names of categorized files to FILE.
+Save file sizes in bytes, identified languages and
+names of categorized files to FILE.
 
 =item B<--counted=FILE>
 
