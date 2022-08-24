@@ -1,1 +1,1 @@
-This folder CDM contains codebase.
+This folder contains CDM codebase.
