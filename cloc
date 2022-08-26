@@ -1360,10 +1360,24 @@ if ($opt_count_diff) {
             ($fn_1 = $ARGV[1]) =~ s{/}{_}g  if defined $ARGV[1];
         }
 
-        if ($opt_count_diff == 3) {
-            $opt_report_file = $COUNT_DIFF_report_file . ".diff.$fn_0.$fn_1";
+        my $ext = "txt";
+        if ($opt_yaml) {
+            $ext = "yaml";
+        } elsif ($opt_json) {
+            $ext = "json";
+        } elsif ($opt_xml) {
+            $ext = "xml";
+        } elsif ($opt_csv) {
+            $ext = "csv";
+        } elsif ($opt_md) {
+            $ext = "md";
+        }
+        if      ($opt_count_diff == 3) {
+            $opt_report_file = $COUNT_DIFF_report_file . "_diff_A_B.$ext";
+        } elsif ($opt_count_diff == 2) {
+            $opt_report_file = $COUNT_DIFF_report_file . "_count_B.$ext";
         } else {
-            $opt_report_file = $COUNT_DIFF_report_file . "." .  $fn_0;
+            $opt_report_file = $COUNT_DIFF_report_file . "_count_A.$ext";
         }
     } else {
         # STDOUT; print a header showing what it's working on
