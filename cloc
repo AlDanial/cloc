@@ -543,7 +543,8 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
    --skip-win-hidden         On Windows, ignore hidden files.
 
  ${BB}Debug Options${NN}
-   --categorized=<file>      Save names of categorized files to <file>.
+   --categorized=<file>      Save file sizes in bytes, identified languages
+                             and names of categorized files to <file>.
    --counted=<file>          Save names of processed source files to <file>.
    --diff-alignment=<file>   Write to <file> a list of files and file pairs
                              showing which files were added, removed, and/or
@@ -6547,7 +6548,7 @@ sub blank_regex {                            # {{{1
     my ($language) = @_;
 
     print "-> blank_regex(language=$language)\n" if $opt_v > 2;
-    
+
     my $blank_regex = '^\s*$';
     if ($language eq "X++") {
         $blank_regex = '^\s*#?\s*$';
@@ -8950,7 +8951,7 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
-    'DOS Batch'          => [   
+    'DOS Batch'          => [
                                 [ 'remove_matches'      , '^\s*rem' ],
                                 [ 'remove_matches'      , '^\s*::'  ],
                             ],
@@ -14061,7 +14062,7 @@ Regexp::Common - Provide commonly requested regular expressions
 
 =head1 SYNOPSIS
 
- # STANDARD USAGE 
+ # STANDARD USAGE
 
  use Regexp::Common;
 
@@ -14145,12 +14146,12 @@ L<"Subroutine-based interface">.
 
 To access a particular pattern, C<%RE> is treated as a hierarchical hash of
 hashes (of hashes...), with each successive key being an identifier. For
-example, to access the pattern that matches real numbers, you 
+example, to access the pattern that matches real numbers, you
 specify:
 
         $RE{num}{real}
-        
-and to access the pattern that matches integers: 
+
+and to access the pattern that matches integers:
 
         $RE{num}{int}
 
@@ -14228,7 +14229,7 @@ new patterns with "optional" capturing brackets that respond to C<-keep>.
 Some patterns or subpatterns only match lowercase or uppercase letters.
 If one wants the do case insensitive matching, one option is to use
 the C</i> regexp modifier, or the special sequence C<(?i)>. But if the
-functional interface is used, one does not have this option. The 
+functional interface is used, one does not have this option. The
 C<-i> switch solves this problem; by using it, the pattern will do
 case insensitive matching.
 
@@ -14263,7 +14264,7 @@ Regexp::Common allows you do write this:
         $changed = $RE{some}{pattern}->subs($original=>$replacement);
 
 Apart from reducing precedence-angst, this approach has the added
-advantages that the substitution behaviour can be optimized from the 
+advantages that the substitution behaviour can be optimized from the
 regular expression, and the replacement string can be provided by
 default (see L<"Adding new regular expressions">).
 
@@ -14336,7 +14337,7 @@ whose pattern names have first keys I<key1> ... I<keyn>.
 =head2 Adding new regular expressions
 
 You can add your own regular expressions to the C<%RE> hash at run-time,
-using the exportable C<pattern> subroutine. It expects a hash-like list of 
+using the exportable C<pattern> subroutine. It expects a hash-like list of
 key/value pairs that specify the behaviour of the pattern. The various
 possible argument pairs are:
 
@@ -14382,10 +14383,10 @@ or a reference to a subroutine that will be called to create the pattern:
                             },
                 ;
 
-If the subroutine version is used, the subroutine will be called with 
+If the subroutine version is used, the subroutine will be called with
 three arguments: a reference to the pattern object itself, a reference
 to a hash containing the flags and their values,
-and a reference to an array containing the non-flag keys. 
+and a reference to an array containing the non-flag keys.
 
 Whatever the subroutine returns is stringified as the pattern.
 
@@ -14537,7 +14538,7 @@ Provides regexes for zip codes.
 
 Future releases of the module will also provide patterns for the following:
 
-        * email addresses 
+        * email addresses
         * HTML/XML tags
         * more numerical matchers,
         * mail headers (including multiline ones),
@@ -14562,7 +14563,7 @@ tests will be especially welcome.
 The subroutine-based interface didn't recognize the requested subroutine.
 Often caused by a spelling mistake or an incompletely specified name.
 
-        
+
 =item C<Can't create unknown regex: $RE{...}>
 
 Regexp::Common doesn't have a generator for the requested pattern.
@@ -14635,8 +14636,8 @@ that is that old. You might consider upgrading your perl.
 
 =item *
 
-The various patterns are not anchored. That is, a pattern like 
-C<< $RE {num} {int} >> will match against "abc4def", because a 
+The various patterns are not anchored. That is, a pattern like
+C<< $RE {num} {int} >> will match against "abc4def", because a
 substring of the subject matches. This is by design, and not a
 bug. If you want the pattern to be anchored, use something like:
 
@@ -14742,7 +14743,7 @@ my @generic = (
 
     {languages => [qw /Oberon/],
      from_to   => [[qw /(* *)/]]},
-     
+
     {languages => [[qw /Pascal Delphi/], [qw /Pascal Free/], [qw /Pascal GPC/]],
      to_eol    => ['//'],
      from_to   => [[qw !{ }!], [qw !(* *)!]]},
@@ -14886,9 +14887,9 @@ foreach my $group (@generic) {
                 ;
     }
 }
-                
 
-    
+
+
 #
 # Other languages.
 #
@@ -15113,15 +15114,15 @@ L<http://www.catseye.mb.ca/esoteric/b-juliet/index.html>.
 The esotoric language I<Befunge-98> uses comments that start and end
 with a C<;>. See L<http://www.catseye.mb.ca/esoteric/befunge/98/spec98.html>.
 
-=item BML                 
+=item BML
 
 I<BML>, or I<Better Markup Language> is an HTML templating language that
 uses comments starting with C<< <?c_ >>, and ending with C<< c_?> >>.
-See L<http://www.livejournal.com/doc/server/bml.index.html>.               
+See L<http://www.livejournal.com/doc/server/bml.index.html>.
 
 =item Brainfuck
 
-The minimal language I<Brainfuck> uses only eight characters, 
+The minimal language I<Brainfuck> uses only eight characters,
 C<E<lt>>, C<E<gt>>, C<[>, C<]>, C<+>, C<->, C<.> and C<,>.
 Any other characters are considered comments. With C<{-keep}>,
 C<$1> is set to the entire comment.
@@ -15391,7 +15392,7 @@ of the line. See also L<http://www.lua.org/manual/manual.html>.
 =item M, MUMPS
 
 In C<M> (aka C<MUMPS>), comments start with a semi-colon, and last
-till the end of a line. The language specification requires the 
+till the end of a line. The language specification requires the
 semi-colon to be preceded by one or more I<linestart character>s.
 Those characters default to a space, but that's configurable. This
 requirement, of preceding the comment with linestart characters is
@@ -15446,7 +15447,7 @@ pattern for comments of several implementations.
 
 =item C<$RE{comment}{Pascal}>
 
-This is the pattern that recognizes comments according to the Pascal ISO 
+This is the pattern that recognizes comments according to the Pascal ISO
 standard. This standard says that comments start with either C<{>, or
 C<(*>, and end with C<}> or C<*)>. This means that C<{*)> and C<(*}>
 are considered to be comments. Many Pascal applications don't allow this.
@@ -15465,12 +15466,12 @@ The I<Delphi Pascal>, I<Free Pascal> and the I<Gnu Pascal Compiler>
 implementations of Pascal all have comments that either start with
 C<//> and last till the end of the line, are delimited with C<{>
 and C<}> or are delimited with C<(*> and C<*)>. Patterns for those
-comments are given by C<$RE{comment}{Pascal}{Delphi}>, 
+comments are given by C<$RE{comment}{Pascal}{Delphi}>,
 C<$RE{comment}{Pascal}{Free}> and C<$RE{comment}{Pascal}{GPC}>
 respectively. These patterns only set C<$1> when C<{-keep}> is used,
 which will then include the entire comment.
 
-See L<http://info.borland.com/techpubs/delphi5/oplg/>, 
+See L<http://info.borland.com/techpubs/delphi5/oplg/>,
 L<http://www.freepascal.org/docs-html/ref/ref.html> and
 L<http://www.gnu-pascal.de/gpc/>.
 
@@ -15489,7 +15490,7 @@ See L<http://docs.sun.com/db/doc/802-5762>.
 =item PEARL
 
 Comments in I<PEARL> start with a C<!> and last till the end of the
-line, or start with C</*> and end with C<*/>. With C<{-keep}>, 
+line, or start with C</*> and end with C<*/>. With C<{-keep}>,
 C<$1> will be set to the entire comment.
 
 =item PHP
@@ -15500,7 +15501,7 @@ C<$1> will be set to the entire comment.
 
 =item PL/B
 
-In I<PL/B>, comments start with either C<.> or C<;>, and end with the 
+In I<PL/B>, comments start with either C<.> or C<;>, and end with the
 next newline. See L<http://www.mmcctech.com/pl-b/plb-0010.htm>.
 
 =item PL/I
@@ -15571,7 +15572,7 @@ a C<;>. See L<http://www.catseye.mb.ca/esoteric/shelta/index.html>.
 The I<SLIDE> language has two froms of comments. First there is the
 line comment, which starts with a C<#> and includes the rest of the
 line (just like Perl). Second, there is the multiline, nested comment,
-which are delimited by C<(*> and C<*)>. Under C{-keep}>, only 
+which are delimited by C<(*> and C<*)>. Under C{-keep}>, only
 C<$1> is set, and is set to the entire comment. See
 L<http://www.cs.berkeley.edu/~ug/slide/docs/slide/spec/spec_frame_intro.shtml>.
 
@@ -15597,11 +15598,11 @@ C<">. Double quotes can appear inside comments by doubling them.
 =item SQL
 
 Standard I<SQL> uses comments starting with two or more dashes, and
-ending at the end of the line. 
+ending at the end of the line.
 
 I<MySQL> does not follow the standard. Instead, it allows comments
 that start with a C<#> or C<-- > (that's two dashes and a space)
-ending with the following newline, and comments starting with 
+ending with the following newline, and comments starting with
 C</*>, and ending with the next C<;> or C<*/> that isn't inside
 single or double quotes. A pattern for this is returned by
 C<$RE{comment}{SQL}{MySQL}>. With C<{-keep}>, only C<$1> will
@@ -15642,7 +15643,7 @@ end of the line.
 
 =item ZZT-OOP
 
-The in-game language I<ZZT-OOP> uses comments that start with a C<'> 
+The in-game language I<ZZT-OOP> uses comments that start with a C<'>
 character, and end at the following newline. See
 L<http://dave2.rocketjump.org/rad/zzthelp/lang.html>.
 
@@ -16124,7 +16125,7 @@ a string with symmetric delimiters, you can specify the closing delimiter(s)
 with C<-cdelim => I<S>>. Each character in I<S> is matched with the
 corresponding character supplied with the C<-delim> option. If the C<-cdelim>
 option has less characters than the C<-delim> option, the last character
-is repeated as often as necessary. If the C<-cdelim> option has more 
+is repeated as often as necessary. If the C<-cdelim> option has more
 characters than the C<-delim> option, the extra characters are ignored.
 
 If C<-esc => I<S>> is specified, each character in the sequence I<S> is
@@ -16183,7 +16184,7 @@ In a future update, pairs may be added (or deleted).
 
 This pattern requires perl 5.14.0 or higher.
 
-For a full list of bracket pairs, inspect the output of 
+For a full list of bracket pairs, inspect the output of
 C<< Regexp::Common::delimited::bracket_pair () >>, which returns
 a list of two element arrays, each holding the Unicode names of
 matching pair of delimiters.

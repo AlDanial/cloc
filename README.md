@@ -913,7 +913,8 @@ Usage: cloc [options] &lt;file(s)/dir(s)/git hash(es)&gt; | &lt;set 1&gt; &lt;se
    --skip-win-hidden         On Windows, ignore hidden files.
 
  Debug Options
-   --categorized=&lt;file&gt;      Save names of categorized files to &lt;file&gt;.
+   --categorized=&lt;file&gt;      Save file sizes in bytes, identified languages
+                             and names of categorized files to &lt;file&gt;.
    --counted=&lt;file&gt;          Save names of processed source files to &lt;file&gt;.
    --diff-alignment=&lt;file&gt;   Write to &lt;file&gt; a list of files and file pairs
                              showing which files were added, removed, and/or

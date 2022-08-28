@@ -519,7 +519,8 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
    --skip-win-hidden         On Windows, ignore hidden files.
 
  ${BB}Debug Options${NN}
-   --categorized=<file>      Save names of categorized files to <file>.
+   --categorized=<file>      Save file sizes in bytes, identified languages
+                             and names of categorized files to <file>.
    --counted=<file>          Save names of processed source files to <file>.
    --diff-alignment=<file>   Write to <file> a list of files and file pairs
                              showing which files were added, removed, and/or
@@ -6533,7 +6534,7 @@ sub blank_regex {                            # {{{1
     my ($language) = @_;
 
     print "-> blank_regex(language=$language)\n" if $opt_v > 2;
-    
+
     my $blank_regex = '^\s*$';
     if ($language eq "X++") {
         $blank_regex = '^\s*#?\s*$';
@@ -8936,7 +8937,7 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
-    'DOS Batch'          => [   
+    'DOS Batch'          => [
                                 [ 'remove_matches'      , '^\s*rem' ],
                                 [ 'remove_matches'      , '^\s*::'  ],
                             ],
