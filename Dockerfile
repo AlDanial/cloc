@@ -7,6 +7,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     ca-certificates \
     git \
     unzip \
+    dos2unix \
  && rm -rf /var/lib/apt/lists/*
 
 #Install all dependencies
@@ -19,6 +20,7 @@ RUN cpanm \
 
 #Copy source code
 COPY cloc /usr/src/
+RUN find /usr/src/ -type f -exec dos2unix {} \;
 
 ####################
 FROM base AS test
@@ -41,5 +43,4 @@ FROM base AS final
 
 WORKDIR /tmp
 
-ENTRYPOINT ["/usr/src/cloc"]
-CMD ["--help"]
+CMD ["/usr/src/cloc", "--help"]

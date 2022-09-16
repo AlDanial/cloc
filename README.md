@@ -258,6 +258,12 @@ New releases nominally appear every six months.
 ```shell
 docker run --rm -v $PWD:/tmp aldanial/cloc
 ```
+
+### Run via docker on git-bash
+```shell
+docker run --rm -v "/$(pwd -W)":/tmp aldanial/cloc
+```
+
 ## Install via package manager
 Depending your operating system, one of these installation methods may
 work for you (all but the last two entries for Windows require
