@@ -125,6 +125,11 @@ my @Tests = (
                     'args' => '../tests/inputs/build.cake',
                 },
                 {
+                    'name' => 'Circom',
+                    'ref'  => '../tests/outputs/eddsa.circom.yaml',
+                    'args' => '../tests/inputs/eddsa.circom',
+                },
+                {
                     'name' => 'Chapel',
                     'ref'  => '../tests/outputs/Chapel.chpl.yaml',
                     'args' => '../tests/inputs/Chapel.chpl',
