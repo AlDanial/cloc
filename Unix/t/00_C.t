@@ -120,6 +120,11 @@ my @Tests = (
                     'args' => '../tests/inputs/locale_facets.h',
                 },
                 {
+                    'name' => 'Cairo',
+                    'ref'  => '../tests/outputs/ERC20.cairo.yaml',
+                    'args' => '../tests/inputs/ERC20.cairo',
+                },
+                {
                     'name' => 'Cake Build Script',
                     'ref'  => '../tests/outputs/build.cake.yaml',
                     'args' => '../tests/inputs/build.cake',
