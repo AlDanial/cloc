@@ -8203,6 +8203,7 @@ sub set_constants {                          # {{{1
             'rexx'        => 'Rexx'                  ,
             'rhtml'       => 'Ruby HTML'             ,
             'circom'      => 'Circom'                ,
+            'cairo'       => 'Cairo'                 ,
             'rs.in'       => 'Rust'                  ,
             'rs'          => 'Rust'                  ,
             'rst.txt'     => 'reStructuredText'      ,
@@ -9641,6 +9642,12 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'Cairo'              => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'Rust'               => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
@@ -10646,6 +10653,7 @@ sub set_constants {                          # {{{1
     'Ring'                         =>   4.20,
     'RobotFramework'               =>   2.50,
     'Circom'                       =>   1.00,
+    'Cairo'                        =>   1.00,
     'Rust'                         =>   1.00,
     'sas'                          =>   1.95,
     'Scala'                        =>   4.10,
