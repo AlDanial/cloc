@@ -68,6 +68,10 @@ released version (`cloc-1.94.pl`) or a Windows executable
 (`cloc-1.94.exe`).  On this page, `cloc` is the generic term
 used to refer to any of these.
 
+[Include Security](https://www.youtube.com/user/IncludeSecurity) has a
+[YouTube video](https://www.youtube.com/watch?v=eRLTkDMsCqs)
+showing the steps in action.
+
 **a file**
 <pre>
 prompt> cloc hello.c
