@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.95
+  elapsed_seconds    : 0.0072929859161377
+  n_files            : 1
+  n_lines            : 163
+  files_per_second   : 137.118048971853
+  lines_per_second   : 22350.241982412
+  report_file        : ../outputs/basic.p4.yaml
+'P4' :
+  nFiles: 1
+  blank: 28
+  comment: 33
+  code: 102
+SUM: 
+  blank: 28
+  comment: 33
+  code: 102
+  nFiles: 1

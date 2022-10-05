@@ -692,6 +692,11 @@ my @Tests = (
                     'args' => '../tests/inputs/bubs_tak_ard.prc',
                 },
                 {
+                    'name' => 'P4',
+                    'ref'  => '../tests/outputs/basic.p4.yaml',
+                    'args' => '../tests/inputs/basic.p4',
+                },
+                {
                     'name' => 'Pascal',
                     'ref'  => '../tests/outputs/Pascal.pas.yaml',
                     'args' => '../tests/inputs/Pascal.pas',
