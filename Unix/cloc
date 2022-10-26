@@ -5269,6 +5269,7 @@ sub lower_on_Windows {                       # {{{1
 # }}}
 sub make_file_list {                         # {{{1
     my ($ra_arg_list,  # in   file and/or directory names to examine
+        $iteration  ,  # in   0 if only called once, 1 or 2 if twice for diff
         $rh_Err     ,  # in   hash of error codes
         $raa_errors ,  # out  errors encountered
         $rh_ignored ,  # out  files not recognized as computer languages
