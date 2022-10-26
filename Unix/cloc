@@ -1682,11 +1682,11 @@ if ($opt_diff_list_file) {
 }
 for (my $i = 0; $i < scalar @ARGV; $i++) {
     if ($opt_diff_list_file) {
-        push @fh, make_file_list($files_for_set[$i],
+        push @fh, make_file_list($files_for_set[$i], $i+1,
                                 \%Error_Codes, \@Errors, \%Ignored);
         @{$files_for_set[$i]} = @file_list;
     } else {
-        push @fh, make_file_list([ $ARGV[$i] ],
+        push @fh, make_file_list([ $ARGV[$i] ], $i+1,
                                 \%Error_Codes, \@Errors, \%Ignored);
         @{$files_for_set[$i]} = @file_list;
     }
@@ -1925,9 +1925,9 @@ if ($opt_list_file or $opt_vcs) {
     } else {
         @list = read_list_file($opt_list_file);
     }
-    $fh = make_file_list(\@list, \%Error_Codes, \@Errors, \%Ignored);
+    $fh = make_file_list(\@list, 0, \%Error_Codes, \@Errors, \%Ignored);
 } else {
-    $fh = make_file_list(\@ARGV, \%Error_Codes, \@Errors, \%Ignored);
+    $fh = make_file_list(\@ARGV, 0, \%Error_Codes, \@Errors, \%Ignored);
     #     make_file_list populates global variable @file_list via call to
     #     File::Find's find() which in turn calls files()
 }
@@ -5278,12 +5278,21 @@ sub make_file_list {                         # {{{1
     my $separator = defined $opt_csv_delimiter ? $opt_csv_delimiter : ",";
     my ($fh, $filename);
     if ($opt_categorized) {
-        $filename = $opt_categorized;
+        if ($iteration) {
+            # am being called twice for diff of Left and Right
+            my $ext = $iteration == 1 ? "L" : "R";
+            $filename = $opt_categorized . "-$ext";
+        } else {
+            $filename = $opt_categorized;
+        }
         $fh = new IO::File $filename, "+>";  # open for read/write
         die "Unable to write to $filename:  $!\n" unless defined $fh;
     } elsif ($opt_sdir) {
         # write to the user-defined scratch directory
-        $filename = $opt_sdir . '/cloc_file_list.txt';
+        ++$TEMP_OFF;
+        my $scr_dir = "$opt_sdir/$TEMP_OFF";
+        File::Path::mkpath($scr_dir) unless is_dir($scr_dir);
+        $filename = $scr_dir . '/cloc_file_list.txt';
         $fh = new IO::File $filename, "+>";  # open for read/write
         die "Unable to write to $filename:  $!\n" unless defined $fh;
     } else {
@@ -8108,6 +8117,7 @@ sub set_constants {                          # {{{1
             'rakumod'     => 'Raku'                  ,
             'pom.xml'     => 'Maven'                 ,
             'pom'         => 'Maven'                 ,
+            'scad'        => 'OpenSCAD'              ,
             'yap'         => 'Prolog'                ,
             'prolog'      => 'Prolog'                ,
             'P'           => 'Prolog'                ,
@@ -9407,6 +9417,11 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'OpenSCAD'           => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'Oracle Forms'       => [   [ 'call_regexp_common'  , 'C'      ], ],
     'Oracle Reports'     => [   [ 'call_regexp_common'  , 'C'      ], ],
     'Oracle PL/SQL'      => [
@@ -10501,6 +10516,7 @@ sub set_constants {                          # {{{1
     'Objective-C++'                =>   2.96,
     'OCaml'                        =>   3.00,
     'Odin'                         =>   2.00,
+    'OpenSCAD'                     =>   1.00,
     'Oracle Reports'               =>   2.76,
     'Oracle Forms'                 =>   2.67,
     'Oracle Developer/2000'        =>   3.48,
@@ -10609,16 +10625,11 @@ sub set_constants {                          # {{{1
     'Verilog-SystemVerilog'        =>   1.51,
     'VHDL'                         =>   4.21,
     'vim script'                   =>   3.00,
-    'visual basic'                 =>   1.90,
     'Visual Basic'                 =>   2.76,
     'VB for Applications'          =>   2.76,
     'Visual Basic .NET'            =>   2.76,
     'Visual Basic Script'          =>   2.76,
-    'visual c++'                   =>   2.35,
-    'visual cobol'                 =>   4.00,
     'Visual Fox Pro'               =>   4.00, # Visual Fox Pro is not available in the language gearing ratios listed at Mayes Consulting web site
-    'visual objects'               =>   5.00,
-    'visualage'                    =>   3.81,
     'Visualforce Component'        =>   1.9 ,
     'Visualforce Page'             =>   1.9 ,
     'Vuejs Component'              =>   2.00,

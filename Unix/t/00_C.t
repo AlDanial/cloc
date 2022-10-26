@@ -687,6 +687,11 @@ my @Tests = (
                     'args' => '../tests/inputs/demo.odin',
                 },
                 {
+                    'name' => 'OpenSCAD',
+                    'ref'  => '../tests/outputs/Rounds.scad.yaml',
+                    'args' => '../tests/inputs/Rounds.scad',
+                },
+                {
                     'name' => 'Oracle PL/SQL',
                     'ref'  => '../tests/outputs/bubs_tak_ard.prc.yaml',
                     'args' => '../tests/inputs/bubs_tak_ard.prc',
