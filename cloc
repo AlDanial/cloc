@@ -84,6 +84,15 @@ if (defined $Algorithm::Diff::VERSION) {
 } else {
     Install_Algorithm_Diff();
 }
+
+my $HAVE_Win32_Long_Path = 0;
+# Win32::LongPath is an optional dependency that when available on
+# Windows will be used to support reading files past the 255 char
+# path length limit.
+eval "use Win32::LongPath;";
+if (defined $Win32::LongPath::VERSION) {
+    $HAVE_Win32_Long_Path = 1;
+}
 # print "2 HAVE_Algorith_Diff = $HAVE_Algorith_Diff\n";
 # test_alg_diff($ARGV[$#ARGV - 1], $ARGV[$#ARGV]); die;
 # die "Hre=$HAVE_Rexexp_Common  Had=$HAVE_Algorith_Diff";
@@ -1091,9 +1100,9 @@ $opt_by_percent = lc $opt_by_percent;
 
 if (defined $opt_vcs) {
     if ($opt_vcs eq "auto") {
-        if      (-d ".git") {
+        if      (is_dir(".git")) {
             $opt_vcs = "git";
-        } elsif (-d ".svn") {
+        } elsif (is_dir(".svn")) {
             $opt_vcs = "svn";
         } else {
             warn "--vcs auto:  unable to determine versioning system\n";
@@ -2951,7 +2960,7 @@ sub combine_results {                        # {{{1
 
     foreach my $file (@{$ra_report_files}) {
         my $n_results_found = 0;
-        my $IN = new IO::File $file, "r";
+        my $IN = open_file('<', $file, 1);
         if (!defined $IN) {
             warn "Unable to read $file; ignoring.\n";
             next;
@@ -3822,9 +3831,17 @@ create table t        (
     my $open_mode = ">";
        $open_mode = ">>" if $opt_sql_append;
 
-    my $fh = new IO::File; # $opt_sql, "w";
-    if (!$fh->open("${open_mode}${opt_sql}")) {
-        die "Unable to write to $opt_sql  $!\n";
+    my $fh;
+    if ($ON_WINDOWS and $HAVE_Win32_Long_Path and $opt_sql ne "-") {
+        # only use the Win32::LongPath wrapper here when needed,
+        # and only when not writing to STDOUT.
+        $fh = open_file($open_mode, $opt_sql, 1);
+        die "Unable to write to $opt_sql\n" if !defined $fh;
+    } else {
+        $fh = new IO::File; # $opt_sql, "w";
+        if (!$fh->open("${open_mode}${opt_sql}")) {
+            die "Unable to write to $opt_sql  $!\n";
+        }
     }
     print $fh $schema unless defined $opt_sql_append;
 
@@ -4877,10 +4894,16 @@ sub top_level_SMB_dir {                      # {{{1
 
     my ($ra_arg_list,) = @_;  # in user supplied file name, directory name, git hash, etc
     foreach my $entry (@{$ra_arg_list}) {
-        next unless -d $entry;
+        next unless is_dir($entry);
         # gets here if $entry is a directory; now get its nlink value
-        my @stats = stat($entry);
-        my $nlink = $stats[3];
+        my $nlink;
+        if ($ON_WINDOWS and $HAVE_Win32_Long_Path) {
+            my $stats = statL($entry);
+            $nlink = $stats->{nlink} if defined $stats;
+        } else {
+            my @stats = stat($entry);
+            $nlink = $stats[3];
+        }
         return 1 if $nlink == 2;  # meaning it is an SMB mount
     }
     return 0;
@@ -4894,12 +4917,12 @@ sub get_git_metadata {                       # {{{1
     my $prt_args = join(",", @{$ra_arg_list});
     print "-> get_git_metadata($prt_args)\n" if $opt_v > 2;
     foreach my $arg (@{$ra_arg_list}) {
-        next if -f $arg;
+        next if is_file($arg);
         my $origin = `git remote get-url origin 2>&1`;
         next if $origin =~ /^fatal:/;
         chomp($rh_git_metadata->{$arg}{"origin"} = $origin);
         chomp($rh_git_metadata->{$arg}{"branch"} = `git symbolic-ref --short HEAD`);
-        if (-d $arg) {
+        if (is_dir($arg)) {
             chomp($rh_git_metadata->{$arg}{"commit"}   = `git rev-parse HEAD`);
         } else {
             chomp($rh_git_metadata->{$arg}{"commit"}   = `git rev-parse $arg`);
@@ -4947,7 +4970,7 @@ sub replace_git_hash_with_tarfile {          # {{{1
     my $i = 0;
     foreach my $file_or_dir (@{$ra_arg_list}) {
         ++$i;
-        if (-r $file_or_dir) { # readable file or dir; not a git hash
+        if (can_read($file_or_dir)) { # readable file or dir; not a git hash
             $replacement_arg_list{$i} = $file_or_dir;
             next;
         } elsif ($opt_force_git or $file_or_dir =~ m/$hash_regex/) {
@@ -5136,7 +5159,7 @@ sub empty_tar {                              # {{{1
     my $cmd = $ON_WINDOWS ? "type nul > $Tarfile" : "tar -cf $Tarfile -T /dev/null";
     print  $cmd, "\n" if $opt_v;
     system $cmd;
-    if (!-r $Tarfile) {
+    if (!can_read($Tarfile)) {
         # not readable
         die "Failed to create empty tarfile.";
     }
@@ -5213,7 +5236,7 @@ sub git_archive {                            # {{{1
     my $cmd = "git archive -o $Tarfile $files_this_commit";
     print  $cmd, "\n" if $opt_v;
     system $cmd;
-    if (!-r $Tarfile or !-s $Tarfile) {
+    if (!can_read($Tarfile) or !get_size($Tarfile)) {
         # not readable, or zero sized
         die "Failed to create tarfile of files from git.";
     }
@@ -5234,7 +5257,7 @@ sub git_archive {                            # {{{1
             my $extract_dir = tempdir( CLEANUP => 0 );  # 1 = delete on exit
             chdir "$extract_dir";
             foreach my $T (@tar_files) {
-                next unless -f $T and -s $T;
+                next unless is_file($T) and get_size($T);
                 my $cmd = "tar -x -f \"$T\"";
                 print  $cmd, "\n" if $opt_v;
                 system $cmd;
@@ -5300,7 +5323,7 @@ sub make_file_list {                         # {{{1
         } else {
             $filename = $opt_categorized;
         }
-        $fh = new IO::File $filename, "+>";  # open for read/write
+        $fh = open_file('+>', $filename, 1);  # open for read/write
         die "Unable to write to $filename:  $!\n" unless defined $fh;
     } elsif ($opt_sdir) {
         # write to the user-defined scratch directory
@@ -5308,7 +5331,7 @@ sub make_file_list {                         # {{{1
         my $scr_dir = "$opt_sdir/$TEMP_OFF";
         File::Path::mkpath($scr_dir) unless is_dir($scr_dir);
         $filename = $scr_dir . '/cloc_file_list.txt';
-        $fh = new IO::File $filename, "+>";  # open for read/write
+        $fh = open_file('+>', $filename, 1);  # open for read/write
         die "Unable to write to $filename:  $!\n" unless defined $fh;
     } else {
         # let File::Temp create a suitable temporary file
@@ -5320,16 +5343,16 @@ sub make_file_list {                         # {{{1
     foreach my $file_or_dir (@{$ra_arg_list}) {
         my $size_in_bytes = 0;
         my $F = lower_on_Windows($file_or_dir);
-        my $ul_F = $upper_lower_map{$F} ? $ON_WINDOWS : $F;
-        if (!-r $file_or_dir) {
+        my $ul_F = $ON_WINDOWS ? $upper_lower_map{$F} : $F;
+        if (!can_read($file_or_dir)) {
             push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $F];
             next;
         }
         if (is_file($file_or_dir)) {
-            if (!(-s $file_or_dir)) {   # 0 sized file, named pipe, socket
+            if (!get_size($file_or_dir)) {   # 0 sized file, named pipe, socket
                 $rh_ignored->{$F} = 'zero sized file';
                 next;
-            } elsif (-B $file_or_dir and !$opt_read_binary_files) {
+            } elsif (is_binary($file_or_dir) and !$opt_read_binary_files) {
                 # avoid binary files unless user insists on reading them
                 if ($opt_unicode) {
                     # only ignore if not a Unicode file w/trivial
@@ -5377,9 +5400,16 @@ sub make_file_list {                         # {{{1
             next;
         }
         if ($opt_no_recurse) {
-            opendir(DIR, $dir);
-            push @file_list, grep(-f $_, readdir(DIR));
-            closedir(DIR);
+            if ($ON_WINDOWS and $HAVE_Win32_Long_Path) {
+                my $d = Win32::LongPath->new();
+                $d->opendirL($dir);
+                push @file_list, grep(is_file($_), $d->readdirL());
+                $d->closedirL();
+            } else {
+                opendir(DIR, $dir);
+                push @file_list, grep(is_file($_), readdir(DIR));
+                closedir(DIR);
+            }
         } else {
             find({wanted     => \&files            ,
                   preprocess => \&find_preprocessor,
@@ -5422,7 +5452,13 @@ sub make_file_list {                         # {{{1
             next;
         }
 
-        my $size_in_bytes = (stat $file)[7];
+        my $size_in_bytes;
+        if ($ON_WINDOWS and $HAVE_Win32_Long_Path) {
+            my $stats = statL($file);
+            $size_in_bytes = $stats->{size} if defined $stats;
+        } else {
+            $size_in_bytes = (stat $file)[7];
+        }
         my $language      = "";
         if ($All_One_Language) {
             # user over-rode auto-language detection by using
@@ -5509,7 +5545,7 @@ sub invoke_generator {                       # {{{1
             push @post_filter, $F unless basename($F) =~ m{$opt_not_match_f};
             next;
         }
-        my $nBytes = -s $F ;
+        my $nBytes = get_size($F);
         if (!$nBytes) {
             $Ignored{$F} = 'zero sized file';
             printf "files(%s)  zero size\n", $F if $opt_v > 5;
@@ -5523,7 +5559,7 @@ sub invoke_generator {                       # {{{1
                 $F if $opt_v > 5;
             next;
         }
-        my $is_bin = -B $F ;
+        my $is_bin = is_binary($F);
         printf "files(%s)  size=%d  -B=%d\n",
             $F, $nBytes, $is_bin if $opt_v > 5;
         $is_bin = 0 if $opt_unicode and unicode_file($_);
@@ -5684,7 +5720,7 @@ sub find_preprocessor {                      # {{{1
                     } else {
                         push @ok, $F_or_D;
                     }
-                } elsif (!-d $F_or_D and basename($File::Find::name) =~ m{$opt_not_match_d}) {
+                } elsif (!is_dir($F_or_D) and basename($File::Find::name) =~ m{$opt_not_match_d}) {
                     $Ignored{$File::Find::name} = "--not-match-d (basename) =$opt_not_match_d";
                 } else {
                     push @ok, $F_or_D;
@@ -5718,8 +5754,8 @@ sub files {                                  # {{{1
     }
     if ($opt_match_d    ) { return unless $Dir =~ m{$opt_match_d}     }
 
-    my $nBytes = -s $_ ;
-    if (!$nBytes and -f $File::Find::name) {
+    my $nBytes = get_size($_);
+    if (!$nBytes and is_file($File::Find::name)) {
         $Ignored{$File::Find::name} = 'zero sized file';
         printf "files(%s)  zero size\n", $File::Find::name if $opt_v > 5;
     }
@@ -5733,7 +5769,7 @@ sub files {                                  # {{{1
         return;
     }
     my $is_dir = is_dir($_);
-    my $is_bin = -B     $_ ;
+    my $is_bin = is_binary($_);
     printf "files(%s)  size=%d is_dir=%d  -B=%d\n",
         $File::Find::name, $nBytes, $is_dir, $is_bin if $opt_v > 5;
     $is_bin = 0 if $opt_unicode and unicode_file($_);
@@ -5755,10 +5791,79 @@ sub archive_files {                          # {{{1
             if $File::Find::name =~ m{$ext$};
     }
 } # 1}}}
+sub open_file {                              # {{{1
+    # portable method to open a file. On Windows this uses Win32::LongPath to
+    # allow reading/writing files past the 255 char path length limit. When on
+    # other operating systems, $use_new_file can be used to specify opening a
+    # file with `new IO::File` instead of `open`. Note: `openL` doesn't support
+    # the C-like fopen modes ("w", "r+", etc.), it only supports Perl mode
+    # strings (">", "+<", etc.). So be sure to only use Perl mode strings to
+    # ensure compatibility. Additionally, openL doesn't handle pipe modes; if
+    # you need to open a pipe/STDIN/STDOUT, use the native `open` function.
+    my ($mode,         # Perl file mode; can not be C-style file mode
+        $filename,     # filename to open
+        $use_new_file, # whether to use `new IO::File` or `open` when not using Win32::LongPath
+        ) = @_;
+    if ($ON_WINDOWS and $HAVE_Win32_Long_Path) {
+        my $file = undef;
+        openL(\$file, $mode, $filename);
+        return $file;
+    } elsif ($use_new_file) {
+        return new IO::File $filename, $mode;
+    }
+    my $file = undef;
+    open($file, $mode, $filename);
+    return $file;
+} # 1}}}
+sub unlink_file {                            # {{{1
+    # portable method to unlink a file. On Windows this uses Win32::LongPath to
+    # allow unlinking files past the 255 char path length limit. Otherwise, the
+    # native `unlink` will be used.
+    my $filename = shift @_;
+    if ($ON_WINDOWS and $HAVE_Win32_Long_Path) {
+        return unlinkL($filename);
+    }
+    return unlink $filename;
+} # 1}}}
+sub is_binary {                              # {{{1
+    # portable method to test if item is a binary file. For Windows,
+    # Win32::LongPath doesn't provide a testL option for -B, but -B
+    # accepts a filehandle which does work with files opened with openL.
+    my $item = shift @_;
+    if ($ON_WINDOWS and $HAVE_Win32_Long_Path) {
+        my $IN = open_file('<', $item, 0);
+        if (defined $IN) {
+            my $res = -B $IN;
+            close($IN);
+            return $res;
+        }
+        return;
+    }
+    return (-B $item);
+} # 1}}}
+sub can_read {                               # {{{1
+    # portable method to test if item can be read
+    my $item = shift @_;
+    if ($ON_WINDOWS and $HAVE_Win32_Long_Path) {
+        return testL('r', $item);
+    }
+    return (-r $item);
+} # 1}}}
+sub get_size {                               # {{{1
+    # portable method to get size in bytes of a file
+    my $filename = shift @_;
+    if ($ON_WINDOWS and $HAVE_Win32_Long_Path) {
+        return testL('s', $filename);
+    }
+    return (-s $filename);
+} # 1}}}
 sub is_file {                                # {{{1
     # portable method to test if item is a file
     # (-f doesn't work in ActiveState Perl on Windows)
     my $item = shift @_;
+    if ($ON_WINDOWS and $HAVE_Win32_Long_Path) {
+        return testL('f', $item);
+    }
     return (-f $item);
 
 #     Was:
@@ -5773,6 +5878,9 @@ sub is_file {                                # {{{1
 } # 1}}}
 sub is_dir {                                 # {{{1
     my $item = shift @_;
+    if ($ON_WINDOWS and $HAVE_Win32_Long_Path) {
+        return testL('d', $item);
+    }
     return (-d $item); # should work everywhere now (July 2017)
 
 #     Was:
@@ -6048,11 +6156,11 @@ sub first_line {                             # {{{1
        ) = @_;
     my $line = "";
     print "-> first_line($file, $n_lines)\n" if $opt_v > 2;
-    if (!-r $file) {
+    if (!can_read($file)) {
         push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
         return $line;
     }
-    my $IN = new IO::File $file, "r";
+    my $IN = open_file('<', $file, 1);
     if (!defined $IN) {
         push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
         print "<- first_line($file, $n_lines)\n" if $opt_v > 2;
@@ -6112,7 +6220,7 @@ sub different_files {                        # {{{1
     my %file_hash = ();  # file_hash{md5 hash} = [ file1, file2, ... ]
     foreach my $F (@{$ra_files}) {
         next if is_dir($F);  # needed for Windows
-        my $IN = new IO::File $F, "r";
+        my $IN = open_file('<', $F, 1);
         if (!defined $IN) {
             push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $F];
             $rh_ignored->{$F} = 'cannot read';
@@ -6179,11 +6287,11 @@ sub call_counter {                           # {{{1
 
     my @lines = ();
     my $ascii = "";
-    if (-B $file and $opt_unicode) {
+    if (is_binary($file) and $opt_unicode) {
         # was binary so must be unicode
 
         $/ = undef;
-        my $IN = new IO::File $file, "r";
+        my $IN = open_file('<', $file, 1);
         my $bin_text = <$IN>;
         $IN->close;
         $/ = "\n";
@@ -6311,12 +6419,12 @@ sub write_file {                             # {{{1
     mkpath($volume . $directories, 1, 0777);
 
     my $OUT = undef;
-    unlink $file;
+    unlink_file($file);
     if ($opt_file_encoding) {
 #       $OUT = IO::File->new($file, ">:$opt_file_encoding");  # doesn't work?
-        open($OUT, "> :encoding($opt_file_encoding)", $file);
+        $OUT = open_file(">:encoding($opt_file_encoding)", $file, 0);
     } else {
-        $OUT = new IO::File $file, "w";
+        $OUT = open_file('>', $file, 1);
     }
 
     my $n_col = undef;
@@ -6389,7 +6497,7 @@ sub write_file {                             # {{{1
     }
     $OUT->close;
 
-    if (-r $file) {
+    if (can_read($file)) {
         print "Wrote $file" unless $opt_quiet;
         print ", $CLOC_XSL" if $opt_xsl and $opt_xsl eq $CLOC_XSL;
         print "\n" unless $opt_quiet;
@@ -6480,7 +6588,7 @@ sub read_file  {                             # {{{1
         );
 
     my @lines = ();
-    my $IN = new IO::File $file, "r";
+    my $IN = open_file('<', $file, 1);
     if (defined $IN) {
         @lines = <$IN>;
         $IN->close;
@@ -7527,10 +7635,10 @@ sub smarty_to_C {                            # {{{1
 sub determine_lit_type {                     # {{{1
   my ($file) = @_;
 
-  open (FILE, $file);
-  while (<FILE>) {
-    if (m/^\\begin\{code\}/) { close FILE; return 2; }
-    if (m/^>\s/) { close FILE; return 1; }
+  my $FILE = open_file('<', $file, 0);
+  while (<$FILE>) {
+    if (m/^\\begin\{code\}/) { close $FILE; return 2; }
+    if (m/^>\s/) { close $FILE; return 1; }
   }
 
   return 0;
@@ -10855,7 +10963,7 @@ sub matlab_or_objective_C {                  # {{{1
     #   BeginPackage
 
     ${$rs_language} = "";
-    my $IN = new IO::File $file, "r";
+    my $IN = open_file('<', $file, 1);
     if (!defined $IN) {
         push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
         return;
@@ -10955,7 +11063,7 @@ sub Lisp_or_OpenCL {                         # {{{1
     print "-> Lisp_or_OpenCL\n" if $opt_v > 2;
 
     my $lang = undef;
-    my $IN = new IO::File $file, "r";
+    my $IN = open_file('<', $file, 1);
     if (!defined $IN) {
         push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
         return $lang;
@@ -10987,7 +11095,7 @@ sub Lisp_or_Julia {                          # {{{1
     print "-> Lisp_or_Julia\n" if $opt_v > 2;
 
     my $lang = undef;
-    my $IN = new IO::File $file, "r";
+    my $IN = open_file('<', $file, 1);
     if (!defined $IN) {
         push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
         return $lang;
@@ -11019,7 +11127,7 @@ sub Perl_or_Prolog {                         # {{{1
     print "-> Perl_or_Prolog\n" if $opt_v > 2;
 
     my $lang = undef;
-    my $IN = new IO::File $file, "r";
+    my $IN = open_file('<', $file, 1);
     if (!defined $IN) {
         push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
         return $lang;
@@ -11076,7 +11184,7 @@ sub IDL_or_QtProject {                       # {{{1
     print "-> IDL_or_QtProject($file)\n" if $opt_v > 2;
 
     my $lang = undef;
-    my $IN = new IO::File $file, "r";
+    my $IN = open_file('<', $file, 1);
     if (!defined $IN) {
         push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
         return $lang;
@@ -11122,7 +11230,7 @@ sub Ant_or_XML {                             # {{{1
     print "-> Ant_or_XML($file)\n" if $opt_v > 2;
 
     my $lang = "XML";
-    my $IN = new IO::File $file, "r";
+    my $IN = open_file('<', $file, 1);
     if (!defined $IN) {
         push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
         return $lang;
@@ -11160,7 +11268,7 @@ sub Maven_or_XML {                           # {{{1
     print "-> Maven_or_XML($file)\n" if $opt_v > 2;
 
     my $lang = "XML";
-    my $IN = new IO::File $file, "r";
+    my $IN = open_file('<', $file, 1);
     if (!defined $IN) {
         push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
         return $lang;
@@ -11200,7 +11308,7 @@ sub pascal_or_puppet {                       # {{{1
     print "-> pascal_or_puppet\n" if $opt_v > 2;
 
     ${$rs_language} = "";
-    my $IN = new IO::File $file, "r";
+    my $IN = open_file('<', $file, 1);
     if (!defined $IN) {
         push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
         return;
@@ -11268,7 +11376,7 @@ sub Forth_or_Fortran {                       # {{{1
     print "-> Forth_or_Fortran\n" if $opt_v > 2;
 
     my $lang = undef;
-    my $IN = new IO::File $file, "r";
+    my $IN = open_file('<', $file, 1);
     if (!defined $IN) {
         push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
         return $lang;
@@ -11298,7 +11406,7 @@ sub Forth_or_Fsharp {                        # {{{1
     print "-> Forth_or_Fsharp\n" if $opt_v > 2;
 
     my $lang = undef;
-    my $IN = new IO::File $file, "r";
+    my $IN = open_file('<', $file, 1);
     if (!defined $IN) {
         push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
         return $lang;
@@ -11328,7 +11436,7 @@ sub Verilog_or_Coq {                         # {{{1
     print "-> Verilog_or_Coq\n" if $opt_v > 2;
 
     my $lang = undef;
-    my $IN = new IO::File $file, "r";
+    my $IN = open_file('<', $file, 1);
     if (!defined $IN) {
         push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
         return $lang;
@@ -11363,7 +11471,7 @@ sub TypeScript_or_QtLinguist {               # {{{1
     print "-> TypeScript_or_QtLinguist\n" if $opt_v > 2;
 
     my $lang = undef;
-    my $IN = new IO::File $file, "r";
+    my $IN = open_file('<', $file, 1);
     if (!defined $IN) {
         push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
         return $lang;
@@ -11394,7 +11502,7 @@ sub Qt_or_Glade {                            # {{{1
     print "-> Qt_or_Glade\n" if $opt_v > 2;
 
     my $lang = undef;
-    my $IN = new IO::File $file, "r";
+    my $IN = open_file('<', $file, 1);
     if (!defined $IN) {
         push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
         return $lang;
@@ -11426,7 +11534,7 @@ sub Csharp_or_Smalltalk {                    # {{{1
     print "-> Csharp_or_Smalltalk($file)\n" if $opt_v > 2;
 
     my $lang = undef;
-    my $IN = new IO::File $file, "r";
+    my $IN = open_file('<', $file, 1);
     if (!defined $IN) {
         push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
         return $lang;
@@ -11469,7 +11577,7 @@ sub Visual_Basic_or_TeX_or_Apex {            # {{{1
     print "-> Visual_Basic_or_TeX_or_Apex($file)\n" if $opt_v > 2;
 
     my $lang = undef;
-    my $IN = new IO::File $file, "r";
+    my $IN = open_file('<', $file, 1);
     if (!defined $IN) {
         push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
         return $lang;
@@ -11518,7 +11626,7 @@ sub Scheme_or_SaltStack {                    # {{{1
     print "-> Scheme_or_SaltStack($file)\n" if $opt_v > 2;
 
     my $lang = undef;
-    my $IN = new IO::File $file, "r";
+    my $IN = open_file('<', $file, 1);
     if (!defined $IN) {
         push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
         return $lang;
@@ -11605,12 +11713,12 @@ sub test_alg_diff {                          # {{{1
     my ($file_1 ,
         $file_2 )
        = @_;
-    my $fh_1 = new IO::File $file_1, "r";
+    my $fh_1 = open_file('<', $file_1, 1);
     die "Unable to read $file_1:  $!\n" unless defined $fh_1;
     chomp(my @lines_1 = <$fh_1>);
     $fh_1->close;
 
-    my $fh_2 = new IO::File $file_2, "r";
+    my $fh_2 = open_file('<', $file_2, 1);
     die "Unable to read $file_2:  $!\n" unless defined $fh_2;
     chomp(my @lines_2 = <$fh_2>);
     $fh_2->close;
@@ -12336,10 +12444,10 @@ sub unicode_file {                           # {{{1
     my $file = shift @_;
 
     print "-> unicode_file($file)\n" if $opt_v > 2;
-    return 0 if (-s $file > 2_000_000);
+    return 0 if (get_size($file) > 2_000_000);
     # don't bother trying to test binary files bigger than 2 MB
 
-    my $IN = new IO::File $file, "r";
+    my $IN = open_file('<', $file, 1);
     if (!defined $IN) {
         warn "Unable to read $file; ignoring.\n";
         return 0;
@@ -13040,7 +13148,7 @@ sub combine_diffs {                          # {{{1
     my %HoH   = ();
 
     foreach my $file (@{$ra_files}) {
-        my $IN = new IO::File $file, "r";
+        my $IN = open_file('<', $file, 1);
         if (!defined $IN) {
             warn "Unable to read $file; ignoring.\n";
             next;
@@ -13118,7 +13226,7 @@ sub combine_csv_diffs {                      # {{{1
 
     my %sum = ();  # sum{ language } = array of 17 values
     foreach my $file (@{$ra_files}) {
-        my $IN = new IO::File $file, "r";
+        my $IN = open_file('<', $file, 1);
         if (!defined $IN) {
             warn "Unable to read $file; ignoring.\n";
             next;
@@ -13344,10 +13452,10 @@ sub load_from_config_file {                  # {{{1
         #    $ENV{'APPDATA'} . 'cloc'
 
     print "-> load_from_config_file($config_file)\n" if $opt_v and $opt_v > 2;
-    if (!-f $config_file) {
+    if (!is_file($config_file)) {
         print "<- load_from_config_file() (no such file: $config_file)\n" if $opt_v and $opt_v > 2;
         return;
-    } elsif (!-r $config_file) {
+    } elsif (!can_read($config_file)) {
         print "<- load_from_config_file() (unable to read $config_file)\n" if $opt_v and $opt_v > 2;
         return;
     }
@@ -13502,9 +13610,9 @@ sub check_alternate_config_files {           # {{{1
                       $diff_list_file ) {
         next unless defined $file;
         my $dir = dirname $file;
-        next unless -r $dir and -d $dir;
+        next unless can_read($dir) and is_dir($dir);
         my $bn = basename $config_file;
-        if (-r "$dir/$bn") {
+        if (can_read("$dir/$bn")) {
             $found_it = "$dir/$bn";
             print "Using configuration file $found_it\n" if $opt_v;
             last;
@@ -13577,9 +13685,9 @@ sub really_is_pascal {                       # {{{1
  my $found_terminating_end = 0;
  my $has_begin = 0;
 
- open(PASCAL_FILE, "<$filename") ||
-      die "Can't open $filename to determine if it's pascal.\n";
- while(<PASCAL_FILE>) {
+ my $PASCAL_FILE = open_file('<', $filename, 0);
+ die "Can't open $filename to determine if it's pascal.\n" if !defined $PASCAL_FILE;
+ while(<$PASCAL_FILE>) {
    s/\{.*?\}//g;  # Ignore {...} comments on this line; imperfect, but effective.
    s/\(\*.*?\*\)//g;  # Ignore (*...*) comments on this line; imperfect, but effective.
    if (m/\bprogram\s+[A-Za-z]/i)  {$has_program=1;}
@@ -13600,7 +13708,7 @@ sub really_is_pascal {                       # {{{1
    if (m/end\.\s*$/i) {$found_terminating_end = 1;}
 #   elsif (m/\S/) {$found_terminating_end = 0;}
  }
- close(PASCAL_FILE);
+ close($PASCAL_FILE);
 
  # Okay, we've examined the entire file looking for clues;
  # let's use those clues to determine if it's really Pascal:
@@ -13632,9 +13740,9 @@ sub really_is_incpascal {                    # {{{1
  my $is_pascal = 0;      # Value to determine.
  my $found_begin = 0;
 
- open(PASCAL_FILE, "<$filename") ||
-      die "Can't open $filename to determine if it's pascal.\n";
- while(<PASCAL_FILE>) {
+ my $PASCAL_FILE = open_file('<', $filename, 0);
+ die "Can't open $filename to determine if it's pascal.\n" if !defined $PASCAL_FILE;
+ while(<$PASCAL_FILE>) {
    s/\{.*?\}//g;  # Ignore {...} comments on this line; imperfect, but effective.
    s/\(\*.*?\*\)//g;  # Ignore (*...*) comments on this line; imperfect, but effective.
    if (m/\bprogram\s+[A-Za-z]/i)  {$is_pascal=1;}
@@ -13652,7 +13760,7 @@ sub really_is_incpascal {                    # {{{1
    }
  }
 
- close(PASCAL_FILE);
+ close($PASCAL_FILE);
  return $is_pascal;
 } # 1}}}
 sub really_is_php {                          # {{{1
@@ -13670,9 +13778,9 @@ sub really_is_php {                          # {{{1
  # Return cached result, if available:
  if ($php_files{$filename}) { return $php_files{$filename};}
 
- open(PHP_FILE, "<$filename") ||
-      die "Can't open $filename to determine if it's php.\n";
- while(<PHP_FILE>) {
+ my $PHP_FILE = open_file('<', $filename, 0);
+ die "Can't open $filename to determine if it's php.\n" if !defined $PHP_FILE;
+ while(<$PHP_FILE>) {
    if (m/\<\?/)                           { $normal_surround |= 1; }
    if (m/\?\>/ && ($normal_surround & 1)) { $normal_surround |= 2; }
    if (m/\<script.*language="?php"?/i)    { $script_surround |= 1; }
@@ -13680,7 +13788,7 @@ sub really_is_php {                          # {{{1
    if (m/\<\%/)                           { $asp_surround |= 1; }
    if (m/\%\>/ && ($asp_surround & 1)) { $asp_surround |= 2; }
  }
- close(PHP_FILE);
+ close($PHP_FILE);
 
  if ( ($normal_surround == 3) || ($script_surround == 3) ||
       ($asp_surround == 3)) {
@@ -16180,7 +16288,7 @@ EOD
     mkdir $Regexp_Common_dir;
 
     foreach my $module_file (keys %Regexp_Common_Contents) {
-        my $OUT = new IO::File "$dir/Regexp/${module_file}.pm", "w";
+        my $OUT = open_file('>', "$dir/Regexp/${module_file}.pm", 1);
         if (defined $OUT) {
             print $OUT $Regexp_Common_Contents{$module_file};
             $OUT->close;
@@ -17046,7 +17154,7 @@ EOAlgDiff
     mkdir $Algorithm_dir     ;
     mkdir $Algorithm_Diff_dir;
 
-    my $OUT = new IO::File "$dir/Algorithm/Diff.pm", "w";
+    my $OUT = open_file('>', "$dir/Algorithm/Diff.pm", 1);
     if (defined $OUT) {
         print $OUT $Algorithm_Diff_Contents;
         $OUT->close;
