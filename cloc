@@ -894,6 +894,7 @@ load_from_config_file($config_file,          # {{{2
                                                 \$opt_extract_with        ,
                                                 \$opt_found               ,
                                                 \$opt_count_diff          ,
+                                                \$opt_diff_list_files     ,
                                                 \$opt_diff                ,
                                                 \$opt_diff_alignment      ,
                                                 \$opt_diff_timeout        ,
@@ -13395,6 +13396,7 @@ sub load_from_config_file {                  # {{{1
                                                  $rs_extract_with        ,
                                                  $rs_found               ,
                                                  $rs_count_diff          ,
+                                                 $rs_diff_list_files     ,
                                                  $rs_diff                ,
                                                  $rs_diff_alignment      ,
                                                  $rs_diff_timeout        ,
@@ -13503,6 +13505,7 @@ sub load_from_config_file {                  # {{{1
         } elsif (!defined ${$rs_extract_with}        and /^(?:extract_with|extract-with)(=|\s+)(.*?)$/)       { ${$rs_extract_with}       = $2;
         } elsif (!defined ${$rs_found}               and /^found(=|\s+)(.*?)$/)                               { ${$rs_found}              = $2;
         } elsif (!defined ${$rs_count_diff}          and /^(count_and_diff|count-and-diff)/)                  { ${$rs_count_diff}         = 1;
+        } elsif (!defined ${$rs_diff_list_files}     and /^(diff_list_files|diff-list-files)/)                { ${$rs_diff_list_files}    = 1;
         } elsif (!defined ${$rs_diff}                and /^diff/)                                             { ${$rs_diff}               = 1;
         } elsif (!defined ${$rs_diff_alignment}      and /^(?:diff-alignment|diff_alignment)(=|\s+)(.*?)$/)   { ${$rs_diff_alignment}     = $2;
         } elsif (!defined ${$rs_diff_timeout}        and /^(?:diff-timeout|diff_timeout)(=|\s+)i/)            { ${$rs_diff_timeout}       = $1;
