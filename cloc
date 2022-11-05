@@ -221,6 +221,16 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              end of each line is ignored.  This enables --diff
                              mode and bypasses file pair alignment logic.
                              See also --config.
+   --diff-list-files <file1> <file2>
+                             Compute differences in code and comments between
+                             the files and directories listed in <file1> and
+                             <file2>.  Each input file should use the same
+                             format as --list-file, where there is one file or
+                             directory name per line.  Only exact matches are
+                             counted; relative path names will be resolved
+                             starting from the directory where cloc is invoked.
+                             This enables --diff mode.  See also --list-file,
+                             --diff-list-file, --diff.
    --vcs=<VCS>               Invoke a system call to <VCS> to obtain a list of
                              files to work on.  If <VCS> is 'git', then will
                              invoke 'git ls-files' to get a file list and
@@ -677,6 +687,7 @@ my (
     $opt_diff                 ,
     $opt_diff_alignment       ,
     $opt_diff_list_file       ,
+    $opt_diff_list_files      ,
     $opt_diff_timeout         ,
     $opt_timeout              ,
     $opt_html                 ,
@@ -785,6 +796,7 @@ my $getopt_success = GetOptions(             # {{{1
    "diff-alignment|diff_alignment=s"         => \$opt_diff_alignment      ,
    "diff-timeout|diff_timeout=i"             => \$opt_diff_timeout        ,
    "diff-list-file|diff_list_file=s"         => \$opt_diff_list_file      ,
+   "diff-list-files|diff_list_files"         => \$opt_diff_list_files     ,
    "timeout=i"                               => \$opt_timeout             ,
    "html"                                    => \$opt_html                ,
    "ignored=s"                               => \$opt_ignored             ,
@@ -882,6 +894,7 @@ load_from_config_file($config_file,          # {{{2
                                                 \$opt_extract_with        ,
                                                 \$opt_found               ,
                                                 \$opt_count_diff          ,
+                                                \$opt_diff_list_files     ,
                                                 \$opt_diff                ,
                                                 \$opt_diff_alignment      ,
                                                 \$opt_diff_timeout        ,
@@ -991,6 +1004,7 @@ $Exclude_Dir{".config"} = 1;
 $opt_count_diff        = defined $opt_count_diff ? 1 : 0;
 $opt_diff              = 1  if $opt_diff_alignment    or
                                $opt_diff_list_file    or
+                               $opt_diff_list_files   or
                                $opt_git_diff_rel      or
                                $opt_git_diff_all      or
                                $opt_git_diff_simindex;
@@ -1353,6 +1367,8 @@ if ($opt_count_diff) {
     if ($opt_count_diff == 3) {
         $opt_diff = 1;
         @ARGV = @{$COUNT_DIFF_ARGV[ $opt_count_diff ]}; # last arg is list of list
+    } elsif ($opt_diff_list_files) {
+        $opt_diff = 0;
     }
     if ($opt_report_file) {
         # Instead of just one output file, will have three.
@@ -1708,6 +1724,11 @@ for (my $i = 0; $i < scalar @ARGV; $i++) {
         push @fh, make_file_list($files_for_set[$i], $i+1,
                                 \%Error_Codes, \@Errors, \%Ignored);
         @{$files_for_set[$i]} = @file_list;
+    } elsif ($opt_diff_list_files) {
+        my @list_files = read_list_file($ARGV[$i]);
+        push @fh, make_file_list(\@list_files, $i+1,
+                                \%Error_Codes, \@Errors, \%Ignored);
+        @{$files_for_set[$i]} = @file_list;
     } else {
         push @fh, make_file_list([ $ARGV[$i] ], $i+1,
                                 \%Error_Codes, \@Errors, \%Ignored);
@@ -1941,12 +1962,14 @@ if ($opt_by_file) {
 } else {
 # Step 4:  Separate code from non-code files.  {{{1
 my $fh = 0;
-if ($opt_list_file or $opt_vcs) {
+if ($opt_list_file or $opt_diff_list_files or $opt_vcs) {
     my @list;
     if ($opt_vcs) {
         @list = invoke_generator($opt_vcs, \@ARGV);
-    } else {
+    } elsif ($opt_list_file) {
         @list = read_list_file($opt_list_file);
+    } else {
+        @list = read_list_file($ARGV[0]);
     }
     $fh = make_file_list(\@list, 0, \%Error_Codes, \@Errors, \%Ignored);
 } else {
@@ -13373,6 +13396,7 @@ sub load_from_config_file {                  # {{{1
                                                  $rs_extract_with        ,
                                                  $rs_found               ,
                                                  $rs_count_diff          ,
+                                                 $rs_diff_list_files     ,
                                                  $rs_diff                ,
                                                  $rs_diff_alignment      ,
                                                  $rs_diff_timeout        ,
@@ -13481,6 +13505,7 @@ sub load_from_config_file {                  # {{{1
         } elsif (!defined ${$rs_extract_with}        and /^(?:extract_with|extract-with)(=|\s+)(.*?)$/)       { ${$rs_extract_with}       = $2;
         } elsif (!defined ${$rs_found}               and /^found(=|\s+)(.*?)$/)                               { ${$rs_found}              = $2;
         } elsif (!defined ${$rs_count_diff}          and /^(count_and_diff|count-and-diff)/)                  { ${$rs_count_diff}         = 1;
+        } elsif (!defined ${$rs_diff_list_files}     and /^(diff_list_files|diff-list-files)/)                { ${$rs_diff_list_files}    = 1;
         } elsif (!defined ${$rs_diff}                and /^diff/)                                             { ${$rs_diff}               = 1;
         } elsif (!defined ${$rs_diff_alignment}      and /^(?:diff-alignment|diff_alignment)(=|\s+)(.*?)$/)   { ${$rs_diff_alignment}     = $2;
         } elsif (!defined ${$rs_diff_timeout}        and /^(?:diff-timeout|diff_timeout)(=|\s+)i/)            { ${$rs_diff_timeout}       = $1;
