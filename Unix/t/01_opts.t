@@ -676,6 +676,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/670/results.yaml',
                 },
 
+                {
+                    'name' => '--diff-list-files, #692',
+                    'cd'   => '../tests/inputs/issues/692',
+                    'args' => '--diff-list-files A.txt B.txt',
+                    'ref'  => '../tests/outputs/issues/692/results.yaml',
+                },
+
             );
 
 # Special cases:

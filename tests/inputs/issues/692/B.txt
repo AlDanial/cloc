@@ -1,0 +1,6 @@
+# directory names are ignored
+../../diff/B/d2/hi.py
+../../diff/B/d1
+../../diff/B/d1/hello.f90
+../../diff/B/extra_file.pl
+../../diff/B/hello.C

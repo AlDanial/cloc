@@ -220,7 +220,8 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              see a sample.)  The language identifier at the
                              end of each line is ignored.  This enables --diff
                              mode and bypasses file pair alignment logic.
-                             See also --config.
+                             Use --diff-list-files to define the file name
+                             pairs in separate files. See also --config.
    --diff-list-files <file1> <file2>
                              Compute differences in code and comments between
                              the files and directories listed in <file1> and
