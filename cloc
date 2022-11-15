@@ -7882,6 +7882,7 @@ sub set_constants {                          # {{{1
             '_coffee'     => 'CoffeeScript'          ,
             'coffee'      => 'CoffeeScript'          ,
             'component'   => 'Visualforce Component' ,
+            'Containerfile'  => 'Containerfile'         ,
             'cpp'         => 'C++'                   ,
             'CPP'         => 'C++'                   ,
             'cr'          => 'Crystal'               ,
@@ -8750,10 +8751,12 @@ sub set_constants {                          # {{{1
             'dockerfile'        => 'Dockerfile'         ,
             'dockerfile.m4'     => 'Dockerfile'         ,
             'dockerfile.cmake'  => 'Dockerfile'         ,
+            'Containerfile'     => 'Containerfile'      ,
             );
 # 1}}}
 %{$rh_Language_by_Prefix}     = (             # {{{1
             'Dockerfile'        => 'Dockerfile'         ,
+            'Containerfile'     => 'Containerfile'         ,
             );
 # 1}}}
 %{$rhaa_Filters_by_Language} = (            # {{{1
@@ -8977,6 +8980,10 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'Containerfile'      => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
                             ],
     'Coq'                => [
                                 [ 'remove_between_general', '(*', '*)' ],
@@ -9534,6 +9541,7 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'       , '##.*$'  ],
                             ],
     'Markdown'           => [
+                                [ 'remove_between_general', '<!--', '-->' ],
                                 [ 'remove_between_regex',
                                   '\[(comment|\/\/)?\]\s*:?\s*(<\s*>|#)?\s*\(.*?', '.*?\)' ],
                                 # http://stackoverflow.com/questions/4823468/comments-in-markdown
@@ -10506,9 +10514,7 @@ sub set_constants {                          # {{{1
     'COBOL ii'                     =>   0.75,
     'COBOL/400'                    =>   0.88,
     'CoffeeScript'                 =>   2.00,
-    'common lisp'                  =>   1.25,
-    'concurrent pascal'            =>   1.00,
-    'conniver'                     =>   1.25,
+    'Containerfile'                =>   2.00,
     'Coq'                          =>   5.00,
     'Crystal'                      =>   2.50,
     'Crystal Reports'              =>   4.00,
@@ -10524,7 +10530,6 @@ sub set_constants {                          # {{{1
     'DAL'                          =>   1.50,
     'Dart'                         =>   2.00,
     'DenizenScript'                =>   1.00,
-    'data base default'            =>   2.00,
     'Delphi Form'                  =>   2.00,
     'DIET'                         =>   2.00,
     'diff'                         =>   1.00,
@@ -10548,7 +10553,6 @@ sub set_constants {                          # {{{1
     'ERB'                          =>   2.00,
     'Erlang'                       =>   2.11,
     'Fennel'                       =>   2.50,
-    'filemaker pro'                =>   2.22,
     'Finite State Language'        =>   2.00,
     'Focus'                        =>   1.90,
     'Forth'                        =>   1.25,
@@ -10567,7 +10571,6 @@ sub set_constants {                          # {{{1
     'Gleam'                        =>   2.50,
     'GLSL'                         =>   2.00,
     'gml'                          =>   1.74,
-    'golden common lisp'           =>   1.25,
     'gpss'                         =>   1.74,
     'guest'                        =>   2.86,
     'guru'                         =>   1.63,

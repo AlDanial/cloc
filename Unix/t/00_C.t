@@ -165,6 +165,11 @@ my @Tests = (
                     'args' => '../tests/inputs/ColdFusion.cfm',
                 },
                 {
+                    'name' => 'Containerfile',
+                    'ref'  => '../tests/outputs/Containerfile.yaml',
+                    'args' => '../tests/inputs/Containerfile',
+                },
+                {
                     'name' => 'C++',
                     'ref'  => '../tests/outputs/C++-MFC.cc.yaml',
                     'args' => '../tests/inputs/C++-MFC.cc',
