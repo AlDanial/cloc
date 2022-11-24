@@ -270,7 +270,7 @@ my @Tests = (
                     'args' => '../tests/inputs/capture.ecr',
                 },
                 {
-                    'name' => 'Fennel',    
+                    'name' => 'Fennel',
                     'ref'  => '../tests/outputs/generate.fnl.yaml',
                     'args' => '../tests/inputs/generate.fnl',
                 },
@@ -740,6 +740,11 @@ my @Tests = (
                     'name' => 'peggy',
                     'ref'  => '../tests/outputs/sdp_parser.peggy.yaml',
                     'args' => '../tests/inputs/sdp_parser.peggy',
+                },
+                {
+                    'name' => 'Pest',
+                    'ref'  => '../tests/outputs/toml.pest.yaml',
+                    'args' => '../tests/inputs/toml.pest',
                 },
                 {
                     'name' => 'tspeg 1',
