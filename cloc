@@ -8372,6 +8372,7 @@ sub set_constants {                          # {{{1
             'peg'         => 'PEG'                   ,
             'pegjs'       => 'peg.js'                ,
             'peggy'       => 'peggy'                 ,
+            'pest'        => 'Pest'                  ,
             'tspeg'       => 'tspeg'                 ,
             'jspeg'       => 'tspeg'                 ,
             'pl1'         => 'PL/I'                  ,
@@ -9627,6 +9628,10 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'Pest'               => [
+                                [ 'remove_matches'      , '^\s*//'  ],
+                                [ 'remove_inline'       , '//.*$'   ],
+                            ],
     'tspeg'              => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
@@ -10678,6 +10683,7 @@ sub set_constants {                          # {{{1
     'PEG'                          =>   3.00,
     'peg.js'                       =>   3.00,
     'peggy'                        =>   3.00,
+    'Pest'                         =>   2.00,
     'tspeg'                        =>   3.00,
     'Pig Latin'                    =>   1.00,
     'PL/I'                         =>   1.38,

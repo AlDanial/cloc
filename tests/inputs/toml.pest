@@ -1,0 +1,76 @@
+// pest. The Elegant Parser
+// Copyright (c) 2018 Dragoș Tiselice
+//
+// Licensed under the Apache License, Version 2.0
+// <LICENSE-APACHE or http://www.apache.org/licenses/LICENSE-2.0> or the MIT
+// license <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
+// option. All files in the project carrying such notice may not be copied,
+// modified, or distributed except according to those terms.
+
+toml = { SOI ~ (table | array_table | pair)* ~ EOI }
+
+table       = { "[" ~ key ~ ("." ~ key)* ~ "]" ~ pair* }
+array_table = { "[[" ~ key ~ ("." ~ key)* ~ "]]" ~ pair* }
+pair        = { key ~ "=" ~ value }
+
+key   = @{ identifier | string | literal }
+value = _{
+    inline_table |
+    array |
+    multi_line_string |
+    string |
+    multi_line_literal |
+    literal |
+    date_time |
+    local_date_time |
+    full_date |
+    partial_time |
+    float |
+    integer |
+    boolean
+}
+
+inline_table = { "{" ~ pair ~ ("," ~ pair)* ~ ","? ~ "}" | "{" ~ "}" }
+
+array = { "[" ~ value ~ ("," ~ value)* ~ ","? ~ "]" | "[" ~ "]" }
+
+identifier = { (ASCII_ALPHANUMERIC | "_" | "-")+ }
+
+multi_line_string  = @{ "\"\"\"" ~ inner ~ "\"\"\"" }
+string             = @{ "\"" ~ inner ~ "\"" }
+inner              = @{ (!("\"" | "\\" | "\u{0000}" | "\u{001F}") ~ ANY)* ~ (escape ~ inner)? }
+multi_line_literal = @{ "'''" ~ (!"'''" ~ ANY)* ~ "'''" }
+literal            = @{ "'" ~ (!"'" ~ ANY)* ~ "'" }
+
+// another comment
+
+escape  = @{ "\\" ~ ("b" | "t" | "n" | "f" | "r" | "\"" | "\\" | unicode | NEWLINE)? }
+unicode = @{ "u" ~ ASCII_HEX_DIGIT{4} | "U" ~ ASCII_HEX_DIGIT{8} }
+
+date_time       = ${ full_date ~ "T" ~ full_time }
+local_date_time = ${ full_date ~ "T" ~ partial_time }
+
+partial_time = ${ time_hour ~ ":" ~ time_minute ~ ":" ~ time_second ~ time_secfrac? }
+full_date    = ${ date_fullyear ~ "-" ~ date_month ~ "-" ~ date_mday }
+full_time    = ${ partial_time ~ time_offset }
+
+date_fullyear = @{ ASCII_DIGIT{4} }
+date_month    = @{ ASCII_DIGIT{2} }
+date_mday     = @{ ASCII_DIGIT{2} }
+
+time_hour    = @{ ASCII_DIGIT{2} }
+time_minute  = @{ ASCII_DIGIT{2} }
+time_second  = @{ ASCII_DIGIT{2} }
+time_secfrac = @{ "." ~ ASCII_DIGIT+ }
+time_offset  = ${ "Z" | ("+" | "-") ~ time_hour ~ ":" ~ time_minute }
+
+integer = @{ ("+" | "-")? ~ int }
+float   = @{ ("+" | "-")? ~ int ~ ("." ~ digits ~ exp? | exp)? }
+int     = @{ "0" | (ASCII_NONZERO_DIGIT ~ digits?) }
+digits  = @{ (ASCII_DIGIT | ("_" ~ ASCII_DIGIT))+ }
+exp     = @{ ("E" | "e") ~ ("+" | "-")? ~ int }
+
+boolean = { "true" | "false" }
+
+WHITESPACE = _{ " " | "\t" | NEWLINE }
+COMMENT    = _{ "#" ~ (!NEWLINE ~ ANY)* }
