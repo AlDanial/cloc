@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.95
+  elapsed_seconds    : 0.00724482536315918
+  n_files            : 1
+  n_lines            : 132
+  files_per_second   : 138.0295521111
+  lines_per_second   : 18219.9008786652
+  report_file        : ../outputs/ring.pony.1.yaml
+'Pony' :
+  nFiles: 1
+  blank: 23
+  comment: 4
+  code: 105
+SUM: 
+  blank: 23
+  comment: 4
+  code: 105
+  nFiles: 1

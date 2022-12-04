@@ -8381,6 +8381,7 @@ sub set_constants {                          # {{{1
             'puml'        => 'PlantUML'              ,
             'properties'  => 'Properties'            ,
             'po'          => 'PO File'               ,
+            'pony'        => 'Pony'                  ,
             'pbt'         => 'PowerBuilder'          ,
             'sra'         => 'PowerBuilder'          ,
             'srf'         => 'PowerBuilder'          ,
@@ -9660,6 +9661,12 @@ sub set_constants {                          # {{{1
     'PO File'            => [
                                 [ 'remove_matches'      , '^\s*#[^,]' ],  # '#,' is not a comment
                             ],
+    'Pony'               => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'docstring_to_C'                 ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'PowerBuilder'       => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
@@ -10691,6 +10698,7 @@ sub set_constants {                          # {{{1
     'PlantUML'                     =>   2.00,
     'Oracle PL/SQL'                =>   2.58,
     'PO File'                      =>   1.50,
+    'Pony'                         =>   3.00,
     'PowerBuilder'                 =>   3.33,
     'PowerShell'                   =>   3.00,
     'problemoriented default'      =>   1.13,

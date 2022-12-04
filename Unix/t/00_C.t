@@ -792,6 +792,16 @@ my @Tests = (
                     'args' => '../tests/inputs/en_AU.po',
                 },
                 {
+                    'name' => 'Pony (--docstring-as-code)',
+                    'ref'  => '../tests/outputs/ring.pony.1.yaml',
+                    'args' => '--docstring-as-code ../tests/inputs/ring.pony',
+                },
+                {
+                    'name' => 'Pony',
+                    'ref'  => '../tests/outputs/ring.pony.2.yaml',
+                    'args' => '../tests/inputs/ring.pony',
+                },
+                {
                     'name' => 'ProGuard',
                     'ref'  => '../tests/outputs/proguard-project-app.pro.yaml',
                     'args' => '../tests/inputs/proguard-project-app.pro',
