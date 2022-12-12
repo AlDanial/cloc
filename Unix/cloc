@@ -2086,7 +2086,10 @@ my $end_time = get_time();
 printf "%8d file%s ignored.\n", plural_form(scalar keys %Ignored)
     unless $opt_quiet;
 print_errors(\%Error_Codes, \@Errors) if @Errors;
-exit unless %Results_by_Language;
+if (!%Results_by_Language) {
+    write_null_results($opt_json, $opt_xml, $opt_report_file);
+    exit;
+}
 
 generate_sql($end_time - $start_time,
             \%Results_by_File, \%Scale_Factor) if $opt_sql;
@@ -13642,6 +13645,26 @@ sub check_alternate_config_files {           # {{{1
     return $found_it;
 }
 # 1}}}
+sub write_null_results {                     # {{{
+    my ($json, $xml, $report_file,) = @_;
+    print "-> write_null_results\n" if $opt_v > 2;
+    if ((defined $json) or (defined $xml)) {
+        my $line = "";
+        if (defined $json) {
+            $line = "{}";
+        } else {
+            $line = '<?xml version="1.0" encoding="UTF-8"?><results/>';
+        }
+        if (defined $report_file) {
+            open OUT, ">$report_file" or die "Cannot write to $report_file $!\n";
+            print OUT "$line\n";
+            close OUT;
+        } else {
+            print "$line\n";
+        }
+    }
+    print "<- write_null_results\n" if $opt_v > 2;
+} # }}}
 # really_is_pascal, really_is_incpascal, really_is_php from SLOCCount
 my %php_files    = ();  # really_is_php()
 sub really_is_pascal {                       # {{{1
