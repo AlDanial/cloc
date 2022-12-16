@@ -683,6 +683,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/692/results.yaml',
                 },
 
+                {
+                    'name' => 'comments in OCaml strings, #701',
+                    'cd'   => '../tests/inputs/issues/701',
+                    'args' => '--strip-str-comments demo.ml',
+                    'ref'  => '../tests/outputs/issues/701/results.yaml',
+                },
+
             );
 
 # Special cases:
