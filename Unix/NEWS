@@ -1,3 +1,36 @@
+                Release Notes for cloc version 1.96
+                   https://github.com/AlDanial/cloc
+                             Dec. 18, 2022
+
+New Languages and File Types:
+    o Cairo
+    o Carbon
+    o Circom
+    o Containerfile
+    o HolyC
+    o kvlang
+    o Nunjucks
+    o OpenSCAD
+    o P4
+    o Pest
+    o Pony
+    o TEAL
+    o WGSL
+
+Updates:
+    o New switch --diff-list-files to run diff given two list
+      files.
+    o Handle comments embedded in OCaml strings.
+    o Write empty JSON and XML structures if the inputs yield zero
+      counts.
+    o Including Win32::LongPath to support long paths on Windows.
+    o Better support for building and running Docker image on Windows
+    o Better output file names when running with --count-and-diff 
+      and --out.
+    o Resolve internal file handle conflict when running --diff with
+      --sdir or --categorized.
+
+============================================================================
                 Release Notes for cloc version 1.94
                    https://github.com/AlDanial/cloc
                              July 4, 2022
