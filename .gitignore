@@ -1,6 +1,11 @@
 cloc-?.??.*
 release_notes-?.??.txt
 
+# Jetbrains and extensions
+.fleet
+.idea
+*.iml
+
 # Visual Studio Code and extensions
 .vstags
 .vscode/perl-lang
