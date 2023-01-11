@@ -64,8 +64,12 @@ Step 3:  Invoke cloc to count your source files, directories, archives,
 or git commits.
 The executable name differs depending on whether you use the
 development source version (`cloc`), source for a
-released version (`cloc-1.94.pl`) or a Windows executable
-(`cloc-1.94.exe`).  On this page, `cloc` is the generic term
+released version (`cloc-1.96.pl`) or a Windows executable
+(`cloc-1.96.1.exe`).
+(2023-01-10: a special
+[1.96.1 release](https://github.com/AlDanial/cloc/releases/tag/v1.96.1) of cloc was made to update the Windows executable to use the
+``Win32::LongPath`` module.)
+On this page, `cloc` is the generic term
 used to refer to any of these.
 
 [Include Security](https://www.youtube.com/user/IncludeSecurity) has a
@@ -428,6 +432,9 @@ executable and also check sites such
 https://www.virustotal.com/ .
 The entries for recent versions are:
 
+cloc-1.96.1.exe:
+https://www.virustotal.com/gui/file/00b1c9dbbfb920dabd374418e1b86d2c24b8cd2b8705aeb956dee910d0d75d45?nocache=1
+
 cloc-1.96.exe:
 https://www.virustotal.com/gui/file/54bf5f46fbaba7949c4eb2d4837b03c774c0ba587448a5bad9b8efc0222b1583?nocache=1
 
@@ -510,7 +517,8 @@ C:> cpan -i Digest::MD5
 C:> cpan -i Regexp::Common
 C:> cpan -i Algorithm::Diff
 C:> cpan -i PAR::Packer
-C:> pp -M Digest::MD5 -c -x -o cloc-1.94.exe cloc-1.94.pl
+C:> cpan -i Win32::LongPath
+C:> pp -M Win32::LongPath -M Encode::Unicode -M Digest::MD5 -c -x -o cloc-1.96.exe cloc-1.96.pl
 </pre>
 
 A variation on the instructions above is if you installed the portable
