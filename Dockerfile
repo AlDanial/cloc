@@ -43,4 +43,5 @@ FROM base AS final
 
 WORKDIR /tmp
 
-CMD ["/usr/src/cloc", "--help"]
+ENTRYPOINT ["/usr/src/cloc"]
+CMD ["--help"]
