@@ -472,21 +472,6 @@ my @Tests = (
                     'args' => '../tests/inputs/igorpro.ipf',
                 },
                 {
-                    'name' => 'Jinja Templates',
-                    'ref'  => '../tests/outputs/child_template.jinja2.yaml',
-                    'args' => '../tests/inputs/child_template.jinja2',
-                },
-                {
-                    'name' => 'Jupyter Notebook',
-                    'ref'  => '../tests/outputs/Trapezoid_Rule.ipynb.yaml',
-                    'args' => '../tests/inputs/Trapezoid_Rule.ipynb',
-                },
-                {
-                    'name' => 'Juniper Junos',
-                    'ref'  => '../tests/outputs/config.junos.yaml',
-                    'args' => '../tests/inputs/config.junos',
-                },
-                {
                     'name' => 'Imba',
                     'ref'  => '../tests/outputs/class.imba.yaml',
                     'args' => '../tests/inputs/class.imba',
@@ -500,6 +485,11 @@ my @Tests = (
                     'name' => 'IPL',
                     'ref'  => '../tests/outputs/insertJournalEntry.ipl.yaml',
                     'args' => '../tests/inputs/insertJournalEntry.ipl',
+                },
+                {
+                    'name' => 'Jai',
+                    'ref'  => '../tests/outputs/poly_constructor.jai.yaml',
+                    'args' => '../tests/inputs/poly_constructor.jai',
                 },
                 {
                     'name' => 'Java',
@@ -517,9 +507,24 @@ my @Tests = (
                     'args' => '../tests/inputs/glossary.json',
                 },
                 {
+                    'name' => 'Jinja Templates',
+                    'ref'  => '../tests/outputs/child_template.jinja2.yaml',
+                    'args' => '../tests/inputs/child_template.jinja2',
+                },
+                {
                     'name' => 'JSON5',
                     'ref'  => '../tests/outputs/glossary.json5.yaml',
                     'args' => '../tests/inputs/glossary.json5',
+                },
+                {
+                    'name' => 'Jupyter Notebook',
+                    'ref'  => '../tests/outputs/Trapezoid_Rule.ipynb.yaml',
+                    'args' => '../tests/inputs/Trapezoid_Rule.ipynb',
+                },
+                {
+                    'name' => 'Juniper Junos',
+                    'ref'  => '../tests/outputs/config.junos.yaml',
+                    'args' => '../tests/inputs/config.junos',
                 },
                 {
                     'name' => 'Julia',

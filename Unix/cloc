@@ -8061,6 +8061,7 @@ sub set_constants {                          # {{{1
             'java'        => 'Java'                  ,
             'jcl'         => 'JCL'                   , # IBM Job Control Lang.
             'jl'          => 'Lisp/Julia'            ,
+            'jai'         => 'Jai'                   ,
             'xsjslib'     => 'JavaScript'            ,
             'xsjs'        => 'JavaScript'            ,
             'ssjs'        => 'JavaScript'            ,
@@ -9317,6 +9318,11 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'HTML'   ],
                             ],
     'IPL'                => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'Jai'                => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
@@ -10611,9 +10617,8 @@ sub set_constants {                          # {{{1
     'INI'                          =>   1.00,
     'InstallShield'                =>   1.90,
     'IPL'                          =>   2.00,
-    'j2ee'                         =>   1.60,
+    'Jai'                          =>   1.13,
     'Jam'                          =>   2.00,
-    'janus'                        =>   1.13,
     'Java'                         =>   1.36,
     'JavaScript'                   =>   1.48,
     'JavaServer Faces'             =>   1.5 ,
@@ -10624,7 +10629,6 @@ sub set_constants {                          # {{{1
     'JSX'                          =>   1.48,
     'Velocity Template Language'   =>   1.00,
     'JCL'                          =>   1.67,
-    'jsp'                          =>   1.36,
     'Juniper Junos'                =>   2.00,
     'kvlang'                       =>   2.00,
     'Kermit'                       =>   2.00,
@@ -10641,9 +10645,8 @@ sub set_constants {                          # {{{1
     'Logos'                        =>   2.00,
     'Logtalk'                      =>   2.00,
     'm4'                           =>   1.00,
-    'm'                            =>   5.00,
     'make'                         =>   2.50,
-    'Mako'                         =>   1.50, # Not sure about the scaling.
+    'Mako'                         =>   1.50,
     'Markdown'                     =>   1.00,
     'mathcad'                      =>  16.00,
     'Maven'                        =>   1.90,
@@ -13573,7 +13576,7 @@ sub load_from_config_file {                  # {{{1
         } elsif (!defined ${$rs_force_git}           and /^git/)                                              { ${$rs_force_git}          = 1;
         } elsif (!defined ${$rs_exclude_list_file}   and /^(?:exclude_list_file|exclude-list-file)(=|\s+)(.*?)$/)
                                                                    { ${$rs_exclude_list_file}  = $2;
-        } elsif (!defined ${$rs_v} and /(verbose|v)((=|\s+)(\d+))?/) {
+        } elsif (!defined ${$rs_v} and /^(verbose|v)((=|\s+)(\d+))?/) {
             if (!defined $4) { ${$rs_v} =  0; }
             else             { ${$rs_v} = $4; }
         } elsif (!$has_script_lang and /^(?:script_lang|script-lang)(=|\s+)(.*?)$/)         {

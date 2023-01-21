@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.97
+  elapsed_seconds    : 0.00720787048339844
+  n_files            : 1
+  n_lines            : 29
+  files_per_second   : 138.737232071977
+  lines_per_second   : 4023.37973008732
+  report_file        : ../outputs/poly_constructor.jai.yaml
+'Jai' :
+  nFiles: 1
+  blank: 4
+  comment: 7
+  code: 18
+SUM: 
+  blank: 4
+  comment: 7
+  code: 18
+  nFiles: 1
