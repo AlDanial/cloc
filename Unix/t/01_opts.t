@@ -689,6 +689,12 @@ my @Tests = (
                     'args' => '--strip-str-comments demo.ml',
                     'ref'  => '../tests/outputs/issues/701/results.yaml',
                 },
+                {
+                    'name' => '--only-count-files, #708',
+                    'cd'   => '../tests/inputs/dd',
+                    'args' => '--only-count-files .',
+                    'ref'  => '../tests/outputs/issues/708/results.yaml',
+                },
 
             );
 
