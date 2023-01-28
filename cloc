@@ -387,6 +387,7 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
    --original-dir            [Only effective in combination with
                              --strip-comments]  Write the stripped files
                              to the same directory as the original files.
+   --only-count-files        Only count files by language.
    --read-binary-files       Process binary files in addition to text files.
                              This is usually a bad idea and should only be
                              attempted with text files that have embedded
@@ -776,6 +777,7 @@ my (
     $opt_summary_cutoff       ,
     $opt_skip_leading         ,
     $opt_no_recurse           ,
+    $opt_only_count_files     ,
    );
 
 my $getopt_success = GetOptions(             # {{{1
@@ -877,6 +879,7 @@ my $getopt_success = GetOptions(             # {{{1
    "summary_cutoff|summary-cutoff=s"         => \$opt_summary_cutoff      ,
    "skip_leading|skip-leading:s"             => \$opt_skip_leading        ,
    "no_recurse|no-recurse"                   => \$opt_no_recurse          ,
+   "only_count_files|only-count-files"       => \$opt_only_count_files    ,
   );
 # 1}}}
 $config_file = $opt_config_file if defined $opt_config_file;
@@ -2381,30 +2384,32 @@ sub count_files {                            # {{{1
             next;
         }
 
-        my ($all_line_count, $blank_count, $comment_count, $code_count);
-        if ($opt_use_sloccount and $Language{$file} =~ /^(C|C\+\+|XML|PHP|Pascal|Java)$/) {
-            chomp ($blank_count     = `grep -cv \"[^[:space:]]\" '$file'`);
-            chomp ($all_line_count  = `cat '$file' | wc -l`);
-            if      ($Language{$file} =~ /^(C|C\+\+)$/) {
-                $code_count = `cat '$file' | c_count      | head -n 1`;
-            } elsif ($Language{$file} eq "XML") {
-                $code_count = `cat '$file' | xml_count    | head -n 1`;
-            } elsif ($Language{$file} eq "PHP") {
-                $code_count = `cat '$file' | php_count    | head -n 1`;
-            } elsif ($Language{$file} eq "Pascal") {
-                $code_count = `cat '$file' | pascal_count | head -n 1`;
-            } elsif ($Language{$file} eq "Java") {
-                $code_count = `cat '$file' | java_count   | head -n 1`;
+        my ($all_line_count, $blank_count, $comment_count, $code_count) = (0, 0, 0, 0);
+        if (!$opt_only_count_files) {
+            if ($opt_use_sloccount and $Language{$file} =~ /^(C|C\+\+|XML|PHP|Pascal|Java)$/) {
+                chomp ($blank_count     = `grep -cv \"[^[:space:]]\" '$file'`);
+                chomp ($all_line_count  = `cat '$file' | wc -l`);
+                if      ($Language{$file} =~ /^(C|C\+\+)$/) {
+                    $code_count = `cat '$file' | c_count      | head -n 1`;
+                } elsif ($Language{$file} eq "XML") {
+                    $code_count = `cat '$file' | xml_count    | head -n 1`;
+                } elsif ($Language{$file} eq "PHP") {
+                    $code_count = `cat '$file' | php_count    | head -n 1`;
+                } elsif ($Language{$file} eq "Pascal") {
+                    $code_count = `cat '$file' | pascal_count | head -n 1`;
+                } elsif ($Language{$file} eq "Java") {
+                    $code_count = `cat '$file' | java_count   | head -n 1`;
+                } else {
+                    die "SLOCCount match failure: file=[$file] lang=[$Language{$file}]";
+                }
+                $code_count = substr($code_count, 0, -2);
+                $comment_count = $all_line_count - $code_count - $blank_count;
             } else {
-                die "SLOCCount match failure: file=[$file] lang=[$Language{$file}]";
+                ($all_line_count,
+                $blank_count   ,
+                $comment_count ,) = call_counter($file, $Language{$file}, \@Errors);
+                $code_count = $all_line_count - $blank_count - $comment_count;
             }
-            $code_count = substr($code_count, 0, -2);
-            $comment_count = $all_line_count - $code_count - $blank_count;
-        } else {
-            ($all_line_count,
-             $blank_count   ,
-             $comment_count ,) = call_counter($file, $Language{$file}, \@Errors);
-            $code_count = $all_line_count - $blank_count - $comment_count;
         }
 
         if ($opt_by_file) {
