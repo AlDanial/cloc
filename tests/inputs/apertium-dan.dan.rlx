@@ -1,0 +1,100 @@
+# based on
+# https://raw.githubusercontent.com/apertium/apertium-dan/master/apertium-dan.dan.rlx
+# -*- cg-pre-pipe: "apertium -d . dan-morph|cg-conv -a 2>/dev/null" -*-
+
+SOFT-DELIMITERS = "<,>" cm ;
+DELIMITERS = "<.>" "<:>" "<!>" "<?>" "<|>" "<$.>" "<$:>" "<$!>" "<$?>" "<$|>" ssingular ;
+
+#PARENTHESES = ("<$(>" "$<)>") ("<$[>" "<$]>") ("<${>" "<$}>") ;
+
+LIST GENDER = m f nt mf ut ;
+LIST NUMBER = sg pl sp ;
+LIST DEFNES = def ind ;
+LIST TEMPUS = inf pres pasv pret pp imp ;
+
+# For use with http://beta.visl.sdu.dk/cg3/single/#set-unification-set
+# as &&ADJ_N_AGR (also works for demonstratives):
+LIST AGR_MF = ut mf f m ;
+LIST AGR_SP = (sp un) ;
+SET AGR_MF_SG = (sg) + AGR_MF OR AGR_SP ;
+SET AGR_NT_SG = (sg) + (nt) OR AGR_SP ;
+SET AGR_PL = (pl) OR AGR_SP ;
+SET ADJ_N_AGR = AGR_MF_SG OR AGR_NT_SG OR AGR_PL ;
+# ADD:agrtest (@agrtest) &&ADJ_N_AGR IF (-1 &&ADJ_N_AGR);
+# sitt telefoner. sine telefoner. si telefoner. sin telefoner.
+# sitt telefon. sine telefon. si telefon. sin telefon.
+# sitt bidrag. sine bidrag. si bidrag. sin bidrag.
+# sitt hus. sine hus. si hus. sin hus.
+
+LIST ADJ_NUMGEN = pl (nt sg) (mf sg) ;
+
+
+LIST sg = sg ;
+LIST pl = pl ;
+LIST ut = ut ;
+LIST nt = nt ;
+
+LIST n = n ;
+LIST pr = pr ;
+LIST vblex = vblex ;
+
+LIST expl = expl ;
+LIST ord = ord ;
+LIST adj = adj ;
+LIST def = def ;
+LIST ind = ind ;
+LIST ref = ref ;
+LIST pers = pers ;
+LIST pres = pres ;
+LIST pret = pret ;
+LIST cm = cm ;
+LIST cnjadv = cnjadv ;
+
+LIST fv = pres pret ;
+
+SET pre-np-head = (*) - (gen) - (adj);
+
+LIST %al% = "al" ;
+LIST %al%-det = "al" det qnt ;
+LIST %aller% = ("aller"  adv) ;
+LIST %alt% = ("al"  det nt) ;
+LIST %andre% = "andre"  ;
+LIST %anden% = "anden"  ;
+LIST %andet% = "andet"  ;
+LIST %anden/samme%/quantifier-neuter = ("anden"  nt) ("samme" ) (det qnt) ;
+LIST %bodyparts%-plural = ("arm"  pl) ("ben"  pl) ("krop"  pl) ("læg"  pl) ;
+LIST %at% = "at"  ;
+LIST %særlig% = "særlig"  ;
+LIST %at/om% = "om"  "at"  ;
+LIST %om-at% = "om at"  ;
+LIST %af% = "af"  ;
+LIST %bare% = ("bare"  adv) ;
+LIST %begge/selve/alle% = "selv"  "begge"  ("al"  det pl) ;
+LIST %bla% = "blandt andet" "bl.a." ;
+LIST %blik% = ("blik"  adv) ;
+LIST %både% = "både"  ;
+LIST %da% = "da"  ;
+LIST %den% = ("den"  det) ;
+LIST %den/denne% = ("den"  det) ("denne"  det) ;
+LIST %den/det/de% = "det"  "den"  "de" ;
+LIST %der% = "der"  ;
+LIST %det% = "det" ("den"  det nt) ;
+LIST %det%-pron = ("det"  prn) ;
+LIST %det/dette% = ("den"  det nt) ("denne"  det nt) ;
+LIST %disse% = ("denne" det dem un pl) ;
+LIST %eksempel% = "eksempel"  ;
+LIST %eksklusiv/e% = "eksklusive"  "eksklusiv"  ;
+LIST %eller% = "eller"  ;
+LIST %endnu% = "endnu"  ;
+LIST %end% = "end"  ;
+LIST %et% = ("en"  det nt sg) ;
+LIST %en% = ("en"  det ut sg) ;
+LIST %en/et% = ("en" det sg ut) ("en" det sg nt) ;
+LIST %fare%-past = ("fare"  vblex past) ;
+LIST %fast% = ("fast"  adj) ;
+LIST %flere% = ("mange" adj comp) ;
+LIST %for% = "for"  ;
+LIST %for/før/når% = "når"  "før"  "for"  ;
+LIST %frem/ind/op% = ("frem"  pr) ("ind"  pr) ("op"  pr) ;
+LIST %fuldstændig%  = ("fuldstændig") ;
+LIST %fuldt/mange% = "mange"  ("fuld"  adj nt ind sg) ; #

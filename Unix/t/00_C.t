@@ -170,6 +170,11 @@ my @Tests = (
                     'args' => '../tests/inputs/Containerfile',
                 },
                 {
+                    'name' => 'Context Grammar',
+                    'ref'  => '../tests/outputs/apertium-dan.dan.rlx.yaml',
+                    'args' => '../tests/inputs/apertium-dan.dan.rlx',
+                },
+                {
                     'name' => 'C++',
                     'ref'  => '../tests/outputs/C++-MFC.cc.yaml',
                     'args' => '../tests/inputs/C++-MFC.cc',
