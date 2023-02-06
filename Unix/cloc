@@ -2529,7 +2529,7 @@ sub count_filesets {                         # {{{1
             and (not defined $Language{$fset_a}{$f}
              or  not defined $Include_Language{lc($Language{$fset_a}{$f})});
         my $this_lang = $Language{$fset_a}{$f};
-        if ($this_lang eq "(unknown)") {
+        if ((not defined $this_lang) or ($this_lang eq "(unknown)")) {
             $p_ignored{$f} = "unknown language";
             next;
         }
