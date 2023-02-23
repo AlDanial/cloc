@@ -704,6 +704,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/710/results.yaml',
                 },
 
+                {
+                    'name' => '--hide-rate --yaml, #713',
+                    'cd'   => '../tests/inputs/issues/713',
+                    'args' => '--hide-rate --yaml .',
+                    'ref'  => '../tests/outputs/issues/713/results.yaml',
+                },
+
             );
 
 # Special cases:

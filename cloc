@@ -626,8 +626,9 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              'euc-kr', 'iso-8859-16'.  Known encodings can be
                              printed with
                                perl -MEncode -e 'print join(\"\\n\", Encode->encodings(\":all\")), \"\\n\"'
-   --hide-rate               Do not show line and file processing rates in the
-                             output header. This makes output deterministic.
+   --hide-rate               Do not show elapsed time, line processing rate, or
+                             file processing rates in the output header. This
+                             makes output deterministic.
    --json                    Write the results as JavaScript Object Notation
                              (JSON) formatted output.
    --md                      Write the results as Markdown-formatted text.
@@ -3367,7 +3368,15 @@ sub xml_yaml_or_json_header {                # {{{1
     if ($opt_xml) {
         $header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
         $header .= "\n<?xml-stylesheet type=\"text/xsl\" href=\"" . $opt_xsl . "\"?>" if $opt_xsl;
-        $header .= "<${type}results>
+        if ($opt_hide_rate) {
+            $header .= "<${type}results>
+<header>
+  <cloc_url>$URL</cloc_url>
+  <cloc_version>$version</cloc_version>
+  <n_files>$sum_files</n_files>
+  <n_lines>$sum_lines</n_lines>";
+        } else {
+            $header .= "<${type}results>
 <header>
   <cloc_url>$URL</cloc_url>
   <cloc_version>$version</cloc_version>
@@ -3376,6 +3385,7 @@ sub xml_yaml_or_json_header {                # {{{1
   <n_lines>$sum_lines</n_lines>
   <files_per_second>$file_rate</files_per_second>
   <lines_per_second>$line_rate</lines_per_second>";
+        }
         $header .= "\n$report_file"
             if $opt_report_file;
         $header .= "\n</header>";
@@ -3391,7 +3401,14 @@ sub xml_yaml_or_json_header {                # {{{1
         }
     } elsif ($opt_yaml or $opt_json) {
         my ($Q, $open_B, $close_B, $start, $C) = yaml_to_json_separators();
-        $header = "${start}${Q}header${Q} : $open_B
+        if ($opt_hide_rate) {
+            $header = "${start}${Q}header${Q} : $open_B
+  ${Q}cloc_url${Q}           : ${Q}$URL${Q}${C}
+  ${Q}cloc_version${Q}       : ${Q}$version${Q}${C}
+  ${Q}n_files${Q}            : $sum_files${C}
+  ${Q}n_lines${Q}            : $sum_lines${C}";
+        } else {
+            $header = "${start}${Q}header${Q} : $open_B
   ${Q}cloc_url${Q}           : ${Q}$URL${Q}${C}
   ${Q}cloc_version${Q}       : ${Q}$version${Q}${C}
   ${Q}elapsed_seconds${Q}    : $elapsed_sec${C}
@@ -3399,6 +3416,7 @@ sub xml_yaml_or_json_header {                # {{{1
   ${Q}n_lines${Q}            : $sum_lines${C}
   ${Q}files_per_second${Q}   : $file_rate${C}
   ${Q}lines_per_second${Q}   : $line_rate";
+        }
         if ($opt_report_file) {
             my $Fname = $opt_report_file;
             $Fname =~ s{\\}{\\\\}g if $ON_WINDOWS;
