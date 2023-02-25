@@ -705,6 +705,13 @@ my @Tests = (
                 },
 
                 {
+                    'name' => 'nondeterministic --diff, #712',
+                    'cd'   => '../tests/inputs/issues/712',
+                    'args' => "--include-lang='C' --by-file --diff dir1/ dir2/",
+                    'ref'  => '../tests/outputs/issues/712/results.yaml',
+                },
+
+                {
                     'name' => '--hide-rate --yaml, #713',
                     'cd'   => '../tests/inputs/issues/713',
                     'args' => '--hide-rate --yaml .',

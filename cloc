@@ -2504,6 +2504,10 @@ sub count_filesets {                         # {{{1
         # is in a known language.
         next if $opt_include_ext
             and not $Include_Ext{ file_extension($f) };
+        if (!defined $Language{$fset_b}{$f}) {
+            $p_ignored{$f} = "excluded or unknown language";
+            next;
+        }
         next if $opt_include_lang
             and not $Include_Language{lc($Language{$fset_b}{$f})};
         my $this_lang = $Language{$fset_b}{$f};
@@ -12332,6 +12336,9 @@ sub get_leading_dirs {                       # {{{1
     if ($ON_WINDOWS) {
         $L_drop =~ s{\\}{/}g;
         $R_drop =~ s{\\}{/}g;
+    } else {
+        $L_drop =~ s{//}{/}g;
+        $R_drop =~ s{//}{/}g;
     }
 #print "L_drop=$L_drop\n";
 #print "R_drop=$R_drop\n";
