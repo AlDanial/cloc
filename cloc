@@ -5566,6 +5566,7 @@ sub invoke_generator {                       # {{{1
             # is this file desired?
             my $want_this_one = 0;
             foreach my $file_dir (@{$ra_user_inputs}) {
+                $file_dir =~ s{\\}{/}g if $ON_WINDOWS;
                 if (/^$file_dir/) {
                     $want_this_one = 1;
                     last;
