@@ -12334,13 +12334,9 @@ sub get_leading_dirs {                       # {{{1
 ########++$candidate_leading_dir_R{$leading_dir_R};
     }
 #use Data::Dumper::Simple;
-    if ($ON_WINDOWS) {
-        $L_drop =~ s{\\}{/}g;
-        $R_drop =~ s{\\}{/}g;
-    } else {
-        $L_drop =~ s{//}{/}g;
-        $R_drop =~ s{//}{/}g;
-    }
+    # at this point path separator on Windows is already /
+    $L_drop =~ s{//}{/}g;
+    $R_drop =~ s{//}{/}g;
 #print "L_drop=$L_drop\n";
 #print "R_drop=$R_drop\n";
     return $L_drop, $R_drop, 1;
