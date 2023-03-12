@@ -956,6 +956,10 @@ if ($opt_version) {
     printf "$VERSION\n";
     exit;
 }
+my $opt_git = 0;
+$opt_git = 1 if defined($opt_git_diff_all) or
+                defined($opt_git_diff_rel) or
+                (defined($opt_vcs) and ($opt_vcs eq "git"));
 $opt_by_file  = 1 if defined  $opt_by_file_by_lang;
 my $CLOC_XSL = "cloc.xsl"; # created with --xsl
    $CLOC_XSL = "cloc-diff.xsl" if $opt_diff;
@@ -1042,6 +1046,17 @@ if ($opt_use_sloccount) {
     }
 }
 $opt_vcs = 0 if $opt_force_git;
+
+# replace Windows path separators with /
+if ($ON_WINDOWS) {
+    map { s{\\}{/}g } @ARGV;
+    if ($opt_git) {
+        # PowerShell tab expansion automatically prefixes local directories
+        # with ".\" (now mapped to "./").   git ls-files output does not
+        # include this.  Strip this prefix to permit clean matches. 
+        map { s{^\./}{} } @ARGV;
+    }
+}
 
 my @COUNT_DIFF_ARGV        = undef;
 my $COUNT_DIFF_report_file = undef;
