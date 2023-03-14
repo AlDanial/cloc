@@ -567,6 +567,11 @@ my @Tests = (
                     'args' => '../tests/inputs/sharpsign.cl',
                 },
                 {
+                    'name' => 'Linker Script',
+                    'ref'  => '../tests/outputs/linker.ld.yaml',
+                    'args' => '../tests/inputs/linker.ld',
+                },
+                {
                     'name' => 'Literate Idris',
                     'ref'  => '../tests/outputs/Hello.lidr.yaml',
                     'args' => '../tests/inputs/Hello.lidr',

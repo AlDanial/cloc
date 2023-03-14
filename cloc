@@ -8190,6 +8190,7 @@ sub set_constants {                          # {{{1
             'lhs'         => 'Haskell'               ,
             'lex'         => 'lex'                   ,
             'l'           => 'lex'                   ,
+            'ld'          => 'Linker Script'         ,
             'lem'         => 'Lem'                   ,
             'less'        => 'LESS'                  ,
             'lfe'         => 'LFE'                   ,
@@ -9496,6 +9497,10 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*;'  ],
                                 [ 'remove_between_general', '#|', '|#' ],
                             ],
+    'Linker Script'      => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/'],
+                                [ 'call_regexp_common',     'C'            ],
+                            ],
     'liquid'             => [
                                 [ 'remove_between_general', '{% comment %}',
                                                             '{% endcomment %}' ],
@@ -10710,6 +10715,7 @@ sub set_constants {                          # {{{1
     'LESS'                         =>   1.50,
     'Lem'                          =>   3.00,
     'LFE'                          =>   1.25,
+    'Linker Script'                =>   1.00,
     'liquid'                       =>   3.00,
     'Lisp'                         =>   1.25,
     'LiveLink OScript'             =>   3.5 ,
