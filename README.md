@@ -11,7 +11,8 @@ Latest release:  v1.96 (Dec. 18, 2022)
     <img src="https://img.shields.io/github/contributors/AlDanial/cloc" /></a>
 <a href="https://zenodo.org/badge/latestdoi/42029482">
     <img src="https://zenodo.org/badge/42029482.svg" alt="DOI"></a>
-<img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg>" />
+[![Github All Releases](https://img.shields.io/github/downloads/AlDanial/cloc/total.svg)]()
+
 
 cloc moved to GitHub in September 2015 after being hosted
 at http://cloc.sourceforge.net/ since August 2006.
