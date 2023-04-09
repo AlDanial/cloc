@@ -391,7 +391,7 @@ the number of its subdirectories.  Consequently
 cloc may undercount or completely skip the
 contents of such file systems.  This switch forces
 File::Find to stat directories to obtain the
-correct count.  File search spead will decrease.
+correct count.  File search speed will decrease.
 See also B<--follow-links>.
 
 =item B<--stdin-name=FILE>
