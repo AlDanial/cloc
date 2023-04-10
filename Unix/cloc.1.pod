@@ -391,7 +391,7 @@ the number of its subdirectories.  Consequently
 cloc may undercount or completely skip the
 contents of such file systems.  This switch forces
 File::Find to stat directories to obtain the
-correct count.  File search spead will decrease.
+correct count.  File search speed will decrease.
 See also B<--follow-links>.
 
 =item B<--stdin-name=FILE>
@@ -426,7 +426,7 @@ Input arguments are report files previously created with the
 B<--report-file> option. Makes a cumulative set of results containing
 the sum of data from the individual report files.
 
-B<--timeout=N>
+=item B<--timeout=N>
 
 Ignore files which take more than <N> seconds
 to process at any of the language's filter stages.
@@ -814,7 +814,7 @@ To see how cloc aligns files for comparison between two code
 bases, use the B<--diff-alignment=FILE> option.  Here the
 alignment information is written to C<align.txt>:
 
-  cloc --diff-aligment=align.txt gcc-4.4.0.tar.bz2  gcc-4.5.0.tar.bz2
+  cloc --diff-alignment=align.txt gcc-4.4.0.tar.bz2  gcc-4.5.0.tar.bz2
 
 Count file, code, and comment changes between two git commits:
 
