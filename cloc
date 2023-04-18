@@ -8297,6 +8297,8 @@ sub set_constants {                          # {{{1
             'mps'         => 'MUMPS'                 ,
             'mth'         => 'Teamcenter mth'        ,
             'n'           => 'Nemerle'               ,
+            'nlogo'       => 'NetLogo'               ,
+            'nls'         => 'NetLogo'               ,
             'nims'        => 'Nim'                   ,
             'nimrod'      => 'Nim'                   ,
             'nimble'      => 'Nim'                   ,
@@ -9660,6 +9662,10 @@ sub set_constants {                          # {{{1
 #                               [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
+    'NetLogo'            => [
+                                [ 'remove_matches'      , '^\s*;'  ],
+                                [ 'remove_inline'       , ';.*$'   ],
+                            ],
     'Nix'                => [
                                 [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -10770,6 +10776,7 @@ sub set_constants {                          # {{{1
     'Mustache'                     =>   1.75,
     'Nastran'                      =>   1.13,
     'Nemerle'                      =>   2.50,
+    'NetLogo'                      =>   4.00,
     'Nim'                          =>   2.00,
     'Nix'                          =>   2.70,
     'Nunjucks'                     =>   1.5 ,

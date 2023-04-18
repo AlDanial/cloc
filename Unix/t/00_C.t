@@ -682,6 +682,11 @@ my @Tests = (
                     'args' => '../tests/inputs/drupal.mxml',
                 },
                 {
+                    'name' => 'NetLogo',
+                    'ref'  => '../tests/outputs/vinos.nlogo.yaml',
+                    'args' => '../tests/inputs/vinos.nlogo',
+                },
+                {
                     'name' => 'Nim',
                     'ref'  => '../tests/outputs/statcsv.nim.yaml',
                     'args' => '../tests/inputs/statcsv.nim',
