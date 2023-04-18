@@ -718,6 +718,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/713/results.yaml',
                 },
 
+                {
+                    'name' => '--include-content, #720',
+                    'cd'   => '../tests/inputs/issues/720',
+                    'args' => '--include-content=for --by-file ../../*.m',
+                    'ref'  => '../tests/outputs/issues/720/results.yaml',
+                },
+
             );
 
 # Special cases:

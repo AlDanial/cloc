@@ -1,0 +1,12 @@
+These files are considered:
+    ../../Lanczos.m
+    ../../Mathematica_1.m
+    ../../matlab_line_colors.m
+    ../../Octave.m
+    ../../qsort_demo.m
+
+These files are counted:
+    ../../Lanczos.m
+    ../../qsort_demo.m
+    ../../matlab_line_colors.m
+

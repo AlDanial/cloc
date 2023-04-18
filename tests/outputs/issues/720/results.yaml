@@ -1,0 +1,31 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.97
+  elapsed_seconds    : 0.0102310180664062
+  n_files            : 3
+  n_lines            : 126
+  files_per_second   : 293.225950782998
+  lines_per_second   : 12315.4899328859
+  report_file        : ../../../outputs/issues/720/results.yaml
+'../../Lanczos.m' :
+  blank: 0
+  comment: 0
+  code: 48
+  language: MATLAB
+'../../qsort_demo.m' :
+  blank: 11
+  comment: 11
+  code: 25
+  language: Objective-C
+'../../matlab_line_colors.m' :
+  blank: 3
+  comment: 10
+  code: 18
+  language: MATLAB
+SUM: 
+  blank: 14
+  comment: 21
+  code: 91
+  nFiles: 3

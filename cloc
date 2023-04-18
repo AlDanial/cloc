@@ -487,6 +487,8 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              See also --unix, --show-os.
 
  ${BB}Filter Options${NN}
+   --include-content=<regex> Only count files containing text that matches the
+                             given regular expression.
    --exclude-content=<regex> Exclude files containing text that matches the given
                              regular expression.
    --exclude-dir=<D1>[,D2,]  Exclude the given comma separated directories
@@ -703,6 +705,7 @@ my (
     $opt_v                    ,
     $opt_vcs                  ,
     $opt_version              ,
+    $opt_include_content      ,
     $opt_exclude_content      ,
     $opt_exclude_lang         ,
     $opt_exclude_list_file    ,
@@ -788,6 +791,7 @@ my $getopt_success = GetOptions(             # {{{1
    "counted=s"                               => \$opt_counted             ,
    "include_ext|include-ext=s"               => \$opt_include_ext         ,
    "include_lang|include-lang=s"             => \$opt_include_lang        ,
+   "include_content|include-content=s"       => \$opt_include_content     ,
    "exclude_content|exclude-content=s"       => \$opt_exclude_content     ,
    "exclude_lang|exclude-lang=s"             => \$opt_exclude_lang        ,
    "exclude_dir|exclude-dir=s"               => \$opt_exclude_dir         ,
@@ -891,6 +895,7 @@ load_from_config_file($config_file,          # {{{2
                                                 \$opt_counted             ,
                                                 \$opt_include_ext         ,
                                                 \$opt_include_lang        ,
+                                                \$opt_include_content     ,
                                                 \$opt_exclude_content     ,
                                                 \$opt_exclude_lang        ,
                                                 \$opt_exclude_dir         ,
@@ -1784,6 +1789,10 @@ foreach my $FH (@fh) {  # loop over each pair of file sets
         exclude_by_regex($opt_exclude_content,              # in
                         \%{$unique_source_file{$FH}},       # in/out
                         \%Ignored);                         # out
+    } elsif ($opt_include_content) {
+        include_by_regex($opt_include_content,              # in
+                        \%{$unique_source_file{$FH}},       # in/out
+                        \%Ignored);                         # out
     }
 
     if ($opt_include_lang) {
@@ -2045,6 +2054,10 @@ if ($opt_exclude_content) {
     exclude_by_regex($opt_exclude_content,              # in
                     \%unique_source_file ,              # in/out
                     \%Ignored);                         # out
+} elsif ($opt_include_content) {
+    include_by_regex($opt_include_content,              # in
+                    \%unique_source_file ,              # in/out
+                    \%Ignored);                         # out
 }
 printf "%8d unique file%s.                              \n",
     plural_form(scalar keys %unique_source_file)
@@ -2255,6 +2268,29 @@ sub exclude_by_regex {                       # {{{1
                 push @exclude, $file;
                 last;
             }
+        }
+    }
+    foreach my $file (@exclude) {
+        delete $rh_unique_source_file->{$file};
+    }
+} # 1}}}
+sub include_by_regex {                       # {{{1
+    my ($regex,
+        $rh_unique_source_file, # in/out
+        $rh_ignored           , # out
+       ) = @_;
+    my @exclude = ();
+    foreach my $file (keys %{$rh_unique_source_file}) {
+        my $keep_this_one = 0;
+        foreach my $line (read_file($file)) {
+            if ($line =~ /$regex/) {
+                $keep_this_one = 1;
+                last;
+            }
+        }
+        if (!$keep_this_one) {
+            $rh_ignored->{$file} = "does not satisfy --include-content=$regex";
+            push @exclude, $file;
         }
     }
     foreach my $file (@exclude) {
@@ -13468,6 +13504,7 @@ sub load_from_config_file {                  # {{{1
                                                  $rs_counted             ,
                                                  $rs_include_ext         ,
                                                  $rs_include_lang        ,
+                                                 $rs_include_content     ,
                                                  $rs_exclude_content     ,
                                                  $rs_exclude_lang        ,
                                                  $rs_exclude_dir         ,
@@ -13578,6 +13615,7 @@ sub load_from_config_file {                  # {{{1
         } elsif (!defined ${$rs_counted}             and /^counted(=|\s+)(.*?)$/)                             { ${$rs_counted}            = $2;
         } elsif (!defined ${$rs_include_ext}         and /^(?:include_ext|include-ext)(=|\s+)(.*?)$/)         { ${$rs_include_ext}        = $2;
         } elsif (!defined ${$rs_include_lang}        and /^(?:include_lang|include-lang)(=|\s+)(.*?)$/)       { ${$rs_include_lang}       = $2;
+        } elsif (!defined ${$rs_include_content}     and /^(?:include_content|include-content)(=|\s+)(.*?)$/) { ${$rs_include_content}    = $2;
         } elsif (!defined ${$rs_exclude_content}     and /^(?:exclude_content|exclude-content)(=|\s+)(.*?)$/) { ${$rs_exclude_content}    = $2;
         } elsif (!defined ${$rs_exclude_lang}        and /^(?:exclude_lang|exclude-lang)(=|\s+)(.*?)$/)       { ${$rs_exclude_lang}       = $2;
         } elsif (!defined ${$rs_exclude_dir}         and /^(?:exclude_dir|exclude-dir)(=|\s+)(.*?)$/)         { ${$rs_exclude_dir}        = $2;

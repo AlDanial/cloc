@@ -471,6 +471,11 @@ Microsoft Windows mode.  See also B<--unix>, B<--show-os>.
 
 =over 4
 
+=item B<--include-content=REGEX>
+
+Only count files containing text that matches the given
+regular expression.
+
 =item B<--exclude-content=REGEX>
 
 Exclude files containing text that matches the given
