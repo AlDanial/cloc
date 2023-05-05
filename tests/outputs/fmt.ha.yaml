@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.97
+  elapsed_seconds    : 0.00677204132080078
+  n_files            : 1
+  n_lines            : 34
+  files_per_second   : 147.665962540487
+  lines_per_second   : 5020.64272637657
+  report_file        : tests/outputs/fmt.ha.yaml
+'Hare' :
+  nFiles: 1
+  blank: 4
+  comment: 14
+  code: 16
+SUM: 
+  blank: 4
+  comment: 14
+  code: 16
+  nFiles: 1

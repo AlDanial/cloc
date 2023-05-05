@@ -407,6 +407,11 @@ my @Tests = (
                     'args' => '../tests/inputs/just_stuff.haml',
                 },
                 {
+                    'name' => 'Hare',
+                    'ref'  => '../tests/outputs/fmt.ha.yaml',
+                    'args' => '../tests/inputs/fmt.ha',
+                },
+                {
                     'name' => 'Haskell',
                     'ref'  => '../tests/outputs/test2.lhs.yaml',
                     'args' => '../tests/inputs/test2.lhs',
