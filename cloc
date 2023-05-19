@@ -1102,7 +1102,8 @@ if ($opt_count_diff and !$opt_diff_list_file) {
 }
 
 # Options defaults:
-$opt_quiet         =   1 if ($opt_md or $opt_json) and !defined $opt_report_file;
+$opt_quiet         =   1 if ($opt_md or $opt_json or !(-t STDOUT))
+                            and !defined $opt_report_file;
 $opt_progress_rate = 100 unless defined $opt_progress_rate;
 $opt_progress_rate =   0 if     defined $opt_quiet;
 if (!defined $opt_v) {
