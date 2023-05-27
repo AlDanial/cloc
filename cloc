@@ -7957,6 +7957,7 @@ sub set_constants {                          # {{{1
             'aspx'        => 'ASP.NET'               ,
             'master'      => 'ASP.NET'               ,
             'sitemap'     => 'ASP.NET'               ,
+            'asy'         => 'Asymptote'             ,
             'cshtml'      => 'Razor'                 ,
             'razor'       => 'Razor'                 , # Client-side Blazor
             'nawk'        => 'awk'                   ,
@@ -8990,6 +8991,11 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '#.*$'   ],
                                 [ 'remove_inline'       , '--.*$'  ],
                                 [ 'remove_matches'      , '^\*'    ],  # z/OS Assembly
+                            ],
+    'Asymptote'          => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'AutoHotkey'         => [
                                 [ 'remove_matches'      , '^\s*;'  ],
@@ -10668,6 +10674,7 @@ sub set_constants {                          # {{{1
     'Assembly'                     =>   0.25,
     'Assembly (macro)'             =>   0.51,
     'associative default'          =>   1.25,
+    'Asymptote'                    =>   2.50,
     'autocoder'                    =>   0.25,
     'AutoHotkey'                   =>   1.29,
     'awk'                          =>   3.81,

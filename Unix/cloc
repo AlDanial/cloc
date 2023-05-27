@@ -525,6 +525,7 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              the regex.
                              Do not include file path separators at the
                              beginning or end of the regex.
+                             This option may be repeated.
    --match-f=<regex>         Only count files whose basenames match the Perl
                              regex.  For example
                                --match-f='^[Ww]idget'
@@ -534,7 +535,7 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
    --not-match-f=<regex>     Count all files except those whose basenames
                              match the Perl regex.  Add --fullpath to include
                              parent directories in the regex instead of just
-                             the basename.
+                             the basename. This option may be repeated.
    --skip-archive=<regex>    Ignore files that end with the given Perl regular
                              expression.  For example, if given
                                --skip-archive='(zip|tar(\.(gz|Z|bz2|xz|7z))?)'
@@ -719,9 +720,9 @@ my (
     $opt_json                 ,
     $opt_md                   ,
     $opt_match_f              ,
-    $opt_not_match_f          ,
+    @opt_not_match_f          ,
     $opt_match_d              ,
-    $opt_not_match_d          ,
+    @opt_not_match_d          ,
     $opt_skip_uniqueness      ,
     $opt_list_file            ,
     $opt_help                 ,
@@ -822,9 +823,9 @@ my $getopt_success = GetOptions(             # {{{1
    "md"                                      => \$opt_md                  ,
    "fullpath"                                => \$opt_fullpath            ,
    "match_f|match-f=s"                       => \$opt_match_f             ,
-   "not_match_f|not-match-f=s"               => \$opt_not_match_f         ,
+   "not_match_f|not-match-f=s"               => \@opt_not_match_f         ,
    "match_d|match-d=s"                       => \$opt_match_d             ,
-   "not_match_d|not-match-d=s"               => \$opt_not_match_d         ,
+   "not_match_d|not-match-d=s"               => \@opt_not_match_d         ,
    "list_file|list-file=s"                   => \$opt_list_file           ,
    "help"                                    => \$opt_help                ,
    "skip_win_hidden|skip-win-hidden"         => \$opt_skip_win_hidden     ,
@@ -923,9 +924,9 @@ load_from_config_file($config_file,          # {{{2
                                                 \$opt_md                  ,
                                                 \$opt_fullpath            ,
                                                 \$opt_match_f             ,
-                                                \$opt_not_match_f         ,
+                                                \@opt_not_match_f         ,
                                                 \$opt_match_d             ,
-                                                \$opt_not_match_d         ,
+                                                \@opt_not_match_d         ,
                                                 \$opt_list_file           ,
                                                 \$opt_help                ,
                                                 \$opt_skip_win_hidden     ,
@@ -5659,18 +5660,22 @@ sub invoke_generator {                       # {{{1
             push @post_filter, $F if $F =~ m{$opt_match_d};
             next;
         }
-        if ($opt_not_match_d) {
-            if ($opt_fullpath and $F =~ m{$opt_not_match_d}) {
-                $Ignored{$F} = "--not-match-d=$opt_not_match_d";
+        if (@opt_not_match_d) {
+            my $rule;
+            if ($opt_fullpath and any_match($F, 0, \$rule, @opt_not_match_d)) {
+                $Ignored{$F} = "--not-match-d=$rule";
                 next;
-            } elsif (basename($F) =~ m{$opt_not_match_d}) {
-                $Ignored{$F} = "--not-match-d (basename) =$opt_not_match_d";
+            } elsif (any_match(basename($F), 0, \$rule, @opt_not_match_d)) {
+                $Ignored{$F} = "--not-match-d (basename) =$rule";
                 next;
             }
         }
-        if ($opt_not_match_f) {
-            push @post_filter, $F unless basename($F) =~ m{$opt_not_match_f};
-            next;
+        if (@opt_not_match_f) {
+            my $rule;
+            if (any_match(basename($F), 0, \$rule, @opt_not_match_f)) {
+                $Ignored{$F} = "--not-match-d =$rule";
+                next;
+            }
         }
         my $nBytes = get_size($F);
         if (!$nBytes) {
@@ -5697,6 +5702,24 @@ sub invoke_generator {                       # {{{1
     print "<- invoke_generator\n" if $opt_v > 2;
     return @post_filter;
 } # 1}}}
+sub any_match {                              # {{{1
+	my ($string, $entire, $rs_matched_pattern, @patterns) = @_;
+	foreach my $pattern (@patterns) {
+        if ($entire) {
+            if ($string =~ m{^${pattern}$}) {
+                ${$rs_matched_pattern} = $pattern;
+                return 1;
+            }
+        } else {
+            if ($string =~ m{$pattern}) {
+                ${$rs_matched_pattern} = $pattern;
+                return 1;
+            }
+        }
+    }
+	return 0;
+}
+# }}}
 sub remove_duplicate_files {                 # {{{1
     my ($fh                   , # in
         $rh_Language          , # out
@@ -5801,16 +5824,17 @@ sub manual_find_preprocessor {               # {{{1
             $Ignored{$File} = "--exclude-dir=$Exclude_Dir{$got_exclude_dir}";
 #print "ignoring $File\n";
         } else {
-            if ($opt_not_match_d) {
+            if (@opt_not_match_d) {
+                my $rule;
                 if ($opt_fullpath) {
-                    if ($Dir =~ m{^${opt_not_match_d}$}) {
-                        $Ignored{$File} = "--not-match-d=$opt_not_match_d";
+                    if (any_match($Dir, 1, \$rule, @opt_not_match_d)) {
+                        $Ignored{$File} = "--not-match-d=$rule";
 #print "matched fullpath\n"
                     } else {
                         push @ok, $File;
                     }
-                } elsif (basename($Dir) =~ m{$opt_not_match_d}) {
-                    $Ignored{$File} = "--not-match-d=$opt_not_match_d";
+                } elsif (any_match(basename($Dir), 0, \$rule, @opt_not_match_d)) {
+                    $Ignored{$File} = "--not-match-d=$rule";
 #print "matched partial\n"
                 } else {
                     push @ok, $File;
@@ -5840,15 +5864,18 @@ sub find_preprocessor {                      # {{{1
             $Ignored{$File::Find::name} = "--exclude-dir=$Exclude_Dir{$F_or_D}";
         } else {
 #printf "  F_or_D=%-20s File::Find::name=%s\n", $F_or_D, $File::Find::name;
-            if ($opt_not_match_d) {
+            if (@opt_not_match_d) {
+                my $rule;
                 if ($opt_fullpath) {
-                    if ($File::Find::name =~ m{$opt_not_match_d}) {
-                        $Ignored{$File::Find::name} = "--not-match-d=$opt_not_match_d";
+                    if (any_match($File::Find::name, 0, \$rule, @opt_not_match_d)) {
+                        $Ignored{$File::Find::name} = "--not-match-d=$rule";
                     } else {
                         push @ok, $F_or_D;
                     }
-                } elsif (!is_dir($F_or_D) and basename($File::Find::name) =~ m{$opt_not_match_d}) {
-                    $Ignored{$File::Find::name} = "--not-match-d (basename) =$opt_not_match_d";
+                } elsif (!is_dir($F_or_D) and
+                         any_match(basename($File::Find::name), 0, \$rule,
+                                   @opt_not_match_d)) {
+                    $Ignored{$File::Find::name} = "--not-match-d (basename) =$rule";
                 } else {
                     push @ok, $F_or_D;
                 }
@@ -5866,18 +5893,19 @@ sub files {                                  # {{{1
     # See also find_preprocessor() which prunes undesired directories.
 
     my $Dir = fastcwd(); # not $File::Find::dir which just gives relative path
+    my $rule;
     if ($opt_fullpath) {
         # look at as much of the path as is known
         if ($opt_match_f    ) {
             return unless $File::Find::name =~ m{$opt_match_f};
         }
-        if ($opt_not_match_f) {
-            return if     $File::Find::name =~ m{$opt_not_match_f};
+        if (@opt_not_match_f) {
+            return if any_match($File::Find::name, 0, \$rule, @opt_not_match_f);
         }
     } else {
         # only look at the basename
         if ($opt_match_f    ) { return unless /$opt_match_f/;     }
-        if ($opt_not_match_f) { return if     /$opt_not_match_f/; }
+        if (@opt_not_match_f) { return if     any_match($_, 0, \$rule, @opt_not_match_f)}
     }
     if ($opt_match_d    ) { return unless $Dir =~ m{$opt_match_d}     }
 
@@ -7914,6 +7942,7 @@ sub set_constants {                          # {{{1
             'aspx'        => 'ASP.NET'               ,
             'master'      => 'ASP.NET'               ,
             'sitemap'     => 'ASP.NET'               ,
+            'asy'         => 'Asymptote'             ,
             'cshtml'      => 'Razor'                 ,
             'razor'       => 'Razor'                 , # Client-side Blazor
             'nawk'        => 'awk'                   ,
@@ -8947,6 +8976,11 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '#.*$'   ],
                                 [ 'remove_inline'       , '--.*$'  ],
                                 [ 'remove_matches'      , '^\*'    ],  # z/OS Assembly
+                            ],
+    'Asymptote'          => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'AutoHotkey'         => [
                                 [ 'remove_matches'      , '^\s*;'  ],
@@ -10625,6 +10659,7 @@ sub set_constants {                          # {{{1
     'Assembly'                     =>   0.25,
     'Assembly (macro)'             =>   0.51,
     'associative default'          =>   1.25,
+    'Asymptote'                    =>   2.50,
     'autocoder'                    =>   0.25,
     'AutoHotkey'                   =>   1.29,
     'awk'                          =>   3.81,
@@ -13588,9 +13623,9 @@ sub load_from_config_file {                  # {{{1
                                                  $rs_md                  ,
                                                  $rs_fullpath            ,
                                                  $rs_match_f             ,
-                                                 $rs_not_match_f         ,
+                                                 $ra_not_match_f         ,
                                                  $rs_match_d             ,
-                                                 $rs_not_match_d         ,
+                                                 $ra_not_match_d         ,
                                                  $rs_list_file           ,
                                                  $rs_help                ,
                                                  $rs_skip_win_hidden     ,
@@ -13694,9 +13729,9 @@ sub load_from_config_file {                  # {{{1
         } elsif (!defined ${$rs_md}                  and /^md/)                                               { ${$rs_md}                 = 1;
         } elsif (!defined ${$rs_fullpath}            and /^fullpath/)                                         { ${$rs_fullpath}           = 1;
         } elsif (!defined ${$rs_match_f}             and /^(?:match_f|match-f)(=|\s+)(.*?)$/)                 { ${$rs_match_f}            = $2;
-        } elsif (!defined ${$rs_not_match_f}         and /^(?:not_match_f|not-match-f)(=|\s+)(.*?)$/)         { ${$rs_not_match_f}        = $2;
+        } elsif (!        @{$ra_not_match_f}         and /^(?:not_match_f|not-match-f)(=|\s+)(.*?)$/)         { push @{$ra_not_match_f}   , $2;
         } elsif (!defined ${$rs_match_d}             and /^(?:match_d|match-d)(=|\s+)(.*?)$/)                 { ${$rs_match_d}            = $2;
-        } elsif (!defined ${$rs_not_match_d}         and /^(?:not_match_d|not-match-d)(=|\s+)(.*?)$/)         { ${$rs_not_match_d}        = $2;
+        } elsif (!        @{$ra_not_match_d}         and /^(?:not_match_d|not-match-d)(=|\s+)(.*?)$/)         { push @{$ra_not_match_d}   , $2;
         } elsif (!defined ${$rs_list_file}           and /^(?:list_file|list-file)(=|\s+)(.*?)$/)             { ${$rs_list_file}          = $2;
         } elsif (!defined ${$rs_help}                and /^help/)                                             { ${$rs_help}               = 1;
         } elsif (!defined ${$rs_skip_win_hidden}     and /^(skip_win_hidden|skip-win-hidden)/)                { ${$rs_skip_win_hidden}    = 1;

@@ -10,6 +10,16 @@ my @Tests = (
                     'args' => '../tests/inputs/Lookup.agda',
                 },
                 {
+                    'name' => 'ANTLR Grammar 1',
+                    'ref'  => '../tests/outputs/ExprParser.g.yaml',
+                    'args' => '../tests/inputs/ExprParser.g',
+                },
+                {
+                    'name' => 'ANTLR Grammar 2',
+                    'ref'  => '../tests/outputs/C.g4.yaml',
+                    'args' => '../tests/inputs/C.g4',
+                },
+                {
                     'name' => 'Apex Class',
                     'ref'  => '../tests/outputs/RemoteSiteHelperTest.cls.yaml',
                     'args' => '../tests/inputs/RemoteSiteHelperTest.cls',
@@ -50,14 +60,9 @@ my @Tests = (
                     'args' => '../tests/inputs/zos_assembly.s',
                 },
                 {
-                    'name' => 'ANTLR Grammar 1',
-                    'ref'  => '../tests/outputs/ExprParser.g.yaml',
-                    'args' => '../tests/inputs/ExprParser.g',
-                },
-                {
-                    'name' => 'ANTLR Grammar 2',
-                    'ref'  => '../tests/outputs/C.g4.yaml',
-                    'args' => '../tests/inputs/C.g4',
+                    'name' => 'Asymptote', 
+                    'ref'  => '../tests/outputs/cad.asy.yaml',
+                    'args' => '../tests/inputs/cad.asy',
                 },
                 {
                     'name' => 'Bazel',
