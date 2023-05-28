@@ -729,7 +729,7 @@ my @Tests = (
                     'name' => 'additive --not-match-f, #722',
                     'cd'   => '../tests/inputs/issues/722',
                     'args' => '--not-match-f lua --not-match-f 77 --by-file .',
-                    'ref'  => '../tests/outputs/issues/722/results.yaml',
+                    'ref'  => '../tests/outputs/issues/722/results_1.yaml',
                 },
 
             );
