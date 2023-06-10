@@ -3090,7 +3090,7 @@ provided the
 [Serbo-Croatian](http://science.webhostinggeeks.com/cloc)
 translation.
 
-Gill Ajoft of [Ajoft Softwares](http://www.ajoft.com)
+Gill Ajoft of [Ajoft Software](http://www.ajoft.com)
 provided the
 [Bulgarian](http://www.ajoft.com/wpaper/aj-cloc.html)
 translation.

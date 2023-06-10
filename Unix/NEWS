@@ -296,7 +296,7 @@ Updates:
       logic.
     o Improve Perl v. Prolog identification.
     o New switch --docstring-as-code to count Python docstrings as code.
-    o Partial support fot Lua nested comments.
+    o Partial support for Lua nested comments.
     o Renamed Skylark to Starlark.
     o Modified Java filter to try to handle embedded comments better.
     o Recognize groovy as one of the #! languages.
@@ -316,7 +316,7 @@ Updates:
                    https://github.com/AlDanial/cloc
                            Oct. 5, 2018
 
-This is a bug-fix release to solve mis-handling of git inputs for
+This is a bug-fix release to solve miss-handling of git inputs for
 straight counts in 1.78 (--git --diff works ok in 1.78),
 https://github.com/AlDanial/cloc/issues/328.
 
@@ -471,10 +471,10 @@ Updates:
       on older versions of Perl on Windows).
     o Put timeout around Regexp::Common regex evaluation to prevent
       hangs on unbalanced comment markers within huge strings (issue 206).
-    o Fix Pascal regex wiht '{' for Perl version >= 5.26 (issue 209)
+    o Fix Pascal regex with '{' for Perl version >= 5.26 (issue 209)
       and '(*', '*)' comment matching (issue 212).
     o Rename Antlr to ANTLR Grammar.
-    o Add .g4 extension fo ANTLR Grammar.
+    o Add .g4 extension for ANTLR Grammar.
     o Replace soon-to-be deprecated File::Glob::glob() with
       File::Glob::bsd_glob() (issue 214).
     o Revert from charset=iso-8859-1 to charset=utf-8 on undocumented
@@ -1213,7 +1213,7 @@ Bug Fixes:
   IDL:     Include .pro as a recognized file extension.
 
   --3:   
-      o Correct XSLT syle when running with --3.
+      o Correct XSLT style when running with --3.
   
   --diff:   
       o Implemented YAML output option.
