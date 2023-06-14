@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.97
+  elapsed_seconds    : 0.00728893280029297
+  n_files            : 1
+  n_lines            : 93
+  files_per_second   : 137.19429543373
+  lines_per_second   : 12759.0694753369
+  report_file        : ../outputs/vinos.nlogo.yaml
+'NetLogo' :
+  nFiles: 1
+  blank: 17
+  comment: 14
+  code: 62
+SUM: 
+  blank: 17
+  comment: 14
+  code: 62
+  nFiles: 1

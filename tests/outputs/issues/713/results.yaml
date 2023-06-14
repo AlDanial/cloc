@@ -1,0 +1,18 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.97
+  n_files            : 1
+  n_lines            : 8
+  report_file        : /home/al/git-cloc/tests/outputs/issues/713/results.yaml
+'C++' :
+  nFiles: 1
+  blank: 0
+  comment: 2
+  code: 6
+SUM: 
+  blank: 0
+  comment: 2
+  code: 6
+  nFiles: 1

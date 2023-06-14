@@ -1,6 +1,6 @@
 #   Copyright
 #
-#      Copyright (C) 2018-2021 Al Danial <al.danial@gmail.com>.
+#      Copyright (C) 2018-2022 Al Danial <al.danial@gmail.com>.
 #      Copyright (C) 2010-2017 Jari Aalto <jari.aalto@cante.net>
 #
 #   License
@@ -391,7 +391,7 @@ the number of its subdirectories.  Consequently
 cloc may undercount or completely skip the
 contents of such file systems.  This switch forces
 File::Find to stat directories to obtain the
-correct count.  File search spead will decrease.
+correct count.  File search speed will decrease.
 See also B<--follow-links>.
 
 =item B<--stdin-name=FILE>
@@ -426,7 +426,7 @@ Input arguments are report files previously created with the
 B<--report-file> option. Makes a cumulative set of results containing
 the sum of data from the individual report files.
 
-B<--timeout=N>
+=item B<--timeout=N>
 
 Ignore files which take more than <N> seconds
 to process at any of the language's filter stages.
@@ -470,6 +470,11 @@ Microsoft Windows mode.  See also B<--unix>, B<--show-os>.
 =head2 Filter Options
 
 =over 4
+
+=item B<--include-content=REGEX>
+
+Only count files containing text that matches the given
+regular expression.
 
 =item B<--exclude-content=REGEX>
 
@@ -814,7 +819,7 @@ To see how cloc aligns files for comparison between two code
 bases, use the B<--diff-alignment=FILE> option.  Here the
 alignment information is written to C<align.txt>:
 
-  cloc --diff-aligment=align.txt gcc-4.4.0.tar.bz2  gcc-4.5.0.tar.bz2
+  cloc --diff-alignment=align.txt gcc-4.4.0.tar.bz2  gcc-4.5.0.tar.bz2
 
 Count file, code, and comment changes between two git commits:
 
@@ -846,7 +851,7 @@ sloccount(1)
 =head1 AUTHORS
 
 The cloc program was written by Al Danial <al.danial@gmail.com> and
-is Copyright (C) 2006-2021 <al.danial@gmail.com>.
+is Copyright (C) 2006-2022 <al.danial@gmail.com>.
 
 The manual page was originally written by Jari Aalto <jari.aalto@cante.net>.
 

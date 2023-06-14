@@ -5,13 +5,13 @@
 * * *
 cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.
 
-Latest release:  v1.94 (July 4, 2022)
+Latest release:  v1.96 (Dec. 18, 2022)
 
 <a href="https://github.com/AlDanial/cloc/graphs/contributors" alt="Contributors">
     <img src="https://img.shields.io/github/contributors/AlDanial/cloc" /></a>
 <a href="https://zenodo.org/badge/latestdoi/42029482">
     <img src="https://zenodo.org/badge/42029482.svg" alt="DOI"></a>
-<img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg>" />
+<img src="https://img.shields.io/github/downloads/AlDanial/cloc/total.svg">
 
 cloc moved to GitHub in September 2015 after being hosted
 at http://cloc.sourceforge.net/ since August 2006.
@@ -64,9 +64,17 @@ Step 3:  Invoke cloc to count your source files, directories, archives,
 or git commits.
 The executable name differs depending on whether you use the
 development source version (`cloc`), source for a
-released version (`cloc-1.94.pl`) or a Windows executable
-(`cloc-1.94.exe`).  On this page, `cloc` is the generic term
+released version (`cloc-1.96.pl`) or a Windows executable
+(`cloc-1.96.1.exe`).
+(2023-01-10: a special
+[1.96.1 release](https://github.com/AlDanial/cloc/releases/tag/v1.96.1) of cloc was made to update the Windows executable to use the
+``Win32::LongPath`` module.)
+On this page, `cloc` is the generic term
 used to refer to any of these.
+
+[Include Security](https://www.youtube.com/user/IncludeSecurity) has a
+[YouTube video](https://www.youtube.com/watch?v=eRLTkDMsCqs)
+showing the steps in action.
 
 **a file**
 <pre>
@@ -424,6 +432,12 @@ executable and also check sites such
 https://www.virustotal.com/ .
 The entries for recent versions are:
 
+cloc-1.96.1.exe:
+https://www.virustotal.com/gui/file/00b1c9dbbfb920dabd374418e1b86d2c24b8cd2b8705aeb956dee910d0d75d45?nocache=1
+
+cloc-1.96.exe:
+https://www.virustotal.com/gui/file/54bf5f46fbaba7949c4eb2d4837b03c774c0ba587448a5bad9b8efc0222b1583?nocache=1
+
 cloc-1.94.exe:
 https://www.virustotal.com/gui/file/b48a6002fb75fa66ec5d0c05a5c4d51f2ad22b5b025b7eb4e3945d18419c0952?nocache=1
 
@@ -503,7 +517,8 @@ C:> cpan -i Digest::MD5
 C:> cpan -i Regexp::Common
 C:> cpan -i Algorithm::Diff
 C:> cpan -i PAR::Packer
-C:> pp -M Digest::MD5 -c -x -o cloc-1.94.exe cloc-1.94.pl
+C:> cpan -i Win32::LongPath
+C:> pp -M Win32::LongPath -M Encode::Unicode -M Digest::MD5 -c -x -o cloc-1.96.exe cloc-1.96.pl
 </pre>
 
 A variation on the instructions above is if you installed the portable
@@ -1055,9 +1070,12 @@ C#                         (cs)
 C# Designer                (designer.cs)
 C++                        (C, c++, cc, CPP, cpp, cxx, h++, inl, ipp, pcc, tcc, tpp)
 C/C++ Header               (H, h, hh, hpp, hxx)
+Cairo                      (cairo)
 Cake Build Script          (cake)
+Carbon                     (carbon)
 CCS                        (ccs)
 Chapel                     (chpl)
+Circom                     (circom)
 Clean                      (dcl, icl)
 Clojure                    (boot, cl2, clj, cljs.hl, cljscm, cljx, hic, riemann.config)
 ClojureC                   (cljc)
@@ -1067,6 +1085,7 @@ COBOL                      (CBL, cbl, ccp, COB, cob, cobol, cpy)
 CoffeeScript               (_coffee, cakefile, cjsx, coffee, iced)
 ColdFusion                 (cfm, cfml)
 ColdFusion CFScript        (cfc)
+Containerfile              (Containerfile)
 Coq                        (v)
 Crystal                    (cr)
 CSON                       (cson)
@@ -1134,6 +1153,7 @@ Haskell                    (hs, hsc, lhs)
 Haxe                       (hx, hxsl)
 HCL                        (hcl, nomad, tf, tfvars)
 HLSL                       (cg, cginc, fxh, hlsl, hlsli, shader)
+HolyC                      (HC)
 Hoon                       (hoon)
 HTML                       (htm, html, html.hl, xht)
 HTML EEx                   (heex)
@@ -1156,15 +1176,16 @@ JSX                        (jsx)
 Julia                      (jl)
 Juniper Junos              (junos)
 Jupyter Notebook           (ipynb)
-kvlang                     (kv)
 Kermit                     (ksc)
 Korn Shell                 (ksh)
 Kotlin                     (kt, ktm, kts)
+kvlang                     (kv)
 Lean                       (hlean, lean)
 Lem                        (lem)
 LESS                       (less)
 lex                        (l, lex)
 LFE                        (lfe)
+Linker Script              (ld)
 liquid                     (liquid)
 Lisp                       (asd, el, lisp, lsp, cl, jl)
 Literate Idris             (lidr)
@@ -1193,14 +1214,17 @@ NASTRAN DMAP               (dmap)
 Nemerle                    (n)
 Nim                        (nim, nim.cfg, nimble, nimrod, nims)
 Nix                        (nix)
+Nunjucks                   (njk)
 Objective-C                (m)
 Objective-C++              (mm)
 OCaml                      (eliom, eliomi, ml, ml4, mli, mll, mly)
 Odin                       (odin)
 OpenCL                     (cl)
+OpenSCAD                   (scad)
 Oracle Forms               (fmt)
 Oracle PL/SQL              (bod, fnc, prc, spc, trg)
 Oracle Reports             (rex)
+P4                         (p4)
 Pascal                     (dpr, lpr, p, pas, pascal)
 Pascal/Puppet              (pp)
 Patran Command Language    (pcl, ses)
@@ -1208,6 +1232,7 @@ PEG                        (peg)
 peg.js                     (pegjs)
 peggy                      (peggy)
 Perl                       (ack, al, cpanfile, makefile.pl, perl, ph, plh, plx, pm, psgi, rexfile, pl, p6)
+Pest                       (pest)
 PHP                        (aw, ctp, phakefile, php, php3, php4, php5, php_cs, php_cs.dist, phps, phpt, phtml)
 PHP/Pascal                 (inc)
 Pig Latin                  (pig)
@@ -1215,6 +1240,7 @@ PL/I                       (pl1)
 PL/M                       (lit, plm)
 PlantUML                   (puml)
 PO File                    (po)
+Pony                       (pony)
 PowerBuilder               (pbt, sra, srf, srm, srs, sru, srw)
 PowerShell                 (ps1, psd1, psm1)
 ProGuard                   (pro)
@@ -1277,6 +1303,7 @@ Swift                      (swift)
 SWIG                       (i)
 TableGen                   (td)
 Tcl/Tk                     (itk, tcl, tk)
+TEAL                       (teal)
 Teamcenter met             (met)
 Teamcenter mth             (mth)
 TeX                        (aux, bbx, bib, bst, cbx, dtx, ins, lbx, ltx, mkii, mkiv, mkvi, sty, tex, cls)
@@ -1310,6 +1337,7 @@ Visualforce Page           (page)
 Vuejs Component            (vue)
 Web Services Description   (wsdl)
 WebAssembly                (wast, wat)
+WGSL                       (wgsl)
 Windows Message File       (mc)
 Windows Module Definition  (def)
 Windows Resource File      (rc, rc2)
@@ -3062,7 +3090,7 @@ provided the
 [Serbo-Croatian](http://science.webhostinggeeks.com/cloc)
 translation.
 
-Gill Ajoft of [Ajoft Softwares](http://www.ajoft.com)
+Gill Ajoft of [Ajoft Software](http://www.ajoft.com)
 provided the
 [Bulgarian](http://www.ajoft.com/wpaper/aj-cloc.html)
 translation.

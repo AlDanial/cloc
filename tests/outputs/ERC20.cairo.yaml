@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.95
+  elapsed_seconds    : 0.00880813598632812
+  n_files            : 1
+  n_lines            : 101
+  files_per_second   : 113.531398873971
+  lines_per_second   : 11466.6712862711
+  report_file        : ../outputs/ERC20.cairo.yaml
+'Cairo' :
+  nFiles: 1
+  blank: 17
+  comment: 9
+  code: 75
+SUM: 
+  blank: 17
+  comment: 9
+  code: 75
+  nFiles: 1

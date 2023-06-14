@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.95
+  elapsed_seconds    : 0.00864696502685547
+  n_files            : 1
+  n_lines            : 140
+  files_per_second   : 115.647512959082
+  lines_per_second   : 16190.6518142715
+  report_file        : ../outputs/eddsa.circom.yaml
+'Circom' :
+  nFiles: 1
+  blank: 34
+  comment: 26
+  code: 80
+SUM: 
+  blank: 34
+  comment: 26
+  code: 80
+  nFiles: 1

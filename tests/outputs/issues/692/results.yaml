@@ -1,0 +1,136 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.95
+  elapsed_seconds    : 0.0124430656433105
+  n_files            : 5
+  n_lines            : 47
+  files_per_second   : 401.830235677333
+  lines_per_second   : 3777.20421536693
+  report_file        : ../../../outputs/issues/692/results.yaml
+added :
+  'Fortran 90' :
+    nFiles : 0
+    blank : 0
+    comment : 1
+    code : 0
+  'Perl' :
+    code : 2
+    comment : 0
+    blank : 0
+    nFiles : 1
+  'C++' :
+    nFiles : 0
+    blank : 0
+    code : 0
+    comment : 0
+  'Java' :
+    code : 0
+    blank : 0
+    comment : 0
+    nFiles : 0
+  'Python' :
+    blank : 0
+    code : 0
+    comment : 0
+    nFiles : 0
+same :
+  'Fortran 90' :
+    nFiles : 0
+    blank : 0
+    comment : 3
+    code : 4
+  'Perl' :
+    code : 0
+    comment : 0
+    blank : 0
+    nFiles : 0
+  'C++' :
+    nFiles : 0
+    blank : 0
+    code : 6
+    comment : 1
+  'Java' :
+    code : 0
+    blank : 0
+    comment : 0
+    nFiles : 0
+  'Python' :
+    blank : 4
+    code : 3
+    comment : 10
+    nFiles : 1
+modified :
+  'Fortran 90' :
+    nFiles : 1
+    blank : 0
+    comment : 0
+    code : 0
+  'Perl' :
+    code : 0
+    comment : 0
+    blank : 0
+    nFiles : 0
+  'C++' :
+    nFiles : 1
+    blank : 0
+    code : 0
+    comment : 1
+  'Java' :
+    code : 0
+    blank : 0
+    comment : 0
+    nFiles : 0
+  'Python' :
+    blank : 0
+    code : 0
+    comment : 0
+    nFiles : 0
+removed :
+  'Fortran 90' :
+    nFiles : 0
+    blank : 0
+    comment : 0
+    code : 1
+  'Perl' :
+    code : 0
+    comment : 0
+    blank : 0
+    nFiles : 0
+  'C++' :
+    nFiles : 0
+    blank : 0
+    code : 0
+    comment : 0
+  'Java' :
+    code : 7
+    blank : 0
+    comment : 4
+    nFiles : 1
+  'Python' :
+    blank : 0
+    code : 0
+    comment : 0
+    nFiles : 0
+SUM :
+  added :
+    nFiles : 1
+    blank : 0
+    code : 2
+    comment : 1
+  same :
+    nFiles : 1
+    blank : 4
+    code : 13
+    comment : 14
+  modified :
+    nFiles : 2
+    blank : 0
+    code : 0
+    comment : 1
+  removed :
+    nFiles : 1
+    blank : 0
+    code : 8
+    comment : 4

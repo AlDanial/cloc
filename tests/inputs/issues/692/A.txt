@@ -1,0 +1,7 @@
+../../diff/A
+../../diff/A/d2
+../../diff/A/d2/hi.py
+../../diff/A/d2/hello.java
+../../diff/A/d1
+../../diff/A/d1/hello.f90
+../../diff/A/hello.C
