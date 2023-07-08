@@ -316,7 +316,7 @@ Updates:
                    https://github.com/AlDanial/cloc
                            Oct. 5, 2018
 
-This is a bug-fix release to solve miss-handling of git inputs for
+This is a bug-fix release to solve mishandling of git inputs for
 straight counts in 1.78 (--git --diff works ok in 1.78),
 https://github.com/AlDanial/cloc/issues/328.
 
