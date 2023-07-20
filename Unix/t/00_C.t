@@ -180,9 +180,14 @@ my @Tests = (
                     'args' => '../tests/inputs/apertium-dan.dan.rlx',
                 },
                 {
-                    'name' => 'C++',
+                    'name' => 'C++ 1',
                     'ref'  => '../tests/outputs/C++-MFC.cc.yaml',
                     'args' => '../tests/inputs/C++-MFC.cc',
+                },
+                {
+                    'name' => 'C++ 2',
+                    'ref'  => '../tests/outputs/BasicPlane.Figures-Rectangle.ixx.yaml',
+                    'args' => '../tests/inputs/BasicPlane.Figures-Rectangle.ixx',
                 },
                 {
                     'name' => 'C++ Uppercase extension',
@@ -1140,11 +1145,6 @@ my @Tests = (
                     'name' => 'Visual Basic',
                     'ref'  => '../tests/outputs/JetCar.cls.yaml',
                     'args' => '../tests/inputs/JetCar.cls',
-                },
-                {
-                    'name' => 'Visual Studio Module',
-                    'ref'  => '../tests/outputs/BasicPlane.Figures-Rectangle.ixx.yaml',
-                    'args' => '../tests/inputs/BasicPlane.Figures-Rectangle.ixx',
                 },
                 {
                     'name' => 'Visual Studio Solution',
