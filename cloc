@@ -1995,6 +1995,12 @@ if ($opt_by_file) {
 # 1}}}
 } else {
 # Step 4:  Separate code from non-code files.  {{{1
+if ($opt_exclude_list_file) {
+    # note: process_exclude_list_file() references global @file_list
+    process_exclude_list_file($opt_exclude_list_file,
+                             \%Exclude_Dir,
+                             \%Ignored);
+}
 my $fh = 0;
 if ($opt_list_file or $opt_diff_list_files or $opt_vcs) {
     my @list;
@@ -2010,12 +2016,6 @@ if ($opt_list_file or $opt_diff_list_files or $opt_vcs) {
     $fh = make_file_list(\@ARGV, 0, \%Error_Codes, \@Errors, \%Ignored);
     #     make_file_list populates global variable @file_list via call to
     #     File::Find's find() which in turn calls files()
-}
-if ($opt_exclude_list_file) {
-    # note: process_exclude_list_file() references global @file_list
-    process_exclude_list_file($opt_exclude_list_file,
-                             \%Exclude_Dir,
-                             \%Ignored);
 }
 if ($opt_skip_win_hidden and $ON_WINDOWS) {
     my @file_list_minus_hidden = ();
