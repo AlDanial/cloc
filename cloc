@@ -5929,7 +5929,10 @@ sub files {                                  # {{{1
         if ($opt_match_f    ) { return unless /$opt_match_f/;     }
         if (@opt_not_match_f) { return if     any_match($_, 0, \$rule, @opt_not_match_f)}
     }
-    if ($opt_match_d    ) { return unless $Dir =~ m{$opt_match_d}     }
+    if ($opt_match_d) {
+        $Dir = "$Dir/" if $opt_match_d =~ m{/$};
+        return if $Dir !~ m{$opt_match_d};
+    }
 
     my $nBytes = get_size($_);
     if (!$nBytes and is_file($File::Find::name)) {
