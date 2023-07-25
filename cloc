@@ -5552,7 +5552,10 @@ sub make_file_list {                         # {{{1
             if ($ON_WINDOWS and $HAVE_Win32_Long_Path) {
                 my $d = Win32::LongPath->new();
                 $d->opendirL($dir);
-                push @file_list, grep(is_file($_), $d->readdirL());
+                foreach my $entry ($d->readdirL()) {
+                    my $F = "$dir/$entry";
+                    push @file_list, $F if is_file($F);
+                }
                 $d->closedirL();
             } else {
                 opendir(DIR, $dir);
