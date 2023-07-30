@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.97
+  elapsed_seconds    : 0.00732302665710449
+  n_files            : 1
+  n_lines            : 64
+  files_per_second   : 136.555559173042
+  lines_per_second   : 8739.55578707472
+  report_file        : ../outputs/Buchberger.cocoa5.yaml
+'CoCoA 5' :
+  nFiles: 1
+  blank: 6
+  comment: 10
+  code: 48
+SUM: 
+  blank: 6
+  comment: 10
+  code: 48
+  nFiles: 1

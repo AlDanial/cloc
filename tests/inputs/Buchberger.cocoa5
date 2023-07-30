@@ -1,0 +1,64 @@
+define Buchberger(F)
+  -- Make all monic for (sometimes) nicer GB :)
+  G := [monic(f) | f in F];
+  r := len(G);
+  B := [x in tuples(1..r, 2) | 1 <= x[1] and x[1] < x[2] and x[2] <= r];
+  while B <> [] do
+    p := B[1];
+    remove(ref B, 1);
+    gj := G[p[1]];
+    gk := G[p[2]];
+
+    // Optimization: Skip if LTs are coprime
+    if IsCoprime(LT(gj), LT(gk)) then
+      continue;
+    endif;
+
+    t := lcm(LT(gj), LT(gk));
+    Sjk := (t / LM(gj)) * gj - (t / LM(gk)) * gk;
+    R := NR(Sjk, G);
+    if R <> 0 then
+      // Append monic for (sometimes) nicer GB :)
+      append(ref G, monic(R));
+      r := len(G);
+      B := concat(B, [[i, r] | i in 1..(r-1)]);
+    endif;
+  endwhile;
+  return G;
+enddefine; -- Buchberger
+
+define BuchbergerOnIdeal(I)
+  return Buchberger(gens(I));
+enddefine; -- BuchbergerOnIdeal
+
+define TestBuchberger(F)
+  println "===== INPUT: ", F, " =====";
+  B1 := Buchberger(F);
+  B2 := GBasis(ideal(F));
+  println "Basis:     ", B1;
+  eq := EqSet(B1, B2);
+  println "Equals?    ", eq;
+  if not(eq) then
+    // If the reduced GBs are equal, the Buchberger-computed GB
+    // is most likely also a correct one.
+    req := ReducedGBasis(ideal(B1)) = ReducedGBasis(ideal(B2));
+    println "Red GB eq? ", req;
+    if not(req) then println "Correct:   ", B2; endif;
+  endif;
+enddefine; -- TestBuchberger
+
+/*
+Test cases can be found here!
+First, some using a "normal" term order.
+Then, some using an elimination ordering.
+*/
+
+use QQ[x,y,z], DegRevLex;
+TestBuchberger([x^10,x^8*y^6,x^7*y^7,x^6*y^8,y^10]);
+TestBuchberger([x^3-3,y^5-5,z^7-7]);
+TestBuchberger([5*y^2+4*y*z-2*y-4,4*y^2-3*y*z+5*z^2-5*z]);
+TestBuchberger([8*x^3+x^2*y-2*z^2+4,7*x^3+6*x^2*z-5*x*y*z-5*y^2]);
+TestBuchberger([x^5+x*y^4+y^2*z^3+z^5,x^4*y+x^3*y^2+x^4*z+x^2*z^3]);
+use QQ[x,y,z], Lex;
+println "===== INPUT: ", [x^2*y*z+x*y^3*z-1,x^4*y*z-1,x*y^4+x*y*z-1] , " =====";
+println "Basis:     ", Buchberger([x^2*y*z+x*y^3*z-1,x^4*y*z-1,x*y^4+x*y*z-1]);

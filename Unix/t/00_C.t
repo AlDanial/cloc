@@ -165,6 +165,11 @@ my @Tests = (
                     'args' => '../tests/inputs/Cobol.cbl',
                 },
                 {
+                    'name' => 'CoCoA 5',
+                    'ref'  => '../tests/outputs/Buchberger.cocoa5.yaml',
+                    'args' => '../tests/inputs/Buchberger.cocoa5',
+                },
+                {
                     'name' => 'ColdFusion',
                     'ref'  => '../tests/outputs/ColdFusion.cfm.yaml',
                     'args' => '../tests/inputs/ColdFusion.cfm',
