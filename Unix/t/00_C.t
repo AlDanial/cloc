@@ -1122,6 +1122,11 @@ my @Tests = (
                     'args' => '../tests/inputs/greeter.tsx',
                 },
                 {
+                    'name' => 'Typst',
+                    'ref'  => '../tests/outputs/notes.typ.yaml',
+                    'args' => '../tests/inputs/notes.typ',
+                },
+                {
                     'name' => 'Umka',
                     'ref'  => '../tests/outputs/fractal.um.yaml',
                     'args' => '../tests/inputs/fractal.um',

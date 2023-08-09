@@ -8678,6 +8678,7 @@ sub set_constants {                          # {{{1
             'tsx'         => 'TypeScript'            ,
             'tss'         => 'Titanium Style Sheet'  ,
             'twig'        => 'Twig'                  ,
+            'typ'         => 'Typst'                 ,
             'um'          => 'Umka'                  ,
             'ui'          => 'Qt/Glade'              ,
             'glade'       => 'Glade'                 ,
@@ -10254,6 +10255,11 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'Typst'              => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'Umka'               => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
@@ -10990,6 +10996,7 @@ sub set_constants {                          # {{{1
     'TTCN'                         =>   2.00,
     'TITAN Project File Information' =>   1.90,
     'TypeScript'                   =>   2.00,
+    'Typst'                        =>   3.00,
     'Umka'                         =>   2.00,
     'Unity-Prefab'                 =>   2.50,
     'Vala'                         =>   1.50,
