@@ -313,7 +313,7 @@ excluding portions which
 are copied from other sources. Code
 copied from the Regexp::Common, Win32::Autoglob, and Algorithm::Diff
 Perl modules is subject to the
-[Artistic License](http://www.opensource.org/licenses/artistic-license-2.0.php).
+[Artistic License](https://opensource.org/license/artistic-2-0).
 [](1}}})
 <a name="why_use"></a> []({{{1)
 # [Why Use cloc? &#9650;](#___top "click to go to top of document")
