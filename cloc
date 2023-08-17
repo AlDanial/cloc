@@ -8236,6 +8236,7 @@ sub set_constants {                          # {{{1
             'lektorproject'=> 'INI'                  ,
             'buildozer.spec'=> 'INI'                 ,
             'ini'         => 'INI'                   ,
+            'editorconfig'=> 'INI'                   ,
             'ism'         => 'InstallShield'         ,
             'ipl'         => 'IPL'                   ,
             'pro'         => 'IDL/Qt Project/Prolog/ProGuard' ,
