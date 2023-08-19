@@ -1266,7 +1266,7 @@ foreach my $t (@Tests) {
     ok(-e $results, $t->{'name'} . " created output");
     my %ref  = load_yaml($t->{'ref'});
     my %this = load_yaml($results);
-    is_deeply(\%ref, \%this, $t->{'name'} . " results match");
+    is_deeply(\%this, \%ref, $t->{'name'} . " results match");
 }
 done_testing();
 
