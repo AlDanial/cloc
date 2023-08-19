@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "1.97";  # odd number == beta; even number == stable
+my $VERSION = "1.98";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.10.0;
 # use modules                                  {{{1
@@ -365,7 +365,8 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
    --original-dir            [Only effective in combination with
                              --strip-comments]  Write the stripped files
                              to the same directory as the original files.
-   --only-count-files        Only count files by language.
+   --only-count-files        Only count files by language.  Blank, comment, and
+                             code counts will be zero.
    --read-binary-files       Process binary files in addition to text files.
                              This is usually a bad idea and should only be
                              attempted with text files that have embedded

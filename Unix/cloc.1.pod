@@ -1,6 +1,6 @@
 #   Copyright
 #
-#      Copyright (C) 2018-2022 Al Danial <al.danial@gmail.com>.
+#      Copyright (C) 2018-2023 Al Danial <al.danial@gmail.com>.
 #      Copyright (C) 2010-2017 Jari Aalto <jari.aalto@cante.net>
 #
 #   License
@@ -323,6 +323,11 @@ See also B<--autoconf>.
 Count files in the given directories without
 recursively descending below them.
 
+=item B<--only-count-files>
+
+Only count files by language.  Blank, comment, and
+code counts will be zero.
+
 =item B<--original-dir>
 
 Only effective in combination with
@@ -553,6 +558,7 @@ Add B<--fullpath> to compare parent directories to
 the regex.
 Do not include file path separators at the beginning
 or end of the regex.
+This switch may be repeated.
 
 =item B<--match-f=REGEX>
 
@@ -569,6 +575,7 @@ in the regex instead of just the basename.
 Count all files except those whose basenames match the Perl regex.
 Add B<--fullpath> to include parent directories
 in the regex instead of just the basename.
+This switch may be repeated.
 
 =item B<--skip-archive=REGEX>
 
@@ -851,7 +858,7 @@ sloccount(1)
 =head1 AUTHORS
 
 The cloc program was written by Al Danial <al.danial@gmail.com> and
-is Copyright (C) 2006-2022 <al.danial@gmail.com>.
+is Copyright (C) 2006-2023 <al.danial@gmail.com>.
 
 The manual page was originally written by Jari Aalto <jari.aalto@cante.net>.
 

@@ -5,7 +5,7 @@
 * * *
 cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.
 
-Latest release:  v1.96 (Dec. 18, 2022)
+Latest release:  v1.98 (Aug. 19, 2023)
 
 <a href="https://github.com/AlDanial/cloc/graphs/contributors" alt="Contributors">
     <img src="https://img.shields.io/github/contributors/AlDanial/cloc" /></a>
@@ -64,11 +64,9 @@ Step 3:  Invoke cloc to count your source files, directories, archives,
 or git commits.
 The executable name differs depending on whether you use the
 development source version (`cloc`), source for a
-released version (`cloc-1.96.pl`) or a Windows executable
-(`cloc-1.96.1.exe`).
-(2023-01-10: a special
-[1.96.1 release](https://github.com/AlDanial/cloc/releases/tag/v1.96.1) of cloc was made to update the Windows executable to use the
-``Win32::LongPath`` module.)
+released version (`cloc-1.98.pl`) or a Windows executable
+(`cloc-1.98.exe`).
+
 On this page, `cloc` is the generic term
 used to refer to any of these.
 
@@ -385,37 +383,43 @@ and Digest::MD5 installed locally.
 <a name="building_exe"></a> []({{{1)
 # [Building a Windows Executable &#9650;](#___top "click to go to top of document")
 
-The Windows downloads
-<tt>cloc-1.94.exe</tt>,
-<tt>cloc-1.92.exe</tt>,
-<tt>cloc-1.90.exe</tt> and
-<tt>cloc-1.88.exe</tt> were built on a 64 bit Windows 10 computer
-using
+#### Create your own executable
+The most robust option for creating a Windows executable of
+cloc is to use [ActiveState's Perl Development Kit](http://www.activestate.com/perl-dev-kit).
+It includes a utility, `perlapp`, which can build stand-alone
+Windows, Mac, and Linux binaries of Perl source code.
+
+[perl2exe](http://www.indigostar.com/perl2exe/)
+will also do the trick.  If you do have `perl2exe`, modify lines
+84-87 in the cloc source code for a minor code
+modification that is necessary to make a cloc Windows executable.
+
+Otherwise, to build a Windows executable with `pp` from
+`PAR::Packer`, first install a Windows-based Perl distribution
+(for example Strawberry Perl or ActivePerl) following their
+instructions. Next, open a command prompt, aka a DOS window and install
+the PAR::Packer module. Finally, invoke the newly installed `pp`
+command with the cloc source code to create an `.exe` file:
+
+<pre>
+C:> cpan -i Digest::MD5
+C:> cpan -i Regexp::Common
+C:> cpan -i Algorithm::Diff
+C:> cpan -i PAR::Packer
+C:> cpan -i Win32::LongPath
+C:> pp -M Win32::LongPath -M Encode::Unicode -M Digest::MD5 -c -x -o cloc-1.98.exe cloc-1.98.pl
+</pre>
+
+A variation on the instructions above is if you installed the portable
+version of Strawberry Perl, you will need to run `portableshell.bat` first
+to properly set up your environment.
+
+The Windows executable in the Releases section, <tt>cloc-1.98.exe</tt>,
+was built on a 64 bit Windows 10 computer using
 [Strawberry Perl](http://strawberryperl.com/)
 5.30.2 and
 [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.050/lib/pp.pm)
 to build the `.exe`.
-
-Release 1.86 was built on a 64 bit Windows 10 virtual machine
-downloaded from https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/;
-releases 1.74 through 1.84
-were was built on a 32 bit Windows 7 virtual machine
-using Strawberry Perl 5.26.1.1, while
-1.70 and 1.72 were built with Strawberry Perl 5.24.0.1
-on an Amazon Web Services t2.micro instance running Microsoft Windows Server 2008
-(32 bit for 1.70 and 1.72; 64 bit for 1.74).
-Release 1.66 was built on a 32 bit Windows 7 VirtualBox image.
-Windows executables of cloc versions 1.60 and earlier were built with
-[perl2exe](http://www.indigostar.com/perl2exe/) on a 32 bit Windows
-XP computer. A small modification was made to the cloc source code
-before passing it to perl2exe; lines 87 and 88 were uncommented:
-
-<pre>
-<font color="gray">85</font>  # Uncomment next two lines when building Windows executable with perl2exe
-<font color="gray">86</font>  # or if running on a system that already has Regexp::Common.
-<font color="gray">87</font>  <font color="red">#use Regexp::Common;</font>
-<font color="gray">88</font>  <font color="red">#$HAVE_Rexexp_Common = 1;</font>
-</pre>
 
 #### Is the Windows executable safe to run?  Does it have malware?
 
@@ -431,6 +435,9 @@ You are encouraged to run your own virus scanners against the
 executable and also check sites such
 https://www.virustotal.com/ .
 The entries for recent versions are:
+
+cloc-1.98.exe:
+https://www.virustotal.com/gui/file/88615d193ec8c06f7ceec3cc1d661088af997798d87ddff331d9e9f9128a6782?nocache=1
 
 cloc-1.96.1.exe:
 https://www.virustotal.com/gui/file/00b1c9dbbfb920dabd374418e1b86d2c24b8cd2b8705aeb956dee910d0d75d45?nocache=1
@@ -493,37 +500,6 @@ Why are the `PAR::Packer`, executables so
 much larger than those built with perl2exe? My theory is that perl2exe
 uses smarter tree pruning logic
 than `PAR::Packer`, but that's pure speculation.
-
-#### Create your own executable
-The most robust option for creating a Windows executable of
-cloc is to use [ActiveState's Perl Development Kit](http://www.activestate.com/perl-dev-kit).
-It includes a utility, `perlapp`, which can build stand-alone
-Windows, Mac, and Linux binaries of Perl source code.
-
-[perl2exe](http://www.indigostar.com/perl2exe/)
-will also do the trick.  If you do have `perl2exe`, modify lines
-84-87 in the cloc source code for a minor code
-modification that is necessary to make a cloc Windows executable.
-
-Otherwise, to build a Windows executable with `pp` from
-`PAR::Packer`, first install a Windows-based Perl distribution
-(for example Strawberry Perl or ActivePerl) following their
-instructions. Next, open a command prompt, aka a DOS window and install
-the PAR::Packer module. Finally, invoke the newly installed `pp`
-command with the cloc source code to create an `.exe` file:
-
-<pre>
-C:> cpan -i Digest::MD5
-C:> cpan -i Regexp::Common
-C:> cpan -i Algorithm::Diff
-C:> cpan -i PAR::Packer
-C:> cpan -i Win32::LongPath
-C:> pp -M Win32::LongPath -M Encode::Unicode -M Digest::MD5 -c -x -o cloc-1.96.exe cloc-1.96.pl
-</pre>
-
-A variation on the instructions above is if you installed the portable
-version of Strawberry Perl, you will need to run `portableshell.bat` first
-to properly set up your environment.
 
 [](1}}})
 <a name="Basic_Use"></a> []({{{1)
@@ -1054,6 +1030,7 @@ ASP                        (asa, ashx, asp, axd)
 ASP.NET                    (asax, ascx, asmx, aspx, master, sitemap, webinfo)
 AspectJ                    (aj)
 Assembly                   (a51, asm, nasm, S, s)
+Asymptote                  (asy)
 AutoHotkey                 (ahk, ahkl)
 awk                        (auk, awk, gawk, mawk, nawk)
 Bazel                      (BUILD)
@@ -1068,7 +1045,7 @@ C                          (c, cats, ec, idc, pgc)
 C Shell                    (csh, tcsh)
 C#                         (cs)
 C# Designer                (designer.cs)
-C++                        (C, c++, cc, CPP, cpp, cxx, h++, inl, ipp, pcc, tcc, tpp)
+C++                        (C, c++, c++m, cc, ccm, CPP, cpp, cppm, cxx, cxxm, h++, inl, ipp, ixx, pcc, tcc, tpp)
 C/C++ Header               (H, h, hh, hpp, hxx)
 Cairo                      (cairo)
 Cake Build Script          (cake)
@@ -1082,9 +1059,11 @@ ClojureC                   (cljc)
 ClojureScript              (cljs)
 CMake                      (cmake, cmake.in, CMakeLists.txt)
 COBOL                      (CBL, cbl, ccp, COB, cob, cobol, cpy)
+CoCoA 5                    (c5, cocoa5, cocoa5server, cpkg5)
 CoffeeScript               (_coffee, cakefile, cjsx, coffee, iced)
 ColdFusion                 (cfm, cfml)
 ColdFusion CFScript        (cfc)
+Constraint Grammar         (cg3, rlx)
 Containerfile              (Containerfile)
 Coq                        (v)
 Crystal                    (cr)
@@ -1149,6 +1128,7 @@ Groovy                     (gant, groovy, grt, gtpl, gvy, jenkinsfile)
 Haml                       (haml, haml.deface)
 Handlebars                 (handlebars, hbs)
 Harbour                    (hb)
+Hare                       (ha)
 Haskell                    (hs, hsc, lhs)
 Haxe                       (hx, hxsl)
 HCL                        (hcl, nomad, tf, tfvars)
@@ -1161,9 +1141,10 @@ IDL                        (dlm, idl, pro)
 Idris                      (idr)
 Igor Pro                   (ipf)
 Imba                       (imba)
-INI                        (buildozer.spec, ini, lektorproject, prefs)
+INI                        (buildozer.spec, editorconfig, ini, lektorproject, prefs)
 InstallShield              (ism)
 IPL                        (ipl)
+Jai                        (jai)
 Java                       (java)
 JavaScript                 (_js, bones, cjs, es6, jake, jakefile, js, jsb, jscad, jsfl, jsm, jss, mjs, njs, pac, sjs, ssjs, xsjs, xsjslib)
 JavaServer Faces           (jsf)
@@ -1212,6 +1193,7 @@ MXML                       (mxml)
 NAnt script                (build)
 NASTRAN DMAP               (dmap)
 Nemerle                    (n)
+NetLogo                    (nlogo, nls)
 Nim                        (nim, nim.cfg, nimble, nimrod, nims)
 Nix                        (nix)
 Nunjucks                   (njk)
@@ -1317,6 +1299,7 @@ tspeg                      (jspeg, tspeg)
 TTCN                       (ttcn, ttcn2, ttcn3, ttcnpp)
 Twig                       (twig)
 TypeScript                 (tsx, ts)
+Typst                      (typ)
 Umka                       (um)
 Unity-Prefab               (mat, prefab)
 Vala                       (vala)
@@ -1330,7 +1313,6 @@ Visual Basic               (BAS, bas, ctl, dsr, frm, FRX, frx, VBHTML, vbhtml, v
 Visual Basic .NET          (VB, vb, vbproj)
 Visual Basic Script        (VBS, vbs)
 Visual Fox Pro             (SCA, sca)
-Visual Studio Module       (ixx)
 Visual Studio Solution     (sln)
 Visualforce Component      (component)
 Visualforce Page           (page)
