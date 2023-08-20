@@ -1087,6 +1087,21 @@ my @Tests = (
                     'args' => '../tests/inputs/DocTest.thrift',
                 },
                 {
+                    'name' => 'TLA+',
+                    'ref'  => '../tests/outputs/TLAExample.tla.yaml',
+                    'args' => '../tests/inputs/TLAExample.tla',
+                },
+                {
+                    'name' => 'TLA+/PlusCal',
+                    'ref'  => '../tests/outputs/PlusCalExample.tla.yaml',
+                    'args' => '../tests/inputs/PlusCalExample.tla',
+                },
+                {
+                    'name' => 'TLA+/PlusCal --no-autogen',
+                    'ref'  => '../tests/outputs/PlusCalExample-no-autogen.tla.yaml',
+                    'args' => '--no-autogen ../tests/inputs/PlusCalExample.tla',
+                },
+                {
                     'name' => 'TOML',
                     'ref'  => '../tests/outputs/toml_example.toml.yaml',
                     'args' => '../tests/inputs/toml_example.toml',

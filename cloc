@@ -7648,6 +7648,64 @@ sub remove_OCaml_comments {                  # {{{1
     print "<- remove_OCaml_comments\n" if $opt_v > 2;
     return @save_lines;
 } # 1}}}
+sub remove_TLAPlus_generated_code {          # {{{1
+    my ($ra_lines, ) = @_;
+    # If --no-autogen, remove code created by the PlusCal translator.
+    return @{$ra_lines} if !$opt_no_autogen;
+    return remove_between_regex($ra_lines, '^\\\\\\* BEGIN TRANSLATION\b', '^\\\\\\* END TRANSLATION\b');
+} # 1}}}
+sub remove_TLAPlus_comments {                # {{{1
+    my ($ra_lines, ) = @_;
+    # TLA+ block comments are like OCaml comments (remove_OCaml_comments).
+    # However, TLA+ comments may contain PlusCal code, and we must consider the
+    # PlusCal code as code, not comments.
+
+    print "-> remove_TLAPlus_comments\n" if $opt_v > 2;
+
+    my @save_lines = ();
+    my $in_comment = 0;        # counter to depth of nested (* *) comments
+    my $in_pluscal_head = 0;   # whether we saw the start of PlusCal code
+    my $in_pluscal_block = 0;  # counter to depth of nested { } blocks
+    my $saved_in_comment = 0;  # $in_comment before we entered PlusCal code
+    foreach my $L (@{$ra_lines}) {
+        next if $L =~ /^\s*$/;
+        # make an array of interesting tokens we need to act upon
+        my $clean_line = ""; # ie, free of comments
+        my @tokens = split(/(\(\*|\*\)|".*?"|[{}]|--fair\b|--algorithm|PlusCal options)/, $L);
+        foreach my $t (@tokens) {
+            next unless $t;
+            if      ($t eq "(*") {
+                ++$in_comment;
+            } elsif ($t eq "*)") {
+                --$in_comment;
+            } elsif ($t eq "{" && $in_pluscal_head) {
+                # start block matching when we see '{' in '--algorithm NAME {'
+                $in_pluscal_head = 0;
+                $in_pluscal_block = 1;
+                $saved_in_comment = $in_comment;
+                $in_comment = 0;
+                $clean_line .= $t;
+            } elsif ($t eq "{" && $in_pluscal_block && !$in_comment) {
+                ++$in_pluscal_block;
+                $clean_line .= $t;
+            } elsif ($t eq "}" && $in_pluscal_block && !$in_comment) {
+                --$in_pluscal_block;
+                if ($in_pluscal_block == 0) {
+                    $in_comment = $saved_in_comment;
+                }
+                $clean_line .= $t;
+            } elsif ($t eq "--fair" || $t eq "--algorithm") {
+                $in_pluscal_head = 1;
+                $clean_line .= $t;
+            } elsif (!$in_comment || $in_pluscal_head || $in_pluscal_block || $t eq "PlusCal options") {
+                $clean_line .= $t;
+            }
+        }
+        push @save_lines, $clean_line if $clean_line;
+    }
+    print "<- remove_TLAPlus_comments\n" if $opt_v > 2;
+    return @save_lines;
+} # 1}}}
 sub remove_slim_block {                      # {{{1
     # slim comments start with /
     # followed by indented text on subsequent lines.
@@ -8655,6 +8713,7 @@ sub set_constants {                          # {{{1
             'tres'        => 'Godot Resource'        ,
             'tscn'        => 'Godot Scene'           ,
             'thrift'      => 'Thrift'                ,
+            'tla'         => 'TLA+'                  ,
             'tpl'         => 'Smarty'                ,
             'trigger'     => 'Apex Trigger'          ,
             'ttcn'        => 'TTCN'                  ,
@@ -10220,6 +10279,11 @@ sub set_constants {                          # {{{1
     'Text'               => [
                                 [ 'remove_matches'      , '^\s*$'  ],
                             ],
+    'TLA+'               => [
+                                [ 'remove_TLAPlus_generated_code'                 ],
+                                [ 'remove_matches'               , '^\\s*\\\\\\*' ],
+                                [ 'remove_TLAPlus_comments'                       ],
+                            ],
     'Thrift'             => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
@@ -10991,6 +11055,7 @@ sub set_constants {                          # {{{1
     'TeX'                          =>   1.50,
     'Text'                         =>   0.50,
     'Thrift'                       =>   2.50,
+    'TLA+'                         =>   1.00,
     'Titanium Style Sheet'         =>   2.00,
     'TOML'                         =>   2.76,
     'Twig'                         =>   2.00,
