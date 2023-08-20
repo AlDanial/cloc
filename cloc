@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "1.98";  # odd number == beta; even number == stable
+my $VERSION = "1.99";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.10.0;
 # use modules                                  {{{1
@@ -388,8 +388,8 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
    --no-recurse              Count files in the given directories without
                              recursively descending below them.
    --original-dir            [Only effective in combination with
-                             --strip-comments]  Write the stripped files
-                             to the same directory as the original files.
+                             --strip-comments or --strip-code]  Write the stripped
+                             files to the same directory as the original files.
    --only-count-files        Only count files by language.  Blank, comment, and
                              code counts will be zero.
    --read-binary-files       Process binary files in addition to text files.
@@ -440,6 +440,13 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
    --stdin-name=<file>       Give a file name to use to determine the language
                              for standard input.  (Use - as the input name to
                              receive source code via STDIN.)
+   --strip-code=<ext>        For each file processed, write to the current
+                             directory a version of the file which has blank
+                             and code lines, including code with (in-line
+                             comments) removed. The name of each stripped file
+                             is the original file name with .<ext> appended to
+                             it. It is written to the current directory unless
+                             --original-dir is on.
    --strip-comments=<ext>    For each file processed, write to the current
                              directory a version of the file which has blank
                              and commented lines removed (in-line comments
@@ -485,7 +492,8 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              a performance improvement when counting projects
                              with large files.  However, these cloc-specific
                              features will not be available: --diff,
-                             --count-and-diff, --strip-comments, --unicode.
+                             --count-and-diff, --strip-code, --strip-comments,
+                             --unicode.
    --windows                 Override the operating system autodetection
                              logic and run in Microsoft Windows mode.
                              See also --unix, --show-os.
@@ -722,6 +730,7 @@ my (
     $opt_read_lang_def        ,
     $opt_write_lang_def       ,
     $opt_write_lang_def_incl_dup,
+    $opt_strip_code           ,
     $opt_strip_comments       ,
     $opt_original_dir         ,
     $opt_quiet                ,
@@ -825,6 +834,7 @@ my $getopt_success = GetOptions(             # {{{1
    "script_lang|script-lang=s"               => \@opt_script_lang         ,
    "sdir=s"                                  => \$opt_sdir                ,
    "skip_uniqueness|skip-uniqueness"         => \$opt_skip_uniqueness     ,
+   "strip_code|strip-code=s"                 => \$opt_strip_code          ,
    "strip_comments|strip-comments=s"         => \$opt_strip_comments      ,
    "original_dir|original-dir"               => \$opt_original_dir        ,
    "sum_reports|sum-reports"                 => \$opt_sum_reports         ,
@@ -927,6 +937,7 @@ load_from_config_file($config_file,          # {{{2
                                                 \@opt_script_lang         ,
                                                 \$opt_sdir                ,
                                                 \$opt_skip_uniqueness     ,
+                                                \$opt_strip_code          ,
                                                 \$opt_strip_comments      ,
                                                 \$opt_original_dir        ,
                                                 \$opt_sum_reports         ,
@@ -1071,12 +1082,16 @@ if ($opt_use_sloccount) {
         warn "--count-and-diff is disabled with --use-sloccount\n" if $opt_count_diff;
         warn "--unicode is disabled with --use-sloccount\n" if $opt_unicode;
         warn "--strip-comments is disabled with --use-sloccount\n" if $opt_strip_comments;
+        warn "--strip-code is disabled with --use-sloccount\n" if $opt_strip_code;
         $opt_diff           = 0;
         $opt_count_diff     = undef;
         $opt_unicode        = 0;
         $opt_strip_comments = 0;
+        $opt_strip_code     = 0;
     }
 }
+die "--strip-comments and --strip-code are mutually exclusive\n" if
+    $opt_strip_comments and $opt_strip_code;
 $opt_vcs = 0 if $opt_force_git;
 
 # replace Windows path separators with /
@@ -6526,6 +6541,15 @@ sub call_counter {                           # {{{1
         }
         write_file($stripped_file, {}, @lines);
     }
+    if ($opt_strip_code) {
+        my $stripped_file = "";
+        if ($opt_original_dir) {
+            $stripped_file =          $file . ".$opt_strip_code";
+        } else {
+            $stripped_file = basename $file . ".$opt_strip_code";
+        }
+        write_file($stripped_file, {}, rm_code(\@original_lines, \@lines));
+    }
     if ($opt_html and !$opt_diff) {
         chomp(@original_lines);  # includes blank lines, comments
         chomp(@lines);           # no blank lines, no comments
@@ -6939,6 +6963,30 @@ sub rm_comments {                            # {{{1
 
     print "<- rm_comments\n" if $opt_v > 2;
     return @lines;
+} # 1}}}
+sub rm_code {                                # {{{1
+    # Return lines containing only comments.
+    my ($ra_lines_w_comments , # in
+        $ra_lines_no_comments, # in
+       )  = @_;
+
+    my @w_comments_no_blanks  = grep { ! /^\s*$/ } @{$ra_lines_w_comments} ;
+    my @no_comments_no_blanks = grep { ! /^\s*$/ } @{$ra_lines_no_comments};
+    chomp( @w_comments_no_blanks  );
+    chomp( @no_comments_no_blanks );
+
+    my @sdiffs = sdiff( \@w_comments_no_blanks, \@no_comments_no_blanks, );
+    my @comments = ();
+    foreach my $entry (@sdiffs) {
+        my ($out_1, $out_2) = ('', '');
+        next if $entry->[0] eq 'u';
+        if ($entry->[0] eq '-') {
+            $out_1 = $entry->[1];
+        }
+        next if $out_1 =~ /^\s*$/;
+        push @comments, $out_1;
+    }
+    return @comments;
 } # 1}}}
 sub remove_first_n {                         # {{{1
     my ($n, $ra_lines, ) = @_;
@@ -13714,6 +13762,7 @@ sub load_from_config_file {                  # {{{1
                                                  $ra_script_lang         ,
                                                  $rs_sdir                ,
                                                  $rs_skip_uniqueness     ,
+                                                 $rs_strip_code          ,
                                                  $rs_strip_comments      ,
                                                  $rs_original_dir        ,
                                                  $rs_sum_reports         ,
@@ -13822,6 +13871,7 @@ sub load_from_config_file {                  # {{{1
         } elsif (!defined ${$rs_report_file}         and /^out(=|\s+)(.*?)$/)                                 { ${$rs_report_file}        = $2;
         } elsif (!defined ${$rs_sdir}                and /^sdir(=|\s+)(.*?)$/)                                { ${$rs_sdir}               = $2;
         } elsif (!defined ${$rs_skip_uniqueness}     and /^(skip_uniqueness|skip-uniqueness)/)                { ${$rs_skip_uniqueness}    = 1;
+        } elsif (!defined ${$rs_strip_code}          and /^(?:strip_code|strip-code)(=|\s+)(.*?)$/)           { ${$rs_strip_code}         = $2;
         } elsif (!defined ${$rs_strip_comments}      and /^(?:strip_comments|strip-comments)(=|\s+)(.*?)$/)   { ${$rs_strip_comments}     = $2;
         } elsif (!defined ${$rs_original_dir}        and /^(original_dir|original-dir)/)                      { ${$rs_original_dir}       = 1;
         } elsif (!defined ${$rs_sum_reports}         and /^(sum_reports|sum-reports)/)                        { ${$rs_sum_reports}        = 1;
