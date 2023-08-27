@@ -5204,6 +5204,12 @@ sub replace_git_hash_with_tarfile {          # {{{1
 #use Data::Dumper;
 #print "files_union =\n", Dumper(\%files_union);
 #print "repo_listing=\n", Dumper(\%repo_listing);
+            if ($opt_exclude_list_file) {
+                my @reject_list   = read_list_file($opt_exclude_list_file);
+                foreach my $file (@reject_list) {
+                    delete $files_union{$file};
+                }
+            }
 
             # then make truncated tar files of those union files which
             # actually exist in each repo
