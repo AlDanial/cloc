@@ -390,6 +390,16 @@ my @Tests = (
                     'args' => '--no-autogen ../tests/inputs/hello_app*.go',
                 },
                 {
+                    'name' => 'Go',
+                    'ref'  => '../tests/outputs/hello_app.go-1.yaml',
+                    'args' => '../tests/inputs/hello_app*.ʕ◔ϖ◔ʔ',
+                },
+                {
+                    'name' => 'Go --no-autogen',
+                    'ref'  => '../tests/outputs/hello_app.go-2.yaml',
+                    'args' => '--no-autogen ../tests/inputs/hello_app*.ʕ◔ϖ◔ʔ',
+                },
+                {
                     'name' => 'Godot Scene',
                     'ref'  => '../tests/outputs/GamePanel.tscn.yaml',
                     'args' => '../tests/inputs/GamePanel.tscn',
