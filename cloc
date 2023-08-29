@@ -5216,12 +5216,22 @@ sub replace_git_hash_with_tarfile {          # {{{1
 
             }
 
-#use Data::Dumper;
-#print "files_union =\n", Dumper(\%files_union);
-#print "repo_listing=\n", Dumper(\%repo_listing);
             if ($opt_exclude_list_file) {
                 my @reject_list   = read_list_file($opt_exclude_list_file);
-                foreach my $file (@reject_list) {
+                my %entries_to_drop = ();
+                foreach my $f_or_d (@reject_list) {
+                    if (-d $f_or_d) {
+                        # directory match
+                        $entries_to_drop{$f_or_d} = 1;
+                        foreach my $file (keys %files_union) {
+                            $entries_to_drop{$file} = 1 if $file =~ m{$f_or_d/};
+                        }
+                    } else {
+                        # exact match
+                        $entries_to_drop{$f_or_d} = 1;
+                    }
+                }
+                foreach my $file (keys %entries_to_drop) {
                     delete $files_union{$file};
                 }
             }
