@@ -10123,7 +10123,8 @@ sub set_constants {                          # {{{1
     'Rexx'               => [   [ 'call_regexp_common'  , 'C'      ], ],
     'ReasonML'           => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
-                                [ 'remove_between_general', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'ReScript'           => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
