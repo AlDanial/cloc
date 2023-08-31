@@ -3952,6 +3952,7 @@ sub generate_sql    {                        # {{{1
         $schema = "
 CREATE TABLE metadata
 (
+  id          INTEGER PRIMARY KEY,
   timestamp   TIMESTAMP,
   project     VARCHAR2(500 CHAR),
   elapsed_s   NUMBER(10, 6)
@@ -3960,6 +3961,7 @@ CREATE TABLE metadata
 
 CREATE TABLE t
 (
+  id             INTEGER           ,
   project        VARCHAR2(500 CHAR),
   language       VARCHAR2(500 CHAR),
   file_fullname  VARCHAR2(500 CHAR),
@@ -3968,7 +3970,9 @@ CREATE TABLE t
   nblank         INTEGER,
   ncomment       INTEGER,
   ncode          INTEGER,
-  nscaled        NUMBER(10, 6)
+  nscaled        NUMBER(10, 6),
+FOREIGN KEY (id)
+    REFERENCES metadata (id)
 )
 /
 
@@ -3976,10 +3980,12 @@ CREATE TABLE t
     } else {
         $schema = "
 create table metadata (          -- $URL v $VERSION
+                id        integer primary key,
                 timestamp varchar(500),
                 Project   varchar(500),
                 elapsed_s real);
 create table t        (
+                id            integer        ,
                 Project       varchar(500)   ,
                 Language      varchar(500)   ,
                 File          varchar(500)   ,
@@ -3988,7 +3994,9 @@ create table t        (
                 nBlank        integer        ,
                 nComment      integer        ,
                 nCode         integer        ,
-                nScaled       real           );
+                nScaled       real           ,
+        foreign key (id)
+            references metadata (id));
 ";
     }
     $opt_sql = "-" if $opt_sql eq "1";
@@ -4010,18 +4018,20 @@ create table t        (
     }
     print $fh $schema unless defined $opt_sql_append;
 
+    my $id = int(time());
     my $insert_into_t = "insert into t ";
     if ($opt_sql_style eq "oracle") {
-        printf $fh "insert into metadata values(TO_TIMESTAMP('%s','yyyy-mm-dd hh24:mi:ss'), '%s', %f);\n",
+        printf $fh "insert into metadata values(%d, TO_TIMESTAMP('%s','yyyy-mm-dd hh24:mi:ss'), '%s', %f);\n",
+                    $id,
                     strftime("%Y-%m-%d %H:%M:%S", localtime(time())),
                     $opt_sql_project, $elapsed_sec;
     } elsif ($opt_sql_style eq "named_columns") {
         print $fh "begin transaction;\n";
-        $insert_into_t .= "( Project, Language, File, File_dirname, File_basename, nBlank, nComment, nCode, nScaled )";
+        $insert_into_t .= "( Project, Language, File, File_dirname, File_basename, nBlank, nComment, nCode, nScaled, id )";
     } else {
         print $fh "begin transaction;\n";
-        printf $fh "insert into metadata values('%s', '%s', %f);\n",
-                    strftime("%Y-%m-%d %H:%M:%S", localtime(time())),
+        printf $fh "insert into metadata values(%d, '%s', '%s', %f);\n",
+                    $id, strftime("%Y-%m-%d %H:%M:%S", localtime(time())),
                     $opt_sql_project, $elapsed_sec;
     }
 
@@ -4038,8 +4048,9 @@ create table t        (
         $clean_filename =~ s/\'/''/g;  # double embedded single quotes
                                        # to escape them
 
-        printf $fh "$insert_into_t values('%s', '%s', '%s', '%s', '%s', " .
+        printf $fh "$insert_into_t values(%d, '%s', '%s', '%s', '%s', '%s', " .
                    "%d, %d, %d, %f);\n",
+                    $id                        ,
                     $opt_sql_project           ,
                     $language                  ,
                     $clean_filename            ,
