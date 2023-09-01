@@ -4027,7 +4027,7 @@ create table t        (
                     $opt_sql_project, $elapsed_sec;
     } elsif ($opt_sql_style eq "named_columns") {
         print $fh "begin transaction;\n";
-        $insert_into_t .= "( Project, Language, File, File_dirname, File_basename, nBlank, nComment, nCode, nScaled, id )";
+        $insert_into_t .= "(id, Project, Language, File, File_dirname, File_basename, nBlank, nComment, nCode, nScaled )";
     } else {
         print $fh "begin transaction;\n";
         printf $fh "insert into metadata values(%d, '%s', '%s', %f);\n",
