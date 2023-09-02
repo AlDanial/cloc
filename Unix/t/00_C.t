@@ -1182,6 +1182,11 @@ my @Tests = (
                     'args' => '../tests/inputs/ItemView.vue',
                 },
                 {
+                    'name' => 'Vyper',
+                    'ref'  => '../tests/outputs/vyper.vy.yaml',
+                    'args' => '../tests/inputs/vyper.vy',
+                },
+                {
                     'name' => 'WebAssembly',
                     'ref'  => '../tests/outputs/type.wast.yaml',
                     'args' => '../tests/inputs/type.wast',
