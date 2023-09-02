@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.99
+  elapsed_seconds    : 0.00448417663574219
+  n_files            : 1
+  n_lines            : 85
+  files_per_second   : 223.006380263718
+  lines_per_second   : 18955.542322416
+  report_file        : vyper.vy.yaml
+'Vyper' :
+  nFiles: 1
+  blank: 11
+  comment: 41
+  code: 33
+SUM: 
+  blank: 11
+  comment: 41
+  code: 33
+  nFiles: 1
