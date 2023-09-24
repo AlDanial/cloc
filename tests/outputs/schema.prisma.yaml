@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.99
+  elapsed_seconds    : 0.00669693946838379
+  n_files            : 1
+  n_lines            : 27
+  files_per_second   : 149.321940973335
+  lines_per_second   : 4031.69240628004
+  report_file        : ../outputs/schema.prisma.yaml
+'Prisma Schema' :
+  nFiles: 1
+  blank: 5
+  comment: 1
+  code: 21
+SUM: 
+  blank: 5
+  comment: 1
+  code: 21
+  nFiles: 1

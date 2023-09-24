@@ -8705,6 +8705,7 @@ sub set_constants {                          # {{{1
             'pegjs'       => 'peg.js'                ,
             'peggy'       => 'peggy'                 ,
             'pest'        => 'Pest'                  ,
+            'prisma'      => 'Prisma Schema'         ,
             'tspeg'       => 'tspeg'                 ,
             'jspeg'       => 'tspeg'                 ,
             'pl1'         => 'PL/I'                  ,
@@ -10002,11 +10003,6 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*//'  ],
                                 [ 'remove_inline'       , '//.*$'   ],
                             ],
-    'tspeg'              => [
-                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
-                                [ 'rm_comments_in_strings', '"', '//', '' ],
-                                [ 'call_regexp_common'  , 'C++'    ],
-                            ],
     'Perl/Prolog'        => [ [ 'die' ,          ], ], # never called
     'PL/I'               => [
                                 [ 'call_regexp_common'  , 'C'      ],
@@ -10022,6 +10018,9 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*--' ],
                                 [ 'remove_inline'       , '--.*$'  ],
                                 [ 'call_regexp_common'  , 'C'       ],
+                            ],
+    'Prisma Schema'      => [
+                                [ 'remove_matches'      , '^\s*//' ],
                             ],
     'ProGuard'           => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -10413,6 +10412,11 @@ sub set_constants {                          # {{{1
     'TITAN Project File Information'               => [
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
+    'tspeg'              => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Twig'               => [
                                 [ 'remove_between_general', '{#', '#}' ],
@@ -11089,7 +11093,7 @@ sub set_constants {                          # {{{1
     'Pony'                         =>   3.00,
     'PowerBuilder'                 =>   3.33,
     'PowerShell'                   =>   3.00,
-    'problemoriented default'      =>   1.13,
+    'Prisma Schema'                =>   2.50,
     'ProGuard'                     =>   2.50,
     'Prolog'                       =>   1.25,
     'Properties'                   =>   1.36,

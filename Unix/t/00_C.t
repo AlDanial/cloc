@@ -797,16 +797,6 @@ my @Tests = (
                     'args' => '../tests/inputs/toml.pest',
                 },
                 {
-                    'name' => 'tspeg 1',
-                    'ref'  => '../tests/outputs/sdp_parser.tspeg.yaml',
-                    'args' => '../tests/inputs/sdp_parser.tspeg',
-                },
-                {
-                    'name' => 'tspeg 2',
-                    'ref'  => '../tests/outputs/sdp_parser.jspeg.yaml',
-                    'args' => '../tests/inputs/sdp_parser.jspeg',
-                },
-                {
                     'name' => 'PHP',
                     'ref'  => '../tests/outputs/test1.inc.yaml',
                     'args' => '../tests/inputs/test1.inc',
@@ -850,6 +840,11 @@ my @Tests = (
                     'name' => 'Pony',
                     'ref'  => '../tests/outputs/ring.pony.2.yaml',
                     'args' => '../tests/inputs/ring.pony',
+                },
+                {
+                    'name' => 'Prisma Schema',
+                    'ref'  => '../tests/outputs/schema.prisma.yaml',
+                    'args' => '../tests/inputs/schema.prisma',
                 },
                 {
                     'name' => 'ProGuard',
@@ -1120,6 +1115,16 @@ my @Tests = (
                     'name' => 'TNSDL',
                     'ref'  => '../tests/outputs/tnsdl.sdl.yaml',
                     'args' => '../tests/inputs/tnsdl.sdl',
+                },
+                {
+                    'name' => 'tspeg 1',
+                    'ref'  => '../tests/outputs/sdp_parser.tspeg.yaml',
+                    'args' => '../tests/inputs/sdp_parser.tspeg',
+                },
+                {
+                    'name' => 'tspeg 2',
+                    'ref'  => '../tests/outputs/sdp_parser.jspeg.yaml',
+                    'args' => '../tests/inputs/sdp_parser.jspeg',
                 },
                 {
                     'name' => 'TTCN',
