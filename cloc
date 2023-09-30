@@ -3521,7 +3521,7 @@ sub xml_yaml_or_json_header {                # {{{1
   ${Q}cloc_url${Q}           : ${Q}$URL${Q}${C}
   ${Q}cloc_version${Q}       : ${Q}$version${Q}${C}
   ${Q}n_files${Q}            : $sum_files${C}
-  ${Q}n_lines${Q}            : $sum_lines${C}";
+  ${Q}n_lines${Q}            : $sum_lines";
         } else {
             $header = "${start}${Q}header${Q} : $open_B
   ${Q}cloc_url${Q}           : ${Q}$URL${Q}${C}
