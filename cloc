@@ -8731,6 +8731,7 @@ sub set_constants {                          # {{{1
             'ps1'         => 'PowerShell'            ,
             'psd1'        => 'PowerShell'            ,
             'psm1'        => 'PowerShell'            ,
+            'prql'        => 'PRQL'                  ,
             'rsx'         => 'R'                     ,
             'rd'          => 'R'                     ,
             'expr-dist'   => 'R'                     ,
@@ -10060,6 +10061,9 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'PRQL'               => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                            ],
     'Pug'                => [
                                 [ 'remove_pug_block'    ,          ],
                                 [ 'remove_matches'      , '^\s*//' ],
@@ -11098,6 +11102,7 @@ sub set_constants {                          # {{{1
     'Prolog'                       =>   1.25,
     'Properties'                   =>   1.36,
     'Protocol Buffers'             =>   2.00,
+    'PRQL'                         =>   3.00,
     'Pug'                          =>   2.00,
     'Puppet'                       =>   2.00,
     'PureScript'                   =>   2.00,

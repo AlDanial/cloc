@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.99
+  elapsed_seconds    : 0.0065009593963623
+  n_files            : 1
+  n_lines            : 17
+  files_per_second   : 153.823449591081
+  lines_per_second   : 2614.99864304837
+  report_file        : ../outputs/invoices.prql.yaml
+'PRQL' :
+  nFiles: 1
+  blank: 2
+  comment: 1
+  code: 14
+SUM: 
+  blank: 2
+  comment: 1
+  code: 14
+  nFiles: 1

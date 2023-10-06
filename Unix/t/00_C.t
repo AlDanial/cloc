@@ -862,6 +862,11 @@ my @Tests = (
                     'args' => '../tests/inputs/wiki.properties',
                 },
                 {
+                    'name' => 'PRQL',
+                    'ref'  => '../tests/outputs/invoices.prql.yaml',
+                    'args' => '../tests/inputs/invoices.prql',
+                },
+                {
                     'name' => 'Puppet class',
                     'ref'  => '../tests/outputs/modules1-ntp1.pp.yaml',
                     'args' => '../tests/inputs/modules1-ntp1.pp',

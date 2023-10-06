@@ -1,0 +1,17 @@
+# https://prql-lang.org/
+from invoices
+filter invoice_date >= @1970-01-16
+derive {
+  transaction_fees = 0.8,
+  income = total - transaction_fees
+}
+
+filter income > 1
+
+group customer_id (
+  aggregate {
+    average total,
+    sum_income = sum income,
+    ct = count total,
+  }
+)
