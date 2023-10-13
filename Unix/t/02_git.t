@@ -92,6 +92,13 @@ my @Tests = (
                     'cd'   => 'cloc_submodule_test',
                 },
 
+                {
+                    'name' => '--vcs=git from non-git directory, #772',
+                    'args' => '--vcs=git cloc_submodule_test',
+                    'ref'  => '../tests/outputs/issues/772/results.yaml',
+                    'cd'   => '.',
+                },
+
             );
 
 my $Verbose = 0;

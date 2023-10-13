@@ -1155,7 +1155,7 @@ if (defined $opt_vcs) {
     }
     if      ($opt_vcs eq "git") {
         $opt_vcs = "git ls-files";
-        my @submodules = invoke_generator('git submodule status');
+        my @submodules = invoke_generator('git submodule status', \@ARGV);
         foreach my $SM (@submodules) {
             $SM =~ s/^\s+//;        # may have leading space
             $SM =~ s/\(\S+\)\s*$//; # may end with something like (heads/master)
@@ -3506,7 +3506,7 @@ sub xml_yaml_or_json_header {                # {{{1
   ${Q}cloc_url${Q}           : ${Q}$URL${Q}${C}
   ${Q}cloc_version${Q}       : ${Q}$version${Q}${C}
   ${Q}n_files${Q}            : $sum_files${C}
-  ${Q}n_lines${Q}            : $sum_lines${C}";
+  ${Q}n_lines${Q}            : $sum_lines";
         } else {
             $header = "${start}${Q}header${Q} : $open_B
   ${Q}cloc_url${Q}           : ${Q}$URL${Q}${C}
@@ -5696,30 +5696,56 @@ sub invoke_generator {                       # {{{1
     # If user provided file/directory inputs, only return
     # generated files that are in user's request.
     # Populates global variable %Ignored.
-    print "-> invoke_generator($generator)\n" if $opt_v > 2;
-    open(FH, "$generator |") or
-        die "Failed to pipe $generator: $!";
-    my @files = ();
-    while(<FH>) {
-        chomp;
-        my $F = $_;
-        print "VCS input:  $F\n" if $opt_v >= 2;
-        if (!defined $ra_user_inputs or !@{$ra_user_inputs}) {
-            push @files, $F;
-        } else {
-            # is this file desired?
-            my $want_this_one = 0;
-            foreach my $file_dir (@{$ra_user_inputs}) {
-                $file_dir =~ s{\\}{/}g if $ON_WINDOWS;
-                if (/^$file_dir/) {
-                    $want_this_one = 1;
-                    last;
-                }
-            }
-            push @files, $F if $want_this_one;
+    print "-> invoke_generator($generator, @{$ra_user_inputs})\n" if $opt_v > 2;
+    my $start_dir = cwd();
+    my @dir_list  = ();
+    my @file_list = ();
+
+    if (!@{$ra_user_inputs}) {
+        # input must be a generator command, ie "find -type f -name '*.c'"
+        # issued from the cwd
+        push @dir_list, ".";
+    }
+    foreach my $file_dir (@{$ra_user_inputs}) {
+        if (is_dir($file_dir)) {
+            push @dir_list, $file_dir;
+        } elsif (is_file($file_dir)) {
+            push @file_list, $file_dir;
         }
     }
-    close(FH);
+
+    my @files = ();
+    foreach my $work_dir (@dir_list) {
+        if ($work_dir ne $start_dir) {
+            chdir $work_dir or die "Failed to chdir to $work_dir: $!";
+        }
+        open(FH, "$generator |") or die "Failed to pipe $generator: $!";
+        while(<FH>) {
+            chomp;
+            my $F = "$work_dir/$_";
+            print "VCS input:  $F\n" if $opt_v >= 2;
+            if (!@file_list) {
+                # no files given on the command line; accept all
+                push @files, $F;
+            } else {
+                # is this file desired?
+                my $want_this_one = 0;
+                foreach my $file (@file_list) {
+                    $file =~ s{\\}{/}g if $ON_WINDOWS;
+                    if (/^$file/) {
+                        $want_this_one = 1;
+                        last;
+                    }
+                }
+                push @files, $F if $want_this_one;
+            }
+        }
+        close(FH);
+        if ($work_dir ne $start_dir) {
+            chdir $start_dir or die "Failed to chdir to $start_dir: $!";
+        }
+    }
+
     # apply match/not-match file/dir filters to the list so far
     my @post_filter = ();
     foreach my $F (@files) {
