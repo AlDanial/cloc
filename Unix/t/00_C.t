@@ -1007,6 +1007,11 @@ my @Tests = (
                     'args' => '../tests/inputs/captcha.cs',
                 },
                 {
+                    'name' => 'Snakemake',
+                    'ref'  => '../tests/outputs/Snakefile.yaml',
+                    'args' => '../tests/inputs/Snakefile',
+                },
+                {
                     'name' => 'Smarty',
                     'ref'  => '../tests/outputs/guestbook.tpl.yaml',
                     'args' => '../tests/inputs/guestbook.tpl',
