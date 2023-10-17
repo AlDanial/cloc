@@ -10817,6 +10817,7 @@ sub set_constants {                          # {{{1
    'n'         => 1,
    'o'         => 1,  # Object code is generated from source code.
    'o.cmd'     => 1,  # not DOS Batch; Linux kernel compilation optimization file
+   'o.d'       => 1,  # cmake object dependency file
    'pbm'       => 1,
    'pdf'       => 1,
    'pfb'       => 1,
