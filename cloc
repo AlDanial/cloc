@@ -10342,8 +10342,6 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C'      ],
                             ],
     'Snakemake'          => [
-                                [ 'remove_matches'      , '/\*'    ],
-                                [ 'remove_matches'      , '\*/'    ],
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'docstring_to_C'                 ],
                                 [ 'call_regexp_common'  , 'C'      ],
@@ -11275,7 +11273,7 @@ sub set_constants {                          # {{{1
     'PHP'                          => 3.50,
     'Jupyter Notebook'             => 4.20,
     'Python'                       => 4.20,
-    'Snakemake'                    => 4.20, # This is a guess. Copied from Python, because Snakemake supports Python syntax
+    'Snakemake'                    => 4.20,
     'RapydScript'                  => 4.20,
     'Starlark'                     => 4.20,
     'BizTalk Pipeline'             => 1.00,
