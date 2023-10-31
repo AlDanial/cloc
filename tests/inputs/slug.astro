@@ -1,0 +1,102 @@
+---
+import { API, useAPI } from "../../../lib/hooks/useAPI.astro";
+import Spinner from "../../components/other/Spinner.astro";
+import Layout from "../../layouts/Layout.astro";
+
+const announcement_title = (Astro.url.pathname.split("/").pop() as string).replace(/-/g, " ");
+let announcement: ({ id: number; title: string; date: number; content: string; views: number } & { images: string[] }) | undefined;
+try {
+	const res_announcement = await useAPI(API.Announcements.getByTitle, { UrlArgs: { title: announcement_title } });
+	announcement = res_announcement.data;
+	if (!announcement) return Astro.redirect("/404");
+} catch (e) {
+	return Astro.redirect("/404");
+}
+const imgSrc = "/anakoinoseis/images/" + announcement.id + "/";
+const imgThumbSrc = "/anakoinoseis/images/" + announcement.id + "/thumb_";
+---
+
+<Layout title={announcement.title} imageUrl={announcement.images[0]}>
+	<section class="relative flex flex-col p-12 max-sm:p-4 overflow-auto items-center gap-y-6">
+		<h1
+			class="heading w-[25ch] max-sm:w-[25ch] text-5xl max-sm:text-3xl text-center font-bold text-red-900 font-anaktoria drop-shadow-[-1px_2px_1px_rgba(0,0,0,0.25)]"
+		>
+			{announcement.title}
+		</h1>
+		<div class="max-w-[720px] h-[360px] shadow-lg shadow-slate-800">
+			<img src={imgSrc + announcement.images[1]} alt={announcement?.title as string} class="w-[720px] object-cover h-full" />
+		</div>
+		<div class="text-xl mt-4 self-start">
+			{announcement.content}
+		</div>
+		<div id="imgContainer" class="flex items-center">
+			<div class="flex flex-row flex-wrap mt-4 gap-y-6 loading items-center justify-evenly self-center">
+				{
+					announcement.images.map((image, i) => (
+						<div class="imgLoader group/img">
+							<div class="hidden group-[:is(.loading)]/img:block w-[320px] h-[240px] ">
+								<Spinner />
+							</div>
+							<div class="hidden group-[:is(.loaded)]/img:block max-w-[320px] h-[240px] transition-shadow hover:shadow-lg !shadow-slate-800">
+								<img
+									data-src={imgThumbSrc + image}
+									alt={announcement?.title as string}
+									class="w-[400px] object-cover h-full"
+								/>
+							</div>
+						</div>
+					))
+				}
+			</div>
+		</div>
+	</section>
+	<!-- <div id="imageCarouselContainer" class="fixed inset-0 bg-[rgba(40,10,10,0.4)] backdrop-blur-[3px] grid place-content-center">
+		<div
+			id="controlsContainer"
+			class="grid grid-cols-[max-content,1fr,max-content] justify-center items-center p-8 bg-[rgba(40,10,10,0.75)] rounded-md shadow-lg shadow-[rgba(40,10,10,1)] backdrop-blur-[3px]"
+		>
+			<i class="pr-8 fa-solid fa-chevron-left font-bold text-2xl text-white max-sm:text-xs max-sm:px-2 max-3xs:text-xs"></i>
+			<div id="imageCarousel" data-index="0">
+				<div class="imgLoader group/img">
+					<div class="hidden group-[:is(.loading)]/img:block w-[320px] h-[240px]">
+						<Spinner />
+					</div>
+					<div
+						class="hidden group-[:is(.loaded)]/img:block max-w-[320px] h-[240px] transition-shadow hover:shadow-lg !shadow-slate-800"
+					>
+						<img alt={announcement.title} class="w-[400px] object-cover h-full" />
+					</div>
+				</div>
+				<div id="thumbContainer" class="flex flex-row pt-8">
+					<img alt={announcement.title}/>
+					<img alt={announcement.title}/>
+					<img alt={announcement.title}/>
+					<img alt={announcement.title}/>
+					<img alt={announcement.title}/>
+				</div>
+			</div>
+			<i class="pl-8 fa-solid fa-chevron-right font-bold text-2xl text-white max-sm:text-xs max-sm:px-2 max-3xs:text-xs"></i>
+		</div>
+	</div> -->
+</Layout>
+<script>
+	import { onElementMount, asyncQueue, sleep } from "../../../lib/utils.client";
+	onElementMount("#imgContainer", async el => {
+		const imgs = [...el.querySelectorAll("img")];
+		const imgContainers = [...el.querySelectorAll(".imgLoader")];
+		const jobs = imgs.map((img, i) => async () => {
+			let loaded = false;
+			imgContainers[i].classList.add("loading");
+			img.addEventListener("load", () => {
+				loaded = true;
+				imgContainers[i].classList.remove("loading");
+				imgContainers[i].classList.add("loaded");
+			});
+			img.src = img.dataset.src as string;
+			while (!loaded) {
+				await sleep(20);
+			}
+		});
+		await asyncQueue(jobs, 5);
+	});
+</script>

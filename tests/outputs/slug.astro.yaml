@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.99
+  elapsed_seconds    : 0.00802516937255859
+  n_files            : 1
+  n_lines            : 102
+  files_per_second   : 124.607961972668
+  lines_per_second   : 12710.0121212121
+  report_file        : ../outputs/slug.astro.yaml
+'Astro' :
+  nFiles: 1
+  blank: 2
+  comment: 28
+  code: 72
+SUM: 
+  blank: 2
+  comment: 28
+  code: 72
+  nFiles: 1

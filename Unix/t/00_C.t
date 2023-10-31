@@ -60,6 +60,11 @@ my @Tests = (
                     'args' => '../tests/inputs/zos_assembly.s',
                 },
                 {
+                    'name' => 'Astro',
+                    'ref'  => '../tests/outputs/slug.astro.yaml',
+                    'args' => '../tests/inputs/slug.astro',
+                },
+                {
                     'name' => 'Asymptote', 
                     'ref'  => '../tests/outputs/cad.asy.yaml',
                     'args' => '../tests/inputs/cad.asy',
