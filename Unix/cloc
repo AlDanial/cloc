@@ -1243,7 +1243,7 @@ my %Extension_Collision = (
     'MATLAB/Mathematica/Objective-C/MUMPS/Mercury'  => [ 'm'    ] ,
     'Pascal/Puppet'                                 => [ 'pp'   ] ,
     'Perl/Prolog'                                   => [ 'pl', 'PL'  ] ,
-    'PHP/Pascal'                                    => [ 'inc'  ] ,
+    'PHP/Pascal/Fortran'                            => [ 'inc'  ] ,
     'Raku/Prolog'                                   => [ 'p6', 'P6'  ] ,
     'Qt/Glade'                                      => [ 'ui'   ] ,
     'TypeScript/Qt Linguist'                        => [ 'ts'   ] ,
@@ -1996,12 +1996,6 @@ if ($opt_by_file) {
 # 1}}}
 } else {
 # Step 4:  Separate code from non-code files.  {{{1
-if ($opt_exclude_list_file) {
-    # note: process_exclude_list_file() references global @file_list
-    process_exclude_list_file($opt_exclude_list_file,
-                             \%Exclude_Dir,
-                             \%Ignored);
-}
 my $fh = 0;
 if ($opt_list_file or $opt_diff_list_files or $opt_vcs) {
     my @list;
@@ -2017,6 +2011,12 @@ if ($opt_list_file or $opt_diff_list_files or $opt_vcs) {
     $fh = make_file_list(\@ARGV, 0, \%Error_Codes, \@Errors, \%Ignored);
     #     make_file_list populates global variable @file_list via call to
     #     File::Find's find() which in turn calls files()
+}
+if ($opt_exclude_list_file) {
+    # note: process_exclude_list_file() references global @file_list
+    process_exclude_list_file($opt_exclude_list_file,
+                             \%Exclude_Dir,
+                             \%Ignored);
 }
 if ($opt_skip_win_hidden and $ON_WINDOWS) {
     my @file_list_minus_hidden = ();
@@ -3054,7 +3054,8 @@ sub process_exclude_list_file {              # {{{1
     # note: references global @file_list
     print "-> process_exclude_list_file($list_file)\n" if $opt_v > 2;
     # reject a specific set of files and/or directories
-    my @reject_list   = read_list_file($list_file);
+    my @reject_list   = ($list_file); # don't count the exclude list file itself
+    push @reject_list, read_list_file($list_file);
     my @file_reject_list = ();
     foreach my $F_or_D (@reject_list) {
         if (is_dir($F_or_D)) {
@@ -6233,7 +6234,7 @@ sub classify_file {                          # {{{1
                         'failure in matlab_or_objective_C()';
                     return $language; # (unknown)
                 }
-            } elsif ($Language_by_Extension{$extension} eq 'PHP/Pascal') {
+            } elsif ($Language_by_Extension{$extension} eq 'PHP/Pascal/Fortran') {
                 if (really_is_php($full_file)) {
                     return 'PHP';
                 } elsif (really_is_incpascal($full_file)) {
@@ -8413,7 +8414,7 @@ sub set_constants {                          # {{{1
             'ig'          => 'Modula3'               ,
             'il'          => 'SKILL'                 ,
             'ils'         => 'SKILL++'               ,
-            'inc'         => 'PHP/Pascal'            , # might be PHP or Pascal
+            'inc'         => 'PHP/Pascal/Fortran'    ,
             'ino'         => 'Arduino Sketch'        ,
             'ipf'         => 'Igor Pro'              ,
             'pde'         => 'Arduino Sketch'        , # pre 1.0
@@ -9932,7 +9933,7 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
-    'PHP/Pascal'               => [ [ 'die' ,          ], ], # never called
+    'PHP/Pascal/Fortran'       => [ [ 'die' ,          ], ], # never called
     'Mako'               => [
                                 [ 'remove_matches'       , '##.*$'  ],
                             ],
@@ -11278,7 +11279,7 @@ sub set_constants {                          # {{{1
     'Fortran 77/Forth'                => 1.00,
     'Lisp/Julia'                      => 1.00,
     'Lisp/OpenCL'                     => 1.00,
-    'PHP/Pascal'                      => 1.00,
+    'PHP/Pascal/Fortran'              => 1.00,
     'Pascal/Puppet'                   => 1.00,
     'Perl/Prolog'                     => 1.00,
     'Raku/Prolog'                     => 1.00,

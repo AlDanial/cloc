@@ -740,10 +740,10 @@ my @Tests = (
                 },
 
                 {
-                    'name' => 'C# with --no-autogen, #753',
-                    'cd'   => '../tests/inputs/issues/753',
-                    'args' => '--no-autogen .',
-                    'ref'  => '../tests/outputs/issues/753/no_autogen.yaml',
+                    'name' => '--exclude-list-file, #784',
+                    'cd'   => '../tests/inputs/issues/784',
+                    'args' => '--by-file --exclude-list-file=.cloc-ignore .',
+                    'ref'  => '../tests/outputs/issues/784/results.yaml',
                 },
 
             );
