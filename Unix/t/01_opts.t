@@ -746,6 +746,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/784/results.yaml',
                 },
 
+                {
+                    'name' => '--exclude-list-file, file path w/regex metacharacters, #785',
+                    'cd'   => '../tests/inputs/issues/785',
+                    'args' => '--exclude-list-file=.cloc-ignore .',
+                    'ref'  => '../tests/outputs/issues/785/results.yaml',
+                },
+
             );
 
 # Special cases:

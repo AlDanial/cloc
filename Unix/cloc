@@ -6157,7 +6157,7 @@ sub is_excluded {                            # {{{1
        ) = @_;
     my($filename, $filepath, $suffix) = fileparse($file);
     foreach my $path (sort keys %{$excluded}) {
-        return 1 if ($filepath =~ m{^$path/}i);
+        return 1 if ($filepath =~ m{^\Q$path\E/}i);
     }
 } # 1}}}
 sub classify_file {                          # {{{1
