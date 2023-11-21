@@ -8240,6 +8240,7 @@ sub set_constants {                          # {{{1
             'd'           => 'D/dtrace'              ,
 # in addition, .d can map to init.d files typically written as
 # bash or sh scripts
+            'dfy'         => 'Dafny'                 ,
             'da'          => 'DAL'                   ,
             'dart'        => 'Dart'                  ,
             'dsc'         => 'DenizenScript'         ,
@@ -9410,6 +9411,11 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*--' ],
                                 [ 'remove_between_general', '{-', '-}' ],
                                 [ 'remove_inline'       , '--.*$'  ],
+                            ],
+    'Dafny'              => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'dhall'              => [   [ 'remove_haskell_comments', '>filename<' ], ],
     'Delphi Form'        => [ # same as Pascal
@@ -10969,6 +10975,7 @@ sub set_constants {                          # {{{1
     'Cucumber'                     =>   3.00,
     'CUDA'                         =>   1.00,
     'D'                            =>   1.70,
+    'Dafny'                        =>   3.00,
     'DAL'                          =>   1.50,
     'Dart'                         =>   2.00,
     'DenizenScript'                =>   1.00,

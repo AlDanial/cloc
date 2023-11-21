@@ -230,6 +230,11 @@ my @Tests = (
                     'args' => '../tests/inputs/cucumber.feature',
                 },
                 {
+                    'name' => 'Dafny',
+                    'ref'  => '../tests/outputs/fib.dfy.yaml',
+                    'args' => '../tests/inputs/fib.dfy',
+                },
+                {
                     'name' => 'DenizenScript',
                     'ref'  => '../tests/outputs/double_doors.dsc.yaml',
                     'args' => '../tests/inputs/double_doors.dsc',
