@@ -8131,6 +8131,7 @@ sub set_constants {                          # {{{1
             'apln'        => 'APL'                   ,
             'aplc'        => 'APL'                   ,
             'apli'        => 'APL'                   ,
+            'applescript' => 'AppleScript'           ,
             'dyalog'      => 'APL'                   ,
             'dyapp'       => 'APL'                   ,
             'mipage'      => 'APL'                   ,
@@ -9146,6 +9147,12 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'AppleScript'         => [
+                                [ 'remove_matches'      , '^\s*--' ],
+                                [ 'rm_comments_in_strings', '"', '(*', '*)' ],
+                                [ 'remove_between_general', '(*', '*)' ],
+                                [ 'remove_inline'       , '--.*$'  ],
                             ],
     'ASP'                => [   [ 'remove_matches'      , '^\s*\47'], ],  # \47 = '
     'ASP.NET'            => [
@@ -10926,6 +10933,7 @@ sub set_constants {                          # {{{1
     'ASP.NET'                      =>   1.29,
     'CCS'                          =>   5.33,
     'Apex Trigger'                 =>   1.4 ,
+    'AppleScript'                  =>   4.0 ,
     'Arduino Sketch'               =>   1.00,
     'Assembly'                     =>   0.25,
     'Astro'                        =>   3.0,

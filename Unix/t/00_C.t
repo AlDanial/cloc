@@ -30,6 +30,11 @@ my @Tests = (
                     'args' => '../tests/inputs/rand.apl',
                 },
                 {
+                    'name' => 'AppleScript',
+                    'ref'  => '../tests/outputs/send_msg.applescript.yaml',
+                    'args' => '../tests/inputs/send_msg.applescript',
+                },
+                {
                     'name' => 'AsciiDoc',
                     'ref'  => '../tests/outputs/asciidoctor.adoc.yaml',
                     'args' => '../tests/inputs/asciidoctor.adoc',
