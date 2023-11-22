@@ -9172,8 +9172,8 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*⍝' ],
                             ],
     'AnsProlog'          => [
+                                [ 'remove_between_general', '%*', '*%' ],
                                 [ 'remove_matches'      , '^\s*\%' ],
-                                [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_inline'       , '(//|\%).*$' ],
                             ],
     'Ant/XML'            => [
