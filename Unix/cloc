@@ -8496,6 +8496,7 @@ sub set_constants {                          # {{{1
             'll'          => 'LLVM IR'               ,
             'lgt'         => 'Logtalk'               ,
             'logtalk'     => 'Logtalk'               ,
+            'lp'          => 'AnsProlog'             ,  # Answer Set Programming / clingo
             'wlua'        => 'Lua'                   ,
             'rbxs'        => 'Lua'                   ,
             'pd_lua'      => 'Lua'                   ,
@@ -9154,6 +9155,11 @@ sub set_constants {                          # {{{1
     'AMPLE'              => [   [ 'remove_matches'      , '^\s*//' ], ],
     'APL'                => [
                                 [ 'remove_matches'      , '^\s*⍝' ],
+                            ],
+    'AnsProlog'          => [
+                                [ 'remove_between_general', '%*', '*%' ],
+                                [ 'remove_matches'      , '^\s*\%' ],
+                                [ 'remove_inline'       , '(//|\%).*$' ],
                             ],
     'Ant/XML'            => [
                                 [ 'remove_html_comments',          ],
@@ -10909,6 +10915,7 @@ sub set_constants {                          # {{{1
     'ADSO/IDSM'                    =>   3.00,
     'Agda'                         =>   2.11,
     'AMPLE'                        =>   2.00,
+    'AnsProlog'                    =>   1.25,
     'Ant/XML'                      =>   1.90,
     'Ant'                          =>   1.90,
     'ANTLR Grammar'                =>   2.00,

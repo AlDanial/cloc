@@ -10,6 +10,11 @@ my @Tests = (
                     'args' => '../tests/inputs/Lookup.agda',
                 },
                 {
+                    'name' => 'AnsProlog',
+                    'ref'  => '../tests/outputs/AnsProlog.lp.yaml',
+                    'args' => '../tests/inputs/AnsProlog.lp',
+                },
+                {
                     'name' => 'ANTLR Grammar 1',
                     'ref'  => '../tests/outputs/ExprParser.g.yaml',
                     'args' => '../tests/inputs/ExprParser.g',
