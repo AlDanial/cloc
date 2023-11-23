@@ -8279,6 +8279,7 @@ sub set_constants {                          # {{{1
             'ejs'         => 'EJS'                   ,
             'erb'         => 'ERB'                   ,
             'ERB'         => 'ERB'                   ,
+            'ets'         => 'ArkTs'                 , # OpenHarmonyOS app language
             'yrl'         => 'Erlang'                ,
             'xrl'         => 'Erlang'                ,
             'rebar.lock'  => 'Erlang'                ,
@@ -9181,6 +9182,11 @@ sub set_constants {                          # {{{1
                             ],
     'Arduino Sketch'     => [ # Arduino IDE inserts problematic 0xA0 characters; strip them
                                 [ 'replace_regex' , '\xa0', " " ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'ArkTs'              => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
@@ -10924,6 +10930,7 @@ sub set_constants {                          # {{{1
     'SQL Data'                     =>   1.00,
     'Apex Class'                   =>   1.50,
     'APL'                          =>   2.50,
+    'ArkTs'                        =>   2.50,
     'AsciiDoc'                     =>   1.50,
     'AspectJ'                      =>   1.36,
     'asa'                          =>   1.29,

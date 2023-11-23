@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.99
+  elapsed_seconds    : 0.00846600532531738
+  n_files            : 1
+  n_lines            : 21
+  files_per_second   : 118.119462671435
+  lines_per_second   : 2480.50871610014
+  report_file        : ../outputs/openharmony.ets.yaml
+'ArkTs' :
+  nFiles: 1
+  blank: 1
+  comment: 10
+  code: 10
+SUM: 
+  blank: 1
+  comment: 10
+  code: 10
+  nFiles: 1

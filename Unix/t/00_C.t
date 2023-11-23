@@ -40,6 +40,11 @@ my @Tests = (
                     'args' => '../tests/inputs/send_msg.applescript',
                 },
                 {
+                    'name' => 'ArkTs',
+                    'ref'  => '../tests/outputs/openharmony.ets.yaml',
+                    'args' => '../tests/inputs/openharmony.ets',
+                },
+                {
                     'name' => 'AsciiDoc',
                     'ref'  => '../tests/outputs/asciidoctor.adoc.yaml',
                     'args' => '../tests/inputs/asciidoctor.adoc',
