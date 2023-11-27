@@ -6005,7 +6005,8 @@ sub files {                                  # {{{1
     # invoked by File::Find's find()   Populates global variable @file_list.
     # See also find_preprocessor() which prunes undesired directories.
 
-    my $Dir = fastcwd(); # not $File::Find::dir which just gives relative path
+#   my $Dir = fastcwd();         # fully qualified path -- problematic
+    my $Dir = $File::Find::dir;  # path anchored to cloc's cwd
     my $rule;
     if ($opt_fullpath) {
         # look at as much of the path as is known

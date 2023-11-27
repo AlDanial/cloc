@@ -502,13 +502,12 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              the directory where cloc is invoked.
                              See also --list-file, --config.
    --fullpath                Modifies the behavior of --match-f, --not-match-f,
-                             and --not-match-d to include the file's path
-                             in the regex, not just the file's basename.
-                             (This does not expand each file to include its
-                             absolute path, instead it uses as much of
-                             the path as is passed in to cloc.)
-                             Note:  --match-d always looks at the full
-                             path and therefore is unaffected by --fullpath.
+                             and --not-match-d to include the file's path--
+                             relative to the directory from which cloc is
+                             invoked--in the regex, not just the file's basename.
+                             (This does not expand each filename to include its
+                             fully qualified absolute path; instead, it uses as
+                             much of the path as is passed in to cloc.)
    --include-ext=<ext1>[,ext2[...]]
                              Count only languages having the given comma
                              separated file extensions.  Use --show-ext to
@@ -523,18 +522,17 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              only counts files in directories containing
                              /src/ or /include/.  Unlike --not-match-d,
                              --match-f, and --not-match-f, --match-d always
-                             compares the fully qualified path against the
-                             regex.
+                             anchors the regex to the directory from which
+                             cloc is invoked.
    --not-match-d=<regex>     Count all files except those in directories
                              matching the Perl regex.  Only the trailing
                              directory name is compared, for example, when
                              counting in /usr/local/lib, only 'lib' is
                              compared to the regex.
-                             Add --fullpath to compare parent directories to
-                             the regex.
-                             Do not include file path separators at the
-                             beginning or end of the regex.
-                             This option may be repeated.
+                             Add --fullpath to compare parent directories, beginning
+                             from the directory where cloc is invoked, to the regex.
+                             Do not include file path separators at the beginning
+                             or end of the regex. This option may be repeated.
    --match-f=<regex>         Only count files whose basenames match the Perl
                              regex.  For example
                                --match-f='^[Ww]idget'
@@ -5801,21 +5799,25 @@ sub invoke_generator {                       # {{{1
     return @post_filter;
 } # 1}}}
 sub any_match {                              # {{{1
-	my ($string, $entire, $rs_matched_pattern, @patterns) = @_;
-	foreach my $pattern (@patterns) {
+    my ($string, $entire, $rs_matched_pattern, @patterns) = @_;
+    print "-> any_match($string, $entire)\n" if $opt_v > 2;
+    foreach my $pattern (@patterns) {
         if ($entire) {
             if ($string =~ m{^${pattern}$}) {
                 ${$rs_matched_pattern} = $pattern;
+                print "<- any_match(1)\n" if $opt_v > 2;
                 return 1;
             }
         } else {
             if ($string =~ m{$pattern}) {
                 ${$rs_matched_pattern} = $pattern;
+                print "<- any_match(1)\n" if $opt_v > 2;
                 return 1;
             }
         }
     }
-	return 0;
+    print "<- any_match(0)\n" if $opt_v > 2;
+    return 0;
 }
 # }}}
 sub remove_duplicate_files {                 # {{{1
@@ -5954,8 +5956,6 @@ sub find_preprocessor {                      # {{{1
     print "-> find_preprocessor(", cwd(), ")\n" if $opt_v > 2;
     my @ok = ();
 
-#printf "TOP find_preprocessor\n";
-
     foreach my $F_or_D (@_) {  # pure file or directory name, no separators
         next if $F_or_D =~ /^\.{1,2}$/;  # skip .  and  ..
         if ($Exclude_Dir{$F_or_D}) {
@@ -5971,7 +5971,7 @@ sub find_preprocessor {                      # {{{1
                         push @ok, $F_or_D;
                     }
                 } elsif (!is_dir($F_or_D) and
-                         any_match(basename($File::Find::name), 0, \$rule,
+                         any_match($File::Find::name, 0, \$rule,
                                    @opt_not_match_d)) {
                     $Ignored{$File::Find::name} = "--not-match-d (basename) =$rule";
                 } else {
@@ -5990,7 +5990,8 @@ sub files {                                  # {{{1
     # invoked by File::Find's find()   Populates global variable @file_list.
     # See also find_preprocessor() which prunes undesired directories.
 
-    my $Dir = fastcwd(); # not $File::Find::dir which just gives relative path
+#   my $Dir = fastcwd();         # fully qualified path -- problematic
+    my $Dir = $File::Find::dir;  # path anchored to cloc's cwd
     my $rule;
     if ($opt_fullpath) {
         # look at as much of the path as is known
@@ -8354,7 +8355,7 @@ sub set_constants {                          # {{{1
             'g4'          => 'ANTLR Grammar'         ,
             'gleam'       => 'Gleam'                 ,
             'go'          => 'Go'                    ,
-            'ʕ◔ϖ◔ʔ'	  => 'Go'                    ,
+            'ʕ◔ϖ◔ʔ'       => 'Go'                    ,
             'gsp'         => 'Grails'                ,
             'jenkinsfile' => 'Groovy'                ,
             'gvy'         => 'Groovy'                ,
