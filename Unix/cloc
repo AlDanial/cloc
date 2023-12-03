@@ -6232,15 +6232,20 @@ sub classify_file {                          # {{{1
                     return $lang_M_or_O;
                 } else { # an error happened in matlab_or_objective_C()
                     $rh_ignored->{$full_file} =
-                        'failure in matlab_or_objective_C()';
+                        'failure in matlab_or_objective_C($full_file)';
                     return $language; # (unknown)
                 }
             } elsif ($Language_by_Extension{$extension} eq 'PHP/Pascal/Fortran') {
-                if (really_is_php($full_file)) {
-                    return 'PHP';
-                } elsif (really_is_incpascal($full_file)) {
-                    return 'Pascal';
-                } else {
+                my $lang_F_or_P_or_P = "";
+                php_pascal_or_fortran($full_file ,
+                                      $rh_Err    ,
+                                      $raa_errors,
+                                     \$lang_F_or_P_or_P);
+                if ($lang_F_or_P_or_P) {
+                    return $lang_F_or_P_or_P;
+                } else { # an error happened in php_pascal_or_fortran()
+                    $rh_ignored->{$full_file} =
+                        'failure in php_pascal_or_fortran($full_file)';
                     return $language; # (unknown)
                 }
             } elsif ($Language_by_Extension{$extension} eq 'Pascal/Puppet') {
@@ -11549,6 +11554,98 @@ printf "END LOOP    obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $obje
     ${$rs_language} = (sort { $points{$b} <=> $points{$a} or $a cmp $b } keys %points)[0];
 
     print "<- matlab_or_objective_C($file: matlab=$matlab_points, mathematica=$mathematica_points, C=$objective_C_points, mumps=$mumps_points, mercury=$mercury_points) => ${$rs_language}\n"
+        if $opt_v > 2;
+
+} # 1}}}
+sub php_pascal_or_fortran {                  # {{{1
+    # Decide if code is Fortran, PHP, or Pascal
+    my ($file        , # in
+        $rh_Err      , # in   hash of error codes
+        $raa_errors  , # out
+        $rs_language , # out
+       ) = @_;
+    print "-> php_pascal_or_fortran\n" if $opt_v > 2;
+    # fortran markers:
+    #   'implicit none' or 'implicit real' or 'implicit integer'
+    #   'program' or 'subroutine' or 'function' or 'module'
+    #   'end program' or 'end subroutine' or 'end function' or 'end module'
+    #   'write(', 'enddo'
+    #
+    # PHP:
+    #   must have at least two brace characters, { }
+    #   has /* ... */ style comments
+    #   some lines start with @
+    #   some lines start with #include
+    #
+    # Pascal:
+    #   lines ending with ;
+    #   writeln
+
+    ${$rs_language} = "";
+    my $IN = open_file('<', $file, 1);
+    if (!defined $IN) {
+        push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
+        return;
+    }
+
+    my $DEBUG           = 0;
+
+    my $fortran_90      = 0;
+    my $fortran_points  = 0;
+    my $php_points      = 0;
+    my $pascal_points   = 0;
+    while (<$IN>) {
+        if (/^\s*<\?php/i) {
+            $php_points += 100;
+            last;
+        } elsif (/^\s*end\./i ) {
+            $pascal_points += 100;
+            last;
+        } elsif (/^\s*implicit\s+(none|real|integer|complex|double)/i) {
+            $fortran_points += 100;
+            # don't end here; try to get 77 or 90 flavor
+        } elsif (/^\s*end;/i ) {
+            ++$pascal_points;
+            last;
+        } elsif (/^\s*program\b/i) {
+            ++$fortran_points;
+            ++$pascal_points;
+        # 'function' is common to all three languages so ignore it
+        } elsif (/^\s*(subroutine|module|stop)\b/i or
+                 /^\s*write\s*\(/i                 or
+                 /^\s*end\s+(program|subroutine)/i or
+                 /^\s*end\s*(if|do)\b/i) {
+            ++$fortran_points;
+        } elsif (/^\s*(writeln|begin|procedure|interface|implementation|const|var)\b/i) {
+            ++$pascal_points;
+        } elsif (/^\s*(<|\?>)/) {
+            ++$php_points;
+        } elsif (/;\s*$/) {
+            ++$pascal_points;
+            ++$php_points;
+        }
+        if (/^\s*(integer|real|complex|double|character|logical|public|private).*?::/i or
+            /^\s*(allocatable|dimension)/i or
+            /^\s*(end\s+)?(interface|type|function|module)\b/i) {
+            ++$fortran_90;
+        }
+    }
+    $IN->close;
+
+    my %points = ( 'Fortran'      => $fortran_points     ,
+                   'PHP'          => $php_points         ,
+                   'Pascal'       => $pascal_points      , );
+
+    ${$rs_language} = (sort { $points{$b} <=> $points{$a} or $a cmp $b } keys %points)[0];
+    if (${$rs_language} eq 'Fortran') {
+        if ($fortran_90) {
+            ${$rs_language} = 'Fortran 90';
+        } else {
+            ${$rs_language} = 'Fortran 77';
+        }
+    }
+
+    print "<- php_pascal_or_fortran($file: fortran=$fortran_points, php=$php_points, pascal=$pascal_points) => ${$rs_language}\n"
         if $opt_v > 2;
 
 } # 1}}}
