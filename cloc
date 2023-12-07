@@ -9063,6 +9063,7 @@ sub set_constants {                          # {{{1
             'yml'         => 'YAML'                  ,
             'zig'         => 'Zig'                   ,
             'zsh'         => 'zsh'                   ,
+            'slint'       => 'Slint'                 ,
             );
 # 1}}}
 %{$rh_Language_by_Script}    = (             # {{{1
@@ -10757,6 +10758,11 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
+    'Slint'              => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     );
 # 1}}}
 %{$rh_EOL_continuation_re} = (               # {{{1
@@ -10829,6 +10835,7 @@ sub set_constants {                          # {{{1
     'Vyper'              =>     '\\\\$'         ,
     'X++'                =>     '\\\\$'         ,
     'zsh'                =>     '\\\\$'         ,
+    'Slint'              =>     '\\\\$'         ,
     );
 # 1}}}
 %{$rh_Not_Code_Extension}    = (             # {{{1
@@ -11338,6 +11345,7 @@ sub set_constants {                          # {{{1
     'Verilog-SystemVerilog/Coq'    => 1.00,
     'MATLAB/Mathematica/Objective-C/MUMPS/Mercury' => 1.00,
     'IDL/Qt Project/Prolog/ProGuard'     => 1.00,
+    'Slint'                           => 1.00,
 );
 # 1}}}
 %{$rh_Known_Binary_Archives} = (             # {{{1
