@@ -1345,6 +1345,7 @@ yacc                       (y, yacc)
 YAML                       (clang-format, clang-tidy, gemrc, glide.lock, mir, reek, rviz, sublime-syntax, syntax, yaml, yaml-tmlanguage, yml, yml.mysql)
 Zig                        (zig)
 zsh                        (zsh)
+Slint                      (slint)
 </pre>
 
 The above list can be customized by reading language definitions from a

@@ -1321,6 +1321,11 @@ my @Tests = (
                     'ref'  => '../tests/outputs/zir_sema.zig.yaml',
                     'args' => '../tests/inputs/zir_sema.zig',
                 },
+                {
+                    'name' => 'Slint',
+                    'ref'  => '../tests/outputs/Slint-helloworld.slint.yaml',
+                    'args' => '../tests/inputs/Slint-helloworld.slint',
+                },
             );
 
 my $Verbose = 0;
