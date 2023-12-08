@@ -1022,6 +1022,11 @@ my @Tests = (
                     'args' => '../tests/inputs/Slim.html.slim',
                 },
                 {
+                    'name' => 'Slint',
+                    'ref'  => '../tests/outputs/Slint-helloworld.slint.yaml',
+                    'args' => '../tests/inputs/Slint-helloworld.slint',
+                },
+                {
                     'name' => 'Smalltalk 1',
                     'ref'  => '../tests/outputs/chat.st.yaml',
                     'args' => '../tests/inputs/chat.st',
@@ -1320,11 +1325,6 @@ my @Tests = (
                     'name' => 'Zig',
                     'ref'  => '../tests/outputs/zir_sema.zig.yaml',
                     'args' => '../tests/inputs/zir_sema.zig',
-                },
-                {
-                    'name' => 'Slint',
-                    'ref'  => '../tests/outputs/Slint-helloworld.slint.yaml',
-                    'args' => '../tests/inputs/Slint-helloworld.slint',
                 },
             );
 

@@ -756,7 +756,7 @@ my @Tests = (
                 {
                     'name' => '.inc as PHP, Pascal, or Fortran #781',
                     'cd'   => '../tests/inputs/issues/781',
-                    'args' => '--by-file ../../*.inc',
+                    'args' => '--by-file .',
                     'ref'  => '../tests/outputs/issues/781/results.yaml',
                 },
 

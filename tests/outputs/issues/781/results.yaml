@@ -1,0 +1,31 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.99
+  elapsed_seconds    : 0.0100669860839844
+  n_files            : 3
+  n_lines            : 64
+  files_per_second   : 298.003789314134
+  lines_per_second   : 6357.41417203486
+  report_file        : /home/al/git-cloc/tests/outputs/issues/781/results.yaml
+'./fortran.inc' :
+  blank: 4
+  comment: 4
+  code: 20
+  language: Fortran 90
+'./test1.inc' :
+  blank: 5
+  comment: 7
+  code: 11
+  language: PHP
+'./pascal.inc' :
+  blank: 1
+  comment: 2
+  code: 10
+  language: Pascal
+SUM: 
+  blank: 10
+  comment: 13
+  code: 41
+  nFiles: 3
