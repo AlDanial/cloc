@@ -12854,8 +12854,14 @@ sub get_leading_dirs {                       # {{{1
     }
 #use Data::Dumper::Simple;
     # at this point path separator on Windows is already /
-    $L_drop =~ s{//}{/}g;
-    $R_drop =~ s{//}{/}g;
+
+    while ($L_drop =~ m{//}) {
+        $L_drop =~ s{//}{/}g;
+    }
+    while ($R_drop =~ m{//}) {
+        $R_drop =~ s{//}{/}g;
+    }
+
 #print "L_drop=$L_drop\n";
 #print "R_drop=$R_drop\n";
     return $L_drop, $R_drop, 1;
@@ -12968,7 +12974,7 @@ sub align_by_pairs {                         # {{{1
 #print Dumper("align_by_pairs", %stripped_L, %stripped_R);
 #print Dumper("align_by_pairs", %common, %added, %deleted);
 
-    foreach my $f (keys %common) {
+    foreach my $f (sort keys %common) {
         push @{$ra_compare_list}, [ $stripped_L{$f},
                                     $stripped_R{$f} ];
     }
