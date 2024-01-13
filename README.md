@@ -130,27 +130,28 @@ This example uses code from
 <a href=https://pypi.python.org/pypi/pudb>PuDB</a>, a fantastic Python debugger.
 
 <pre>
-prompt> git clone http://git.tiker.net/trees/pudb.git
+prompt> git clone https://github.com/inducer/pudb.git
 
 prompt> cd pudb
 
 prompt> cloc 6be804e07a5db
       48 text files.
-      48 unique files.
-      15 files ignored.
+      41 unique files.                              
+       8 files ignored.
 
-github.com/AlDanial/cloc v 1.73  T=0.15 s (223.1 files/s, 46159.0 lines/s)
+github.com/AlDanial/cloc v 1.99  T=0.04 s (1054.9 files/s, 189646.8 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
 Python                          28           1519            728           4659
+reStructuredText                 6            102             20            203
 YAML                             2              9              2             75
 Bourne Shell                     3              6              0             17
+Text                             1              0              0             11
 make                             1              4              6             10
 -------------------------------------------------------------------------------
-SUM:                            34           1538            736           4761
+SUM:                            41           1640            756           4975
 -------------------------------------------------------------------------------
-
 </pre>
 
 **each subdirectory of a particular directory**
