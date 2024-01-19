@@ -11,12 +11,13 @@ RUN export DEBIAN_FRONTEND=noninteractive \
  && rm -rf /var/lib/apt/lists/*
 
 #Install all dependencies
-RUN cpanm \
-      Algorithm::Diff \
-      Digest::MD5 \
-      Parallel::ForkManager \
-      Regexp::Common \
- && rm -rf $HOME/.cpanm
+# 2024-01-19 cpanm command has been failing -- no explanation
+#RUN cpanm \
+#      Algorithm::Diff \
+#      Digest::MD5 \
+#      Parallel::ForkManager \
+#      Regexp::Common \
+# && rm -rf $HOME/.cpanm
 
 #Copy source code
 COPY cloc /usr/src/
