@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.99
+  elapsed_seconds    : 0.00251412391662598
+  n_files            : 1
+  n_lines            : 55
+  files_per_second   : 397.752868658132
+  lines_per_second   : 21876.4077761973
+  report_file        : ../outputs/args.janet.yaml
+'Janet' :
+  nFiles: 1
+  blank: 8
+  comment: 2
+  code: 45
+SUM: 
+  blank: 8
+  comment: 2
+  code: 45
+  nFiles: 1

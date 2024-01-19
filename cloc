@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 # cloc -- Count Lines of Code                  {{{1
-# Copyright (C) 2006-2023 Al Danial <al.danial@gmail.com>
+# Copyright (C) 2006-2024 Al Danial <al.danial@gmail.com>
 # First release August 2006
 #
 # Includes code from:
@@ -8447,6 +8447,7 @@ sub set_constants {                          # {{{1
             'jcl'         => 'JCL'                   , # IBM Job Control Lang.
             'jl'          => 'Lisp/Julia'            ,
             'jai'         => 'Jai'                   ,
+            'janet'       => 'Janet'                 ,
             'xsjslib'     => 'JavaScript'            ,
             'xsjs'        => 'JavaScript'            ,
             'ssjs'        => 'JavaScript'            ,
@@ -9781,6 +9782,10 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
+    'Janet'              => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
     'JSP'                => [   [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
                                 [ 'remove_jsp_comments' ,          ],
@@ -11111,6 +11116,7 @@ sub set_constants {                          # {{{1
     'IPL'                          =>   2.00,
     'Jai'                          =>   1.13,
     'Jam'                          =>   2.00,
+    'Janet'                        =>   3.00,
     'Java'                         =>   1.36,
     'JavaScript'                   =>   1.48,
     'JavaServer Faces'             =>   1.5 ,

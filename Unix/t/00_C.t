@@ -552,6 +552,11 @@ my @Tests = (
                     'args' => '../tests/inputs/poly_constructor.jai',
                 },
                 {
+                    'name' => 'Janet',
+                    'ref'  => '../tests/outputs/args.janet.yaml',
+                    'args' => '../tests/inputs/args.janet',
+                },
+                {
                     'name' => 'Java',
                     'ref'  => '../tests/outputs/Java.java.yaml',
                     'args' => '../tests/inputs/Java.java',
