@@ -760,6 +760,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/781/results.yaml',
                 },
 
+                {
+                    'name' => 'Java /* in string #804',
+                    'cd'   => '../tests/inputs/issues/804',
+                    'args' => 'infoSQL.java',
+                    'ref'  => '../tests/outputs/issues/804/infoSQL.java.yaml',
+                },
+
             );
 
 # Special cases:

@@ -9627,7 +9627,7 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '//.*$'  ],
                                 # separate /* inside quoted strings with two
                                 # concatenated strings split between / and *
-                                [ 'replace_between_regex', '(["\'])(.*?/)(\*.*?)\g1',
+                                [ 'replace_between_regex', '(["\'])(.*?/)(\*.*?)\1',
                                   '(.*?)' , '"$1$2$1 + $1$3$1$4"', 0],
                                 [ 'rm_comments_in_strings', '"""', '/*', '*/', 1],
                                 [ 'rm_comments_in_strings', '"""', '//', '', 1],
@@ -9654,7 +9654,7 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '//.*$'  ],
                                 # separate /* inside quoted strings with two
                                 # concatenated strings split between / and *
-                                [ 'replace_between_regex', '(["\'])(.*?/)(\*.*?)\g1',
+                                [ 'replace_between_regex', '(["\'])(.*?/)(\*.*?)\1',
                                   '(.*?)' , '"$1$2$1 + $1$3$1$4"', 0],
                                 [ 'rm_comments_in_strings', '"""', '/*', '*/', 1],
                                 [ 'rm_comments_in_strings', '"""', '//', '', 1],
@@ -9788,14 +9788,16 @@ sub set_constants {                          # {{{1
                                 # Java seems to have more path globs in strings
                                 # than other languages.  The variations makes
                                 # it tricky to craft a universal fix.
-                                [ 'replace_between_regex', '(["\'])(.*?/\*)\g1',
+                                # \1 is a backreference to the first group, meaning
+                                # either single or double quote
+                                [ 'replace_between_regex', '(["\'])(.*?/\*)(.*?)\1',
                                   '(.*?)' , '"xx"'],
-                                [ 'replace_between_regex', '(["\'])(.*?\*/)\g1',
+                                [ 'replace_between_regex', '(["\'])(.*?\*/)(.*?)\1',
                                   '(.*?)' , '"xx"'],
                                ## separate /* inside quoted strings with two
                                ## concatenated strings split between / and *
                                ##    -> defeated by "xx/**/*_xx" issue 365
-                               #[ 'replace_between_regex', '(["\'])(.*?/)(\*.*?)\g1',
+                               #[ 'replace_between_regex', '(["\'])(.*?/)(\*.*?)\1',
                                #  '(.*?)' , '"$1$2$1 + $1$3$1$4"'],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
@@ -10725,7 +10727,7 @@ sub set_constants {                          # {{{1
     'Xtend'              => [   # copy of Java, plus triple << inline
                                 # separate /* inside quoted strings with two
                                 # concatenated strings split between / and *
-                                [ 'replace_between_regex', '(["\'])(.*?/)(\*.*?)\g1',
+                                [ 'replace_between_regex', '(["\'])(.*?/)(\*.*?)\1',
                                   '(.*?)' , '"$1$2$1 + $1$3$1$4"', 0],
                                 [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_matches'      , '^\s*\x{c2ab}{3}'  ], # doesn't work
