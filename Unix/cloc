@@ -242,6 +242,7 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
    --autoconf                Count .in files (as processed by GNU autoconf) of
                              recognized languages.  See also --no-autogen.
    --by-file                 Report results for every source file encountered.
+                             See also --fmt under 'Output Options'.
    --by-file-by-lang         Report results for every source file encountered
                              in addition to reporting by language.
    --config <file>           Read command line switches from <file> instead of
@@ -614,6 +615,14 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              'euc-kr', 'iso-8859-16'.  Known encodings can be
                              printed with
                                perl -MEncode -e 'print join(\"\\n\", Encode->encodings(\":all\")), \"\\n\"'
+   --fmt=<N>                 Alternate text output format where <N> is a number
+                             from 1 to 5. 'total lines' means the sum of code,
+                             comment, and blank lines.
+                               1:  by language (same as cloc default output)
+                               2:  by language with an extra column for total lines
+                               3:  by file with language
+                               4:  by file with a total lines column
+                               5:  by file with language and a total lines column
    --hide-rate               Do not show elapsed time, line processing rate, or
                              file processing rates in the output header. This
                              makes output deterministic.
@@ -769,6 +778,7 @@ my (
     $opt_skip_leading         ,
     $opt_no_recurse           ,
     $opt_only_count_files     ,
+    $opt_fmt                  ,
    );
 
 my $getopt_success = GetOptions(             # {{{1
@@ -873,6 +883,7 @@ my $getopt_success = GetOptions(             # {{{1
    "skip_leading|skip-leading:s"             => \$opt_skip_leading        ,
    "no_recurse|no-recurse"                   => \$opt_no_recurse          ,
    "only_count_files|only-count-files"       => \$opt_only_count_files    ,
+   "fmt=i"                                   => \$opt_fmt                 ,
   );
 # 1}}}
 $config_file = $opt_config_file if defined $opt_config_file;
@@ -987,6 +998,13 @@ $opt_git = 1 if defined($opt_git_diff_all) or
                 defined($opt_git_diff_rel) or
                 (defined($opt_vcs) and ($opt_vcs eq "git"));
 $opt_by_file  = 1 if defined  $opt_by_file_by_lang;
+if ($opt_fmt) {
+    $opt_by_file = 1;
+    $opt_json = 1;
+    my $fh;
+    ($fh, $opt_report_file) = tempfile(UNLINK => 0, DIR => ".", SUFFIX => ".json" );
+    $fh->close; # will be opened later by the JSON writer
+}
 my $CLOC_XSL = "cloc.xsl"; # created with --xsl
    $CLOC_XSL = "cloc-diff.xsl" if $opt_diff;
 die "\n" unless $getopt_success;
@@ -1083,7 +1101,7 @@ if ($ON_WINDOWS) {
     if ($opt_git) {
         # PowerShell tab expansion automatically prefixes local directories
         # with ".\" (now mapped to "./").   git ls-files output does not
-        # include this.  Strip this prefix to permit clean matches. 
+        # include this.  Strip this prefix to permit clean matches.
         map { s{^\./}{} } @ARGV;
     }
 }
@@ -2171,8 +2189,14 @@ if      ($opt_by_file_by_lang) {
 }
 # 1}}}
 }
-if ($opt_report_file) { write_file($opt_report_file, {}, @Lines_Out); }
-else {
+if ($opt_report_file) {
+    write_file($opt_report_file, {}, @Lines_Out);
+    if ($opt_fmt) {
+        my ($file_len, $lang_len, $header, %contents) = load_json($opt_report_file);
+        print_format_n($opt_fmt, $file_len, $lang_len, $header, %contents);
+        unlink $opt_report_file;
+    }
+} else {
     print "\n" unless $opt_quiet;
     print join("\n", @Lines_Out), "\n";
 }
@@ -6773,7 +6797,7 @@ sub write_file {                             # {{{1
     $OUT->close;
 
     if (can_read($file)) {
-        print "Wrote $file" unless $opt_quiet;
+        print "Wrote $file" unless $opt_quiet or $opt_fmt;
         print ", $CLOC_XSL" if $opt_xsl and $opt_xsl eq $CLOC_XSL;
         print "\n" unless $opt_quiet;
     }
