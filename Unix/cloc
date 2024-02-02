@@ -616,8 +616,12 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              printed with
                                perl -MEncode -e 'print join(\"\\n\", Encode->encodings(\":all\")), \"\\n\"'
    --fmt=<N>                 Alternate text output format where <N> is a number
-                             from 1 to 5. 'total lines' means the sum of code,
-                             comment, and blank lines.
+                             from 1 to 5, or -1 to -5. 'total lines' means the
+                             sum of code, comment, and blank lines.  Negative
+                             values are the same as the positive values but retain,
+                             instead of deleting, the intermediate JSON file that
+                             is written.  The JSON file name is randomly generated
+                             unless --out/--report-file is given.  The formats are:
                                1:  by language (same as cloc default output)
                                2:  by language with an extra column for total lines
                                3:  by file with language
@@ -1001,9 +1005,11 @@ $opt_by_file  = 1 if defined  $opt_by_file_by_lang;
 if ($opt_fmt) {
     $opt_by_file = 1;
     $opt_json = 1;
+    if (!defined $opt_report_file) {
     my $fh;
     ($fh, $opt_report_file) = tempfile(UNLINK => 0, DIR => ".", SUFFIX => ".json" );
     $fh->close; # will be opened later by the JSON writer
+    }
 }
 my $CLOC_XSL = "cloc.xsl"; # created with --xsl
    $CLOC_XSL = "cloc-diff.xsl" if $opt_diff;
@@ -2193,8 +2199,8 @@ if ($opt_report_file) {
     write_file($opt_report_file, {}, @Lines_Out);
     if ($opt_fmt) {
         my ($file_len, $lang_len, $header, %contents) = load_json($opt_report_file);
-        print_format_n($opt_fmt, $file_len, $lang_len, $header, %contents);
-        unlink $opt_report_file;
+        unlink $opt_report_file unless $opt_fmt < 0;
+        print_format_n(abs($opt_fmt), $file_len, $lang_len, $header, %contents);
     }
 } else {
     print "\n" unless $opt_quiet;
@@ -6797,7 +6803,7 @@ sub write_file {                             # {{{1
     $OUT->close;
 
     if (can_read($file)) {
-        print "Wrote $file" unless $opt_quiet or $opt_fmt;
+        print "Wrote $file" unless $opt_quiet or $opt_fmt > 0;
         print ", $CLOC_XSL" if $opt_xsl and $opt_xsl eq $CLOC_XSL;
         print "\n" unless $opt_quiet;
     }
