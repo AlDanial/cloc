@@ -767,6 +767,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/804/infoSQL.java.yaml',
                 },
 
+                {
+                    'name' => 'comments in Java text blocks #805',
+                    'cd'   => '../tests/inputs/issues/805',
+                    'args' => 'text_block.java',
+                    'ref'  => '../tests/outputs/issues/805/text_block.java.yaml',
+                },
+
             );
 
 # Special cases:

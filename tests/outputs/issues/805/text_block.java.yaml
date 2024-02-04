@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.99
+  elapsed_seconds    : 0.00261998176574707
+  n_files            : 1
+  n_lines            : 21
+  files_per_second   : 381.682045682046
+  lines_per_second   : 8015.32295932296
+  report_file        : ../../../outputs/issues/805/text_block.java.yaml
+'Java' :
+  nFiles: 1
+  blank: 2
+  comment: 1
+  code: 18
+SUM: 
+  blank: 2
+  comment: 1
+  code: 18
+  nFiles: 1

@@ -1002,6 +1002,7 @@ $opt_git = 1 if defined($opt_git_diff_all) or
                 defined($opt_git_diff_rel) or
                 (defined($opt_vcs) and ($opt_vcs eq "git"));
 $opt_by_file  = 1 if defined  $opt_by_file_by_lang;
+$opt_fmt = 0 unless defined $opt_fmt;
 if ($opt_fmt) {
     $opt_by_file = 1;
     $opt_json = 1;
@@ -7898,6 +7899,38 @@ sub docstring_to_C {                         # {{{1
     print "<- docstring_to_C\n" if $opt_v > 2;
     return @{$ra_lines};
 } # 1}}}
+sub docstring_rm_comments {                  # {{{1
+    my ($ra_lines, ) = @_;
+    # Remove embedded C/C++ style comments in docstrings.
+
+    print "-> docstring_rm_comments()\n" if $opt_v > 2;
+
+    my $in_docstring = 0;
+    foreach (@{$ra_lines}) {
+        if (/((""")|('''))(.*?)\1/) {
+            # single line docstring
+            my ($i_start, $i_end) = ($-[0]+3, $+[0]-3);
+            # replace /*, */, // with xx
+            substr($_, $i_start, $i_end-$i_start) =~ s{(/\*|\*/|//)}{xx}g;
+            next;
+        } elsif (/^(.*?)((""")|('''))/ and  $in_docstring) {
+            $in_docstring = 0;
+            my $i_end = length $1;
+            if ($i_end) {
+                substr($_, 0, $i_end) =~ s{(/\*|\*/|//)}{xx}g;
+            }
+        } elsif (/((""")|('''))(.*?)$/ and !$in_docstring) {
+            $in_docstring = 1;
+            my $i_start = $-[0]+3;
+            substr($_, $i_start) =~ s{(/\*|\*/|//)}{xx}g;
+        } elsif ($in_docstring) {
+            s{(/\*|\*/|//)}{xx}g;
+        }
+    }
+
+    print "<- docstring_rm_comments\n" if $opt_v > 2;
+    return @{$ra_lines};
+} # 1}}}
 sub jupyter_nb {                             # {{{1
     my ($ra_lines, ) = @_;
     # Translate .ipynb file content into an equivalent set of code
@@ -9814,6 +9847,7 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Java'               => [
+								[ 'docstring_rm_comments', ],
                                 [ 'replace_regex', '\\\\$', ' '],
                                 # Java seems to have more path globs in strings
                                 # than other languages.  The variations makes
