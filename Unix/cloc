@@ -7539,6 +7539,7 @@ sub replace_between_regex  {                 # {{{1
         push @save_lines, $_;
     }
 
+    print "[", join("][", @{$ra_lines}), "]\n" if $opt_v > 4;
     print "<- replace_between_regex\n" if $opt_v > 2;
     return @save_lines;
 } # 1}}}
@@ -7913,6 +7914,14 @@ sub docstring_rm_comments {                  # {{{1
             # replace /*, */, // with xx
             substr($_, $i_start, $i_end-$i_start) =~ s{(/\*|\*/|//)}{xx}g;
             next;
+        } elsif (m{/\*.*?((""")|(''')).*?\*/}) {
+            # docstring start or end within /* */ comments
+            my $i_start = $-[0]+2;
+            substr($_, $i_start, 3) = "xxx";
+        } elsif (m{//.*?((""")|('''))}) {
+            # docstring start or end after //
+            my $i_start = $-[0]+2;
+            substr($_, $i_start, 3) = "xxx";
         } elsif (/^(.*?)((""")|('''))/ and  $in_docstring) {
             $in_docstring = 0;
             my $i_end = length $1;
@@ -7928,6 +7937,7 @@ sub docstring_rm_comments {                  # {{{1
         }
     }
 
+    print "[", join("][", @{$ra_lines}), "]\n" if $opt_v > 4;
     print "<- docstring_rm_comments\n" if $opt_v > 2;
     return @{$ra_lines};
 } # 1}}}
@@ -11503,6 +11513,7 @@ sub call_regexp_common {                     # {{{1
     # a bogus use of %RE to avoid:
     # Name "main::RE" used only once: possible typo at cloc line xx.
     print scalar keys %RE if $opt_v < -20;
+    print "[", join("][", @{$ra_lines}), "]\n" if $opt_v > 4;
     print "<- call_regexp_common\n" if $opt_v > 2;
     return split("\n", $all_lines);
 } # 1}}}
@@ -14340,6 +14351,171 @@ sub glob2regex {                             # {{{
     $re =~ s{\cy}{[^/]*}g;
     return '^' . $re . '$';
 } # }}}
+sub load_json {                              # {{{1
+    #
+    # Load a cloc-generated JSON file into %contents
+    #   $contents{filename}{blank|comment|code|language} = value
+    # then print in a variety of formats.
+    #
+    my ($file, ) = @_;
+
+    my %contents = ();
+    my $heading = undef;
+    open IN, $file or die "failed load_json($file)";
+    while (<IN>) {
+        if (/^{?"(.*?)"/) {
+            $heading = $1;
+        } else {
+            if (/^\s+"(.*?)"\s*:\s+(\d+(\.\d+)?)\b/) {
+                # numeric value
+                $contents{$heading}{$1} = $2;
+            } elsif (/^\s+"(.*?)"\s*:\s+"(.*?)"/) {
+                $contents{$heading}{$1} = $2;
+            }
+        }
+    }
+    close IN;
+    my $url = $contents{'header'}{'cloc_url'};
+    my $ver = $contents{'header'}{'cloc_version'};
+    my $sec = $contents{'header'}{'elapsed_seconds'};
+    my $n_file = $contents{'header'}{'n_files'};
+    my $n_line = $contents{'header'}{'n_lines'};
+    $sec = $sec == 0 ? 1.0e-3 : $sec;
+    my $header = sprintf "%s v %s T=%.2f s (%.1f files/s, %.1f lines/s)",
+                          $url, $ver, $sec, $n_file/$sec, $n_line/$sec;
+    delete $contents{'header'};
+    delete $contents{'SUM'};
+
+    my @file_list = (sort { $contents{$b}{'code'} <=>
+                            $contents{$a}{'code'} } keys %contents );
+#die Dumper(\%contents);
+    # Determine column widths for output
+    my $file_len = 0;
+    my $lang_len = 0;
+    foreach my $file (keys %contents) {
+        my $flen = length $file;
+        my $llen = length $contents{$file}{'language'};
+        $file_len = $file_len > $flen ? $file_len : $flen;
+        $lang_len = $lang_len > $llen ? $lang_len : $llen;
+    }
+    return $file_len, $lang_len, $header, %contents;
+} # 1}}}
+sub print_format_n {                         # {{{1
+    # by file with
+    # format 1 : Language | files | blank | comment | code
+    # format 2 : Language | files | blank | comment | code | total
+    # format 3 : File | Language | blank | comment | code
+    # format 4 : File | blank | comment | code | total
+    # format 5 : File | Language | blank | comment | code | total
+    my ($format, $file_len, $lang_len, $header, %contents) = @_;
+
+    my %str_fmt = (
+        1 => sprintf("%%-%ds  %%7s  %%7s  %%7s  %%7s\n", $lang_len),
+        2 => sprintf("%%-%ds  %%7s  %%7s  %%7s  %%7s  %%7s\n", $lang_len),
+        3 => sprintf("%%-%ds  %%-%ds  %%7s  %%7s  %%7s\n", $file_len, $lang_len),
+        4 => sprintf("%%-%ds  %%7s  %%7s  %%7s  %%7s\n", $file_len),
+        5 => sprintf("%%-%ds  %%-%ds  %%7s  %%7s  %%7s  %%7s\n", $file_len, $lang_len),
+    );
+    my %val_fmt = (
+        1 => sprintf("%%-%ds  %%7d  %%7d  %%7d  %%7d\n", $lang_len),
+        2 => sprintf("%%-%ds  %%7d  %%7d  %%7d  %%7d  %%7d\n", $lang_len),
+        3 => sprintf("%%-%ds  %%-%ds  %%7d  %%7d  %%7d\n", $file_len, $lang_len),
+        4 => sprintf("%%-%ds  %%7d  %%7d  %%7d  %%7d\n", $file_len),
+        5 => sprintf("%%-%ds  %%-%ds  %%7d  %%7d  %%7d  %%7d\n", $file_len, $lang_len),
+    );
+    my %language = ();
+    foreach my $file (keys %contents) {
+        my $lang = $contents{$file}{'language'};
+        $language{$lang}{'files'} += 1;
+        foreach my $category ('blank', 'comment', 'code',) {
+            $language{$lang}{$category} += $contents{$file}{$category};
+            $language{$lang}{'total'}   += $contents{$file}{$category};
+        }
+    }
+    my @file_list = (sort { $contents{$b}{'code'} <=>
+                            $contents{$a}{'code'} } keys %contents );
+    my @lang_list = (sort { $language{$b}{'code'} <=>
+                            $language{$a}{'code'} } keys %language );
+
+    my %hyphens = (
+        1 => "-" x ($lang_len + 4*9),
+        2 => "-" x ($lang_len + 5*9),
+        3 => "-" x ($lang_len + $file_len + 2 + 3*9),
+        4 => "-" x ($file_len + 4*9),
+        5 => "-" x ($lang_len + $file_len + 2 + 4*9),
+    );
+    my %col_headings = (
+        1 => ["Language", "files", "blank", "comment", "code"],
+        2 => ["Language", "files", "blank", "comment", "code", "Total"],
+        3 => ["File", "Language", "blank", "comment", "code"],
+        4 => ["File", "blank", "comment", "code", "Total"],
+        5 => ["File", "Language", "blank", "comment", "code", "Total"],
+    );
+
+    print "$header\n";
+    print "$hyphens{$format}\n";
+    printf $str_fmt{$format}, @{$col_headings{$format}};
+    print "$hyphens{$format}\n";
+    my ($n_files, $n_blank, $n_comment, $n_code, $n_total) = (0, 0, 0, 0, 0);
+    my @out;
+    if ($format < 3) {
+        # by language
+        foreach my $lang (@lang_list) {
+            my ($nF, $nB, $nCm, $nCo) = ($language{$lang}{'files'},
+                                         $language{$lang}{'blank'},
+                                         $language{$lang}{'comment'},
+                                         $language{$lang}{'code'});
+            if      ($format == 1) {
+                @out = ($lang, $nF, $nB, $nCm, $nCo);
+            } else {
+                @out = ($lang, $nF, $nB, $nCm, $nCo, $nB + $nCm + $nCo);
+            }
+            printf $val_fmt{$format}, @out;
+            $n_files   += $nF;
+            $n_blank   += $nB;
+            $n_comment += $nCm;
+            $n_code    += $nCo;
+            $n_total   += $nB + $nCm + $nCo;
+        }
+    } else {
+        # by file
+        foreach my $file (@file_list) {
+            my ($nB, $nCm, $nCo) = ($contents{$file}{'blank'},
+                                    $contents{$file}{'comment'},
+                                    $contents{$file}{'code'});
+            my $lang = $contents{$file}{'language'};
+            if      ($format == 1) {
+            } elsif ($format == 3) {
+                @out = ($file, $lang, $nB, $nCm, $nCo);
+            } elsif ($format == 4) {
+                @out = ($file, $nB, $nCm, $nCo, $nB + $nCm + $nCo);
+            } else {
+                @out = ($file, $lang, $nB, $nCm, $nCo, $nB + $nCm + $nCo);
+            }
+            printf $val_fmt{$format}, @out;
+            $n_blank   += $nB;
+            $n_comment += $nCm;
+            $n_code    += $nCo;
+            $n_total   += $nB + $nCm + $nCo;
+        }
+    }
+    print "$hyphens{$format}\n";
+    if (scalar @file_list > 1) {
+        if      ($format == 1) {
+            @out = ( "SUM", $n_files, $n_blank, $n_comment, $n_code );
+        } elsif ($format == 2) {
+            @out = ( "SUM", $n_files, $n_blank, $n_comment, $n_code, $n_total );
+        } elsif ($format == 3) {
+            @out = ( "SUM", " ", $n_blank, $n_comment, $n_code );
+        } elsif ($format == 4) {
+            @out = ( "SUM", $n_blank, $n_comment, $n_code, $n_total );
+        } else {
+            @out = ( "SUM", " ", $n_blank, $n_comment, $n_code, $n_total );
+        }
+        printf $val_fmt{$format}, @out;
+        print "$hyphens{$format}\n";
+    }
+} # 1}}}
 # really_is_pascal, really_is_incpascal, really_is_php from SLOCCount
 my %php_files    = ();  # really_is_php()
 sub really_is_pascal {                       # {{{1

@@ -7554,6 +7554,7 @@ sub replace_between_regex  {                 # {{{1
         push @save_lines, $_;
     }
 
+    print "[", join("][", @{$ra_lines}), "]\n" if $opt_v > 4;
     print "<- replace_between_regex\n" if $opt_v > 2;
     return @save_lines;
 } # 1}}}
@@ -7928,6 +7929,14 @@ sub docstring_rm_comments {                  # {{{1
             # replace /*, */, // with xx
             substr($_, $i_start, $i_end-$i_start) =~ s{(/\*|\*/|//)}{xx}g;
             next;
+        } elsif (m{/\*.*?((""")|(''')).*?\*/}) {
+            # docstring start or end within /* */ comments
+            my $i_start = $-[0]+2;
+            substr($_, $i_start, 3) = "xxx";
+        } elsif (m{//.*?((""")|('''))}) {
+            # docstring start or end after //
+            my $i_start = $-[0]+2;
+            substr($_, $i_start, 3) = "xxx";
         } elsif (/^(.*?)((""")|('''))/ and  $in_docstring) {
             $in_docstring = 0;
             my $i_end = length $1;
@@ -7943,6 +7952,7 @@ sub docstring_rm_comments {                  # {{{1
         }
     }
 
+    print "[", join("][", @{$ra_lines}), "]\n" if $opt_v > 4;
     print "<- docstring_rm_comments\n" if $opt_v > 2;
     return @{$ra_lines};
 } # 1}}}
@@ -11518,6 +11528,7 @@ sub call_regexp_common {                     # {{{1
     # a bogus use of %RE to avoid:
     # Name "main::RE" used only once: possible typo at cloc line xx.
     print scalar keys %RE if $opt_v < -20;
+    print "[", join("][", @{$ra_lines}), "]\n" if $opt_v > 4;
     print "<- call_regexp_common\n" if $opt_v > 2;
     return split("\n", $all_lines);
 } # 1}}}

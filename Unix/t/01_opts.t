@@ -774,6 +774,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/805/text_block.java.yaml',
                 },
 
+                {
+                    'name' => 'Java text block start in comments #806',
+                    'cd'   => '../tests/inputs/issues/806',
+                    'args' => 'huffman.java',
+                    'ref'  => '../tests/outputs/issues/806/results.yaml',
+                },
+
             );
 
 # Special cases:
