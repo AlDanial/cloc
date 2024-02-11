@@ -8528,6 +8528,7 @@ sub set_constants {                          # {{{1
             'jsf'         => 'JavaServer Faces'      ,
             'jsx'         => 'JSX'                   ,
             'xhtml'       => 'XHTML'                 ,
+            'j2'          => 'Jinja Template'        ,
             'jinja'       => 'Jinja Template'        ,
             'jinja2'      => 'Jinja Template'        ,
             'yyp'         => 'JSON'                  ,
