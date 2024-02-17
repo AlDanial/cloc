@@ -781,6 +781,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/806/results.yaml',
                 },
 
+                {
+                    'name' => 'XML start block comment on line w/code #811',
+                    'cd'   => '../tests/inputs/issues/811',
+                    'args' => 'inline_comment.xml',
+                    'ref'  => '../tests/outputs/issues/811/inline_comment.xml.yaml',
+                },
+
             );
 
 # Special cases:

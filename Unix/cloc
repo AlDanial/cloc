@@ -7160,6 +7160,7 @@ sub remove_matches {                         # {{{1
         $pattern , # in   Perl regular expression (case insensitive)
        ) = @_;
     print "-> remove_matches(pattern=$pattern)\n" if $opt_v > 2;
+    print "[", join("]\n[", @{$ra_lines}), "]\n" if $opt_v > 4;
 
     my @save_lines = ();
     foreach (@{$ra_lines}) {
@@ -7171,6 +7172,7 @@ sub remove_matches {                         # {{{1
         push @save_lines, $_;
     }
 
+    print "[", join("]\n[", @{$ra_lines}), "]\n" if $opt_v > 4;
     print "<- remove_matches\n" if $opt_v > 2;
 #print "remove_matches returning\n   ", join("\n   ", @save_lines), "\n";
     return @save_lines;
@@ -7181,6 +7183,7 @@ sub remove_matches_2re {                     # {{{1
         $pattern2, # in Perl regex 2 (case insensitive) to not match prev line
        ) = @_;
     print "-> remove_matches_2re(pattern=$pattern1,$pattern2)\n" if $opt_v > 2;
+    print "[", join("]\n[", @{$ra_lines}), "]\n" if $opt_v > 4;
 
     my @save_lines = ();
     for (my $i = 0; $i < scalar @{$ra_lines}; $i++) {
@@ -7197,6 +7200,7 @@ sub remove_matches_2re {                     # {{{1
         push @save_lines, $ra_lines->[$i];
     }
 
+    print "[", join("]\n[", @{$ra_lines}), "]\n" if $opt_v > 4;
     print "<- remove_matches_2re\n" if $opt_v > 2;
 #print "remove_matches_2re returning\n   ", join("\n   ", @save_lines), "\n";
     return @save_lines;
@@ -7308,6 +7312,7 @@ sub remove_between {                         # {{{1
     # '{}'  '()'  '[]'  or  '<>'
 
     print "-> remove_between(marker=$marker)\n" if $opt_v > 2;
+    print "[", join("]\n[", @{$ra_lines}), "]\n" if $opt_v > 4;
     my %acceptable = ('{}'=>1,  '()'=>1,  '[]'=>1,  '<>'=>1, );
     die "remove_between:  invalid delimiter '$marker'\n",
         "the delimiter must be one of these four pairs:\n",
@@ -7326,6 +7331,7 @@ sub remove_between {                         # {{{1
         $all_lines =~ s/$1//g;
     }
 
+    print "[", join("]\n[", split(/\n/, $all_lines)), "]\n" if $opt_v > 4;
     print "<- remove_between\n" if $opt_v > 2;
     return split("\n", $all_lines);
 } # 1}}}
@@ -7337,6 +7343,7 @@ sub rm_comments_in_strings {                 # {{{1
     print "-> rm_comments_in_strings(string_marker=$string_marker, " .
           "start_comment=$start_comment, end_comment=$end_comment)\n"
         if $opt_v > 2;
+    print "[", join("]\n[", @{$ra_lines}), "]\n" if $opt_v > 4;
 
     my @save_lines = ();
     my $in_ml_string = 0;
@@ -7407,6 +7414,7 @@ sub rm_comments_in_strings {                 # {{{1
         push @save_lines, $new_line;
     }
 
+    print "[", join("]\n[", @save_lines), "]\n" if $opt_v > 4;
     print "<- rm_comments_in_strings\n" if $opt_v > 2;
     return @save_lines;
 } # 1}}}
@@ -7539,7 +7547,7 @@ sub replace_between_regex  {                 # {{{1
         push @save_lines, $_;
     }
 
-    print "[", join("][", @{$ra_lines}), "]\n" if $opt_v > 4;
+    print "[", join("]\n[", @{$ra_lines}), "]\n" if $opt_v > 4;
     print "<- replace_between_regex\n" if $opt_v > 2;
     return @save_lines;
 } # 1}}}
@@ -7656,7 +7664,11 @@ sub remove_html_comments {                   # {{{1
         }
         next if /^\s*$/;
         $in_comment = 1 if /^(.*?)<!\-\-/;
-        next if defined $1 and $1 =~ /^\s*$/;
+        if (defined $1 and $1 !~ /^\s*$/) {
+            # has both code and comment
+            push @save_lines, "$1\n";
+            next;
+        }
         next if ($in_comment);
         push @save_lines, $_;
     }
@@ -7937,7 +7949,7 @@ sub docstring_rm_comments {                  # {{{1
         }
     }
 
-    print "[", join("][", @{$ra_lines}), "]\n" if $opt_v > 4;
+    print "[", join("]\n[", @{$ra_lines}), "]\n" if $opt_v > 4;
     print "<- docstring_rm_comments\n" if $opt_v > 2;
     return @{$ra_lines};
 } # 1}}}
@@ -11514,7 +11526,7 @@ sub call_regexp_common {                     # {{{1
     # a bogus use of %RE to avoid:
     # Name "main::RE" used only once: possible typo at cloc line xx.
     print scalar keys %RE if $opt_v < -20;
-    print "[", join("][", @{$ra_lines}), "]\n" if $opt_v > 4;
+    print "[", join("]\n[", @{$ra_lines}), "]\n" if $opt_v > 4;
     print "<- call_regexp_common\n" if $opt_v > 2;
     return split("\n", $all_lines);
 } # 1}}}

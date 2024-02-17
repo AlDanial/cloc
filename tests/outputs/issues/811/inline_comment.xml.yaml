@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.99
+  elapsed_seconds    : 0.00256609916687012
+  n_files            : 1
+  n_lines            : 6
+  files_per_second   : 389.696553005668
+  lines_per_second   : 2338.17931803401
+  report_file        : ../../../outputs/issues/811/inline_comment.xml.yaml
+'XML' :
+  nFiles: 1
+  blank: 0
+  comment: 2
+  code: 4
+SUM: 
+  blank: 0
+  comment: 2
+  code: 4
+  nFiles: 1
