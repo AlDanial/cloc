@@ -1,6 +1,6 @@
 #   Copyright
 #
-#      Copyright (C) 2018-2023 Al Danial <al.danial@gmail.com>.
+#      Copyright (C) 2018-2024 Al Danial <al.danial@gmail.com>.
 #      Copyright (C) 2010-2017 Jari Aalto <jari.aalto@cante.net>
 #
 #   License
@@ -403,6 +403,14 @@ See also B<--follow-links>.
 
 Count lines streamed via I<STDIN> as if they came from a file named FILE.
 
+=item B<--strip-code=EXT>
+
+For each file processed, write to the current directory a version of
+the file which has blank and code lines removed.
+The name of each stripped file is the original file name with
+C<.EXT> appended to it. It is written to the current directory unless
+B<--original-dir> is on.
+
 =item B<--strip-comments=EXT>
 
 For each file processed, write to the current directory a version of
@@ -723,6 +731,21 @@ the default ASCII (B<E> = 'UTF-7').  Examples: 'UTF-16',
 'euc-kr', 'iso-8859-16'.  Known encodings can be
 printed with
   perl -MEncode -e 'print join("\n", Encode->encodings(":all")), "\n"'
+
+=item B<--fmt=N>
+
+Alternate text output format where B<N> is a number
+from 1 to 5, or -1 to -5. 'total lines' means the
+sum of code, comment, and blank lines.  Negative
+values are the same as the positive values but retain,
+instead of deleting, the intermediate JSON file that
+is written.  The JSON file name is randomly generated
+unless --out/--report-file is given.  The formats are:
+  1:  by language (same as cloc default output)
+  2:  by language with an extra column for total lines
+  3:  by file with language
+  4:  by file with a total lines column
+  5:  by file with language and a total lines column
 
 =item B<--hide-rate>
 
