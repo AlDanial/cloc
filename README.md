@@ -2942,6 +2942,9 @@ from the Windows Subsystem for Linux (WSL).
 which cannot properly account for nested comments using
 the same comment markers (such as <tt>/*  /*  */  */</tt>).
 </li>
+<li> XML comments embedded within <tt>CDATA</tt> blocks are counted as
+comments rather than code.
+</li>
 </ol>
 
 [](1}}})
