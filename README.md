@@ -5,7 +5,7 @@
 * * *
 cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.
 
-Latest release:  v1.98 (Aug. 19, 2023)
+Latest release:  v2.00 (Feb. 17, 2024)
 
 <a href="https://github.com/AlDanial/cloc/graphs/contributors" alt="Contributors">
     <img src="https://img.shields.io/github/contributors/AlDanial/cloc" /></a>
@@ -64,8 +64,8 @@ Step 3:  Invoke cloc to count your source files, directories, archives,
 or git commits.
 The executable name differs depending on whether you use the
 development source version (`cloc`), source for a
-released version (`cloc-1.98.pl`) or a Windows executable
-(`cloc-1.98.exe`).
+released version (`cloc-2.00.pl`) or a Windows executable
+(`cloc-2.00.exe`).
 
 On this page, `cloc` is the generic term
 used to refer to any of these.
@@ -408,14 +408,14 @@ C:> cpan -i Regexp::Common
 C:> cpan -i Algorithm::Diff
 C:> cpan -i PAR::Packer
 C:> cpan -i Win32::LongPath
-C:> pp -M Win32::LongPath -M Encode::Unicode -M Digest::MD5 -c -x -o cloc-1.98.exe cloc-1.98.pl
+C:> pp -M Win32::LongPath -M Encode::Unicode -M Digest::MD5 -c -x -o cloc-2.00.exe cloc-2.00.pl
 </pre>
 
 A variation on the instructions above is if you installed the portable
 version of Strawberry Perl, you will need to run `portableshell.bat` first
 to properly set up your environment.
 
-The Windows executable in the Releases section, <tt>cloc-1.98.exe</tt>,
+The Windows executable in the Releases section, <tt>cloc-2.00.exe</tt>,
 was built on a 64 bit Windows 10 computer using
 [Strawberry Perl](http://strawberryperl.com/)
 5.30.2 and
@@ -436,6 +436,9 @@ You are encouraged to run your own virus scanners against the
 executable and also check sites such
 https://www.virustotal.com/ .
 The entries for recent versions are:
+
+cloc-2.00.exe:
+https://www.virustotal.com/gui/file/7a234ef0cb495de1b5776acf88c5554e2bab1fb02725a5fb85756a6db3121c1f
 
 cloc-1.98.exe:
 https://www.virustotal.com/gui/file/88615d193ec8c06f7ceec3cc1d661088af997798d87ddff331d9e9f9128a6782?nocache=1
