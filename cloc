@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "2.00";  # odd number == beta; even number == stable
+my $VERSION = "2.01";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.10.0;
 # use modules                                  {{{1
@@ -8668,6 +8668,7 @@ sub set_constants {                          # {{{1
             'n'           => 'Nemerle'               ,
             'nlogo'       => 'NetLogo'               ,
             'nls'         => 'NetLogo'               ,
+            'ncl'         => 'Nickel'                ,
             'nims'        => 'Nim'                   ,
             'nimrod'      => 'Nim'                   ,
             'nimble'      => 'Nim'                   ,
@@ -10089,6 +10090,10 @@ sub set_constants {                          # {{{1
     'Mustache'           => [
                                 [ 'remove_between_general', '{{!', '}}' ],
                             ],
+    'Nickel'             => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
     'Nim'                => [
                                 [ 'remove_between_general', '#[', ']#' ],
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -11245,6 +11250,7 @@ sub set_constants {                          # {{{1
     'Nastran'                      =>   1.13,
     'Nemerle'                      =>   2.50,
     'NetLogo'                      =>   4.00,
+    'Nickel'                       =>   2.00,
     'Nim'                          =>   2.00,
     'Nix'                          =>   2.70,
     'Nunjucks'                     =>   1.5 ,

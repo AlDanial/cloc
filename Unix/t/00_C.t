@@ -747,6 +747,11 @@ my @Tests = (
                     'args' => '../tests/inputs/vinos.nlogo',
                 },
                 {
+                    'name' => 'Nickel',
+                    'ref'  => '../tests/outputs/fibonacci.ncl.yaml',
+                    'args' => '../tests/inputs/fibonacci.ncl',
+                },
+                {
                     'name' => 'Nim',
                     'ref'  => '../tests/outputs/statcsv.nim.yaml',
                     'args' => '../tests/inputs/statcsv.nim',
