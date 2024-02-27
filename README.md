@@ -287,6 +287,7 @@ a Perl interpreter):
     sudo pkg install cloc            # FreeBSD
     sudo port install cloc           # macOS with MacPorts
     brew install cloc                # macOS with Homebrew
+    winget install AlDanial.Cloc     # Windows with winget
     choco install cloc               # Windows with Chocolatey
     scoop install cloc               # Windows with Scoop
 
