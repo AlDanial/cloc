@@ -667,6 +667,11 @@ my @Tests = (
                     'args' => '../tests/inputs/nested.lua',
                 },
                 {
+                    'name' => 'Luau',
+                    'ref'  => '../tests/outputs/basic.luau.yaml',
+                    'args' => '../tests/inputs/basic.luau',
+                },
+                {
                     'name' => 'Makefile',
                     'ref'  => '../tests/outputs/Makefile.yaml',
                     'args' => '../tests/inputs/Makefile',

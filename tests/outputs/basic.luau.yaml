@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.01
+  elapsed_seconds    : 0.0025789737701416
+  n_files            : 1
+  n_lines            : 12
+  files_per_second   : 387.751132476657
+  lines_per_second   : 4653.01358971989
+  report_file        : ../outputs/basic.luau.yaml
+'Luau' :
+  nFiles: 1
+  blank: 2
+  comment: 4
+  code: 6
+SUM: 
+  blank: 2
+  comment: 4
+  code: 6
+  nFiles: 1
