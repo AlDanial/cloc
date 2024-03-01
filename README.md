@@ -2207,29 +2207,37 @@ A database created from cloc SQL output has two tables,
 
 Table **metadata**:
 
-|Field     | Type |
-|----------|------|
-|timestamp | text |
-|project   | text |
-|elapsed_s | text |
+|Field     | Type                |
+|----------|---------------------|
+|id        | integer primary key |
+|timestamp | text                |
+|project   | text                |
+|elapsed_s | text                |
 
 Table **t**:
 
-|Field       | Type   |
-|------------|--------|
-| project    |text    |
-| language   |text    |
-| file       |text    |
-| nBlank     |integer |
-| nComment   |integer |
-| nCode      |integer |
-| nScaled    |real    |
+|Field             | Type                     |
+|------------------|--------------------------|
+| project          |text                      |
+| language         |text                      |
+| file             |text                      |
+| nBlank           |integer                   |
+| nComment         |integer                   |
+| nCode            |integer                   |
+| nScaled          |real                      |
+| foreign key (id) | references metadata (id) |
 
 The **metadata** table contains information about when the cloc run
-was made.  The `--sql-append` switch allows one to combine
+was made.  Run time is stored two ways: as Unix epoch
+seconds in `id` and as an ISO 8601 formatted text string
+in the local time zone
+(for example `2024-03-01 14:19:41`) in `timestamp`.
+The `--sql-append` switch allows one to combine
 many runs in a single database; each run adds a
 row to the metadata table.
 The code count information resides in table **t**.
+The `id` key makes it easy to associate a run's code count with
+its metadata.
 
 Let's repeat the code count examples of Perl, Python, SQLite, MySQL and
 PostgreSQL tarballs shown in the
