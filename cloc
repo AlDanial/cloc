@@ -8226,6 +8226,7 @@ sub set_constants {                          # {{{1
             'dyalog'      => 'APL'                   ,
             'dyapp'       => 'APL'                   ,
             'mipage'      => 'APL'                   ,
+            'art'         => 'Arturo'                ,
             'as'          => 'ActionScript'          ,
             'adoc'        => 'AsciiDoc'              ,
             'asciidoc'    => 'AsciiDoc'              ,
@@ -9302,6 +9303,10 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'Arturo'             => [
+                                [ 'remove_matches'      , '^\s*;'  ],
+                                [ 'remove_inline'       , ';.*$'   ],
                             ],
     'AsciiDoc'           => [
                                 [ 'remove_between_general', '////', '////' ],
@@ -11069,6 +11074,7 @@ sub set_constants {                          # {{{1
     'Apex Class'                   =>   1.50,
     'APL'                          =>   2.50,
     'ArkTs'                        =>   2.50,
+    'Arturo'                       =>   4.00,
     'AsciiDoc'                     =>   1.50,
     'AspectJ'                      =>   1.36,
     'asa'                          =>   1.29,
