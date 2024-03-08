@@ -1033,6 +1033,7 @@ APL                        (apl, apla, aplc, aplf, apli, apln, aplo, dyalog, dya
 AppleScript                (applescript)
 Arduino Sketch             (ino, pde)
 ArkTs                      (ets)
+Arturo                     (art)
 AsciiDoc                   (adoc, asciidoc)
 ASP                        (asa, ashx, asp, axd)
 ASP.NET                    (asax, ascx, asmx, aspx, master, sitemap, webinfo)

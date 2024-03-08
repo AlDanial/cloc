@@ -45,6 +45,11 @@ my @Tests = (
                     'args' => '../tests/inputs/openharmony.ets',
                 },
                 {
+                    'name' => 'Arturo',
+                    'ref'  => '../tests/outputs/Arturo.art.yaml',
+                    'args' => '../tests/inputs/Arturo.art',
+                },
+                {
                     'name' => 'AsciiDoc',
                     'ref'  => '../tests/outputs/asciidoctor.adoc.yaml',
                     'args' => '../tests/inputs/asciidoctor.adoc',
