@@ -8512,7 +8512,8 @@ sub set_constants {                          # {{{1
             'inc'         => 'PHP/Pascal/Fortran'    ,
             'ino'         => 'Arduino Sketch'        ,
             'ipf'         => 'Igor Pro'              ,
-            'pde'         => 'Arduino Sketch'        , # pre 1.0
+           #'pde'         => 'Arduino Sketch'        , # pre 1.0
+            'pde'         => 'Processing'            , # pre 1.0
             'itk'         => 'Tcl/Tk'                ,
             'java'        => 'Java'                  ,
             'jcl'         => 'JCL'                   , # IBM Job Control Lang.
@@ -10203,6 +10204,11 @@ sub set_constants {                          # {{{1
     'Prisma Schema'      => [
                                 [ 'remove_matches'      , '^\s*//' ],
                             ],
+    'Processing'         => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'ProGuard'           => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
@@ -11291,6 +11297,7 @@ sub set_constants {                          # {{{1
     'PowerBuilder'                 =>   3.33,
     'PowerShell'                   =>   3.00,
     'Prisma Schema'                =>   2.50,
+    'Processing'                   =>   2.50,
     'ProGuard'                     =>   2.50,
     'Prolog'                       =>   1.25,
     'Properties'                   =>   1.36,

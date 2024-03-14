@@ -897,6 +897,11 @@ my @Tests = (
                     'args' => '../tests/inputs/schema.prisma',
                 },
                 {
+                    'name' => 'Processing',
+                    'ref'  => '../tests/outputs/pointillism.pde.yaml',
+                    'args' => '../tests/inputs/pointillism.pde',
+                },
+                {
                     'name' => 'ProGuard',
                     'ref'  => '../tests/outputs/proguard-project-app.pro.yaml',
                     'args' => '../tests/inputs/proguard-project-app.pro',

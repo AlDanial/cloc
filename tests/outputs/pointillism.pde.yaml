@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.01
+  elapsed_seconds    : 0.00258994102478027
+  n_files            : 1
+  n_lines            : 32
+  files_per_second   : 386.109177943478
+  lines_per_second   : 12355.4936941913
+  report_file        : ../outputs/pointillism.pde.yaml
+'Processing' :
+  nFiles: 1
+  blank: 4
+  comment: 9
+  code: 19
+SUM: 
+  blank: 4
+  comment: 9
+  code: 19
+  nFiles: 1
