@@ -8642,6 +8642,7 @@ sub set_constants {                          # {{{1
             'mt'          => 'Mathematica'           ,
             'wl'          => 'Mathematica'           ,
             'wlt'         => 'Mathematica'           ,
+            'mo'          => 'Modelica'              ,
             'mustache'    => 'Mustache'              ,
             'wdproj'      => 'MSBuild script'        ,
             'csproj'      => 'MSBuild script'        ,
@@ -10042,6 +10043,11 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'Modelica'           => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'Modula3'            => [   [ 'call_regexp_common'  , 'Pascal' ], ],
         # Modula 3 comments are (* ... *) so applying the Pascal filter
         # which also treats { ... } as a comment is not really correct.
@@ -11059,6 +11065,7 @@ sub set_constants {                          # {{{1
     'Apex Class'                   =>   1.50,
     'APL'                          =>   2.50,
     'ArkTs'                        =>   2.50,
+    'Arturo'                       =>   4.00,
     'AsciiDoc'                     =>   1.50,
     'AspectJ'                      =>   1.36,
     'asa'                          =>   1.29,
@@ -11068,7 +11075,6 @@ sub set_constants {                          # {{{1
     'Apex Trigger'                 =>   1.4 ,
     'AppleScript'                  =>   4.0 ,
     'Arduino Sketch'               =>   1.00,
-    'Arturo'                       =>   4.00,
     'Assembly'                     =>   0.25,
     'Astro'                        =>   3.0,
     'Asymptote'                    =>   2.50,
@@ -11247,6 +11253,7 @@ sub set_constants {                          # {{{1
     'Maven'                        =>   1.90,
     'Meson'                        =>   1.00,
     'Metal'                        =>   1.51,
+    'Modelica'                     =>   2.00,
     'MUMPS'                        =>   4.21,
     'Mustache'                     =>   1.75,
     'Nastran'                      =>   1.13,

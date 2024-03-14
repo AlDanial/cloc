@@ -727,6 +727,11 @@ my @Tests = (
                     'args' => '../tests/inputs/RenderTest.metal',
                 },
                 {
+                    'name' => 'Modelica',
+                    'ref'  => '../tests/outputs/SimpleODE.mo.yaml',
+                    'args' => '../tests/inputs/SimpleODE.mo',
+                },
+                {
                     'name' => 'Mojo',
                     'ref'  => '../tests/outputs/Mojo.mojom.yaml',
                     'args' => '../tests/inputs/Mojo.mojom',
