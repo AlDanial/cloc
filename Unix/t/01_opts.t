@@ -788,6 +788,13 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/811/inline_comment.xml.yaml',
                 },
 
+                {
+                    'name' => '"*/*", `*/*` in Go strings #816',
+                    'cd'   => '../tests/inputs/issues/816',
+                    'args' => '--strip-str-comments star_slash_star.go',
+                    'ref'  => '../tests/outputs/issues/816/results.yaml',
+                },
+
             );
 
 # Special cases:
