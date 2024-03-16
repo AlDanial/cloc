@@ -296,7 +296,7 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              Fortran 90 counter (which expects files to
                              end with .f90) instead of the default Fortran 77
                              counter, use
-                               --force-lang=\"Fortran 90\",f
+                               --force-lang=\"Fortran 90,f\"
                              If <ext> is omitted, every file will be counted
                              with the <lang> counter.  This option can be
                              specified multiple times (but that is only

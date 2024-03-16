@@ -678,7 +678,7 @@ Usage: cloc [options] &lt;file(s)/dir(s)/git hash(es)&gt; | &lt;set 1&gt; &lt;se
                              Fortran 90 counter (which expects files to
                              end with .f90) instead of the default Fortran 77
                              counter, use
-                               --force-lang="Fortran 90",f
+                               --force-lang="Fortran 90,f"
                              If &lt;ext&gt; is omitted, every file will be counted
                              with the &lt;lang&gt; counter.  This option can be
                              specified multiple times (but that is only
