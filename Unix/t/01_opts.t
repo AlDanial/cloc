@@ -795,6 +795,61 @@ my @Tests = (
                     'ref'  => '../tests/outputs/issues/816/results.yaml',
                 },
 
+                {
+                   'name' => '--fullpath issues/822 (github issue #822 T1)',
+                   'cd'   => '../tests/inputs',
+                   'args' => '--fullpath --not-match-f "^c.csv" issues/822',
+                   'ref'  => '../tests/outputs/issues/822/T1.yaml',
+                },
+
+                {
+                   'name' => '--fullpath issues/822 (github issue #822 T2)',
+                   'cd'   => '../tests/inputs',
+                   'args' => '--vcs git --fullpath --not-match-f "^c.csv" issues/822',
+                   'ref'  => '../tests/outputs/issues/822/T2.yaml',
+                },
+
+                {
+                   'name' => '--fullpath issues/822 (github issue #822 T3)',
+                   'cd'   => '../tests/inputs',
+                   'args' => '--fullpath --not-match-f "b/c.csv" issues/822',
+                   'ref'  => '../tests/outputs/issues/822/T3.yaml',
+                },
+
+                {
+                   'name' => '--fullpath issues/822 (github issue #822 T4)',
+                   'cd'   => '../tests/inputs',
+                   'args' => '--vcs git --fullpath --not-match-f "b/c.csv" issues/822',
+                   'ref'  => '../tests/outputs/issues/822/T4.yaml',
+                },
+
+                {
+                   'name' => '--fullpath issues/822 (github issue #822 T5)',
+                   'cd'   => '../tests/inputs',
+                   'args' => '--fullpath --not-match-d "^b" issues/822',
+                   'ref'  => '../tests/outputs/issues/822/T5.yaml',
+                },
+
+                {
+                   'name' => '--fullpath issues/822 (github issue #822 T6)',
+                   'cd'   => '../tests/inputs',
+                   'args' => '--vcs git --fullpath --not-match-d "^b" issues/822',
+                   'ref'  => '../tests/outputs/issues/822/T6.yaml',
+                },
+
+                {
+                   'name' => '--fullpath issues/822 (github issue #822 T7)',
+                   'cd'   => '../tests/inputs',
+                   'args' => '--fullpath --not-match-d "a/b" issues/822',
+                   'ref'  => '../tests/outputs/issues/822/T7.yaml',
+                },
+
+                {
+                   'name' => '--fullpath issues/822 (github issue #822 T8)',
+                   'cd'   => '../tests/inputs',
+                   'args' => '--vcs git --fullpath --not-match-d "a/b" issues/822',
+                   'ref'  => '../tests/outputs/issues/822/T8.yaml',
+                },
             );
 
 # Special cases:
