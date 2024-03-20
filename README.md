@@ -838,6 +838,8 @@ Usage: cloc [options] &lt;file(s)/dir(s)/git hash(es)&gt; | &lt;set 1&gt; &lt;se
                              See also --unix, --show-os.
 
  Filter Options
+   --include-content=&lt;regex&gt; Only count files containing text that matches the
+                             given regular expression.
    --exclude-content=&lt;regex&gt; Exclude files containing text that matches the given
                              regular expression.
    --exclude-dir=&lt;D1&gt;[,D2,]  Exclude the given comma separated directories
