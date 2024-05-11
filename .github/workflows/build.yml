@@ -20,4 +20,4 @@ jobs:
         IMAGE_TAG: ${{ github.sha }}
       run: |
         # Build a docker container to run tests
-        docker build .
+        docker build . --target test
