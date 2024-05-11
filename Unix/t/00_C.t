@@ -405,6 +405,11 @@ my @Tests = (
                     'args' => '../tests/inputs/string.gleam',
                 },
                 {
+                    'name' => 'Glimmer JavaScript',
+                    'ref'  => '../tests/outputs/body.gjs.yaml',
+                    'args' => '../tests/inputs/body.gjs',
+                },
+                {
                     'name' => 'GLSL',
                     'ref'  => '../tests/outputs/blur.glsl.yaml',
                     'args' => '../tests/inputs/blur.glsl',

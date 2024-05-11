@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.01
+  elapsed_seconds    : 0.00696301460266113
+  n_files            : 1
+  n_lines            : 89
+  files_per_second   : 143.615956171888
+  lines_per_second   : 12781.8200992981
+  report_file        : ../outputs/body.gjs.yaml
+'Glimmer JavaScript' :
+  nFiles: 1
+  blank: 10
+  comment: 41
+  code: 38
+SUM: 
+  blank: 10
+  comment: 41
+  code: 38
+  nFiles: 1

@@ -8446,6 +8446,7 @@ sub set_constants {                          # {{{1
             'frg'         => 'GLSL'                  ,
             'fp'          => 'GLSL'                  ,
             'fbs'         => 'Flatbuffers'           ,
+            'gjs'         => 'Glimmer JavaScript'    ,
             'glsl'        => 'GLSL'                  ,
             'graphqls'    => 'GraphQL'               ,
             'gql'         => 'GraphQL'               ,
@@ -9722,6 +9723,15 @@ sub set_constants {                          # {{{1
     'Gleam'              => [
                                 [ 'remove_matches'      , '^\s*//' ],
                                 [ 'remove_inline'       , '//.*$'  ],
+                            ],
+    'Glimmer JavaScript' => [
+                                [ 'remove_between_general', '{{!', '}}' ],
+                                [ 'remove_between_general', '<!--', '-->' ],
+                                [ 'rm_comments_in_strings', "'", '/*', '*/' ],
+                                [ 'rm_comments_in_strings', "'", '//', '' ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'GLSL'               => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
@@ -11190,6 +11200,7 @@ sub set_constants {                          # {{{1
     'Glade'                        =>   2.00,
     'Gleam'                        =>   2.50,
     'GLSL'                         =>   2.00,
+    'Glimmer JavaScript'           =>   3.50,
     'gml'                          =>   1.74,
     'gpss'                         =>   1.74,
     'guest'                        =>   2.86,
