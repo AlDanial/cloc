@@ -410,6 +410,11 @@ my @Tests = (
                     'args' => '../tests/inputs/body.gjs',
                 },
                 {
+                    'name' => 'Glimmer TypeScript',
+                    'ref'  => '../tests/outputs/input.gts.yaml',
+                    'args' => '../tests/inputs/input.gts',
+                },
+                {
                     'name' => 'GLSL',
                     'ref'  => '../tests/outputs/blur.glsl.yaml',
                     'args' => '../tests/inputs/blur.glsl',

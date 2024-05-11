@@ -5792,15 +5792,18 @@ sub invoke_generator {                       # {{{1
             if ($opt_fullpath and any_match($F, 0, \$rule, @opt_not_match_d)) {
                 $Ignored{$F} = "--not-match-d=$rule";
                 next;
-            } elsif (any_match(basename($F), 0, \$rule, @opt_not_match_d)) {
+            } elsif (!$opt_fullpath and any_match(basename($F), 0, \$rule, @opt_not_match_d)) {
                 $Ignored{$F} = "--not-match-d (basename) =$rule";
                 next;
             }
         }
         if (@opt_not_match_f) {
             my $rule;
-            if (any_match(basename($F), 0, \$rule, @opt_not_match_f)) {
-                $Ignored{$F} = "--not-match-d =$rule";
+            if ($opt_fullpath and any_match($F, 0, \$rule, @opt_not_match_f)) {
+                $Ignored{$F} = "--not-match-f=$rule";
+                next;
+            } elsif (!$opt_fullpath and any_match(basename($F), 0, \$rule, @opt_not_match_f)) {
+                $Ignored{$F} = "--not-match-f (basename) =$rule";
                 next;
             }
         }
@@ -8432,6 +8435,7 @@ sub set_constants {                          # {{{1
             'fp'          => 'GLSL'                  ,
             'fbs'         => 'Flatbuffers'           ,
             'gjs'         => 'Glimmer JavaScript'    ,
+            'gts'         => 'Glimmer TypeScript'    ,
             'glsl'        => 'GLSL'                  ,
             'graphqls'    => 'GraphQL'               ,
             'gql'         => 'GraphQL'               ,
@@ -9710,6 +9714,15 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
     'Glimmer JavaScript' => [
+                                [ 'remove_between_general', '{{!', '}}' ],
+                                [ 'remove_between_general', '<!--', '-->' ],
+                                [ 'rm_comments_in_strings', "'", '/*', '*/' ],
+                                [ 'rm_comments_in_strings', "'", '//', '' ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'Glimmer TypeScript' => [
                                 [ 'remove_between_general', '{{!', '}}' ],
                                 [ 'remove_between_general', '<!--', '-->' ],
                                 [ 'rm_comments_in_strings', "'", '/*', '*/' ],
@@ -11186,6 +11199,7 @@ sub set_constants {                          # {{{1
     'Gleam'                        =>   2.50,
     'GLSL'                         =>   2.00,
     'Glimmer JavaScript'           =>   3.50,
+    'Glimmer TypeScript'           =>   3.50,
     'gml'                          =>   1.74,
     'gpss'                         =>   1.74,
     'guest'                        =>   2.86,

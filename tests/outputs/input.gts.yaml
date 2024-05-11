@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.01
+  elapsed_seconds    : 0.00317215919494629
+  n_files            : 1
+  n_lines            : 150
+  files_per_second   : 315.242690717775
+  lines_per_second   : 47286.4036076663
+  report_file        : ../outputs/input.gts.yaml
+'Glimmer TypeScript' :
+  nFiles: 1
+  blank: 17
+  comment: 24
+  code: 109
+SUM: 
+  blank: 17
+  comment: 24
+  code: 109
+  nFiles: 1
