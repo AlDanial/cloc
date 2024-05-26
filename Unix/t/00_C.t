@@ -742,9 +742,14 @@ my @Tests = (
                     'args' => '../tests/inputs/SimpleODE.mo',
                 },
                 {
-                    'name' => 'Mojo',
+                    'name' => 'Mojom',
                     'ref'  => '../tests/outputs/Mojo.mojom.yaml',
                     'args' => '../tests/inputs/Mojo.mojom',
+                },
+                {
+                    'name' => 'Mojo',
+                    'ref'  => '../tests/outputs/hi.mojo.yaml',
+                    'args' => '../tests/inputs/hi.mojo',
                 },
                 {
                     'name' => 'Mumps',
