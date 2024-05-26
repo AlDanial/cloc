@@ -8642,7 +8642,7 @@ sub set_constants {                          # {{{1
             'mg'          => 'Modula3'               ,
             'mojom'       => 'Mojom'                 ,
             'mojo'        => 'Mojo'                  ,
-            '🔥'          => 'Mojo'                 ,
+            '🔥'          => 'Mojo'                  ,
             'meson.build' => 'Meson'                 ,
             'metal'       => 'Metal'                 ,
             'mk'          => 'make'                  ,
@@ -10093,8 +10093,8 @@ sub set_constants {                          # {{{1
     'Modula3'            => [   [ 'call_regexp_common'  , 'Pascal' ], ],
         # Modula 3 comments are (* ... *) so applying the Pascal filter
         # which also treats { ... } as a comment is not really correct.
-    'Mojom'               => [   [ 'call_regexp_common' , 'C++' ], ],
-    'Mojo'              => [
+    'Mojom'              => [   [ 'call_regexp_common' , 'C++' ], ],
+    'Mojo'               => [
                                 [ 'remove_matches'      , '/\*'    ],
                                 [ 'remove_matches'      , '\*/'    ],
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -10102,7 +10102,6 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
-
     'Nemerle'            => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
