@@ -850,6 +850,14 @@ my @Tests = (
                    'args' => '--vcs git --fullpath --not-match-d "a/b" issues/822',
                    'ref'  => '../tests/outputs/issues/822/T8.yaml',
                 },
+
+                {
+                   'name' => '--not-match-d with trailing slash (github issue #833)',
+                   'cd'   => '../tests/inputs/issues/833',
+                   'args' => '. --not-match-d="/foo/"',
+                   'ref'  => '../tests/outputs/issues/833/results.yaml',
+                },
+
             );
 
 # Special cases:

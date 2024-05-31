@@ -1224,6 +1224,18 @@ if (!$opt_config_file) {
     $opt_config_file = $other_loc if $other_loc;
 }
 
+# --match-d and --not-match-d: if end with a trailing slash, update the
+# regex to be either slash or end of line since File::Find::find() will
+# not see the trailing slash in leaf directories (#732, #833).
+if ($opt_match_d and $opt_match_d =~ m{/$}) {
+    $opt_match_d =~ s{/$}{(/|\$)};
+}
+foreach my $nmd (@opt_not_match_d) {
+    if ($nmd =~ m{/$}) {
+        $nmd =~ s{/$}{(/|\$)};
+    }
+}
+
 die $brief_usage unless defined $opt_version         or
                         defined $opt_show_lang       or
                         defined $opt_show_ext        or
