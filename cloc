@@ -1021,11 +1021,6 @@ $opt_fmt = 0 unless defined $opt_fmt;
 if ($opt_fmt) {
     $opt_by_file = 1;
     $opt_json = 1;
-    if (!defined $opt_report_file) {
-    my $fh;
-    ($fh, $opt_report_file) = tempfile(UNLINK => 0, DIR => ".", SUFFIX => ".json" );
-    $fh->close; # will be opened later by the JSON writer
-    }
 }
 my $CLOC_XSL = "cloc.xsl"; # created with --xsl
    $CLOC_XSL = "cloc-diff.xsl" if $opt_diff;
@@ -2223,16 +2218,21 @@ if      ($opt_by_file_by_lang) {
 }
 # 1}}}
 }
+if ($opt_fmt) {
+    my $json_string = "";
+    write_file(\$json_string, {}, @Lines_Out);
+    my ($file_len, $lang_len, $header, %contents) = load_json($json_string);
+    @Lines_Out = print_format_n(abs($opt_fmt), $file_len, $lang_len, $header, %contents);
+}
 if ($opt_report_file) {
     write_file($opt_report_file, {}, @Lines_Out);
-    if ($opt_fmt) {
-        my ($file_len, $lang_len, $header, %contents) = load_json($opt_report_file);
-        unlink $opt_report_file unless $opt_fmt < 0;
-        print_format_n(abs($opt_fmt), $file_len, $lang_len, $header, %contents);
-    }
 } else {
-    print "\n" unless $opt_quiet;
-    print join("\n", @Lines_Out), "\n";
+    if ($opt_fmt) {
+        print "@Lines_Out";
+    } else {
+        print "\n" unless $opt_quiet;
+        print join("\n", @Lines_Out), "\n";
+    }
 }
 if ($opt_count_diff) {
     ++$opt_count_diff;
@@ -6728,60 +6728,54 @@ sub write_file {                             # {{{1
         $rh_options , # in
         @lines      , # in
        ) = @_;
+    # If $file is a conventional scalar, it is the name of the file to write to.
+    # if $file is a reference to a scalar, rather than writing @lines to a file,
+    # write @lines to this scalar as a single string.
 
     my $local_formatting = 0;
     foreach my $opt (sort keys %{$rh_options}) {
 #       print "write_file option $opt = $rh_options->{$opt}\n";
         $local_formatting = 1;
     }
+    my $write_to_file = ref($file) eq "" ? 1 : 0;
+
 #print "write_file 1 [$file]\n";
     # Do ~ expansion (by Tim LaBerge, fixes bug 2787984)
-    my $preglob_filename = $file;
-#print "write_file 2 [$preglob_filename]\n";
-    if ($ON_WINDOWS) {
-        $file = (windows_glob($file))[0];
-    } else {
-        $file = File::Glob::bsd_glob($file);
+    if ($write_to_file) {
+        my $preglob_filename = $file;
+    #print "write_file 2 [$preglob_filename]\n";
+        if ($ON_WINDOWS) {
+            $file = (windows_glob($file))[0];
+        } else {
+            $file = File::Glob::bsd_glob($file);
+        }
+    #print "write_file 3 [$file]\n";
+        $file = $preglob_filename unless $file;
+    #print "write_file 4 [$file]\n";
     }
-#print "write_file 3 [$file]\n";
-    $file = $preglob_filename unless $file;
-#print "write_file 4 [$file]\n";
 
-    print "-> write_file($file)\n" if $opt_v > 2;
-
-    # Create the destination directory if it doesn't already exist.
-    my $abs_file_path = File::Spec->rel2abs( $file );
-    my ($volume, $directories, $filename) = File::Spec->splitpath( $abs_file_path );
-    mkpath($volume . $directories, 1, 0777);
-
-    my $OUT = undef;
-    unlink_file($file);
-    if ($opt_file_encoding) {
-#       $OUT = IO::File->new($file, ">:$opt_file_encoding");  # doesn't work?
-        $OUT = open_file(">:encoding($opt_file_encoding)", $file, 0);
+    if ($write_to_file) {
+        print "-> write_file($file)\n" if $opt_v > 2;
     } else {
-        $OUT = open_file('>', $file, 1);
+        print "-> write_file() -- writing to string variable\n" if $opt_v > 2;
     }
+
+    my @prt_lines = ();
 
     my $n_col = undef;
     if ($local_formatting) {
         $n_col = scalar @{$rh_options->{'columns'}};
         if ($opt_xml) {
-            print $OUT '<?xml version="1.0" encoding="UTF-8"?>', "\n";
-            print $OUT "<all_$rh_options->{'file_type'}>\n";
+            push @prt_lines, '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+            push @prt_lines, "<all_$rh_options->{'file_type'}>\n";
         } elsif ($opt_yaml) {
-            print $OUT "---\n";
+            push @prt_lines, "---\n";
         } elsif ($opt_md) {
-            print $OUT join("|", @{$rh_options->{'columns'}}) , "\n";
-            print $OUT join("|", map( ":------", 1 .. $n_col)), "\n";
+            push @prt_lines, join("|", @{$rh_options->{'columns'}})  . "\n";
+            push @prt_lines, join("|", map( ":------", 1 .. $n_col)) . "\n";
         }
     }
 
-    if (!defined $OUT) {
-        warn "Unable to write to $file\n";
-        print "<- write_file\n" if $opt_v > 2;
-        return;
-    }
     chomp(@lines);
 
     if ($local_formatting) {
@@ -6794,11 +6788,11 @@ sub write_file {                             # {{{1
                 @entries = ( $L );
             }
             if ($opt_xml) {
-                print $OUT "  <$rh_options->{'file_type'} ";
+                push @prt_lines, "  <$rh_options->{'file_type'} ";
                 for (my $i = 0; $i < $n_col; $i++) {
-                    printf $OUT "%s=\"%s\" ", $rh_options->{'columns'}[$i], $entries[$i];
+                    push @prt_lines, sprintf("%s=\"%s\" ", $rh_options->{'columns'}[$i], $entries[$i]);
                 }
-                print $OUT "/>\n";
+                push @prt_lines, "/>\n";
             } elsif ($opt_yaml or $opt_json) {
                 my @pairs = ();
                 for (my $i = 0; $i < $n_col; $i++) {
@@ -6810,27 +6804,46 @@ sub write_file {                             # {{{1
                     $pairs[0] =~ s/\\x//g;
                     push @json_lines, join(", ", @pairs );
                 } else {
-                    print $OUT "- {", join(", ", @pairs), "}\n";
+                    push @prt_lines, "- {", join(", ", @pairs) . "}\n";
                 }
             } elsif ($opt_csv) {
-                print $OUT join(",", @entries), "\n";
+                push @prt_lines, join(",", @entries) . "\n";
             } elsif ($opt_md) {
-                print $OUT join("|", @entries), "\n";
+                push @prt_lines, join("|", @entries) . "\n";
             }
         }
         if ($opt_json) {
-            print $OUT "[{", join("},\n {", @json_lines), "}]\n";
+            push @prt_lines, "[{" . join("},\n {", @json_lines) . "}]\n";
         }
         if (!$opt_json and !$opt_yaml and !$opt_xml and !$opt_csv) {
-            print $OUT join("\n", @lines), "\n";
+            push @prt_lines, join("\n", @lines) . "\n";
         }
     } else {
-        print $OUT join("\n", @lines), "\n";
+        push @prt_lines, join("\n", @lines) . "\n";
     }
 
     if ($local_formatting and $opt_xml) {
-        print $OUT "</all_$rh_options->{'file_type'}>\n";
+        push @prt_lines, "</all_$rh_options->{'file_type'}>\n";
     }
+
+    # Create the destination directory if it doesn't already exist.
+    my $abs_file_path = File::Spec->rel2abs( $file );
+    my ($volume, $directories, $filename) = File::Spec->splitpath( $abs_file_path );
+    mkpath($volume . $directories, 1, 0777);
+
+    my $OUT = undef;
+    unlink_file($file);
+    if ($opt_file_encoding) {
+        $OUT = open_file(">:encoding($opt_file_encoding)", $file, 0);
+    } else {
+        $OUT = open_file('>', $file, 1);
+    }
+    if (!defined $OUT) {
+        warn "Unable to write to $file\n";
+        print "<- write_file\n" if $opt_v > 2;
+        return;
+    }
+    print $OUT @prt_lines;
     $OUT->close;
 
     if (can_read($file)) {
@@ -14468,16 +14481,16 @@ sub glob2regex {                             # {{{
 } # }}}
 sub load_json {                              # {{{1
     #
-    # Load a cloc-generated JSON file into %contents
+    # Load a cloc-generated JSON string into %contents
     #   $contents{filename}{blank|comment|code|language} = value
     # then print in a variety of formats.
     #
-    my ($file, ) = @_;
+    my ($json_string, ) = @_;
+    print "-> load_json()\n" if $opt_v > 2;
 
     my %contents = ();
     my $heading = undef;
-    open IN, $file or die "failed load_json($file)";
-    while (<IN>) {
+    foreach (split /\n/, $json_string) {
         if (/^{?"(.*?)"/) {
             $heading = $1;
         } else {
@@ -14489,7 +14502,6 @@ sub load_json {                              # {{{1
             }
         }
     }
-    close IN;
     my $url = $contents{'header'}{'cloc_url'};
     my $ver = $contents{'header'}{'cloc_version'};
     my $sec = $contents{'header'}{'elapsed_seconds'};
@@ -14513,8 +14525,10 @@ sub load_json {                              # {{{1
         $file_len = $file_len > $flen ? $file_len : $flen;
         $lang_len = $lang_len > $llen ? $lang_len : $llen;
     }
+    print "<- load_json()\n" if $opt_v > 2;
     return $file_len, $lang_len, $header, %contents;
-} # 1}}}
+}
+# 1}}}
 sub print_format_n {                         # {{{1
     # by file with
     # format 1 : Language | files | blank | comment | code
@@ -14523,7 +14537,11 @@ sub print_format_n {                         # {{{1
     # format 4 : File | blank | comment | code | total
     # format 5 : File | Language | blank | comment | code | total
     my ($format, $file_len, $lang_len, $header, %contents) = @_;
+    print "-> print_format_n($format)\n" if $opt_v > 2;
+    my @prt_lines = ();
 
+    # 8 = characters in "Language"
+    $lang_len = max(8, $lang_len);
     my %str_fmt = (
         1 => sprintf("%%-%ds  %%7s  %%7s  %%7s  %%7s\n", $lang_len),
         2 => sprintf("%%-%ds  %%7s  %%7s  %%7s  %%7s  %%7s\n", $lang_len),
@@ -14567,10 +14585,10 @@ sub print_format_n {                         # {{{1
         5 => ["File", "Language", "blank", "comment", "code", "Total"],
     );
 
-    print "$header\n";
-    print "$hyphens{$format}\n";
-    printf $str_fmt{$format}, @{$col_headings{$format}};
-    print "$hyphens{$format}\n";
+    push @prt_lines, "$header\n";
+    push @prt_lines, "$hyphens{$format}\n";
+    push @prt_lines, sprintf $str_fmt{$format}, @{$col_headings{$format}};
+    push @prt_lines, "$hyphens{$format}\n";
     my ($n_files, $n_blank, $n_comment, $n_code, $n_total) = (0, 0, 0, 0, 0);
     my @out;
     if ($format < 3) {
@@ -14585,7 +14603,7 @@ sub print_format_n {                         # {{{1
             } else {
                 @out = ($lang, $nF, $nB, $nCm, $nCo, $nB + $nCm + $nCo);
             }
-            printf $val_fmt{$format}, @out;
+            push @prt_lines, sprintf $val_fmt{$format}, @out;
             $n_files   += $nF;
             $n_blank   += $nB;
             $n_comment += $nCm;
@@ -14607,14 +14625,14 @@ sub print_format_n {                         # {{{1
             } else {
                 @out = ($file, $lang, $nB, $nCm, $nCo, $nB + $nCm + $nCo);
             }
-            printf $val_fmt{$format}, @out;
+            push @prt_lines, sprintf $val_fmt{$format}, @out;
             $n_blank   += $nB;
             $n_comment += $nCm;
             $n_code    += $nCo;
             $n_total   += $nB + $nCm + $nCo;
         }
     }
-    print "$hyphens{$format}\n";
+    push @prt_lines, "$hyphens{$format}\n";
     if (scalar @file_list > 1) {
         if      ($format == 1) {
             @out = ( "SUM", $n_files, $n_blank, $n_comment, $n_code );
@@ -14627,9 +14645,11 @@ sub print_format_n {                         # {{{1
         } else {
             @out = ( "SUM", " ", $n_blank, $n_comment, $n_code, $n_total );
         }
-        printf $val_fmt{$format}, @out;
-        print "$hyphens{$format}\n";
+        push @prt_lines, sprintf $val_fmt{$format}, @out;
+        push @prt_lines, "$hyphens{$format}\n";
     }
+    return @prt_lines;
+    print "<- print_format_n()\n" if $opt_v > 2;
 } # 1}}}
 # really_is_pascal, really_is_incpascal, really_is_php from SLOCCount
 my %php_files    = ();  # really_is_php()
