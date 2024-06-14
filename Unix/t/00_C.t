@@ -1367,6 +1367,11 @@ my @Tests = (
                     'args' => '../tests/inputs/Xtend.xtend',
                 },
                 {
+                    'name' => 'Yang',
+                    'ref'  => '../tests/outputs/bbf-device.yang.yaml',
+                    'args' => '../tests/inputs/bbf-device.yang',
+                },
+                {
                     'name' => 'Zig',
                     'ref'  => '../tests/outputs/zir_sema.zig.yaml',
                     'args' => '../tests/inputs/zir_sema.zig',

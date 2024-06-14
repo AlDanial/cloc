@@ -616,12 +616,8 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              printed with
                                perl -MEncode -e 'print join(\"\\n\", Encode->encodings(\":all\")), \"\\n\"'
    --fmt=<N>                 Alternate text output format where <N> is a number
-                             from 1 to 5, or -1 to -5. 'total lines' means the
-                             sum of code, comment, and blank lines.  Negative
-                             values are the same as the positive values but retain,
-                             instead of deleting, the intermediate JSON file that
-                             is written.  The JSON file name is randomly generated
-                             unless --out/--report-file is given.  The formats are:
+                             from 1 to 5. 'total lines' means the sum of code,
+                             comment, and blank lines.  The formats are:
                                1:  by language (same as cloc default output)
                                2:  by language with an extra column for total lines
                                3:  by file with language
@@ -9171,6 +9167,7 @@ sub set_constants {                          # {{{1
             'clang-format'=> 'YAML'                  ,
             'yaml'        => 'YAML'                  ,
             'yml'         => 'YAML'                  ,
+            'yang'        => 'Yang'                  ,
             'zig'         => 'Zig'                   ,
             'zsh'         => 'zsh'                   ,
             );
@@ -10011,6 +10008,7 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'lex'                => [   [ 'call_regexp_common'  , 'C'      ], ],
     'LFE'                => [
                                 [ 'remove_matches'      , '^\s*;'  ],
                                 [ 'remove_between_general', '#|', '|#' ],
@@ -10720,6 +10718,14 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'Velocity Template Language' => [
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ],
+                                [ 'remove_jsp_comments' ,          ],
+                                [ 'remove_matches'      , '^\s*##' ],
+                                [ 'remove_between_general', '#**', '*#' ],
+                                [ 'add_newlines'        ,          ],
+                            ],
     'Verilog-SystemVerilog/Coq' => [ ['die'] ], # never called
     'Verilog-SystemVerilog' => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
@@ -10765,13 +10771,15 @@ sub set_constants {                          # {{{1
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
                             ],
-    'Velocity Template Language' => [
+    'Visual Studio Module' => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'Visual Studio Solution' => [
+                                [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
-                                [ 'remove_jsp_comments' ,          ],
-                                [ 'remove_matches'      , '^\s*##' ],
-                                [ 'remove_between_general', '#**', '*#' ],
-                                [ 'add_newlines'        ,          ],
                             ],
     'Vuejs Component'     => [
                                 [ 'remove_html_comments',          ],
@@ -10800,7 +10808,6 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
-    'lex'                => [   [ 'call_regexp_common'  , 'C'      ], ],
     'XAML'               => [   [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
     'xBase Header'       => [
@@ -10915,15 +10922,10 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
     'MSBuild script'    => [    [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ], ],
-    'Visual Studio Module' => [
+    'Yang'               => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
-                            ],
-    'Visual Studio Solution' => [
-                                [ 'remove_matches'      , '^\s*#'  ],
-                                [ 'remove_html_comments',          ],
-                                [ 'call_regexp_common'  , 'HTML'   ],
                             ],
     'Zig'                => [
                                 [ 'remove_matches'      , '^\s*//'  ],
@@ -11510,6 +11512,7 @@ sub set_constants {                          # {{{1
     'Luau'                         => 4.50,
     'OpenCL'                       => 1.50,
     'Xtend'                        => 2.00,
+    'Yang'                         => 3.00,
     'Zig'                          => 2.50,
     # aggregates; value is meaningless
     'C#/Smalltalk'                    => 1.00,
