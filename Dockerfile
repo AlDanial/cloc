@@ -59,3 +59,5 @@ WORKDIR /tmp
 
 ENTRYPOINT ["/usr/src/cloc"]
 CMD ["--help"]
+
+#Only add this comment file
