@@ -323,7 +323,7 @@ cloc has many features that make it easy to use, thorough, extensible, and porta
 1.  Exists as a single, self-contained file that requires minimal installation effort---just download the file and run it.
 2.  Can read language comment definitions from a file and thus potentially work with computer languages that do not yet exist.
 3.  Allows results from multiple runs to be summed together by language and by project.
-4.  Can produce results in a variety of formats: plain text, SQL, JSON, XML, YAML, comma separated values.
+4.  Can produce results in a variety of formats: plain text, Markdown, SQL, JSON, XML, YAML, comma separated values.
 5.  Can count code within compressed archives (tar balls, Zip files, Java .ear files).
 6.  Has numerous troubleshooting options.
 7.  Handles file and directory names with spaces and other unusual characters.
