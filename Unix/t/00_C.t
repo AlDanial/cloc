@@ -822,6 +822,16 @@ my @Tests = (
                     'args' => '../tests/inputs/basic.p4',
                 },
                 {
+                    'name' => 'Pawn',
+                    'ref'  => '../tests/outputs/pawn.yaml',
+                    'args' => '../tests/inputs/fortran.inc ' .
+                              '../tests/inputs/hanoi.inc ' .
+                              '../tests/inputs/pascal.inc ' .
+                              '../tests/inputs/test1.inc ' .
+                              '../tests/inputs/Pascal.p ' .
+                              '../tests/inputs/queue.p ',
+                },
+                {
                     'name' => 'Pascal',
                     'ref'  => '../tests/outputs/Pascal.pas.yaml',
                     'args' => '../tests/inputs/Pascal.pas',

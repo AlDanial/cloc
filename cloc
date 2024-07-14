@@ -1282,9 +1282,10 @@ my %Extension_Collision = (
     'Lisp/Julia'                                    => [ 'jl'   ] ,
     'Lisp/OpenCL'                                   => [ 'cl'   ] ,
     'MATLAB/Mathematica/Objective-C/MUMPS/Mercury'  => [ 'm'    ] ,
+    'Pascal/Pawn'                                   => [ 'p'    ] ,
     'Pascal/Puppet'                                 => [ 'pp'   ] ,
     'Perl/Prolog'                                   => [ 'pl', 'PL'  ] ,
-    'PHP/Pascal/Fortran'                            => [ 'inc'  ] ,
+    'PHP/Pascal/Fortran/Pawn'                       => [ 'inc'  ] ,
     'Raku/Prolog'                                   => [ 'p6', 'P6'  ] ,
     'Qt/Glade'                                      => [ 'ui'   ] ,
     'TypeScript/Qt Linguist'                        => [ 'ts'   ] ,
@@ -6292,17 +6293,17 @@ sub classify_file {                          # {{{1
                         'failure in matlab_or_objective_C($full_file)';
                     return $language; # (unknown)
                 }
-            } elsif ($Language_by_Extension{$extension} eq 'PHP/Pascal/Fortran') {
+            } elsif ($Language_by_Extension{$extension} eq 'PHP/Pascal/Fortran/Pawn') {
                 my $lang_F_or_P_or_P = "";
-                php_pascal_or_fortran($full_file ,
-                                      $rh_Err    ,
-                                      $raa_errors,
-                                     \$lang_F_or_P_or_P);
+                php_pascal_fortran_pawn($full_file ,
+                                        $rh_Err    ,
+                                        $raa_errors,
+                                       \$lang_F_or_P_or_P);
                 if ($lang_F_or_P_or_P) {
                     return $lang_F_or_P_or_P;
                 } else { # an error happened in php_pascal_or_fortran()
                     $rh_ignored->{$full_file} =
-                        'failure in php_pascal_or_fortran($full_file)';
+                        'failure in php_pascal_fortran_pawn($full_file)';
                     return $language; # (unknown)
                 }
             } elsif ($Language_by_Extension{$extension} eq 'Pascal/Puppet') {
@@ -6404,6 +6405,9 @@ sub classify_file {                          # {{{1
                         'failure in Visual_Basic_or_TeX_or_Apex()';
                     return $language; # (unknown)
                 }
+            } elsif ($Language_by_Extension{$extension} eq 'Pascal/Pawn') {
+                my $lang_p_or_p = "";
+                return Pascal_or_Pawn($full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'Brainfuck') {
                 if (really_is_bf($full_file)) {
                     return $Language_by_Extension{$extension};
@@ -8550,7 +8554,7 @@ sub set_constants {                          # {{{1
             'ig'          => 'Modula3'               ,
             'il'          => 'SKILL'                 ,
             'ils'         => 'SKILL++'               ,
-            'inc'         => 'PHP/Pascal/Fortran'    ,
+            'inc'         => 'PHP/Pascal/Fortran/Pawn',
             'ino'         => 'Arduino Sketch'        ,
             'ipf'         => 'Igor Pro'              ,
            #'pde'         => 'Arduino Sketch'        , # pre 1.0
@@ -8716,6 +8720,7 @@ sub set_constants {                          # {{{1
             'fnc'         => 'Oracle PL/SQL'         ,
             'prc'         => 'Oracle PL/SQL'         ,
             'trg'         => 'Oracle PL/SQL'         ,
+            'p'           => 'Pascal/Pawn'           ,
             'pad'         => 'Ada'                   , # Oracle Ada preprocessor
             'page'        => 'Visualforce Page'      ,
             'pas'         => 'Pascal'                ,
@@ -8759,7 +8764,6 @@ sub set_constants {                          # {{{1
             'yap'         => 'Prolog'                ,
             'prolog'      => 'Prolog'                ,
             'P'           => 'Prolog'                ,
-            'p'           => 'Pascal'                ,
             'pp'          => 'Pascal/Puppet'         ,
             'viw'         => 'SQL'                   ,
             'udf'         => 'SQL'                   ,
@@ -8857,6 +8861,8 @@ sub set_constants {                          # {{{1
             'sp'          => 'SparForte'             ,
             'sol'         => 'Solidity'              ,
             'p4'          => 'P4'                    ,
+            'pwn'         => 'Pawn'                  ,
+            'pawn'        => 'Pawn'                  ,
             'ses'         => 'Patran Command Language'   ,
             'pcl'         => 'Patran Command Language'   ,
             'peg'         => 'PEG'                   ,
@@ -10154,7 +10160,7 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
-    'PHP/Pascal/Fortran'       => [ [ 'die' ,          ], ], # never called
+    'PHP/Pascal/Fortran/Pawn' => [ [ 'die' ,          ], ], # never called
     'Mako'               => [
                                 [ 'remove_matches'       , '##.*$'  ],
                             ],
@@ -10224,6 +10230,11 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
     'P4'                 => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'Pawn'               => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
@@ -11357,6 +11368,7 @@ sub set_constants {                          # {{{1
     'Oracle Developer/2000'        =>   3.48,
     'Other'                        =>   1.00,
     'P4'                           =>   1.5 ,
+    'Pawn'                         =>   2.00,
     'Pascal'                       =>   0.88,
     'Patran Command Language'      =>   2.50,
     'Perl'                         =>   4.00,
@@ -11536,7 +11548,7 @@ sub set_constants {                          # {{{1
     'Fortran 77/Forth'                => 1.00,
     'Lisp/Julia'                      => 1.00,
     'Lisp/OpenCL'                     => 1.00,
-    'PHP/Pascal/Fortran'              => 1.00,
+    'PHP/Pascal/Fortran/Pawn'         => 1.00,
     'Pascal/Puppet'                   => 1.00,
     'Perl/Prolog'                     => 1.00,
     'Raku/Prolog'                     => 1.00,
@@ -11778,8 +11790,8 @@ printf "END LOOP    obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $obje
         if $opt_v > 2;
 
 } # 1}}}
-sub php_pascal_or_fortran {                  # {{{1
-    # Decide if code is Fortran, PHP, or Pascal
+sub php_pascal_fortran_pawn {                # {{{1
+    # Decide if code is Fortran, PHP, Pascal, Pawn
     my ($file        , # in
         $rh_Err      , # in   hash of error codes
         $raa_errors  , # out
@@ -11801,6 +11813,11 @@ sub php_pascal_or_fortran {                  # {{{1
     # Pascal:
     #   lines ending with ;
     #   writeln
+    #
+    # Pawn:
+    #   lines ending with ;
+    #   has /* ... */ style comments
+    #   writeln
 
     ${$rs_language} = "";
     my $IN = open_file('<', $file, 1);
@@ -11815,6 +11832,7 @@ sub php_pascal_or_fortran {                  # {{{1
     my $fortran_points  = 0;
     my $php_points      = 0;
     my $pascal_points   = 0;
+    my $pawn_points     = 0;
     while (<$IN>) {
         if (/^\s*<\?php/i) {
             $php_points += 100;
@@ -11837,13 +11855,16 @@ sub php_pascal_or_fortran {                  # {{{1
                  /^\s*end\s+(program|subroutine)/i or
                  /^\s*end\s*(if|do)\b/i) {
             ++$fortran_points;
-        } elsif (/^\s*(writeln|begin|procedure|interface|implementation|const|var)\b/i) {
+        } elsif (/^\s*(writeln|begin|procedure|interface|implementation|const)\b/i) {
             ++$pascal_points;
         } elsif (/^\s*(<|\?>)/) {
             ++$php_points;
         } elsif (/;\s*$/) {
             ++$pascal_points;
             ++$php_points;
+        } elsif (/^\@/ or /^\s*(Float:|bool:)/) {
+            $pawn_points += 1e+20;
+            last;
         }
         if (/^\s*(integer|real|complex|double|character|logical|public|private).*?::/i or
             /^\s*(allocatable|dimension)/i or
@@ -11855,7 +11876,8 @@ sub php_pascal_or_fortran {                  # {{{1
 
     my %points = ( 'Fortran'      => $fortran_points     ,
                    'PHP'          => $php_points         ,
-                   'Pascal'       => $pascal_points      , );
+                   'Pascal'       => $pascal_points      ,
+                   'Pawn'         => $pawn_points        , );
 
     ${$rs_language} = (sort { $points{$b} <=> $points{$a} or $a cmp $b } keys %points)[0];
     if (${$rs_language} eq 'Fortran') {
@@ -11866,7 +11888,8 @@ sub php_pascal_or_fortran {                  # {{{1
         }
     }
 
-    print "<- php_pascal_or_fortran($file: fortran=$fortran_points, php=$php_points, pascal=$pascal_points) => ${$rs_language}\n"
+    print "<- php_pascal_fortran_pawn($file: fortran=$fortran_points, php=$php_points, ",
+          "pascal=$pascal_points, pawn=$pawn_points) => ${$rs_language}\n"
         if $opt_v > 2;
 
 } # 1}}}
@@ -12467,6 +12490,45 @@ sub Scheme_or_SaltStack {                    # {{{1
         return "Scheme";
     } else {
         return "SaltStack";
+    }
+} # 1}}}
+sub Pascal_or_Pawn {                         # {{{1
+    my ($file        , # in
+        $rh_Err      , # in   hash of error codes
+        $raa_errors  , # out
+       ) = @_;
+
+    print "-> Pascal_or_Pawn($file)\n" if $opt_v > 2;
+
+    my $lang = undef;
+    my $IN = open_file('<', $file, 1);
+    if (!defined $IN) {
+        push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
+        return $lang;
+    }
+    my $scal = 0;
+    my $wn   = 0;
+    while (<$IN>) {
+        next if /^\s*$/;
+        if (/^\s*(program|begin|end|[Ww]riteln|procedure)\s/) {
+            $scal += 1e+20;
+            last;
+        } elsif (/^\@/ or m{/\*} or m{\*/} or /^\s*(Float:|bool:)/) {
+            $wn += 1e+20;
+            last;
+        } elsif (/^\s*(static|printf?|switch)\s/) {
+            $wn += 1;
+        } elsif (/;\s*$/) {
+            $scal += 1;
+        }
+    }
+    $IN->close;
+
+    print "<- Pascal_or_Pawn($file: Pascal=$scal, Pawn=$wn\n" if $opt_v > 2;
+    if ($scal > $wn) {
+        return "Pascal";
+    } else {
+        return "Pawn";
     }
 } # 1}}}
 sub html_colored_text {                      # {{{1

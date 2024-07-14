@@ -1,0 +1,36 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.01
+  elapsed_seconds    : 0.00428891181945801
+  n_files            : 6
+  n_lines            : 165
+  files_per_second   : 1398.9562510423
+  lines_per_second   : 38471.2969036634
+  report_file        : ../outputs/pawn.yaml
+'Pawn' :
+  nFiles: 2
+  blank: 16
+  comment: 14
+  code: 64
+'Fortran 90' :
+  nFiles: 1
+  blank: 4
+  comment: 4
+  code: 20
+'Pascal' :
+  nFiles: 2
+  blank: 2
+  comment: 4
+  code: 14
+'PHP' :
+  nFiles: 1
+  blank: 5
+  comment: 7
+  code: 11
+SUM: 
+  blank: 27
+  comment: 29
+  code: 109
+  nFiles: 6
