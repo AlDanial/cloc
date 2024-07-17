@@ -42,6 +42,7 @@ at http://cloc.sourceforge.net/ since August 2006.
     *   [git and UTF8 pathnames](#git-and-UTF8-pathnames-)
     *   [Third Generation Language Scale Factors](#third-generation-language-scale-factors-)
     *   [options.txt configuration file](#optionstxt-configuration-file-)
+    *   [Java Programmatic Interface](#java-programmatic-interface-)
 *   [Complex regular subexpression recursion limit ](#complex-regular-subexpression-recursion-limit-)
 *   [Limitations](#limitations-)
 *   [Requesting Support for Additional Languages](#requesting-support-for-additional-languages-)
@@ -2866,6 +2867,14 @@ from that location:
 
 Run with ``--verbose`` to have cloc tell you which, if
 any, ``options.txt`` file it uses.
+
+[](1}}})
+<a name="Java Programmatic Interface"></a> []({{{1)
+##  [Java Programmatic Interface &#9650;](#___top "click to go to top of document")
+
+[Ozren Dabić](https://github.com/seart-group/jcloc/commits?author=dabico)
+created a Java programmatic interface to cloc.
+It is available at https://github.com/seart-group/jcloc
 
 [](1}}})
 <a name="complex_regex_recursion"></a> []({{{1)
