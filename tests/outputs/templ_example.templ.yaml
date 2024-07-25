@@ -1,0 +1,20 @@
+---
+# github.com/AlDanial/cloc
+header :
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.01
+  elapsed_seconds    : 0.0374619960784912
+  n_files            : 1
+  n_lines            : 25
+  files_per_second   : 26.6937190934722
+  lines_per_second   : 667.342977336804
+'Templ' :
+  nFiles: 1
+  blank: 5
+  comment: 12
+  code: 8
+SUM:
+  blank: 5
+  comment: 12
+  code: 8
+  nFiles: 1

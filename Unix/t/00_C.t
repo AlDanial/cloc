@@ -1172,6 +1172,11 @@ my @Tests = (
                     'args' => '../tests/inputs/htlc.teal',
                 },
                 {
+                    'name' => 'Templ',
+                    'ref'  => '../tests/outputs/templ_example.templ.yaml',
+                    'args' => '../tests/inputs/templ_example.templ'
+                },
+                {
                     'name' => 'TeX',
                     'ref'  => '../tests/outputs/LaTeX.tex.yaml',
                     'args' => '../tests/inputs/LaTeX.tex',
