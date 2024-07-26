@@ -2838,7 +2838,25 @@ cloc will look for this file in the following default locations:
 /home/USERNAME/.config/cloc/options.txt
 
 # Windows
-C:\Users\USERNAME\AppData\cloc\options.txt
+C:\Users\USERNAME\AppData\Roaming\cloc
+</pre>
+
+If you run cloc with ``--help``, cloc will tell you
+where it expects to find this config file file.  The information
+appears by the explanation of the ``--config`` switch after
+the text ``the default location of``.
+On Unix-like operating systems, this can be simplifed to
+
+<pre>
+&gt; cloc --help | grep "default location"
+             the default location of /home/al/.config/cloc/options.txt.
+</pre>
+
+and in a Windows ``cmd`` terminal with
+
+<pre>
+&gt; cloc --help | findstr default | findstr location
+             the default location of C:\Users\al\AppData\Roaming\cloc
 </pre>
 
 Place each switch and arguments, if any, on a line by itself.
