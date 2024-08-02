@@ -5,13 +5,13 @@
 * * *
 cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.
 
-Latest release:  v2.00 (Feb. 17, 2024)
+Latest release:  v2.02 (Aug. 2, 2024)
 
-<a href="https://github.com/AlDanial/cloc/graphs/contributors" alt="Contributors">
-    <img src="https://img.shields.io/github/contributors/AlDanial/cloc" /></a>
-<a href="https://zenodo.org/badge/latestdoi/42029482">
-    <img src="https://zenodo.org/badge/42029482.svg" alt="DOI"></a>
-<img src="https://img.shields.io/github/downloads/AlDanial/cloc/total.svg">
+[![Version](https://img.shields.io/badge/version-2.02-blue.svg)](https://github.com/AlDanial/cloc)
+[![Contributors](https://img.shields.io/github/contributors/AlDanial/cloc.svg)](https://github.com/AlDanial/cloc/graphs/contributors)
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.42029482.svg)](https://doi.org/10.5281/zenodo.42029482)
+[![Forks](https://img.shields.io/github/forks/AlDanial/cloc.svg)](https://github.com/AlDanial/cloc/network/members)
+[![Downloads](https://img.shields.io/github/downloads/AlDanial/cloc/total.svg)]()
 
 cloc moved to GitHub in September 2015 after being hosted
 at http://cloc.sourceforge.net/ since August 2006.
@@ -65,8 +65,8 @@ Step 3:  Invoke cloc to count your source files, directories, archives,
 or git commits.
 The executable name differs depending on whether you use the
 development source version (`cloc`), source for a
-released version (`cloc-2.00.pl`) or a Windows executable
-(`cloc-2.00.exe`).
+released version (`cloc-2.02.pl`) or a Windows executable
+(`cloc-2.02.exe`).
 
 On this page, `cloc` is the generic term
 used to refer to any of these.
@@ -410,14 +410,14 @@ C:> cpan -i Regexp::Common
 C:> cpan -i Algorithm::Diff
 C:> cpan -i PAR::Packer
 C:> cpan -i Win32::LongPath
-C:> pp -M Win32::LongPath -M Encode::Unicode -M Digest::MD5 -c -x -o cloc-2.00.exe cloc-2.00.pl
+C:> pp -M Win32::LongPath -M Encode::Unicode -M Digest::MD5 -c -x -o cloc-2.02.exe cloc-2.02.pl
 </pre>
 
 A variation on the instructions above is if you installed the portable
 version of Strawberry Perl, you will need to run `portableshell.bat` first
 to properly set up your environment.
 
-The Windows executable in the Releases section, <tt>cloc-2.00.exe</tt>,
+The Windows executable in the Releases section, <tt>cloc-2.02.exe</tt>,
 was built on a 64 bit Windows 10 computer using
 [Strawberry Perl](http://strawberryperl.com/)
 5.30.2 and
@@ -438,6 +438,9 @@ You are encouraged to run your own virus scanners against the
 executable and also check sites such
 https://www.virustotal.com/ .
 The entries for recent versions are:
+
+cloc-2.02.exe:
+https://www.virustotal.com/gui/file/369ed76125f7399cd582d169adf39a2e08ae5066031fea0cc8b2836ea50e7ce2?nocache=1
 
 cloc-2.00.exe:
 https://www.virustotal.com/gui/file/7a234ef0cb495de1b5776acf88c5554e2bab1fb02725a5fb85756a6db3121c1f
@@ -1034,7 +1037,7 @@ Apex Class                 (cls)
 Apex Trigger               (trigger)
 APL                        (apl, apla, aplc, aplf, apli, apln, aplo, dyalog, dyapp, mipage)
 AppleScript                (applescript)
-Arduino Sketch             (ino, pde)
+Arduino Sketch             (ino)
 ArkTs                      (ets)
 Arturo                     (art)
 AsciiDoc                   (adoc, asciidoc)
@@ -1130,6 +1133,8 @@ GDScript                   (gd)
 Gencat NLS                 (msg)
 Glade                      (glade, ui)
 Gleam                      (gleam)
+Glimmer JavaScript         (gjs)
+Glimmer TypeScript         (gts)
 GLSL                       (comp, fp, frag, frg, fsh, fshader, geo, geom, glsl, glslv, gshader, tesc, tese, vert, vrx, vsh, vshader)
 Go                         (go, ʕ◔ϖ◔ʔ)
 Godot Resource             (tres)
@@ -1190,6 +1195,7 @@ LLVM IR                    (ll)
 Logos                      (x, xm)
 Logtalk                    (lgt, logtalk)
 Lua                        (lua, nse, p8, pd_lua, rbxs, wlua)
+Luau                       (luau)
 m4                         (ac, m4)
 make                       (am, Gnumakefile, gnumakefile, Makefile, makefile, mk)
 Mako                       (mako, mao)
@@ -1199,9 +1205,10 @@ MATLAB                     (m)
 Maven                      (pom, pom.xml)
 Meson                      (meson.build)
 Metal                      (metal)
+Modelica                   (mo)
 Modula3                    (i3, ig, m3, mg)
-Mojom                      (mojom)
 Mojo                       (mojo, 🔥)
+Mojom                      (mojom)
 MSBuild script             (btproj, csproj, msbuild, vcproj, wdproj, wixproj)
 MUMPS                      (mps, m)
 Mustache                   (mustache)
@@ -1210,6 +1217,7 @@ NAnt script                (build)
 NASTRAN DMAP               (dmap)
 Nemerle                    (n)
 NetLogo                    (nlogo, nls)
+Nickel                     (ncl)
 Nim                        (nim, nim.cfg, nimble, nimrod, nims)
 Nix                        (nix)
 Nunjucks                   (njk)
@@ -1223,16 +1231,18 @@ Oracle Forms               (fmt)
 Oracle PL/SQL              (bod, fnc, prc, spc, trg)
 Oracle Reports             (rex)
 P4                         (p4)
-Pascal                     (dpr, lpr, p, pas, pascal)
+Pascal                     (dpr, lpr, pas, pascal)
+Pascal/Pawn                (p)
 Pascal/Puppet              (pp)
 Patran Command Language    (pcl, ses)
+Pawn                       (pawn, pwn)
 PEG                        (peg)
 peg.js                     (pegjs)
 peggy                      (peggy)
 Perl                       (ack, al, cpanfile, makefile.pl, perl, ph, plh, plx, pm, psgi, rexfile, pl, p6)
 Pest                       (pest)
 PHP                        (aw, ctp, phakefile, php, php3, php4, php5, php_cs, php_cs.dist, phps, phpt, phtml)
-PHP/Pascal/Fortran         (inc)
+PHP/Pascal/Fortran/Pawn    (inc)
 Pig Latin                  (pig)
 PL/I                       (pl1)
 PL/M                       (lit, plm)
@@ -1242,6 +1252,7 @@ Pony                       (pony)
 PowerBuilder               (pbt, sra, srf, srm, srs, sru, srw)
 PowerShell                 (ps1, psd1, psm1)
 Prisma Schema              (prisma)
+Processing                 (pde)
 ProGuard                   (pro)
 Prolog                     (P, prolog, yap, pl, p6, pro)
 Properties                 (properties)
@@ -1364,6 +1375,7 @@ XSLT                       (XSL, xsl, XSLT, xslt)
 Xtend                      (xtend)
 yacc                       (y, yacc)
 YAML                       (clang-format, clang-tidy, gemrc, glide.lock, mir, reek, rviz, sublime-syntax, syntax, yaml, yaml-tmlanguage, yml, yml.mysql)
+Yang                       (yang)
 Zig                        (zig)
 zsh                        (zsh)
 </pre>

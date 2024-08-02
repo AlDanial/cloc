@@ -1,3 +1,33 @@
+                Release Notes for cloc version 2.02
+                   https://github.com/AlDanial/cloc
+                             Aug. 2, 2024
+
+New Languages and File Types:
+    o Arturo
+    o Glimmer JavaScript
+    o Glimmer TypeScript
+    o Luau
+    o Modelica
+    o Mojo
+    o Nickel
+    o Pawn
+    o Processing
+    o Templ
+    o Yang
+
+Updates:
+    o Support SQL output with --diff
+    o Support counting in .git repo directories not owned by the user.
+    o Eliminate the need to write temporary files when using --fmt.
+    o Restore Dockerfile CI by fixing CPAN module setup that somehow stopped
+      installing Parallel::ForkManager.
+    o Improve handling of C comments in Go strings.
+
+Bug fixes:
+    o Improve --fmt output column alignments.
+    o Handle --no-match when combined with --fullpath and --vcs.
+
+============================================================================
                 Release Notes for cloc version 2.00
                    https://github.com/AlDanial/cloc
                              Feb. 17, 2024
