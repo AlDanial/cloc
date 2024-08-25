@@ -439,6 +439,10 @@ executable and also check sites such
 https://www.virustotal.com/ .
 The entries for recent versions are:
 
+cloc-2.02-winget.exe:  (includes [PR 850](https://github.com/AlDanial/cloc/pull/850) to allow
+[running from a symlink on Windows](https://github.com/AlDanial/cloc/issues/849))
+https://www.virustotal.com/gui/file/be033061e091fea48a5bc9e8964cee0416ddd5b34bd5226a1c9aa4b30bdba66a?nocache=1
+
 cloc-2.02.exe:
 https://www.virustotal.com/gui/file/369ed76125f7399cd582d169adf39a2e08ae5066031fea0cc8b2836ea50e7ce2?nocache=1
 
