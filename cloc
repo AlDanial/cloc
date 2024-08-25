@@ -136,6 +136,19 @@ if ($ON_WINDOWS and $ENV{'SHELL'}) {
     }
 }
 
+use Cwd "abs_path";
+use File::Spec;
+# Fix for issues when runing cloc through a symlink on Windows
+# e.g. : it have been installed with Winget
+# See https://github.com/AlDanial/cloc/issues/849
+if ($ON_WINDOWS) {
+    my $exec_path = abs_path($0);
+    if (-l $0) {
+        $exec_path = abs_path(readlink($0));
+    }
+    $0 = $exec_path;
+}
+
 my $HAVE_Win32_Long_Path = 0;
 # Win32::LongPath is an optional dependency that when available on
 # Windows will be used to support reading files past the 255 char
