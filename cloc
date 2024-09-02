@@ -5848,19 +5848,30 @@ sub make_file_list {                         # {{{1
             next;
         }
         if ($opt_no_recurse) {
+            my @candidate_file_list = ();
             if ($ON_WINDOWS and $HAVE_Win32_Long_Path) {
                 my $d = Win32::LongPath->new();
                 $d->opendirL($dir);
                 foreach my $entry ($d->readdirL()) {
                     my $F = "$dir/$entry";
-                    push @file_list, $F if is_file($F);
+                    push @candidate_file_list, $F if is_file($F);
                 }
                 $d->closedirL();
             } else {
                 opendir(DIR, $dir);
-                push @file_list, grep(is_file($_), readdir(DIR));
+                push @candidate_file_list, grep(is_file("$dir/$_"), readdir(DIR));
                 closedir(DIR);
             }
+            foreach my $F (@candidate_file_list) {
+                # pretend to be File::Find's wanted() routine, namely subroutine files(),
+                # to apply all file filter rules
+                $File::Find::dir  = $dir;
+                $File::Find::name = $F;
+                $_ = "$dir/$F";
+                files();  # side effect:  populates @file_list
+            }
+            # ... then prepend the directory name to each file
+            @file_list = map { "$dir/$_" } @file_list;
         } else {
             find({wanted     => \&files            ,
                   preprocess => \&find_preprocessor,

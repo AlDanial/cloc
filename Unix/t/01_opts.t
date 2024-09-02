@@ -858,6 +858,13 @@ my @Tests = (
                    'ref'  => '../tests/outputs/issues/833/results.yaml',
                 },
 
+                {
+                   'name' => '--match-f with --no-recurse (github issue #851)',
+                   'cd'   => '../tests/inputs/issues/851',
+                   'args' => "--match-f '.lua\$' --no-recurse level_1",
+                   'ref'  => '../tests/outputs/issues/851/results.yaml',
+                },
+
             );
 
 # Special cases:

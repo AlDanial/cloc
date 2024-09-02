@@ -1,0 +1,6 @@
+
+/* Comment 1 */
+table TestTable {
+	// Comment 2
+  Item: int32;
+}
