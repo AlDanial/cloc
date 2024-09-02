@@ -14627,10 +14627,10 @@ sub load_from_config_file {                  # {{{1
         } elsif (!defined ${$rs_json}                and /^json/)                                             { ${$rs_json}               = 1;
         } elsif (!defined ${$rs_md}                  and /^md/)                                               { ${$rs_md}                 = 1;
         } elsif (!defined ${$rs_fullpath}            and /^fullpath/)                                         { ${$rs_fullpath}           = 1;
-        } elsif (!defined ${$rs_match_f}             and /^(?:match_f|match-f)(=|\s+)(.*?)$/)                 { ${$rs_match_f}            = $2;
-        } elsif (!        @{$ra_not_match_f}         and /^(?:not_match_f|not-match-f)(=|\s+)(.*?)$/)         { push @{$ra_not_match_f}   , $2;
-        } elsif (!defined ${$rs_match_d}             and /^(?:match_d|match-d)(=|\s+)(.*?)$/)                 { ${$rs_match_d}            = $2;
-        } elsif (!        @{$ra_not_match_d}         and /^(?:not_match_d|not-match-d)(=|\s+)(.*?)$/)         { push @{$ra_not_match_d}   , $2;
+        } elsif (!defined ${$rs_match_f}             and /^(?:match_f|match-f)(=|\s+)['"]?(.*?)['"]?$/)       { ${$rs_match_f}            = $2;
+        } elsif (!        @{$ra_not_match_f}         and /^(?:not_match_f|not-match-f)(=|\s+)['"]?(.*?)['"]?$/) { push @{$ra_not_match_f}   , $2;
+        } elsif (!defined ${$rs_match_d}             and /^(?:match_d|match-d)(=|\s+)['"]?(.*?)['"]?$/)       { ${$rs_match_d}            = $2;
+        } elsif (!        @{$ra_not_match_d}         and /^(?:not_match_d|not-match-d)(=|\s+)['"]?(.*?)['"]?$/) { push @{$ra_not_match_d}   , $2;
         } elsif (!defined ${$rs_list_file}           and /^(?:list_file|list-file)(=|\s+)(.*?)$/)             { ${$rs_list_file}          = $2;
         } elsif (!defined ${$rs_help}                and /^help/)                                             { ${$rs_help}               = 1;
         } elsif (!defined ${$rs_skip_win_hidden}     and /^(skip_win_hidden|skip-win-hidden)/)                { ${$rs_skip_win_hidden}    = 1;
