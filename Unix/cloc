@@ -5847,14 +5847,17 @@ sub make_file_list {                         # {{{1
                 push @candidate_file_list, grep(is_file("$dir/$_"), readdir(DIR));
                 closedir(DIR);
             }
+            my $start_dir = cwd();
             foreach my $F (@candidate_file_list) {
                 # pretend to be File::Find's wanted() routine, namely subroutine files(),
                 # to apply all file filter rules
                 $File::Find::dir  = $dir;
-                $File::Find::name = $F;
-                $_ = "$dir/$F";
+                $File::Find::name = basename $F;
+                $_ = basename $F;
+                chdir $dir;
                 files();  # side effect:  populates @file_list
             }
+            chdir $start_dir;
             # ... then prepend the directory name to each file
             @file_list = map { "$dir/$_" } @file_list;
         } else {
@@ -6259,7 +6262,7 @@ sub files {                                  # {{{1
         }
     } else {
         # only look at the basename
-        if ($opt_match_f    ) { return unless /$opt_match_f/;     }
+        if ($opt_match_f    ) { return unless m{$opt_match_f}; }
         if (@opt_not_match_f) { return if     any_match($_, 0, \$rule, @opt_not_match_f)}
     }
     if ($opt_match_d) {
