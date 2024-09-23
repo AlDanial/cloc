@@ -867,6 +867,11 @@ my @Tests = (
                     'args' => '../tests/inputs/sdp_parser.peggy',
                 },
                 {
+                    'name' => 'Pek',
+                    'ref'  => '../tests/outputs/pek_example.pek.yaml',
+                    'args' => '../tests/inputs/pek_example.pek',
+                },
+                {
                     'name' => 'Pest',
                     'ref'  => '../tests/outputs/toml.pest.yaml',
                     'args' => '../tests/inputs/toml.pest',

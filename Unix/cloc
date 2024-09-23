@@ -9066,6 +9066,7 @@ sub set_constants {                          # {{{1
             'pawn'        => 'Pawn'                  ,
             'ses'         => 'Patran Command Language'   ,
             'pcl'         => 'Patran Command Language'   ,
+            'pek'         => 'Pek'                   ,
             'peg'         => 'PEG'                   ,
             'pegjs'       => 'peg.js'                ,
             'peggy'       => 'peggy'                 ,
@@ -10466,6 +10467,10 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'Pek'                => [
+                                [ 'remove_matches'      , '^\s*//'  ],
+                                [ 'remove_inline'       , '//.*$'   ],
+                            ],
     'Pest'               => [
                                 [ 'remove_matches'      , '^\s*//'  ],
                                 [ 'remove_inline'       , '//.*$'   ],
@@ -11584,6 +11589,7 @@ sub set_constants {                          # {{{1
     'PEG'                          =>   3.00,
     'peg.js'                       =>   3.00,
     'peggy'                        =>   3.00,
+    'Pek'                          =>   2.50,
     'Pest'                         =>   2.00,
     'tspeg'                        =>   3.00,
     'Pig Latin'                    =>   1.00,
