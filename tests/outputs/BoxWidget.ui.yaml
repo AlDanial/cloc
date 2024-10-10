@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.03
+  elapsed_seconds    : 0.00384879112243652
+  n_files            : 1
+  n_lines            : 7
+  files_per_second   : 259.821842284582
+  lines_per_second   : 1818.75289599207
+  report_file        : ../outputs/BoxWidget.ui.yaml
+'XML (Qt/GTK)' :
+  nFiles: 1
+  blank: 0
+  comment: 0
+  code: 7
+SUM: 
+  blank: 0
+  comment: 0
+  code: 7
+  nFiles: 1

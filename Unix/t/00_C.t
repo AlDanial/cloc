@@ -1367,6 +1367,11 @@ my @Tests = (
                     'args' => '../tests/inputs/XML.xml',
                 },
                 {
+                    'name' => 'XML (Qt/GTK)',
+                    'ref'  => '../tests/outputs/BoxWidget.ui.yaml',
+                    'args' => '../tests/inputs/BoxWidget.ui',
+                },
+                {
                     'name' => 'XQuery',
                     'ref'  => '../tests/outputs/pop_by_country.xq.yaml',
                     'args' => '../tests/inputs/pop_by_country.xq',

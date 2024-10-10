@@ -777,7 +777,7 @@ my %Extension_Collision = (
     'Perl/Prolog'                                   => [ 'pl', 'PL'  ] ,
     'PHP/Pascal/Fortran/Pawn'                       => [ 'inc'  ] ,
     'Raku/Prolog'                                   => [ 'p6', 'P6'  ] ,
-    'Qt/Glade'                                      => [ 'ui'   ] ,
+    'XML-Qt-GTK/Glade'                              => [ 'ui'   ] ,
     'TypeScript/Qt Linguist'                        => [ 'ts'   ] ,
     'Verilog-SystemVerilog/Coq'                     => [ 'v'    ] ,
     'Visual Basic/TeX/Apex Class'                   => [ 'cls'  ] ,
@@ -5249,9 +5249,9 @@ sub print_language_info {                    # {{{1
         delete $extensions{'TypeScript/Qt Linguist'};
     }
     if (!$language or $language =~ /^(Qt|Glade)$/) {
-        push @{$extensions{'Glade'}} , "ui";
-        push @{$extensions{'Qt'}}    , "ui";
-        delete $extensions{'Qt/Glade'};
+        push @{$extensions{'Glade'}}       , "ui";
+        push @{$extensions{'XML-Qt-GTK'}}  , "ui";
+        delete $extensions{'XML-Qt-GTK/Glade'};
     }
     if (!$language or $language =~ /^(C#|Smalltalk)$/) {
         push @{$extensions{'C#'}}           , "cs";
@@ -5455,7 +5455,7 @@ sub replace_git_hash_with_tarfile {          # {{{1
             my @left_files  = ();
             my @right_files = ();
             if ($opt_git_diff_rel) {
-                # Strategy 1:  Union files are what git consinders have changed
+                # Strategy 1:  Union files are what git considers have changed
                 #              between the two commits.
                 my $git_list_cmd = "git -c \"safe.directory=*\" diff-tree -r --no-commit-id --name-only $Left $Right";
                 # print "$git_list_cmd\n" if $opt_v;
@@ -6604,7 +6604,7 @@ sub classify_file {                          # {{{1
                 }
             } elsif ($Language_by_Extension{$extension} eq 'TypeScript/Qt Linguist') {
                 return TypeScript_or_QtLinguist( $full_file, $rh_Err, $raa_errors);
-            } elsif ($Language_by_Extension{$extension} eq 'Qt/Glade') {
+            } elsif ($Language_by_Extension{$extension} eq 'XML-Qt-GTK/Glade') {
                 return Qt_or_Glade( $full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'C#/Smalltalk') {
                 my $L = Csharp_or_Smalltalk( $full_file, $rh_Err, $raa_errors);
@@ -9247,7 +9247,7 @@ sub set_constants {                          # {{{1
             'twig'        => 'Twig'                  ,
             'typ'         => 'Typst'                 ,
             'um'          => 'Umka'                  ,
-            'ui'          => 'Qt/Glade'              ,
+            'ui'          => 'XML-Qt-GTK/Glade'      ,
             'glade'       => 'Glade'                 ,
             'vala'        => 'Vala'                  ,
             'vapi'        => 'Vala Header'           ,
@@ -10608,7 +10608,7 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
-    'Qt'                 => [
+    'XML (Qt/GTK)'       => [
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
                             ],
@@ -11642,7 +11642,7 @@ sub set_constants {                          # {{{1
     'Puppet'                       =>   2.00,
     'PureScript'                   =>   2.00,
     'QML'                          =>   1.25,
-    'Qt'                           =>   2.00,
+    'XML (Qt/GTK)'                 =>   2.00,
     'Qt Linguist'                  =>   1.00,
     'Qt Project'                   =>   1.00,
     'R'                            =>   3.00,
@@ -12605,7 +12605,7 @@ sub Qt_or_Glade {                            # {{{1
     if ($glade_points > $qt_points) {
         $lang = "Glade";
     } else {
-        $lang = "Qt";
+        $lang = "XML (Qt/GTK)";
     }
     print "<- Qt_or_Glade\n" if $opt_v > 2;
     return $lang;
