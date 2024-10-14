@@ -225,6 +225,11 @@ my @Tests = (
                     'args' => '../tests/inputs/C++-uppercase.CPP',
                 },
                 {
+                    'name' => 'Cadence',
+                    'ref'  => '../tests/outputs/cadence_test.cdc.yaml',
+                    'args' => '../tests/inputs/cadence_test.cdc',
+                },
+                {
                     'name' => 'Carbon',
                     'ref'  => '../tests/outputs/variable_length.carbon.yaml',
                     'args' => '../tests/inputs/variable_length.carbon',

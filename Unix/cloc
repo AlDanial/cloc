@@ -8555,6 +8555,7 @@ sub set_constants {                          # {{{1
             'ixx'         => 'C++'                   ,
             'tcc'         => 'C++'                   ,
             'tpp'         => 'C++'                   ,
+            'cdc'         => 'Cadence'               ,
             'ccs'         => 'CCS'                   ,
             'cfc'         => 'ColdFusion CFScript'   ,
             'cfml'        => 'ColdFusion'            ,
@@ -9659,11 +9660,6 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
-    'Chapel'       => [
-                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
-                                [ 'rm_comments_in_strings', '"', '//', '' ],
-                                [ 'call_regexp_common'  , 'C++'    ],
-                            ],
     'C++'                => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
@@ -9674,7 +9670,17 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'Cadence'            => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'Carbon'             => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'Chapel'             => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
@@ -10182,7 +10188,7 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Java'               => [
-								[ 'docstring_rm_comments', ],
+                                [ 'docstring_rm_comments', ],
                                 [ 'replace_regex', '\\\\$', ' '],
                                 # Java seems to have more path globs in strings
                                 # than other languages.  The variations makes
@@ -11408,7 +11414,6 @@ sub set_constants {                          # {{{1
     'asa'                          =>   1.29,
     'ASP'                          =>   1.29,
     'ASP.NET'                      =>   1.29,
-    'CCS'                          =>   5.33,
     'Apex Trigger'                 =>   1.4 ,
     'AppleScript'                  =>   4.0 ,
     'Arduino Sketch'               =>   1.00,
@@ -11429,13 +11434,14 @@ sub set_constants {                          # {{{1
     'BrightScript'                 =>   2.00,
     'builder'                      =>   2.00,
     'C'                            =>   0.77,
-    'c set 2'                      =>   0.88,
     'C#'                           =>   1.36,
     'C# Designer'                  =>   1.36,
     'C# Generated'                 =>   1.36,
     'Cake Build Script'            =>   1.36,
     'C++'                          =>   1.51,
+    'Cadence'                      =>   3.00,
     'Carbon'                       =>   1.51,
+    'CCS'                          =>   5.33,
     'ColdFusion'                   =>   4.00,
     'ColdFusion CFScript'          =>   4.00,
     'Chapel'                       =>   2.96,

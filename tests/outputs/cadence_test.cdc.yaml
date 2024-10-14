@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.03
+  elapsed_seconds    : 0.00456786155700684
+  n_files            : 1
+  n_lines            : 45
+  files_per_second   : 218.920820502114
+  lines_per_second   : 9851.43692259512
+  report_file        : ../outputs/cadence_test.cdc.yaml
+'Cadence' :
+  nFiles: 1
+  blank: 8
+  comment: 13
+  code: 24
+SUM: 
+  blank: 8
+  comment: 13
+  code: 24
+  nFiles: 1
