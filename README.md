@@ -1897,7 +1897,7 @@ seeing line counts by project, not just by language.
 Say you manage three software projects called MariaDB, PostgreSQL, and SQLite.
 The teams responsible for each of these projects run cloc on their
 source code and provide you with the output.
-For example MariaDB team does
+For example, MariaDB team does
 
 <pre>cloc --out mariadb-10.1.txt mariadb-server-10.1.zip</pre>
 
@@ -2861,7 +2861,7 @@ If you run cloc with ``--help``, cloc will tell you
 where it expects to find this config file file.  The information
 appears by the explanation of the ``--config`` switch after
 the text ``the default location of``.
-On Unix-like operating systems, this can be simplifed to
+On Unix-like operating systems, this can be simplified to
 
 <pre>
 &gt; cloc --help | grep "default location"
