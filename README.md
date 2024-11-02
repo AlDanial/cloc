@@ -1453,7 +1453,7 @@ A more detailed description:
     associates with programming languages (see the `--show-lang` and
     `--show-ext` options). Files which match are classified as
     containing source
-    code for that language. Each file without an extensions is opened
+    code for that language. Each file without an extension is opened
     and its first line read to see if it is a Unix shell script
     (anything that begins with #!). If it is shell script, the file is
     classified by that scripting language (if the language is
@@ -1897,7 +1897,7 @@ seeing line counts by project, not just by language.
 Say you manage three software projects called MariaDB, PostgreSQL, and SQLite.
 The teams responsible for each of these projects run cloc on their
 source code and provide you with the output.
-For example, MariaDB team does
+For example, the MariaDB team does
 
 <pre>cloc --out mariadb-10.1.txt mariadb-server-10.1.zip</pre>
 
@@ -3216,5 +3216,5 @@ Corporation.
 [](1}}})
 <a name="Copyright"></a> []({{{1)
 #   [Copyright &#9650;](#___top "click to go to top of document")
-Copyright (c) 2006-2018, [Al Danial](https://github.com/AlDanial)
+Copyright (c) 2006-2024, [Al Danial](https://github.com/AlDanial)
 [](1}}})

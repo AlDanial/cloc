@@ -729,7 +729,9 @@ if (defined $Algorithm::Diff::VERSION) {
 trick_pp_packer_encode() if $ON_WINDOWS and $opt_file_encoding;
 $File::Find::dont_use_nlink = 1 if $opt_stat or top_level_SMB_dir(\@ARGV);
 my @git_similarity = (); # only populated with --git-diff-simindex
-my %git_metadata   = ();
+my %git_metadata   = (); # key is hash, tag, or other git reference;
+                         # this has two keys if doing git diff and
+                         # both L and R are git references
 get_git_metadata(\@ARGV, \%git_metadata) if $opt_force_git;
 #use Data::Dumper;
 #print Dumper(\%git_metadata);
@@ -1355,6 +1357,7 @@ my %Results_by_Language = ();
 my %Results_by_File     = ();
 my %Delta_by_Language   = ();
 my %Delta_by_File       = ();
+my %Renamed             = ();
 
 my %alignment = ();
 
@@ -1368,7 +1371,17 @@ if ( scalar @fh != 2 ) {
     print "Error: incorrect length fh array when preparing diff at step 6.\n";
     exit 1;
 }
-if (!$opt_diff_list_file) {
+
+if ($opt_git_diff_rel and (scalar(keys %git_metadata) == 2)) {
+    # --git --diff with both L and R as git references
+    align_from_git($ARGV[0]                              , # in, before tag
+                   $ARGV[1]                              , # in, after  tag
+                   \@files_added_tot                     , # out
+                   \@files_removed_tot                   , # out
+                   \@file_pairs_tot                      , # out
+                   \%Renamed                             , # out
+                  );
+} elsif (!$opt_diff_list_file) {
     align_by_pairs(\%{$unique_source_file{$fset_a}}      , # in
                    \%{$unique_source_file{$fset_b}}      , # in
                    \@files_added_tot                     , # out
@@ -1378,6 +1391,8 @@ if (!$opt_diff_list_file) {
 }
 
 #use Data::Dumper;
+#print "in files L : ", Dumper($unique_source_file{$fset_a});
+#print "in files R : ", Dumper($unique_source_file{$fset_b});
 #print "added : ", Dumper(\@files_added_tot);
 #print "removed : ", Dumper(\@files_removed_tot);
 #print "pairs : ", Dumper(\@file_pairs_tot);
@@ -1481,7 +1496,7 @@ if ( $max_processes == 0) {
     $pm->wait_all_children();
 }
 
-# Write alignment data, if needed
+# Write alignment data if needed requested
 if ($opt_diff_alignment) {
     write_alignment_data ( $opt_diff_alignment, $n_filepairs_compared, \%alignment ) ;
 }
@@ -1511,11 +1526,11 @@ exit if $skip_generate_report;
 if ($opt_by_file) {
     @Lines_Out = diff_report($VERSION, get_time() - $start_time,
                             "by file",
-                            \%Delta_by_File, \%Scale_Factor);
+                            \%Delta_by_File, \%Scale_Factor, \%Renamed);
 } else {
     @Lines_Out = diff_report($VERSION, get_time() - $start_time,
                             "by language",
-                            \%Delta_by_Language, \%Scale_Factor);
+                            \%Delta_by_Language, \%Scale_Factor, undef);
 }
 
 # 1}}}
@@ -3304,6 +3319,7 @@ sub diff_report     {                        # {{{1
         $report_type, # in  "by language" | "by report file" | "by file"
         $rhhh_count , # in  count{TYPE}{nFiles|code|blank|comment}{a|m|r|s}
         $rh_scale   , # in
+        $rh_renamed , # in
        ) = @_;
     my %orig_case = ();
     if ($ON_WINDOWS and $report_type eq "by file") {
@@ -3419,6 +3435,9 @@ sub diff_report     {                        # {{{1
         push @results, $hyphen_line;
     }
 
+#use Data::Dumper;
+#print "diff_report.Renamed:\n", Dumper($rh_renamed);
+
     # sort diff output in descending order of cumulative entries
     foreach my $lang_or_file (sort {
                                 ($rhhh_count->{$b}{'code'}{'added'}    +
@@ -3433,7 +3452,10 @@ sub diff_report     {                        # {{{1
                                     keys %{$rhhh_count}) {
 
         if ($BY_FILE) {
-            push @results, rm_leading_tempdir($lang_or_file, \%TEMP_DIR);
+            my $file = rm_leading_tempdir($lang_or_file, \%TEMP_DIR);
+#print "diff_report.file=$file (orig $lang_or_file)\n";
+            $file .= " -> " . $rh_renamed->{$file} if defined $rh_renamed->{$file};
+            push @results, $file;
         } else {
             push @results, $lang_or_file;
         }
@@ -13503,6 +13525,69 @@ sub align_by_pairs {                         # {{{1
     return;
 #print Dumper("align_by_pairs", @files_L_minus_dir, @files_R_minus_dir);
 #die;
+} # 1}}}
+sub align_from_git {                         # {{{1
+    # have git identify the files that changed, as well as how
+    my ($L_tag                 , # in
+        $R_tag                 , # in
+        $ra_added              , # out
+        $ra_removed            , # out
+        $ra_compare_list       , # out
+        $rh_renamed            , # out
+        ) = @_;
+    print "-> align_from_git()\n" if $opt_v > 2;
+
+    # On the command line, L_tag and R_tag are commit hashes or tags.  Here they are
+    # replaced with temp directories like /tmp/vGxIL7AWRw and /tmp/BS400yIQEl
+    my $cmd = "git -c \"safe.directory=*\" --no-pager diff --name-status --diff-filter=ADRM $L_tag $R_tag";
+
+    # A = added, D = deleted, M = modified, R = renamed; entries tab separated
+    # Example:
+    # M   README.md
+    # R089    package.json    dist/pack age.json-AND
+    # M   package-lock.json
+    # A   src/apps/compare-tags-branches-commits-llm-explanation/README.md
+    # A   src/internals/cloc-git/cloc-diff-rel.ts
+    # D   src/internals/cloc-git/cloc-git-diff-rel-between-commits.ts
+
+    print $cmd, "\n" if $opt_v > 1;
+    open(GSIM, "$cmd |") or die "Unable to run $cmd  $!";
+    while (<GSIM>) {
+        chomp;
+        my @words = split(/\t/);
+        #print "align_from_git: words=[@words]\n";
+        if (scalar(@words) == 2) {
+            if ($words[0] =~ /^M/) {
+                ( my $right = $words[1] ) =~ s[^${L_tag}/][${R_tag}/];
+                push @{$ra_compare_list}, [ $words[1], $right ];
+            } elsif ($words[0] =~ /^A/) {
+                push @{$ra_added}  , $words[1];
+            } elsif ($words[0] =~ /^D/) {
+                push @{$ra_removed}, $words[1];
+            } else {
+                die "cloc.align_from_git() parse failure with [$_]\n";
+            }
+        } elsif (scalar(@words) == 3) {
+            if ($words[0] =~ /^R/) { # rename
+                ( my $clean_L = $words[1] ) =~ s[^${L_tag}/][];
+                ( my $clean_R = $words[2] ) =~ s[^${R_tag}/][];
+                $rh_renamed->{ $clean_L } = $clean_R;
+                push @{$ra_compare_list}, [ $words[1], $words[2] ];
+            } elsif ($words[0] =~ /^A/) {
+                push @{$ra_added}  , $words[1];
+            } elsif ($words[0] =~ /^D/) {
+                push @{$ra_removed}, $words[1];
+            } else {
+                die "cloc.align_from_git() parse failure with [$_]\n";
+            }
+        } else {
+            die "Unexpected output from git diff --name-status\n";
+        }
+    }
+    close(GSIM);
+
+    print "<- align_from_git()\n" if $opt_v > 2;
+    return;
 } # 1}}}
 sub html_header {                            # {{{1
     my ($title , ) = @_;
