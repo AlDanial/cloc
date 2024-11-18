@@ -1734,6 +1734,25 @@ if ($opt_count_diff) {
     exit if $opt_count_diff > 3;
     goto Top_of_Processing_Loop;
 }
+suggest_remedies_for_errors(\@Errors) if @Errors;
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+sub suggest_remedies_for_errors {            # {{{1
+    my ($raa_errors) = @_; #  [ [ numeric error code, filename], .. ]
+    my $hit_timeout = 0;
+    foreach my $pair (@{$raa_errors}) {
+        my ($code, $file) = @{$pair};
+        $hit_timeout = $code == -5 ? 1 : $hit_timeout;
+    }
+    if ($hit_timeout) {
+        print "\n";
+        print "One or more files took longer to process than expected.\n";
+        print "Try rerunning without timeout guards by adding  --timeout 0\n";
+        print "to your command line arguments.  See the documentation on\n";
+        print "the --timeout switch for more information.\n";
+        print "\n";
+    }
+}
+# 1}}}
 sub brief_usage {                            # {{{1
     return "
                        cloc -- Count Lines of Code
@@ -7291,6 +7310,15 @@ sub rm_comments {                            # {{{1
         # a corresponding */ can cause huge delays so put a timer on this.
         my $max_duration_sec = scalar(@lines)/1000.0; # est lines per second
            $max_duration_sec = 1.0 if $max_duration_sec < 1;
+        # add a scale factor for super long lines
+        my $max_line_len = 0;
+        foreach my $line (@lines) {
+            my $len = length($line);
+            $max_line_len = $len if $len > $max_line_len;
+        }
+        if ($max_line_len > 1000) {
+            $max_duration_sec *= $max_line_len / 2000;
+        }
         if (defined $opt_timeout) {
             $max_duration_sec = $opt_timeout if $opt_timeout > 0;
         }
@@ -7302,6 +7330,7 @@ sub rm_comments {                            # {{{1
             @lines = &{$subroutine}(\@lines, @args);   # apply filter...
             alarm 0;
         };
+        #$@ = "alarm\n"; # to trigger the timeout case in tests
         if ($@) {
             # timed out
             die unless $@ eq "alarm\n";
