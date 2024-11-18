@@ -13857,7 +13857,7 @@ sub uncompress_archive_cmd {                 # {{{1
                 $missing = "rpm2cpio";
             }
         } else {
-            $missing = "bzip2";
+            $missing = "cpio";
         }
     } elsif ($archive_file =~ /\.(whl|zip)$/i and !$ON_WINDOWS)    {
         if (external_utility_exists("unzip")) {
@@ -13930,13 +13930,17 @@ sub read_list_file {                         # {{{1
 sub external_utility_exists {                # {{{1
     my $exe = shift @_;
 
+    # remove args, if any
+    my $leading_exe = $exe;
+    $leading_exe =~ s/^(\S+)\s*.*?$/$1/;
+
     my $success      = 0;
     if ($ON_WINDOWS) {
         $success = 1 unless system $exe . ' > nul';
     } else {
         $success = 1 unless system $exe . ' >/dev/null 2>&1';
         if (!$success) {
-            $success = 1 unless system "which" . " $exe" . ' >/dev/null 2>&1';
+            $success = 1 unless system "which" . " $leading_exe" . ' >/dev/null 2>&1';
         }
     }
 
