@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.01
+  elapsed_seconds    : 0.0034480094909668
+  n_files            : 1
+  n_lines            : 104
+  files_per_second   : 290.022403540313
+  lines_per_second   : 30162.3299681925
+  report_file        : ../outputs/bbf-device.yang.yaml
+'Yang' :
+  nFiles: 1
+  blank: 18
+  comment: 6
+  code: 80
+SUM: 
+  blank: 18
+  comment: 6
+  code: 80
+  nFiles: 1

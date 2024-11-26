@@ -1,0 +1,76 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.99
+  elapsed_seconds    : 0.0950539112091064
+  n_files            : 3
+  n_lines            : 425
+  files_per_second   : 31.5610369088378
+  lines_per_second   : 4471.14689541869
+  report_file        : ../../tests/outputs/issues/735/results.yaml
+added :
+  'MATLAB' :
+    code : 2
+    comment : 1
+    blank : 0
+    nFiles : 1
+  'C' :
+    blank : 1
+    nFiles : 0
+    code : 3
+    comment : 0
+same :
+  'MATLAB' :
+    code : 0
+    comment : 0
+    blank : 0
+    nFiles : 0
+  'C' :
+    blank : 0
+    nFiles : 0
+    code : 228
+    comment : 46
+modified :
+  'MATLAB' :
+    code : 0
+    comment : 0
+    blank : 0
+    nFiles : 0
+  'C' :
+    blank : 0
+    nFiles : 2
+    code : 0
+    comment : 0
+removed :
+  'MATLAB' :
+    code : 0
+    comment : 0
+    blank : 0
+    nFiles : 0
+  'C' :
+    blank : 32
+    nFiles : 0
+    code : 102
+    comment : 10
+SUM :
+  added :
+    comment : 1
+    code : 5
+    nFiles : 1
+    blank : 1
+  same :
+    comment : 46
+    code : 228
+    nFiles : 0
+    blank : 0
+  modified :
+    comment : 0
+    code : 0
+    nFiles : 2
+    blank : 0
+  removed :
+    comment : 10
+    code : 102
+    nFiles : 0
+    blank : 32

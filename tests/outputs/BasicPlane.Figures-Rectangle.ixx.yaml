@@ -2,14 +2,14 @@
 # github.com/AlDanial/cloc
 header : 
   cloc_url           : github.com/AlDanial/cloc
-  cloc_version       : 1.92
-  elapsed_seconds    : 0.00741195678710938
+  cloc_version       : 1.97
+  elapsed_seconds    : 0.00714921951293945
   n_files            : 1
   n_lines            : 17
-  files_per_second   : 134.917138445703
-  lines_per_second   : 2293.59135357694
+  files_per_second   : 139.875408523978
+  lines_per_second   : 2377.88194490762
   report_file        : ../outputs/BasicPlane.Figures-Rectangle.ixx.yaml
-'Visual Studio Module' :
+'C++' :
   nFiles: 1
   blank: 3
   comment: 5

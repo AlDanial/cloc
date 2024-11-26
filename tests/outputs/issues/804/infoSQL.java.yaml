@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.99
+  elapsed_seconds    : 0.00276994705200195
+  n_files            : 1
+  n_lines            : 41
+  files_per_second   : 361.017731106903
+  lines_per_second   : 14801.726975383
+  report_file        : ../../../outputs/issues/804/infoSQL.java.yaml
+'Java' :
+  nFiles: 1
+  blank: 1
+  comment: 11
+  code: 29
+SUM: 
+  blank: 1
+  comment: 11
+  code: 29
+  nFiles: 1

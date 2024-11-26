@@ -10,6 +10,11 @@ my @Tests = (
                     'args' => '../tests/inputs/Lookup.agda',
                 },
                 {
+                    'name' => 'AnsProlog',
+                    'ref'  => '../tests/outputs/AnsProlog.lp.yaml',
+                    'args' => '../tests/inputs/AnsProlog.lp',
+                },
+                {
                     'name' => 'ANTLR Grammar 1',
                     'ref'  => '../tests/outputs/ExprParser.g.yaml',
                     'args' => '../tests/inputs/ExprParser.g',
@@ -28,6 +33,21 @@ my @Tests = (
                     'name' => 'APL',
                     'ref'  => '../tests/outputs/rand.apl.yaml',
                     'args' => '../tests/inputs/rand.apl',
+                },
+                {
+                    'name' => 'AppleScript',
+                    'ref'  => '../tests/outputs/send_msg.applescript.yaml',
+                    'args' => '../tests/inputs/send_msg.applescript',
+                },
+                {
+                    'name' => 'ArkTs',
+                    'ref'  => '../tests/outputs/openharmony.ets.yaml',
+                    'args' => '../tests/inputs/openharmony.ets',
+                },
+                {
+                    'name' => 'Arturo',
+                    'ref'  => '../tests/outputs/Arturo.art.yaml',
+                    'args' => '../tests/inputs/Arturo.art',
                 },
                 {
                     'name' => 'AsciiDoc',
@@ -58,6 +78,11 @@ my @Tests = (
                     'name' => 'Assembly 3',
                     'ref'  => '../tests/outputs/zos_assembly.s.yaml',
                     'args' => '../tests/inputs/zos_assembly.s',
+                },
+                {
+                    'name' => 'Astro',
+                    'ref'  => '../tests/outputs/slug.astro.yaml',
+                    'args' => '../tests/inputs/slug.astro',
                 },
                 {
                     'name' => 'Asymptote', 
@@ -165,6 +190,11 @@ my @Tests = (
                     'args' => '../tests/inputs/Cobol.cbl',
                 },
                 {
+                    'name' => 'CoCoA 5',
+                    'ref'  => '../tests/outputs/Buchberger.cocoa5.yaml',
+                    'args' => '../tests/inputs/Buchberger.cocoa5',
+                },
+                {
                     'name' => 'ColdFusion',
                     'ref'  => '../tests/outputs/ColdFusion.cfm.yaml',
                     'args' => '../tests/inputs/ColdFusion.cfm',
@@ -180,14 +210,24 @@ my @Tests = (
                     'args' => '../tests/inputs/apertium-dan.dan.rlx',
                 },
                 {
-                    'name' => 'C++',
+                    'name' => 'C++ 1',
                     'ref'  => '../tests/outputs/C++-MFC.cc.yaml',
                     'args' => '../tests/inputs/C++-MFC.cc',
+                },
+                {
+                    'name' => 'C++ 2',
+                    'ref'  => '../tests/outputs/BasicPlane.Figures-Rectangle.ixx.yaml',
+                    'args' => '../tests/inputs/BasicPlane.Figures-Rectangle.ixx',
                 },
                 {
                     'name' => 'C++ Uppercase extension',
                     'ref'  => '../tests/outputs/C++-uppercase.CPP.yaml',
                     'args' => '../tests/inputs/C++-uppercase.CPP',
+                },
+                {
+                    'name' => 'Cadence',
+                    'ref'  => '../tests/outputs/cadence_test.cdc.yaml',
+                    'args' => '../tests/inputs/cadence_test.cdc',
                 },
                 {
                     'name' => 'Carbon',
@@ -208,6 +248,11 @@ my @Tests = (
                     'name' => 'Cucumber',
                     'ref'  => '../tests/outputs/cucumber.feature.yaml',
                     'args' => '../tests/inputs/cucumber.feature',
+                },
+                {
+                    'name' => 'Dafny',
+                    'ref'  => '../tests/outputs/fib.dfy.yaml',
+                    'args' => '../tests/inputs/fib.dfy',
                 },
                 {
                     'name' => 'DenizenScript',
@@ -365,6 +410,16 @@ my @Tests = (
                     'args' => '../tests/inputs/string.gleam',
                 },
                 {
+                    'name' => 'Glimmer JavaScript',
+                    'ref'  => '../tests/outputs/body.gjs.yaml',
+                    'args' => '../tests/inputs/body.gjs',
+                },
+                {
+                    'name' => 'Glimmer TypeScript',
+                    'ref'  => '../tests/outputs/input.gts.yaml',
+                    'args' => '../tests/inputs/input.gts',
+                },
+                {
                     'name' => 'GLSL',
                     'ref'  => '../tests/outputs/blur.glsl.yaml',
                     'args' => '../tests/inputs/blur.glsl',
@@ -378,6 +433,16 @@ my @Tests = (
                     'name' => 'Go --no-autogen',
                     'ref'  => '../tests/outputs/hello_app.go-2.yaml',
                     'args' => '--no-autogen ../tests/inputs/hello_app*.go',
+                },
+                {
+                    'name' => 'Go',
+                    'ref'  => '../tests/outputs/hello_app.go-1.yaml',
+                    'args' => '../tests/inputs/hello_app*.ʕ◔ϖ◔ʔ',
+                },
+                {
+                    'name' => 'Go --no-autogen',
+                    'ref'  => '../tests/outputs/hello_app.go-2.yaml',
+                    'args' => '--no-autogen ../tests/inputs/hello_app*.ʕ◔ϖ◔ʔ',
                 },
                 {
                     'name' => 'Godot Scene',
@@ -507,6 +572,11 @@ my @Tests = (
                     'args' => '../tests/inputs/poly_constructor.jai',
                 },
                 {
+                    'name' => 'Janet',
+                    'ref'  => '../tests/outputs/args.janet.yaml',
+                    'args' => '../tests/inputs/args.janet',
+                },
+                {
                     'name' => 'Java',
                     'ref'  => '../tests/outputs/Java.java.yaml',
                     'args' => '../tests/inputs/Java.java',
@@ -617,6 +687,11 @@ my @Tests = (
                     'args' => '../tests/inputs/nested.lua',
                 },
                 {
+                    'name' => 'Luau',
+                    'ref'  => '../tests/outputs/basic.luau.yaml',
+                    'args' => '../tests/inputs/basic.luau',
+                },
+                {
                     'name' => 'Makefile',
                     'ref'  => '../tests/outputs/Makefile.yaml',
                     'args' => '../tests/inputs/Makefile',
@@ -667,9 +742,19 @@ my @Tests = (
                     'args' => '../tests/inputs/RenderTest.metal',
                 },
                 {
-                    'name' => 'Mojo',
+                    'name' => 'Modelica',
+                    'ref'  => '../tests/outputs/SimpleODE.mo.yaml',
+                    'args' => '../tests/inputs/SimpleODE.mo',
+                },
+                {
+                    'name' => 'Mojom',
                     'ref'  => '../tests/outputs/Mojo.mojom.yaml',
                     'args' => '../tests/inputs/Mojo.mojom',
+                },
+                {
+                    'name' => 'Mojo',
+                    'ref'  => '../tests/outputs/hi.mojo.yaml',
+                    'args' => '../tests/inputs/hi.mojo',
                 },
                 {
                     'name' => 'Mumps',
@@ -695,6 +780,11 @@ my @Tests = (
                     'name' => 'NetLogo',
                     'ref'  => '../tests/outputs/vinos.nlogo.yaml',
                     'args' => '../tests/inputs/vinos.nlogo',
+                },
+                {
+                    'name' => 'Nickel',
+                    'ref'  => '../tests/outputs/fibonacci.ncl.yaml',
+                    'args' => '../tests/inputs/fibonacci.ncl',
                 },
                 {
                     'name' => 'Nim',
@@ -737,6 +827,16 @@ my @Tests = (
                     'args' => '../tests/inputs/basic.p4',
                 },
                 {
+                    'name' => 'Pawn',
+                    'ref'  => '../tests/outputs/pawn.yaml',
+                    'args' => '../tests/inputs/fortran.inc ' .
+                              '../tests/inputs/hanoi.inc ' .
+                              '../tests/inputs/pascal.inc ' .
+                              '../tests/inputs/test1.inc ' .
+                              '../tests/inputs/Pascal.p ' .
+                              '../tests/inputs/queue.p ',
+                },
+                {
                     'name' => 'Pascal',
                     'ref'  => '../tests/outputs/Pascal.pas.yaml',
                     'args' => '../tests/inputs/Pascal.pas',
@@ -772,19 +872,14 @@ my @Tests = (
                     'args' => '../tests/inputs/sdp_parser.peggy',
                 },
                 {
+                    'name' => 'Pek',
+                    'ref'  => '../tests/outputs/pek_example.pek.yaml',
+                    'args' => '../tests/inputs/pek_example.pek',
+                },
+                {
                     'name' => 'Pest',
                     'ref'  => '../tests/outputs/toml.pest.yaml',
                     'args' => '../tests/inputs/toml.pest',
-                },
-                {
-                    'name' => 'tspeg 1',
-                    'ref'  => '../tests/outputs/sdp_parser.tspeg.yaml',
-                    'args' => '../tests/inputs/sdp_parser.tspeg',
-                },
-                {
-                    'name' => 'tspeg 2',
-                    'ref'  => '../tests/outputs/sdp_parser.jspeg.yaml',
-                    'args' => '../tests/inputs/sdp_parser.jspeg',
                 },
                 {
                     'name' => 'PHP',
@@ -832,6 +927,16 @@ my @Tests = (
                     'args' => '../tests/inputs/ring.pony',
                 },
                 {
+                    'name' => 'Prisma Schema',
+                    'ref'  => '../tests/outputs/schema.prisma.yaml',
+                    'args' => '../tests/inputs/schema.prisma',
+                },
+                {
+                    'name' => 'Processing',
+                    'ref'  => '../tests/outputs/pointillism.pde.yaml',
+                    'args' => '../tests/inputs/pointillism.pde',
+                },
+                {
                     'name' => 'ProGuard',
                     'ref'  => '../tests/outputs/proguard-project-app.pro.yaml',
                     'args' => '../tests/inputs/proguard-project-app.pro',
@@ -845,6 +950,11 @@ my @Tests = (
                     'name' => 'Properties',
                     'ref'  => '../tests/outputs/wiki.properties.yaml',
                     'args' => '../tests/inputs/wiki.properties',
+                },
+                {
+                    'name' => 'PRQL',
+                    'ref'  => '../tests/outputs/invoices.prql.yaml',
+                    'args' => '../tests/inputs/invoices.prql',
                 },
                 {
                     'name' => 'Puppet class',
@@ -977,6 +1087,11 @@ my @Tests = (
                     'args' => '../tests/inputs/Slim.html.slim',
                 },
                 {
+                    'name' => 'Slint',
+                    'ref'  => '../tests/outputs/Slint-helloworld.slint.yaml',
+                    'args' => '../tests/inputs/Slint-helloworld.slint',
+                },
+                {
                     'name' => 'Smalltalk 1',
                     'ref'  => '../tests/outputs/chat.st.yaml',
                     'args' => '../tests/inputs/chat.st',
@@ -985,6 +1100,11 @@ my @Tests = (
                     'name' => 'Smalltalk 2',
                     'ref'  => '../tests/outputs/captcha.cs.yaml',
                     'args' => '../tests/inputs/captcha.cs',
+                },
+                {
+                    'name' => 'Snakemake',
+                    'ref'  => '../tests/outputs/Snakefile.yaml',
+                    'args' => '../tests/inputs/Snakefile',
                 },
                 {
                     'name' => 'Smarty',
@@ -1062,6 +1182,11 @@ my @Tests = (
                     'args' => '../tests/inputs/htlc.teal',
                 },
                 {
+                    'name' => 'Templ',
+                    'ref'  => '../tests/outputs/templ_example.templ.yaml',
+                    'args' => '../tests/inputs/templ_example.templ'
+                },
+                {
                     'name' => 'TeX',
                     'ref'  => '../tests/outputs/LaTeX.tex.yaml',
                     'args' => '../tests/inputs/LaTeX.tex',
@@ -1077,6 +1202,21 @@ my @Tests = (
                     'args' => '../tests/inputs/DocTest.thrift',
                 },
                 {
+                    'name' => 'TLA+',
+                    'ref'  => '../tests/outputs/TLAExample.tla.yaml',
+                    'args' => '../tests/inputs/TLAExample.tla',
+                },
+                {
+                    'name' => 'TLA+/PlusCal',
+                    'ref'  => '../tests/outputs/PlusCalExample.tla.yaml',
+                    'args' => '../tests/inputs/PlusCalExample.tla',
+                },
+                {
+                    'name' => 'TLA+/PlusCal --no-autogen',
+                    'ref'  => '../tests/outputs/PlusCalExample-no-autogen.tla.yaml',
+                    'args' => '--no-autogen ../tests/inputs/PlusCalExample.tla',
+                },
+                {
                     'name' => 'TOML',
                     'ref'  => '../tests/outputs/toml_example.toml.yaml',
                     'args' => '../tests/inputs/toml_example.toml',
@@ -1085,6 +1225,16 @@ my @Tests = (
                     'name' => 'TNSDL',
                     'ref'  => '../tests/outputs/tnsdl.sdl.yaml',
                     'args' => '../tests/inputs/tnsdl.sdl',
+                },
+                {
+                    'name' => 'tspeg 1',
+                    'ref'  => '../tests/outputs/sdp_parser.tspeg.yaml',
+                    'args' => '../tests/inputs/sdp_parser.tspeg',
+                },
+                {
+                    'name' => 'tspeg 2',
+                    'ref'  => '../tests/outputs/sdp_parser.jspeg.yaml',
+                    'args' => '../tests/inputs/sdp_parser.jspeg',
                 },
                 {
                     'name' => 'TTCN',
@@ -1110,6 +1260,11 @@ my @Tests = (
                     'name' => 'TypeScript 4',
                     'ref'  => '../tests/outputs/greeter.tsx.yaml',
                     'args' => '../tests/inputs/greeter.tsx',
+                },
+                {
+                    'name' => 'Typst',
+                    'ref'  => '../tests/outputs/notes.typ.yaml',
+                    'args' => '../tests/inputs/notes.typ',
                 },
                 {
                     'name' => 'Umka',
@@ -1142,11 +1297,6 @@ my @Tests = (
                     'args' => '../tests/inputs/JetCar.cls',
                 },
                 {
-                    'name' => 'Visual Studio Module',
-                    'ref'  => '../tests/outputs/BasicPlane.Figures-Rectangle.ixx.yaml',
-                    'args' => '../tests/inputs/BasicPlane.Figures-Rectangle.ixx',
-                },
-                {
                     'name' => 'Visual Studio Solution',
                     'ref'  => '../tests/outputs/vs_solution.sln.yaml',
                     'args' => '../tests/inputs/vs_solution.sln',
@@ -1155,6 +1305,11 @@ my @Tests = (
                     'name' => 'Vuejs Component',
                     'ref'  => '../tests/outputs/ItemView.vue.yaml',
                     'args' => '../tests/inputs/ItemView.vue',
+                },
+                {
+                    'name' => 'Vyper',
+                    'ref'  => '../tests/outputs/vyper.vy.yaml',
+                    'args' => '../tests/inputs/vyper.vy',
                 },
                 {
                     'name' => 'WebAssembly',
@@ -1217,6 +1372,11 @@ my @Tests = (
                     'args' => '../tests/inputs/XML.xml',
                 },
                 {
+                    'name' => 'XML (Qt/GTK)',
+                    'ref'  => '../tests/outputs/BoxWidget.ui.yaml',
+                    'args' => '../tests/inputs/BoxWidget.ui',
+                },
+                {
                     'name' => 'XQuery',
                     'ref'  => '../tests/outputs/pop_by_country.xq.yaml',
                     'args' => '../tests/inputs/pop_by_country.xq',
@@ -1235,6 +1395,11 @@ my @Tests = (
                     'name' => 'Xtend',
                     'ref'  => '../tests/outputs/Xtend.xtend.yaml',
                     'args' => '../tests/inputs/Xtend.xtend',
+                },
+                {
+                    'name' => 'Yang',
+                    'ref'  => '../tests/outputs/bbf-device.yang.yaml',
+                    'args' => '../tests/inputs/bbf-device.yang',
                 },
                 {
                     'name' => 'Zig',
@@ -1256,7 +1421,7 @@ foreach my $t (@Tests) {
     ok(-e $results, $t->{'name'} . " created output");
     my %ref  = load_yaml($t->{'ref'});
     my %this = load_yaml($results);
-    is_deeply(\%ref, \%this, $t->{'name'} . " results match");
+    is_deeply(\%this, \%ref, $t->{'name'} . " results match");
 }
 done_testing();
 

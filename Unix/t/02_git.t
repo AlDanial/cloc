@@ -54,28 +54,29 @@ my @Tests = (
                     'cd'   => 'cloc_submodule_test',
                 },
 
+                # cannot use HEAD~1 HEAD as the diff is not deterministic
                 {
                     'name' => 'count and diff part I',
-                    'args' => '--strip-str-comments  --git --count-and-diff HEAD~1 HEAD',
+                    'args' => '--strip-str-comments  --git --count-and-diff 3b359b4904 f647093e8be',
                     'ref'  => '../tests/outputs/git_tests/count_and_diff.yaml.HEAD',
                     'cd'   => 'cloc_submodule_test',
-                    'results'  => 'results.yaml.HEAD',
+                    'results'  => 'results.yaml.f647093e8be',
                 },
 
                 {
                     'name' => 'count and diff part II',
-                    'args' => '--strip-str-comments  --git --count-and-diff HEAD~1 HEAD',
+                    'args' => '--strip-str-comments  --git --count-and-diff 3b359b4904 f647093e8be',
                     'ref'  => '../tests/outputs/git_tests/count_and_diff.yaml.HEAD~1',
                     'cd'   => 'cloc_submodule_test',
-                    'results'  => 'results.yaml.HEAD~1',
+                    'results'  => 'results.yaml.3b359b4904',
                 },
 
                 {
                     'name' => 'count and diff part III',
-                    'args' => '--strip-str-comments  --git --count-and-diff HEAD~1 HEAD',
+                    'args' => '--strip-str-comments  --git --count-and-diff 3b359b4904 f647093e8be',
                     'ref'  => '../tests/outputs/git_tests/count_and_diff.yaml.diff.HEAD~1.HEAD',
                     'cd'   => 'cloc_submodule_test',
-                    'results'  => 'results.yaml.diff.HEAD~1.HEAD',
+                    'results'  => 'results.yaml.diff.3b359b4904.f647093e8be',
                 },
 
                 {
@@ -83,6 +84,20 @@ my @Tests = (
                     'args' => '--vcs=git --max-file-size 0.0001 .',
                     'ref'  => '../tests/outputs/issues/599/results.yaml',
                     'cd'   => 'cloc_submodule_test',
+                },
+
+                {
+                    'name' => '--git-diff-{rel,all} with --exclude-list-file, #735',
+                    'args' => '--exclude-list-file ../../tests/inputs/issues/735/excludes.txt --git --diff f15bf042b f647093e8b',
+                    'ref'  => '../tests/outputs/issues/735/results.yaml',
+                    'cd'   => 'cloc_submodule_test',
+                },
+
+                {
+                    'name' => '--vcs=git from non-git directory, #772',
+                    'args' => '--vcs=git cloc_submodule_test',
+                    'ref'  => '../tests/outputs/issues/772/results.yaml',
+                    'cd'   => '.',
                 },
 
             );

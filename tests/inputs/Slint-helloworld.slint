@@ -1,0 +1,24 @@
+component MyButton inherits Text {
+    color: black;
+    // ...
+}
+
+export component MyApp inherits Window {
+    preferred-width: 200px;
+    preferred-height: 100px;
+    Rectangle {
+        width: 200px;
+        height: 100px;
+        background: green;
+        
+    }/* */
+    MyButton { 
+        x:0;y:0;    // hello
+        text: "hello";
+    }
+    MyButton {  // world
+        y:0;
+        x: 50px;
+        text: "world";
+    }
+}

@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.01
+  elapsed_seconds    : 0.0048980712890625
+  n_files            : 1
+  n_lines            : 12
+  files_per_second   : 204.16199376947
+  lines_per_second   : 2449.94392523364
+  report_file        : hi.mojo.yaml
+Mojo :
+  nFiles: 1
+  blank: 4
+  comment: 11
+  code: 3
+SUM: 
+  blank: 4
+  comment: 11
+  code: 3
+  nFiles: 1

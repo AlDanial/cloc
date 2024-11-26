@@ -1,0 +1,15 @@
+// https://github.com/nektro/zig-pek/tree/master
+// language request: pek #855 
+
+html[lang="en"](
+    head(
+        title("Pek Example")
+        meta[charset="UTF-8"]
+        meta[name="viewport" content="width=device-width,initial-scale=1"]
+    )
+    body(
+        h1("Pek Example")
+        hr
+        p("This is an example HTML document written in "a[href="https://github.com/nektro/zig-pek"]("Pek")".")
+    )
+)

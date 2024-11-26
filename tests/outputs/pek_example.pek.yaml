@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.03
+  elapsed_seconds    : 0.00303912162780762
+  n_files            : 1
+  n_lines            : 15
+  files_per_second   : 329.042441358751
+  lines_per_second   : 4935.63662038127
+  report_file        : tests/outputs/pek_example.pek.yaml
+'Pek' :
+  nFiles: 1
+  blank: 1
+  comment: 2
+  code: 12
+SUM: 
+  blank: 1
+  comment: 2
+  code: 12
+  nFiles: 1

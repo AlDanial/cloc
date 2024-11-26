@@ -2,24 +2,19 @@
 # github.com/AlDanial/cloc
 header : 
   cloc_url           : github.com/AlDanial/cloc
-  cloc_version       : 1.70
-  elapsed_seconds    : 0.0164718627929688
-  n_files            : 3
-  n_lines            : 3
-  files_per_second   : 182.12876331635
-  lines_per_second   : 182.12876331635
-  report_file        : outputs/issues/114/T4.yaml
-issues/114/foo/under_foo.js :
+  cloc_version       : 1.99
+  elapsed_seconds    : 0.00816798210144043
+  n_files            : 2
+  n_lines            : 2
+  files_per_second   : 244.858518929332
+  lines_per_second   : 244.858518929332
+  report_file        : ../outputs/issues/114/T4.yaml
+'issues/114/bar/under_Bar.js' :
   blank: 0
   comment: 0
   code: 1
   language: JavaScript
-issues/114/bar/bee/inner_most.js :
-  blank: 0
-  comment: 0
-  code: 1
-  language: JavaScript
-issues/114/bar/under_Bar.js :
+'issues/114/foo/under_foo.js' :
   blank: 0
   comment: 0
   code: 1
@@ -27,5 +22,5 @@ issues/114/bar/under_Bar.js :
 SUM: 
   blank: 0
   comment: 0
-  code: 3
-  nFiles: 3
+  code: 2
+  nFiles: 2

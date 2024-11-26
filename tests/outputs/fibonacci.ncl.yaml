@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.01
+  elapsed_seconds    : 0.00243306159973145
+  n_files            : 1
+  n_lines            : 14
+  files_per_second   : 411.004801567859
+  lines_per_second   : 5754.06722195002
+  report_file        : ../outputs/fibonacci.ncl.yaml
+'Nickel' :
+  nFiles: 1
+  blank: 1
+  comment: 4
+  code: 9
+SUM: 
+  blank: 1
+  comment: 4
+  code: 9
+  nFiles: 1

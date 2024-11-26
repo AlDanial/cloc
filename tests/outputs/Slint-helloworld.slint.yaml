@@ -1,0 +1,20 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.99
+  elapsed_seconds    : 0.00504088401794434
+  n_files            : 1
+  n_lines            : 24
+  files_per_second   : 198.377902852008
+  lines_per_second   : 4761.06966844819
+'Slint' :
+  nFiles: 1
+  blank: 2
+  comment: 1
+  code: 21
+SUM: 
+  blank: 2
+  comment: 1
+  code: 21
+  nFiles: 1

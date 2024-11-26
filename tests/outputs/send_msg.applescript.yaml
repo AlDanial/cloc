@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.99
+  elapsed_seconds    : 0.00740313529968262
+  n_files            : 1
+  n_lines            : 24
+  files_per_second   : 135.077904093266
+  lines_per_second   : 3241.86969823838
+  report_file        : ../outputs/send_msg.applescript.yaml
+'AppleScript' :
+  nFiles: 1
+  blank: 5
+  comment: 8
+  code: 11
+SUM: 
+  blank: 5
+  comment: 8
+  code: 11
+  nFiles: 1

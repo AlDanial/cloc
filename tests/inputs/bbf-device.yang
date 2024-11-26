@@ -1,0 +1,104 @@
+// fragment of
+// https://github.com/BroadbandForum/yang/raw/eaac2c3904365d3c7b17100c7d5120ed06a56b74/standard/common/bbf-device.yang
+module bbf-device {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-device";
+  prefix bbf-dvc;
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import bbf-device-types {
+    prefix bbf-dvct;
+  }
+  import bbf-node-types {
+    prefix bbf-nodet;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Nick Hancock, ADTRAN
+
+     Editor:      Ludwig Pauwels, Nokia
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
+
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on managing physical
+     devices.";
+
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
+
+  // Features
+
+  feature reports-device-powering-state {
+    description
+      "Indicates the support for reporting the device powering
+       state.";
+  }
+
+  // Device Properties
+
+  grouping device-alias {
+    description
+      "Alias information for the device.";
+    leaf alias {
+      type bbf-yang:string-ascii64;
+      description
+        "The alias that can be used to identify a device.";
+    }
+  }
+
+  // Device hardware information
+
+
+  // Device Management Information
+
+  grouping device-management-info {
+    description
+      "Data nodes relating to management plane information needed to
+       reach and communicate with the device.";
+    leaf ip-address {
+      type inet:host;
+      description
+        "The IP address or DNS domain name of the device.";
+    }
+    leaf port {
+      type inet:port-number;
+      description
+        "The port number used on the device for
+         management.";
+    }
+    leaf admin-state {
+      type bbf-nodet:admin-state;
+      description
+        "The administrative state of the device.";
+    }
+  }
+
+}

@@ -1,0 +1,11 @@
+---
+'TLA+':
+  nFiles: 1
+  blank: 3
+  comment: 5
+  code: 5
+SUM:
+  nFiles: 1
+  blank: 3
+  comment: 5
+  code: 5

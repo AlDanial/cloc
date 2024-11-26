@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.99
+  elapsed_seconds    : 0.00858902931213379
+  n_files            : 1
+  n_lines            : 2
+  files_per_second   : 116.427591950035
+  lines_per_second   : 232.855183900069
+  report_file        : tests/outputs/issues/785/results.yaml
+'Bourne Shell' :
+  nFiles: 1
+  blank: 0
+  comment: 0
+  code: 2
+SUM: 
+  blank: 0
+  comment: 0
+  code: 2
+  nFiles: 1

@@ -1,0 +1,31 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.99
+  elapsed_seconds    : 0.00866103172302246
+  n_files            : 3
+  n_lines            : 105
+  files_per_second   : 346.379056899827
+  lines_per_second   : 12123.2669914939
+  report_file        : /home/al/git-cloc/tests/outputs/issues/753/all.yaml
+'C# Designer' :
+  nFiles: 1
+  blank: 8
+  comment: 22
+  code: 28
+'C# Generated' :
+  nFiles: 1
+  blank: 2
+  comment: 11
+  code: 17
+'C#' :
+  nFiles: 1
+  blank: 4
+  comment: 4
+  code: 9
+SUM: 
+  blank: 14
+  comment: 37
+  code: 54
+  nFiles: 3
