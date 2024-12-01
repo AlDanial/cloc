@@ -184,6 +184,7 @@ my (
     $opt_timeout              ,
     $opt_html                 ,
     $opt_ignored              ,
+    $opt_unique               ,
     $opt_counted              ,
     $opt_show_ext             ,
     $opt_show_lang            ,
@@ -297,6 +298,7 @@ my $getopt_success = GetOptions(             # {{{1
    "timeout=i"                               => \$opt_timeout             ,
    "html"                                    => \$opt_html                ,
    "ignored=s"                               => \$opt_ignored             ,
+   "unique=s"                                => \$opt_unique             ,
    "quiet"                                   => \$opt_quiet               ,
    "force_lang_def|force-lang-def=s"         => \$opt_force_lang_def      ,
    "read_lang_def|read-lang-def=s"           => \$opt_read_lang_def       ,
@@ -402,6 +404,7 @@ load_from_config_file($config_file,          # {{{2
                                                 \$opt_timeout             ,
                                                 \$opt_html                ,
                                                 \$opt_ignored             ,
+                                                \$opt_unique              ,
                                                 \$opt_quiet               ,
                                                 \$opt_force_lang_def      ,
                                                 \$opt_read_lang_def       ,
@@ -1359,6 +1362,8 @@ foreach my $FH (@fh) {  # loop over each pair of file sets
         $n_set,
         plural_form(scalar keys %unique_source_file)
         unless $opt_quiet;
+    my $suffix = $n_set == 1 ? "L" : "R";
+    write_file("${opt_unique}_${suffix}", {}, sort keys %unique_source_file) if $opt_unique;
 }
 # 1}}}
 # Step 6:  Count code, comments, blank lines.  {{{1
@@ -1618,6 +1623,7 @@ if ($opt_exclude_content) {
 printf "%8d unique file%s.                              \n",
     plural_form(scalar keys %unique_source_file)
     unless $opt_quiet;
+write_file($opt_unique, {}, sort keys %unique_source_file) if $opt_unique;
 # 1}}}
 # Step 6:  Count code, comments, blank lines.  {{{1
 #
@@ -14635,6 +14641,7 @@ sub load_from_config_file {                  # {{{1
                                                  $rs_timeout             ,
                                                  $rs_html                ,
                                                  $rs_ignored             ,
+                                                 $rs_unique              ,
                                                  $rs_quiet               ,
                                                  $rs_force_lang_def      ,
                                                  $rs_read_lang_def       ,
@@ -14746,6 +14753,7 @@ sub load_from_config_file {                  # {{{1
         } elsif (!defined ${$rs_timeout}             and /^timeout(=|\s+)i/)                                  { ${$rs_timeout}            = $1;
         } elsif (!defined ${$rs_html}                and /^html/)                                             { ${$rs_html}               = 1;
         } elsif (!defined ${$rs_ignored}             and /^ignored(=|\s+)(.*?)$/)                             { ${$rs_ignored}            = $2;
+        } elsif (!defined ${$rs_unique}              and /^unique(=|\s+)(.*?)$/)                              { ${$rs_unique}            = $2;
         } elsif (!defined ${$rs_quiet}               and /^quiet/)                                            { ${$rs_quiet}              = 1;
         } elsif (!defined ${$rs_force_lang_def}      and /^(?:force_lang_def|force-lang-def)(=|\s+)(.*?)$/)   { ${$rs_force_lang_def}     = $2;
         } elsif (!defined ${$rs_read_lang_def}       and /^(?:read_lang_def|read-lang-def)(=|\s+)(.*?)$/)     { ${$rs_read_lang_def}      = $2;
