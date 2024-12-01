@@ -8999,6 +8999,7 @@ sub set_constants {                          # {{{1
             'odin'        => 'Odin'                  ,
             'oscript'     => 'LiveLink OScript'      ,
             'bod'         => 'Oracle PL/SQL'         ,
+            'bdy'         => 'Oracle PL/SQL'         ,
             'spc'         => 'Oracle PL/SQL'         ,
             'fnc'         => 'Oracle PL/SQL'         ,
             'prc'         => 'Oracle PL/SQL'         ,
