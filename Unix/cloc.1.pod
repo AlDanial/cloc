@@ -293,6 +293,24 @@ C++; this switch would count .C files as C rather
 than C++ on *nix operating systems).  File name
 case insensitivity is always true on Windows.
 
+=item B<--ignore-regex>
+
+Ignore lines in source files that match the given
+Perl regular expression for the given language(s).
+This option can be specified multiple times.
+Language names are comma separated and are followed
+by the pipe character and the regular expression.
+Use * to match all languages.
+Examples:
+
+  --ignore-regex='C,Java,C++|^\s*[{};]\s*$'
+  --ignore-regex='*|DEBUG|TEST\s+ONLY'
+
+These filters are applied after comments are
+removed.  Use --strip-comments=EXT to create
+new files that show these filters applied.
+
+
 =item B<--lang-no-ext=LANG>
 
 Count files without extensions using the LANG counter.  This option
@@ -614,6 +632,7 @@ names of categorized files to FILE.
 =item B<--counted=FILE>
 
 Save names of processed source files to FILE.
+See also B<--found>, B<--ignored>, B<--unique>.
 
 =item B<--diff-alignment=FILE>
 
@@ -636,11 +655,13 @@ Print cloc's internal usage information and exit.
 
 =item B<--found=FILE>
 
-Save names of every file found to FILE.
+Save names of every file found to FILE.  See also B<--counted>,
+B<--ignored>, B<--unique>.
 
 =item B<--ignored=FILE>
 
 Save names of ignored files and the reason they were ignored to FILE.
+See also B<--counted>, B<--found>, B<--unique>.
 
 =item B<--print-filter-stages>
 
@@ -661,6 +682,11 @@ exit.
 
 Print the value of the operating system mode and exit.  See also
 B<--unix>, B<--windows>.
+
+=item B<--unique=FILE>
+
+Save names of ignored files and the reason they were ignored to FILE.
+See also B<--counted>, B<--found>, B<--ignored>.
 
 =item B<-v[=N]>
 
