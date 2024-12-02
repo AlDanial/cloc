@@ -614,6 +614,7 @@ names of categorized files to FILE.
 =item B<--counted=FILE>
 
 Save names of processed source files to FILE.
+See also B<--found>, B<--ignored>, B<--unique>.
 
 =item B<--diff-alignment=FILE>
 
@@ -636,11 +637,13 @@ Print cloc's internal usage information and exit.
 
 =item B<--found=FILE>
 
-Save names of every file found to FILE.
+Save names of every file found to FILE.  See also B<--counted>,
+B<--ignored>, B<--unique>.
 
 =item B<--ignored=FILE>
 
 Save names of ignored files and the reason they were ignored to FILE.
+See also B<--counted>, B<--found>, B<--unique>.
 
 =item B<--print-filter-stages>
 
@@ -661,6 +664,11 @@ exit.
 
 Print the value of the operating system mode and exit.  See also
 B<--unix>, B<--windows>.
+
+=item B<--unique=FILE>
+
+Save names of ignored files and the reason they were ignored to FILE.
+See also B<--counted>, B<--found>, B<--ignored>.
 
 =item B<-v[=N]>
 
