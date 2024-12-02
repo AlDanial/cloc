@@ -247,6 +247,7 @@ my (
     $opt_ignore_whitespace    ,
     $opt_ignore_case          ,
     $opt_ignore_case_ext      ,
+    @opt_ignore_regex         ,
     $opt_follow_links         ,
     $opt_autoconf             ,
     $opt_sum_one              ,
@@ -352,6 +353,7 @@ my $getopt_success = GetOptions(             # {{{1
    "ignore_whitespace|ignore-whitespace"     => \$opt_ignore_whitespace   ,
    "ignore_case|ignore-case"                 => \$opt_ignore_case         ,
    "ignore_case_ext|ignore-case-ext"         => \$opt_ignore_case_ext     ,
+   "ignore_regex|ignore-regex=s"             => \@opt_ignore_regex        ,
    "follow_links|follow-links"               => \$opt_follow_links        ,
    "autoconf"                                => \$opt_autoconf            ,
    "sum_one|sum-one"                         => \$opt_sum_one             ,
@@ -456,6 +458,7 @@ load_from_config_file($config_file,          # {{{2
                                                 \$opt_ignore_whitespace   ,
                                                 \$opt_ignore_case         ,
                                                 \$opt_ignore_case_ext     ,
+                                                \@opt_ignore_regex        ,
                                                 \$opt_follow_links        ,
                                                 \$opt_autoconf            ,
                                                 \$opt_sum_one             ,
@@ -540,6 +543,7 @@ $opt_exclude_ext       = "" unless $opt_exclude_ext;
 $opt_ignore_whitespace = 0  unless $opt_ignore_whitespace;
 $opt_ignore_case       = 0  unless $opt_ignore_case;
 $opt_ignore_case_ext   = 0  unless $opt_ignore_case_ext;
+my %ignore_regex       = ();
 $opt_lang_no_ext       = 0  unless $opt_lang_no_ext;
 $opt_follow_links      = 0  unless $opt_follow_links;
 if (defined $opt_diff_timeout) {
@@ -841,6 +845,8 @@ if ($opt_lang_no_ext and !defined $Filters_by_Language{$opt_lang_no_ext}) {
 }
 check_scale_existence(\%Filters_by_Language, \%Language_by_Extension,
                       \%Scale_Factor);
+parse_ignore_regex(\@opt_ignore_regex, \%Filters_by_Language, \%ignore_regex)
+    if @opt_ignore_regex;
 
 my $nCounted = 0;
 
@@ -1416,7 +1422,7 @@ if ( $max_processes == 0) {
     # Multiprocessing is disabled
     my $part = count_filesets ( $fset_a, $fset_b, \@files_added_tot,
                                \@files_removed_tot, \@file_pairs_tot,
-                               0, \%Language, \%Ignored);
+                               0, \%Language, \%ignore_regex, \%Ignored);
     %Results_by_File = %{$part->{'results_by_file'}};
     %Results_by_Language= %{$part->{'results_by_language'}};
     %Delta_by_File = %{$part->{'delta_by_file'}};
@@ -1504,7 +1510,7 @@ if ( $max_processes == 0) {
         $pm->start() and next;
         my $count_result = count_filesets ( $fset_a, $fset_b,
             \@files_added_part, \@files_removed_part,
-            \@filepairs_part, 1, \%Language, \%Ignored );
+            \@filepairs_part, 1, \%Language, \%ignore_regex, \%Ignored );
         $pm->finish(0 , $count_result);
     }
     # Wait for processes to finish
@@ -1634,7 +1640,7 @@ my @sorted_files = sort keys %unique_source_file;
 
 if ( $max_processes == 0) {
     # Multiprocessing is disabled
-    my $part = count_files ( \@sorted_files , 0, \%Language);
+    my $part = count_files ( \@sorted_files , 0, \%ignore_regex, \%Language);
     %Results_by_File = %{$part->{'results_by_file'}};
     %Results_by_Language= %{$part->{'results_by_language'}};
     %Ignored = ( %Ignored, %{$part->{'ignored'}});
@@ -1677,7 +1683,7 @@ if ( $max_processes == 0) {
     my $num_files_per_part = ceil ( ( scalar @sorted_files ) / $num_processes );
     while ( my @part = splice @sorted_files, 0 , $num_files_per_part ) {
         $pm->start() and next;
-        my $count_result = count_files ( \@part, 1, \%Language );
+        my $count_result = count_files ( \@part, 1, \%ignore_regex, \%Language );
         $pm->finish(0 , $count_result);
     }
     # Wait for processes to finish
@@ -1975,6 +1981,18 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              C++; this switch would count .C files as C rather
                              than C++ on *nix operating systems).  File name
                              case insensitivity is always true on Windows.
+   --ignore-regex            Ignore lines in source files that match the given
+                             Perl regular expression for the given language(s).
+                             This option can be specified multiple times.
+                             Language names are comma separated and are followed
+                             by the pipe character and the regular expression.
+                             Use * to match all languages.
+                             Examples:
+                               --ignore-regex=\"C,Java,C++|^\\s*[{};]\\s*\$\"
+                               --ignore-regex=\"*|DEBUG|TEST\\s+ONLY\"
+                             These filters are applied after comments are
+                             removed.  Use --strip-comments=EXT to create
+                             new files that show these filters applied.
    --lang-no-ext=<lang>      Count files without extensions using the <lang>
                              counter.  This option overrides internal logic
                              for files without extensions (where such files
@@ -2188,6 +2206,7 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
    --categorized=<file>      Save file sizes in bytes, identified languages
                              and names of categorized files to <file>.
    --counted=<file>          Save names of processed source files to <file>.
+                             See also --found, --ignored, --unique.
    --diff-alignment=<file>   Write to <file> a list of files and file pairs
                              showing which files were added, removed, and/or
                              compared during a run with --diff.  This switch
@@ -2198,9 +2217,11 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              regular expressions.  An examination of the
                              source code may be needed for further explanation.
    --help                    Print this usage information and exit.
-   --found=<file>            Save names of every file found to <file>.
+   --found=<file>            Save names of every file found to <file>.  See
+                             also --counted, --ignored, --unique.
    --ignored=<file>          Save names of ignored files and the reason they
-                             were ignored to <file>.
+                             were ignored to <file>.  See also --counted,
+                             --found, --unique.
    --print-filter-stages     Print processed source code before and after
                              each filter is applied.
    --show-ext[=<ext>]        Print information about all known (or just the
@@ -2209,6 +2230,8 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              given) languages and exit.
    --show-os                 Print the value of the operating system mode
                              and exit.  See also --unix, --windows.
+   --unique=<file>           Save names of unique files found to <file>.  See
+                             also --counted, --found, --ignored.
    -v[=<n>]                  Verbose switch (optional numeric value).
    -verbose[=<n>]            Long form of -v.
    --version                 Print the version of this program and exit.
@@ -2558,7 +2581,7 @@ sub file_extension {                         # {{{1
     }
 } # 1}}}
 sub count_files {                            # {{{1
-    my ($filelist, $counter_type, $language_hash) = @_;
+    my ($filelist, $counter_type, $rha_ignore_regex, $language_hash) = @_;
     print "-> count_files()\n" if $opt_v > 2;
     my @p_errors = ();
     my %p_ignored = ();
@@ -2629,7 +2652,8 @@ sub count_files {                            # {{{1
             } else {
                 ($all_line_count,
                 $blank_count   ,
-                $comment_count ,) = call_counter($file, $Language{$file}, \@Errors);
+                $comment_count ,) = call_counter($file, $Language{$file},
+                                                 $rha_ignore_regex, \@Errors);
                 $code_count = $all_line_count - $blank_count - $comment_count;
             }
         }
@@ -2666,6 +2690,7 @@ sub count_filesets {                         # {{{1
         $file_pairs,
         $counter_type,
         $language_hash,
+        $rha_ignore_regex,
         $rh_Ignored) = @_;
     print "-> count_filesets()\n" if $opt_v > 2;
     my @p_errors = ();
@@ -2695,7 +2720,7 @@ sub count_filesets {                         # {{{1
             my ($all_line_count,
                 $blank_count   ,
                 $comment_count ,
-                ) = call_counter($file, $Lang, \@p_errors);
+                ) = call_counter($file, $Lang, $rha_ignore_regex, \@p_errors);
             $already_counted{$file} = 1;
             my $code_count = $all_line_count-$blank_count-$comment_count;
             if ($opt_by_file) {
@@ -2755,7 +2780,7 @@ sub count_filesets {                         # {{{1
         my ($all_line_count,
             $blank_count   ,
             $comment_count ,
-           ) = call_counter($f, $this_lang, \@p_errors);
+           ) = call_counter($f, $this_lang, $rha_ignore_regex, \@p_errors);
         $p_dbl{ $this_lang }{'comment'}{'added'} += $comment_count;
         $p_dbl{ $this_lang }{'blank'}{'added'}   += $blank_count;
         $p_dbl{ $this_lang }{'code'}{'added'}    +=
@@ -2795,7 +2820,7 @@ sub count_filesets {                         # {{{1
         my ($all_line_count,
             $blank_count   ,
             $comment_count ,
-           ) = call_counter($f, $this_lang, \@p_errors);
+           ) = call_counter($f, $this_lang, $rha_ignore_regex, \@p_errors);
         $p_dbl{ $this_lang}{'comment'}{'removed'} += $comment_count;
         $p_dbl{ $this_lang}{'blank'}{'removed'}   += $blank_count;
         $p_dbl{ $this_lang}{'code'}{'removed'}    +=
@@ -3057,18 +3082,18 @@ sub count_filesets {                         # {{{1
             ($all_line_count_L,
              $blank_count_L   ,
              $comment_count_L ,
-            ) = call_counter($file_L, $Lang_L, \@Errors);
+            ) = call_counter($file_L, $Lang_L, $rha_ignore_regex, \@Errors);
 
             ($all_line_count_R,
              $blank_count_R   ,
              $comment_count_R ,
-            ) = call_counter($file_R, $Lang_R, \@Errors);
+            ) = call_counter($file_R, $Lang_R, $rha_ignore_regex, \@Errors);
         } else {
             # L and R file contents are identical, no need to diff
             ($all_line_count_L,
              $blank_count_L   ,
              $comment_count_L ,
-            ) = call_counter($file_L, $Lang_L, \@Errors);
+            ) = call_counter($file_L, $Lang_L, $rha_ignore_regex, \@Errors);
             $all_line_count_R = $all_line_count_L;
             $blank_count_R    = $blank_count_L   ;
             $comment_count_R  = $comment_count_L ;
@@ -6872,9 +6897,10 @@ sub different_files {                        # {{{1
     return @unique;
 } # 1}}}
 sub call_counter {                           # {{{1
-    my ($file     , # in
-        $language , # in
-        $ra_Errors, # out
+    my ($file                    , # in
+        $language                , # in
+        $rha_ignore_regex        , # in
+        $ra_Errors               , # out
        ) = @_;
 
     # Logic:  pass the file through the following filters:
@@ -6883,7 +6909,9 @@ sub call_counter {                           # {{{1
     #         3. remove comments using each filter defined for this language
     #            (example:  SQL has two, remove_starts_with(--) and
     #             remove_c_comments() )
-    #         4. compute comment lines as
+    #         4. if ignore regex filters are defined, remove lines that
+    #            match any of them
+    #         5. compute comment lines as
     #               total lines - blank lines - lines left over after all
     #                   comment filters have been applied
 
@@ -6937,6 +6965,22 @@ sub call_counter {                           # {{{1
 
     @lines = rm_comments(\@lines, $language, $file,
                                \%EOL_Continuation_re, $ra_Errors);
+
+    if (%{$rha_ignore_regex} and defined($rha_ignore_regex->{$language})) {
+        my @keep_lines = ();
+        foreach my $line (@lines) {
+            my $keep = 1;
+            foreach my $regex (@{$rha_ignore_regex->{$language}}) {
+                if ($line =~ m{$regex}) {
+print "reject '$line' in $file because of '$regex'\n" if $opt_v > 4;
+                    $keep = 0;
+                    last;
+                }
+            }
+            push @keep_lines, $line if $keep;
+        }
+        @lines = @keep_lines;
+    }
 
     my $comment_lines = $total_lines - $blank_lines - scalar  @lines;
     if ($opt_strip_comments) {
@@ -14693,6 +14737,7 @@ sub load_from_config_file {                  # {{{1
                                                  $rs_ignore_whitespace   ,
                                                  $rs_ignore_case         ,
                                                  $rs_ignore_case_ext     ,
+                                                 $ra_ignore_regex        ,
                                                  $rs_follow_links        ,
                                                  $rs_autoconf            ,
                                                  $rs_sum_one             ,
@@ -14801,6 +14846,7 @@ sub load_from_config_file {                  # {{{1
         } elsif (!defined ${$rs_ignore_whitespace}   and /^(ignore_whitespace|ignore-whitespace)/)            { ${$rs_ignore_whitespace}  = 1;
         } elsif (!defined ${$rs_ignore_case_ext}     and /^(ignore_case_ext|ignore-case-ext)/)                { ${$rs_ignore_case_ext}    = 1;
         } elsif (!defined ${$rs_ignore_case}         and /^(ignore_case|ignore-case)/)                        { ${$rs_ignore_case}        = 1;
+        } elsif (!        @{$ra_ignore_regex}        and /^(?:ignore_regex|ignore-regex)(=|\s+)['"]?(.*?)['"]?$/) { push @{$ra_ignore_regex}, $2;
         } elsif (!defined ${$rs_follow_links}        and /^(follow_links|follow-links)/)                      { ${$rs_follow_links}       = 1;
         } elsif (!defined ${$rs_autoconf}            and /^autoconf/)                                         { ${$rs_autoconf}           = 1;
         } elsif (!defined ${$rs_sum_one}             and /^(sum_one|sum-one)/)                                { ${$rs_sum_one}            = 1;
@@ -15095,6 +15141,41 @@ sub print_format_n {                         # {{{1
     return @prt_lines;
     print "<- print_format_n()\n" if $opt_v > 2;
 } # 1}}}
+sub parse_ignore_regex {                              # {{{1
+    #
+    # Convert the list of "language(s)|regex" into a hash
+    #   $ignore_regex{language} = [list of regex]
+
+    my ($ra_lang_regex           , # in, as given on command line
+        $rhaa_Filters_by_Language, # in, hash of filters by language
+        $rha_ignore_regex) = @_;
+    print "-> parse_ignore_regex()\n" if $opt_v > 2;
+
+    foreach my $lang_regex (@{$ra_lang_regex}) {
+        die "Missing '|' character in --ignore-regex '$lang_regex'\n"
+            unless $lang_regex =~ /\|/;
+        my ($lang, $regex) = split(/\|/, $lang_regex, 2);
+        die "Invalid --ignore-regex: $lang_regex\n"
+            unless defined $lang and defined $regex;
+        my @languages = split(/,/, $lang);
+        foreach my $lang (@languages) {
+            if ($lang eq '*') {
+                foreach my $lang (keys %{$rhaa_Filters_by_Language}) {
+                    push @{$rha_ignore_regex->{$lang}}, $regex;
+                }
+            } else {
+                die "Unknown language '$lang' in --ignore-regex '$lang_regex'\n"
+                    unless defined $rhaa_Filters_by_Language->{$lang};
+                push @{$rha_ignore_regex->{$lang}}, $regex;
+            }
+#print "lang=$lang  regex=[$regex]\n";
+        }
+    }
+#use Data::Dumper;
+#print Dumper($rha_ignore_regex);
+    print "<- parse_ignore_regex()\n" if $opt_v > 2;
+}
+# 1}}}
 # really_is_pascal, really_is_incpascal, really_is_php from SLOCCount
 my %php_files    = ();  # really_is_php()
 sub really_is_pascal {                       # {{{1

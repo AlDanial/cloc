@@ -865,6 +865,13 @@ my @Tests = (
                    'ref'  => '../tests/outputs/issues/851/results.yaml',
                 },
 
+                {
+                   'name' => '--ignore-regex (github issues #862, #865, #868)',
+                   'cd'   => '../tests/inputs/issues/862',
+                   'args' => '--ignore-regex="C,Fortran 77|^\\s*([{};]|END)\\s*\$" *.f *.c',
+                   'ref'  => '../tests/outputs/issues/862/results.yaml',
+                },
+
             );
 
 # Special cases:
