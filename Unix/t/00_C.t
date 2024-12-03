@@ -816,11 +816,19 @@ my @Tests = (
                     'ref'  => '../tests/outputs/Rounds.scad.yaml',
                     'args' => '../tests/inputs/Rounds.scad',
                 },
+
                 {
-                    'name' => 'Oracle PL/SQL',
+                    'name' => 'Oracle PL/SQL 1',
                     'ref'  => '../tests/outputs/bubs_tak_ard.prc.yaml',
                     'args' => '../tests/inputs/bubs_tak_ard.prc',
                 },
+
+                {
+                    'name' => 'Oracle PL/SQL 2',
+                    'ref'  => '../tests/outputs/issue_875.bdy.yaml',
+                    'args' => '../tests/inputs/issue_875.bdy',
+                },
+
                 {
                     'name' => 'P4',
                     'ref'  => '../tests/outputs/basic.p4.yaml',

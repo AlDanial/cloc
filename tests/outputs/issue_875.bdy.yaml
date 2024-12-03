@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.03
+  elapsed_seconds    : 0.00424885749816895
+  n_files            : 1
+  n_lines            : 26
+  files_per_second   : 235.357387352
+  lines_per_second   : 6119.29207115201
+  report_file        : ../outputs/issue_875.bdy.yaml
+'Oracle PL/SQL' :
+  nFiles: 1
+  blank: 0
+  comment: 4
+  code: 22
+SUM: 
+  blank: 0
+  comment: 4
+  code: 22
+  nFiles: 1

@@ -10553,17 +10553,16 @@ sub set_constants {                          # {{{1
     'Oracle Forms'       => [   [ 'call_regexp_common'  , 'C'      ], ],
     'Oracle Reports'     => [   [ 'call_regexp_common'  , 'C'      ], ],
     'Oracle PL/SQL'      => [
-                                [ 'call_regexp_common'  , 'PL/SQL'      ],
+                              # [ 'call_regexp_common'  , 'PL/SQL' ], # bad results
+                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'remove_matches'      , '^\s*--' ],
+                                [ 'remove_inline'       , '--.*$'  ],
                             ],
     'Pascal'             => [
                                 [ 'remove_between_regex', '\{[^$]', '}' ],
                                 [ 'remove_between_general', '(*', '*)' ],
                                 [ 'remove_matches'      , '^\s*//' ],
                             ],
-####'Pascal'             => [
-####                            [ 'call_regexp_common'  , 'Pascal' ],
-####                            [ 'remove_matches'      , '^\s*//' ],
-####                        ],
     'Pascal/Puppet'            => [ [ 'die' ,          ], ], # never called
     'Puppet'             => [
                                 [ 'remove_matches'      , '^\s*#'   ],
