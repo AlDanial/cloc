@@ -7535,7 +7535,7 @@ sub remove_matches {                         # {{{1
         $pattern , # in   Perl regular expression (case insensitive)
        ) = @_;
     print "-> remove_matches(pattern=$pattern)\n" if $opt_v > 2;
-    print "[", join("]\n[", @{$ra_lines}), "]\n" if $opt_v > 4;
+    print "in:  [", join("]\nin:  [", @{$ra_lines}), "]\n" if $opt_v > 4;
 
     my @save_lines = ();
     foreach (@{$ra_lines}) {
@@ -7547,7 +7547,7 @@ sub remove_matches {                         # {{{1
         push @save_lines, $_;
     }
 
-    print "[", join("]\n[", @{$ra_lines}), "]\n" if $opt_v > 4;
+    print "out: [", join("]\nout: [", @{$ra_lines}), "]\n" if $opt_v > 4;
     print "<- remove_matches\n" if $opt_v > 2;
 #print "remove_matches returning\n   ", join("\n   ", @save_lines), "\n";
     return @save_lines;
@@ -7558,7 +7558,7 @@ sub remove_matches_2re {                     # {{{1
         $pattern2, # in Perl regex 2 (case insensitive) to not match prev line
        ) = @_;
     print "-> remove_matches_2re(pattern=$pattern1,$pattern2)\n" if $opt_v > 2;
-    print "[", join("]\n[", @{$ra_lines}), "]\n" if $opt_v > 4;
+    print "[", join("]\nin:  [", @{$ra_lines}), "]\n" if $opt_v > 4;
 
     my @save_lines = ();
     for (my $i = 0; $i < scalar @{$ra_lines}; $i++) {
@@ -7575,7 +7575,7 @@ sub remove_matches_2re {                     # {{{1
         push @save_lines, $ra_lines->[$i];
     }
 
-    print "[", join("]\n[", @{$ra_lines}), "]\n" if $opt_v > 4;
+    print "[", join("]\nout: [", @{$ra_lines}), "]\n" if $opt_v > 4;
     print "<- remove_matches_2re\n" if $opt_v > 2;
 #print "remove_matches_2re returning\n   ", join("\n   ", @save_lines), "\n";
     return @save_lines;
@@ -11160,7 +11160,7 @@ sub set_constants {                          # {{{1
                             ],
     'Vuejs Component'     => [
                                 [ 'remove_html_comments',          ],
-                                [ 'call_regexp_common'  , 'HTML'   ],
+#                               [ 'call_regexp_common'  , 'HTML'   ], # problematic, ref #876
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
@@ -11993,6 +11993,11 @@ sub call_regexp_common {                     # {{{1
         $all_lines = join(""  , @{$ra_lines});
     }
 
+    {
+    my @ra_lines = split("\n", $all_lines);
+    print "in:  [", join("]\nin:  [", @ra_lines), "]\n" if $opt_v > 4;
+    }
+
     no strict 'vars';
     # otherwise get:
     #  Global symbol "%RE" requires explicit package name at cloc line xx.
@@ -12009,9 +12014,10 @@ sub call_regexp_common {                     # {{{1
     # a bogus use of %RE to avoid:
     # Name "main::RE" used only once: possible typo at cloc line xx.
     print scalar keys %RE if $opt_v < -20;
-    print "[", join("]\n[", @{$ra_lines}), "]\n" if $opt_v > 4;
+    my @out = split("\n", $all_lines);
+    print "out: [", join("]\nout: [", @out), "]\n" if $opt_v > 4;
     print "<- call_regexp_common\n" if $opt_v > 2;
-    return split("\n", $all_lines);
+    return @out;
 } # 1}}}
 sub plural_form {                            # {{{1
     # For getting the right plural form on some English nouns.

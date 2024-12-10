@@ -1309,11 +1309,19 @@ my @Tests = (
                     'ref'  => '../tests/outputs/vs_solution.sln.yaml',
                     'args' => '../tests/inputs/vs_solution.sln',
                 },
+
                 {
-                    'name' => 'Vuejs Component',
+                    'name' => 'Vuejs Component 1',
                     'ref'  => '../tests/outputs/ItemView.vue.yaml',
                     'args' => '../tests/inputs/ItemView.vue',
                 },
+
+                {
+                    'name' => 'Vuejs Component 2',
+                    'ref'  => '../tests/outputs/issue_876.vue.yaml',
+                    'args' => '../tests/inputs/issue_876.vue',
+                },
+
                 {
                     'name' => 'Vyper',
                     'ref'  => '../tests/outputs/vyper.vy.yaml',

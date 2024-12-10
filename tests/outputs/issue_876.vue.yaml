@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.03
+  elapsed_seconds    : 0.00376987457275391
+  n_files            : 1
+  n_lines            : 16
+  files_per_second   : 265.260814571212
+  lines_per_second   : 4244.17303313939
+  report_file        : ../tests/outputs/issue_876.vue.yaml
+'Vuejs Component' :
+  nFiles: 1
+  blank: 0
+  comment: 1
+  code: 15
+SUM: 
+  blank: 0
+  comment: 1
+  code: 15
+  nFiles: 1
