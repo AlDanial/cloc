@@ -1,0 +1,56 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.03
+  elapsed_seconds    : 0.00476408004760742
+  n_files            : 1
+  n_lines            : 15
+  files_per_second   : 209.904113702332
+  lines_per_second   : 3148.56170553498
+  report_file        : ../../../outputs/issues/862/diff_results.yaml
+added :
+  'Python' :
+    comment : 0
+    code : 0
+    blank : 0
+    nFiles : 0
+same :
+  'Python' :
+    comment : 1
+    code : 13
+    blank : 0
+    nFiles : 0
+modified :
+  'Python' :
+    comment : 0
+    code : 1
+    blank : 0
+    nFiles : 1
+removed :
+  'Python' :
+    comment : 0
+    code : 0
+    blank : 0
+    nFiles : 0
+SUM :
+  added :
+    nFiles : 0
+    comment : 0
+    code : 0
+    blank : 0
+  same :
+    nFiles : 0
+    comment : 1
+    code : 13
+    blank : 0
+  modified :
+    nFiles : 1
+    comment : 0
+    code : 1
+    blank : 0
+  removed :
+    nFiles : 0
+    comment : 0
+    code : 0
+    blank : 0

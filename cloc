@@ -3030,6 +3030,12 @@ sub count_filesets {                         # {{{1
                 foreach (@comm_L) { $_ = lc }
                 foreach (@comm_R) { $_ = lc }
             }
+            my $n_code_removed_L = 0;
+            my $n_code_removed_R = 0;
+            @code_L = apply_ignores(\@code_L, $Lang_L, $file_L, $rha_ignore_regex,
+                                    \$n_code_removed_L);
+            @code_R = apply_ignores(\@code_R, $Lang_R, $file_R, $rha_ignore_regex,
+                                    \$n_code_removed_R);
             # step 3: compute code diffs
             array_diff("$file_L v. $file_R"   ,   # in
                        \@code_L               ,   # in
@@ -3144,8 +3150,40 @@ sub count_filesets {                         # {{{1
         "n_filepairs_compared" => $n_file_pairs_compared
     }
 } # 1}}}
+sub apply_ignores {                          # {{{1
+    my ($ra_lines             , # in
+        $language             , # in
+        $file                 , # in
+        $rha_ignore_regex     , # in
+        $rs_lines_code_removed, # out
+       ) = @_;
+    my @output = ();
+    print "-> apply_ignores($file, $language)\n" if $opt_v > 2;
+
+    if (%{$rha_ignore_regex} and defined($rha_ignore_regex->{$language})) {
+        foreach my $line (@{$ra_lines}) {
+            my $keep = 1;
+            foreach my $regex (@{$rha_ignore_regex->{$language}}) {
+                if ($line =~ m{$regex}) {
+                    print "apply_ignores reject '$line' in $file because of '$regex'\n"
+                        if $opt_v > 4;
+                    $keep = 0;
+                    ++${$rs_lines_code_removed};
+                    last;
+                }
+            }
+            push @output, $line if $keep;
+        }
+    } else {
+        @output = @{$ra_lines};
+    }
+
+    print "<- apply_ignores(${$rs_lines_code_removed})\n" if $opt_v > 2;
+    return @output;
+} # 1}}}
 sub write_alignment_data {                   # {{{1
     my ($filename, $n_filepairs_compared, $data ) = @_;
+    print "-> write_alignment_data($filename)\n" if $opt_v > 2;
     my @output = ();
     if ( $data->{'added'} ) {
         my %added_lines = %{$data->{'added'}};
@@ -3171,9 +3209,12 @@ sub write_alignment_data {                   # {{{1
         }
     }
     write_file($filename, {}, @output);
+    print "<- write_alignment_data\n" if $opt_v > 2;
 } # 1}}}
 sub exclude_dir_validates {                  # {{{1
     my ($rh_Exclude_Dir) = @_;
+    # $opt_v hasn't been set yet
+    # print "-> exclude_dir_validates\n" if $opt_v > 2;
     my $is_OK = 1;
     foreach my $dir (keys %{$rh_Exclude_Dir}) {
         if (($ON_WINDOWS and $dir =~ m{\\}) or ($dir =~ m{/})) {
@@ -3184,6 +3225,7 @@ sub exclude_dir_validates {                  # {{{1
     if (!$is_OK) {
         warn "Use '--fullpath --not-match-d=REGEX' instead\n";
     }
+    # print "<- exclude_dir_validates\n" if $opt_v > 2;
     return $is_OK;
 } # 1}}}
 sub process_exclude_list_file {              # {{{1
@@ -6956,23 +6998,12 @@ sub call_counter {                           # {{{1
     @lines = rm_comments(\@lines, $language, $file,
                                \%EOL_Continuation_re, $ra_Errors);
 
-    if (%{$rha_ignore_regex} and defined($rha_ignore_regex->{$language})) {
-        my @keep_lines = ();
-        foreach my $line (@lines) {
-            my $keep = 1;
-            foreach my $regex (@{$rha_ignore_regex->{$language}}) {
-                if ($line =~ m{$regex}) {
-print "reject '$line' in $file because of '$regex'\n" if $opt_v > 4;
-                    $keep = 0;
-                    last;
-                }
-            }
-            push @keep_lines, $line if $keep;
-        }
-        @lines = @keep_lines;
-    }
+    my $n_code_removed = 0;
+    @lines = apply_ignores(\@lines, $language, $file, $rha_ignore_regex,
+                           \$n_code_removed);
+    $total_lines -= $n_code_removed;
 
-    my $comment_lines = $total_lines - $blank_lines - scalar  @lines;
+    my $comment_lines = $total_lines - $blank_lines - scalar @lines;
     if ($opt_strip_comments) {
         my $stripped_file = "";
         if ($opt_original_dir) {

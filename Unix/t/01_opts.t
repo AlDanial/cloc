@@ -872,6 +872,13 @@ my @Tests = (
                    'ref'  => '../tests/outputs/issues/862/results.yaml',
                 },
 
+                {
+                   'name' => '--ignore-regex --diff (github issues #862, #865, #868)',
+                   'cd'   => '../tests/inputs/issues/862',
+                   'args' => '--ignore-regex="*|import" --diff a.py b.py',
+                   'ref'  => '../tests/outputs/issues/862/diff_results.yaml',
+                },
+
             );
 
 # Special cases:
