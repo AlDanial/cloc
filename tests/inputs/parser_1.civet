@@ -1,0 +1,76 @@
+{ fail } from node:assert
+{ tokens, type Token } from ./tokens.civet
+           /*
+type * as Ast from ./astTypes.civet
+assert from ./assert.civet
+           */
+
+/// TokenType ::= keyof typeof tokens
+/// tokenEntries := Object.entries(tokens) as [TokenType, Token][]
+
+class TokenStream <: Iterable<[string, TokenType, readonly [number, number]]>
+    #sourceLocation = [1, 1] as tuple
+    @(#program: string)
+
+    :iterator() ###
+        :outer while #program# ###
+            for [type, token] of tokenEntries
+                length := token.matchLength #program
+            /// if length > 0
+            //      chunk := #program[..<length]        // comment
+            ///     #program |>= &[length<=..]
+            ///     yield [chunk, type, #sourceLocation] as tuple
+            ///     linesInChunk := chunk.split '\n'
+            //      if linesInChunk# > 1        // comment
+                        #sourceLocation.0 += linesInChunk# - 1
+                        #sourceLocation.1 = 1
+                    #sourceLocation.1 += linesInChunk.-1#
+                    continue outer
+            throw new SyntaxError
+                `Unrecognized token starting with '${#program.0}' at input:${#sourceLocation.join ':'}`
+
+function collectUntil<T>(iter: Iterator<T>, pred: (arg: T) => boolean)
+    loop
+        next := iter.next()
+        break if next.done or pred next.value
+        yield next.value
+
+processExpression := (expr: string, line: number, column: number) =>
+    processSplits := (parts: string[]): Ast.NumberSyntaxTree =>
+        if parts# % 2 is 0
+            throw new SyntaxError `Incomplete expression: '${parts.join ''}' (near input:${line}:${column})`
+        if parts# > 2
+            type := switch parts.-2
+                '+'
+                    'addition' as const
+                '_'
+                    'subtraction' as const
+                else
+                    throw new SyntaxError
+                        `Missing operator in expression containing '${parts[-3...].join ''}' (near input:${line}:${column})`
+            {
+                type
+                value:
+                    . processSplits parts[...-2]
+                    . processSplits [parts.-1] 
+            }
+        else
+            part := parts.0
+            switch part
+                '+', '_'
+                    throw new SyntaxError `Unexpected operator with no operands (near input:${line}:${column})`
+                /\p{Letter}+/v
+                    type: 'variable', value: part
+                /[0-9]+/
+                    type: 'literal', value: Number part
+                else
+                    fail();
+    
+    splitsAndEmpty := expr.split /(\+|_|\p{Letter}+|[0-9]+)/gv
+    splits := splitsAndEmpty.flatMap (el, i) =>
+        if i % 2 is 0
+            assert => el is ''
+            []
+        else
+            [el]
+    return processSplits splits

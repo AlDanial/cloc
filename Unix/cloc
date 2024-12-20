@@ -8689,6 +8689,9 @@ sub set_constants {                          # {{{1
             'tpp'         => 'C++'                   ,
             'cdc'         => 'Cadence'               ,
             'ccs'         => 'CCS'                   ,
+            'civet'       => 'Civet'                 ,
+            'cvt'         => 'Civet'                 ,
+            'cvtx'        => 'Civet'                 ,
             'cfc'         => 'ColdFusion CFScript'   ,
             'cfml'        => 'ColdFusion'            ,
             'cfm'         => 'ColdFusion'            ,
@@ -9880,6 +9883,9 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C'      ],
+                            ],
+    'Civet'              => [
+                                [ 'call_parse_civet'               ],
                             ],
     'CSS'                => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
@@ -11574,6 +11580,7 @@ sub set_constants {                          # {{{1
     'Cadence'                      =>   3.00,
     'Carbon'                       =>   1.51,
     'CCS'                          =>   5.33,
+    'Civet'                        =>   3.00,
     'ColdFusion'                   =>   4.00,
     'ColdFusion CFScript'          =>   4.00,
     'Chapel'                       =>   2.96,
@@ -12002,6 +12009,28 @@ sub rm_last_line {                           # {{{1
     print "<- rm_last_line\n" if $opt_v > 2;
     my $n = scalar(@{$ra_lines}) - 2;
     return @{$ra_lines}[0..$n];
+} # 1}}}
+sub call_parse_civet {                       # {{{1
+    my ($ra_lines, ) = @_;
+    print "-> call_parse_civet\n" if $opt_v > 2;
+    my $coffeeComment = 0;
+    foreach my $L (@{$ra_lines}) {
+        if ($L =~ /^\s*civet\s+coffee(Comment|Compat)/) {
+            $coffeeComment = 1;
+            last;
+        }
+    }
+    my (@step_1, @step_2, @step_3, @step_4);
+    if ($coffeeComment) {
+        @step_4 = remove_matches($ra_lines, '^\s*#');
+    } else {
+        @step_1 = call_regexp_common($ra_lines, 'C');
+        @step_2 = remove_matches(        \@step_1, '^///');
+        @step_3 = remove_matches(        \@step_2, '^\s*//[^/]');
+        @step_4 = remove_between_general(\@step_3, '###', '###');
+    }
+    print "<- call_parse_civet\n" if $opt_v > 2;
+    return @step_4;
 } # 1}}}
 sub call_regexp_common {                     # {{{1
     my ($ra_lines, $language ) = @_;

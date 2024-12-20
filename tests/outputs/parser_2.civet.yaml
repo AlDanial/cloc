@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.03
+  elapsed_seconds    : 0.00371313095092773
+  n_files            : 1
+  n_lines            : 37
+  files_per_second   : 269.31449852318
+  lines_per_second   : 9964.63644535765
+  report_file        : tests/outputs/parser_2.civet.yaml
+'Civet' :
+  nFiles: 1
+  blank: 4
+  comment: 9
+  code: 24
+SUM: 
+  blank: 4
+  comment: 9
+  code: 24
+  nFiles: 1

@@ -1,0 +1,37 @@
+civet coffeeComment
+{ fail } from node:assert
+{ tokens, type Token } from ./tokens.civet
+           /*
+type * as Ast from ./astTypes.civet
+assert from ./assert.civet
+           */
+
+/// TokenType ::= keyof typeof tokens
+/// tokenEntries := Object.entries(tokens) as [TokenType, Token][]
+
+class TokenStream <: Iterable<[string, TokenType, readonly [number, number]]>
+    #sourceLocation = [1, 1] as tuple
+    @(#program: string)
+
+    :iterator() ###
+        :outer while #program# ###
+            for [type, token] of tokenEntries
+                length := token.matchLength #program
+            /// if length > 0
+            //      chunk := #program[..<length]        // comment
+            ///     #program |>= &[length<=..]
+            ///     yield [chunk, type, #sourceLocation] as tuple
+            ///     linesInChunk := chunk.split '\n'
+            //      if linesInChunk# > 1        // comment
+                        #sourceLocation.0 += linesInChunk# - 1
+                        #sourceLocation.1 = 1
+                    #sourceLocation.1 += linesInChunk.-1#
+                    continue outer
+            throw new SyntaxError
+                `Unrecognized token starting with '${#program.0}' at input:${#sourceLocation.join ':'}`
+
+#function collectUntil<T>(iter: Iterator<T>, pred: (arg: T) => boolean)
+#    loop
+#        next := iter.next()
+#        break if next.done or pred next.value
+#        yield next.value

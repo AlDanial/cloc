@@ -240,6 +240,16 @@ my @Tests = (
                     'args' => '../tests/inputs/C-Ansi.c',
                 },
                 {
+                    'name' => 'Civet',
+                    'ref'  => '../tests/outputs/parser_1.civet.yaml',
+                    'args' => '../tests/inputs/parser_1.civet',
+                },
+                {
+                    'name' => 'Civet (coffeeComment)',
+                    'ref'  => '../tests/outputs/parser_2.civet.yaml',
+                    'args' => '../tests/inputs/parser_2.civet',
+                },
+                {
                     'name' => 'CSV',
                     'ref'  => '../tests/outputs/cloc_counts.csv.yaml',
                     'args' => '../tests/inputs/cloc_counts.csv',
