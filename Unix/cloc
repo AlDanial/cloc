@@ -12022,9 +12022,8 @@ sub call_parse_civet {                       # {{{1
     }
     my (@step_1, @step_2, @step_3, @step_4);
     if ($coffeeComment) {
-        @step_1 = call_regexp_common($ra_lines, 'C');
-        @step_2 = remove_between_general(\@step_1, '###', '###');
-        @step_4 = remove_matches(        \@step_2, '^\s*#');
+        @step_1 = remove_between_general($ra_lines, '###', '###');
+        @step_4 = remove_matches(        \@step_1, '^\s*#');
     } else {
         @step_1 = call_regexp_common($ra_lines, 'C');
         @step_2 = remove_matches(        \@step_1, '^///');
