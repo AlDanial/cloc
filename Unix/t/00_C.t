@@ -915,6 +915,11 @@ my @Tests = (
                     'args' => '../tests/inputs/script1-hadoop.pig',
                 },
                 {
+                    'name' => 'Pkl',
+                    'ref'  => '../tests/outputs/fib_class.pkl.yaml',
+                    'args' => '../tests/inputs/fib_class.pkl',
+                },
+                {
                     'name' => 'PL/I',
                     'ref'  => '../tests/outputs/hello.pl1.yaml',
                     'args' => '../tests/inputs/hello.pl1',

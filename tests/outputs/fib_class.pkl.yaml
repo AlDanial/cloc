@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.03
+  elapsed_seconds    : 0.00434088706970215
+  n_files            : 1
+  n_lines            : 25
+  files_per_second   : 230.367660789806
+  lines_per_second   : 5759.19151974515
+  report_file        : ../outputs/fib_class.pkl.yaml
+'Pkl' :
+  nFiles: 1
+  blank: 3
+  comment: 18
+  code: 4
+SUM: 
+  blank: 3
+  comment: 18
+  code: 4
+  nFiles: 1

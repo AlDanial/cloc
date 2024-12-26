@@ -9219,15 +9219,16 @@ sub set_constants {                          # {{{1
             'sp'          => 'SparForte'             ,
             'sol'         => 'Solidity'              ,
             'p4'          => 'P4'                    ,
-            'pwn'         => 'Pawn'                  ,
-            'pawn'        => 'Pawn'                  ,
             'ses'         => 'Patran Command Language'   ,
             'pcl'         => 'Patran Command Language'   ,
+            'pwn'         => 'Pawn'                  ,
+            'pawn'        => 'Pawn'                  ,
             'pek'         => 'Pek'                   ,
             'peg'         => 'PEG'                   ,
             'pegjs'       => 'peg.js'                ,
             'peggy'       => 'peggy'                 ,
             'pest'        => 'Pest'                  ,
+            'pkl'         => 'Pkl'                   ,
             'prisma'      => 'Prisma Schema'         ,
             'tspeg'       => 'tspeg'                 ,
             'jspeg'       => 'tspeg'                 ,
@@ -10601,15 +10602,15 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
-    'Pawn'               => [
-                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
-                                [ 'rm_comments_in_strings', '"', '//', '' ],
-                                [ 'call_regexp_common'  , 'C++'    ],
-                            ],
     'Patran Command Language'=> [
                                 [ 'remove_matches'      , '^\s*#'   ],
                                 [ 'remove_matches'      , '^\s*\$#' ],
                                 [ 'call_regexp_common'  , 'C'       ],
+                            ],
+    'Pawn'               => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Perl'               => [   [ 'remove_below'        , '^__(END|DATA)__'],
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -10640,6 +10641,14 @@ sub set_constants {                          # {{{1
                                 [ 'remove_inline'       , '//.*$'   ],
                             ],
     'Perl/Prolog'        => [ [ 'die' ,          ], ], # never called
+    'Pig Latin'          => [
+                                [ 'remove_matches'      , '^\s*--' ],
+                                [ 'remove_inline'       , '--.*$'  ],
+                                [ 'call_regexp_common'  , 'C'       ],
+                            ],
+    'Pkl'                => [
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'PL/I'               => [
                                 [ 'call_regexp_common'  , 'C'      ],
                             ],
@@ -10649,11 +10658,6 @@ sub set_constants {                          # {{{1
     'PlantUML'           => [
                                 [ 'remove_between_general', "/'", "'/" ],
                                 [ 'remove_matches'      , "^\\s*'" ],
-                            ],
-    'Pig Latin'          => [
-                                [ 'remove_matches'      , '^\s*--' ],
-                                [ 'remove_inline'       , '--.*$'  ],
-                                [ 'call_regexp_common'  , 'C'       ],
                             ],
     'Prisma Schema'      => [
                                 [ 'remove_matches'      , '^\s*//' ],
@@ -11758,6 +11762,7 @@ sub set_constants {                          # {{{1
     'Pest'                         =>   2.00,
     'tspeg'                        =>   3.00,
     'Pig Latin'                    =>   1.00,
+    'Pkl'                          =>   3.00,
     'PL/I'                         =>   1.38,
     'PL/M'                         =>   1.13,
     'PlantUML'                     =>   2.00,
