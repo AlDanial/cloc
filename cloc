@@ -9312,6 +9312,7 @@ sub set_constants {                          # {{{1
             'rules'       => 'Snakemake'             ,
             'smk'         => 'Snakemake'             ,
             'styl'        => 'Stylus'                ,
+            'surql'       => 'SurrealQL'             ,
             'i'           => 'SWIG'                  ,
             'svelte'      => 'Svelte'                ,
             'sv'          => 'Verilog-SystemVerilog' ,
@@ -9758,6 +9759,15 @@ sub set_constants {                          # {{{1
     'bc'                 => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
+                            ],
+    'BizTalk Pipeline' =>   [
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
+    'BizTalk Orchestration' => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ],
                             ],
     'Blade'              => [
                                 [ 'remove_between_general', '{{--', '--}}' ],
@@ -10897,27 +10907,18 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_matches'      , '^\s*;'  ],
                             ],
-    'Squirrel'           => [
-                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
-                                [ 'rm_comments_in_strings', '"', '//', '' ],
-                                [ 'call_regexp_common'  , 'C++'    ],
-                                [ 'remove_matches'      , '^\s*#'  ],
-                                [ 'remove_inline'       , '#.*$'   ],
+    'Smalltalk'          => [
+                                [ 'call_regexp_common'  , 'Smalltalk'      ],
                             ],
-    'Starlark'           => [
+    'Smarty'             => [
+                                [ 'smarty_to_C'                    ],
+                                [ 'call_regexp_common'  , 'C'      ],
+                            ],
+    'Snakemake'          => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'docstring_to_C'                 ],
                                 [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_inline'       , '#.*$'   ],
-                            ],
-    'BizTalk Pipeline' =>   [
-                                [ 'remove_html_comments',          ],
-                                [ 'call_regexp_common'  , 'HTML'   ],
-                            ],
-    'BizTalk Orchestration' => [
-                                [ 'remove_matches'      , '^\s*#'  ],
-                                [ 'remove_html_comments',          ],
-                                [ 'call_regexp_common'  , 'HTML'   ],
                             ],
     'Solidity'           => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
@@ -10938,6 +10939,19 @@ sub set_constants {                          # {{{1
                                 [ 'rm_last_line'        , ],  # undo pre_post_fix addition
                                                               # of trailing line of just <'
                             ],
+    'Squirrel'           => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
+    'Starlark'           => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'docstring_to_C'                 ],
+                                [ 'call_regexp_common'  , 'C'      ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
     'SQL'                => [
                                 [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_matches'      , '^\s*--' ],
@@ -10953,18 +10967,16 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*--' ],
                                 [ 'remove_inline'       , '--.*$'  ],
                             ],
-    'Smalltalk'          => [
-                                [ 'call_regexp_common'  , 'Smalltalk'      ],
-                            ],
-    'Smarty'             => [
-                                [ 'smarty_to_C'                    ],
-                                [ 'call_regexp_common'  , 'C'      ],
-                            ],
-    'Snakemake'          => [
+    'SurrealQL'          => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'rm_comments_in_strings', '"', '--', '' ],
+                                [ 'rm_comments_in_strings', '"', '#', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_matches'      , '^\s*#'  ],
-                                [ 'docstring_to_C'                 ],
-                                [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_inline'       , '#.*$'   ],
+                                [ 'remove_matches'      , '^\s*--' ],
+                                [ 'remove_inline'       , '--.*$'  ],
                             ],
     'Standard ML'        => [
                                 [ 'remove_between_general', '(*', '*)' ],
@@ -11834,6 +11846,7 @@ sub set_constants {                          # {{{1
     'Stata'                        =>   3.00,
     'Stylus'                       =>   1.48,
     'SugarSS'                      =>   2.50,
+    'SurrealQL'                    =>   2.50,
     'Svelte'                       =>   2.00,
     'SVG'                          =>   1.00,
     'Swift'                        =>   2.50,

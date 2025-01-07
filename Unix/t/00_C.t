@@ -1170,6 +1170,11 @@ my @Tests = (
                     'args' => '../tests/inputs/rules.sss',
                 },
                 {
+                    'name' => 'SurrealQL',
+                    'ref'  => '../tests/outputs/ranges.surql.yaml',
+                    'args' => '../tests/inputs/ranges.surql',
+                },
+                {
                     'name' => 'Svelte',
                     'ref'  => '../tests/outputs/reactive.svelte.yaml',
                     'args' => '../tests/inputs/reactive.svelte',

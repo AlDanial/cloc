@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.03
+  elapsed_seconds    : 0.0037388801574707
+  n_files            : 1
+  n_lines            : 13
+  files_per_second   : 267.459762785359
+  lines_per_second   : 3476.97691620967
+  report_file        : ../outputs/ranges.surql.yaml
+'SurrealQL' :
+  nFiles: 1
+  blank: 0
+  comment: 8
+  code: 5
+SUM: 
+  blank: 0
+  comment: 8
+  code: 5
+  nFiles: 1
