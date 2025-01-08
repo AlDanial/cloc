@@ -282,6 +282,7 @@ a Perl interpreter):
     sudo yum install cloc            # Red Hat, Fedora
     sudo dnf install cloc            # Fedora 22 or later
     sudo pacman -S cloc              # Arch
+    yay -S cloc-git                  # Arch AUR (latest git version)
     sudo emerge -av dev-util/cloc    # Gentoo https://packages.gentoo.org/packages/dev-util/cloc
     sudo apk add cloc                # Alpine Linux
     doas pkg_add cloc                # OpenBSD
