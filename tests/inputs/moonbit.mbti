@@ -1,0 +1,14 @@
+package moonbitlang/core/array
+
+alias @moonbitlang/core/quickcheck as @quickcheck
+
+// Values
+
+// Types and methods
+impl FixedArray {
+  all[T](Self[T], (T) -> Bool) -> Bool
+}
+
+// Type aliases
+
+// Traits

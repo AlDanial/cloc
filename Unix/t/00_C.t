@@ -767,6 +767,12 @@ my @Tests = (
                     'args' => '../tests/inputs/hi.mojo',
                 },
                 {
+                    'name' => 'MoonBit',
+                    'ref'  => '../tests/outputs/moonbit.yaml',
+                    'args' => '../tests/inputs/moonbit.mbt ' .
+                              '../tests/inputs/moonbit.mbti ',
+                },
+                {
                     'name' => 'Mumps',
                     'ref'  => '../tests/outputs/Mumps.mps.yaml',
                     'args' => '../tests/inputs/Mumps.mps',
