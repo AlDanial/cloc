@@ -45,6 +45,7 @@ use File::Spec;
 use IO::File;
 use List::Util qw( min max );
 use Cwd;
+use Encode qw( encode );
 use POSIX qw { strftime ceil};
 # Parallel::ForkManager isn't in the standard distribution.
 # Use it only if installed, and only if --processes=N is given.
@@ -274,6 +275,7 @@ my (
     $opt_no_recurse           ,
     $opt_only_count_files     ,
     $opt_fmt                  ,
+    $opt_encoding             ,
    );
 
 my $getopt_success = GetOptions(             # {{{1
@@ -381,6 +383,7 @@ my $getopt_success = GetOptions(             # {{{1
    "no_recurse|no-recurse"                   => \$opt_no_recurse          ,
    "only_count_files|only-count-files"       => \$opt_only_count_files    ,
    "fmt=i"                                   => \$opt_fmt                 ,
+   "encoding=s"                              => \$opt_encoding            ,
   );
 # 1}}}
 $config_file = $opt_config_file if defined $opt_config_file;
@@ -6453,16 +6456,19 @@ sub open_file {                              # {{{1
         $filename,     # filename to open
         $use_new_file, # whether to use `new IO::File` or `open` when not using Win32::LongPath
         ) = @_;
-    if ($ON_WINDOWS and $HAVE_Win32_Long_Path) {
-        my $file = undef;
-        openL(\$file, $mode, $filename);
-        return $file;
-    } elsif ($use_new_file) {
-        return new IO::File $filename, $mode;
+    my $fh = undef;
+    if (defined $opt_encoding) {
+        open($fh,"<:encoding($opt_encoding)", $filename) or
+            die "Failed open('<:encoding($opt_encoding)', $filename): $!";
+    } else {
+        if ($ON_WINDOWS and $HAVE_Win32_Long_Path) {
+            openL(\$fh, $mode, $filename);
+        } elsif ($use_new_file) {
+            return new IO::File $filename, $mode;
+        }
+        open($fh, $mode, $filename);
     }
-    my $file = undef;
-    open($file, $mode, $filename);
-    return $file;
+    return $fh;
 } # 1}}}
 sub unlink_file {                            # {{{1
     # portable method to unlink a file. On Windows this uses Win32::LongPath to
