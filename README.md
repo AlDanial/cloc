@@ -263,13 +263,17 @@ New releases nominally appear every six months.
 
 <a name="Docker"></a> []({{{1)
 ## Run via docker
+
+These docker commands count lines of code in and below
+the current directory:
+
 ```shell
-docker run --rm -v $PWD:/tmp aldanial/cloc
+docker run --rm -v $PWD:/tmp aldanial/cloc .
 ```
 
 ### Run via docker on git-bash
 ```shell
-docker run --rm -v "/$(pwd -W)":/tmp aldanial/cloc
+docker run --rm -v "/$(pwd -W)":/tmp aldanial/cloc .
 ```
 
 ## Install via package manager
