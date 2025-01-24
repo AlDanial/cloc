@@ -793,6 +793,11 @@ my @Tests = (
                     'args' => '../tests/inputs/drupal.mxml',
                 },
                 {
+                    'name' => '.NET IL',
+                    'ref'  => '../tests/outputs/dotNET_intermediate.il.yaml',
+                    'args' => '../tests/inputs/dotNET_intermediate.il',
+                },
+                {
                     'name' => 'NetLogo',
                     'ref'  => '../tests/outputs/vinos.nlogo.yaml',
                     'args' => '../tests/inputs/vinos.nlogo',
@@ -1091,19 +1096,24 @@ my @Tests = (
                     'args' => '../tests/inputs/messages.rb',
                 },
                 {
-                    'name' => 'SCSS',
-                    'ref'  => '../tests/outputs/style.scss.yaml',
-                    'args' => '../tests/inputs/style.scss',
-                },
-                {
                     'name' => 'SaltStack',
                     'ref'  => '../tests/outputs/certificates.sls.yaml',
                     'args' => '../tests/inputs/certificates.sls',
                 },
                 {
+                    'name' => 'SCSS',
+                    'ref'  => '../tests/outputs/style.scss.yaml',
+                    'args' => '../tests/inputs/style.scss',
+                },
+                {
                     'name' => 'Scheme',
                     'ref'  => '../tests/outputs/scheme.sls.yaml',
                     'args' => '../tests/inputs/scheme.sls',
+                },
+                {
+                    'name' => 'SKILL',
+                    'ref'  => '../tests/outputs/ChangeProperties.il.yaml',
+                    'args' => '../tests/inputs/ChangeProperties.il',
                 },
                 {
                     'name' => 'Starlark',

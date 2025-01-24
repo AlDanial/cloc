@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 # cloc -- Count Lines of Code                  {{{1
-# Copyright (C) 2006-2024 Al Danial <al.danial@gmail.com>
+# Copyright (C) 2006-2025 Al Danial <al.danial@gmail.com>
 # First release August 2006
 #
 # Includes code from:
@@ -45,6 +45,7 @@ use File::Spec;
 use IO::File;
 use List::Util qw( min max );
 use Cwd;
+use Encode qw( encode );
 use POSIX qw { strftime ceil};
 
 # Digest::MD5 isn't in the standard distribution. Use it only if installed.
@@ -60,8 +61,6 @@ use Digest::MD5;
 # Time::HiRes became standard with Perl 5.8
 my $HAVE_Time_HiRes = 1;
 use Time::HiRes;
-#eval "use Time::HiRes;";
-#$HAVE_Time_HiRes = 1 if defined $Time::HiRes::VERSION;
 
 my $HAVE_Rexexp_Common = 1;
 # Regexp::Common isn't in the standard distribution.  It will
@@ -273,6 +272,7 @@ my (
     $opt_no_recurse           ,
     $opt_only_count_files     ,
     $opt_fmt                  ,
+    $opt_encoding             ,
    );
 
 my $getopt_success = GetOptions(             # {{{1
@@ -380,6 +380,7 @@ my $getopt_success = GetOptions(             # {{{1
    "no_recurse|no-recurse"                   => \$opt_no_recurse          ,
    "only_count_files|only-count-files"       => \$opt_only_count_files    ,
    "fmt=i"                                   => \$opt_fmt                 ,
+   "encoding=s"                              => \$opt_encoding            , # not production ready #880
   );
 # 1}}}
 $config_file = $opt_config_file if defined $opt_config_file;
@@ -791,6 +792,7 @@ my %Extension_Collision = (
     'Verilog-SystemVerilog/Coq'                     => [ 'v'    ] ,
     'Visual Basic/TeX/Apex Class'                   => [ 'cls'  ] ,
     'Scheme/SaltStack'                              => [ 'sls'  ] ,
+    'SKILL/.NET IL'                                 => [ 'il'   ] ,
 );
 my @Autogen_to_ignore = no_autogen_files($list_no_autogen);
 if ($opt_force_lang_def) {
@@ -6463,16 +6465,19 @@ sub open_file {                              # {{{1
         $filename,     # filename to open
         $use_new_file, # whether to use `new IO::File` or `open` when not using Win32::LongPath
         ) = @_;
-    if ($ON_WINDOWS and $HAVE_Win32_Long_Path) {
-        my $file = undef;
-        openL(\$file, $mode, $filename);
-        return $file;
-    } elsif ($use_new_file) {
-        return new IO::File $filename, $mode;
+    my $fh = undef;
+    if (defined $opt_encoding) {
+        open($fh,"<:encoding($opt_encoding)", $filename) or
+            die "Failed open('<:encoding($opt_encoding)', $filename): $!";
+    } else {
+        if ($ON_WINDOWS and $HAVE_Win32_Long_Path) {
+            openL(\$fh, $mode, $filename);
+        } elsif ($use_new_file) {
+            return new IO::File $filename, $mode;
+        }
+        open($fh, $mode, $filename);
     }
-    my $file = undef;
-    open($file, $mode, $filename);
-    return $file;
+    return $fh;
 } # 1}}}
 sub unlink_file {                            # {{{1
     # portable method to unlink a file. On Windows this uses Win32::LongPath to
@@ -6753,6 +6758,8 @@ sub classify_file {                          # {{{1
             } elsif ($Language_by_Extension{$extension} eq 'Pascal/Pawn') {
                 my $lang_p_or_p = "";
                 return Pascal_or_Pawn($full_file, $rh_Err, $raa_errors);
+            } elsif ($Language_by_Extension{$extension} eq 'SKILL/.NET IL') {
+                return SKILL_or_DotNetIL($full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'Brainfuck') {
                 if (really_is_bf($full_file)) {
                     return $Language_by_Extension{$extension};
@@ -8919,7 +8926,7 @@ sub set_constants {                          # {{{1
             'ipl'         => 'IPL'                   ,
             'pro'         => 'IDL/Qt Project/Prolog/ProGuard' ,
             'ig'          => 'Modula3'               ,
-            'il'          => 'SKILL'                 ,
+            'il'          => 'SKILL/.NET IL'         ,
             'ils'         => 'SKILL++'               ,
             'inc'         => 'PHP/Pascal/Fortran/Pawn',
             'ino'         => 'Arduino Sketch'        ,
@@ -9035,6 +9042,10 @@ sub set_constants {                          # {{{1
             'mojom'       => 'Mojom'                 ,
             'mojo'        => 'Mojo'                  ,
             '🔥'          => 'Mojo'                  ,
+            'mbt'         => 'MoonBit'               ,
+            'mbti'        => 'MoonBit'               ,
+            'mbtx'        => 'MoonBit'               ,
+            'mbty'        => 'MoonBit'               ,
             'meson.build' => 'Meson'                 ,
             'metal'       => 'Metal'                 ,
             'mk'          => 'make'                  ,
@@ -10520,6 +10531,7 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
+    'MoonBit'            => [   [ 'remove_matches'      , '^\s*//' ], ],
     'Nemerle'            => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
@@ -10563,6 +10575,11 @@ sub set_constants {                          # {{{1
     'MUMPS'              => [   [ 'remove_matches'      , '^\s*;'  ], ],
     'Mustache'           => [
                                 [ 'remove_between_general', '{{!', '}}' ],
+                            ],
+    '.NET IL'            => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Nickel'             => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -10909,6 +10926,7 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'SKILL/.NET IL'      => [   [ 'die' ,          ], ], # never called
     'SKILL'              => [
                                 [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_matches'      , '^\s*;'  ],
@@ -11756,8 +11774,10 @@ sub set_constants {                          # {{{1
     'Modelica'                     =>   2.00,
     'MUMPS'                        =>   4.21,
     'Mustache'                     =>   1.75,
+    'MoonBit'                      =>   2.50,
     'Nastran'                      =>   1.13,
     'Nemerle'                      =>   2.50,
+    '.NET IL'                      =>   3.00,
     'NetLogo'                      =>   4.00,
     'Nickel'                       =>   2.00,
     'Nim'                          =>   2.00,
@@ -11964,6 +11984,7 @@ sub set_constants {                          # {{{1
     'Verilog-SystemVerilog/Coq'    => 1.00,
     'MATLAB/Mathematica/Objective-C/MUMPS/Mercury' => 1.00,
     'IDL/Qt Project/Prolog/ProGuard'     => 1.00,
+    'SKILL/.NET IL'                => 1.00,
 );
 # 1}}}
 %{$rh_Known_Binary_Archives} = (             # {{{1
@@ -12967,6 +12988,44 @@ sub Pascal_or_Pawn {                         # {{{1
         return "Pascal";
     } else {
         return "Pawn";
+    }
+} # 1}}}
+sub SKILL_or_DotNetIL {                      # {{{1
+    my ($file        , # in
+        $rh_Err      , # in   hash of error codes
+        $raa_errors  , # out
+       ) = @_;
+
+    print "-> SKILL_or_DotNetIL($file)\n" if $opt_v > 2;
+
+    my $lang = undef;
+    my $IN = open_file('<', $file, 1);
+    if (!defined $IN) {
+        push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
+        return $lang;
+    }
+    my $skill   = 0;
+    my $dnet_il = 0;
+    while (<$IN>) {
+        next if /^\s*$/;
+        if (/^\s*;/) {
+            $skill += 50;
+        } elsif (/^\.(class|assembly|method|custom|entrypoint)/) {
+            $dnet_il += 50;
+            last;
+        } elsif (/{\s*$/ or /^\s*}/) {
+            $dnet_il += 5;
+        } elsif (/^\s*(procedure|let|foreach)\b/) {
+            $skill += 1;
+        }
+    }
+    $IN->close;
+
+    print "<- SKILL_or_DotNetIL($file: SKILL=$skill, .NET IL=$dnet_il\n" if $opt_v > 2;
+    if ($skill > $dnet_il) {
+        return "SKILL";
+    } else {
+        return ".NET IL";
     }
 } # 1}}}
 sub html_colored_text {                      # {{{1

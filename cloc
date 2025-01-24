@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 # cloc -- Count Lines of Code                  {{{1
-# Copyright (C) 2006-2024 Al Danial <al.danial@gmail.com>
+# Copyright (C) 2006-2025 Al Danial <al.danial@gmail.com>
 # First release August 2006
 #
 # Includes code from:
@@ -383,7 +383,7 @@ my $getopt_success = GetOptions(             # {{{1
    "no_recurse|no-recurse"                   => \$opt_no_recurse          ,
    "only_count_files|only-count-files"       => \$opt_only_count_files    ,
    "fmt=i"                                   => \$opt_fmt                 ,
-   "encoding=s"                              => \$opt_encoding            ,
+   "encoding=s"                              => \$opt_encoding            , # not production ready #880
   );
 # 1}}}
 $config_file = $opt_config_file if defined $opt_config_file;
@@ -784,6 +784,7 @@ my %Extension_Collision = (
     'Verilog-SystemVerilog/Coq'                     => [ 'v'    ] ,
     'Visual Basic/TeX/Apex Class'                   => [ 'cls'  ] ,
     'Scheme/SaltStack'                              => [ 'sls'  ] ,
+    'SKILL/.NET IL'                                 => [ 'il'   ] ,
 );
 my @Autogen_to_ignore = no_autogen_files($list_no_autogen);
 if ($opt_force_lang_def) {
@@ -6749,6 +6750,8 @@ sub classify_file {                          # {{{1
             } elsif ($Language_by_Extension{$extension} eq 'Pascal/Pawn') {
                 my $lang_p_or_p = "";
                 return Pascal_or_Pawn($full_file, $rh_Err, $raa_errors);
+            } elsif ($Language_by_Extension{$extension} eq 'SKILL/.NET IL') {
+                return SKILL_or_DotNetIL($full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'Brainfuck') {
                 if (really_is_bf($full_file)) {
                     return $Language_by_Extension{$extension};
@@ -8915,7 +8918,7 @@ sub set_constants {                          # {{{1
             'ipl'         => 'IPL'                   ,
             'pro'         => 'IDL/Qt Project/Prolog/ProGuard' ,
             'ig'          => 'Modula3'               ,
-            'il'          => 'SKILL'                 ,
+            'il'          => 'SKILL/.NET IL'         ,
             'ils'         => 'SKILL++'               ,
             'inc'         => 'PHP/Pascal/Fortran/Pawn',
             'ino'         => 'Arduino Sketch'        ,
@@ -10565,6 +10568,11 @@ sub set_constants {                          # {{{1
     'Mustache'           => [
                                 [ 'remove_between_general', '{{!', '}}' ],
                             ],
+    '.NET IL'            => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'Nickel'             => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
@@ -10910,6 +10918,7 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'SKILL/.NET IL'      => [   [ 'die' ,          ], ], # never called
     'SKILL'              => [
                                 [ 'call_regexp_common'  , 'C'      ],
                                 [ 'remove_matches'      , '^\s*;'  ],
@@ -11760,6 +11769,7 @@ sub set_constants {                          # {{{1
     'MoonBit'                      =>   2.50,
     'Nastran'                      =>   1.13,
     'Nemerle'                      =>   2.50,
+    '.NET IL'                      =>   3.00,
     'NetLogo'                      =>   4.00,
     'Nickel'                       =>   2.00,
     'Nim'                          =>   2.00,
@@ -11966,6 +11976,7 @@ sub set_constants {                          # {{{1
     'Verilog-SystemVerilog/Coq'    => 1.00,
     'MATLAB/Mathematica/Objective-C/MUMPS/Mercury' => 1.00,
     'IDL/Qt Project/Prolog/ProGuard'     => 1.00,
+    'SKILL/.NET IL'                => 1.00,
 );
 # 1}}}
 %{$rh_Known_Binary_Archives} = (             # {{{1
@@ -12969,6 +12980,44 @@ sub Pascal_or_Pawn {                         # {{{1
         return "Pascal";
     } else {
         return "Pawn";
+    }
+} # 1}}}
+sub SKILL_or_DotNetIL {                      # {{{1
+    my ($file        , # in
+        $rh_Err      , # in   hash of error codes
+        $raa_errors  , # out
+       ) = @_;
+
+    print "-> SKILL_or_DotNetIL($file)\n" if $opt_v > 2;
+
+    my $lang = undef;
+    my $IN = open_file('<', $file, 1);
+    if (!defined $IN) {
+        push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
+        return $lang;
+    }
+    my $skill   = 0;
+    my $dnet_il = 0;
+    while (<$IN>) {
+        next if /^\s*$/;
+        if (/^\s*;/) {
+            $skill += 50;
+        } elsif (/^\.(class|assembly|method|custom|entrypoint)/) {
+            $dnet_il += 50;
+            last;
+        } elsif (/{\s*$/ or /^\s*}/) {
+            $dnet_il += 5;
+        } elsif (/^\s*(procedure|let|foreach)\b/) {
+            $skill += 1;
+        }
+    }
+    $IN->close;
+
+    print "<- SKILL_or_DotNetIL($file: SKILL=$skill, .NET IL=$dnet_il\n" if $opt_v > 2;
+    if ($skill > $dnet_il) {
+        return "SKILL";
+    } else {
+        return ".NET IL";
     }
 } # 1}}}
 sub html_colored_text {                      # {{{1

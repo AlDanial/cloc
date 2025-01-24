@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.03
+  elapsed_seconds    : 0.00425410270690918
+  n_files            : 1
+  n_lines            : 32
+  files_per_second   : 235.067197220198
+  lines_per_second   : 7522.15031104635
+  report_file        : ../outputs/ChangeProperties.il.yaml
+'SKILL' :
+  nFiles: 1
+  blank: 2
+  comment: 13
+  code: 17
+SUM: 
+  blank: 2
+  comment: 13
+  code: 17
+  nFiles: 1
