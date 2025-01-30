@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.03
+  elapsed_seconds    : 0.00471806526184082
+  n_files            : 1
+  n_lines            : 101
+  files_per_second   : 211.951286068018
+  lines_per_second   : 21407.0798928698
+  report_file        : ../outputs/window.blp.yaml
+'Blueprint' :
+  nFiles: 1
+  blank: 19
+  comment: 2
+  code: 80
+SUM: 
+  blank: 19
+  comment: 2
+  code: 80
+  nFiles: 1

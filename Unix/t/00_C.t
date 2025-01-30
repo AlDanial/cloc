@@ -110,6 +110,11 @@ my @Tests = (
                     'args' => '../tests/inputs/master.blade.php',
                 },
                 {
+                    'name' => 'Blueprint',
+                    'ref'  => '../tests/outputs/window.blp.yaml',
+                    'args' => '../tests/inputs/window.blp',
+                },
+                {
                     'name' => 'Brainfuck',
                     'ref'  => '../tests/outputs/hello.bf.yaml',
                     'args' => '../tests/inputs/hello.bf',

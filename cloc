@@ -8660,6 +8660,7 @@ sub set_constants {                          # {{{1
             'build.xml'   => 'Ant'                   ,
             'b'           => 'Brainfuck'             ,
             'bf'          => 'Brainfuck'             ,
+            'blp'         => 'Blueprint'             ,
             'brs'         => 'BrightScript'          ,
             'bzl'         => 'Starlark'              ,
             'btp'         => 'BizTalk Pipeline'      ,
@@ -9785,6 +9786,10 @@ sub set_constants {                          # {{{1
     'Blade'              => [
                                 [ 'remove_between_general', '{{--', '--}}' ],
                                 [ 'remove_html_comments',                  ],
+                            ],
+    'Blueprint'          => [
+                                [ 'remove_matches'      , '^\s*//'  ],
+                                [ 'remove_inline'       , '//.*$'   ],
                             ],
     'Bourne Again Shell' => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -11592,6 +11597,7 @@ sub set_constants {                          # {{{1
     'bc'                           =>   1.50,
     'Blade'                        =>   2.00,
     'bliss'                        =>   0.75,
+    'Blueprint'                    =>   2.50,
     'bmsgen'                       =>   2.22,
     'bteq'                         =>   6.15,
     'Brainfuck'                    =>   0.10,

@@ -1,0 +1,101 @@
+// https://raw.githubusercontent.com/workbenchdev/Workbench/refs/heads/main/src/window.blp
+// (truncated)
+using Gtk 4.0;
+using Adw 1;
+using Vte 3.91;
+
+Adw.ApplicationWindow window {
+  default-width: 1920;
+  default-height: 1200;
+
+  Adw.ToolbarView {
+    top-bar-style: raised;
+
+      [title]
+      Box {
+        spacing: 6;
+        orientation: horizontal;
+        homogeneous: true;
+
+        ToggleButton button_code {
+          child: Box {
+            halign: center;
+
+            Image {
+              icon-name: "re.sonny.Workbench-code-symbolic";
+            }
+
+            Label {
+              label: _("_Code");
+              use-underline: true;
+            }
+          };
+
+          styles [
+            "flat",
+            "view-toggler"
+          ]
+        }
+
+        ToggleButton button_style {
+          child: Box {
+            halign: center;
+
+            Image {
+              icon-name: "re.sonny.Workbench-larger-brush-symbolic";
+            }
+
+            Label {
+              label: _("_Style");
+              use-underline: true;
+            }
+          };
+
+          styles [
+            "flat",
+            "view-toggler"
+          ]
+        }
+
+        ToggleButton button_ui {
+          child: Box {
+            halign: center;
+
+            Image {
+              icon-name: "re.sonny.Workbench-ui-symbolic";
+            }
+
+            Label {
+              label: _("_UI");
+              use-underline: true;
+            }
+          };
+
+          styles [
+            "flat",
+            "view-toggler"
+          ]
+        }
+
+        ToggleButton button_preview {
+          child: Box {
+            halign: center;
+
+            Image {
+              icon-name: "re.sonny.Workbench-preview-symbolic";
+            }
+
+            Label {
+              label: _("_Preview");
+              use-underline: true;
+            }
+          };
+
+          styles [
+            "flat",
+            "view-toggler"
+          ]
+      }
+    }
+  }
+}
