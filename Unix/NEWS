@@ -1,3 +1,34 @@
+                Release Notes for cloc version 2.04
+                   https://github.com/AlDanial/cloc
+                             Jan. 31, 2025
+
+New Languages and File Types:
+    o Blueprint
+    o MoonBit
+    o SurrealQL
+    o Pkl
+    o Civet
+    o Cadence
+    o Pek
+
+Updates:
+    o Follow file renames when pairing files for --git --diff.
+    o Arch Linux now has an AUR package for cloc.
+    o New switch --ignore-regex to exclude files whose content matches a regex.
+    o New switch --unique to identify unique files found.
+    o Descriptive message at the end of a run if timeouts were encountered.
+    o Slight performance improvement for --help by installing temporary
+      modules later.
+
+Bug fixes:
+    o Better handling of Vuejs.
+    o Better handling of Oracle PL/SQL.
+    o Better error message on failure to count .src.rpm files if external
+      tools are not installed.
+    o Identify non-Glade .ui files as 'XML (Qt/GTK)' instead of 'Qt'.
+    o Apply file filter rules with --no-recurse.
+
+============================================================================
                 Release Notes for cloc version 2.02
                    https://github.com/AlDanial/cloc
                              Aug. 2, 2024

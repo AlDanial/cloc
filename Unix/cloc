@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "2.03";  # odd number == beta; even number == stable
+my $VERSION = "2.04";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.10.0;
 # use modules                                  {{{1
@@ -1995,6 +1995,8 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              These filters are applied after comments are
                              removed.  Use --strip-comments=EXT to create
                              new files that show these filters applied.
+                             The primary use case is to ignore lines
+                             containing only braces, brackets, or puctuation.
    --lang-no-ext=<lang>      Count files without extensions using the <lang>
                              counter.  This option overrides internal logic
                              for files without extensions (where such files

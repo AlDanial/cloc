@@ -5,9 +5,9 @@
 * * *
 cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.
 
-Latest release:  v2.02 (Aug. 2, 2024)
+Latest release:  v2.04 (Jan. 31, 2025)
 
-[![Version](https://img.shields.io/badge/version-2.02-blue.svg)](https://github.com/AlDanial/cloc)
+[![Version](https://img.shields.io/badge/version-2.04-blue.svg)](https://github.com/AlDanial/cloc)
 [![Contributors](https://img.shields.io/github/contributors/AlDanial/cloc.svg)](https://github.com/AlDanial/cloc/graphs/contributors)
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.42029482.svg)](https://doi.org/10.5281/zenodo.42029482)
 [![Forks](https://img.shields.io/github/forks/AlDanial/cloc.svg)](https://github.com/AlDanial/cloc/network/members)
@@ -65,8 +65,8 @@ Step 3:  Invoke cloc to count your source files, directories, archives,
 or git commits.
 The executable name differs depending on whether you use the
 development source version (`cloc`), source for a
-released version (`cloc-2.02.pl`) or a Windows executable
-(`cloc-2.02.exe`).
+released version (`cloc-2.04.pl`) or a Windows executable
+(`cloc-2.04.exe`).
 
 On this page, `cloc` is the generic term
 used to refer to any of these.
@@ -415,14 +415,14 @@ C:> cpan -i Regexp::Common
 C:> cpan -i Algorithm::Diff
 C:> cpan -i PAR::Packer
 C:> cpan -i Win32::LongPath
-C:> pp -M Win32::LongPath -M Encode::Unicode -M Digest::MD5 -c -x -o cloc-2.02.exe cloc-2.02.pl
+C:> pp -M Win32::LongPath -M Encode::Unicode -M Digest::MD5 -c -x -o cloc-2.04.exe cloc-2.04.pl
 </pre>
 
 A variation on the instructions above is if you installed the portable
 version of Strawberry Perl, you will need to run `portableshell.bat` first
 to properly set up your environment.
 
-The Windows executable in the Releases section, <tt>cloc-2.02.exe</tt>,
+The Windows executable in the Releases section, <tt>cloc-2.04.exe</tt>,
 was built on a 64 bit Windows 10 computer using
 [Strawberry Perl](http://strawberryperl.com/)
 5.30.2 and
@@ -443,6 +443,9 @@ You are encouraged to run your own virus scanners against the
 executable and also check sites such
 https://www.virustotal.com/ .
 The entries for recent versions are:
+
+cloc-2.04.exe:
+https://www.virustotal.com/gui/file/89cda0038bf4e13c6c13ebc1e60bec4dfad362e69ac8a5b8e2d5ebe3020359e1
 
 cloc-2.02-winget.exe:  (includes [PR 850](https://github.com/AlDanial/cloc/pull/850) to allow
 [running from a symlink on Windows](https://github.com/AlDanial/cloc/issues/849))
@@ -3222,5 +3225,5 @@ Corporation.
 [](1}}})
 <a name="Copyright"></a> []({{{1)
 #   [Copyright &#9650;](#___top "click to go to top of document")
-Copyright (c) 2006-2024, [Al Danial](https://github.com/AlDanial)
+Copyright (c) 2006-2025, [Al Danial](https://github.com/AlDanial)
 [](1}}})

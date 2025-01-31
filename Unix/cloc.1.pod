@@ -309,6 +309,8 @@ Examples:
 These filters are applied after comments are
 removed.  Use --strip-comments=EXT to create
 new files that show these filters applied.
+The primary use case is to ignore lines
+containing only braces, brackets, or puctuation.
 
 
 =item B<--lang-no-ext=LANG>
