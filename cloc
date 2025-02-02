@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "2.04";  # odd number == beta; even number == stable
+my $VERSION = "2.05";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.10.0;
 # use modules                                  {{{1
@@ -276,6 +276,7 @@ my (
     $opt_only_count_files     ,
     $opt_fmt                  ,
     $opt_encoding             ,
+    $opt_txt              ,  # not associated with a command line option
    );
 
 my $getopt_success = GetOptions(             # {{{1
@@ -385,6 +386,7 @@ my $getopt_success = GetOptions(             # {{{1
    "fmt=i"                                   => \$opt_fmt                 ,
    "encoding=s"                              => \$opt_encoding            , # not production ready #880
   );
+$opt_txt = 0;
 # 1}}}
 $config_file = $opt_config_file if defined $opt_config_file;
 load_from_config_file($config_file,          # {{{2
@@ -649,6 +651,33 @@ if ($opt_by_percent and $opt_by_percent !~ m/^(c|cm|cb|cmb)$/i) {
     die "--by-percent must be either 'c', 'cm', 'cb', or 'cmb'\n";
 }
 $opt_by_percent = lc $opt_by_percent;
+
+$opt_txt = 1 if $opt_report_file;
+my $N_OUTPUT_FORMATS = 0;
+my %OUTFILE_EXT      = (
+    "txt"  => $opt_txt ,
+    "csv"  => $opt_csv ,
+    "xml"  => 0        ,
+    "yaml" => 0        ,
+    "json" => 0        ,
+    "md"   => 0        ,
+);
+$OUTFILE_EXT{"xml" } = 1 if defined($opt_xml );
+$OUTFILE_EXT{"yaml"} = 1 if defined($opt_yaml);
+$OUTFILE_EXT{"json"} = 1 if defined($opt_json);
+$OUTFILE_EXT{"md"  } = 1 if defined($opt_md  );
+foreach my $out_style (sort keys %OUTFILE_EXT) {
+    ++$N_OUTPUT_FORMATS if $OUTFILE_EXT{$out_style};
+}
+if ($N_OUTPUT_FORMATS >= 2 and $OUTFILE_EXT{"txt"}) {
+    --$N_OUTPUT_FORMATS;
+    $OUTFILE_EXT{"txt"} = 0;
+}
+if (!$N_OUTPUT_FORMATS) {
+    $N_OUTPUT_FORMATS = 1;
+    $OUTFILE_EXT{"txt"} = 1;
+    $opt_txt = 1;
+}
 
 if (defined $opt_vcs) {
     if ($opt_vcs eq "auto") {
@@ -1049,7 +1078,8 @@ if ($opt_sum_reports) {
         my $end_time = get_time();
         my @results  = generate_report($VERSION, $end_time - $start_time,
                                        $type,
-                                      \%{$Results{ $type }}, \%Scale_Factor);
+                                      \%{$Results{ $type }}, \%Scale_Factor,
+                                       "txt");
         if ($opt_report_file) {
             my $ext  = ".lang";
                $ext  = ".file" unless $type eq "by language";
@@ -1241,7 +1271,6 @@ my @Errors    = ();
 my @file_list = ();  # global variable updated in files()
 my %Ignored   = ();  # files that are not counted (language not recognized or
                      # problems reading the file)
-my @Lines_Out = ();
 my %upper_lower_map = ();  # global variable (needed only on Windows) to
                            # track case of original filename, populated in
                            # make_file_list() if $ON_WINDOWS
@@ -1538,14 +1567,20 @@ generate_diff_sql($end_time - $start_time, \%Delta_by_File) if $opt_sql;
 
 exit if $skip_generate_report;
 
-if ($opt_by_file) {
-    @Lines_Out = diff_report($VERSION, get_time() - $start_time,
-                            "by file",
-                            \%Delta_by_File, \%Scale_Factor, \%Renamed);
-} else {
-    @Lines_Out = diff_report($VERSION, get_time() - $start_time,
-                            "by language",
-                            \%Delta_by_Language, \%Scale_Factor, undef);
+foreach my $out_style (sort keys %OUTFILE_EXT) {
+    next unless $OUTFILE_EXT{$out_style};
+    my @Lines_Out = ();
+    if ($opt_by_file) {
+        @Lines_Out = diff_report($VERSION, $end_time - $start_time,
+                                "by file",
+                                \%Delta_by_File, \%Scale_Factor, \%Renamed);
+    } else {
+        @Lines_Out = diff_report($VERSION, $end_time - $start_time,
+                                "by language",
+                                \%Delta_by_Language, \%Scale_Factor, undef);
+    }
+    my $outfile = $opt_report_file;
+    produce_output(\@Lines_Out, $opt_report_file, $out_style);
 }
 
 # 1}}}
@@ -1709,49 +1744,88 @@ if (!%Results_by_Language) {
 
 generate_sql($end_time - $start_time,
             \%Results_by_File, \%Scale_Factor) if $opt_sql;
-
 exit if $skip_generate_report;
-if      ($opt_by_file_by_lang) {
-    push @Lines_Out, generate_report( $VERSION, $end_time - $start_time,
-                                      "by file",
-                                      \%Results_by_File,    \%Scale_Factor);
-    push @Lines_Out, generate_report( $VERSION, $end_time - $start_time,
-                                      "by language",
-                                      \%Results_by_Language, \%Scale_Factor);
-} elsif ($opt_by_file) {
-    push @Lines_Out, generate_report( $VERSION, $end_time - $start_time,
-                                      "by file",
-                                      \%Results_by_File,    \%Scale_Factor);
-} else {
-    push @Lines_Out, generate_report( $VERSION, $end_time - $start_time,
-                                      "by language",
-                                      \%Results_by_Language, \%Scale_Factor);
+
+foreach my $out_style (sort keys %OUTFILE_EXT) {
+    next unless $OUTFILE_EXT{$out_style};
+    my @Lines_Out = ();
+
+    if      ($opt_by_file_by_lang) {
+        push @Lines_Out, generate_report( $VERSION, $end_time - $start_time,
+                                          "by file",
+                                          \%Results_by_File,    \%Scale_Factor,
+                                          $out_style);
+        push @Lines_Out, generate_report( $VERSION, $end_time - $start_time,
+                                          "by language",
+                                          \%Results_by_Language, \%Scale_Factor,
+                                          $out_style);
+    } elsif ($opt_by_file) {
+        push @Lines_Out, generate_report( $VERSION, $end_time - $start_time,
+                                          "by file",
+                                          \%Results_by_File,    \%Scale_Factor,
+                                          $out_style);
+    } else {
+        push @Lines_Out, generate_report( $VERSION, $end_time - $start_time,
+                                          "by language",
+                                          \%Results_by_Language, \%Scale_Factor,
+                                          $out_style);
+    }
+    produce_output(\@Lines_Out, $opt_report_file, $out_style);
 }
 # 1}}}
 }
-if ($opt_fmt) {
-    my $json_string = "";
-    write_file(\$json_string, {}, @Lines_Out);
-    my ($file_len, $lang_len, $header, %contents) = load_json($json_string);
-    @Lines_Out = print_format_n(abs($opt_fmt), $file_len, $lang_len, $header, %contents);
-}
-if ($opt_report_file) {
-    write_file($opt_report_file, {}, @Lines_Out);
-} else {
-    if ($opt_fmt) {
-        print "@Lines_Out";
-    } else {
-        print "\n" unless $opt_quiet;
-        print join("\n", @Lines_Out), "\n";
-    }
-}
+
+#if ($opt_fmt) {
+#    my $json_string = "";
+#    write_file(\$json_string, {}, @Lines_Out);
+#    my ($file_len, $lang_len, $header, %contents) = load_json($json_string);
+#    @Lines_Out = print_format_n(abs($opt_fmt), $file_len, $lang_len, $header, %contents);
+#}
+#if ($opt_report_file) {
+#    write_file($opt_report_file, {}, @Lines_Out);
+#} else {
+#    if ($opt_fmt) {
+#        print "@Lines_Out";
+#    } else {
+#        print "\n" unless $opt_quiet;
+#        print join("\n", @Lines_Out), "\n";
+#    }
+#}
+
 if ($opt_count_diff) {
     ++$opt_count_diff;
     exit if $opt_count_diff > 3;
     goto Top_of_Processing_Loop;
 }
+
 suggest_remedies_for_errors(\@Errors) if @Errors;
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - end of main - - - - - - - - - - - - - - - #
+sub produce_output {                         # {{{1
+    my ($ra_Lines_Out, $outfile, $out_style) = @_;
+    if ($opt_fmt) {
+        my $json_string = "";
+        write_file(\$json_string, {}, @{$ra_Lines_Out});
+        my ($file_len, $lang_len, $header, %contents) = load_json($json_string);
+        @{$ra_Lines_Out} = print_format_n(abs($opt_fmt), $file_len, $lang_len, $header, %contents);
+    }
+    if ($outfile) {
+        my $adjusted_outfile = $outfile;
+        if ($N_OUTPUT_FORMATS > 1 and 
+            ($opt_report_file !~ /\.${out_style}$/)) {
+            # ensure the output filename has a suitable extension 
+            $adjusted_outfile .=  "." . $out_style;
+        }
+        write_file($adjusted_outfile, {}, @{$ra_Lines_Out});
+    } else {
+        if ($opt_fmt) {
+            print "@{$ra_Lines_Out}";
+        } else {
+            print "\n" unless $opt_quiet;
+            print join("\n", @{$ra_Lines_Out}), "\n";
+        }
+    }
+}
+# 1}}}
 sub suggest_remedies_for_errors {            # {{{1
     my ($raa_errors) = @_; #  [ [ numeric error code, filename], .. ]
     my $hit_timeout = 0;
@@ -4495,6 +4569,7 @@ sub generate_report {                        # {{{1
                       #       where TYPE = name of language, source file,
                       #                    or report file
         $rh_scale   , # in
+        $out_style  , # in  "txt" | "xml" | "yaml" | "json" | "csv" | "md"
        ) = @_;
 
     my %orig_case = ();
@@ -4511,7 +4586,7 @@ sub generate_report {                        # {{{1
     print "-> generate_report\n" if $opt_v > 2;
     my $DELIM = ",";
        $DELIM = $opt_csv_delimiter if defined $opt_csv_delimiter;
-       $DELIM = "|" if defined $opt_md;
+       $DELIM = "|" if $out_style eq "md";
 
     my @results       = ();
 
@@ -4567,10 +4642,10 @@ sub generate_report {                        # {{{1
                },
     );
     my $Style = "txt";
-       $Style = "xml" if $opt_xml ;
-       $Style = "xml" if $opt_yaml;  # not a typo; just set to anything but txt
-       $Style = "xml" if $opt_json;  # not a typo; just set to anything but txt
-       $Style = "xml" if $opt_csv ;  # not a typo; just set to anything but txt
+       $Style = "xml" if $out_style eq "xml" ;
+       $Style = "xml" if $out_style eq "yaml";  # not a typo; just set to anything but txt
+       $Style = "xml" if $out_style eq "json";  # not a typo; just set to anything but txt
+       $Style = "xml" if $out_style eq "csv" ;  # not a typo; just set to anything but txt
 
     my $hyphen_line = sprintf "%s", '-' x (79 + $column_1_offset);
        $hyphen_line = sprintf "%s", '-' x (68 + $column_1_offset)
@@ -4596,9 +4671,9 @@ sub generate_report {                        # {{{1
                         $elapsed_sec           ,
                         $sum_files/$elapsed_sec,
                         $sum_lines/$elapsed_sec) unless $opt_sum_reports or $opt_hide_rate;
-    if ($opt_xml or $opt_yaml or $opt_json) {
+    if ($out_style eq "xml" or $out_style eq "yaml" or $out_style eq "json") {
         if (!$ALREADY_SHOWED_HEADER) {
-            if ($opt_by_file_by_lang and $opt_json) {
+            if ($opt_by_file_by_lang and $out_style eq "json") {
                 push @results, '{ "by_file" : ';
             }
             push @results, xml_yaml_or_json_header($URL, $version, $elapsed_sec,
@@ -4607,7 +4682,7 @@ sub generate_report {                        # {{{1
             # --sum-reports yields two xml or yaml files, one by
             # language and one by report file, each of which needs a header
         }
-        if ($opt_xml) {
+        if ($out_style eq "xml") {
             if ($BY_FILE or ($report_type eq "by report file")) {
                 push @results, "<files>";
             } else {
@@ -4615,7 +4690,7 @@ sub generate_report {                        # {{{1
             }
         }
     } else {
-        $header_line =~ s/,// if $opt_csv;
+        $header_line =~ s/,// if $out_style eq "csv";
         push @results, output_header($header_line, $hyphen_line, $BY_FILE);
     }
 
@@ -4642,7 +4717,7 @@ sub generate_report {                        # {{{1
             "scale"         ,
             "3rd gen. equiv"
               if $opt_3;
-        if ($opt_md) {
+        if ($out_style eq "md") {
             my @col_header  = ();
             if ($data_line =~ m{\s%}) {
                 $data_line =~ s{\s%}{_%}g;
@@ -4663,7 +4738,7 @@ sub generate_report {                        # {{{1
         }
     }
 
-    if ($opt_csv)  {
+    if ($out_style eq "csv")  {
         my $header2;
         if ($BY_FILE) {
             $header2 = "language${DELIM}filename";
@@ -4719,7 +4794,7 @@ sub generate_report {                        # {{{1
 
         if ($BY_FILE) {
             my $clean_filename = rm_leading_tempdir($lang_or_file, \%TEMP_DIR);
-               $clean_filename = xml_metachars($clean_filename) if $opt_xml;
+               $clean_filename = xml_metachars($clean_filename) if $out_style eq "xml";
             $data_line  = sprintf $Format{'1'}{$Style}, $clean_filename;
         } else {
             $data_line  = sprintf $Format{'2'}{$Style}, $lang_or_file;
@@ -4746,7 +4821,7 @@ sub generate_report {                        # {{{1
             $scaled if $opt_3;
         $sum_scaled  += $scaled if $opt_3;
 
-        if ($opt_xml) {
+        if ($out_style eq "xml") {
             if (defined $rhh_count->{$lang_or_file}{'lang'}) {
                 my $lang = $rhh_count->{$lang_or_file}{'lang'};
                 if (!defined $languages->{$lang}) {
@@ -4759,9 +4834,9 @@ sub generate_report {                        # {{{1
             } else {
                 push @results, "  <language " . $data_line . "/>";
             }
-        } elsif ($opt_yaml or $opt_json) {
+        } elsif ($out_style eq "yaml" or $out_style eq "json") {
             my ($Q, $open_B, $close_B, $start, $C) = yaml_to_json_separators();
-            if ($opt_yaml) {
+            if ($out_style eq "yaml") {
                 # YAML: force quoted language or filename in case these
                 #       have embedded funny characters, issue #312
                 push @results,"'" . rm_leading_tempdir($lang_or_file, \%TEMP_DIR). "' :$open_B";
@@ -4791,16 +4866,16 @@ sub generate_report {                        # {{{1
                 push @results, "  ${Q}scaled${Q}: " . $scaled . $C;
                 push @results, "  ${Q}factor${Q}: " . $factor . $C;
             }
-            if ($opt_json) { # replace the trailing comma with }, on the last line
+            if ($out_style eq "json") { # replace the trailing comma with }, on the last line
                 $results[-1] =~ s/,\s*$/},/;
             }
-        } elsif ($opt_csv or $opt_md) {
+        } elsif ($out_style eq "csv" or $out_style eq "md") {
             my $extra_3 = "";
                $extra_3 = "${DELIM}$factor${DELIM}$scaled" if $opt_3;
             my $first_column = undef;
             my $clean_name   = $lang_or_file;
             my $str;
-            if ($opt_csv) {
+            if ($out_style eq "csv") {
                 if ($BY_FILE) {
                     $first_column = $rhh_count->{$lang_or_file}{'lang'};
                     $clean_name   = rm_leading_tempdir($lang_or_file, \%TEMP_DIR);
@@ -4845,7 +4920,7 @@ sub generate_report {                        # {{{1
        $avg_scale = sprintf("%.2f", $sum_scaled / $sum_code)
             if $sum_code and $opt_3;
 
-    if ($opt_xml) {
+    if ($out_style eq "xml") {
         $data_line = "";
         if (!$BY_FILE) {
             $data_line .= sprintf "sum_files=\"%d\" ", $sum_files;
@@ -4882,7 +4957,7 @@ sub generate_report {                        # {{{1
         } else {
             $ALREADY_SHOWED_XML_SECTION = 1;
         }
-    } elsif ($opt_yaml or $opt_json) {
+    } elsif ($out_style eq "yaml" or $out_style eq "json") {
         my ($Q, $open_B, $close_B, $start, $C) = yaml_to_json_separators();
         push @results, "${Q}SUM${Q}: ${open_B}";
         if ($opt_by_percent) {
@@ -4901,7 +4976,7 @@ sub generate_report {                        # {{{1
             push @results, "  ${Q}scaled${Q}: " . $sum_scaled . $C;
             push @results, "  ${Q}factor${Q}: " . $avg_scale  . $C;
         }
-        if ($opt_json) {
+        if ($out_style eq "json") {
             $results[-1] =~ s/,\s*$/} }/;
             if ($opt_by_file_by_lang) {
                 if ($ALREADY_SHOWED_HEADER) {
@@ -4911,7 +4986,7 @@ sub generate_report {                        # {{{1
                 }
             }
         }
-    } elsif ($opt_csv) {
+    } elsif ($out_style eq "csv") {
         my @entries = ();
         if ($opt_by_file) {
             push @entries, "SUM";
@@ -4960,7 +5035,7 @@ sub generate_report {                        # {{{1
         $data_line .= sprintf $Format{'6'}{$Style},
             $avg_scale   ,
             $sum_scaled if $opt_3;
-        if ($opt_md) {
+        if ($out_style eq "md") {
             my @words = split(' ', $data_line);
             my $n_cols = scalar(@words);
 #           my $n_cols = scalar(split(' ', $data_line));  # deprecated

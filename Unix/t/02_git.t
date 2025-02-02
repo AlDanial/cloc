@@ -4,6 +4,9 @@ use strict;
 use Test::More;
 use File::Copy "cp";
 use Cwd;
+use Getopt::Std;
+my %opt;
+getopts('u', \%opt);  # -u to run Unix/cloc instead of ../cloc
 my @Tests = (
                 {
                     'name' => 'direct count git hash 1',
@@ -103,6 +106,7 @@ my @Tests = (
             );
 
 my $Verbose = 0;
+my $cloc;
 
 if (!-d 'cloc_submodule_test') {
     print "-" x 79, "\n";
@@ -114,8 +118,9 @@ if (!-d 'cloc_submodule_test') {
 } else {
     my $results  = 'results.yaml';
     my $work_dir = getcwd;
-    my $cloc     = "$work_dir/../cloc";   # all-purpose version
-#   my $cloc     = "$work_dir/cloc";      # Unix-tuned version
+       $cloc     = "$work_dir/../cloc";                 # all-purpose version
+       $cloc     = "$work_dir/cloc" if defined $opt{u}; # Unix-tuned version
+
     my $Run = "$cloc --quiet --yaml --out $results ";
     foreach my $t (@Tests) {
         chdir($t->{'cd'}) if defined $t->{'cd'};
@@ -137,6 +142,7 @@ if (!-d 'cloc_submodule_test') {
     }
 }
 done_testing();
+print "Finished testing $cloc\n";
 
 sub load_yaml { # {{{1
     my ($file, ) = @_;

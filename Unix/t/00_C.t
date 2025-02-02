@@ -3,6 +3,9 @@ use warnings;
 use strict;
 use Test::More;
 use Cwd;
+use Getopt::Std;
+my %opt;
+getopts('u', \%opt);  # -u to run Unix/cloc instead of ../cloc
 my @Tests = (
                 {
                     'name' => 'Agda',
@@ -1469,8 +1472,8 @@ my $Verbose = 0;
 
 my $results  = 'results.yaml';
 my $work_dir = getcwd;
-my $cloc     = "$work_dir/../cloc";   # all-purpose version
-#my $cloc     = "$work_dir/cloc";      # Unix-tuned version
+my $cloc     = "$work_dir/../cloc";                 # all-purpose version
+   $cloc     = "$work_dir/cloc" if defined $opt{u}; # Unix-tuned version
 my $Run = "$cloc --quiet --yaml --out $results ";
 foreach my $t (@Tests) {
     print  $Run . $t->{'args'} if $Verbose;
@@ -1481,6 +1484,7 @@ foreach my $t (@Tests) {
     is_deeply(\%this, \%ref, $t->{'name'} . " results match");
 }
 done_testing();
+print "Finished testing $cloc\n";
 
 sub load_yaml { # {{{1
     my ($file, ) = @_;

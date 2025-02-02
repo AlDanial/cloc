@@ -4,7 +4,9 @@ use strict;
 use Test::More;
 use File::Copy "cp";
 use Cwd;
-#use YAML qw(LoadFile);
+use Getopt::Std;
+my %opt;
+getopts('u', \%opt);  # -u to run Unix/cloc instead of ../cloc
 my @Tests = (
 
                {
@@ -595,7 +597,7 @@ my @Tests = (
                {
                    'name' => '--csv-delimiter="#", #597',
                    'cd'   => '../tests/inputs/issues/597',
-                   'args' => '--csv-delimiter="#" .',
+                   'args' => '--csv-delimiter="#" --exclude-lang=CSV hello.C',
                    'ref'  => '../tests/outputs/issues/597/results.yaml',
                },
 
@@ -672,7 +674,7 @@ my @Tests = (
                {
                    'name' => '--csv-delimiter="|", #670',
                    'cd'   => '../tests/inputs/issues/670',
-                   'args' => '--csv-delimiter="|" .',
+                   'args' => '--csv-delimiter="|" --exclude-lang=CSV hello.C hi.py',
                    'ref'  => '../tests/outputs/issues/670/results.yaml',
                },
 
@@ -905,8 +907,8 @@ if (!-d $missing_dir) {
 my $Verbose = 0;
 
 my $results = 'results.yaml';
-my $cloc     = "$work_dir/../cloc";   # all-purpose version
-#my $cloc     = "$work_dir/cloc";      # Unix-tuned version
+my $cloc    = "$work_dir/../cloc";                 # all-purpose version
+   $cloc    = "$work_dir/cloc" if defined $opt{u}; # Unix-tuned version
 my $Run = "$cloc --quiet --yaml --out $results ";
 foreach my $t (@Tests) {
     chdir($t->{'cd'}) if defined $t->{'cd'};
@@ -930,6 +932,7 @@ foreach my $t (@Tests) {
     is_deeply(\%ref, \%this, $t->{'name'} . " results match");
 }
 done_testing();
+print "Finished testing $cloc\n";
 
 sub load_yaml { # {{{1
     my ($file, ) = @_;

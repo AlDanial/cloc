@@ -9,7 +9,6 @@ header :
   files_per_second   : 127.45545156193
   lines_per_second   : 1019.64361249544
   report_file        : ../../../outputs/issues/597/results.yaml
-files#language#blank#comment#code#"github.com/AlDanial/cloc v 1.90  T=0.01 s (127.5 files/s, 1019.6 lines/s)"
 'C++' :
   nFiles: 1
   blank: 0
