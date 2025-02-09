@@ -98,7 +98,13 @@ test-code:
 	t/02_git.t
 	t/01_opts.t
 
-# Rule: test - Run tests
+# Rule: test-unix - Check that the Unix version works
+test-unix:
+	t/00_C.t -u
+	t/02_git.t -u
+	t/01_opts.t -u
+
+# Rule: test - Run tests (exclude test-unix)
 test: test-perl test-pod test-code
 
 install-man: test-pod man

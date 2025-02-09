@@ -9160,6 +9160,7 @@ sub set_constants {                          # {{{1
             'n'           => 'Nemerle'               ,
             'nlogo'       => 'NetLogo'               ,
             'nls'         => 'NetLogo'               ,
+            'nf'          => 'Nextflow'              ,
             'ncl'         => 'Nickel'                ,
             'nims'        => 'Nim'                   ,
             'nimrod'      => 'Nim'                   ,
@@ -9674,6 +9675,7 @@ sub set_constants {                          # {{{1
             'perl5'    => 'Perl'                  ,
             'perl'     => 'Perl'                  ,
             'miniperl' => 'Perl'                  ,
+            'nextflow' => 'Nextflow'              ,
             'php'      => 'PHP'                   ,
             'php5'     => 'PHP'                   ,
             'python'   => 'Python'                ,
@@ -10617,6 +10619,17 @@ sub set_constants {                          # {{{1
     'Nemerle'            => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
+    'Nextflow'             => [
+                                # copy of Groovy
+                                [ 'remove_inline'       , '//.*$'  ],
+                                [ 'replace_between_regex', '(["\'])(.*?/)(\*.*?)\1',
+                                  '(.*?)' , '"$1$2$1 + $1$3$1$4"', 0],
+                                [ 'rm_comments_in_strings', '"""', '/*', '*/', 1],
+                                [ 'rm_comments_in_strings', '"""', '//', '', 1],
+                                [ 'rm_comments_in_strings', "'''", '/*', '*/', 1],
+                                [ 'rm_comments_in_strings', "'''", '//', '', 1],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Nunjucks'           => [
@@ -11862,6 +11875,7 @@ sub set_constants {                          # {{{1
     'Nemerle'                      =>   2.50,
     '.NET IL'                      =>   3.00,
     'NetLogo'                      =>   4.00,
+    'Nextflow'                     =>   4.10,
     'Nickel'                       =>   2.00,
     'Nim'                          =>   2.00,
     'Nix'                          =>   2.70,

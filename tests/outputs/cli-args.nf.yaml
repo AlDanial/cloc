@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.05
+  elapsed_seconds    : 0.00423502922058105
+  n_files            : 1
+  n_lines            : 24
+  files_per_second   : 236.125879637449
+  lines_per_second   : 5667.02111129877
+  report_file        : ../outputs/cli-args.nf.yaml
+'Nextflow' :
+  nFiles: 1
+  blank: 1
+  comment: 16
+  code: 7
+SUM: 
+  blank: 1
+  comment: 16
+  code: 7
+  nFiles: 1

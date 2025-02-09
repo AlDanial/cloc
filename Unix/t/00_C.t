@@ -811,6 +811,11 @@ my @Tests = (
                     'args' => '../tests/inputs/vinos.nlogo',
                 },
                 {
+                    'name' => 'Nextflow',
+                    'ref'  => '../tests/outputs/cli-args.nf.yaml',
+                    'args' => '../tests/inputs/cli-args.nf',
+                },
+                {
                     'name' => 'Nickel',
                     'ref'  => '../tests/outputs/fibonacci.ncl.yaml',
                     'args' => '../tests/inputs/fibonacci.ncl',
