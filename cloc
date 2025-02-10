@@ -8852,7 +8852,7 @@ sub set_constants {                          # {{{1
             'eex'         => 'EEx'                   ,
             'el'          => 'Lisp'                  ,
             'elm'         => 'Elm'                   ,
-            'exs'         => 'Elixir'                ,
+            'exs'         => 'Elixir Script'         ,
             'ex'          => 'Elixir'                ,
             'ecr'         => 'Embedded Crystal'      ,
             'ejs'         => 'EJS'                   ,
