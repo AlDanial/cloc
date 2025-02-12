@@ -338,6 +338,11 @@ my @Tests = (
                     'args' => '../tests/inputs/elixir.ex',
                 },
                 {
+                    'name' => 'Elixir Script',
+                    'ref'  => '../tests/outputs/dev.exs.yaml',
+                    'args' => '../tests/inputs/dev.exs',
+                },
+                {
                     'name' => 'Embedded Crystal',
                     'ref'  => '../tests/outputs/capture.ecr.yaml',
                     'args' => '../tests/inputs/capture.ecr',
