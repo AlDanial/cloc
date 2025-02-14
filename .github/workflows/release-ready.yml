@@ -1,0 +1,86 @@
+name: Create release
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  create_release:
+    if: ${{ github.event.pull_request.merged == true && startsWith(github.head_ref, 'release-v') }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: "master"
+
+      - name: Extract version from branch name
+        id: get_version
+        run: |
+          BRANCH="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
+          if [[ "$BRANCH" =~ release-v([0-9]+\.[0-9]+) ]]; then
+            VERSION="${BASH_REMATCH[1]}"
+            echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+            echo "DISPLAY_VERSION=v$VERSION" >> $GITHUB_OUTPUT
+          else
+            echo "Branch name does not match expected format (release-vX.XX)!" && exit 1
+          fi
+
+      - name: Package repository as tar.gz
+        run: |
+          VER="${{ steps.get_version.outputs.VERSION }}"
+          git archive --format=tar.gz -o cloc-$VER.tar.gz HEAD
+
+      - name: Get artifact url
+        id: get_artifact_url
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ARTIFACT_COMMENT=$(gh pr view ${{ github.event.pull_request.number }} --json comments -q '
+            .comments 
+            | sort_by(.createdAt) 
+            | reverse 
+            | map(select(.body | contains("**Built executable artifact:**"))) 
+            | .[0].body
+          ')
+          if [ -z "$ARTIFACT_COMMENT" ]; then
+            echo "No matching comment found."
+            exit 1
+          fi
+          MATCHING_URLS=$(echo "$ARTIFACT_COMMENT" | grep -oP 'https:\/\/[^\s\)]+')
+          if [ -z "$MATCHING_URLS" ]; then
+            echo "No URL found in the comment."
+            exit 1
+          fi
+          ARTIFACT_URL=$(echo "$MATCHING_URLS" | head -n 1)
+          RUN_ID=$(echo "$ARTIFACT_URL" | grep -oP '/actions/runs/\K[0-9]+')
+          echo "RUN_ID=$RUN_ID" >> $GITHUB_OUTPUT
+          echo "Artifact URL: $ARTIFACT_URL"
+      
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: cloc-${{ steps.get_version.outputs.VERSION }}-executable
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ steps.get_artifact_url.outputs.RUN_ID }}
+
+      - name: Prepare renamed release assets
+        run: |
+          VER="${{ steps.get_version.outputs.VERSION }}"
+          cp cloc cloc-$VER.pl
+          cp Unix/NEWS release_notes-$VER.txt
+
+      - name: Create GitHub release with assets
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "${{ steps.get_version.outputs.DISPLAY_VERSION }}"
+          name: "${{ steps.get_version.outputs.DISPLAY_VERSION }}"
+          body: "${{ github.event.pull_request.body }}"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          files: |
+            cloc-${{ steps.get_version.outputs.VERSION }}.tar.gz
+            README.md
+            cloc-${{ steps.get_version.outputs.VERSION }}.pl
+            cloc-${{ steps.get_version.outputs.VERSION }}.exe
+            release_notes-${{ steps.get_version.outputs.VERSION }}.txt
