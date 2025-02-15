@@ -1,0 +1,171 @@
+name: Build Windows executable
+
+on:
+  pull_request:
+    types: [labeled]
+
+jobs:
+  staging_build:
+    if: ${{ github.event.label.name == 'release-ready' }}
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      # Branch name must be in the format "release-vX.XX"
+      - name: Extract version from branch name
+        id: get_version
+        shell: pwsh
+        run: |
+          $branch = "${{ github.head_ref }}"
+          if (-not $branch) { $branch = "${{ github.ref }}" }
+          if ($branch -match 'release-v(?<ver>[0-9]+\.[0-9]+)') {
+            $ver = $Matches["ver"]
+            echo "VERSION_NUM=$ver" >> $env:GITHUB_OUTPUT
+            echo "DISPLAY_VERSION=v$ver" >> $env:GITHUB_OUTPUT
+            Write-Host "Extracted version: $ver"
+          }
+          else {
+            Write-Error "Branch name does not match expected format (release-vX.XX)."
+          }
+
+      - name: Update version in cloc files
+        shell: pwsh
+        run: |
+          $ver = "${{ steps.get_version.outputs.VERSION_NUM }}"
+          Write-Host "Updating version in cloc and Unix/cloc to '$ver'"
+          $replaceVer = 'my $VERSION = "' + $ver + '";'
+          (Get-Content cloc) -replace 'my \$VERSION = ".*";', $replaceVer | Set-Content cloc
+          (Get-Content Unix/cloc) -replace 'my \$VERSION = ".*";', $replaceVer | Set-Content Unix/cloc
+
+      - name: Update README.md with version and date
+        shell: pwsh
+        run: |
+          $ver = "${{ steps.get_version.outputs.VERSION_NUM }}"
+          $disp = "${{ steps.get_version.outputs.DISPLAY_VERSION }}"
+          $currentDate = (Get-Date).ToString("MMM. d, yyyy")
+          Write-Host "Updating README.md with version $disp and date $currentDate"
+          (Get-Content README.md) `
+            -replace 'Latest release:\s+v\d+\.\d+\s+\(.*\)', "Latest release:  $disp ($currentDate)" `
+            -replace 'badge/version-\d+\.\d+', "badge/version-$ver" `
+            -replace 'cloc-\d+\.\d+\.pl', "cloc-$ver.pl" `
+            -replace 'cloc-\d+\.\d+\.exe(?!:)', "cloc-$ver.exe" `
+            -replace 'pp -M Win32::LongPath -M Encode::Unicode -M Digest::MD5 -c -x -o cloc-\d+\.\d+\.exe', "pp -M Win32::LongPath -M Encode::Unicode -M Digest::MD5 -c -x -o cloc-$ver.exe" `
+            -replace '<tt>cloc-\d+\.\d+\.exe</tt>', "<tt>cloc-$ver.exe</tt>" | Set-Content README.md
+      
+      - name: Install or upgrade Strawberry Perl
+        shell: pwsh
+        run: |
+          if (Get-Command perl -ErrorAction SilentlyContinue) {
+            # see https://github.com/StrawberryPerl/Perl-Dist-Strawberry/issues/19#issuecomment-2401043349
+            choco uninstall strawberryperl -y
+          }
+          choco install strawberryperl --no-progress -y
+          perl -V
+          cpan -v
+
+      - name: Install CPAN dependencies
+        shell: pwsh
+        run: |
+          cpan -i App::cpanminus
+          cpanm Digest::MD5
+          cpanm Regexp::Common
+          cpanm Algorithm::Diff
+          cpanm PAR::Packer
+          cpanm Win32::LongPath || cpanm -n Win32::LongPath
+      
+      - name: Build executable
+        shell: pwsh
+        run: |
+          $ver = "${{ steps.get_version.outputs.VERSION_NUM }}"
+          pp -M Win32::LongPath -M Encode::Unicode -M Digest::MD5 -c -x -o "cloc-$ver.exe" cloc
+
+      - name: Upload executable to VirusTotal and get analysis URL
+        id: vt_upload
+        shell: pwsh
+        run: |
+          $ver = "${{ steps.get_version.outputs.VERSION_NUM }}"
+          $apiKey = "${{ secrets.VIRUSTOTAL_API_KEY }}"
+          $exeFile = "cloc-$ver.exe"
+          $absoluteFilePath = (Get-Location).Path + "\" + $exeFile
+          Write-Host "Uploading $absoluteFilePath to VirusTotal..."
+          $headers=@{}
+          $headers.Add("accept", "application/json")
+          $headers.Add("content-type", "multipart/form-data")
+          $headers.Add("x-apikey", $apiKey)
+          $response = Invoke-RestMethod -Uri "https://www.virustotal.com/api/v3/files" `
+                                     -Method POST `
+                                     -Headers $headers `
+                                     -Form @{ file = Get-Item -Path $absoluteFilePath }
+          $vtAnalysisId = $response.data.id
+          $response2 = Invoke-WebRequest -Uri "https://www.virustotal.com/api/v3/analyses/$vtAnalysisId" -Method GET -Headers $headers
+          $vtId = ($response2.Content | ConvertFrom-Json).data.links.item.Split("/")[-1]
+          $vtUrl = "https://www.virustotal.com/gui/file/$vtId"
+          echo "VT_URL=$vtUrl" >> $env:GITHUB_OUTPUT
+          Write-Host "VirusTotal analysis available at $vtUrl"
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        id: upload-artifact
+        with:
+          name: cloc-${{ steps.get_version.outputs.VERSION_NUM }}-executable
+          path: cloc-${{ steps.get_version.outputs.VERSION_NUM }}.exe
+
+      - name: Post comment with artifact and VirusTotal URL
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            **Built executable artifact:**
+            [Download the executable artifact from this workflow run](${{ steps.upload-artifact.outputs.artifact-url }})
+
+            **VirusTotal Analysis:** ${{ steps.vt_upload.outputs.VT_URL }}
+
+      - name: Clean up local exe
+        shell: pwsh
+        run: |
+          $ver = "${{ steps.get_version.outputs.VERSION_NUM }}"
+          Remove-Item "cloc-$ver.exe"
+
+      - name: Update README recent versions entry
+        shell: pwsh
+        run: |
+          $ver = "${{ steps.get_version.outputs.VERSION_NUM }}"
+          $vtUrl = "${{ steps.vt_upload.outputs.VT_URL }}"
+          $readme = Get-Content README.md -Raw
+          $pattern = 'The entries for recent versions are:\s*\r?\n\s*\r?\n'
+          $replacement = "The entries for recent versions are:`n`ncloc-$ver.exe:`n$vtUrl`n`n"
+          $newReadme = [regex]::Replace($readme, $pattern, $replacement)
+          Set-Content -Path README.md -Value $newReadme
+          (Get-Content README.md -Raw) -replace '\r?\n\s*\r?\n$', "" | Set-Content README.md
+
+      - name: Update Unix/NEWS with release notes
+        shell: pwsh
+        run: |
+          $ver = "${{ steps.get_version.outputs.VERSION_NUM }}"
+          $currentDate = (Get-Date).ToString("MMM. d, yyyy")
+          $event = Get-Content $env:GITHUB_EVENT_PATH -Raw | ConvertFrom-Json
+          $prBody = $event.pull_request.body -replace '"', '`"'
+          $processedNotes = $prBody -replace '- ', '    o ' -replace '[\*\`_]', ''
+          $newsContent = Get-Content Unix/NEWS -Raw -Encoding UTF8
+          $header = @(
+            "                Release Notes for cloc version $ver",
+            "                   https://github.com/AlDanial/cloc",
+            "                             $currentDate"
+          )
+          $newNews = $header + "" + $processedNotes + "" + ("=" * 76) + $newsContent
+          Set-Content -Path Unix/NEWS -Value $newNews -Encoding UTF8
+          (Get-Content Unix/NEWS -Raw) -replace '\r?\n\s*\r?\n$', "" | Set-Content Unix/NEWS -Encoding UTF8
+
+      - name: Commit changes
+        shell: pwsh
+        run: |
+          $ver = "${{ steps.get_version.outputs.VERSION_NUM }}"
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add cloc README.md Unix/NEWS Unix/cloc
+          git commit -m "chore: prepare release version $ver"
+          git push
