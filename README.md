@@ -304,11 +304,45 @@ on GitHub (link follows below) before submitting a problem report.
 [](1}}})
 <a name="Stable"></a> []({{{1)
 ## Stable release
+
+Download the latest released cloc source file, for example `cloc-2.04.pl`, or
+the Windows executable `cloc-2.04.exe` from
 https://github.com/AlDanial/cloc/releases/latest
 
 <a name="Dev"></a>
 ## Development version
-https://github.com/AlDanial/cloc/raw/master/cloc
+
+Download the cloc source code at https://github.com/AlDanial/cloc/raw/master/cloc and
+save it as the file `cloc` (or `cloc.pl`, or whatever executable name you wish).
+The next step depends on the operating system you're using.
+
+### On Unix-like systems, including macOS
+
+In a terminal, go to the download directory
+and make the cloc file executable, then give it a test run.
+For example
+
+```shell
+» cd ~/Downloads
+» chmod +x cloc
+» ./cloc --version
+```
+
+For future use, move the file to a more convenient directory in your `PATH`
+such as `/usr/local/bin` or `~/bin`.
+
+### On Windows
+
+You'll need a Perl interpreter such as [Strawberry Perl](http://strawberryperl.com/)
+installed to run the source version of cloc.
+After downloading the cloc source file, open a command prompt or PowerShell window,
+navigate to the download directory (`C:\TEMP` in the example below), then test cloc with:
+
+```dos
+cd C:\TEMP>
+C:TEMP\> perl cloc --version
+```
+
 [](1}}})
 <a name="License"></a> []({{{1)
 # [License &#9650;](#___top "click to go to top of document")
