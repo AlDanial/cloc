@@ -1209,9 +1209,14 @@ my @Tests = (
                     'args' => '../tests/inputs/ranges.surql',
                 },
                 {
-                    'name' => 'Svelte',
+                    'name' => 'Svelte (HTML comments)',
                     'ref'  => '../tests/outputs/reactive.svelte.yaml',
                     'args' => '../tests/inputs/reactive.svelte',
+                },
+                {
+                    'name' => 'Svelte (C++ comments)',
+                    'ref'  => '../tests/outputs/test_w_cpp_comments.svelte.yaml',
+                    'args' => '../tests/inputs/test_w_cpp_comments.svelte',
                 },
                 {
                     'name' => 'SVG',
