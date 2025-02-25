@@ -1219,6 +1219,11 @@ my @Tests = (
                     'args' => '../tests/inputs/test_w_cpp_comments.svelte',
                 },
                 {
+                    'name' => 'Svelte (comments in strings)',
+                    'ref'  => '../tests/outputs/comments_in_str.svelte.yaml',
+                    'args' => '--strip-str-comments ../tests/inputs/comments_in_str.svelte',
+                },
+                {
                     'name' => 'SVG',
                     'ref'  => '../tests/outputs/SVG_logo.svg.yaml',
                     'args' => '../tests/inputs/SVG_logo.svg',

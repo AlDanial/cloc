@@ -11126,6 +11126,8 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Svelte'             => [
+                                [ 'rm_comments_in_strings', "`", '/*', '*/' ],
+                                [ 'rm_comments_in_strings', "'", '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'remove_html_comments',          ],

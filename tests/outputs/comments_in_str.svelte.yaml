@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.05
+  elapsed_seconds    : 0.00450420379638672
+  n_files            : 1
+  n_lines            : 8
+  files_per_second   : 222.014821088291
+  lines_per_second   : 1776.11856870633
+  report_file        : ../outputs/comments_in_str.svelte.yaml
+'Svelte' :
+  nFiles: 1
+  blank: 1
+  comment: 0
+  code: 7
+SUM: 
+  blank: 1
+  comment: 0
+  code: 7
+  nFiles: 1
