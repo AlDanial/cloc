@@ -3,12 +3,17 @@
 header : 
   cloc_url           : github.com/AlDanial/cloc
   cloc_version       : 2.05
-  elapsed_seconds    : 0.00426006317138672
-  n_files            : 2
-  n_lines            : 24
-  files_per_second   : 469.476606223416
-  lines_per_second   : 5633.71927468099
+  elapsed_seconds    : 0.00424814224243164
+  n_files            : 3
+  n_lines            : 36
+  files_per_second   : 706.191042765743
+  lines_per_second   : 8474.29251318891
   report_file        : ../../../outputs/issues/898/results.yaml
+'./irregular"file2.md' :
+  blank: 3
+  comment: 0
+  code: 9
+  language: Markdown
 './irregular0x27file.md' :
   blank: 3
   comment: 0
@@ -20,7 +25,7 @@ header :
   code: 9
   language: Markdown
 SUM: 
-  blank: 6
+  blank: 9
   comment: 0
-  code: 18
-  nFiles: 2
+  code: 27
+  nFiles: 3

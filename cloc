@@ -4797,9 +4797,11 @@ sub generate_report {                        # {{{1
         if ($BY_FILE) {
             $clean_lang_or_file = rm_leading_tempdir($lang_or_file, \%TEMP_DIR);
             $clean_lang_or_file = xml_metachars($clean_lang_or_file) if $out_style eq "xml";
-            if ($out_style eq "json" or $out_style eq "yaml")  {
-                # YAML, JSON do not allow protected characters in keys
+            if ($out_style eq "yaml")  {
+                # YAML does not allow protected single quotes in keys
                 $clean_lang_or_file =~ s/'/0x27/g;
+            } elsif ($out_style eq "json")  {
+                # JSON does not allow protected double quotes in keys
                 $clean_lang_or_file =~ s/"/0x2b/g;
             } elsif ($out_style ne "txt")  {
                 # text output is allowed to keep its quotes as they are
