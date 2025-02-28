@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.05
+  elapsed_seconds    : 0.00456094741821289
+  n_files            : 1
+  n_lines            : 60
+  files_per_second   : 219.252692106639
+  lines_per_second   : 13155.1615263983
+  report_file        : ../outputs/functional.cj.yaml
+'Cangjie' :
+  nFiles: 1
+  blank: 6
+  comment: 6
+  code: 48
+SUM: 
+  blank: 6
+  comment: 6
+  code: 48
+  nFiles: 1

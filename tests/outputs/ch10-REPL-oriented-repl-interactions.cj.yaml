@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.05
+  elapsed_seconds    : 0.00492715835571289
+  n_files            : 1
+  n_lines            : 214
+  files_per_second   : 202.956740540017
+  lines_per_second   : 43432.7424755637
+  report_file        : ../outputs/ch10-REPL-oriented-repl-interactions.cj.yaml
+'Clojure' :
+  nFiles: 1
+  blank: 44
+  comment: 82
+  code: 88
+SUM: 
+  blank: 44
+  comment: 82
+  code: 88
+  nFiles: 1

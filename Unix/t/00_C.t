@@ -168,6 +168,16 @@ my @Tests = (
                     'args' => '../tests/inputs/build.cake',
                 },
                 {
+                    'name' => 'Cangjie',
+                    'ref'  => '../tests/outputs/functional.cj.yaml',
+                    'args' => '../tests/inputs/functional.cj',
+                },
+                {
+                    'name' => 'Clojure',
+                    'ref'  => '../tests/outputs/ch10-REPL-oriented-repl-interactions.cj.yaml',
+                    'args' => '../tests/inputs/ch10-REPL-oriented-repl-interactions.cj',
+                },
+                {
                     'name' => 'Circom',
                     'ref'  => '../tests/outputs/eddsa.circom.yaml',
                     'args' => '../tests/inputs/eddsa.circom',

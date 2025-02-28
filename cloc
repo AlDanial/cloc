@@ -814,6 +814,7 @@ my %Extension_Collision = (
     'Visual Basic/TeX/Apex Class'                   => [ 'cls'  ] ,
     'Scheme/SaltStack'                              => [ 'sls'  ] ,
     'SKILL/.NET IL'                                 => [ 'il'   ] ,
+    'Clojure/Cangjie'                               => [ 'cj'   ] ,
 );
 my @Autogen_to_ignore = no_autogen_files($list_no_autogen);
 if ($opt_force_lang_def) {
@@ -5458,6 +5459,11 @@ sub print_language_info {                    # {{{1
         push @{$extensions{'SaltStack'}} , "sls";
         delete $extensions{'Scheme/SaltStack'};
     }
+    if (!$language or $language =~ /^(Clojure|Cangjie)$/i) {
+        push @{$extensions{'Clojure'}} , "cj";
+        push @{$extensions{'Cangjie'}} , "cj";
+        delete $extensions{'Clojure/Cangjie'};
+    }
     if ($opt_explain) {
         return unless $extensions{$language};
         if ($prefix) {
@@ -6829,6 +6835,8 @@ sub classify_file {                          # {{{1
                 return Pascal_or_Pawn($full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'SKILL/.NET IL') {
                 return SKILL_or_DotNetIL($full_file, $rh_Err, $raa_errors);
+            } elsif ($Language_by_Extension{$extension} eq 'Clojure/Cangjie') {
+                return Clojure_or_Cangjie($full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'Brainfuck') {
                 if (really_is_bf($full_file)) {
                     return $Language_by_Extension{$extension};
@@ -8781,6 +8789,7 @@ sub set_constants {                          # {{{1
             'cljs.hl'     => 'Clojure'               ,
             'cl2'         => 'Clojure'               ,
             'boot'        => 'Clojure'               ,
+            'cj'          => 'Clojure/Cangjie'       ,
             'clj'         => 'Clojure'               ,
             'cljs'        => 'ClojureScript'         ,
             'cljc'        => 'ClojureC'              ,
@@ -9909,6 +9918,11 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'Cangjie'            => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'Carbon'             => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
@@ -9930,6 +9944,7 @@ sub set_constants {                          # {{{1
                             ],
     'ClojureScript'      => [   [ 'remove_matches'      , '^\s*;'  ], ],
     'ClojureC'           => [   [ 'remove_matches'      , '^\s*;'  ], ],
+    'Clojure/Cangjie'    => [ [ 'die' ,  ], ], # never called
     'CMake'              => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
@@ -11710,6 +11725,7 @@ sub set_constants {                          # {{{1
     'Cake Build Script'            =>   1.36,
     'C++'                          =>   1.51,
     'Cadence'                      =>   3.00,
+    'Cangjie'                      =>   3.00,
     'Carbon'                       =>   1.51,
     'CCS'                          =>   5.33,
     'Civet'                        =>   3.00,
@@ -12085,6 +12101,7 @@ sub set_constants {                          # {{{1
     'MATLAB/Mathematica/Objective-C/MUMPS/Mercury' => 1.00,
     'IDL/Qt Project/Prolog/ProGuard'     => 1.00,
     'SKILL/.NET IL'                => 1.00,
+    'Clojure/Cangjie'              => 1.00,
 );
 # 1}}}
 %{$rh_Known_Binary_Archives} = (             # {{{1
@@ -13126,6 +13143,43 @@ sub SKILL_or_DotNetIL {                      # {{{1
         return "SKILL";
     } else {
         return ".NET IL";
+    }
+} # 1}}}
+sub Clojure_or_Cangjie {                     # {{{1
+    my ($file        , # in
+        $rh_Err      , # in   hash of error codes
+        $raa_errors  , # out
+       ) = @_;
+
+    print "-> Clojure_or_Cangjie($file)\n" if $opt_v > 2;
+
+    my $lang = undef;
+    my $IN = open_file('<', $file, 1);
+    if (!defined $IN) {
+        push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
+        return $lang;
+    }
+    my $clojure   = 0;
+    my $cangjie = 0;
+    while (<$IN>) {
+        next if /^\s*$/;
+        if (/^\s*(;|\(|\[)/) {
+            $clojure += 50;
+        } elsif (/^(import|func|main)/) {
+            $cangjie += 50;
+        } elsif (/{\s*$/ or /^\s*}$/) {
+            $cangjie += 5;
+        } elsif (/^\s*(procedure|let|foreach)\b/) {
+            $clojure += 1;
+        }
+    }
+    $IN->close;
+
+    print "<- Clojure_or_Cangjie($file: clojure=$clojure, .NET IL=$cangjie\n" if $opt_v > 2;
+    if ($clojure > $cangjie) {
+        return "Clojure";
+    } else {
+        return "Cangjie";
     }
 } # 1}}}
 sub html_colored_text {                      # {{{1

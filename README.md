@@ -1432,6 +1432,7 @@ file with the `--read-lang-def` or `--force-lang-def` options.
 
 These file extensions map to multiple languages:
 
+*   `cj`  files could be Clojure or Cangjie
 *   `cl`  files could be Lisp or OpenCL
 *   `cls` files could be Visual Basic, TeX or Apex Class
 *   `cs`  files could be C# or Smalltalk
