@@ -881,6 +881,13 @@ my @Tests = (
                    'ref'  => '../tests/outputs/issues/862/diff_results.yaml',
                 },
 
+                {
+                   'name' => '--by-file output for JSON/YAML with filenames having embedded quotes (#897, #898)',
+                   'cd'   => '../tests/inputs/issues/898',
+                   'args' => '--by-file .', # default is YAML
+                   'ref'  => '../tests/outputs/issues/898/results.yaml',
+                },
+
             );
 
 # Special cases:

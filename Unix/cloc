@@ -4768,6 +4768,7 @@ sub generate_report {                        # {{{1
                                         }
                                    keys %{$rhh_count}) {
         next if $lang_or_file eq "by report file";
+        my $clean_lang_or_file = $lang_or_file;   # later, if by-file protect ' and "
         my ($factor, $scaled);
         if ($BY_LANGUAGE or $BY_FILE) {
             $factor = 1;
@@ -4802,9 +4803,18 @@ sub generate_report {                        # {{{1
         }
 
         if ($BY_FILE) {
-            my $clean_filename = rm_leading_tempdir($lang_or_file, \%TEMP_DIR);
-               $clean_filename = xml_metachars($clean_filename) if $out_style eq "xml";
-            $data_line  = sprintf $Format{'1'}{$Style}, $clean_filename;
+            $clean_lang_or_file = rm_leading_tempdir($lang_or_file, \%TEMP_DIR);
+            $clean_lang_or_file = xml_metachars($clean_lang_or_file) if $out_style eq "xml";
+            if ($out_style eq "json" or $out_style eq "yaml")  {
+                # YAML, JSON do not allow protected characters in keys
+                $clean_lang_or_file =~ s/'/0x27/g;
+                $clean_lang_or_file =~ s/"/0x2b/g;
+            } elsif ($out_style ne "txt")  {
+                # text output is allowed to keep its quotes as they are
+                $clean_lang_or_file =~ s/'/\\'/g;
+                $clean_lang_or_file =~ s/"/\\"/g;
+            }
+            $data_line  = sprintf $Format{'1'}{$Style}, $clean_lang_or_file;
         } else {
             $data_line  = sprintf $Format{'2'}{$Style}, $lang_or_file;
         }
@@ -4848,9 +4858,9 @@ sub generate_report {                        # {{{1
             if ($out_style eq "yaml") {
                 # YAML: force quoted language or filename in case these
                 #       have embedded funny characters, issue #312
-                push @results,"'" . rm_leading_tempdir($lang_or_file, \%TEMP_DIR). "' :$open_B";
+                push @results,"'" . rm_leading_tempdir($clean_lang_or_file, \%TEMP_DIR). "' :$open_B";
             } else {
-                push @results,"${Q}" . rm_leading_tempdir($lang_or_file, \%TEMP_DIR). "${Q} :$open_B";
+                push @results,"${Q}" . rm_leading_tempdir($clean_lang_or_file, \%TEMP_DIR). "${Q} :$open_B";
             }
             push @results,"  ${Q}nFiles${Q}: " . $rhh_count->{$lang_or_file}{'nFiles'} . $C
                 unless $BY_FILE;
