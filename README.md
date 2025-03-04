@@ -16,6 +16,8 @@ Latest release:  v2.04 (Jan. 31, 2025)
 cloc moved to GitHub in September 2015 after being hosted
 at http://cloc.sourceforge.net/ since August 2006.
 
+![Warp packs green](https://github.com/user-attachments/assets/87347f84-34e2-4aa1-9cc6-ec5e8dbc4b1d)
+
 *   [Quick Start](#quick-start-)
 *   [Overview](#overview-)
 *   [Download](https://github.com/AlDanial/cloc/releases/latest)
