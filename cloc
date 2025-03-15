@@ -2910,6 +2910,10 @@ sub count_filesets {                         # {{{1
     foreach my $pair (@$file_pairs) {
         my $file_L = $pair->[0];
         my $file_R = $pair->[1];
+        if ($ON_WINDOWS) {
+            $file_L = lc $file_L;
+            $file_R = lc $file_R;
+        }
         my $Lang_L = $Language{$fset_a}{$file_L};
         my $Lang_R = $Language{$fset_b}{$file_R};
         if (!defined($Lang_L) or !defined($Lang_R)) {
@@ -13738,8 +13742,6 @@ sub get_leading_dirs {                       # {{{1
     }
     return undef, undef, 0 unless %unique_filename;
 
-####my %candidate_leading_dir_L = ();
-####my %candidate_leading_dir_R = ();
     my ($L_drop, $R_drop) = (undef, undef);
     foreach my $f (keys %unique_filename) {
         my $fL = $unique_filename{ $f }{'L'};
@@ -13747,8 +13749,6 @@ sub get_leading_dirs {                       # {{{1
 
         my @DL = File::Spec->splitdir($fL);
         my @DR = File::Spec->splitdir($fR);
-#printf "%-36s -> %-36s\n", $fL, $fR;
-#print Dumper(@DL, @DR);
         # find the most number of common directories between L and R
         if (!defined $L_drop) {
             $L_drop = dirname $fL;
@@ -13768,30 +13768,12 @@ sub get_leading_dirs {                       # {{{1
         }
         my $L_common = File::Spec->catdir( @DL[0..($#DL-$n_L_drop_this_pair)] );
         my $R_common = File::Spec->catdir( @DR[0..($#DR-$n_R_drop_this_pair)] );
-#print "L_common=$L_common\n";
-#print "R_common=$R_common\n";
         $L_drop = $L_common if length $L_common < length $L_drop;
         $R_drop = $R_common if length $R_common < length $R_drop;
 
         $L_drop = $L_drop . "/" if $L_drop;
         $R_drop = $R_drop . "/" if $R_drop;
-########my $ptr_L = length($fL) - 1;
-########my $ptr_R = length($fR) - 1;
-########my @aL    = split '', $fL;
-########my @aR    = split '', $fR;
-########while ($ptr_L >= 0 and $ptr_R >= 0) {
-########    last if $aL[$ptr_L] ne $aR[$ptr_R];
-########    --$ptr_L;
-########    --$ptr_R;
-########}
-########my $leading_dir_L = "";
-########   $leading_dir_L = substr($fL, 0, $ptr_L+1) if $ptr_L >= 0;
-########my $leading_dir_R = "";
-########   $leading_dir_R = substr($fR, 0, $ptr_R+1) if $ptr_R >= 0;
-########++$candidate_leading_dir_L{$leading_dir_L};
-########++$candidate_leading_dir_R{$leading_dir_R};
     }
-#use Data::Dumper::Simple;
     # at this point path separator on Windows is already /
 
     while ($L_drop =~ m{//}) {
@@ -13801,16 +13783,7 @@ sub get_leading_dirs {                       # {{{1
         $R_drop =~ s{//}{/}g;
     }
 
-#print "L_drop=$L_drop\n";
-#print "R_drop=$R_drop\n";
     return $L_drop, $R_drop, 1;
-####my $best_L = (sort {
-####           $candidate_leading_dir_L{$b} <=>
-####           $candidate_leading_dir_L{$a}} keys %candidate_leading_dir_L)[0];
-####my $best_R = (sort {
-####           $candidate_leading_dir_R{$b} <=>
-####           $candidate_leading_dir_R{$a}} keys %candidate_leading_dir_R)[0];
-####return $best_L, $best_R, 1;
 } # 1}}}
 sub align_by_pairs {                         # {{{1
     my ($rh_file_list_L        , # in
@@ -13927,8 +13900,8 @@ sub align_by_pairs {                         # {{{1
 } # 1}}}
 sub align_from_git {                         # {{{1
     # have git identify the files that changed, as well as how
-    my ($L_tag                 , # in
-        $R_tag                 , # in
+    my ($L_tag_in              , # in
+        $R_tag_in              , # in
         $ra_added              , # out
         $ra_removed            , # out
         $ra_compare_list       , # out
@@ -13936,6 +13909,12 @@ sub align_from_git {                         # {{{1
         ) = @_;
     print "-> align_from_git()\n" if $opt_v > 2;
 
+    my $L_tag = $L_tag_in;
+    my $R_tag = $R_tag_in;
+    if ($ON_WINDOWS) {
+        $L_tag =~ s{\\}{/}g;
+        $R_tag =~ s{\\}{/}g;
+    }
     # On the command line, L_tag and R_tag are commit hashes or tags.  Here they are
     # replaced with temp directories like /tmp/vGxIL7AWRw and /tmp/BS400yIQEl
     my $cmd = "git -c \"safe.directory=*\" --no-pager diff --name-status --diff-filter=ADRM $L_tag $R_tag";
