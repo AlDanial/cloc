@@ -888,6 +888,20 @@ my @Tests = (
                    'ref'  => '../tests/outputs/issues/898/results.yaml',
                 },
 
+                {
+                   'name' => '--percent (#886)',
+                   'cd'   => '../tests/inputs/dd',
+                   'args' => '--percent .',
+                   'ref'  => '../tests/outputs/issues/886/results.yaml',
+                },
+
+                {
+                   'name' => '--percent --by-file (#886)',
+                   'cd'   => '../tests/inputs/dd',
+                   'args' => '--percent --by-file .',
+                   'ref'  => '../tests/outputs/issues/886/results_by_file.yaml',
+                },
+
             );
 
 # Special cases:

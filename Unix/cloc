@@ -220,6 +220,7 @@ my (
     $opt_by_file              ,
     $opt_by_file_by_lang      ,
     $opt_by_percent           ,
+    $opt_percent              ,
     $opt_xml                  ,
     $opt_xsl                  ,
     $opt_yaml                 ,
@@ -358,6 +359,7 @@ my $getopt_success = GetOptions(             # {{{1
    "follow_links|follow-links"               => \$opt_follow_links        ,
    "autoconf"                                => \$opt_autoconf            ,
    "sum_one|sum-one"                         => \$opt_sum_one             ,
+   "percent|percent"                         => \$opt_percent             ,
    "by_percent|by-percent=s"                 => \$opt_by_percent          ,
    "stdin_name|stdin-name=s"                 => \$opt_stdin_name          ,
    "windows"                                 => \$opt_force_on_windows    ,
@@ -654,10 +656,11 @@ if ($opt_sql_style) {
     }
 }
 $opt_by_percent = '' unless defined $opt_by_percent;
-if ($opt_by_percent and $opt_by_percent !~ m/^(c|cm|cb|cmb)$/i) {
-    die "--by-percent must be either 'c', 'cm', 'cb', or 'cmb'\n";
+if ($opt_by_percent and $opt_by_percent !~ m/^(c|cm|cb|cmb|t)$/i) {
+    die "--by-percent must be either 'c', 'cm', 'cb', 'cmb', or 't'\n";
 }
 $opt_by_percent = lc $opt_by_percent;
+$opt_by_percent = 't' if $opt_percent;
 
 $opt_txt = 1 if $opt_report_file;
 my $N_OUTPUT_FORMATS = 0;
@@ -2337,10 +2340,15 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                                  cm   meaning lines of code + comments
                                  cb   meaning lines of code + blanks
                                  cmb  meaning lines of code + comments + blanks
+                                 t    meaning sum of values in that column
                              For example, if using method 'c' and your code
                              has twice as many lines of comments as lines
                              of code, the value in the comment column will
-                             be 200%.  The code column remains a line count.
+                             be 200%.  Method 't' computes percentages
+                             based on totals for each column.  Another way of
+                             looking at this is that 't' computes percentages
+                             vertically while the other methods compute them
+                             horizontally.
    --csv                     Write the results as comma separated values.
    --csv-delimiter=<C>       Use the character <C> as the delimiter for comma
                              separated files instead of ,.  This switch forces
@@ -2364,6 +2372,8 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              (JSON) formatted output.
    --md                      Write the results as Markdown-formatted text.
    --out=<file>              Synonym for --report-file=<file>.
+   --percent                 Show counts as percentages of sums for each column.
+                             Same as '--by-percent t'.
    --progress-rate=<n>       Show progress update after every <n> files are
                              processed (default <n>=100).  Set <n> to 0 to
                              suppress progress output (useful when redirecting
@@ -3613,7 +3623,7 @@ sub diff_report     {                        # {{{1
     $data_line .= sprintf "%${spacing_2}s %${spacing_2}s %${spacing_2}s",
         "blank${PCT_symbol}"         ,
         "comment${PCT_symbol}"       ,
-        "code";
+        "code${PCT_symbol}"          ;
 
     if ($Style eq "txt") {
         push @results, $data_line;
@@ -3661,7 +3671,7 @@ sub diff_report     {                        # {{{1
                     $line .= sprintf " %14.2f %14.2f %${spacing_2}s",
                         $rhhh_count->{$lang_or_file}{'blank'}{$S}   / $DEN * 100,
                         $rhhh_count->{$lang_or_file}{'comment'}{$S} / $DEN * 100,
-                        $rhhh_count->{$lang_or_file}{'code'}{$S}    ;
+                        $rhhh_count->{$lang_or_file}{'code'}{$S}    / $DEN * 100;
                 } else {
                     $line .= sprintf " %14.2f %14.2f %${spacing_2}s",
                         0.0, 0.0, $rhhh_count->{$lang_or_file}{'code'}{$S}    ;
@@ -3696,7 +3706,7 @@ sub diff_report     {                        # {{{1
                 $line .= sprintf " %14.2f %14.2f %${spacing_2}s",
                     $sum{'blank'}{$S}   / $DEN * 100,
                     $sum{'comment'}{$S} / $DEN * 100,
-                    $sum{'code'}{$S}    ;
+                    $sum{'code'}{$S}    / $DEN * 100;
             } else {
                 $line .= sprintf " %14.2f %14.2f %${spacing_2}s",
                     0.0, 0.0, $sum{'code'}{$S}    ;
@@ -4007,17 +4017,13 @@ sub diff_xml_report {                        # {{{1
                             $rhhh_count->{$lang_or_file}{'code'}{$S}   ,
                             $rhhh_count->{$lang_or_file}{'comment'}{$S},
                             $rhhh_count->{$lang_or_file}{'blank'}{$S}  );
-              foreach my $T (qw(blank comment)) {
+              foreach my $T (qw(blank comment code)) {
                   if ($rhhh_count->{$lang_or_file}{'code'}{$S} > 0) {
                     $L .= sprintf "%s=\"%.2f\" ",
                             $T, $rhhh_count->{$lang_or_file}{$T}{$S} / $DEN * 100;
                   } else {
                     $L .= sprintf "%s=\"0.0\" ", $T;
                   }
-              }
-              foreach my $T (qw(code)) {
-                  $L .= sprintf "%s=\"%d\" ",
-                          $T, $rhhh_count->{$lang_or_file}{$T}{$S};
               }
             } else {
               foreach my $T (qw(blank comment code)) {
@@ -4035,15 +4041,12 @@ sub diff_xml_report {                        # {{{1
                         $sum{'code'}{$S}   ,
                         $sum{'comment'}{$S},
                         $sum{'blank'}{$S}  );
-          foreach my $V (qw(blank comment)) {
+          foreach my $V (qw(blank comment code)) {
               if ($sum{'code'}{$S} > 0) {
                   $L .= sprintf "%s=\"%.2f\" ", $V, $sum{$V}{$S} / $DEN * 100;
               } else {
                   $L .= sprintf "%s=\"0.0\" ", $V;
               }
-          }
-          foreach my $V (qw(code)) {
-              $L .= sprintf "%s=\"%d\" ", $V, $sum{$V}{$S};
           }
         } else {
           foreach my $V (qw(blank comment code)) {
@@ -4139,7 +4142,7 @@ sub diff_csv_report {                        # {{{1
                   }
               }
           }
-          foreach my $item (qw(blank comment)) {
+          foreach my $item (qw(blank comment code)) {
               foreach my $symbol (qw(same modified added removed)) {
                   if (defined $rhhh_count->{$lang_or_file}{$item}{$symbol} and
                       defined $rhhh_count->{$lang_or_file}{'code'}{$symbol} and
@@ -4147,15 +4150,6 @@ sub diff_csv_report {                        # {{{1
                       $line .= sprintf("%.2f", $rhhh_count->{$lang_or_file}{$item}{$symbol} / $rhhh_count->{$lang_or_file}{'code'}{$symbol} * 100).${DELIM};
                   } else {
                       $line .= "0.00${DELIM} ";
-                  }
-              }
-          }
-          foreach my $item (qw(code)) {
-              foreach my $symbol (qw(same modified added removed)) {
-                  if (defined $rhhh_count->{$lang_or_file}{$item}{$symbol}) {
-                      $line .= "$rhhh_count->{$lang_or_file}{$item}{$symbol}${DELIM} ";
-                  } else {
-                      $line .= "0${DELIM} ";
                   }
               }
           }
@@ -4647,8 +4641,8 @@ sub generate_report {                        # {{{1
         '4' => { 'xml' => 'blank="%d" comment="%d" code="%d" ',
                  'txt' => "\%${spacing_2}d \%${spacing_2}d \%${spacing_2}d",
                },
-        '5' => { 'xml' => 'blank="%3.2f" comment="%3.2f" code="%d" ',
-                 'txt' => "\%14.2f \%14.2f \%${spacing_2}d",
+        '5' => { 'xml' => 'blank="%3.2f" comment="%3.2f" code="%3.2f" ',
+                 'txt' => "\%14.2f \%14.2f  \%13.2f",
                },
         '6' => { 'xml' => 'factor="%.2f" scaled="%.2f" ',
                  'txt' => ' x %6.2f = %14.2f',
@@ -4725,7 +4719,7 @@ sub generate_report {                        # {{{1
         $data_line .= sprintf "%${spacing_2}s %${spacing_2}s %${spacing_2}s",
             "blank${PCT_symbol}"   ,
             "comment${PCT_symbol}" ,
-            "code";
+            "code${PCT_symbol}";
         $data_line .= sprintf " %8s   %14s",
             "scale"         ,
             "3rd gen. equiv"
@@ -4831,10 +4825,17 @@ sub generate_report {                        # {{{1
                         $rhh_count->{$lang_or_file}{'code'}   ,
                         $rhh_count->{$lang_or_file}{'comment'},
                         $rhh_count->{$lang_or_file}{'blank'}  );
-          $data_line .= sprintf $Format{5}{$Style}  ,
-              $rhh_count->{$lang_or_file}{'blank'}   / $DEN * 100,
-              $rhh_count->{$lang_or_file}{'comment'} / $DEN * 100,
-              $rhh_count->{$lang_or_file}{'code'}   ;
+          if ($opt_by_percent eq 't') {
+            $data_line .= sprintf $Format{5}{$Style}  ,
+                $rhh_count->{$lang_or_file}{'blank'}   / $sum_blank   * 100,
+                $rhh_count->{$lang_or_file}{'comment'} / $sum_comment * 100,
+                $rhh_count->{$lang_or_file}{'code'}    / $sum_code    * 100;
+          } else {
+            $data_line .= sprintf $Format{5}{$Style}  ,
+                $rhh_count->{$lang_or_file}{'blank'}   / $DEN * 100,
+                $rhh_count->{$lang_or_file}{'comment'} / $DEN * 100,
+                $rhh_count->{$lang_or_file}{'code'}    / $DEN * 100;
+          }
         } else {
           $data_line .= sprintf $Format{4}{$Style}  ,
               $rhh_count->{$lang_or_file}{'blank'}  ,
@@ -4875,11 +4876,21 @@ sub generate_report {                        # {{{1
                             $rhh_count->{$lang_or_file}{'code'}   ,
                             $rhh_count->{$lang_or_file}{'comment'},
                             $rhh_count->{$lang_or_file}{'blank'}  );
+            if ($opt_by_percent eq 't') {
               push @results,"  ${Q}blank_pct${Q}: "   .
-                sprintf("%3.2f", $rhh_count->{$lang_or_file}{'blank'} / $DEN * 100) . $C;
+                sprintf("%3.2f", $rhh_count->{$lang_or_file}{'blank'}   / $sum_blank   * 100) . $C;
+              push @results,"  ${Q}comment_pct${Q}: " .
+                sprintf("%3.2f", $rhh_count->{$lang_or_file}{'comment'} / $sum_comment * 100) . $C;
+              push @results,"  ${Q}code_pct${Q}: "    .
+                sprintf("%3.2f", $rhh_count->{$lang_or_file}{'code'}    / $sum_code    * 100) . $C;
+            } else {
+              push @results,"  ${Q}blank_pct${Q}: "     .
+                sprintf("%3.2f", $rhh_count->{$lang_or_file}{'blank'}   / $DEN * 100) . $C;
               push @results,"  ${Q}comment_pct${Q}: " .
                 sprintf("%3.2f", $rhh_count->{$lang_or_file}{'comment'} / $DEN * 100) . $C;
-              push @results,"  ${Q}code${Q}: "    . $rhh_count->{$lang_or_file}{'code'}  . $C;
+              push @results,"  ${Q}code_pct${Q}: "    .
+                sprintf("%3.2f", $rhh_count->{$lang_or_file}{'code'}    / $DEN * 100) . $C;
+            }
             } else {
               push @results,"  ${Q}blank${Q}: "   . $rhh_count->{$lang_or_file}{'blank'}   . $C;
               push @results,"  ${Q}comment${Q}: " . $rhh_count->{$lang_or_file}{'comment'} . $C;
@@ -4925,9 +4936,15 @@ sub generate_report {                        # {{{1
                             $rhh_count->{$lang_or_file}{'code'}   ,
                             $rhh_count->{$lang_or_file}{'comment'},
                             $rhh_count->{$lang_or_file}{'blank'}  );
-              $str .= sprintf("%3.2f", $rhh_count->{$lang_or_file}{'blank'}   / $DEN * 100) . ${DELIM} .
-                      sprintf("%3.2f", $rhh_count->{$lang_or_file}{'comment'} / $DEN * 100) . ${DELIM} .
-                      $rhh_count->{$lang_or_file}{'code'};
+              if ($opt_by_percent eq 't') {
+                $str .= sprintf("%3.2f", $rhh_count->{$lang_or_file}{'blank'}   / $sum_blank   * 100) . ${DELIM} .
+                        sprintf("%3.2f", $rhh_count->{$lang_or_file}{'comment'} / $sum_comment * 100) . ${DELIM} .
+                        sprintf("%3.2f", $rhh_count->{$lang_or_file}{'code'}    / $sum_code    * 100) . ${DELIM} ;
+              } else {
+                $str .= sprintf("%3.2f", $rhh_count->{$lang_or_file}{'blank'}   / $DEN * 100) . ${DELIM} .
+                        sprintf("%3.2f", $rhh_count->{$lang_or_file}{'comment'} / $DEN * 100) . ${DELIM} .
+                        sprintf("%3.2f", $rhh_count->{$lang_or_file}{'code'}    / $DEN * 100) . ${DELIM} ;
+              }
             } else {
               $str .= $rhh_count->{$lang_or_file}{'blank'}  . ${DELIM} .
                       $rhh_count->{$lang_or_file}{'comment'}. ${DELIM} .
@@ -4953,10 +4970,17 @@ sub generate_report {                        # {{{1
         if ($opt_by_percent) {
           my $DEN = compute_denominator($opt_by_percent    ,
                         $sum_code, $sum_comment, $sum_blank);
-          $data_line .= sprintf $Format{'5'}{$Style},
-              $sum_blank   / $DEN * 100,
-              $sum_comment / $DEN * 100,
-              $sum_code    ;
+          if ($opt_by_percent eq 't') {
+            $data_line .= sprintf $Format{'5'}{$Style},
+                $sum_blank   / $sum_blank   * 100,
+                $sum_comment / $sum_comment * 100,
+                $sum_code    / $sum_code    * 100;
+          } else {
+            $data_line .= sprintf $Format{'5'}{$Style},
+                $sum_blank   / $DEN * 100,
+                $sum_comment / $DEN * 100,
+                $sum_code    / $DEN * 100;
+          }
         } else {
           $data_line .= sprintf $Format{'4'}{$Style},
               $sum_blank   ,
@@ -4985,13 +5009,13 @@ sub generate_report {                        # {{{1
     } elsif ($out_style eq "yaml" or $out_style eq "json") {
         my ($Q, $open_B, $close_B, $start, $C) = yaml_to_json_separators();
         push @results, "${Q}SUM${Q}: ${open_B}";
-        if ($opt_by_percent) {
+        if ($opt_by_percent eq 't') {
+          push @results, "  ${Q}blank${Q}: "  . sprintf("%.2f", 100) . $C;
+          push @results, "  ${Q}comment${Q}: ". sprintf("%.2f", 100) . $C;
+          push @results, "  ${Q}code${Q}: "   . sprintf("%.2f", 100) . $C;
+        } else {
           my $DEN = compute_denominator($opt_by_percent    ,
                         $sum_code, $sum_comment, $sum_blank);
-          push @results, "  ${Q}blank${Q}: "  . sprintf("%.2f", $sum_blank   / $DEN * 100) . $C;
-          push @results, "  ${Q}comment${Q}: ". sprintf("%.2f", $sum_comment / $DEN * 100) . $C;
-          push @results, "  ${Q}code${Q}: "   . $sum_code    . $C;
-        } else {
           push @results, "  ${Q}blank${Q}: "  . $sum_blank   . $C;
           push @results, "  ${Q}comment${Q}: ". $sum_comment . $C;
           push @results, "  ${Q}code${Q}: "   . $sum_code    . $C;
@@ -5021,15 +5045,22 @@ sub generate_report {                        # {{{1
             push @entries, "SUM";
         }
         if ($opt_by_percent) {
+          if ($opt_by_percent eq 't') {
+            push @entries, sprintf("%.2f", 100);
+            push @entries, sprintf("%.2f", 100);
+            push @entries, sprintf("%.2f", 100);
+          } else {
             my $DEN = compute_denominator($opt_by_percent    ,
                           $sum_code, $sum_comment, $sum_blank);
             push @entries, sprintf("%.2f", $sum_blank   / $DEN * 100);
             push @entries, sprintf("%.2f", $sum_comment / $DEN * 100);
+            push @entries, sprintf("%.2f", $sum_code    / $DEN * 100);
+          }
         } else {
             push @entries, $sum_blank;
             push @entries, $sum_comment;
+            push @entries, $sum_code;
         }
-        push @entries, $sum_code;
         if ($opt_3) {
             push @entries, $sum_scaled;
             push @entries, $avg_scale ;
@@ -5045,12 +5076,16 @@ sub generate_report {                        # {{{1
             $data_line .= sprintf "%${spacing_2}d ", $sum_files;
         }
         if ($opt_by_percent) {
-          my $DEN = compute_denominator($opt_by_percent    ,
-                        $sum_code, $sum_comment, $sum_blank);
-          $data_line .= sprintf $Format{'5'}{$Style},
-              $sum_blank   / $DEN * 100,
-              $sum_comment / $DEN * 100,
-              $sum_code    ;
+          if ($opt_by_percent eq 't') {
+            $data_line .= sprintf $Format{'5'}{$Style}, 100, 100, 100;
+          } else {
+            my $DEN = compute_denominator($opt_by_percent    ,
+                          $sum_code, $sum_comment, $sum_blank);
+            $data_line .= sprintf $Format{'5'}{$Style},
+                $sum_blank   / $DEN * 100,
+                $sum_comment / $DEN * 100,
+                $sum_code    / $DEN * 100;
+          }
         } else {
           $data_line .= sprintf $Format{'4'}{$Style},
               $sum_blank   ,

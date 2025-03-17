@@ -1,0 +1,31 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.05
+  elapsed_seconds    : 0.00641512870788574
+  n_files            : 3
+  n_lines            : 929
+  files_per_second   : 467.644553461924
+  lines_per_second   : 144813.930055376
+  report_file        : ../../outputs/issues/886/results_by_file.yaml
+'./bb/cc/MoreTeapotsRenderer.cpp' :
+  blank_pct: 51.70
+  comment_pct: 59.69
+  code_pct: 61.76
+  language: C++
+'./bb/ee/TeapotRenderer.cpp' :
+  blank_pct: 33.33
+  comment_pct: 28.80
+  code_pct: 30.80
+  language: C++
+'./bb/config.c' :
+  blank_pct: 14.97
+  comment_pct: 11.52
+  code_pct: 7.45
+  language: C
+SUM: 
+  blank: 100.00
+  comment: 100.00
+  code: 100.00
+  nFiles: 3
