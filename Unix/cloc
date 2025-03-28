@@ -9124,6 +9124,7 @@ sub set_constants {                          # {{{1
             'arcconfig'   => 'JSON'                  ,
             'json'        => 'JSON'                  ,
             'json5'       => 'JSON5'                 ,
+            'jsonnet'     => 'Jsonnet'               ,
             'jsp'         => 'JSP'                   , # Java server pages
             'jspf'        => 'JSP'                   , # Java server pages
             'junos'       => 'Juniper Junos'         ,
@@ -10549,6 +10550,12 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'Jsonnet'            => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
     'Julia'              => [
                                 [ 'remove_between_general', '#=', '=#' ],
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -11917,6 +11924,7 @@ sub set_constants {                          # {{{1
     'Jinja Template'               =>   1.5 ,
     'JSON'                         =>   2.50,
     'JSON5'                        =>   2.50,
+    'Jsonnet'                      =>   2.50,
     'JSP'                          =>   1.48,
     'JSX'                          =>   1.48,
     'Velocity Template Language'   =>   1.00,

@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.05
+  elapsed_seconds    : 0.00428891181945801
+  n_files            : 1
+  n_lines            : 19
+  files_per_second   : 233.159375173717
+  lines_per_second   : 4430.02812830063
+  report_file        : ../outputs/inner_ref.jsonnet.yaml
+'Jsonnet' :
+  nFiles: 1
+  blank: 0
+  comment: 5
+  code: 14
+SUM: 
+  blank: 0
+  comment: 5
+  code: 14
+  nFiles: 1

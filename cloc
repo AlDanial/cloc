@@ -2926,6 +2926,10 @@ sub count_filesets {                         # {{{1
         }
         my $Lang_L = $Language{$fset_a}{$file_L};
         my $Lang_R = $Language{$fset_b}{$file_R};
+#use Data::Dumper;
+#print "file_L=$file_L  $Language{$fset_a}{$file_L}\n";
+#print "fset_a=$fset_a  $Language{$fset_a}{$file_L}\n";
+#print "fset_b=$fset_b  $Language{$fset_b}{$file_R}\n";
         if (!defined($Lang_L) or !defined($Lang_R)) {
             print " -> count_filesets skipping $file_L, $file_R ",
                   "because language cannot be inferred\n" if $opt_v;
@@ -9116,6 +9120,7 @@ sub set_constants {                          # {{{1
             'arcconfig'   => 'JSON'                  ,
             'json'        => 'JSON'                  ,
             'json5'       => 'JSON5'                 ,
+            'jsonnet'     => 'Jsonnet'               ,
             'jsp'         => 'JSP'                   , # Java server pages
             'jspf'        => 'JSP'                   , # Java server pages
             'junos'       => 'Juniper Junos'         ,
@@ -10541,6 +10546,12 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'Jsonnet'            => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
     'Julia'              => [
                                 [ 'remove_between_general', '#=', '=#' ],
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -11909,6 +11920,7 @@ sub set_constants {                          # {{{1
     'Jinja Template'               =>   1.5 ,
     'JSON'                         =>   2.50,
     'JSON5'                        =>   2.50,
+    'Jsonnet'                      =>   2.50,
     'JSP'                          =>   1.48,
     'JSX'                          =>   1.48,
     'Velocity Template Language'   =>   1.00,

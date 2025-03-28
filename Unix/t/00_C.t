@@ -620,19 +620,24 @@ my @Tests = (
                     'args' => '../tests/inputs/offline.jcl',
                 },
                 {
-                    'name' => 'JSON',
-                    'ref'  => '../tests/outputs/glossary.json.yaml',
-                    'args' => '../tests/inputs/glossary.json',
-                },
-                {
                     'name' => 'Jinja Templates',
                     'ref'  => '../tests/outputs/child_template.jinja2.yaml',
                     'args' => '../tests/inputs/child_template.jinja2',
                 },
                 {
+                    'name' => 'JSON',
+                    'ref'  => '../tests/outputs/glossary.json.yaml',
+                    'args' => '../tests/inputs/glossary.json',
+                },
+                {
                     'name' => 'JSON5',
                     'ref'  => '../tests/outputs/glossary.json5.yaml',
                     'args' => '../tests/inputs/glossary.json5',
+                },
+                {
+                    'name' => 'Jsonnet',
+                    'ref'  => '../tests/outputs/inner_ref.jsonnet.yaml',
+                    'args' => '../tests/inputs/inner_ref.jsonnet',
                 },
                 {
                     'name' => 'Jupyter Notebook',
