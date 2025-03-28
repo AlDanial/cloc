@@ -119,6 +119,10 @@ if ($ON_WINDOWS and $ENV{'SHELL'}) {
         $ON_WINDOWS = 1;  # MKS defines $SHELL but still acts like Windows
     }
 }
+my $ON_MINGW64 = 0; # git-bash on Windows has special needs
+if (!$ON_WINDOWS and defined $ENV{'SSH_ASKPASS'} and $ENV{'SSH_ASKPASS'} =~ m{^/mingw64/}) {
+    $ON_MINGW64 = 1;
+}
 
 use Cwd "abs_path";
 use File::Spec;
@@ -1787,23 +1791,6 @@ foreach my $out_style (sort keys %OUTFILE_EXT) {
 # 1}}}
 }
 
-#if ($opt_fmt) {
-#    my $json_string = "";
-#    write_file(\$json_string, {}, @Lines_Out);
-#    my ($file_len, $lang_len, $header, %contents) = load_json($json_string);
-#    @Lines_Out = print_format_n(abs($opt_fmt), $file_len, $lang_len, $header, %contents);
-#}
-#if ($opt_report_file) {
-#    write_file($opt_report_file, {}, @Lines_Out);
-#} else {
-#    if ($opt_fmt) {
-#        print "@Lines_Out";
-#    } else {
-#        print "\n" unless $opt_quiet;
-#        print join("\n", @Lines_Out), "\n";
-#    }
-#}
-
 if ($opt_count_diff) {
     ++$opt_count_diff;
     exit if $opt_count_diff > 3;
@@ -1822,9 +1809,9 @@ sub produce_output {                         # {{{1
     }
     if ($outfile) {
         my $adjusted_outfile = $outfile;
-        if ($N_OUTPUT_FORMATS > 1 and 
+        if ($N_OUTPUT_FORMATS > 1 and
             ($opt_report_file !~ /\.${out_style}$/)) {
-            # ensure the output filename has a suitable extension 
+            # ensure the output filename has a suitable extension
             $adjusted_outfile .=  "." . $out_style;
         }
         write_file($adjusted_outfile, {}, @{$ra_Lines_Out});
@@ -2934,6 +2921,10 @@ sub count_filesets {                         # {{{1
         }
         my $Lang_L = $Language{$fset_a}{$file_L};
         my $Lang_R = $Language{$fset_b}{$file_R};
+#use Data::Dumper;
+#print "file_L=$file_L  $Language{$fset_a}{$file_L}\n";
+#print "fset_a=$fset_a  $Language{$fset_a}{$file_L}\n";
+#print "fset_b=$fset_b  $Language{$fset_b}{$file_R}\n";
         if (!defined($Lang_L) or !defined($Lang_R)) {
             print " -> count_filesets skipping $file_L, $file_R ",
                   "because language cannot be inferred\n" if $opt_v;
@@ -13969,6 +13960,15 @@ sub align_from_git {                         # {{{1
     # On the command line, L_tag and R_tag are commit hashes or tags.  Here they are
     # replaced with temp directories like /tmp/vGxIL7AWRw and /tmp/BS400yIQEl
     my $cmd = "git -c \"safe.directory=*\" --no-pager diff --name-status --diff-filter=ADRM $L_tag $R_tag";
+    # Note:  the above command has a problematic side-effect in a git-bash
+    #        terminal on Windows in that the output file path uses the
+    #        native Windows location instead of the Unix-like path.  Here's
+    #        an example:
+    # $ git -c "safe.directory=*" --no-pager diff --name-status --diff-filter=ADRM /tmp/pyXXfAJosD /tmp/GftmAmyjOH
+    # M       C:/Users/al/AppData/Local/Temp/pyXXfAJosD/file.js
+    #        In other words, /tmp was replaced by C:/Users/al/AppData/Local/Temp
+    #        This has to be undone otherwise the file pairing will be broken.
+
 
     # A = added, D = deleted, M = modified, R = renamed; entries tab separated
     # Example:
@@ -13984,6 +13984,10 @@ sub align_from_git {                         # {{{1
     while (<GSIM>) {
         chomp;
         my @words = split(/\t/);
+        if ($ON_MINGW64) {
+            # "C:/Users/al/AppData/Local/Temp" => "/tmp"
+            $words[1] =~ s{^[A-Z]:/.*?/AppData/Local/Temp}{/tmp};
+        }
         #print "align_from_git: words=[@words]\n";
         if (scalar(@words) == 2) {
             if ($words[0] =~ /^M/) {
