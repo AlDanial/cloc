@@ -8947,6 +8947,8 @@ sub set_constants {                          # {{{1
             'ftl'         => 'Freemarker Template'   ,
             'ftn'         => 'Fortran 77'            ,
             'FTN'         => 'Fortran 77'            ,
+            'f03'         => 'Fortran 2003'          ,
+            'F03'         => 'Fortran 2003'          ,
             'fmt'         => 'Oracle Forms'          ,
             'focexec'     => 'Focus'                 ,
             'fs'          => 'F#/Forth'              ,
@@ -10251,6 +10253,9 @@ sub set_constants {                          # {{{1
                                 [ 'remove_f77_comments' ,          ],
                                 [ 'remove_f90_comments' ,          ],
                                 [ 'remove_inline'       , '\!.*$'  ],
+                            ],
+    'Fortran 2003'       => [
+                                [ 'remove_matches'      , '^\s*!'  ],
                             ],
     'Freemarker Template' => [
                                 [ 'remove_between_general', '<#--', '-->' ],
@@ -11839,6 +11844,7 @@ sub set_constants {                          # {{{1
     'Fortran 90'                   =>   1.00,
     'Fortran 95'                   =>   1.13,
     'Fortran II'                   =>   0.63,
+    'Fortran 2003'                 =>   2.50,
     'foundation'                   =>   2.76,
     'Freemarker Template'          =>   1.48,
     'Futhark'                      =>   3.00, # Guessed from value of ML

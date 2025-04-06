@@ -398,6 +398,11 @@ my @Tests = (
                     'args' => '../tests/inputs/hello.f90',
                 },
                 {
+                    'name' => 'Fortran 2003',
+                    'ref'  => '../tests/outputs/main.f03.yaml',
+                    'args' => '../tests/inputs/main.f03',
+                },
+                {
                     'name' => 'Freemarker Template',
                     'ref'  => '../tests/outputs/FreemarkerTemplate.ftl.yaml',
                     'args' => '../tests/inputs/FreemarkerTemplate.ftl',
