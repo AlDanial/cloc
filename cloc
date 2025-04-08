@@ -9775,6 +9775,8 @@ sub set_constants {                          # {{{1
             'dockerfile.m4'     => 'Dockerfile'         ,
             'dockerfile.cmake'  => 'Dockerfile'         ,
             'Containerfile'     => 'Containerfile'      ,
+            'Jenkinsfile'       => 'Groovy'             ,
+            'jenkinsfile'       => 'Groovy'             ,
             );
 # 1}}}
 %{$rh_Language_by_Prefix}     = (            # {{{1
