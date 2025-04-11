@@ -1,0 +1,21 @@
+#+title: Example Org File
+
+Hello, world
+
+# comment 1
+
+#+begin_comment
+comment 2
+#+end_comment
+
+* COMMENT comment3
+just a comment
+
+* About Org
+A GNU Emacs major mode for keeping notes, authoring documents, computational notebooks, literate programming, maintaining to-do lists, planning projects, and more — in a fast and effective plain text system.
+
+Org is a highly flexible structured plain text file format, composed of a few simple, yet versatile, structures — constructed to be both simple enough for the novice and powerful enough for the expert.
+
+#+begin_src python
+  print("hello world")
+#+end_src
