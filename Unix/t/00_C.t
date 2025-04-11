@@ -1506,6 +1506,11 @@ my @Tests = (
                     'ref'  => '../tests/outputs/zir_sema.zig.yaml',
                     'args' => '../tests/inputs/zir_sema.zig',
                 },
+                {
+                    'name' => 'Org Mode',
+                    'ref'  => '../tests/outputs/orgmode.org.yaml',
+                    'args' => '../tests/inputs/orgmode.org',
+                }
             );
 
 my $Verbose = 0;

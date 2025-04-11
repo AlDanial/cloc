@@ -9160,6 +9160,7 @@ sub set_constants {                          # {{{1
             'markdown'    => 'Markdown'              ,
             'contents.lr' => 'Markdown'              ,
             'md'          => 'Markdown'              ,
+            'org'         => 'Org Mode'              ,
             'mc'          => 'Windows Message File'  ,
             'met'         => 'Teamcenter met'        ,
             'mg'          => 'Modula3'               ,
@@ -10735,6 +10736,16 @@ sub set_constants {                          # {{{1
                                   '\[(comment|\/\/)?\]\s*:?\s*(<\s*>|#)?\s*\(.*?', '.*?\)' ],
                                 # http://stackoverflow.com/questions/4823468/comments-in-markdown
                             ],
+    'Org Mode'           => [
+                                # https://orgmode.org/guide/Comment-Lines.html
+                                [ 'remove_matches'      , '^\s*#\s.*'   ],
+                                [ 'remove_between_general', '#+BEGIN_COMMENT', '#+END_COMMENT' ],
+                                [ 'remove_between_general', '#+begin_comment', '#+end_comment' ],
+                                [ 'remove_between_regex',
+                                  '^\*+\s+COMMENT\b.*',
+                                  '^\*+\s+(?!COMMENT\b)'
+                                ],
+                            ],
     'MATLAB/Mathematica/Objective-C/MUMPS/Mercury' => [ [ 'die' ,          ], ], # never called
     'MUMPS'              => [   [ 'remove_matches'      , '^\s*;'  ], ],
     'Mustache'           => [
@@ -11966,6 +11977,7 @@ sub set_constants {                          # {{{1
     'Oracle Forms'                 =>   2.67,
     'Oracle Developer/2000'        =>   3.48,
     'Other'                        =>   1.00,
+    'Org Mode'                     =>   1.00,
     'P4'                           =>   1.5 ,
     'Pawn'                         =>   2.00,
     'Pascal'                       =>   0.88,
