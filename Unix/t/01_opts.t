@@ -902,6 +902,13 @@ my @Tests = (
                    'ref'  => '../tests/outputs/issues/886/results_by_file.yaml',
                 },
 
+                {
+                   'name' => 'Python docstring with embedded "#" (#906)',
+                   'cd'   => '../tests/inputs/issues/906',
+                   'args' => '--diff previous_version.py current_version.py',
+                   'ref'  => '../tests/outputs/issues/906/results.yaml',
+                },
+
             );
 
 # Special cases:
