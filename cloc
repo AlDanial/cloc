@@ -393,6 +393,7 @@ my $getopt_success = GetOptions(             # {{{1
    "encoding=s"                              => \$opt_encoding            , # not production ready #880
   );
 $opt_txt = 0;
+my $opt_fmt_tempfile = "";
 # 1}}}
 $config_file = $opt_config_file if defined $opt_config_file;
 load_from_config_file($config_file,          # {{{2
@@ -7312,6 +7313,13 @@ sub write_file {                             # {{{1
 
     my $OUT = undef;
     unlink_file($file);
+    # If $file is a reference to a scalar, write to that scalar.  This works
+    # cleanly on Unix, but on Windows a zero-length file is created.  The
+    # filename starts with "SCALAR" followed by a memory address in hex.
+    # This temporary file will need to be cleaned up before the program ends.
+    if ($ON_WINDOWS and (ref($file) eq "SCALAR" or $file =~ /^SCALAR/)) {
+        $opt_fmt_tempfile = "$file"; # string version of the file name
+    }
     if ($opt_file_encoding) {
         $OUT = open_file(">:encoding($opt_file_encoding)", $file, 0);
     } else {
@@ -19080,6 +19088,13 @@ EOAlgDiff
     eval "use Algorithm::Diff qw / sdiff /";
     $HAVE_Algorithm_Diff = 1 unless $problems;
     print "<- Install_Algorithm_Diff\n" if $opt_v > 2;
+} # 1}}}
+END { # {{{1
+    # Remove temp file on Windows if running with --fmt
+    if ($ON_WINDOWS and $opt_fmt and $opt_fmt_tempfile) {
+        print "-> END unlink $opt_fmt_tempfile\n" if $opt_v > 2;
+        unlink($opt_fmt_tempfile)
+    }
 } # 1}}}
 __END__
 mode values (stat $item)[2]
