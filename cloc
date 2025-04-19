@@ -366,7 +366,7 @@ my $getopt_success = GetOptions(             # {{{1
    "follow_links|follow-links"               => \$opt_follow_links        ,
    "autoconf"                                => \$opt_autoconf            ,
    "sum_one|sum-one"                         => \$opt_sum_one             ,
-   "percent|percent"                         => \$opt_percent             ,
+   "percent"                                 => \$opt_percent             ,
    "by_percent|by-percent=s"                 => \$opt_by_percent          ,
    "stdin_name|stdin-name=s"                 => \$opt_stdin_name          ,
    "windows"                                 => \$opt_force_on_windows    ,
