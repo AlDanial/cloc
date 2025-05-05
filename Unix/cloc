@@ -9231,6 +9231,8 @@ sub set_constants {                          # {{{1
             'nim.cfg'     => 'Nim'                   ,
             'nim'         => 'Nim'                   ,
             'nix'         => 'Nix'                   ,
+            'nu'          => 'Nushell'               ,
+            'nuon'        => 'Nushell Object Notation',
             'nut'         => 'Squirrel'              ,
             'njk'         => 'Nunjucks'              ,
             'odin'        => 'Odin'                  ,
@@ -10727,6 +10729,14 @@ sub set_constants {                          # {{{1
     'Nunjucks'           => [
                                 [ 'remove_between_general', '{#', '#}' ],
                             ],
+    'Nushell'            => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
+    'Nushell Object Notation' => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
     'Objective-C'        => [
 #                               [ 'remove_matches'      , '^\s*//' ],
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
@@ -11990,6 +12000,8 @@ sub set_constants {                          # {{{1
     'Nim'                          =>   2.00,
     'Nix'                          =>   2.70,
     'Nunjucks'                     =>   1.5 ,
+    'Nushell'                      =>   3.81,
+    'Nushell Object Notation'      =>   2.50,
     'Objective-C'                  =>   2.96,
     'Objective-C++'                =>   2.96,
     'OCaml'                        =>   3.00,
