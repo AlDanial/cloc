@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.04
+  elapsed_seconds    : 0.00592303276062012
+  n_files            : 1
+  n_lines            : 24
+  files_per_second   : 168.832427645614
+  lines_per_second   : 4051.97826349475
+  report_file        : ../tests/outputs/nuon-example.nuon.yaml
+'Nushell Object Notation' :
+  nFiles: 1
+  blank: 1
+  comment: 3
+  code: 20
+SUM: 
+  blank: 1
+  comment: 3
+  code: 20
+  nFiles: 1

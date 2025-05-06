@@ -861,6 +861,16 @@ my @Tests = (
                     'args' => '../tests/inputs/child_template.njk',
                 },
                 {
+                    'name' => 'Nushell',
+                    'ref'  => '../tests/outputs/nu-example.nu.yaml',
+                    'args' => '../tests/inputs/nu-example.nu',
+                },
+                {
+                    'name' => 'Nushell Object Notation',
+                    'ref'  => '../tests/outputs/nuon-example.nuon.yaml',
+                    'args' => '../tests/inputs/nuon-example.nuon',
+                },
+                {
                     'name' => 'Objective-C',
                     'ref'  => '../tests/outputs/qsort_demo.m.yaml',
                     'args' => '../tests/inputs/qsort_demo.m',
