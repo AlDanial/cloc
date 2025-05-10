@@ -281,7 +281,8 @@ my (
     $opt_only_count_files     ,
     $opt_fmt                  ,
     $opt_encoding             ,
-    $opt_txt              ,  # not associated with a command line option
+    $opt_txt                  ,  # not associated with a command line option
+    $opt_thousands_delimiter  ,
    );
 
 my $getopt_success = GetOptions(             # {{{1
@@ -391,6 +392,7 @@ my $getopt_success = GetOptions(             # {{{1
    "only_count_files|only-count-files"       => \$opt_only_count_files    ,
    "fmt=i"                                   => \$opt_fmt                 ,
    "encoding=s"                              => \$opt_encoding            , # not production ready #880
+   "thousands_delimiter|thousands-delimiter" => \$opt_thousands_delimiter ,
   );
 $opt_txt = 0;
 my $opt_fmt_tempfile = "";
@@ -489,6 +491,7 @@ load_from_config_file($config_file,          # {{{2
                                                 \$opt_file_encoding       ,
                                                 \$opt_docstring_as_code   ,
                                                 \$opt_stat                ,
+                                                \$opt_thousands_delimiter ,
 );  # 2}}} Not pretty.  Not at all.
 if ($opt_version) {
     printf "$VERSION\n";
@@ -554,6 +557,9 @@ if (defined $opt_diff_timeout) {
     $opt_diff_timeout = 2**31-1 unless $opt_diff_timeout > 0;
 } else {
     $opt_diff_timeout  =10; # seconds
+}
+if (!defined($opt_thousands_delimiter)) {
+    $opt_thousands_delimiter = ",";
 }
 if (defined $opt_timeout) {
     # if defined but with a value of <= 0, set to 2^31-1 seconds = 68 years
@@ -2391,6 +2397,12 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              cloc-diff.xsl if --diff is also given).
                              This switch forces --xml on.
    --yaml                    Write the results in YAML.
+   --thousands-delimiter=<C> Divides numbers with many digits (i.e. numbers over 999)
+                             into groups using the character <C> as delimiter
+                             (e.g. for <C> = '.': 12345 -> 12.345).
+                             Only works together with the '--fmt' option.
+                             Examples: '.', ',', '_', ' '.
+                             Default: ','.
 
 ";
 #  Help information for options not yet implemented:
@@ -2400,6 +2412,12 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
 #                            comment and code lines in different colors.
 }
 # 1}}}
+sub separate_thousands {
+    my ($number, $separator,) = @_;
+    while ($number =~ s/(\d+)(\d\d\d)/$1\=$2/) { };
+    $number =~ s/=/${separator}/g;
+    return $number;
+}
 sub summary_cutoff_error {                   # {{{
     my ($parameter) = @_;
     print "-> summary_cutoff_is_ok($parameter)\n" if $opt_v > 2;
@@ -15470,11 +15488,18 @@ sub print_format_n {                         # {{{1
                                          $language{$lang}{'comment'},
                                          $language{$lang}{'code'});
             if      ($format == 1) {
-                @out = ($lang, $nF, $nB, $nCm, $nCo);
+                @out = ($lang, separate_thousands($nF,  $opt_thousands_delimiter),
+                               separate_thousands($nB,  $opt_thousands_delimiter),
+                               separate_thousands($nCm, $opt_thousands_delimiter),
+                               separate_thousands($nCo, $opt_thousands_delimiter));
             } else {
-                @out = ($lang, $nF, $nB, $nCm, $nCo, $nB + $nCm + $nCo);
+                @out = ($lang, separate_thousands($nF,  $opt_thousands_delimiter),
+                               separate_thousands($nB,  $opt_thousands_delimiter),
+                               separate_thousands($nCm, $opt_thousands_delimiter),
+                               separate_thousands($nCo, $opt_thousands_delimiter),
+                               separate_thousands($nB + $nCm + $nCo, $opt_thousands_delimiter));
             }
-            push @prt_lines, sprintf $val_fmt{$format}, @out;
+            push @prt_lines, sprintf $str_fmt{$format}, @out;
             $n_files   += $nF;
             $n_blank   += $nB;
             $n_comment += $nCm;
@@ -15490,13 +15515,22 @@ sub print_format_n {                         # {{{1
             my $lang = $contents{$file}{'language'};
             if      ($format == 1) {
             } elsif ($format == 3) {
-                @out = ($file, $lang, $nB, $nCm, $nCo);
+                @out = ($file, $lang, separate_thousands($nB,  $opt_thousands_delimiter),
+                                      separate_thousands($nCm, $opt_thousands_delimiter),
+                                      separate_thousands($nCo, $opt_thousands_delimiter));
             } elsif ($format == 4) {
-                @out = ($file, $nB, $nCm, $nCo, $nB + $nCm + $nCo);
+                @out = ($file, separate_thousands($nB,  $opt_thousands_delimiter),
+                               separate_thousands($nCm, $opt_thousands_delimiter),
+                               separate_thousands($nCo, $opt_thousands_delimiter),
+                               separate_thousands($nB + $nCm + $nCo, $opt_thousands_delimiter));
             } else {
-                @out = ($file, $lang, $nB, $nCm, $nCo, $nB + $nCm + $nCo);
+                @out = ($file, $lang,
+                               separate_thousands($nB,  $opt_thousands_delimiter),
+                               separate_thousands($nCm, $opt_thousands_delimiter),
+                               separate_thousands($nCo, $opt_thousands_delimiter),
+                               separate_thousands($nB + $nCm + $nCo, $opt_thousands_delimiter));
             }
-            push @prt_lines, sprintf $val_fmt{$format}, @out;
+            push @prt_lines, sprintf $str_fmt{$format}, @out;
             $n_blank   += $nB;
             $n_comment += $nCm;
             $n_code    += $nCo;
@@ -15506,17 +15540,32 @@ sub print_format_n {                         # {{{1
     push @prt_lines, "$hyphens{$format}\n";
     if (scalar @file_list > 1) {
         if      ($format == 1) {
-            @out = ( "SUM", $n_files, $n_blank, $n_comment, $n_code );
+            @out = ( "SUM", separate_thousands($n_files,   $opt_thousands_delimiter),
+                            separate_thousands($n_blank,   $opt_thousands_delimiter),
+                            separate_thousands($n_comment, $opt_thousands_delimiter),
+                            separate_thousands($n_code,    $opt_thousands_delimiter));
         } elsif ($format == 2) {
-            @out = ( "SUM", $n_files, $n_blank, $n_comment, $n_code, $n_total );
+            @out = ( "SUM", separate_thousands($n_files,   $opt_thousands_delimiter),
+                            separate_thousands($n_blank,   $opt_thousands_delimiter),
+                            separate_thousands($n_comment, $opt_thousands_delimiter),
+                            separate_thousands($n_code,    $opt_thousands_delimiter),
+                            separate_thousands($n_total,   $opt_thousands_delimiter));
         } elsif ($format == 3) {
-            @out = ( "SUM", " ", $n_blank, $n_comment, $n_code );
+            @out = ( "SUM", " ", separate_thousands($n_blank,   $opt_thousands_delimiter),
+                                 separate_thousands($n_comment, $opt_thousands_delimiter),
+                                 separate_thousands($n_code,    $opt_thousands_delimiter));
         } elsif ($format == 4) {
-            @out = ( "SUM", $n_blank, $n_comment, $n_code, $n_total );
+            @out = ( "SUM", separate_thousands($n_blank,   $opt_thousands_delimiter),
+                            separate_thousands($n_comment, $opt_thousands_delimiter),
+                            separate_thousands($n_code,    $opt_thousands_delimiter),
+                            separate_thousands($n_total,   $opt_thousands_delimiter));
         } else {
-            @out = ( "SUM", " ", $n_blank, $n_comment, $n_code, $n_total );
+            @out = ( "SUM", " ", separate_thousands($n_blank,   $opt_thousands_delimiter),
+                                 separate_thousands($n_comment, $opt_thousands_delimiter),
+                                 separate_thousands($n_code,    $opt_thousands_delimiter),
+                                 separate_thousands($n_total,   $opt_thousands_delimiter));
         }
-        push @prt_lines, sprintf $val_fmt{$format}, @out;
+        push @prt_lines, sprintf $str_fmt{$format}, @out;
         push @prt_lines, "$hyphens{$format}\n";
     }
     return @prt_lines;
