@@ -1,0 +1,35 @@
+---
+# github.com/AlDanial/cloc
+header :
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.75
+  elapsed_seconds    : 0.00842499732971191
+  n_files            : 1
+  n_lines            : 399
+  files_per_second   : 118.694399637773
+  lines_per_second   : 47359.0654554716
+  report_file        : issues/912/results_4.yaml
+Rust:
+  nFiles: 1
+  blank: 100,000
+  comment: 100,000
+  code: 100,000
+  total: 300,000
+Python:
+  nFiles: 1
+  blank: 1,000
+  comment: 1,000
+  code: 1,000
+  total: 3,000
+C:
+  nFiles: 1
+  blank: 10
+  comment: 10
+  code: 10
+  total: 30
+SUM:
+  nFiles: 3
+  blank: 101,010
+  comment: 101,010
+  code: 101,010
+  total: 303,030
