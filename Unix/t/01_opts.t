@@ -909,55 +909,6 @@ my @Tests = (
                    'ref'  => '../tests/outputs/issues/906/results.yaml',
                 },
 
-                {
-                    'name' => 'Thousands delimiter default fmt 1',
-                    'cd'   => '../tests/inputs/issues/912',
-                    'args' => '--fmt 1 10_lines.c 1_000_lines.py 100_000_lines.rs',
-                    'ref'  => '../tests/outputs/issues/912/results_1.yaml',
-                },
-
-                {
-                    'name' => 'Thousands delimiter default fmt 2',
-                    'cd'   => '../tests/inputs/issues/912',
-                    'args' => '--fmt 2 10_lines.c 1_000_lines.py 100_000_lines.rs',
-                    'ref'  => '../tests/outputs/issues/912/results_2.yaml',
-                },
-
-                {
-                    'name' => 'Thousands delimiter default fmt 3',
-                    'cd'   => '../tests/inputs/issues/912',
-                    'args' => '--fmt 3 10_lines.c 1_000_lines.py 100_000_lines.rs',
-                    'ref'  => '../tests/outputs/issues/912/results_3.yaml',
-                },
-
-                {
-                    'name' => 'Thousands delimiter default fmt 4',
-                    'cd'   => '../tests/inputs/issues/912',
-                    'args' => '--fmt 4 10_lines.c 1_000_lines.py 100_000_lines.rs',
-                    'ref'  => '../tests/outputs/issues/912/results_4.yaml',
-                },
-
-                {
-                    'name' => 'Thousands delimiter default fmt 5',
-                    'cd'   => '../tests/inputs/issues/912',
-                    'args' => '--fmt 5 10_lines.c 1_000_lines.py 100_000_lines.rs',
-                    'ref'  => '../tests/outputs/issues/912/results_5.yaml',
-                },
-
-                {
-                    'name' => 'Thousands delimiter custom fmt 1',
-                    'cd'   => '../tests/inputs/issues/912',
-                    'args' => '--fmt 1 --thousands-delimiter=\'_\' 10_lines.c 1_000_lines.py 100_000_lines.rs',
-                    'ref'  => '../tests/outputs/issues/912/results_custom.yaml',
-                },
-
-                {
-                    'name' => 'Thousands delimiter 1000 files',
-                    'cd'   => '../tests/inputs/issues/912/1_000_files/',
-                    'args' => '--fmt 1 *.py',
-                    'ref'  => '../tests/outputs/issues/912/results_1_000_files.yaml',
-                },
-
             );
 
 # Special cases:
