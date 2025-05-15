@@ -278,7 +278,8 @@ my (
     $opt_only_count_files     ,
     $opt_fmt                  ,
     $opt_encoding             ,
-    $opt_txt              ,  # not associated with a command line option
+    $opt_txt                  ,  # not associated with a command line option
+    $opt_thousands_delimiter  ,
    );
 
 my $getopt_success = GetOptions(             # {{{1
@@ -388,6 +389,7 @@ my $getopt_success = GetOptions(             # {{{1
    "only_count_files|only-count-files"       => \$opt_only_count_files    ,
    "fmt=i"                                   => \$opt_fmt                 ,
    "encoding=s"                              => \$opt_encoding            , # not production ready #880
+   "ksep|thousands-delimiter=s"              => \$opt_thousands_delimiter ,
   );
 $opt_txt = 0;
 my $opt_fmt_tempfile = "";
@@ -486,6 +488,7 @@ load_from_config_file($config_file,          # {{{2
                                                 \$opt_file_encoding       ,
                                                 \$opt_docstring_as_code   ,
                                                 \$opt_stat                ,
+                                                \$opt_thousands_delimiter ,
 );  # 2}}} Not pretty.  Not at all.
 my $HAVE_Parallel_ForkManager = undef;
 if ($opt_processes and $opt_processes > 1) {
@@ -562,6 +565,7 @@ if (defined $opt_diff_timeout) {
 } else {
     $opt_diff_timeout  =10; # seconds
 }
+$opt_thousands_delimiter = 0 unless defined $opt_thousands_delimiter;
 if (defined $opt_timeout) {
     # if defined but with a value of <= 0, set to 2^31-1 seconds = 68 years
     $opt_timeout = 2**31-1 unless $opt_timeout > 0;
@@ -1818,7 +1822,7 @@ sub produce_output {                         # {{{1
         write_file($adjusted_outfile, {}, @{$ra_Lines_Out});
     } else {
         if ($opt_fmt) {
-            print "@{$ra_Lines_Out}";
+            print join("", @{$ra_Lines_Out});
         } else {
             print "\n" unless $opt_quiet;
             print join("\n", @{$ra_Lines_Out}), "\n";
@@ -2399,15 +2403,21 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              cloc-diff.xsl if --diff is also given).
                              This switch forces --xml on.
    --yaml                    Write the results in YAML.
-
+   --thousands-delimiter=<C> Divides numbers with many digits (i.e. numbers
+                             over 999) into groups using the character <C> as
+                             delimiter (e.g. for <C> = '.': 12345 -> 12.345).
+                             Only works with the '--fmt' option.
+                             Sample values: '.', ',', '_', ' '
+                             Synonym:  --ksep
 ";
-#  Help information for options not yet implemented:
-#  --inline                  Process comments that appear at the end
-#                            of lines containing code.
-#  --html                    Create HTML files of each input file showing
-#                            comment and code lines in different colors.
 }
 # 1}}}
+sub separate_thousands {
+    my ($number, $separator,) = @_;
+    while ($number =~ s/(\d+)(\d\d\d)/$1\=$2/) { };
+    $number =~ s/=/${separator}/g;
+    return $number;
+}
 sub summary_cutoff_error {                   # {{{
     my ($parameter) = @_;
     print "-> summary_cutoff_is_ok($parameter)\n" if $opt_v > 2;
@@ -15429,11 +15439,11 @@ sub print_format_n {                         # {{{1
         5 => sprintf("%%-%ds  %%-%ds  %%7s  %%7s  %%7s  %%7s\n", $file_len, $lang_len),
     );
     my %val_fmt = (
-        1 => sprintf("%%-%ds  %%7d  %%7d  %%7d  %%7d\n", $lang_len),
-        2 => sprintf("%%-%ds  %%7d  %%7d  %%7d  %%7d  %%7d\n", $lang_len),
-        3 => sprintf("%%-%ds  %%-%ds  %%7d  %%7d  %%7d\n", $file_len, $lang_len),
-        4 => sprintf("%%-%ds  %%7d  %%7d  %%7d  %%7d\n", $file_len),
-        5 => sprintf("%%-%ds  %%-%ds  %%7d  %%7d  %%7d  %%7d\n", $file_len, $lang_len),
+        1 => sprintf("%%-%ds  %%7s  %%7s  %%7s  %%7s\n", $lang_len),
+        2 => sprintf("%%-%ds  %%7s  %%7s  %%7s  %%7s  %%7s\n", $lang_len),
+        3 => sprintf("%%-%ds  %%-%ds  %%7s  %%7s  %%7s\n", $file_len, $lang_len),
+        4 => sprintf("%%-%ds  %%7s  %%7s  %%7s  %%7s\n", $file_len),
+        5 => sprintf("%%-%ds  %%-%ds  %%7d  %%7s  %%7s  %%7s\n", $file_len, $lang_len),
     );
     my %language = ();
     foreach my $file (keys %contents) {
@@ -15470,6 +15480,7 @@ sub print_format_n {                         # {{{1
     push @prt_lines, "$hyphens{$format}\n";
     my ($n_files, $n_blank, $n_comment, $n_code, $n_total) = (0, 0, 0, 0, 0);
     my @out;
+    my $sum;
     if ($format < 3) {
         # by language
         foreach my $lang (@lang_list) {
@@ -15477,17 +15488,25 @@ sub print_format_n {                         # {{{1
                                          $language{$lang}{'blank'},
                                          $language{$lang}{'comment'},
                                          $language{$lang}{'code'});
-            if      ($format == 1) {
-                @out = ($lang, $nF, $nB, $nCm, $nCo);
-            } else {
-                @out = ($lang, $nF, $nB, $nCm, $nCo, $nB + $nCm + $nCo);
-            }
-            push @prt_lines, sprintf $val_fmt{$format}, @out;
             $n_files   += $nF;
             $n_blank   += $nB;
             $n_comment += $nCm;
             $n_code    += $nCo;
             $n_total   += $nB + $nCm + $nCo;
+            $sum = $nB + $nCm + $nCo;
+            if ($opt_thousands_delimiter) {
+                $sum = separate_thousands($sum, $opt_thousands_delimiter);
+                $nF  = separate_thousands($nF,  $opt_thousands_delimiter);
+                $nB  = separate_thousands($nB,  $opt_thousands_delimiter);
+                $nCm = separate_thousands($nCm, $opt_thousands_delimiter);
+                $nCo = separate_thousands($nCo, $opt_thousands_delimiter);
+            }
+            if      ($format == 1) {
+                @out = ($lang, $nF, $nB, $nCm, $nCo);
+            } else {
+                @out = ($lang, $nF, $nB, $nCm, $nCo, $sum);
+            }
+            push @prt_lines, sprintf $str_fmt{$format}, @out;
         }
     } else {
         # by file
@@ -15495,36 +15514,50 @@ sub print_format_n {                         # {{{1
             my ($nB, $nCm, $nCo) = ($contents{$file}{'blank'},
                                     $contents{$file}{'comment'},
                                     $contents{$file}{'code'});
+            $n_blank   += $nB;
+            $n_comment += $nCm;
+            $n_code    += $nCo;
+            $n_total   += $nB + $nCm + $nCo;
+            $sum = $nB + $nCm + $nCo;
+            if ($opt_thousands_delimiter) {
+                $sum = separate_thousands($sum, $opt_thousands_delimiter);
+                $nB  = separate_thousands($nB,  $opt_thousands_delimiter);
+                $nCm = separate_thousands($nCm, $opt_thousands_delimiter);
+                $nCo = separate_thousands($nCo, $opt_thousands_delimiter);
+            }
             my $lang = $contents{$file}{'language'};
             if      ($format == 1) {
             } elsif ($format == 3) {
                 @out = ($file, $lang, $nB, $nCm, $nCo);
             } elsif ($format == 4) {
-                @out = ($file, $nB, $nCm, $nCo, $nB + $nCm + $nCo);
+                @out = ($file, $nB, $nCm, $nCo, $sum);
             } else {
-                @out = ($file, $lang, $nB, $nCm, $nCo, $nB + $nCm + $nCo);
+                @out = ($file, $lang, $nB, $nCm, $nCo, $sum);
             }
-            push @prt_lines, sprintf $val_fmt{$format}, @out;
-            $n_blank   += $nB;
-            $n_comment += $nCm;
-            $n_code    += $nCo;
-            $n_total   += $nB + $nCm + $nCo;
+            push @prt_lines, sprintf $str_fmt{$format}, @out;
         }
     }
     push @prt_lines, "$hyphens{$format}\n";
     if (scalar @file_list > 1) {
-        if      ($format == 1) {
-            @out = ( "SUM", $n_files, $n_blank, $n_comment, $n_code );
-        } elsif ($format == 2) {
-            @out = ( "SUM", $n_files, $n_blank, $n_comment, $n_code, $n_total );
-        } elsif ($format == 3) {
-            @out = ( "SUM", " ", $n_blank, $n_comment, $n_code );
-        } elsif ($format == 4) {
-            @out = ( "SUM", $n_blank, $n_comment, $n_code, $n_total );
-        } else {
-            @out = ( "SUM", " ", $n_blank, $n_comment, $n_code, $n_total );
+        if ($opt_thousands_delimiter) {
+            $n_files   = separate_thousands($n_files,   $opt_thousands_delimiter);
+            $n_blank   = separate_thousands($n_blank,   $opt_thousands_delimiter);
+            $n_comment = separate_thousands($n_comment, $opt_thousands_delimiter);
+            $n_code    = separate_thousands($n_code,    $opt_thousands_delimiter);
+            $n_total   = separate_thousands($n_total,   $opt_thousands_delimiter);
         }
-        push @prt_lines, sprintf $val_fmt{$format}, @out;
+        if      ($format == 1) {
+            @out = ( "SUM", $n_files, $n_blank, $n_comment, $n_code);
+        } elsif ($format == 2) {
+            @out = ( "SUM", $n_files, $n_blank, $n_comment, $n_code, $n_total);
+        } elsif ($format == 3) {
+            @out = ( "SUM", " ", $n_blank, $n_comment, $n_code);
+        } elsif ($format == 4) {
+            @out = ( "SUM", $n_blank, $n_comment, $n_code, $n_total);
+        } else {
+            @out = ( "SUM", " ", $n_blank, $n_comment, $n_code, $n_total);
+        }
+        push @prt_lines, sprintf $str_fmt{$format}, @out;
         push @prt_lines, "$hyphens{$format}\n";
     }
     return @prt_lines;
