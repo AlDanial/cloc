@@ -42,6 +42,7 @@ at http://cloc.sourceforge.net/ since August 2006.
     *   [git and UTF8 pathnames](#git-and-UTF8-pathnames-)
     *   [Third Generation Language Scale Factors](#third-generation-language-scale-factors-)
     *   [options.txt configuration file](#optionstxt-configuration-file-)
+    *   [Python Programmatic Interface](#python-programmatic-interface-)
     *   [Java Programmatic Interface](#java-programmatic-interface-)
 *   [Complex regular subexpression recursion limit ](#complex-regular-subexpression-recursion-limit-)
 *   [Limitations](#limitations-)
@@ -2948,6 +2949,14 @@ from that location:
 
 Run with ``--verbose`` to have cloc tell you which, if
 any, ``options.txt`` file it uses.
+
+[](1}}})
+<a name="Python Programmatic Interface"></a> []({{{1)
+##  [Python Programmatic Interface &#9650;](#___top "click to go to top of document")
+
+[Stefano Campanella](https://github.com/StefanoStone)
+created a Python programmatic interface to cloc.
+It is available at https://github.com/USIREVEAL/pycloc
 
 [](1}}})
 <a name="Java Programmatic Interface"></a> []({{{1)
