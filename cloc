@@ -333,6 +333,7 @@ my $getopt_success = GetOptions(             # {{{1
    "3"                                       => \$opt_3                   ,
    "v|verbose:i"                             => \$opt_v                   ,
    "vcs=s"                                   => \$opt_vcs                 ,
+   "files-from=s"                            => \$opt_vcs                 ,  # synonym
    "version"                                 => \$opt_version             ,
    "write_lang_def|write-lang-def=s"         => \$opt_write_lang_def      ,
    "write_lang_def_incl_dup|write-lang-def-incl-dup=s" => \$opt_write_lang_def_incl_dup,
@@ -1912,8 +1913,9 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              starting from the directory where cloc is invoked.
                              This enables --diff mode.  See also --list-file,
                              --diff-list-file, --diff.
-   --vcs=<VCS>               Invoke a system call to <VCS> to obtain a list of
-                             files to work on.  If <VCS> is 'git', then will
+   --files-from=<CMD>        Synonym for --vcs=<CMD>.
+   --vcs=<CMD>               Invoke a system call to <CMD> to obtain a list of
+                             files to work on.  If <CMD> is 'git', then will
                              invoke 'git ls-files' to get a file list and
                              'git submodule status' to get a list of submodules
                              whose contents will be ignored.  See also --git
@@ -1923,19 +1925,20 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              files explicitly excluded by the versioning tool
                              in question, ie, those in .gitignore or have the
                              svn:ignore property.
-                             Alternatively <VCS> may be any system command
+                             Alternatively <CMD> may be any system command
                              that generates a list of files.
                              Note:  cloc must be in a directory which can read
-                             the files as they are returned by <VCS>.  cloc will
+                             the files as they are returned by <CMD>.  cloc will
                              not download files from remote repositories.
                              'svn list -R' may refer to a remote repository
                              to obtain file names (and therefore may require
                              authentication to the remote repository), but
                              the files themselves must be local.
-                             Setting <VCS> to 'auto' selects between 'git'
+                             Setting <CMD> to 'auto' selects between 'git'
                              and 'svn' (or neither) depending on the presence
                              of a .git or .svn subdirectory below the directory
                              where cloc is invoked.
+                             --files-from is a synonym for --vcs.
    --unicode                 Check binary files to see if they contain Unicode
                              expanded ASCII text.  This causes performance to
                              drop noticeably.

@@ -52,8 +52,6 @@ at http://cloc.sourceforge.net/ since August 2006.
 *   [Acknowledgments](#acknowledgments-)
 *   [Copyright](#copyright-)
 
-[![Warp packs green](https://github.com/user-attachments/assets/f65431e9-8e97-4813-92fa-86eaf7c0fbbb)](https://warp.dev/cloc)
-
 <a name="Quick_Start"></a>      []({{{1)
 # [Quick Start &#9650;](#___top "click to go to top of document")
 
