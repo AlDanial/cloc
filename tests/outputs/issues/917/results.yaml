@@ -1,0 +1,115 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.05
+  elapsed_seconds    : 0.127105951309204
+  n_files            : 4
+  n_lines            : 308
+  files_per_second   : 31.4698089176754
+  lines_per_second   : 2423.175286661
+added :
+  'Markdown' :
+    comment : 0
+    nFiles : 1
+    blank : 0
+    code : 2
+  'Python' :
+    comment : 11
+    nFiles : 1
+    blank : 4
+    code : 2
+  'C++' :
+    comment : 55
+    nFiles : 1
+    blank : 49
+    code : 182
+  'MATLAB' :
+    comment : 1
+    nFiles : 1
+    blank : 0
+    code : 2
+same :
+  'Markdown' :
+    comment : 0
+    nFiles : 0
+    blank : 0
+    code : 0
+  'Python' :
+    comment : 0
+    nFiles : 0
+    blank : 0
+    code : 0
+  'C++' :
+    comment : 0
+    nFiles : 0
+    blank : 0
+    code : 0
+  'MATLAB' :
+    comment : 0
+    nFiles : 0
+    blank : 0
+    code : 0
+modified :
+  'Markdown' :
+    comment : 0
+    nFiles : 0
+    blank : 0
+    code : 0
+  'Python' :
+    comment : 0
+    nFiles : 0
+    blank : 0
+    code : 0
+  'C++' :
+    comment : 0
+    nFiles : 0
+    blank : 0
+    code : 0
+  'MATLAB' :
+    comment : 0
+    nFiles : 0
+    blank : 0
+    code : 0
+removed :
+  'Markdown' :
+    comment : 0
+    nFiles : 0
+    blank : 0
+    code : 0
+  'Python' :
+    comment : 0
+    nFiles : 0
+    blank : 0
+    code : 0
+  'C++' :
+    comment : 0
+    nFiles : 0
+    blank : 0
+    code : 0
+  'MATLAB' :
+    comment : 0
+    nFiles : 0
+    blank : 0
+    code : 0
+SUM :
+  added :
+    comment : 67
+    blank : 53
+    nFiles : 4
+    code : 188
+  same :
+    comment : 0
+    blank : 0
+    nFiles : 0
+    code : 0
+  modified :
+    comment : 0
+    blank : 0
+    nFiles : 0
+    code : 0
+  removed :
+    comment : 0
+    blank : 0
+    nFiles : 0
+    code : 0
