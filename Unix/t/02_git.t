@@ -103,6 +103,13 @@ my @Tests = (
                     'cd'   => '.',
                 },
 
+                {
+                    'name' => '--exclude-lang with --git --diff and all additions, #917',
+                    'args' => '--git --diff ../../tests/inputs/issues/917/empty.tar f647093e8b --exclude-lang=C',
+                    'ref'  => '../tests/outputs/issues/917/results.yaml',
+                    'cd'   => 'cloc_submodule_test',
+                },
+
             );
 
 my $Verbose = 0;
