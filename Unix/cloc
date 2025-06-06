@@ -5403,18 +5403,20 @@ sub merge_lang_def {                         # {{{1
 } # 1}}}
 sub print_extension_info {                   # {{{1
     my ($extension,) = @_;
+    printf "%-15s %s\n", "Extension", "Language";
+    printf "%-15s %s\n", "---------", "-" x 20;
     if ($extension) {  # show information on this extension
         foreach my $ext (sort {lc $a cmp lc $b or $a cmp $b } keys %Language_by_Extension) {
             # Language_by_Extension{f}    = 'Fortran 77'
             next if $Language_by_Extension{$ext} =~ /Brain/;
-            printf "%-15s -> %s\n", $ext, $Language_by_Extension{$ext}
+            printf "%-15s %s\n", $ext, $Language_by_Extension{$ext}
                 if $ext =~ m{$extension}i;
         }
     } else {           # show information on all  extensions
         foreach my $ext (sort {lc $a cmp lc $b or $a cmp $b } keys %Language_by_Extension) {
             next if $Language_by_Extension{$ext} =~ /Brain/;
             # Language_by_Extension{f}    = 'Fortran 77'
-            printf "%-15s -> %s\n", $ext, $Language_by_Extension{$ext};
+            printf "%-15s %s\n", $ext, $Language_by_Extension{$ext};
         }
     }
 } # 1}}}
@@ -5533,6 +5535,8 @@ sub print_language_info {                    # {{{1
         push @{$extensions{'Cangjie'}} , "cj";
         delete $extensions{'Clojure/Cangjie'};
     }
+    printf "%-26s %s\n", "Language", "Extension(s)";
+    printf "%-26s %s\n", "-" x 20, "-" x 40;
     if ($opt_explain) {
         return unless $extensions{$language};
         if ($prefix) {
