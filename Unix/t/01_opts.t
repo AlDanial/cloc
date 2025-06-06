@@ -881,6 +881,8 @@ my @Tests = (
                    'ref'  => '../tests/outputs/issues/862/diff_results.yaml',
                 },
 
+                # The filename tests/inputs/issues/898/irregular"file2.md
+                # is not legal on Windows.  Only test it on Unix-like systems.
                 {
                    'name' => '--by-file output for JSON/YAML with filenames having embedded quotes (#897, #898)',
                    'cd'   => '../tests/inputs/issues/898',
@@ -911,12 +913,29 @@ my @Tests = (
 
             );
 
+my $ON_WINDOWS = 0;
+   $ON_WINDOWS = 1 if ($^O =~ /^MSWin/) or ($^O eq "Windows_NT");
+if ($ON_WINDOWS and $ENV{'SHELL'}) {
+    if ($ENV{'SHELL'} =~ m{^/}) {
+        $ON_WINDOWS = 0;  # make Cygwin look like Unix
+    } else {
+        $ON_WINDOWS = 1;  # MKS defines $SHELL but still acts like Windows
+    }
+}
+my $ON_MINGW64 = 0; # git-bash on Windows has special needs
+if (!$ON_WINDOWS and defined $ENV{'SSH_ASKPASS'} and $ENV{'SSH_ASKPASS'} =~ m{^/mingw64/}) {
+    $ON_MINGW64 = 1;
+}
+
 # Special cases:
 
-# Create test input for issue #132 which needs data not in the git repo.
+# 132: Create test input which needs data not in the git repo.
 # Silently fail if file/dir already exists.
 mkdir "../tests/inputs/issues/132/ignore_git";
 cp    "../tests/inputs/hi.py", "../tests/inputs/issues/132/ignore_git/";
+
+# 898
+make_898_weird_filename() unless $ON_WINDOWS;
 
 # Issues #540, #544 regarding case preservation on file systems
 # that are case insensitive:  git issues a warning about the
@@ -939,6 +958,10 @@ my $cloc    = "$work_dir/../cloc";                 # all-purpose version
    $cloc    = "$work_dir/cloc" if defined $opt{u}; # Unix-tuned version
 my $Run = "$cloc --quiet --yaml --out $results ";
 foreach my $t (@Tests) {
+    if ($t->{'name'} =~ /#898/ and $ON_WINDOWS) {
+        print "Skipping test $t->{'name'} on Windows.\n";
+        next;
+    }
     chdir($t->{'cd'}) if defined $t->{'cd'};
     print "Run  dir= ", cwd(), "\n" if $Verbose;
     print  $Run . $t->{'args'} if $Verbose;
@@ -986,4 +1009,31 @@ sub load_yaml { # {{{1
     }
     close IN;
     return %result
+} # 1}}}
+sub make_898_weird_filename { # {{{1
+    my $parent_dir = "../tests/inputs/issues/898";
+    if (!-d $parent_dir) {
+        print "Cannot find $parent_dir, skipping test 898.\n";
+        return 0;
+    }
+    my $weird_filename = 'irregular"file2.md';
+    my $content = <<'EOF';
+---
+id: 5dc174fcf86c76b9248c6eb3
+title: Step 3
+challengeType: 0
+dashedName: step-2
+demoType: onLoad                                                                                                                 ---
+
+# --description--
+
+In this workshop, you will learn how to work with basic HTML elements like
+headings.
+
+EOF
+    open OUT , ">$parent_dir/$weird_filename" or die "Cannot write to  $weird_filename : $!";
+    print OUT $content;
+    close OUT;
+
+    return 1;
 } # 1}}}
