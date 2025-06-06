@@ -2807,6 +2807,11 @@ sub count_filesets {                         # {{{1
             next unless defined $Language{$fset}{$file};
             my $Lang = $Language{$fset}{$file};
             next if $Lang eq '(unknown)';
+            if ($Exclude_Language{$Lang}) {
+                $p_ignored{$file} = "--exclude-lang=$Lang";
+                next;
+            }
+
             my ($all_line_count,
                 $blank_count   ,
                 $comment_count ,
@@ -5945,13 +5950,15 @@ sub git_archive {                            # {{{1
     my $files_this_commit = join(" ", @{$File_Set[0]});
     print "   git_archive(file_set[0]=$files_this_commit)\n" if $opt_v > 2;
     my ($Tarfh, $Tarfile);
+    my $archive_ext = $ON_WINDOWS ? '.zip'         : '.tar';
+    my $format      = $ON_WINDOWS ? '--format=zip' : "";
     if ($opt_sdir) {
       File::Path::mkpath($opt_sdir) unless is_dir($opt_sdir);
-      ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, DIR => $opt_sdir, SUFFIX => '.tar');  # delete on exit
+      ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, DIR => $opt_sdir, SUFFIX => $archive_ext);  # delete on exit
     } else {
-      ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, SUFFIX => '.tar');  # delete on exit
+      ($Tarfh, $Tarfile) = tempfile(UNLINK => 1, SUFFIX => $archive_ext);  # delete on exit
     }
-    my $cmd = "git -c \"safe.directory=*\" archive -o $Tarfile $files_this_commit";
+    my $cmd = "git -c \"safe.directory=*\" archive $format -o $Tarfile $files_this_commit";
     print  $cmd, "\n" if $opt_v;
     system $cmd;
     if (!can_read($Tarfile) or !get_size($Tarfile)) {
@@ -5965,7 +5972,7 @@ sub git_archive {                            # {{{1
             foreach my $i (1..$n_sets-1) {
                 my $fname = sprintf "%s_extra_%08d", $Tarfile, $i;
                 my $files_this_commit = join(" ", @{$File_Set[$i]});
-                my $cmd = "git -c \"safe.directory=*\" archive -o $fname $files_this_commit";
+                my $cmd = "git -c \"safe.directory=*\" archive $format -o $fname $files_this_commit";
                 print  $cmd, "\n" if $opt_v;
                 system $cmd;
                 push @tar_files, $fname;
@@ -5990,7 +5997,7 @@ sub git_archive {                            # {{{1
         } else {
             foreach my $i (1..$n_sets-1) {
                 my $files_this_commit = join(" ", @{$File_Set[$i]});
-                my $cmd = "git -c \"safe.directory=*\" archive -o ${Tarfile}_extra $files_this_commit";
+                my $cmd = "git -c \"safe.directory=*\" archive $format -o ${Tarfile}_extra $files_this_commit";
                 print  $cmd, "\n" if $opt_v;
                 system $cmd;
                 # and merge into the first one
