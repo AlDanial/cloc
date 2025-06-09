@@ -9565,6 +9565,8 @@ sub set_constants {                          # {{{1
             'twig'        => 'Twig'                  ,
             'typ'         => 'Typst'                 ,
             'um'          => 'Umka'                  ,
+            'uss'         => 'USS'                   ,
+            'uxml'        => 'UXML'                  ,
             'ui'          => 'XML-Qt-GTK/Glade'      ,
             'glade'       => 'Glade'                 ,
             'vala'        => 'Vala'                  ,
@@ -11381,6 +11383,15 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
+    'USS'                => [   # same as CSS
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C'      ],
+                            ],
+    'UXML'               => [
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
     'Visual Fox Pro'     =>  [
                                 [ 'remove_matches'      , '^\s*\*' ],
                                 [ 'remove_inline'       , '\*.*$'  ],
@@ -12146,6 +12157,8 @@ sub set_constants {                          # {{{1
     'Typst'                        =>   3.00,
     'Umka'                         =>   2.00,
     'Unity-Prefab'                 =>   2.50,
+    'USS'                          =>   1.0,
+    'UXML'                         =>   1.90,
     'Vala'                         =>   1.50,
     'Vala Header'                  =>   1.40,
     'Verilog-SystemVerilog'        =>   1.51,
