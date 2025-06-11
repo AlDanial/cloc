@@ -1125,6 +1125,11 @@ my @Tests = (
                     'args' => '../tests/inputs/LogMain.re',
                 },
                 {
+                    'name' => 'Rego',
+                    'ref'  => '../tests/outputs/test.rego.yaml',
+                    'args' => '../tests/inputs/test.rego',
+                },
+                {
                     'name' => 'ReScript',
                     'ref'  => '../tests/outputs/RedBlackTree.res.yaml',
                     'args' => '../tests/inputs/RedBlackTree.res',
