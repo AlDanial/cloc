@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.05
+  elapsed_seconds    : 0.00441598892211914
+  n_files            : 1
+  n_lines            : 13
+  files_per_second   : 226.449843429435
+  lines_per_second   : 2943.84796458266
+  report_file        : ../outputs/USS.uss.yaml
+'USS' :
+  nFiles: 1
+  blank: 1
+  comment: 7
+  code: 5
+SUM: 
+  blank: 1
+  comment: 7
+  code: 5
+  nFiles: 1

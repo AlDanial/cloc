@@ -1,0 +1,13 @@
+/* https://github.com/AlDanial/cloc/pull/919 */
+/* name selector (like ID selector in CSS) */
+#root {
+    /* 
+    some style
+    this is an example of a multiline comment 
+    */
+}
+
+/* class selector (like in CSS) */
+.hidden {
+    display: none;
+}

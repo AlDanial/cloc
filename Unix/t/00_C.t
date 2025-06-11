@@ -899,6 +899,12 @@ my @Tests = (
                 },
 
                 {
+                    'name' => 'Org Mode',
+                    'ref'  => '../tests/outputs/orgmode.org.yaml',
+                    'args' => '../tests/inputs/orgmode.org',
+                },
+
+                {
                     'name' => 'P4',
                     'ref'  => '../tests/outputs/basic.p4.yaml',
                     'args' => '../tests/inputs/basic.p4',
@@ -1368,11 +1374,25 @@ my @Tests = (
                     'ref'  => '../tests/outputs/notes.typ.yaml',
                     'args' => '../tests/inputs/notes.typ',
                 },
+
                 {
                     'name' => 'Umka',
                     'ref'  => '../tests/outputs/fractal.um.yaml',
                     'args' => '../tests/inputs/fractal.um',
                 },
+
+                {
+                    'name' => 'USS',
+                    'ref'  => '../tests/outputs/USS.uss.yaml',
+                    'args' => '../tests/inputs/USS.uss',
+                },
+
+                {
+                    'name' => 'UXML',
+                    'ref'  => '../tests/outputs/UXML.uxml.yaml',
+                    'args' => '../tests/inputs/UXML.uxml',
+                },
+
                 {
                     'name' => 'Vala',
                     'ref'  => '../tests/outputs/gnureadline.vala.yaml',
@@ -1516,11 +1536,6 @@ my @Tests = (
                     'ref'  => '../tests/outputs/zir_sema.zig.yaml',
                     'args' => '../tests/inputs/zir_sema.zig',
                 },
-                {
-                    'name' => 'Org Mode',
-                    'ref'  => '../tests/outputs/orgmode.org.yaml',
-                    'args' => '../tests/inputs/orgmode.org',
-                }
             );
 
 my $Verbose = 0;

@@ -1,0 +1,7 @@
+<!-- https://github.com/AlDanial/cloc/pull/919 -->
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <!-- Importing styles from uss file -->
+    <Style src="project://database/Assets/UI/Resources/common.uss?fileID=7433441132597879392&amp;guid=c5fd8770b48bac1e48d6087c0a2e0230&amp;type=3#common" />
+    <!-- Instantiating build-in control (Button) -->
+    <ui:Button text="Choose me" name="choice" />
+</ui:UXML>
