@@ -9736,6 +9736,7 @@ sub set_constants {                          # {{{1
             'yang'        => 'Yang'                  ,
             'zig'         => 'Zig'                   ,
             'zsh'         => 'zsh'                   ,
+            'rego'        => 'Rego'                  ,
             );
 # 1}}}
 %{$rh_Language_by_Script}    = (             # {{{1
@@ -11621,6 +11622,10 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
+    "Rego"               => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
     );
 # 1}}}
 %{$rh_EOL_continuation_re} = (               # {{{1
@@ -12219,6 +12224,7 @@ sub set_constants {                          # {{{1
     'Xtend'                        => 2.00,
     'Yang'                         => 3.00,
     'Zig'                          => 2.50,
+    "Rego"                         => 1.00,
     # aggregates; value is meaningless
     'C#/Smalltalk'                    => 1.00,
     'D/dtrace'                        => 1.00,
