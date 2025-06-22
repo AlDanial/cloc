@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "2.05";  # odd number == beta; even number == stable
+my $VERSION = "2.06";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.10.0;
 # use modules                                  {{{1
@@ -2399,6 +2399,12 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              'Oracle' and 'Named_Columns'.
    --sum-one                 For plain text reports, show the SUM: output line
                              even if only one input file is processed.
+   --thousands-delimiter=<C> Divides numbers with many digits (i.e. numbers
+                             over 999) into groups using the character <C> as
+                             delimiter (e.g. for <C> = '.': 12345 -> 12.345).
+                             Only works with the '--fmt' option.
+                             Sample values: '.', ',', '_', ' '
+                             Synonym:  --ksep
    --xml                     Write the results in XML.
    --xsl=<file>              Reference <file> as an XSL stylesheet within
                              the XML output.  If <file> is 1 (numeric one),
@@ -2406,12 +2412,6 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              cloc-diff.xsl if --diff is also given).
                              This switch forces --xml on.
    --yaml                    Write the results in YAML.
-   --thousands-delimiter=<C> Divides numbers with many digits (i.e. numbers
-                             over 999) into groups using the character <C> as
-                             delimiter (e.g. for <C> = '.': 12345 -> 12.345).
-                             Only works with the '--fmt' option.
-                             Sample values: '.', ',', '_', ' '
-                             Synonym:  --ksep
 ";
 }
 # 1}}}

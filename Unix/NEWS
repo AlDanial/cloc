@@ -1,3 +1,56 @@
+                Release Notes for cloc version 2.06
+                   https://github.com/AlDanial/cloc
+                             June 22, 2025
+
+New Languages and File Types:
+    o Cangjie
+    o Elixir Script
+    o Fortran 2003
+    o Jsonnet
+    o Nextflow
+    o Nushell
+    o Org Mode
+    o Rego
+    o UXML, USS (Unity)
+
+Updates:
+    o First attempt at using Github Actions to package a release
+      including making a Windows executable that works with
+      symlinks as used by winget
+    o Add column headers for --show-lang and --show-ext output
+    o Remove '->' separator in --show-ext output
+    o Remove leading blank space for --fmt output written to STDOUT
+    o New switch --files-from as a synonym for --vcs
+    o New switch --ksep/--thousands-delimiter to show a separator (default
+      is a comma) between thousands in output counts
+    o Change sequence of Python language filters so that docstrings are
+      handled before #
+    o Jenkinsfile now recognized as Groovy
+    o Improve Windows/Unix path conflicts when using --git --diff in
+      git-bash terminal
+    o New switch --percent as a shortcut to '--by-percent t' to show
+      percentage of totals in blank, comment, code columns
+    o Add backtick and C++ style comment support for Svelte
+    o Write results in multiple formats if multiple output format
+      switches are given (for example --json --yaml --xml)
+
+Bug fixes:
+    o Remove file 'irregular"file2.md' from the test suite as filenames
+      with embedded double quotes are illegal in Windows and cause git
+      pull problems (among other issues).  This file is created dynamically
+      during testing on non-Windows operating systems.
+    o On Windows use zip format instead of tar for the 'git archive' command
+      used when running with --git --diff
+    o Remove duplicate "percent" entry in options handling
+    o Support --exclude-lang in --diff mode
+    o Fix --exclude-lang option when used in diff mode and when all files
+      are additions or deletions
+    o On Windows, remove temporary "SCALAR(0x..)" files created when
+      using --fmt
+    o Handle --by-file for JSON and YAML outputs with single and double
+      quotes in file names
+
+============================================================================
                 Release Notes for cloc version 2.04
                    https://github.com/AlDanial/cloc
                              Jan. 31, 2025
