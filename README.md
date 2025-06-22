@@ -672,7 +672,8 @@ Usage: cloc [options] &lt;file(s)/dir(s)/git hash(es)&gt; | &lt;set 1&gt; &lt;se
                              Setting &lt;VCS&gt; to 'auto' selects between 'git'
                              and 'svn' (or neither) depending on the presence
                              of a .git or .svn subdirectory below the directory
-                             where cloc is invoked.
+                             where cloc is invoked.  --files-from is a synonym
+                             for --vcs.
    --unicode                 Check binary files to see if they contain Unicode
                              expanded ASCII text.  This causes performance to
                              drop noticeably.
@@ -1036,6 +1037,8 @@ Usage: cloc [options] &lt;file(s)/dir(s)/git hash(es)&gt; | &lt;set 1&gt; &lt;se
                              (JSON) formatted output.
    --md                      Write the results as Markdown-formatted text.
    --out=&lt;file&gt;              Synonym for --report-file=&lt;file&gt;.
+   --percent                 Show counts as percentages of sums for each column.
+                             Same as '--by-percent t'.
    --progress-rate=&lt;n&gt;       Show progress update after every &lt;n&gt; files are
                              processed (default &lt;n&gt;=100).  Set &lt;n&gt; to 0 to
                              suppress progress output (useful when redirecting
@@ -1056,6 +1059,12 @@ Usage: cloc [options] &lt;file(s)/dir(s)/git hash(es)&gt; | &lt;set 1&gt; &lt;se
                              'Oracle' and 'Named_Columns'.
    --sum-one                 For plain text reports, show the SUM: output line
                              even if only one input file is processed.
+   --thousands-delimiter=&lt;C&gt; Divides numbers with many digits (i.e. numbers
+                             over 999) into groups using the character <C> as
+                             delimiter (e.g. for <C> = '.': 12345 -> 12.345).
+                             Only works with the '--fmt' option.
+                             Sample values: '.', ',', '_', ' '
+                             Synonym:  --ksep
    --xml                     Write the results in XML.
    --xsl=&lt;file&gt;              Reference &lt;file&gt; as an XSL stylesheet within
                              the XML output.  If &lt;file&gt; is 1 (numeric one),
