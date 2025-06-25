@@ -5,9 +5,9 @@
 * * *
 cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.
 
-Latest release:  v2.04 (Jan. 31, 2025)
+Latest release:  v2.06 (June 24, 2025)
 
-[![Version](https://img.shields.io/badge/version-2.04-blue.svg)](https://github.com/AlDanial/cloc)
+[![Version](https://img.shields.io/badge/version-2.06-blue.svg)](https://github.com/AlDanial/cloc)
 [![Contributors](https://img.shields.io/github/contributors/AlDanial/cloc.svg)](https://github.com/AlDanial/cloc/graphs/contributors)
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.42029482.svg)](https://doi.org/10.5281/zenodo.42029482)
 [![Forks](https://img.shields.io/github/forks/AlDanial/cloc.svg)](https://github.com/AlDanial/cloc/network/members)
@@ -66,8 +66,8 @@ Step 3:  Invoke cloc to count your source files, directories, archives,
 or git commits.
 The executable name differs depending on whether you use the
 development source version (`cloc`), source for a
-released version (`cloc-2.04.pl`) or a Windows executable
-(`cloc-2.04.exe`).
+released version (`cloc-2.06.pl`) or a Windows executable
+(`cloc-2.06.exe`).
 
 On this page, `cloc` is the generic term
 used to refer to any of these.
@@ -306,8 +306,8 @@ on GitHub (link follows below) before submitting a problem report.
 <a name="Stable"></a> []({{{1)
 ## Stable release
 
-Download the latest released cloc source file, for example `cloc-2.04.pl`, or
-the Windows executable `cloc-2.04.exe` from
+Download the latest released cloc source file, for example `cloc-2.06.pl`, or
+the Windows executable `cloc-2.06.exe` from
 https://github.com/AlDanial/cloc/releases/latest
 
 <a name="Dev"></a>
@@ -450,15 +450,15 @@ C:> cpan -i Regexp::Common
 C:> cpan -i Algorithm::Diff
 C:> cpan -i PAR::Packer
 C:> cpan -i Win32::LongPath
-C:> pp -M Win32::LongPath -M Encode::Unicode -M Digest::MD5 -c -x -o cloc-2.04.exe cloc-2.04.pl
+C:> pp -M Win32::LongPath -M Encode::Unicode -M Digest::MD5 -c -x -o cloc-2.06.exe cloc-2.06.pl
 </pre>
 
 A variation on the instructions above is if you installed the portable
 version of Strawberry Perl, you will need to run `portableshell.bat` first
 to properly set up your environment.
 
-The Windows executable in the Releases section, <tt>cloc-2.04.exe</tt>,
-was built on a 64 bit Windows 10 computer using
+The Windows executable in the Releases section, <tt>cloc-2.06.exe</tt>,
+was built on a 64 bit Windows 11 computer using
 [Strawberry Perl](http://strawberryperl.com/)
 5.30.2 and
 [PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.050/lib/pp.pm)
@@ -479,6 +479,9 @@ executable and also check sites such
 https://www.virustotal.com/ .
 The entries for recent versions are:
 
+cloc-2.06.exe:
+https://www.virustotal.com/gui/file/e65a631e3a981b86537d1278028857b2bb799e6e80ef2d11b477bddbf84b2dee?nocache=1
+
 cloc-2.04.exe:
 https://www.virustotal.com/gui/file/89cda0038bf4e13c6c13ebc1e60bec4dfad362e69ac8a5b8e2d5ebe3020359e1
 
@@ -491,60 +494,6 @@ https://www.virustotal.com/gui/file/369ed76125f7399cd582d169adf39a2e08ae5066031f
 
 cloc-2.00.exe:
 https://www.virustotal.com/gui/file/7a234ef0cb495de1b5776acf88c5554e2bab1fb02725a5fb85756a6db3121c1f
-
-cloc-1.98.exe:
-https://www.virustotal.com/gui/file/88615d193ec8c06f7ceec3cc1d661088af997798d87ddff331d9e9f9128a6782?nocache=1
-
-cloc-1.96.1.exe:
-https://www.virustotal.com/gui/file/00b1c9dbbfb920dabd374418e1b86d2c24b8cd2b8705aeb956dee910d0d75d45?nocache=1
-
-cloc-1.96.exe:
-https://www.virustotal.com/gui/file/54bf5f46fbaba7949c4eb2d4837b03c774c0ba587448a5bad9b8efc0222b1583?nocache=1
-
-cloc-1.94.exe:
-https://www.virustotal.com/gui/file/b48a6002fb75fa66ec5d0c05a5c4d51f2ad22b5b025b7eb4e3945d18419c0952?nocache=1
-
-cloc-1.92.exe:
-https://www.virustotal.com/gui/file/2668fcf8609c431e8934fe9e1866bc620c58d198c4eb262f1d3ef31ef4a690f7
-
-cloc-1.90.exe:
-https://www.virustotal.com/gui/file/d655caae55486f9bac39f7e3c7b7553bcfcfe2b88914c79bfc328055f22b8a37/detection
-
-cloc-1.88.exe:
-https://www.virustotal.com/gui/file/97d5d2631d1cccdbfd99267ab8a4cf5968816bbe52c0f9324e72e768857f642d/detection
-
-cloc-1.86.exe:
-https://www.virustotal.com/gui/file/1b2e189df1834411b34534db446330d1c379b4bc008af3042ee9ade818c6a1c8/detection
-
-cloc-1.84.exe:
-https://www.virustotal.com/gui/file/e73d490c1e4ae2f50ee174005614029b4fa2610dcb76988714839d7be68479af/detection
-
-cloc-1.82.exe:
-https://www.virustotal.com/#/file/2e5fb443fdefd776d7b6b136a25e5ee2048991e735042897dbd0bf92efb16563/detection
-
-cloc-1.80.exe:
-https://www.virustotal.com/#/file/9e547b01c946aa818ffad43b9ebaf05d3da08ed6ca876ef2b6847be3bf1cf8be/detection
-
-cloc-1.78.exe:
-https://www.virustotal.com/#/file/256ade3df82fa92febf2553853ed1106d96c604794606e86efd00d55664dd44f/detection
-
-cloc-1.76.exe:
-https://www.virustotal.com/#/url/c1b9b9fe909f91429f95d41e9a9928ab7c58b21351b3acd4249def2a61acd39d/detection
-
-cloc-1.74_x86.exe:
-https://www.virustotal.com/#/file/b73dece71f6d3199d90d55db53a588e1393c8dbf84231a7e1be2ce3c5a0ec75b/detection
-
-cloc 1.72 exe:
-https://www.virustotal.com/en/url/8fd2af5cd972f648d7a2d7917bc202492012484c3a6f0b48c8fd60a8d395c98c/analysis/
-
-cloc 1.70 exe:
-https://www.virustotal.com/en/url/63edef209099a93aa0be1a220dc7c4c7ed045064d801e6d5daa84ee624fc0b4a/analysis/
-
-cloc 1.68 exe:
-https://www.virustotal.com/en/file/c484fc58615fc3b0d5569b9063ec1532980281c3155e4a19099b11ef1c24443b/analysis/
-
-cloc 1.66 exe:
-https://www.virustotal.com/en/file/54d6662e59b04be793dd10fa5e5edf7747cf0c0cc32f71eb67a3cf8e7a171d81/analysis/1453601367/
 
 #### Why is the Windows executable so large?
 
