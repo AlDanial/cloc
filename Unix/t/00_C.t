@@ -650,14 +650,19 @@ my @Tests = (
                     'args' => '../tests/inputs/Trapezoid_Rule.ipynb',
                 },
                 {
+                    'name' => 'Julia',
+                    'ref'  => '../tests/outputs/julia.jl.yaml',
+                    'args' => '../tests/inputs/julia.jl',
+                },
+                {
                     'name' => 'Juniper Junos',
                     'ref'  => '../tests/outputs/config.junos.yaml',
                     'args' => '../tests/inputs/config.junos',
                 },
                 {
-                    'name' => 'Julia',
-                    'ref'  => '../tests/outputs/julia.jl.yaml',
-                    'args' => '../tests/inputs/julia.jl',
+                    'name' => 'Justfile',
+                    'ref'  => '../tests/outputs/cross-platform.just.yaml',
+                    'args' => '../tests/inputs/cross-platform.just',
                 },
                 {
                     'name' => 'kvlang',

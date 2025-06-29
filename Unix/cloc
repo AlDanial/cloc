@@ -9153,6 +9153,7 @@ sub set_constants {                          # {{{1
             'jsp'         => 'JSP'                   , # Java server pages
             'jspf'        => 'JSP'                   , # Java server pages
             'junos'       => 'Juniper Junos'         ,
+            'just'        => 'Justfile'              ,
             'vm'          => 'Velocity Template Language' ,
             'kv'          => 'kvlang'                ,
             'ksc'         => 'Kermit'                ,
@@ -9811,6 +9812,8 @@ sub set_constants {                          # {{{1
             'Jamfile'           => 'Jam'                ,
             'jamfile'           => 'Jam'                ,
             'Jamrules'          => 'Jam'                ,
+            'justfile'          => 'Justfile'           ,
+            'Justfile'          => 'Justfile'           ,
             'Makefile'          => 'make'               ,
             'makefile'          => 'make'               ,
             'meson.build'       => 'Meson'              ,
@@ -10608,6 +10611,10 @@ sub set_constants {                          # {{{1
     'Juniper Junos'      => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'call_regexp_common'  , 'C'      ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
+    'Justfile'           => [
+                                [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
     'kvlang'             => [
@@ -12004,6 +12011,7 @@ sub set_constants {                          # {{{1
     'Velocity Template Language'   =>   1.00,
     'JCL'                          =>   1.67,
     'Juniper Junos'                =>   2.00,
+    'Justfile'                     =>   2.50,
     'kvlang'                       =>   2.00,
     'Kermit'                       =>   2.00,
     'Korn Shell'                   =>   3.81,
