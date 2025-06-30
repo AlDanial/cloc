@@ -480,7 +480,7 @@ https://www.virustotal.com/ .
 The entries for recent versions are:
 
 cloc-2.06.exe:
-https://www.virustotal.com/gui/file/e65a631e3a981b86537d1278028857b2bb799e6e80ef2d11b477bddbf84b2dee?nocache=1
+https://www.virustotal.com/gui/file/bbe48de9102d0f2520d292d65897001c1d068340eb7cd74dd1ee30c1a9091c4a?nocache=1
 
 cloc-2.04.exe:
 https://www.virustotal.com/gui/file/89cda0038bf4e13c6c13ebc1e60bec4dfad362e69ac8a5b8e2d5ebe3020359e1
