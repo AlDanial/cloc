@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "2.06";  # odd number == beta; even number == stable
+my $VERSION = "2.07";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.10.0;
 # use modules                                  {{{1
@@ -393,7 +393,7 @@ my $getopt_success = GetOptions(             # {{{1
    "ksep|thousands-delimiter=s"              => \$opt_thousands_delimiter ,
   );
 $opt_txt = 0;
-my $opt_fmt_tempfile = "";
+my $tmp_file_to_delete = "";
 # 1}}}
 $config_file = $opt_config_file if defined $opt_config_file;
 load_from_config_file($config_file,          # {{{2
@@ -6098,6 +6098,12 @@ sub make_file_list {                         # {{{1
             push @file_list, "$file_or_dir";
         } elsif (is_dir($file_or_dir)) {
             push @dir_list, $file_or_dir;
+        } elsif (-p $file_or_dir) {
+            # a pipe via process substitution, eg cloc <(cat cloc)
+            my @lines = <>;
+            $tmp_file_to_delete = "temp_process_substitution_$$";
+            write_file($tmp_file_to_delete, {}, @lines);
+            push @dir_list, $tmp_file_to_delete;
         } else {
             push @{$raa_errors}, [$rh_Err->{'Neither file nor directory'} , $F];
             $rh_ignored->{$F} = 'not file, not directory';
@@ -7350,7 +7356,7 @@ sub write_file {                             # {{{1
     # filename starts with "SCALAR" followed by a memory address in hex.
     # This temporary file will need to be cleaned up before the program ends.
     if ($ON_WINDOWS and (ref($file) eq "SCALAR" or $file =~ /^SCALAR/)) {
-        $opt_fmt_tempfile = "$file"; # string version of the file name
+        $tmp_file_to_delete = "$file"; # string version of the file name
     }
     if ($opt_file_encoding) {
         $OUT = open_file(">:encoding($opt_file_encoding)", $file, 0);
@@ -15818,10 +15824,12 @@ sub really_is_php {                          # {{{1
  return $is_php;
 } # 1}}}
 END { # {{{1
-    # Remove temp file on Windows if running with --fmt
-    if ($ON_WINDOWS and $opt_fmt and $opt_fmt_tempfile) {
-        print "-> END unlink $opt_fmt_tempfile\n" if $opt_v > 2;
-        unlink($opt_fmt_tempfile)
+    # Temp files might have been created
+    #   - on Windows if running with --fmt
+    #   - on POSIX if using process substitution, eg, cloc <(cat cloc)
+    if ($tmp_file_to_delete) {
+        print "-> END unlink $tmp_file_to_delete\n" if $opt_v > 2;
+        unlink($tmp_file_to_delete)
     }
 } # 1}}}
 __END__
