@@ -1833,7 +1833,7 @@ sub suggest_remedies_for_errors {            # {{{1
     if ($hit_timeout) {
         print "\n";
         print "One or more files took longer to process than expected.\n";
-        print "Try rerunning without timeout guards by adding  --timeout 0\n";
+        print "Try rerunning without timeout guards by adding  --timeout=0\n";
         print "to your command line arguments.  See the documentation on\n";
         print "the --timeout switch for more information.\n";
         print "\n";
