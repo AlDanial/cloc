@@ -1542,6 +1542,11 @@ my @Tests = (
                     'args' => '../tests/inputs/bbf-device.yang',
                 },
                 {
+                    'name' => 'Yarn',
+                    'ref'  => '../tests/outputs/guard_talking.yarn.yaml',
+                    'args' => '../tests/inputs/guard_talking.yarn',
+                },
+                {
                     'name' => 'Zig',
                     'ref'  => '../tests/outputs/zir_sema.zig.yaml',
                     'args' => '../tests/inputs/zir_sema.zig',

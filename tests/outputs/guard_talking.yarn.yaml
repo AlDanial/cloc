@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.07
+  elapsed_seconds    : 0.00369501113891602
+  n_files            : 1
+  n_lines            : 32
+  files_per_second   : 270.63517873274
+  lines_per_second   : 8660.32571944767
+  report_file        : ../outputs/guard_talking.yarn.yaml
+'Yarn' :
+  nFiles: 1
+  blank: 2
+  comment: 3
+  code: 27
+SUM: 
+  blank: 2
+  comment: 3
+  code: 27
+  nFiles: 1

@@ -9741,6 +9741,7 @@ sub set_constants {                          # {{{1
             'yaml'        => 'YAML'                  ,
             'yml'         => 'YAML'                  ,
             'yang'        => 'Yang'                  ,
+            'yarn'        => 'Yarn'                  ,
             'zig'         => 'Zig'                   ,
             'zsh'         => 'zsh'                   ,
             'rego'        => 'Rego'                  ,
@@ -11627,6 +11628,9 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'Yarn'               => [
+                                [ 'remove_matches'      , '^\s*//'  ],
+                            ],
     'Zig'                => [
                                 [ 'remove_matches'      , '^\s*//'  ],
                                 [ 'remove_inline'       , '//.*$'   ],
@@ -12204,6 +12208,7 @@ sub set_constants {                          # {{{1
     'yacc'                         =>   1.51,
     'yacc++'                       =>   1.51,
     'YAML'                         =>   0.90,
+    'Yarn'                         => 2.00,
     'Expect'                       => 2.00,
     'Gencat NLS'                   => 1.50,
     'C/C++ Header'                 => 1.00,
