@@ -27,6 +27,7 @@ at http://cloc.sourceforge.net/ since August 2006.
 *   [Other Counters](#other-counters-)
 *   [Building a Windows Executable](#building-a-windows-executable-)
 *   [Basic Use](#basic-use-)
+*   [GUI Frontends](#gui-frontends-)
 *   [Options](#options-)
 *   [Recognized Languages](#recognized-languages-)
 *   [How it Works](#how-it-works-)
@@ -554,6 +555,17 @@ https://github.com/Roemer/ClocViewer.
 
 See also https://github.com/jmensch1/codeflower for a
 graphical rendering of cloc results.
+[](1}}})
+<a name="GUI_Frontends"></a> []({{{1)
+# [GUI Frontends &#9650;](#___top "click to go to top of document")
+
+Several GUI frontends to cloc are available:
+[![Version](https://img.shields.io/badge/version-2.06-blue.svg)](https://github.com/AlDanial/cloc)
+
+* [cloctui](https://github.com/edward-jazzhands/cloctui)
+* [ClocViewer](https://github.com/Roemer/ClocViewer)
+* [codeflower](https://github.com/jmensch1/codeflower)
+
 [](1}}})
 <a name="Options"></a> []({{{1)
 # [Options &#9650;](#___top "click to go to top of document")
