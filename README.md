@@ -560,7 +560,6 @@ graphical rendering of cloc results.
 # [GUI Frontends &#9650;](#___top "click to go to top of document")
 
 Several GUI frontends to cloc are available:
-[![Version](https://img.shields.io/badge/version-2.06-blue.svg)](https://github.com/AlDanial/cloc)
 
 * [cloctui](https://github.com/edward-jazzhands/cloctui)
 * [ClocViewer](https://github.com/Roemer/ClocViewer)
