@@ -43,6 +43,11 @@ my @Tests = (
                     'args' => '../tests/inputs/send_msg.applescript',
                 },
                 {
+                    'name' => 'Aria',
+                    'ref'  => '../tests/outputs/github_user.aria.yaml',
+                    'args' => '../tests/inputs/github_user.aria',
+                },
+                {
                     'name' => 'ArkTs',
                     'ref'  => '../tests/outputs/openharmony.ets.yaml',
                     'args' => '../tests/inputs/openharmony.ets',

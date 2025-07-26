@@ -1,0 +1,20 @@
+# https://egranata.github.io/aria/
+
+# github_user.aria
+import Request from aria.network.request;
+import JsonValue from aria.json.parser;
+
+val whoami = "egranata";
+
+func main() {
+    val request = Request.new("https://api.github.com/users/{0}".format(whoami));
+    request.headers["User-Agent"] = "AriaLang/1.0";
+    val response = request.get();
+
+    if response.status_code == 200 {
+        val user_data = JsonValue.parse(response.content).flatten();
+        println("User {1} has {0} public repositories.".format(user_data["public_repos"], whoami));
+    } else {
+        println("Failed to fetch user data. Status: {0}".format(response.status_code));
+    }
+}

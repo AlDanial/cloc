@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.07
+  elapsed_seconds    : 0.00420713424682617
+  n_files            : 1
+  n_lines            : 20
+  files_per_second   : 237.691488155956
+  lines_per_second   : 4753.82976311912
+  report_file        : ../outputs/github_user.aria.yaml
+'Aria' :
+  nFiles: 1
+  blank: 4
+  comment: 2
+  code: 14
+SUM: 
+  blank: 4
+  comment: 2
+  code: 14
+  nFiles: 1
