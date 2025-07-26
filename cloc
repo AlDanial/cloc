@@ -9576,6 +9576,7 @@ sub set_constants {                          # {{{1
             'inf'         => 'TNSDL'                 ,
             'tpd'         => 'TITAN Project File Information',
             'ts'          => 'TypeScript/Qt Linguist',
+            'cts'         => 'TypeScript'            ,
             'mts'         => 'TypeScript'            ,
             'tsx'         => 'TypeScript'            ,
             'tss'         => 'Titanium Style Sheet'  ,
