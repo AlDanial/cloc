@@ -2933,15 +2933,25 @@ sub count_filesets {                         # {{{1
         my $Lang_L = $Language{$fset_a}{$file_L};
         my $Lang_R = $Language{$fset_b}{$file_R};
 #use Data::Dumper;
-#print "file_L=$file_L  $Language{$fset_a}{$file_L}\n";
+#print "Language: ", Dumper(\%Language);
+#die "L undefined" unless defined $Language{$fset_a}{$file_L};
+#die "R undefined" unless defined $Language{$fset_b}{$file_R};
+#print "file_L=$file_L  file_R=$file_R\n";
 #print "fset_a=$fset_a  $Language{$fset_a}{$file_L}\n";
 #print "fset_b=$fset_b  $Language{$fset_b}{$file_R}\n";
-        if (!defined($Lang_L) or !defined($Lang_R)) {
+        # handle cases where one side of the pair couldn't be identified
+        if      ( defined($Lang_L) and !defined($Lang_R)) {
+            $Lang_R = $Lang_L;
+            $Language{$fset_b}{$file_R} = $Lang_R;
+        } elsif (!defined($Lang_L) and  defined($Lang_R)) {
+            $Lang_L = $Lang_R;
+            $Language{$fset_a}{$file_L} = $Lang_L;
+        } elsif (!defined($Lang_L) or  !defined($Lang_R)) {
             print " -> count_filesets skipping $file_L, $file_R ",
                   "because language cannot be inferred\n" if $opt_v;
             next;
         }
-        #print "main step 6 file_L=$file_L    file_R=$file_R\n";
+#print "main step 6 file_L=$file_L ($Lang_L)   file_R=$file_R ($Lang_R)\n";
         ++$nCounted;
         printf "Counting:  %d\r", $nCounted
              unless ($counter_type or !$opt_progress_rate or ($nCounted % $opt_progress_rate));
