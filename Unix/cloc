@@ -280,6 +280,7 @@ my (
     $opt_encoding             ,
     $opt_txt                  ,  # not associated with a command line option
     $opt_thousands_delimiter  ,
+    $opt_show_errors          ,
    );
 
 my $getopt_success = GetOptions(             # {{{1
@@ -391,6 +392,7 @@ my $getopt_success = GetOptions(             # {{{1
    "fmt=i"                                   => \$opt_fmt                 ,
    "encoding=s"                              => \$opt_encoding            , # not production ready #880
    "ksep|thousands-delimiter=s"              => \$opt_thousands_delimiter ,
+   "show-errors"                             => \$opt_show_errors         ,
   );
 $opt_txt = 0;
 my $tmp_file_to_delete = "";
@@ -490,6 +492,7 @@ load_from_config_file($config_file,          # {{{2
                                                 \$opt_docstring_as_code   ,
                                                 \$opt_stat                ,
                                                 \$opt_thousands_delimiter ,
+                                                \$opt_show_errors         ,
 );  # 2}}} Not pretty.  Not at all.
 my $HAVE_Parallel_ForkManager = undef;
 if ($opt_processes and $opt_processes > 1) {
@@ -1580,7 +1583,8 @@ write_file($opt_counted, {}, sort keys %Results_by_File) if $opt_counted;
 my $end_time = get_time();
 printf "%8d file%s ignored.                           \n",
     plural_form(scalar keys %Ignored) unless $opt_quiet;
-print_errors(\%Error_Codes, \@Errors) if @Errors;
+print_errors(\%Error_Codes, \@Errors)
+    if @Errors and !($opt_quiet and !$opt_show_errors);
 if (!%Delta_by_Language) {
     print "Nothing to count.\n";
     exit;
@@ -1758,7 +1762,8 @@ write_file($opt_counted, {}, sort keys %Results_by_File) if $opt_counted;
 my $end_time = get_time();
 printf "%8d file%s ignored.\n", plural_form(scalar keys %Ignored)
     unless $opt_quiet;
-print_errors(\%Error_Codes, \@Errors) if @Errors;
+print_errors(\%Error_Codes, \@Errors)
+    if @Errors and !($opt_quiet and !$opt_show_errors);
 if (!%Results_by_Language) {
     write_null_results($opt_json, $opt_xml, $opt_report_file);
     exit;
@@ -1803,7 +1808,8 @@ if ($opt_count_diff) {
     goto Top_of_Processing_Loop;
 }
 
-suggest_remedies_for_errors(\@Errors) if @Errors;
+suggest_remedies_for_errors(\@Errors)
+    if @Errors and !($opt_quiet and !$opt_show_errors);
 # - - - - - - - - - - - - - - - end of main - - - - - - - - - - - - - - - #
 sub produce_output {                         # {{{1
     my ($ra_Lines_Out, $outfile, $out_style) = @_;
@@ -2373,19 +2379,11 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              processed (default <n>=100).  Set <n> to 0 to
                              suppress progress output (useful when redirecting
                              output to STDOUT).
-   --quiet                   Suppress all information messages except for
-                             the final report.
+   --quiet                   Suppress all information messages, including errors,
+                             except for the final report.  Add --show-errors to
+                             see errors.
    --report-file=<file>      Write the results to <file> instead of STDOUT.
-   --summary-cutoff=X:N      Aggregate to 'Other' results having X lines
-                             below N where X is one of
-                                c   meaning lines of code
-                                f   meaning files
-                                m   meaning lines of comments
-                                cm  meaning lines of code + comments
-                             Appending a percent sign to N changes
-                             the calculation from straight count to
-                             percentage.
-                             Ignored with --diff or --by-file.
+   --show-errors             Show error messages, if any, when running with --quiet.
    --sql=<file>              Write results as SQL create and insert statements
                              which can be read by a database program such as
                              SQLite.  If <file> is -, output is sent to STDOUT.
@@ -2399,6 +2397,16 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              'Oracle' and 'Named_Columns'.
    --sum-one                 For plain text reports, show the SUM: output line
                              even if only one input file is processed.
+   --summary-cutoff=X:N      Aggregate to 'Other' results having X lines
+                             below N where X is one of
+                                c   meaning lines of code
+                                f   meaning files
+                                m   meaning lines of comments
+                                cm  meaning lines of code + comments
+                             Appending a percent sign to N changes
+                             the calculation from straight count to
+                             percentage.
+                             Ignored with --diff or --by-file.
    --thousands-delimiter=<C> Divides numbers with many digits (i.e. numbers
                              over 999) into groups using the character <C> as
                              delimiter (e.g. for <C> = '.': 12345 -> 12.345).
@@ -15216,6 +15224,8 @@ sub load_from_config_file {                  # {{{1
                                                  $rs_file_encoding       ,
                                                  $rs_docstring_as_code   ,
                                                  $rs_stat                ,
+                                                 $rs_thousands_delimiter ,
+                                                 $rs_show_errors         ,
         ) = @_;
         # look for runtime configuration file in
         #    $ENV{'HOME'}/.config/cloc/options.txt         -> POSIX
@@ -15340,6 +15350,8 @@ sub load_from_config_file {                  # {{{1
         } elsif (!defined ${$rs_file_encoding}       and /^(?:file_encoding|file-encoding)(=|\s+)(\S+)/) { ${$rs_file_encoding}      = $2;
         } elsif (!defined ${$rs_docstring_as_code}   and /^(docstring_as_code|docstring-as-code)/)       { ${$rs_docstring_as_code}  = 1;
         } elsif (!defined ${$rs_stat}                and /stat/)                                         { ${$rs_stat}               = 1;
+        } elsif (!defined ${$rs_thousands_delimiter} and /^ksep|thousands-delimiter(=|\s+)(.*?)$/)       { ${$rs_thousands_delimiter}= $2;
+        } elsif (!defined ${$rs_show_errors}         and /show_errors|show-errors/)                      { ${$rs_show_errors}        = 1;
         }
 
     }
