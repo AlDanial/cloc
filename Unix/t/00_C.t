@@ -103,6 +103,11 @@ my @Tests = (
                     'args' => '../tests/inputs/BUILD',
                 },
                 {
+                    'name' => 'BitBake',
+                    'ref'  => '../tests/outputs/hello_1.0.bb.yaml',
+                    'args' => '../tests/inputs/hello_1.0.bb',
+                },
+                {
                     'name' => 'BizTalk Orchestration',
                     'ref'  => '../tests/outputs/ProcessPO.odx.yaml',
                     'args' => '../tests/inputs/ProcessPO.odx',
