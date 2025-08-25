@@ -9765,6 +9765,9 @@ sub set_constants {                          # {{{1
             'zig'         => 'Zig'                   ,
             'zsh'         => 'zsh'                   ,
             'rego'        => 'Rego'                  ,
+            'bb'          => 'BitBake'               ,
+            'bbappend'    => 'BitBake'               ,
+            'bbclass'     => 'BitBake'               ,
             );
 # 1}}}
 %{$rh_Language_by_Script}    = (             # {{{1
@@ -11667,6 +11670,10 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
+    "BitBake"            => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
+                            ],
     );
 # 1}}}
 %{$rh_EOL_continuation_re} = (               # {{{1
@@ -12269,6 +12276,7 @@ sub set_constants {                          # {{{1
     'Yang'                         => 3.00,
     'Zig'                          => 2.50,
     "Rego"                         => 1.00,
+    "BitBake"                      => 1.00,
     # aggregates; value is meaningless
     'C#/Smalltalk'                    => 1.00,
     'D/dtrace'                        => 1.00,
