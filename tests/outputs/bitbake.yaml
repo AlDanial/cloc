@@ -1,0 +1,20 @@
+---
+# github.com/AlDanial/cloc
+header :
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.07
+  elapsed_seconds    : 0.0091090202331543
+  n_files            : 3
+  n_lines            : 59
+  files_per_second   : 329.343872690153
+  lines_per_second   : 6477.09616290635
+'BitBake' :
+  nFiles: 3
+  blank: 15
+  comment: 10
+  code: 34
+SUM:
+  blank: 15
+  comment: 10
+  code: 34
+  nFiles: 3

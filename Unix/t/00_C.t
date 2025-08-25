@@ -104,8 +104,10 @@ my @Tests = (
                 },
                 {
                     'name' => 'BitBake',
-                    'ref'  => '../tests/outputs/hello_1.0.bb.yaml',
-                    'args' => '../tests/inputs/hello_1.0.bb',
+                    'ref'  => '../tests/outputs/bitbake.yaml',
+                    'args' => '../tests/inputs/hello_1.0.bb ' .
+                              '../tests/inputs/cpp-example.inc ' .
+                              '../tests/inputs/layer.conf ',
                 },
                 {
                     'name' => 'BizTalk Orchestration',
@@ -1404,6 +1406,13 @@ my @Tests = (
                     'name' => 'Umka',
                     'ref'  => '../tests/outputs/fractal.um.yaml',
                     'args' => '../tests/inputs/fractal.um',
+                },
+
+                {
+                    'name' => 'Unknown',
+                    # No result will be produced, result.yaml will stay like the previous test
+                    'ref'  => '../tests/outputs/fractal.um.yaml',
+                    'args' => '../tests/inputs/xattr.conf',
                 },
 
                 {
