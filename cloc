@@ -822,7 +822,7 @@ my %Extension_Collision = (
     'Pascal/Pawn'                                   => [ 'p'    ] ,
     'Pascal/Puppet'                                 => [ 'pp'   ] ,
     'Perl/Prolog'                                   => [ 'pl', 'PL'  ] ,
-    'PHP/Pascal/Fortran/Pawn'                       => [ 'inc'  ] ,
+    'PHP/Pascal/Fortran/Pawn/BitBake'               => [ 'inc'  ] ,
     'Raku/Prolog'                                   => [ 'p6', 'P6'  ] ,
     'XML-Qt-GTK/Glade'                              => [ 'ui'   ] ,
     'TypeScript/Qt Linguist'                        => [ 'ts'   ] ,
@@ -6809,17 +6809,17 @@ sub classify_file {                          # {{{1
                         'failure in matlab_or_objective_C($full_file)';
                     return $language; # (unknown)
                 }
-            } elsif ($Language_by_Extension{$extension} eq 'PHP/Pascal/Fortran/Pawn') {
-                my $lang_F_or_P_or_P = "";
-                php_pascal_fortran_pawn($full_file ,
+            } elsif ($Language_by_Extension{$extension} eq 'PHP/Pascal/Fortran/Pawn/BitBake') {
+                my $lang_F_or_P_or_P_or_B = "";
+                php_pascal_fortran_pawn_bitbake($full_file ,
                                         $rh_Err    ,
                                         $raa_errors,
-                                       \$lang_F_or_P_or_P);
-                if ($lang_F_or_P_or_P) {
-                    return $lang_F_or_P_or_P;
-                } else { # an error happened in php_pascal_or_fortran()
+                                       \$lang_F_or_P_or_P_or_B);
+                if ($lang_F_or_P_or_P_or_B) {
+                    return $lang_F_or_P_or_P_or_B;
+                } else { # an error happened in php_pascal_fortran_pawn_bitbake()
                     $rh_ignored->{$full_file} =
-                        'failure in php_pascal_fortran_pawn($full_file)';
+                        'failure in php_pascal_fortran_pawn_bitbake($full_file)';
                     return $language; # (unknown)
                 }
             } elsif ($Language_by_Extension{$extension} eq 'Pascal/Puppet') {
@@ -6934,6 +6934,9 @@ sub classify_file {                          # {{{1
                 } else {
                     return $language; # (unknown)
                 }
+            } elsif ($Language_by_Extension{$extension} eq 'Text/BitBake') {
+                my $lang_t_or_b = "";
+                return Text_or_BitBake($full_file, $rh_Err, $raa_errors);
             } else {
                 return $Language_by_Extension{$extension};
             }
@@ -9108,7 +9111,7 @@ sub set_constants {                          # {{{1
             'ig'          => 'Modula3'               ,
             'il'          => 'SKILL/.NET IL'         ,
             'ils'         => 'SKILL++'               ,
-            'inc'         => 'PHP/Pascal/Fortran/Pawn',
+            'inc'         => 'PHP/Pascal/Fortran/Pawn/BitBake' ,
             'ino'         => 'Arduino Sketch'        ,
             'ipf'         => 'Igor Pro'              ,
            #'pde'         => 'Arduino Sketch'        , # pre 1.0
@@ -10818,7 +10821,7 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
-    'PHP/Pascal/Fortran/Pawn' => [ [ 'die' ,          ], ], # never called
+    'PHP/Pascal/Fortran/Pawn/BitBake' => [ [ 'die' ,          ], ], # never called
     'Mako'               => [
                                 [ 'remove_matches'       , '##.*$'  ],
                             ],
@@ -12284,7 +12287,7 @@ sub set_constants {                          # {{{1
     'Fortran 77/Forth'                => 1.00,
     'Lisp/Julia'                      => 1.00,
     'Lisp/OpenCL'                     => 1.00,
-    'PHP/Pascal/Fortran/Pawn'         => 1.00,
+    'PHP/Pascal/Fortran/Pawn/Bitbake' => 1.00,
     'Pascal/Puppet'                   => 1.00,
     'Perl/Prolog'                     => 1.00,
     'Raku/Prolog'                     => 1.00,
@@ -12557,7 +12560,7 @@ printf "END LOOP    obj C=% 2d  matlab=% 2d  mumps=% 2d  mercury= % 2d\n", $obje
         if $opt_v > 2;
 
 } # 1}}}
-sub php_pascal_fortran_pawn {                # {{{1
+sub php_pascal_fortran_pawn_bitbake {                # {{{1
     # Decide if code is Fortran, PHP, Pascal, Pawn
     my ($file        , # in
         $rh_Err      , # in   hash of error codes
@@ -12585,6 +12588,13 @@ sub php_pascal_fortran_pawn {                # {{{1
     #   lines ending with ;
     #   has /* ... */ style comments
     #   writeln
+    #
+    # BitBake:
+    #   some lines start with variables: SRC_URI, SRC_REV, SUMMARY, LICENSE, DEPENDS, RDEPENDS, LIC_FILES_CHKSUM
+    #   some lines start with tasks: do_compile, do_install, do_configure, python
+    #   some lines start with include, require, inherit statements
+    #   contains .=, =., ?=, ??= operators
+    #   contains :... = assignments
 
     ${$rs_language} = "";
     my $IN = open_file('<', $file, 1);
@@ -12600,6 +12610,7 @@ sub php_pascal_fortran_pawn {                # {{{1
     my $php_points      = 0;
     my $pascal_points   = 0;
     my $pawn_points     = 0;
+    my $bitbake_points  = 0;
     while (<$IN>) {
         if (/^\s*<\?php/i) {
             $php_points += 100;
@@ -12638,13 +12649,25 @@ sub php_pascal_fortran_pawn {                # {{{1
             /^\s*(end\s+)?(interface|type|function|module)\b/i) {
             ++$fortran_90;
         }
+        if (/^\s*(SRC_URI|SRC_REV|SUMMARY|LICENSE|DEPENDS|RDEPENDS|LIC_FILES_CHKSUM)\s*=/i or
+            /^\s*(do_compile|do_install|do_configure|python)\b/i or
+            /^\s*(inherit|include|require)\b/i) {
+            ++$bitbake_points;
+        }
+        if (/\.=/i or /=\./i or /\?=/i or /\?\?=/i) {
+            ++$bitbake_points;
+        }
+        if (/^[A-Z0-9_:-]+:[A-Za-z0-9_-]+\s*=/) {
+            ++$bitbake_points;
+        }
     }
     $IN->close;
 
     my %points = ( 'Fortran'      => $fortran_points     ,
                    'PHP'          => $php_points         ,
                    'Pascal'       => $pascal_points      ,
-                   'Pawn'         => $pawn_points        , );
+                   'Pawn'         => $pawn_points        ,
+                   'BitBake'      => $bitbake_points     , );
 
     ${$rs_language} = (sort { $points{$b} <=> $points{$a} or $a cmp $b } keys %points)[0];
     if (${$rs_language} eq 'Fortran') {
@@ -12655,8 +12678,8 @@ sub php_pascal_fortran_pawn {                # {{{1
         }
     }
 
-    print "<- php_pascal_fortran_pawn($file: fortran=$fortran_points, php=$php_points, ",
-          "pascal=$pascal_points, pawn=$pawn_points) => ${$rs_language}\n"
+    print "<- php_pascal_fortran_pawn_bitbake($file: fortran=$fortran_points, php=$php_points, ",
+          "pascal=$pascal_points, pawn=$pawn_points, bitbake=$bitbake_points) => ${$rs_language}\n"
         if $opt_v > 2;
 
 } # 1}}}

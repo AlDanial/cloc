@@ -1260,7 +1260,7 @@ peggy                      (peggy)
 Perl                       (ack, al, cpanfile, makefile.pl, perl, ph, plh, plx, pm, psgi, rexfile, pl, p6)
 Pest                       (pest)
 PHP                        (aw, ctp, phakefile, php, php3, php4, php5, php_cs, php_cs.dist, phps, phpt, phtml)
-PHP/Pascal/Fortran/Pawn    (inc)
+PHP/Pascal/Fortran/Pawn/Bitbake (inc)
 Pig Latin                  (pig)
 PL/I                       (pl1)
 PL/M                       (lit, plm)
@@ -1415,7 +1415,7 @@ These file extensions map to multiple languages:
 *   `fnc` files could be Oracle PL or SQL
 *   `for` files could be Fortran 77 or Forth
 *   `fs`  files could be F# or Forth
-*   `inc` files could be PHP or Pascal
+*   `inc` files could be PHP, Pascal or BitBake
 *   `itk` files could be Tcl or Tk
 *   `jl`  files could be Lisp or Julia
 *   `lit` files could be PL or M
