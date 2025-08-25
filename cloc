@@ -831,6 +831,7 @@ my %Extension_Collision = (
     'Scheme/SaltStack'                              => [ 'sls'  ] ,
     'SKILL/.NET IL'                                 => [ 'il'   ] ,
     'Clojure/Cangjie'                               => [ 'cj'   ] ,
+    'Unknown/BitBake'                               => [ 'conf' ] ,
 );
 my @Autogen_to_ignore = no_autogen_files($list_no_autogen);
 if ($opt_force_lang_def) {
@@ -6934,9 +6935,9 @@ sub classify_file {                          # {{{1
                 } else {
                     return $language; # (unknown)
                 }
-            } elsif ($Language_by_Extension{$extension} eq 'Text/BitBake') {
+            } elsif ($Language_by_Extension{$extension} eq 'Unknown/BitBake') {
                 my $lang_t_or_b = "";
-                return Text_or_BitBake($full_file, $rh_Err, $raa_errors);
+                return really_is_BitBake($full_file, $rh_Err, $raa_errors);
             } else {
                 return $Language_by_Extension{$extension};
             }
@@ -9771,6 +9772,7 @@ sub set_constants {                          # {{{1
             'bb'          => 'BitBake'               ,
             'bbappend'    => 'BitBake'               ,
             'bbclass'     => 'BitBake'               ,
+            'conf'        => 'Unknown/BitBake'       ,
             );
 # 1}}}
 %{$rh_Language_by_Script}    = (             # {{{1
@@ -12296,6 +12298,7 @@ sub set_constants {                          # {{{1
     'IDL/Qt Project/Prolog/ProGuard'     => 1.00,
     'SKILL/.NET IL'                => 1.00,
     'Clojure/Cangjie'              => 1.00,
+    'Unknown/BitBake'              => 1.00,
 );
 # 1}}}
 %{$rh_Known_Binary_Archives} = (             # {{{1
@@ -13394,6 +13397,46 @@ sub Clojure_or_Cangjie {                     # {{{1
         return "Clojure";
     } else {
         return "Cangjie";
+    }
+} # 1}}}
+sub really_is_BitBake {                    # {{{1
+    my ($file        , # in
+        $rh_Err      , # in   hash of error codes
+        $raa_errors  , # out
+       ) = @_;
+
+    print "-> really_is_BitBake($file)\n" if $opt_v > 2;
+
+    my $lang = undef;
+    my $IN = open_file('<', $file, 1);
+    if (!defined $IN) {
+        push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
+        return $lang;
+    }
+    my $text   = 3; # Text is assumed if no BitBake markers are found
+    my $bitbake = 0;
+    while (<$IN>) {
+        next if /^\s*$/;
+        if (/^\s*(SRC_URI|SRC_REV|SUMMARY|LICENSE|DEPENDS|RDEPENDS|LIC_FILES_CHKSUM)\s*=/i or
+            /^\s*(BBFILE|LAYER).*\s*=/i or
+            /^\s*(do_compile|do_install|do_configure|python)\b/i or
+            /^\s*(inherit|include|require)\b/i) {
+            ++$bitbake;
+        }
+        if (/\.=/i or /=\./i or /\?=/i or /\?\?=/i) {
+            ++$bitbake;
+        }
+        if (/^[A-Z0-9_:-]+:[A-Za-z0-9_-]+\s*=/) {
+            ++$bitbake;
+        }
+    }
+    $IN->close;
+
+    print "<- really_is_BitBake($file: Text=$text, BitBake=$bitbake\n" if $opt_v > 2;
+    if ($text > $bitbake) {
+        return undef;
+    } else {
+        return "BitBake";
     }
 } # 1}}}
 sub html_colored_text {                      # {{{1

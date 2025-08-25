@@ -1341,6 +1341,7 @@ Teamcenter mth             (mth)
 Templ                      (templ)
 TeX                        (aux, bbx, bib, bst, cbx, dtx, ins, lbx, ltx, mkii, mkiv, mkvi, sty, tex, cls)
 Text                       (text, txt)
+Unknown/BitBake            (conf)
 Thrift                     (thrift)
 TITAN Project File Information (tpd)
 Titanium Style Sheet       (tss)
@@ -1409,6 +1410,7 @@ These file extensions map to multiple languages:
 *   `cj`  files could be Clojure or Cangjie
 *   `cl`  files could be Lisp or OpenCL
 *   `cls` files could be Visual Basic, TeX or Apex Class
+*   `conf` files could be BitBake or plain text
 *   `cs`  files could be C# or Smalltalk
 *   `d`   files could be D or dtrace
 *   `f`   files could be Fortran 77 or Forth
