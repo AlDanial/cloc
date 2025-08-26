@@ -1066,6 +1066,7 @@ Asymptote                  (asy)
 AutoHotkey                 (ahk, ahkl)
 awk                        (auk, awk, gawk, mawk, nawk)
 Bazel                      (BUILD)
+BitBake                    (bb, bbappend, bbclass)
 BizTalk Orchestration      (odx)
 BizTalk Pipeline           (btp)
 Blade                      (blade, blade.php)
@@ -1259,7 +1260,7 @@ peggy                      (peggy)
 Perl                       (ack, al, cpanfile, makefile.pl, perl, ph, plh, plx, pm, psgi, rexfile, pl, p6)
 Pest                       (pest)
 PHP                        (aw, ctp, phakefile, php, php3, php4, php5, php_cs, php_cs.dist, phps, phpt, phtml)
-PHP/Pascal/Fortran/Pawn    (inc)
+PHP/Pascal/Fortran/Pawn/Bitbake (inc)
 Pig Latin                  (pig)
 PL/I                       (pl1)
 PL/M                       (lit, plm)
@@ -1340,6 +1341,7 @@ Teamcenter mth             (mth)
 Templ                      (templ)
 TeX                        (aux, bbx, bib, bst, cbx, dtx, ins, lbx, ltx, mkii, mkiv, mkvi, sty, tex, cls)
 Text                       (text, txt)
+Unknown/BitBake            (conf)
 Thrift                     (thrift)
 TITAN Project File Information (tpd)
 Titanium Style Sheet       (tss)
@@ -1408,13 +1410,14 @@ These file extensions map to multiple languages:
 *   `cj`  files could be Clojure or Cangjie
 *   `cl`  files could be Lisp or OpenCL
 *   `cls` files could be Visual Basic, TeX or Apex Class
+*   `conf` files could be BitBake or plain text
 *   `cs`  files could be C# or Smalltalk
 *   `d`   files could be D or dtrace
 *   `f`   files could be Fortran 77 or Forth
 *   `fnc` files could be Oracle PL or SQL
 *   `for` files could be Fortran 77 or Forth
 *   `fs`  files could be F# or Forth
-*   `inc` files could be PHP or Pascal
+*   `inc` files could be PHP, Pascal or BitBake
 *   `itk` files could be Tcl or Tk
 *   `jl`  files could be Lisp or Julia
 *   `lit` files could be PL or M
