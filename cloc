@@ -11477,7 +11477,7 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*"'  ],
                                 [ 'remove_inline'       , '".*$'   ],
                             ],
-    'Visual Basic Script' => [
+    'VBScript' => [
                                 [ 'remove_above'        , '^\s*Attribute\s+VB_Name\s+=' ],
                                 [ 'remove_matches'      , '^\s*Attribute\s+'],
                                 [ 'remove_matches'      , '^\s*\47'],     # \47 = '
@@ -11487,7 +11487,7 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*Attribute\s+'],
                                 [ 'remove_matches'      , '^\s*\47'],     # \47 = '
                             ],
-    'VB for Applications' => [
+    'VBA' => [
                                 [ 'remove_above'        , '^\s*Attribute\s+VB_Name\s+=' ],
                                 [ 'remove_matches'      , '^\s*Attribute\s+'],
                                 [ 'remove_matches'      , '^\s*\47'],     # \47 = '
@@ -12218,9 +12218,9 @@ sub set_constants {                          # {{{1
     'VHDL'                         =>   4.21,
     'vim script'                   =>   3.00,
     'Visual Basic'                 =>   2.76,
-    'VB for Applications'          =>   2.76,
+    'VBA'                          =>   2.76,
     'Visual Basic .NET'            =>   2.76,
-    'Visual Basic Script'          =>   2.76,
+    'VBScript'                     =>   2.76,
     'Visual Fox Pro'               =>   4.00, # Visual Fox Pro is not available in the language gearing ratios listed at Mayes Consulting web site
     'Visualforce Component'        =>   1.9 ,
     'Visualforce Page'             =>   1.9 ,
