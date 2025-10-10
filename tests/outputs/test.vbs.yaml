@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.07
+  elapsed_seconds    : 0.00967001914978027
+  n_files            : 1
+  n_lines            : 10
+  files_per_second   : 103.412411548608
+  lines_per_second   : 1034.12411548608
+  report_file        : tests/outputs/test.vbs.yaml
+'VBScript' :
+  nFiles: 1
+  blank: 1
+  comment: 3
+  code: 6
+SUM: 
+  blank: 1
+  comment: 3
+  code: 6
+  nFiles: 1

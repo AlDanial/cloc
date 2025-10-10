@@ -1433,9 +1433,14 @@ my @Tests = (
                     'args' => '../tests/inputs/gnureadline.vala',
                 },
                 {
-                    'name' => 'VB.Net',
-                    'ref'  => '../tests/outputs/VisualBasic.Net.vba.yaml',
-                    'args' => '../tests/inputs/VisualBasic.Net.vba',
+                    'name' => 'VBA',
+                    'ref'  => '../tests/outputs/vba_test.vba.yaml',
+                    'args' => '../tests/inputs/vba_test.vba',
+                },
+                {
+                    'name' => 'VB.NET',
+                    'ref'  => '../tests/outputs/vbnet_test.vb.yaml',
+                    'args' => '../tests/inputs/vbnet_test.vb',
                 },
                 {
                     'name' => 'Velocity Template Language',
@@ -1451,6 +1456,21 @@ my @Tests = (
                     'name' => 'Visual Basic',
                     'ref'  => '../tests/outputs/JetCar.cls.yaml',
                     'args' => '../tests/inputs/JetCar.cls',
+                },
+                {
+                    'name' => 'Visual Basic (Dsr)',
+                    'ref'  => '../tests/outputs/test.Dsr.yaml',
+                    'args' => '../tests/inputs/test.Dsr',
+                },
+                {
+                    'name' => 'Visual Basic .NET (vbhtml)',
+                    'ref'  => '../tests/outputs/test.vbhtml.yaml',
+                    'args' => '../tests/inputs/test.vbhtml',
+                },
+                {
+                    'name' => 'VBScript',
+                    'ref'  => '../tests/outputs/test.vbs.yaml',
+                    'args' => '../tests/inputs/test.vbs',
                 },
                 {
                     'name' => 'Visual Studio Solution',
