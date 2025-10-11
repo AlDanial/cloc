@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.07
+  elapsed_seconds    : 0.00898003578186035
+  n_files            : 1
+  n_lines            : 20
+  files_per_second   : 111.358130890747
+  lines_per_second   : 2227.16261781495
+  report_file        : tests/outputs/test.Dsr.yaml
+'Visual Basic' :
+  nFiles: 1
+  blank: 2
+  comment: 12
+  code: 6
+SUM: 
+  blank: 2
+  comment: 12
+  code: 6
+  nFiles: 1

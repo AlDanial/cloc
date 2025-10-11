@@ -1,0 +1,20 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.07
+  elapsed_seconds    : 0.0076439380645752
+  n_files            : 1
+  n_lines            : 25
+  files_per_second   : 130.822619381803
+  lines_per_second   : 3270.56548454509
+'Visual Basic .NET' :
+  nFiles: 1
+  blank: 4
+  comment: 2
+  code: 19
+SUM: 
+  blank: 4
+  comment: 2
+  code: 19
+  nFiles: 1
