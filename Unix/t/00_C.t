@@ -1490,6 +1490,12 @@ my @Tests = (
                 },
 
                 {
+                    'name' => 'VSCode Workspace',
+                    'ref'  => '../tests/outputs/cloc-dev.code-workspace.yaml',
+                    'args' => '../tests/inputs/cloc-dev.code-workspace',
+                },
+
+                {
                     'name' => 'Vuejs Component 2',
                     'ref'  => '../tests/outputs/issue_876.vue.yaml',
                     'args' => '../tests/inputs/issue_876.vue',
