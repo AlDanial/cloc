@@ -1197,6 +1197,11 @@ my @Tests = (
                     'args' => '../tests/inputs/scheme.sls',
                 },
                 {
+                    'name' => 'Clarity',
+                    'ref'  => '../tests/outputs/clarityfiles.clar.yaml',
+                    'args' => '../tests/inputs/clarityfiles.clar',
+                },
+                {
                     'name' => 'SKILL',
                     'ref'  => '../tests/outputs/ChangeProperties.il.yaml',
                     'args' => '../tests/inputs/ChangeProperties.il',
