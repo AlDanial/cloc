@@ -119,7 +119,7 @@ if (!-d 'cloc_submodule_test') {
     print "-" x 79, "\n";
     print "Directory 'cloc_submodule_test' is not found; git tests skipped.\n";
     print "To enable the tests, create the directory with\n";
-    print "    git clone https://github.com/AlDanial/cloc_submodule_test.git\n";
+    print "    git submodule add https://github.com/AlDanial/cloc_submodule_test.git\n";
     ok( 0, "git tests");
     print "-" x 79, "\n";
 } else {

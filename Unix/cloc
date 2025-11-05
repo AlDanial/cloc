@@ -196,6 +196,7 @@ my (
     $opt_v                    ,
     $opt_vcs                  ,
     $opt_version              ,
+    $opt_include_submodules   ,
     $opt_include_content      ,
     $opt_exclude_content      ,
     $opt_exclude_lang         ,
@@ -332,6 +333,7 @@ my $getopt_success = GetOptions(             # {{{1
    "v|verbose:i"                             => \$opt_v                   ,
    "vcs=s"                                   => \$opt_vcs                 ,
    "files-from=s"                            => \$opt_vcs                 ,  # synonym
+   "include-submodules"                      => \$opt_include_submodules  ,
    "version"                                 => \$opt_version             ,
    "write_lang_def|write-lang-def=s"         => \$opt_write_lang_def      ,
    "write_lang_def_incl_dup|write-lang-def-incl-dup=s" => \$opt_write_lang_def_incl_dup,
@@ -443,6 +445,7 @@ load_from_config_file($config_file,          # {{{2
                                                 \$opt_3                   ,
                                                 \$opt_v                   ,
                                                 \$opt_vcs                 ,
+                                                \$opt_include_submodules  ,
                                                 \$opt_version             ,
                                                 \$opt_write_lang_def      ,
                                                 \$opt_write_lang_def_incl_dup,
@@ -714,6 +717,7 @@ if (defined $opt_vcs) {
     }
     if      ($opt_vcs eq "git") {
         $opt_vcs = "git -c \"safe.directory=*\" ls-files";
+        $opt_vcs .= " --recurse-submodules" if $opt_include_submodules;
         my @submodules = invoke_generator("git -c \"safe.directory=*\" submodule status", \@ARGV);
         foreach my $SM (@submodules) {
             $SM =~ s/^\s+//;        # may have leading space
@@ -1931,14 +1935,13 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
    --files-from=<CMD>        Synonym for --vcs=<CMD>.
    --vcs=<CMD>               Invoke a system call to <CMD> to obtain a list of
                              files to work on.  If <CMD> is 'git', then will
-                             invoke 'git ls-files' to get a file list and
-                             'git submodule status' to get a list of submodules
-                             whose contents will be ignored.  See also --git
-                             which accepts git commit hashes and branch names.
-                             If <VCS> is 'svn' then will invoke 'svn list -R'.
-                             The primary benefit is that cloc will then skip
-                             files explicitly excluded by the versioning tool
-                             in question, ie, those in .gitignore or have the
+                             invoke 'git ls-files' to get a file list.  Submodules
+                             are ignored unless --include-submodules is also
+                             given. See also --git which accepts git commit hashes
+                             and branch names. If <VCS> is 'svn' then will invoke
+                             'svn list -R'. The primary benefit is that cloc will
+                             then skip files explicitly excluded by the versioning
+                             tool in question, ie, those in .gitignore or have the
                              svn:ignore property.
                              Alternatively <CMD> may be any system command
                              that generates a list of files.
@@ -2251,6 +2254,8 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              Count only the given comma separated, case-
                              insensitive languages L1, L2, L3, et cetera.  Use
                              --show-lang to see the list of recognized languages.
+   --include-submodules      When using --vcs=git, include files in git
+                             submodules.
    --match-d=<regex>         Only count files in directories matching the Perl
                              regex.  For example
                                --match-d='/(src|include)/'
@@ -15279,6 +15284,7 @@ sub load_from_config_file {                  # {{{1
                                                  $rs_3                   ,
                                                  $rs_v                   ,
                                                  $rs_vcs                 ,
+                                                 $rs_include_submodules  ,
                                                  $rs_version             ,
                                                  $rs_write_lang_def      ,
                                                  $rs_write_lang_def_incl_dup,
@@ -15391,6 +15397,7 @@ sub load_from_config_file {                  # {{{1
         } elsif (!defined ${$rs_unicode}             and /^unicode/)                                          { ${$rs_unicode}            = 1;
         } elsif (!defined ${$rs_3}                   and /^3/)                                                { ${$rs_3}                  = 1;
         } elsif (!defined ${$rs_vcs}                 and /^vcs(=|\s+)(\S+)/)                                  { ${$rs_vcs}                = $2;
+        } elsif (!defined ${$rs_include_submodules}  and /^include-submodules/)                               { ${$rs_include_submodules} = 1;
         } elsif (!defined ${$rs_version}             and /^version/)                                          { ${$rs_version}            = 1;
         } elsif (!defined ${$rs_write_lang_def}      and /^(?:write_lang_def|write-lang-def)(=|\s+)(.*?)$/)   { ${$rs_write_lang_def}     = $2;
         } elsif (!defined ${$rs_write_lang_def_incl_dup} and /^(?:write_lang_def_incl_dup|write-lang-def-incl-dup)(=|\s+)(.*?)$/) { ${$rs_write_lang_def_incl_dup} = $2;

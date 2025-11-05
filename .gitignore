@@ -4,3 +4,5 @@ release_notes-?.??.txt
 # Visual Studio Code and extensions
 .vstags
 .vscode/perl-lang
+.gitmodules
+Unix/cloc_submodule_test
