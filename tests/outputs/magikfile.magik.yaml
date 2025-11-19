@@ -1,0 +1,20 @@
+---
+# github.com/AlDanial/cloc
+header :
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.07
+  elapsed_seconds    : 0.0126919746398926
+  n_files            : 1
+  n_lines            : 41
+  files_per_second   : 78.7899462749371
+  lines_per_second   : 3230.38779727242
+'Magik' :
+  nFiles: 1
+  blank: 7
+  comment: 8
+  code: 26
+SUM:
+  blank: 7
+  comment: 8
+  code: 26
+  nFiles: 1

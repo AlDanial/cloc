@@ -9256,6 +9256,7 @@ sub set_constants {                          # {{{1
             'm'           => 'MATLAB/Mathematica/Objective-C/MUMPS/Mercury' ,
             'mm'          => 'Objective-C++'         ,
             'msg'         => 'Gencat NLS'            ,
+            'magik'       => 'Magik'                 ,
             'nbp'         => 'Mathematica'           ,
             'mathematica' => 'Mathematica'           ,
             'ma'          => 'Mathematica'           ,
@@ -10751,6 +10752,10 @@ sub set_constants {                          # {{{1
                                 [ 'remove_between_general', '%{', '%}' ],
                                 [ 'remove_matches'      , '^\s*%'  ],
                                 [ 'remove_inline'       , '%.*$'   ],
+                            ],
+    'Magik'              => [
+                                [ 'remove_matches'      , '^\s*#'  ],
+                                [ 'remove_inline'       , '#.*$'   ],
                             ],
     'Mathematica'        => [
                                 [ 'remove_between_general', '(*', '*)' ],
@@ -12280,6 +12285,7 @@ sub set_constants {                          # {{{1
     'lex'                          => 1.00,
     'Julia'                        => 4.00,
     'MATLAB'                       => 4.00,
+    'Magik'                        => 2.50,
     'Mathematica'                  => 5.00,
     'Mercury'                      => 3.00,
     'Maven/XML'                    => 2.5,

@@ -1,0 +1,41 @@
+# Test fixture for Magik language
+# This file covers various comment and code patterns
+
+_package user
+$
+
+# Full line comment before code
+_pragma(classify_level=basic, topic={test})
+_method char16_vector.test_method()
+	## Method documentation
+	## @return {_self}
+	_if _self.size < 2
+	_then
+		_return _self.lowercase
+	_endif
+
+	_local str << _self # end of line comment
+
+	# Another comment
+	_local regex << /([A-Z]+)([A-Z][a-z])/
+	str << regex.replace_all(str, "$1_$2")
+
+	_return str.lowercase
+_endmethod
+$
+
+# Block comment
+_block
+	_local l_path << system.pathname_down("test", "path")
+	load_file(l_path)
+_endblock
+$
+
+# Define an exemplar
+def_slotted_exemplar(
+	:test_exemplar,
+	{
+		{:field1, _unset},
+		{:field2, _unset} # inline comment
+	})
+$

@@ -772,6 +772,11 @@ my @Tests = (
                     'args' => '../tests/inputs/Mako.mako',
                 },
                 {
+                    'name' => 'Magik',
+                    'ref'  => '../tests/outputs/magikfile.magik.yaml',
+                    'args' => '../tests/inputs/magikfile.magik',
+                },
+                {
                     'name' => 'Mathematica',
                     'ref'  => '../tests/outputs/Mathematica_1.m.yaml',
                     'args' => '../tests/inputs/Mathematica_1.m',
