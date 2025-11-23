@@ -98,6 +98,11 @@ my @Tests = (
                     'args' => '../tests/inputs/cad.asy',
                 },
                 {
+                    'name' => 'AXAML', 
+                    'ref'  => '../tests/outputs/HelpersView.axaml.yaml',
+                    'args' => '../tests/inputs/HelpersView.axaml',
+                },
+                {
                     'name' => 'Bazel',
                     'ref'  => '../tests/outputs/BUILD.yaml',
                     'args' => '../tests/inputs/BUILD',

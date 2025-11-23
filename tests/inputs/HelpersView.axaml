@@ -1,0 +1,146 @@
+﻿<!--
+https://github.com/kikipoulet/SukiUI/raw/b1d624b2472ebd9e442b4870e6e53b8852b86345/SukiUI.Demo/Features/Helpers/HelpersView.axaml
+ -->
+<UserControl
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d"
+    x:Class="SukiUI.Demo.Features.Helpers.HelpersView"
+    x:DataType="helpers:HelpersViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:X="clr-namespace:SukiUI.Helpers.ConditionalXAML;assembly=SukiUI"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:glassMorphism="clr-namespace:SukiUI.Controls.GlassMorphism;assembly=SukiUI"
+    xmlns:helpers="clr-namespace:SukiUI.Demo.Features.Helpers"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:suki="https://github.com/kikipoulet/SukiUI"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Styles>
+        <Style Selector="suki|SukiSideMenu /template/ suki|GlassCard#Glass">
+            <Setter Property="Opacity" Value="0.75" />
+        </Style>
+    </UserControl.Styles>
+    <suki:SukiSideMenu Margin="0">
+        <suki:SukiSideMenu.Items>
+            <suki:SukiSideMenuItem Classes="Compact" Header="Syntax Helpers">
+                <suki:SukiSideMenuItem.Icon>
+                    <PathIcon
+                        Data="{x:Static suki:Icons.ChevronRight}"
+                        Foreground="{DynamicResource SukiLowText}"
+                        Height="13"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Width="13" />
+
+                </suki:SukiSideMenuItem.Icon>
+                <suki:SukiSideMenuItem.PageContent>
+
+                    <helpers:SyntaxHelpers />
+
+                </suki:SukiSideMenuItem.PageContent>
+            </suki:SukiSideMenuItem>
+
+
+            <suki:SukiSideMenuItem Classes="Compact" Header="Easy Animations">
+                <suki:SukiSideMenuItem.Icon>
+                    <PathIcon
+                        Data="{x:Static suki:Icons.ChevronRight}"
+                        Foreground="{DynamicResource SukiLowText}"
+                        Height="13"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Width="13" />
+
+                </suki:SukiSideMenuItem.Icon>
+                <suki:SukiSideMenuItem.PageContent>
+                    <ScrollViewer>
+                        <helpers:Easy_Animations />
+                    </ScrollViewer>
+                </suki:SukiSideMenuItem.PageContent>
+            </suki:SukiSideMenuItem>
+
+            <suki:SukiSideMenuItem Classes="Compact" Header="Suki Easings">
+                <suki:SukiSideMenuItem.Icon>
+                    <PathIcon
+                        Data="{x:Static suki:Icons.ChevronRight}"
+                        Foreground="{DynamicResource SukiLowText}"
+                        Height="13"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Width="13" />
+
+                </suki:SukiSideMenuItem.Icon>
+                <suki:SukiSideMenuItem.PageContent>
+                    <ScrollViewer>
+                        <helpers:CustomEasings />
+                    </ScrollViewer>
+                </suki:SukiSideMenuItem.PageContent>
+            </suki:SukiSideMenuItem>
+
+            <suki:SukiSideMenuItem Classes="Compact" Header="Spring Easing">
+                <suki:SukiSideMenuItem.Icon>
+                    <PathIcon
+                        Data="{x:Static suki:Icons.ChevronRight}"
+                        Foreground="{DynamicResource SukiLowText}"
+                        Height="13"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Width="13" />
+
+                </suki:SukiSideMenuItem.Icon>
+                <suki:SukiSideMenuItem.PageContent>
+                    <ScrollViewer>
+                        <helpers:SpringEasing />
+                    </ScrollViewer>
+                </suki:SukiSideMenuItem.PageContent>
+            </suki:SukiSideMenuItem>
+
+            <!-- <suki:SukiSideMenuItem Classes="Compact" Header="Organic Move">
+                <suki:SukiSideMenuItem.Icon>
+                    <PathIcon Width="13"
+                              Height="13"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              Data="{x:Static suki:Icons.ChevronRight}"
+                              Foreground="{DynamicResource SukiLowText}" />
+
+                </suki:SukiSideMenuItem.Icon>
+                <suki:SukiSideMenuItem.PageContent>
+                    <ScrollViewer>
+                        <helpers:OrganicMove />
+                    </ScrollViewer>
+                </suki:SukiSideMenuItem.PageContent>
+            </suki:SukiSideMenuItem>-->
+
+            <suki:SukiSideMenuItem Classes="Compact" Header="Squish Effect">
+                <suki:SukiSideMenuItem.Icon>
+                    <PathIcon
+                        Data="{x:Static suki:Icons.ChevronRight}"
+                        Foreground="{DynamicResource SukiLowText}"
+                        Height="13"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Width="13" />
+
+                </suki:SukiSideMenuItem.Icon>
+                <suki:SukiSideMenuItem.PageContent>
+                    <ScrollViewer>
+                        <helpers:PullingEffect />
+                    </ScrollViewer>
+                </suki:SukiSideMenuItem.PageContent>
+            </suki:SukiSideMenuItem>
+
+            <!--  Other Pages  -->
+
+        </suki:SukiSideMenu.Items>
+
+
+        <suki:SukiSideMenu.HeaderContent>
+            <Panel />
+        </suki:SukiSideMenu.HeaderContent>
+
+        <suki:SukiSideMenu.FooterContent>
+            <Panel />
+        </suki:SukiSideMenu.FooterContent>
+    </suki:SukiSideMenu>
+</UserControl>

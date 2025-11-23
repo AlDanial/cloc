@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.07
+  elapsed_seconds    : 0.00414800643920898
+  n_files            : 1
+  n_lines            : 146
+  files_per_second   : 241.079664329233
+  lines_per_second   : 35197.6309920681
+  report_file        : ../outputs/HelpersView.axaml.yaml
+'AXAML' :
+  nFiles: 1
+  blank: 19
+  comment: 19
+  code: 108
+SUM: 
+  blank: 19
+  comment: 19
+  code: 108
+  nFiles: 1
