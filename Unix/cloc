@@ -1994,11 +1994,14 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              may be any mix of files, directories, archives,
                              or git commit hashes.  Use --diff-alignment to
                              generate a list showing which file pairs where
-                             compared.  When comparing git branches, only files
-                             which have changed in either commit are compared.
-                             See also --git, --count-and-diff, --diff-alignment,
-                             --diff-list-file, --diff-timeout, --ignore-case,
-                             --ignore-whitespace.
+                             compared.  File pairs are aligned by matching file
+                             names.  If --git is also given, a more sophisticated
+                             pairing algorithm which additionally attempts to pair
+                             renamed file is used.  When comparing git branches,
+                             only files which have changed in either commit are
+                             compared. See also --git, --count-and-diff,
+                             --diff-alignment, --diff-list-file, --diff-timeout,
+                             --ignore-case, --ignore-whitespace.
    --diff-timeout <N>        Ignore files which take more than <N> seconds
                              to process.  Default is 10 seconds.  Setting <N>
                              to 0 allows unlimited time.  (Large files with many
