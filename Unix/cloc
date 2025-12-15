@@ -1591,8 +1591,11 @@ printf "%8d file%s ignored.                           \n",
 print_errors(\%Error_Codes, \@Errors)
     if @Errors and !($opt_quiet and !$opt_show_errors);
 if (!%Delta_by_Language) {
-    print "Nothing to count.\n";
-    exit;
+    foreach my $out_style (sort keys %OUTFILE_EXT) {
+        next unless $OUTFILE_EXT{$out_style};
+        produce_null_output($opt_report_file, $out_style);
+        exit;
+    }
 }
 generate_diff_sql($end_time - $start_time, \%Delta_by_File) if $opt_sql;
 
@@ -1840,6 +1843,27 @@ sub produce_output {                         # {{{1
             print join("\n", @{$ra_Lines_Out}), "\n";
         }
     }
+}
+# 1}}}
+sub produce_null_output {                    # {{{1
+    my ($outfile, $out_style) = @_;
+    print "-> produce_null_output($outfile, $out_style)\n" if $opt_v > 2;
+    my @Lines_Out = ( "Nothing to count." );
+    if ($out_style eq "json") {
+        @Lines_Out = ( "{}" );
+    } elsif ($out_style eq "xml") {
+        @Lines_Out = ( '<?xml version="1.0" encoding="UTF-8"?><results/>' );
+    } elsif ($out_style eq "csv") {
+        @Lines_Out = ( '' );
+    } elsif ($out_style eq "md" or $out_style eq "yaml") {
+        @Lines_Out = ( "# Nothing to count." );
+    }
+    if ($outfile) {
+        write_file($outfile, {}, @Lines_Out);
+    } else {
+        print "@Lines_Out\n";
+    }
+    print "<- produce_null_output()\n" if $opt_v > 2;
 }
 # 1}}}
 sub suggest_remedies_for_errors {            # {{{1
