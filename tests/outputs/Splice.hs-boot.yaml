@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.07
+  elapsed_seconds    : 0.00434708595275879
+  n_files            : 1
+  n_lines            : 52
+  files_per_second   : 230.039159765261
+  lines_per_second   : 11962.0363077936
+  report_file        : ../outputs/Splice.hs-boot.yaml
+'Haskell Boot' :
+  nFiles: 1
+  blank: 13
+  comment: 2
+  code: 37
+SUM: 
+  blank: 13
+  comment: 2
+  code: 37
+  nFiles: 1

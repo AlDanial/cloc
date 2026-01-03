@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 # cloc -- Count Lines of Code                  {{{1
-# Copyright (C) 2006-2025 Al Danial <al.danial@gmail.com>
+# Copyright (C) 2006-2026 Al Danial <al.danial@gmail.com>
 # First release August 2006
 #
 # Includes code from:
@@ -9103,8 +9103,6 @@ sub set_constants {                          # {{{1
             'hxx'         => 'C/C++ Header'          ,
             'hb'          => 'Harbour'               ,
             'hrl'         => 'Erlang'                ,
-            'hsc'         => 'Haskell'               ,
-            'hs'          => 'Haskell'               ,
             'tfvars'      => 'HCL'                   ,
             'hcl'         => 'HCL'                   ,
             'tf'          => 'HCL'                   ,
@@ -9129,6 +9127,11 @@ sub set_constants {                          # {{{1
             'htm'         => 'HTML'                  ,
             'html'        => 'HTML'                  ,
             'heex'        => 'HTML EEx'              ,
+            'hsc'         => 'Haskell'               ,
+            'hs'          => 'Haskell'               ,
+            'lhs'         => 'Haskell'               ,
+            'hs-boot'     => 'Haskell Boot'          ,
+            'lhs-boot'    => 'Haskell Boot'          ,
             'i3'          => 'Modula3'               ,
             'ice'         => 'Slice'                 ,
             'icl'         => 'Clean'                 ,
@@ -9221,7 +9224,6 @@ sub set_constants {                          # {{{1
             'kts'         => 'Kotlin'                ,
             'hlean'       => 'Lean'                  ,
             'lean'        => 'Lean'                  ,
-            'lhs'         => 'Haskell'               ,
             'lex'         => 'lex'                   ,
             'l'           => 'lex'                   ,
             'ld'          => 'Linker Script'         ,
@@ -10576,6 +10578,7 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'HTML'   ],
                             ],
     'Haskell'            => [   [ 'remove_haskell_comments', '>filename<' ], ],
+    'Haskell Boot'       => [   [ 'remove_haskell_comments', '>filename<' ], ],
     'IDL'                => [   [ 'remove_matches'      , '^\s*;'  ], ],
     'IDL/Qt Project/Prolog/ProGuard' => [ [ 'die' ,          ], ], # never called
     'Idris'              => [
@@ -12072,6 +12075,7 @@ sub set_constants {                          # {{{1
     'Harbour'                      =>   2.00,
     'Hare'                         =>   2.50,
     'Haskell'                      =>   2.11,
+    'Haskell Boot'                 =>   2.11,
     'Haxe'                         =>   2.00,
     'HolyC'                        =>   2.50,
     'Hoon'                         =>   2.00,

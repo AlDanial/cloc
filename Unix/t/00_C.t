@@ -562,6 +562,11 @@ my @Tests = (
                     'args' => '../tests/inputs/test.hs',
                 },
                 {
+                    'name' => 'Haskell Boot',
+                    'ref'  => '../tests/outputs/Splice.hs-boot.yaml',
+                    'args' => '../tests/inputs/Splice.hs-boot',
+                },
+                {
                     'name' => 'Haxe',
                     'ref'  => '../tests/outputs/Sys.hx.yaml',
                     'args' => '../tests/inputs/Sys.hx',
