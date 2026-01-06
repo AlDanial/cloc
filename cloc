@@ -5276,16 +5276,18 @@ sub read_lang_def {                          # {{{1
 
     my $language = "";
     my @lines = read_file($file);
+    my $line_num = 0;
     foreach (@lines) {
+        ++$line_num;
         next if /^\s*#/ or /^\s*$/;
 
         $_ = lc $_ if $ON_WINDOWS and /^\s+(filename|extension)\s/;
 
-        if (/^(\w+.*?)\s*$/) {
+        if (/^(\.?\w+.*?)\s*$/) {
             $language = $1;
             next;
         }
-        die "Missing computer language name, line $. of $file\n"
+        die "Missing computer language name, line $line_num of $file\n"
             unless $language;
 
         if      (/^\s{4}filter\s+(remove_between_(general|2re|regex))
@@ -5341,7 +5343,7 @@ sub read_lang_def {                          # {{{1
             $rh_EOL_Continuation_re->{$language} = $1;
 
         } else {
-            die "Unexpected data line $. of $file:\n$_\n";
+            die "Unexpected data line $line_num of $file:\n$_\n";
         }
 
     }
@@ -5366,17 +5368,19 @@ sub merge_lang_def {                         # {{{1
     my $language        = "";
     my $already_know_it = undef;
     my @lines = read_file($file);
+    my $line_num = 0;
     foreach (@lines) {
+        ++$line_num;
         next if /^\s*#/ or /^\s*$/;
 
         $_ = lc $_ if $ON_WINDOWS and /^\s+(filename|extension)\s/;
 
-        if (/^(\w+.*?)\s*$/) {
+        if (/^(\.?\w+.*?)\s*$/) {
             $language = $1;
             $already_know_it = defined $rh_Scale_Factor->{$language};
             next;
         }
-        die "Missing computer language name, line $. of $file\n"
+        die "Missing computer language name, line $line_num of $file\n"
             unless $language;
 
         if      (/^\s{4}filter\s+(remove_between_(general|2re|regex))
@@ -5439,7 +5443,7 @@ sub merge_lang_def {                         # {{{1
             $rh_EOL_Continuation_re->{$language} = $1;
 
         } else {
-            die "Unexpected data line $. of $file:\n$_\n";
+            die "Unexpected data line $line_num of $file:\n$_\n";
         }
 
     }
