@@ -2932,7 +2932,7 @@ any, ``options.txt`` file it uses.
 
 [Stefano Campanella](https://github.com/StefanoStone)
 created a Python programmatic interface to cloc.
-It is available at https://github.com/USIREVEAL/pycloc
+It is available at https://github.com/pycloc/pycloc
 
 [](1}}})
 <a name="Java Programmatic Interface"></a> []({{{1)
@@ -3247,5 +3247,5 @@ Corporation.
 [](1}}})
 <a name="Copyright"></a> []({{{1)
 #   [Copyright &#9650;](#___top "click to go to top of document")
-Copyright (c) 2006-2025, [Al Danial](https://github.com/AlDanial)
+Copyright (c) 2006-2026, [Al Danial](https://github.com/AlDanial)
 [](1}}})
