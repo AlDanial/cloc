@@ -8,6 +8,11 @@ my %opt;
 getopts('u', \%opt);  # -u to run Unix/cloc instead of ../cloc
 my @Tests = (
                 {
+                    'name' => 'Activiti Business Process',
+                    'ref'  => '../tests/outputs/955.tld.yaml',
+                    'args' => '../tests/inputs/955.tld',
+                },
+                {
                     'name' => 'Agda',
                     'ref'  => '../tests/outputs/Lookup.agda.yaml',
                     'args' => '../tests/inputs/Lookup.agda',
@@ -577,6 +582,11 @@ my @Tests = (
                     'args' => '../tests/inputs/nomad_job.hcl',
                 },
                 {
+                    'name' => 'Hibernate',
+                    'ref'  => '../tests/outputs/955.hbm.xml.yaml',
+                    'args' => '../tests/inputs/955.hbm.xml',
+                },
+                {
                     'name' => 'HolyC',
                     'ref'  => '../tests/outputs/Once.HC.yaml',
                     'args' => '../tests/inputs/Once.HC',
@@ -672,6 +682,16 @@ my @Tests = (
                     'args' => '../tests/inputs/inner_ref.jsonnet',
                 },
                 {
+                    'name' => 'Jasper Report XML/Template',
+                    'ref'  => '../tests/outputs/955.jrxml.yaml',
+                    'args' => '../tests/inputs/955.jrxml',
+                },
+                {
+                    'name' => 'JSP Tag Library Definition',
+                    'ref'  => '../tests/outputs/955.tld.yaml',
+                    'args' => '../tests/inputs/955.tld',
+                },
+                {
                     'name' => 'Jupyter Notebook',
                     'ref'  => '../tests/outputs/Trapezoid_Rule.ipynb.yaml',
                     'args' => '../tests/inputs/Trapezoid_Rule.ipynb',
@@ -717,14 +737,19 @@ my @Tests = (
                     'args' => '../tests/inputs/ping_pong.lfe',
                 },
                 {
-                    'name' => 'Lisp',
-                    'ref'  => '../tests/outputs/sharpsign.cl.yaml',
-                    'args' => '../tests/inputs/sharpsign.cl',
-                },
-                {
                     'name' => 'Linker Script',
                     'ref'  => '../tests/outputs/linker.ld.yaml',
                     'args' => '../tests/inputs/linker.ld',
+                },
+                {
+                    'name' => 'Liquibase',
+                    'ref'  => '../tests/outputs/955.lb.xml.yaml',
+                    'args' => '../tests/inputs/955.lb.xml',
+                },
+                {
+                    'name' => 'Lisp',
+                    'ref'  => '../tests/outputs/sharpsign.cl.yaml',
+                    'args' => '../tests/inputs/sharpsign.cl',
                 },
                 {
                     'name' => 'Literate Idris',

@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.07
+  elapsed_seconds    : 0.00415897369384766
+  n_files            : 1
+  n_lines            : 37
+  files_per_second   : 240.443934877322
+  lines_per_second   : 8896.4255904609
+  report_file        : ../outputs/955.tld.yaml
+'JSP Tag Library Definition' :
+  nFiles: 1
+  blank: 3
+  comment: 7
+  code: 27
+SUM: 
+  blank: 3
+  comment: 7
+  code: 27
+  nFiles: 1

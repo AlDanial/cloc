@@ -692,6 +692,7 @@ $OUTFILE_EXT{"xml" } = 1 if defined($opt_xml );
 $OUTFILE_EXT{"yaml"} = 1 if defined($opt_yaml);
 $OUTFILE_EXT{"json"} = 1 if defined($opt_json);
 $OUTFILE_EXT{"md"  } = 1 if defined($opt_md  );
+# $OUTFILE_EXT{"sql" } = 1 if defined($opt_sql ); # doesn't work; --sql needs an argument
 foreach my $out_style (sort keys %OUTFILE_EXT) {
     ++$N_OUTPUT_FORMATS if $OUTFILE_EXT{$out_style};
 }
@@ -8895,6 +8896,7 @@ sub set_constants {                          # {{{1
             'bicep'       => 'Bicep'                 ,
             'bicepparam'  => 'Bicep'                 ,
             'blp'         => 'Blueprint'             ,
+            'bpmn'        => 'Activiti Business Process',
             'brs'         => 'BrightScript'          ,
             'btp'         => 'BizTalk Pipeline'      ,
             'build.xml'   => 'Ant'                   ,
@@ -9128,6 +9130,7 @@ sub set_constants {                          # {{{1
             'haml'        => 'Haml'                  ,
             'handlebars'  => 'Handlebars'            ,
             'hbs'         => 'Handlebars'            ,
+            'hbm.xml'     => 'Hibernate'             ,
             'ha'          => 'Hare'                  ,
             'hxsl'        => 'Haxe'                  ,
             'hx'          => 'Haxe'                  ,
@@ -9193,6 +9196,7 @@ sub set_constants {                          # {{{1
             '_js'         => 'JavaScript'            ,
             'js'          => 'JavaScript'            ,
             'es6'         => 'JavaScript'            ,
+            'jrxml'       => 'Jasper Report XML/Template' ,
             'jsf'         => 'JavaServer Faces'      ,
             'jsx'         => 'JSX'                   ,
             'xhtml'       => 'XHTML'                 ,
@@ -9224,6 +9228,7 @@ sub set_constants {                          # {{{1
             'jsonnet'     => 'Jsonnet'               ,
             'jsp'         => 'JSP'                   , # Java server pages
             'jspf'        => 'JSP'                   , # Java server pages
+            'tld'         => 'JSP Tag Library Definition',
             'junos'       => 'Juniper Junos'         ,
             'just'        => 'Justfile'              ,
             'vm'          => 'Velocity Template Language' ,
@@ -9238,6 +9243,7 @@ sub set_constants {                          # {{{1
             'lex'         => 'lex'                   ,
             'l'           => 'lex'                   ,
             'ld'          => 'Linker Script'         ,
+            'lb.xml'      => 'Liquibase'             ,
             'lem'         => 'Lem'                   ,
             'less'        => 'LESS'                  ,
             'lfe'         => 'LFE'                   ,
@@ -9927,6 +9933,10 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'Activiti Business Process' => [
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
     'Apex Class'         => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
@@ -10572,6 +10582,10 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'       , '^\s*<% #' ],
                                 [ 'remove_between_general', '<%!--', '--%>' ],
                             ],
+    'Hibernate'          => [
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ],
+                            ],
     'HolyC'              => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
@@ -10630,12 +10644,25 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
-    'JSP'                => [   [ 'remove_html_comments',          ],
+    'JSP'                => [
+                                [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
                                 [ 'remove_jsp_comments' ,          ],
                                 [ 'remove_matches'      , '^\s*//' ],
                                 [ 'add_newlines'        ,          ],
                                 [ 'call_regexp_common'  , 'C'      ],
+                            ],
+    'JSP Tag Library Definition' => [
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ],
+                                [ 'remove_jsp_comments' ,          ],
+                                [ 'remove_matches'      , '^\s*//' ],
+                                [ 'add_newlines'        ,          ],
+                                [ 'call_regexp_common'  , 'C'      ],
+                            ],
+    'Jasper Report XML/Template' => [
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ],
                             ],
     'JavaServer Faces'   => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
@@ -10741,6 +10768,10 @@ sub set_constants {                          # {{{1
     'Linker Script'      => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/'],
                                 [ 'call_regexp_common',     'C'            ],
+                            ],
+    'Liquibase'          => [
+                                [ 'remove_html_comments',          ],
+                                [ 'call_regexp_common'  , 'HTML'   ],
                             ],
     'liquid'             => [
                                 [ 'remove_between_general', '{% comment %}',
@@ -11936,6 +11967,7 @@ sub set_constants {                          # {{{1
     '5th generation default'       =>  16.00,
     'ABAP'                         =>   5.00,
     'ActionScript'                 =>   1.36,
+    'Activiti Business Process'    =>   2.00,
     'Ada'                          =>   0.52,
     'ADSO/IDSM'                    =>   3.00,
     'Agda'                         =>   2.11,
@@ -12088,6 +12120,7 @@ sub set_constants {                          # {{{1
     'Haskell'                      =>   2.11,
     'Haskell Boot'                 =>   2.11,
     'Haxe'                         =>   2.00,
+    'Hibernate'                    =>   2.00,
     'HolyC'                        =>   2.50,
     'Hoon'                         =>   2.00,
     'HTML'                         =>   1.90,
@@ -12115,6 +12148,7 @@ sub set_constants {                          # {{{1
     'Jai'                          =>   1.13,
     'Jam'                          =>   2.00,
     'Janet'                        =>   3.00,
+    'Jasper Report XML/Template'   =>   2.00,
     'Java'                         =>   1.36,
     'JavaScript'                   =>   1.48,
     'JavaServer Faces'             =>   1.5 ,
@@ -12123,6 +12157,7 @@ sub set_constants {                          # {{{1
     'JSON5'                        =>   2.50,
     'Jsonnet'                      =>   2.50,
     'JSP'                          =>   1.48,
+    'JSP Tag Library Definition'   =>   2.00,
     'JSX'                          =>   1.48,
     'Velocity Template Language'   =>   1.00,
     'JCL'                          =>   1.67,
@@ -12137,6 +12172,7 @@ sub set_constants {                          # {{{1
     'Lem'                          =>   3.00,
     'LFE'                          =>   1.25,
     'Linker Script'                =>   1.00,
+    'Liquibase'                    =>   2.00,
     'liquid'                       =>   3.00,
     'Lisp'                         =>   1.25,
     'LiveLink OScript'             =>   3.5 ,

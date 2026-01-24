@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.07
+  elapsed_seconds    : 0.00408697128295898
+  n_files            : 1
+  n_lines            : 37
+  files_per_second   : 244.6799673317
+  lines_per_second   : 9053.1587912729
+  report_file        : ../outputs/955.jrxml.yaml
+'Jasper Report XML/Template' :
+  nFiles: 1
+  blank: 3
+  comment: 7
+  code: 27
+SUM: 
+  blank: 3
+  comment: 7
+  code: 27
+  nFiles: 1

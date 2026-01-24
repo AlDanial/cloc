@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.07
+  elapsed_seconds    : 0.00403094291687012
+  n_files            : 1
+  n_lines            : 37
+  files_per_second   : 248.080913231206
+  lines_per_second   : 9178.99378955462
+  report_file        : ../outputs/955.bpmn.yaml
+'Activiti Business Process' :
+  nFiles: 1
+  blank: 3
+  comment: 7
+  code: 27
+SUM: 
+  blank: 3
+  comment: 7
+  code: 27
+  nFiles: 1
