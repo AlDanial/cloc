@@ -1,6 +1,51 @@
+                Release Notes for cloc version 2.08
+                   https://github.com/AlDanial/cloc
+                             Jan. 24, 2026
+
+New Languages and File Types:
+    o Activiti Business Process
+    o Aria
+    o AXAML
+    o Bicep
+    o BitBake
+    o Clarity
+    o Haskell Boot
+    o Hibernate
+    o JSP Tag Library Definition
+    o Jasper Report XML/Template
+    o Justfile
+    o Liquibase
+    o Magik
+    o VSCode Workspace
+    o Yarn
+
+Updates:
+    o Support input through process substitution on Unix-like
+      operating systems (example:  cloc <(git diff HEAD~1 HEAD --name-only) )
+    o Improve Perl filter for POD (plain old documentation) handling.
+    o --quiet now suppresses all output including error messages unless
+      --show-errors is also given.
+    o Add .cts extension for TypeScript.
+    o Renamed "VB for Applications" to "VBA"
+    o Add .vbhtml extension for Visual Basic .NET
+    o Renamed "Visual Basic Script" to "VBScript"
+    o New switch --include-submodules (applies to --vcs=git) to include
+      git submodule files in the count.
+    o Revert back to manual build of Windows executable to avoid
+      issues with symlinks seen with winget on executables created
+      in Github Actions.
+
+Bug fixes:
+    o Handle empty files when using --git --diff.
+    o Replace "Nothing to count." output with valid formatted output
+      (JSON, etc) when no files are found to count.
+    o Fix language definition parse errors with --read-lang-def, --force-lang-def
+      (specifically, update matching regex to allow leading '.' as in .NET)
+
+============================================================================
                 Release Notes for cloc version 2.06
                    https://github.com/AlDanial/cloc
-                             June 22, 2025
+                             June 24, 2025
 
 New Languages and File Types:
     o Cangjie

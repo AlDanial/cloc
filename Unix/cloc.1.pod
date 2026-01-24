@@ -1,6 +1,6 @@
 #   Copyright
 #
-#      Copyright (C) 2018-2024 Al Danial <al.danial@gmail.com>.
+#      Copyright (C) 2018-2026 Al Danial <al.danial@gmail.com>.
 #      Copyright (C) 2010-2017 Jari Aalto <jari.aalto@cante.net>
 #
 #   License
@@ -312,6 +312,9 @@ new files that show these filters applied.
 The primary use case is to ignore lines
 containing only braces, brackets, or puctuation.
 
+=item B<--include-submodules>
+
+When using B<--vcs=git>, include files in git submodules.
 
 =item B<--lang-no-ext=LANG>
 
@@ -675,6 +678,10 @@ applied.
 Print information about all known (or just the given) file extensions
 and exit.
 
+=item B<--show-errors[=EXT]>
+
+Used with B<--quiet>, print error messages (if any).
+
 =item B<--show-lang[=LANG]>
 
 Print information about all known (or just the given) languages and
@@ -684,6 +691,11 @@ exit.
 
 Print the value of the operating system mode and exit.  See also
 B<--unix>, B<--windows>.
+
+=item B<--quiet>
+
+Suppress all information messages except the final output.
+See also B<--shwow-errors>.
 
 =item B<--unique=FILE>
 
@@ -909,7 +921,7 @@ sloccount(1)
 =head1 AUTHORS
 
 The cloc program was written by Al Danial <al.danial@gmail.com> and
-is Copyright (C) 2006-2023 <al.danial@gmail.com>.
+is Copyright (C) 2006-2026 <al.danial@gmail.com>.
 
 The manual page was originally written by Jari Aalto <jari.aalto@cante.net>.
 
