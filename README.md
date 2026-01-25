@@ -5,9 +5,9 @@
 * * *
 cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.
 
-Latest release:  v2.06 (June 24, 2025)
+Latest release:  v2.08 (Jan. 24, 2026)
 
-[![Version](https://img.shields.io/badge/version-2.06-blue.svg)](https://github.com/AlDanial/cloc)
+[![Version](https://img.shields.io/badge/version-2.08-blue.svg)](https://github.com/AlDanial/cloc)
 [![Contributors](https://img.shields.io/github/contributors/AlDanial/cloc.svg)](https://github.com/AlDanial/cloc/graphs/contributors)
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.42029482.svg)](https://doi.org/10.5281/zenodo.42029482)
 [![Forks](https://img.shields.io/github/forks/AlDanial/cloc.svg)](https://github.com/AlDanial/cloc/network/members)
@@ -67,8 +67,8 @@ Step 3:  Invoke cloc to count your source files, directories, archives,
 or git commits.
 The executable name differs depending on whether you use the
 development source version (`cloc`), source for a
-released version (`cloc-2.06.pl`) or a Windows executable
-(`cloc-2.06.exe`).
+released version (`cloc-2.08.pl`) or a Windows executable
+(`cloc-2.08.exe`).
 
 On this page, `cloc` is the generic term
 used to refer to any of these.
@@ -307,8 +307,8 @@ on GitHub (link follows below) before submitting a problem report.
 <a name="Stable"></a> []({{{1)
 ## Stable release
 
-Download the latest released cloc source file, for example `cloc-2.06.pl`, or
-the Windows executable `cloc-2.06.exe` from
+Download the latest released cloc source file, for example `cloc-2.08.pl`, or
+the Windows executable `cloc-2.08.exe` from
 https://github.com/AlDanial/cloc/releases/latest
 
 <a name="Dev"></a>
@@ -451,18 +451,18 @@ C:> cpan -i Regexp::Common
 C:> cpan -i Algorithm::Diff
 C:> cpan -i PAR::Packer
 C:> cpan -i Win32::LongPath
-C:> pp -M Win32::LongPath -M Encode::Unicode -M Digest::MD5 -c -x -o cloc-2.06.exe cloc-2.06.pl
+C:> pp -M Win32::LongPath -M Encode::Unicode -M Digest::MD5 -c -x -o cloc-2.08.exe cloc-2.08.pl
 </pre>
 
 A variation on the instructions above is if you installed the portable
 version of Strawberry Perl, you will need to run `portableshell.bat` first
 to properly set up your environment.
 
-The Windows executable in the Releases section, <tt>cloc-2.06.exe</tt>,
+The Windows executable in the Releases section, <tt>cloc-2.08.exe</tt>,
 was built on a 64 bit Windows 11 computer using
 [Strawberry Perl](http://strawberryperl.com/)
-5.30.2 and
-[PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.050/lib/pp.pm)
+5.32.1 and
+[PAR::Packer](http://search.cpan.org/~rschupp/PAR-Packer-1.064/lib/pp.pm)
 to build the `.exe`.
 
 #### Is the Windows executable safe to run?  Does it have malware?
@@ -479,6 +479,9 @@ You are encouraged to run your own virus scanners against the
 executable and also check sites such
 https://www.virustotal.com/ .
 The entries for recent versions are:
+
+cloc-2.08.exe:
+https://www.virustotal.com/gui/file/4529557d957ade0dd45746eae10e9c51ee01061bb617eeeab256672faf6e42c6?nocache=1
 
 cloc-2.06.exe:
 https://www.virustotal.com/gui/file/bbe48de9102d0f2520d292d65897001c1d068340eb7cd74dd1ee30c1a9091c4a?nocache=1
