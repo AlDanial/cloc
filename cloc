@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "2.08";  # odd number == beta; even number == stable
+my $VERSION = "2.09";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.10.0;
 # use modules                                  {{{1
@@ -9535,6 +9535,7 @@ sub set_constants {                          # {{{1
             'rkt'         => 'Racket'                ,
             'rktl'        => 'Racket'                ,
             'Rmd'         => 'Rmd'                   ,
+            'rhai'        => 'Rhai'                  ,
             're'          => 'ReasonML'              ,
             'rei'         => 'ReasonML'              ,
             'res'         => 'ReScript'              ,
@@ -11206,6 +11207,11 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'Rhai'               => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'ReScript'           => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
@@ -12251,6 +12257,7 @@ sub set_constants {                          # {{{1
     'reStructuredText'             =>   1.50,
     'Razor'                        =>   2.00,
     'Rexx'                         =>   1.19,
+    'Rhai'                         =>   3.00,
     'Ring'                         =>   4.20,
     'RobotFramework'               =>   2.50,
     'Circom'                       =>   1.00,

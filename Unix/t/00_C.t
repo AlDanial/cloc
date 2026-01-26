@@ -1207,6 +1207,11 @@ my @Tests = (
                     'args' => '../tests/inputs/reStructuredText.rst',
                 },
                 {
+                    'name' => 'Rhai',
+                    'ref'  => '../tests/outputs/comments.rhai.yaml',
+                    'args' => '../tests/inputs/comments.rhai',
+                },
+                {
                     'name' => 'RobotFramework',
                     'ref'  => '../tests/outputs/robotframework.robot.yaml',
                     'args' => '../tests/inputs/robotframework.robot',
