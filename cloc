@@ -541,6 +541,7 @@ $Exclude_Dir{".git"}   = 1;
 $Exclude_Dir{".bzr"}   = 1;
 $Exclude_Dir{".snapshot"} = 1;  # NetApp backups
 $Exclude_Dir{".config"} = 1;
+$Exclude_Dir{".venv"}  = 1; # Python virtual environment
 $opt_count_diff        = defined $opt_count_diff ? 1 : 0;
 $opt_diff              = 1  if $opt_diff_alignment    or
                                $opt_diff_list_file    or
