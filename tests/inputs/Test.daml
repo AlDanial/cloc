@@ -1,0 +1,71 @@
+-- https://raw.githubusercontent.com/digital-asset/daml/refs/heads/main/sdk/test-common/src/main/daml/model/Test.daml
+-- (truncated)
+-- Copyright (c) 2025 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.
+-- SPDX-License-Identifier: Apache-2.0
+
+{-# LANGUAGE CPP #-}
+
+-- file that contains the declarations used in the sandbox tests
+
+module Test where
+
+import Iou()
+import IouTrade()
+
+template Dummy
+  with
+    operator : Party
+  where
+    signatory operator
+
+    choice DummyChoice1 : ()
+      controller operator
+      do return ()
+
+    choice FailingChoice : ()
+      controller operator
+      do assert False
+
+    nonconsuming choice Clone: ContractId Dummy
+      controller operator
+      do create Dummy with operator
+
+    nonconsuming choice FailingClone : ()
+      controller operator
+      do clone <- exercise self Clone
+         exercise self FailingChoice
+
+    choice ConsumeIfTimeIsBetween : ()
+      with
+        begin : Time
+        end : Time
+      controller operator
+      do currentTime <- getTime
+         assert (begin <= currentTime)
+         assert (currentTime <= end)
+
+    choice WrapWithAddress : ContractId AddressWrapper
+      with address : Address
+      controller operator
+      do create AddressWrapper with operator; address
+
+    choice PublicChoice: ()
+      with
+        anyParty: Party
+      controller anyParty
+      do return ()
+
+data Address = Address
+  { street: Text
+  , city: Text
+  , state: Text
+  , zip: Text
+  } deriving (Eq, Show)
+
+-- DEL-4615
+template AddressWrapper
+  with
+    operator: Party
+    address: Address
+  where
+    signatory operator

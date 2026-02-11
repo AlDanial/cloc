@@ -310,6 +310,11 @@ my @Tests = (
                     'args' => '../tests/inputs/fib.dfy',
                 },
                 {
+                    'name' => 'DAML',
+                    'ref'  => '../tests/outputs/Test.daml.yaml',
+                    'args' => '../tests/inputs/Test.daml',
+                },
+                {
                     'name' => 'DenizenScript',
                     'ref'  => '../tests/outputs/double_doors.dsc.yaml',
                     'args' => '../tests/inputs/double_doors.dsc',

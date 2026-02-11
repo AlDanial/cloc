@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.09
+  elapsed_seconds    : 0.00397706031799316
+  n_files            : 1
+  n_lines            : 71
+  files_per_second   : 251.441999880103
+  lines_per_second   : 17852.3819914873
+  report_file        : ../outputs/Test.daml.yaml
+'DAML' :
+  nFiles: 1
+  blank: 14
+  comment: 6
+  code: 51
+SUM: 
+  blank: 14
+  comment: 6
+  code: 51
+  nFiles: 1

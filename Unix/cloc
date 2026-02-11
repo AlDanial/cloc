@@ -8983,6 +8983,7 @@ sub set_constants {                          # {{{1
 # bash or sh scripts
             'dfy'         => 'Dafny'                 ,
             'da'          => 'DAL'                   ,
+            'daml'        => 'DAML'                  ,
             'dart'        => 'Dart'                  ,
             'dsc'         => 'DenizenScript'         ,
             'derw'        => 'Derw'                  ,
@@ -10258,6 +10259,9 @@ sub set_constants {                          # {{{1
                             ],
     'DAL'                => [
                                 [ 'remove_between_general', '[', ']', ],
+                            ],
+    'DAML'               => [
+                                [ 'remove_haskell_comments', '>filename<' ],
                             ],
     'Dart'               => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
@@ -12055,6 +12059,7 @@ sub set_constants {                          # {{{1
     'D'                            =>   1.70,
     'Dafny'                        =>   3.00,
     'DAL'                          =>   1.50,
+    'DAML'                         =>   2.11,
     'Dart'                         =>   2.00,
     'DenizenScript'                =>   1.00,
     'Delphi Form'                  =>   2.00,
