@@ -8950,6 +8950,8 @@ sub set_constants {                          # {{{1
             'COB'         => 'COBOL'                 ,
             'cocoa5'      => 'CoCoA 5'               ,
             'code-workspace' => 'VSCode Workspace'   ,
+            'ql'          => 'CodeQL'                ,
+            'qll'         => 'CodeQL'                ,
             'c5'          => 'CoCoA 5'               ,
             'cpkg5'       => 'CoCoA 5'               ,
             'cocoa5server'=> 'CoCoA 5'               ,
@@ -10221,6 +10223,11 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_matches'      , '^\s*--' ],
                                 [ 'remove_inline'       , '--.*$'  ],
+                            ],
+    'CodeQL'             => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'CoffeeScript'       => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -12050,6 +12057,7 @@ sub set_constants {                          # {{{1
     'CMake'                        =>   1.00,
     'COBOL'                        =>   1.04,
     'CoCoA 5'                      =>   1.04,
+    'CodeQL'                       =>   2.50,
     'CoffeeScript'                 =>   2.00,
     'Constraint Grammar'           =>   4.00,
     'Containerfile'                =>   2.00,
