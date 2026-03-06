@@ -245,6 +245,11 @@ my @Tests = (
                     'args' => '../tests/inputs/Buchberger.cocoa5',
                 },
                 {
+                    'name' => 'CodeQL',
+                    'ref'  => '../tests/outputs/CodeQL.ql.yaml',
+                    'args' => '../tests/inputs/CodeQL.ql',
+                },
+                {
                     'name' => 'ColdFusion',
                     'ref'  => '../tests/outputs/ColdFusion.cfm.yaml',
                     'args' => '../tests/inputs/ColdFusion.cfm',

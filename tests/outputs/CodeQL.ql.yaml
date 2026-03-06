@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.09
+  elapsed_seconds    : 0.00732088088989258
+  n_files            : 1
+  n_lines            : 16
+  files_per_second   : 136.595583924966
+  lines_per_second   : 2185.52934279945
+  report_file        : tests/outputs/CodeQL.ql.yaml
+'CodeQL' :
+  nFiles: 1
+  blank: 2
+  comment: 7
+  code: 7
+SUM: 
+  blank: 2
+  comment: 7
+  code: 7
+  nFiles: 1
