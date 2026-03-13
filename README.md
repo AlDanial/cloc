@@ -17,7 +17,10 @@ at http://cloc.sourceforge.net/ since August 2006.
 
 # Quick Start
 
-Step 1:  Download cloc (several methods, see below) or run cloc's
+
+
+Step 1:  Install cloc (see [Install from Github Releases](#install-from-github-releases)
+and [Install via package manager](#install-via-package-manager)) or run cloc's
 [docker image](#run-via-docker).  The Windows executable has no requirements.
 The source version of cloc requires a Perl interpreter, and the
 Docker version of cloc requires a Docker installation.
@@ -221,19 +224,42 @@ http://softwareestimator.com/IndustryData2.htm.
 
 New releases nominally appear every six months.
 
-## Run via docker
+## Install from Github Releases
 
-These docker commands count lines of code in and below
-the current directory:
+Grab the latest release of cloc from the [Releases section of this repository](https://github.com/AlDanial/cloc/releases).
+
+### Source version on Linux/macOS
+
+Save the latest source file, for example `cloc-2.08.pl`,
+as `cloc` (if you prefer the shorter command name) somewhere on your `PATH`.
+After downloading, make the file executable:
 
 ```shell
-docker run --rm -v $PWD:/tmp aldanial/cloc .
+cd ~/Downloads
+mv cloc-2.08.pl cloc
+chmod a+rx cloc
+./cloc --version     # make sure it runs
+mv cloc ~/bin        # for example, if ~/bin is in $PATH
 ```
 
-### Run via docker on git-bash
-```shell
-docker run --rm -v "/$(pwd -W)":/tmp aldanial/cloc .
+### Source version on Windows
+
+You'll need a Perl interpreter such as [Strawberry Perl](http://strawberryperl.com/)
+installed to run the source version of cloc.
+After downloading the cloc source file, open a command prompt or PowerShell window,
+navigate to the download directory (`C:\TEMP` in the example below), then test cloc with:
+
+```dos
+cd C:\TEMP>
+C:TEMP\> perl cloc-2.08.pl --version
 ```
+
+### Binary version on Windows
+
+Download the latest released Windows executable, for example `cloc-2.08.exe`
+and save it as `cloc.exe` (if desired) in a directory on your `PATH`.
+
+There is no binary version for Linux or macOS.
 
 ## Install via package manager
 Depending your operating system, one of these installation methods may
@@ -261,44 +287,25 @@ If you encounter a bug in cloc using one of the above
 packages, try with cloc pulled from the latest stable release here
 on GitHub (link follows below) before submitting a problem report.
 
-## Stable release
+## Run via docker
 
-Download the latest released cloc source file, for example `cloc-2.08.pl`, or
-the Windows executable `cloc-2.08.exe` from
-https://github.com/AlDanial/cloc/releases/latest
+These docker commands count lines of code in and below
+the current directory:
+
+```shell
+docker run --rm -v $PWD:/tmp aldanial/cloc .
+```
+
+### Run via docker on git-bash
+```shell
+docker run --rm -v "/$(pwd -W)":/tmp aldanial/cloc .
+```
 
 ## Development version
 
 Download the cloc source code at https://github.com/AlDanial/cloc/raw/master/cloc and
 save it as the file `cloc` (or `cloc.pl`, or whatever executable name you wish).
 The next step depends on the operating system you're using.
-
-### On Unix-like systems, including macOS
-
-In a terminal, go to the download directory
-and make the cloc file executable, then give it a test run.
-For example
-
-```shell
-» cd ~/Downloads
-» chmod +x cloc
-» ./cloc --version
-```
-
-For future use, move the file to a more convenient directory in your `PATH`
-such as `/usr/local/bin` or `~/bin`.
-
-### On Windows
-
-You'll need a Perl interpreter such as [Strawberry Perl](http://strawberryperl.com/)
-installed to run the source version of cloc.
-After downloading the cloc source file, open a command prompt or PowerShell window,
-navigate to the download directory (`C:\TEMP` in the example below), then test cloc with:
-
-```dos
-cd C:\TEMP>
-C:TEMP\> perl cloc --version
-```
 
 # License
 
@@ -516,7 +523,7 @@ Several GUI frontends to cloc are available:
 # Options
 
 <details>
-<summary>Full options list (<code>cloc --help</code>)</summary>
+<summary>Full options list (<code>cloc --help</code>) (click the triangle to see all option)</summary>
 
 ```
 prompt> cloc --help
@@ -988,7 +995,7 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
 # Recognized Languages
 
 <details>
-<summary>Full language list (<code>cloc --show-lang</code>) (click the triangle to expand)</summary>
+<summary>Full language list (<code>cloc --show-lang</code>) (click the triangle to see all languages)</summary>
 
 ```
 prompt> cloc --show-lang
