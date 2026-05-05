@@ -559,7 +559,7 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
                              relative path names will be resolved starting from
                              the directory where cloc is invoked.  Set <file>
                              to - to read file names from a STDIN pipe.
-                             See also --exclude-list-file.
+                             See also ---list-file.
    --diff-list-file=<file>   Take the pairs of file names to be diff'ed from
                              <file>, whose format matches the output of
                              --diff-alignment.  (Run with that option to
@@ -574,7 +574,7 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
                              which accepts git commit hashes and branch names.
                              If <VCS> is 'svn' then will invoke 'svn list -R'.
                              The primary benefit is that cloc will then skip
-                             files explicitly excluded by the versioning tool
+                             files explicitly d by the versioning tool
                              in question, ie, those in .gitignore or have the
                              svn:ignore property.
                              Alternatively <VCS> may be any system command
@@ -809,11 +809,11 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
  Filter Options
    --include-content=<regex> Only count files containing text that matches the
                              given regular expression.
-   --exclude-content=<regex> Exclude files containing text that matches the given
+   ---content=<regex>  files containing text that matches the given
                              regular expression.
-   --exclude-dir=<D1>[,D2,]  Exclude the given comma separated directories
+   ---dir=<D1>[,D2,]   the given comma separated directories
                              D1, D2, D3, et cetera, from being scanned.  For
-                             example  --exclude-dir=.cache,test will skip
+                             example --exclude-dir=.cache,test will skip
                              all files and subdirectories that have /.cache/
                              or /test/ as their parent directory.
                              Directories named .bzr, .cvs, .hg, .git, .svn,
@@ -916,7 +916,7 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
    --write-lang-def=<file>   Writes to <file> the language processing filters
                              then exits.  Useful as a first step to creating
                              custom language definitions. Note: languages which
-                             map to the same file extension will be excluded.
+                             map to the same file extension will be d.
                              (See also --force-lang-def, --read-lang-def).
    --write-lang-def-incl-dup=<file>
                              Same as --write-lang-def, but includes duplicated
@@ -2498,7 +2498,7 @@ python     Python-2.7.10/Modules/clmodule.c                                     
 python     Python-2.7.10/Mac/Modules/folder/_Foldermodule.c                                                  306        3 0.970873786407767
 ```
 
-**What are the ten longest files (based on code lines) that have no comments at all?  Exclude header, .html, and YAML files.**
+**What are the ten longest files (based on code lines) that have no comments at all?   header, .html, and YAML files.**
 
 ```
 prompt> sqlite3 code.db 'select project, file, nCode from t
@@ -2913,7 +2913,7 @@ optional.  Here's a sample file:
 # options.txt
 --vcs git
 v      # verbose level 1
-exclude-ext svg,html
+-ext svg,html
 ```
 
 The path to the ``options.txt`` file can also be specified
@@ -2925,7 +2925,7 @@ listed priority), it will use that configuration file
 from that location:
 
 1. ``--list-file``
-1. ``--exclude-list-file``
+1. ``---list-file``
 1. ``--read-lang-def``
 1. ``--force-lang-def``
 1. ``--diff-list-file``
@@ -3215,7 +3215,7 @@ Steven Baker found and fixed a problem with the YAML output generator.
 
 Greg Toth provided code to improve blank line detection in COBOL.
 
-Joel Oliveira provided code to let `--exclude-list-file` handle
+Joel Oliveira provided code to let `---list-file` handle
 directory name exclusion.
 
 Blazej Kroll provided code to produce an XSLT file, `cloc-diff.xsl`,
