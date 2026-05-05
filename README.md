@@ -813,7 +813,7 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
                              regular expression.
    --exclude-dir=<D1>[,D2,]  Exclude the given comma separated directories
                              D1, D2, D3, et cetera, from being scanned.  For
-                             example  --exclude-dir=.cache,test  will skip
+                             example  --exclude-dir=.cache,test will skip
                              all files and subdirectories that have /.cache/
                              or /test/ as their parent directory.
                              Directories named .bzr, .cvs, .hg, .git, .svn,
