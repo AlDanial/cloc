@@ -1,0 +1,23 @@
+// Quxlang source fixture.
+
+::url STATIC STRING_CONSTANT := "https://example.test//not-comment";
+
+::documented DOC <$
+  Summary line still doc text.
+  more text
+$> STATIC STRING_CONSTANT := "documented";
+::multi_doc DOC <$
+  bla bla
+  bla bla
+$> STATIC STRING_CONSTANT := "multi";
+::inline_doc DOC <$ one line doc $> FUNCTION()
+{
+}
+::slash STATIC BYTE := '/'; // Inline comment after a char literal.
+::main FUNCTION()
+{
+  VAR text STRING_CONSTANT := "value // not a comment";
+  VAR slash BYTE := '/';
+  // Body comment.
+  RETURN;
+}
