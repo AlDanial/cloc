@@ -1167,6 +1167,11 @@ my @Tests = (
                     'args' => '../tests/inputs/test-1.0-py2.py3-none-win32.whl',
                 },
                 {
+                    'name' => 'Quxlang',
+                    'ref'  => '../tests/outputs/sample.qxs.yaml',
+                    'args' => '../tests/inputs/sample.qxs',
+                },
+                {
                     'name' => 'Qt Linguist',
                     'ref'  => '../tests/outputs/i18n_de.ts.yaml',
                     'args' => '../tests/inputs/i18n_de.ts',

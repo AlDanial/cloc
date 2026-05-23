@@ -1283,6 +1283,7 @@ Python                     (buck, build.bazel, gclient, gyp, gypi, lmi, py, py3,
                             pyt, pyw, sconscript, sconstruct, snakefile, tac, workspace, wscript,
                             wsgi, xpy)
 QML                        (qbs, qml)
+Quxlang                    (qxs)
 Qt Linguist                (ts)
 Qt Project                 (pro)
 R                          (expr-dist, R, r, rd, rprofile, rsx)
