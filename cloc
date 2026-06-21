@@ -5141,10 +5141,10 @@ sub generate_report {                        # {{{1
             my $DEN = compute_denominator($opt_by_percent    ,
                           $sum_code, $sum_comment, $sum_blank);
             if ($DEN > 0) {
-              $data_line .= sprintf $Format{'5'}{$Style},
-                  $sum_blank   / $DEN * 100,
-                  $sum_comment / $DEN * 100,
-                  $sum_code    / $DEN * 100;
+                $data_line .= sprintf $Format{'5'}{$Style},
+                $sum_blank   / $DEN * 100,
+                $sum_comment / $DEN * 100,
+                $sum_code    / $DEN * 100;
             } else {
               $data_line .= sprintf $Format{'5'}{$Style}, 0, 0, 0;
             }
@@ -5708,6 +5708,14 @@ sub replace_git_hash_with_tarfile {          # {{{1
     #   Regular count:
     #       Simply make a tar file of all files in the git repo.
 
+    if (scalar @{$ra_arg_list} == 1 and -p $ra_arg_list->[0]) {
+        # input is from process substitution; read it and write to a temp file
+        # then replace the file descriptor with the temp file name
+        my @lines = <>;
+        $tmp_file_to_delete = "temp_process_substitution_$$";
+        write_file($tmp_file_to_delete, {}, @lines);
+        $ra_arg_list->[0] = $tmp_file_to_delete;
+    }
     my $prt_args = join(",", @{$ra_arg_list});
     print "-> replace_git_hash_with_tarfile($prt_args)\n" if $opt_v > 2;
 #print "ra_arg_list 1: @{$ra_arg_list}\n";

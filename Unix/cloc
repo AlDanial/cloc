@@ -1826,8 +1826,8 @@ sub produce_output {                         # {{{1
     if ($opt_fmt) {
         my $json_string = "";
         write_file(\$json_string, {}, @{$ra_Lines_Out});
-        my ($file_len, $lang_len, $header, %contents) = load_json($json_string);
-        @{$ra_Lines_Out} = print_format_n(abs($opt_fmt), $file_len, $lang_len, $header, %contents);
+        my ($file_len, $lang_len, $header, $rh_sum, %contents) = load_json($json_string);
+        @{$ra_Lines_Out} = print_format_n(abs($opt_fmt), $file_len, $lang_len, $header, $rh_sum, %contents);
     }
     if ($outfile) {
         my $adjusted_outfile = $outfile;
@@ -4890,14 +4890,16 @@ sub generate_report {                        # {{{1
                         $rhh_count->{$lang_or_file}{'blank'}  );
           if ($opt_by_percent eq 't') {
             $data_line .= sprintf $Format{5}{$Style}  ,
-                $rhh_count->{$lang_or_file}{'blank'}   / $sum_blank   * 100,
-                $rhh_count->{$lang_or_file}{'comment'} / $sum_comment * 100,
-                $rhh_count->{$lang_or_file}{'code'}    / $sum_code    * 100;
-          } else {
+                $sum_blank   ? $rhh_count->{$lang_or_file}{'blank'}   / $sum_blank   * 100 : 0,
+                $sum_comment ? $rhh_count->{$lang_or_file}{'comment'} / $sum_comment * 100 : 0,
+                $sum_code    ? $rhh_count->{$lang_or_file}{'code'}    / $sum_code    * 100 : 0;
+          } elsif ($DEN > 0) {
             $data_line .= sprintf $Format{5}{$Style}  ,
                 $rhh_count->{$lang_or_file}{'blank'}   / $DEN * 100,
                 $rhh_count->{$lang_or_file}{'comment'} / $DEN * 100,
                 $rhh_count->{$lang_or_file}{'code'}    / $DEN * 100;
+          } else {
+            $data_line .= sprintf $Format{5}{$Style}, 0, 0, 0;
           }
         } else {
           $data_line .= sprintf $Format{4}{$Style}  ,
@@ -4941,18 +4943,18 @@ sub generate_report {                        # {{{1
                             $rhh_count->{$lang_or_file}{'blank'}  );
             if ($opt_by_percent eq 't') {
               push @results,"  ${Q}blank_pct${Q}: "   .
-                sprintf("%3.2f", $rhh_count->{$lang_or_file}{'blank'}   / $sum_blank   * 100) . $C;
+                sprintf("%3.2f", $sum_blank   ? $rhh_count->{$lang_or_file}{'blank'}   / $sum_blank   * 100 : 0) . $C;
               push @results,"  ${Q}comment_pct${Q}: " .
-                sprintf("%3.2f", $rhh_count->{$lang_or_file}{'comment'} / $sum_comment * 100) . $C;
+                sprintf("%3.2f", $sum_comment ? $rhh_count->{$lang_or_file}{'comment'} / $sum_comment * 100 : 0) . $C;
               push @results,"  ${Q}code_pct${Q}: "    .
-                sprintf("%3.2f", $rhh_count->{$lang_or_file}{'code'}    / $sum_code    * 100) . $C;
+                sprintf("%3.2f", $sum_code    ? $rhh_count->{$lang_or_file}{'code'}    / $sum_code    * 100 : 0) . $C;
             } else {
               push @results,"  ${Q}blank_pct${Q}: "     .
-                sprintf("%3.2f", $rhh_count->{$lang_or_file}{'blank'}   / $DEN * 100) . $C;
+                sprintf("%3.2f", $DEN ? $rhh_count->{$lang_or_file}{'blank'}   / $DEN * 100 : 0) . $C;
               push @results,"  ${Q}comment_pct${Q}: " .
-                sprintf("%3.2f", $rhh_count->{$lang_or_file}{'comment'} / $DEN * 100) . $C;
+                sprintf("%3.2f", $DEN ? $rhh_count->{$lang_or_file}{'comment'} / $DEN * 100 : 0) . $C;
               push @results,"  ${Q}code_pct${Q}: "    .
-                sprintf("%3.2f", $rhh_count->{$lang_or_file}{'code'}    / $DEN * 100) . $C;
+                sprintf("%3.2f", $DEN ? $rhh_count->{$lang_or_file}{'code'}    / $DEN * 100 : 0) . $C;
             }
             } else {
               push @results,"  ${Q}blank${Q}: "   . $rhh_count->{$lang_or_file}{'blank'}   . $C;
@@ -5000,13 +5002,13 @@ sub generate_report {                        # {{{1
                             $rhh_count->{$lang_or_file}{'comment'},
                             $rhh_count->{$lang_or_file}{'blank'}  );
               if ($opt_by_percent eq 't') {
-                $str .= sprintf("%3.2f", $rhh_count->{$lang_or_file}{'blank'}   / $sum_blank   * 100) . ${DELIM} .
-                        sprintf("%3.2f", $rhh_count->{$lang_or_file}{'comment'} / $sum_comment * 100) . ${DELIM} .
-                        sprintf("%3.2f", $rhh_count->{$lang_or_file}{'code'}    / $sum_code    * 100) . ${DELIM} ;
+                $str .= sprintf("%3.2f", $sum_blank   ? $rhh_count->{$lang_or_file}{'blank'}   / $sum_blank   * 100 : 0) . ${DELIM} .
+                        sprintf("%3.2f", $sum_comment ? $rhh_count->{$lang_or_file}{'comment'} / $sum_comment * 100 : 0) . ${DELIM} .
+                        sprintf("%3.2f", $sum_code    ? $rhh_count->{$lang_or_file}{'code'}    / $sum_code    * 100 : 0) . ${DELIM} ;
               } else {
-                $str .= sprintf("%3.2f", $rhh_count->{$lang_or_file}{'blank'}   / $DEN * 100) . ${DELIM} .
-                        sprintf("%3.2f", $rhh_count->{$lang_or_file}{'comment'} / $DEN * 100) . ${DELIM} .
-                        sprintf("%3.2f", $rhh_count->{$lang_or_file}{'code'}    / $DEN * 100) . ${DELIM} ;
+                $str .= sprintf("%3.2f", $DEN ? $rhh_count->{$lang_or_file}{'blank'}   / $DEN * 100 : 0) . ${DELIM} .
+                        sprintf("%3.2f", $DEN ? $rhh_count->{$lang_or_file}{'comment'} / $DEN * 100 : 0) . ${DELIM} .
+                        sprintf("%3.2f", $DEN ? $rhh_count->{$lang_or_file}{'code'}    / $DEN * 100 : 0) . ${DELIM} ;
               }
             } else {
               $str .= $rhh_count->{$lang_or_file}{'blank'}  . ${DELIM} .
@@ -5035,14 +5037,16 @@ sub generate_report {                        # {{{1
                         $sum_code, $sum_comment, $sum_blank);
           if ($opt_by_percent eq 't') {
             $data_line .= sprintf $Format{'5'}{$Style},
-                $sum_blank   / $sum_blank   * 100,
-                $sum_comment / $sum_comment * 100,
-                $sum_code    / $sum_code    * 100;
-          } else {
+                $sum_blank   ? 100 : 0,
+                $sum_comment ? 100 : 0,
+                $sum_code    ? 100 : 0;
+          } elsif ($DEN > 0) {
             $data_line .= sprintf $Format{'5'}{$Style},
                 $sum_blank   / $DEN * 100,
                 $sum_comment / $DEN * 100,
                 $sum_code    / $DEN * 100;
+          } else {
+            $data_line .= sprintf $Format{'5'}{$Style}, 0, 0, 0;
           }
         } else {
           $data_line .= sprintf $Format{'4'}{$Style},
@@ -5115,9 +5119,9 @@ sub generate_report {                        # {{{1
           } else {
             my $DEN = compute_denominator($opt_by_percent    ,
                           $sum_code, $sum_comment, $sum_blank);
-            push @entries, sprintf("%.2f", $sum_blank   / $DEN * 100);
-            push @entries, sprintf("%.2f", $sum_comment / $DEN * 100);
-            push @entries, sprintf("%.2f", $sum_code    / $DEN * 100);
+            push @entries, sprintf("%.2f", $DEN ? $sum_blank   / $DEN * 100 : 0);
+            push @entries, sprintf("%.2f", $DEN ? $sum_comment / $DEN * 100 : 0);
+            push @entries, sprintf("%.2f", $DEN ? $sum_code    / $DEN * 100 : 0);
           }
         } else {
             push @entries, $sum_blank;
@@ -5144,10 +5148,14 @@ sub generate_report {                        # {{{1
           } else {
             my $DEN = compute_denominator($opt_by_percent    ,
                           $sum_code, $sum_comment, $sum_blank);
-            $data_line .= sprintf $Format{'5'}{$Style},
+            if ($DEN > 0) {
+                $data_line .= sprintf $Format{'5'}{$Style},
                 $sum_blank   / $DEN * 100,
                 $sum_comment / $DEN * 100,
                 $sum_code    / $DEN * 100;
+            } else {
+              $data_line .= sprintf $Format{'5'}{$Style}, 0, 0, 0;
+            }
           }
         } else {
           $data_line .= sprintf $Format{'4'}{$Style},
@@ -5708,6 +5716,14 @@ sub replace_git_hash_with_tarfile {          # {{{1
     #   Regular count:
     #       Simply make a tar file of all files in the git repo.
 
+    if (scalar @{$ra_arg_list} == 1 and -p $ra_arg_list->[0]) {
+        # input is from process substitution; read it and write to a temp file for processing
+        # replace the file descriptor with the temp file name
+        my @lines = <>;
+        $tmp_file_to_delete = "temp_process_substitution_$$";
+        write_file($tmp_file_to_delete, {}, @lines);
+        $ra_arg_list->[0] = $tmp_file_to_delete;
+    }
     my $prt_args = join(",", @{$ra_arg_list});
     print "-> replace_git_hash_with_tarfile($prt_args)\n" if $opt_v > 2;
 #print "ra_arg_list 1: @{$ra_arg_list}\n";
@@ -9432,6 +9448,7 @@ sub set_constants {                          # {{{1
             'pyx'         => 'Cython'                ,
             'qbs'         => 'QML'                   ,
             'qml'         => 'QML'                   ,
+            'qxs'         => 'Quxlang'               ,
             'watchr'      => 'Ruby'                  ,
             'vagrantfile' => 'Ruby'                  ,
             'thorfile'    => 'Ruby'                  ,
@@ -10268,9 +10285,13 @@ sub set_constants {                          # {{{1
                             ],
     'C3'                 => [
                                 [ 'remove_matches'      , '^\s*//' ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '`', '/*', '*/', 1 ],
+                                [ 'rm_comments_in_strings', '`', '//', '', 1 ],
+                                [ 'rm_comments_in_strings', '`', '<*', '*>', 1 ],
+                                [ 'remove_between_general', '/*', '*/' ],
                                 [ 'remove_between_general', '<*', '*>' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
-                                [ 'remove_inline'       , '//.*$'  ],
                             ],
     'D/dtrace'           => [ [ 'die' ,          ], ], # never called
     'D'                  => [
@@ -11190,6 +11211,13 @@ sub set_constants {                          # {{{1
     'Qt Project'         => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
+                            ],
+    'Quxlang'            => [
+                                [ 'remove_between_regex', '\bDOC\s*<\$', '\$>' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'rm_comments_in_strings', "'", '//', '' ],
+                                [ 'remove_matches'      , '^\s*//' ],
+                                [ 'remove_inline'       , '//.*$'  ],
                             ],
     'R'                  => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -12290,6 +12318,7 @@ sub set_constants {                          # {{{1
     'XML (Qt/GTK)'                 =>   2.00,
     'Qt Linguist'                  =>   1.00,
     'Qt Project'                   =>   1.00,
+    'Quxlang'                      =>   1.75,
     'R'                            =>   3.00,
     'Rmd'                          =>   3.00,
     'Racket'                       =>   1.50,
@@ -15701,6 +15730,16 @@ sub load_json {                              # {{{1
             }
         }
     }
+    # When --by-percent is in effect, the JSON emits blank_pct/comment_pct/code_pct
+    # instead of blank/comment/code. Alias them so downstream formatting works.
+    foreach my $key (keys %contents) {
+        foreach my $field (qw(blank comment code)) {
+            if (!exists $contents{$key}{$field}
+                && exists $contents{$key}{"${field}_pct"}) {
+                $contents{$key}{$field} = $contents{$key}{"${field}_pct"};
+            }
+        }
+    }
     my $url = $contents{'header'}{'cloc_url'};
     my $ver = $contents{'header'}{'cloc_version'};
     my $sec = $contents{'header'}{'elapsed_seconds'};
@@ -15709,6 +15748,10 @@ sub load_json {                              # {{{1
     $sec = $sec == 0 ? 1.0e-3 : $sec;
     my $header = sprintf "%s v %s T=%.2f s (%.1f files/s, %.1f lines/s)",
                           $url, $ver, $sec, $n_file/$sec, $n_line/$sec;
+    # Preserve the SUM block so print_format_n can render the SUM row from
+    # aggregate counts/percentages instead of accumulating per-row values
+    # (which is meaningless under --by-percent).
+    my %sum_block = exists $contents{'SUM'} ? %{$contents{'SUM'}} : ();
     delete $contents{'header'};
     delete $contents{'SUM'};
 
@@ -15720,12 +15763,13 @@ sub load_json {                              # {{{1
     my $lang_len = 0;
     foreach my $file (keys %contents) {
         my $flen = length $file;
-        my $llen = length $contents{$file}{'language'};
+        # 'language' is absent for by-language reports (the key itself is the language)
+        my $llen = length($contents{$file}{'language'} // $file);
         $file_len = $file_len > $flen ? $file_len : $flen;
         $lang_len = $lang_len > $llen ? $lang_len : $llen;
     }
     print "<- load_json()\n" if $opt_v > 2;
-    return $file_len, $lang_len, $header, %contents;
+    return $file_len, $lang_len, $header, \%sum_block, %contents;
 }
 # 1}}}
 sub print_format_n {                         # {{{1
@@ -15735,8 +15779,9 @@ sub print_format_n {                         # {{{1
     # format 3 : File | Language | blank | comment | code
     # format 4 : File | blank | comment | code | total
     # format 5 : File | Language | blank | comment | code | total
-    my ($format, $file_len, $lang_len, $header, %contents) = @_;
+    my ($format, $file_len, $lang_len, $header, $rh_sum, %contents) = @_;
     print "-> print_format_n($format)\n" if $opt_v > 2;
+    $rh_sum = {} unless ref($rh_sum) eq 'HASH';
     my @prt_lines = ();
 
     # 8 = characters in "Language"
@@ -15849,6 +15894,33 @@ sub print_format_n {                         # {{{1
     }
     push @prt_lines, "$hyphens{$format}\n";
     if (scalar @file_list > 1) {
+        # Under --by-percent the per-row values are percentages, so
+        # accumulating them into the SUM row is meaningless. Replace the
+        # SUM cells with the aggregate from the JSON's preserved SUM block:
+        # in 't' mode the JSON stores 100/100/100 directly; in 'c'/'cm'/
+        # 'cb'/'cmb' it stores raw counts which we convert via the same
+        # compute_denominator() the text path uses.
+        if ($opt_by_percent and %{$rh_sum}) {
+            my $sum_blank   = $rh_sum->{'blank'}   // 0;
+            my $sum_comment = $rh_sum->{'comment'} // 0;
+            my $sum_code    = $rh_sum->{'code'}    // 0;
+            $n_files = $rh_sum->{'nFiles'} // $n_files;
+            if ($opt_by_percent eq 't') {
+                ($n_blank, $n_comment, $n_code) =
+                    ($sum_blank, $sum_comment, $sum_code);
+            } else {
+                my $DEN = compute_denominator($opt_by_percent,
+                              $sum_code, $sum_comment, $sum_blank);
+                if ($DEN > 0) {
+                    $n_blank   = sprintf("%.2f", $sum_blank   / $DEN * 100);
+                    $n_comment = sprintf("%.2f", $sum_comment / $DEN * 100);
+                    $n_code    = sprintf("%.2f", $sum_code    / $DEN * 100);
+                } else {
+                    ($n_blank, $n_comment, $n_code) = (0, 0, 0);
+                }
+            }
+            $n_total = $n_blank + $n_comment + $n_code;
+        }
         if ($opt_thousands_delimiter) {
             $n_files   = separate_thousands($n_files,   $opt_thousands_delimiter);
             $n_blank   = separate_thousands($n_blank,   $opt_thousands_delimiter);
