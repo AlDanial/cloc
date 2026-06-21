@@ -518,6 +518,7 @@ my $CLOC_XSL = "cloc.xsl"; # created with --xsl
    $CLOC_XSL = "cloc-diff.xsl" if $opt_diff;
 die "\n" unless $getopt_success;
 print $usage and exit if $opt_help;
+my $Archive_Extension_re = qr/\.(tar(\.xz|\.gz|\.bz2|\.7z)?|tgz|zip|ear|srpm|src\.rpm)$/;
 my %Exclude_Language = ();
    %Exclude_Language = map { $_ => 1 } split(/,/, $opt_exclude_lang)
         if $opt_exclude_lang;
@@ -1154,7 +1155,7 @@ my $max_processes = get_max_processes();
 #
 my @binary_archive = ();
 my $cwd            = cwd();
-if ($opt_extract_with) {
+if ($opt_extract_with or (scalar(@ARGV) == 1 and $ARGV[0] =~ /${Archive_Extension_re}$/)) {
 #print "cwd main = [$cwd]\n";
     my @extract_location = ();
     foreach my $bin_file (@ARGV) {
@@ -14591,38 +14592,9 @@ sub uncompress_archive_cmd {                 # {{{1
         $extract_cmd = "cat > -";
     } elsif ($archive_file =~ /\.tar$/ and $ON_WINDOWS) {
         $extract_cmd = "tar -xf \"$archive_file\"";
-    } elsif (($archive_file =~ /\.tar\.(gz|Z)$/ or
-              $archive_file =~ /\.tgz$/       ) and !$ON_WINDOWS)    {
-        if (external_utility_exists("gzip --version")) {
-            if (external_utility_exists("tar --version")) {
-                $extract_cmd = "gzip -dc '$archive_file' | tar xf -";
-            } else {
-                $missing = "tar";
-            }
-        } else {
-            $missing = "gzip";
-        }
-    } elsif ($archive_file =~ /\.tar\.bz2$/ and !$ON_WINDOWS)    {
-        if (external_utility_exists("bzip2 --help")) {
-            if (external_utility_exists("tar --version")) {
-                $extract_cmd = "bzip2 -dc '$archive_file' | tar xf -";
-            } else {
-                $missing = "tar";
-            }
-        } else {
-            $missing = "bzip2";
-        }
-    } elsif ($archive_file =~ /\.tar\.xz$/ and !$ON_WINDOWS)    {
-        if (external_utility_exists("unxz --version")) {
-            if (external_utility_exists("tar --version")) {
-                $extract_cmd = "unxz -dc '$archive_file' | tar xf -";
-            } else {
-                $missing = "tar";
-            }
-        } else {
-            $missing = "bzip2";
-        }
-    } elsif ($archive_file =~ /\.tar$/ and !$ON_WINDOWS)    {
+    } elsif ($archive_file =~ /\.tar(\.(gz|Z|xz|bz2))?$/
+            or $archive_file =~ /\.tgz$/
+            and !$ON_WINDOWS)    {
         $extract_cmd = "tar xf '$archive_file'";
     } elsif ($archive_file =~ /\.src\.rpm$/i and !$ON_WINDOWS) {
         if (external_utility_exists("cpio --version")) {
@@ -14656,7 +14628,7 @@ sub uncompress_archive_cmd {                 # {{{1
             $missing = "unzip";
         }
     }
-    print "<- uncompress_archive_cmd\n" if $opt_v > 2;
+    print "<- uncompress_archive_cmd ($extract_cmd)\n" if $opt_v > 2;
     if ($missing) {
         die "Unable to expand $archive_file because external\n",
             "utility '$missing' is not available.\n",

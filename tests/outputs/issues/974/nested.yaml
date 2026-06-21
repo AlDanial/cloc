@@ -1,0 +1,91 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.09
+  elapsed_seconds    : 0.0138771533966064
+  n_files            : 20
+  n_lines            : 333
+  files_per_second   : 1441.21776479684
+  lines_per_second   : 23996.2757838674
+  report_file        : nested.yaml
+'RAML' :
+  nFiles: 1
+  blank: 5
+  comment: 3
+  code: 62
+'Brainfuck' :
+  nFiles: 1
+  blank: 1
+  comment: 3
+  code: 24
+'Go' :
+  nFiles: 2
+  blank: 10
+  comment: 37
+  code: 22
+'Pascal' :
+  nFiles: 4
+  blank: 4
+  comment: 15
+  code: 18
+'BitBake' :
+  nFiles: 1
+  blank: 4
+  comment: 1
+  code: 13
+'Slang' :
+  nFiles: 1
+  blank: 1
+  comment: 4
+  code: 10
+'Kotlin' :
+  nFiles: 1
+  blank: 0
+  comment: 3
+  code: 9
+'SparForte' :
+  nFiles: 1
+  blank: 6
+  comment: 8
+  code: 8
+'C++' :
+  nFiles: 1
+  blank: 0
+  comment: 2
+  code: 6
+'Java' :
+  nFiles: 1
+  blank: 0
+  comment: 3
+  code: 6
+'PL/I' :
+  nFiles: 1
+  blank: 0
+  comment: 7
+  code: 5
+'Fortran 77' :
+  nFiles: 1
+  blank: 0
+  comment: 6
+  code: 4
+'Fortran 90' :
+  nFiles: 1
+  blank: 0
+  comment: 3
+  code: 4
+'Bourne Shell' :
+  nFiles: 2
+  blank: 0
+  comment: 0
+  code: 2
+'Lua' :
+  nFiles: 1
+  blank: 3
+  comment: 9
+  code: 2
+SUM: 
+  blank: 34
+  comment: 104
+  code: 195
+  nFiles: 20

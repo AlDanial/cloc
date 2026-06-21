@@ -911,6 +911,13 @@ my @Tests = (
                    'ref'  => '../tests/outputs/issues/906/results.yaml',
                 },
 
+                {
+                   'name' => 'nested archives (#974)',
+                   'cd'   => '../tests/inputs/issues/974',
+                   'args' => 'nested.tar.gz',
+                   'ref'  => '../tests/outputs/issues/974/nested.yaml',
+                },
+
             );
 
 my $ON_WINDOWS = 0;
