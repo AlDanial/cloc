@@ -1,3 +1,27 @@
+                   https://github.com/AlDanial/cloc
+                             July 4, 2026
+
+New Languages and File Types:
+    o beluga
+    o C3
+    o CodeQL
+    o DAML
+    o Quxlang
+    o Rhai
+    o Slang
+
+Updates:
+    o Skip contents of .venv directories.
+    o Update wscript implementation (this is a filename, not an extension).
+    o Updated BibTeX entry in the README.
+    o Add support for --by-percent with --fmt formatting styles.
+    o Support process substitution as input to --sum-reports (Unix-like
+      operating systems only).
+
+Bug fixes:
+    o Fix handling of nested archive files (ie, a zip file inside a zip file).
+
+============================================================================
                 Release Notes for cloc version 2.08
                    https://github.com/AlDanial/cloc
                              Jan. 24, 2026
