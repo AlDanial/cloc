@@ -9821,6 +9821,7 @@ sub set_constants {                          # {{{1
             'wxs'         => 'WiX source'            ,
             'wxi'         => 'WiX include'           ,
             'wxl'         => 'WiX string localization' ,
+            'wren'        => 'Wren'                  ,
             'prw'         => 'xBase'                 ,
             'prg'         => 'xBase'                 ,
             'ch'          => 'xBase Header'          ,
@@ -11785,6 +11786,11 @@ sub set_constants {                          # {{{1
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
                             ],
+    'Wren'               => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'WXML'               => [
                                 [ 'remove_html_comments',          ],
                                 [ 'call_regexp_common'  , 'HTML'   ],
@@ -12425,6 +12431,7 @@ sub set_constants {                          # {{{1
     'WiX source'                   =>   1.90,
     'WiX include'                  =>   1.90,
     'WiX string localization'      =>   1.90,
+    'Wren'                         =>   4.00,
     'WXML'                         =>   1.90,
     'WXSS'                         =>   1.00,
     'xBase'                        =>   2.00,

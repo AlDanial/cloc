@@ -1622,6 +1622,11 @@ my @Tests = (
                     'args' => '../tests/inputs/ZosNet.rc',
                 },
                 {
+                    'name' => 'Wren',
+                    'ref'  => '../tests/outputs/mandelbrot.wren.yaml',
+                    'args' => '../tests/inputs/mandelbrot.wren',
+                },
+                {
                     'name' => 'WXML',
                     'ref'  => '../tests/outputs/pages.wxml.yaml',
                     'args' => '../tests/inputs/pages.wxml',

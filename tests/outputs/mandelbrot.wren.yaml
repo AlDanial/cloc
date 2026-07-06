@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.10
+  elapsed_seconds    : 0.00491595268249512
+  n_files            : 1
+  n_lines            : 39
+  files_per_second   : 203.419370483535
+  lines_per_second   : 7933.35544885785
+  report_file        : ../outputs/mandelbrot.wren.yaml
+'Wren' :
+  nFiles: 1
+  blank: 6
+  comment: 5
+  code: 28
+SUM: 
+  blank: 6
+  comment: 5
+  code: 28
+  nFiles: 1
