@@ -1163,7 +1163,8 @@ my $max_processes = get_max_processes();
 #
 my @binary_archive = ();
 my $cwd            = cwd();
-if ($opt_extract_with or (scalar(@ARGV) == 1 and $ARGV[0] =~ /${Archive_Extension_re}$/)) {
+if ($opt_extract_with or
+    (scalar(@ARGV) == 1 and $ARGV[0] =~ /${Archive_Extension_re}$/ and !is_dir($ARGV[0]))) {
 #print "cwd main = [$cwd]\n";
     my @extract_location = ();
     foreach my $bin_file (@ARGV) {

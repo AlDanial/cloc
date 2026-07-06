@@ -918,6 +918,13 @@ my @Tests = (
                    'ref'  => '../tests/outputs/issues/974/nested.yaml',
                 },
 
+                {
+                   'name' => 'directory named like archive (#977)',
+                   'cd'   => '../tests/inputs/issues/977',
+                   'args' => 'foo.tar.gz',
+                   'ref'  => '../tests/outputs/issues/977/results.yaml',
+                },
+
             );
 
 my $ON_WINDOWS = 0;
