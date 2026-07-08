@@ -1,0 +1,26 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.10
+  elapsed_seconds    : 0.0136580467224121
+  n_files            : 2
+  n_lines            : 32
+  files_per_second   : 146.433823272702
+  lines_per_second   : 2342.94117236323
+  report_file        : ../outputs/hello-0.0.0.gem.yaml
+'Ruby' :
+  nFiles: 1
+  blank: 0
+  comment: 0
+  code: 5
+'Python' :
+  nFiles: 1
+  blank: 4
+  comment: 21
+  code: 2
+SUM: 
+  blank: 4
+  comment: 21
+  code: 7
+  nFiles: 2

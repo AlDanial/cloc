@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "2.10";  # odd number == beta; even number == stable
+my $VERSION = "2.11";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.10.0;
 # use modules                                  {{{1
@@ -518,7 +518,7 @@ my $CLOC_XSL = "cloc.xsl"; # created with --xsl
    $CLOC_XSL = "cloc-diff.xsl" if $opt_diff;
 die "\n" unless $getopt_success;
 print $usage and exit if $opt_help;
-my $Archive_Extension_re = qr/\.(tar(\.xz|\.gz|\.bz2|\.7z)?|tgz|zip|ear|srpm|src\.rpm)$/;
+my $Archive_Extension_re = qr/\.(tar(\.xz|\.gz|\.bz2|\.7z)?|tgz|gem|zip|ear|srpm|src\.rpm)$/;
 my %Exclude_Language = ();
    %Exclude_Language = map { $_ => 1 } split(/,/, $opt_exclude_lang)
         if $opt_exclude_lang;
@@ -11980,7 +11980,6 @@ sub set_constants {                          # {{{1
    'so'            => 1,  # Dynamically-loaded object code.
    'Tag'           => 1,
    'tfm'           => 1,
-   'tgz'           => 1,  # gzipped tarball
    'tiff'          => 1,
    'tsv'           => 1,  # tab separated values
    'vf'            => 1,
@@ -14601,7 +14600,7 @@ sub uncompress_archive_cmd {                 # {{{1
     } elsif ($archive_file =~ /\.tar$/ and $ON_WINDOWS) {
         $extract_cmd = "tar -xf \"$archive_file\"";
     } elsif ($archive_file =~ /\.tar(\.(gz|Z|xz|bz2))?$/
-            or $archive_file =~ /\.tgz$/
+            or $archive_file =~ /\.(tgz|gem)$/
             and !$ON_WINDOWS)    {
         $extract_cmd = "tar xf '$archive_file'";
     } elsif ($archive_file =~ /\.src\.rpm$/i and !$ON_WINDOWS) {

@@ -925,6 +925,13 @@ my @Tests = (
                    'ref'  => '../tests/outputs/issues/977/results.yaml',
                 },
 
+                {
+                   'name' => 'contents of a .gem file',
+                   'cd'   => '../tests/inputs',
+                   'args' => 'hello-0.0.0.gem', # .tar.gz inside .tar.gz
+                   'ref'  => '../tests/outputs/hello-0.0.0.gem.yaml',
+                },
+
             );
 
 my $ON_WINDOWS = 0;
