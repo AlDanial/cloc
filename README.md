@@ -1607,13 +1607,14 @@ Versions of cloc before v1.07 required an
 to expand an archive file.  Beginning with v1.07 this is extraction is
 attempted automatically.  At the moment the automatic extraction method works
 reasonably well on Unix-type OS's for the following file types:
-`.tar.gz`,
+`.deb`.
+`.ear`,
+`.gem`,
 `.tar.bz2`,
+`.tar.gz`,
 `.tar.xz`,
 `.tgz`,
 `.zip`,
-`.ear`,
-`.deb`.
 Some of these extensions work on Windows if one has WinZip installed
 in the default location (`C:\Program Files\WinZip\WinZip32.exe`).
 Additionally, with newer versions of WinZip, the
