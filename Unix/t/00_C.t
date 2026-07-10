@@ -1272,6 +1272,11 @@ my @Tests = (
                     'args' => '../tests/inputs/scheme.sls',
                 },
                 {
+                    'name' => 'Sema',
+                    'ref'  => '../tests/outputs/sample.sema.yaml',
+                    'args' => '../tests/inputs/sample.sema',
+                },
+                {
                     'name' => 'SKILL',
                     'ref'  => '../tests/outputs/ChangeProperties.il.yaml',
                     'args' => '../tests/inputs/ChangeProperties.il',

@@ -9574,6 +9574,7 @@ sub set_constants {                          # {{{1
             'sch'         => 'Scheme'                ,
             'sls'         => 'Scheme/SaltStack'      ,
             'sld'         => 'Scheme'                ,
+            'sema'        => 'Sema'                  ,
             'robot'       => 'RobotFramework'        ,
             'rc'          => 'Windows Resource File' ,
             'rc2'         => 'Windows Resource File' ,
@@ -11341,6 +11342,11 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
                             ],
+    'Sema'               => [
+                                [ 'remove_between_general', '#|', '|#' ],
+                                [ 'remove_matches'      , '^\s*;'  ],
+                                [ 'remove_inline'       , ';.*$'   ],
+                            ],
     'Slang'             => [
                                 [ 'remove_inline'       , '//.*$'  ],
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
@@ -12340,6 +12346,7 @@ sub set_constants {                          # {{{1
     'sas'                          =>   1.95,
     'Scala'                        =>   4.10,
     'Scheme'                       =>   1.51,
+    'Sema'                         =>   1.25,
     'Slim'                         =>   3.00,
     'Solidity'                     =>   1.48,
     'Bourne Shell'                 =>   3.81,
