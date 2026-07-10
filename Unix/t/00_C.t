@@ -1003,6 +1003,7 @@ my @Tests = (
                               '../tests/inputs/hanoi.inc ' .
                               '../tests/inputs/pascal.inc ' .
                               '../tests/inputs/test1.inc ' .
+                              '../tests/inputs/assembly.inc ' .
                               '../tests/inputs/Pascal.p ' .
                               '../tests/inputs/queue.p ',
                 },

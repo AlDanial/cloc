@@ -2,13 +2,13 @@
 # github.com/AlDanial/cloc
 header : 
   cloc_url           : github.com/AlDanial/cloc
-  cloc_version       : 2.01
-  elapsed_seconds    : 0.00428891181945801
-  n_files            : 6
-  n_lines            : 165
-  files_per_second   : 1398.9562510423
-  lines_per_second   : 38471.2969036634
-  report_file        : ../outputs/pawn.yaml
+  cloc_version       : 2.11
+  elapsed_seconds    : 0.00733709335327148
+  n_files            : 7
+  n_lines            : 187
+  files_per_second   : 954.056281276402
+  lines_per_second   : 25486.9320855267
+  report_file        : tests/outputs/pawn.yaml
 'Pawn' :
   nFiles: 2
   blank: 16
@@ -19,6 +19,11 @@ header :
   blank: 4
   comment: 4
   code: 20
+'Assembly' :
+  nFiles: 1
+  blank: 5
+  comment: 1
+  code: 16
 'Pascal' :
   nFiles: 2
   blank: 2
@@ -30,7 +35,7 @@ header :
   comment: 7
   code: 11
 SUM: 
-  blank: 27
-  comment: 29
-  code: 109
-  nFiles: 6
+  blank: 32
+  comment: 30
+  code: 125
+  nFiles: 7
