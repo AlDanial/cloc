@@ -12795,10 +12795,11 @@ sub php_pascal_fortran_pawn_bitbake_assembly {                # {{{1
     #   some lines start with include, require, inherit statements
     #   contains .=, =., ?=, ??= operators
     #   contains :... = assignments
-	#
-	# Assembly:
-	#   lines may start with: org/.org, section/.section, segment, %include/.include/include, macro/.macro/%macro/.endm/%endmacro (some nasm/fasm/gas/masm directives)
-	#   lines may start with: mov, push, pop, add, jmp, call, ret (common assembly instructions)
+    #
+    # Assembly:
+    #   lines may start with: org/.org, section/.section, segment, %include/.include/include,
+    #   macro/.macro/%macro/.endm/%endmacro (some nasm/fasm/gas/masm directives),
+    #   mov, push, pop, add, jmp, call, ret (common assembly instructions)
 
     ${$rs_language} = "";
     my $IN = open_file('<', $file, 1);
@@ -12854,7 +12855,7 @@ sub php_pascal_fortran_pawn_bitbake_assembly {                # {{{1
                  /^\s*(\.org|org)\b/i) {
             $assembly_points += 100;
             last;
-		}
+        }
         if (/^\s*(integer|real|complex|double|character|logical|public|private).*?::/i or
             /^\s*(allocatable|dimension)/i or
             /^\s*(end\s+)?(interface|type|function|module)\b/i) {

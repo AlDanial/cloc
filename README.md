@@ -179,18 +179,6 @@ SUM:                            39           1564           1365           3945
 for /D %I in (.\*) do cd %I && cloc --vcs git && cd ..
 ```
 
-# Sponsors
-
-<p align="center">
-  <img src="img/atlas_cloud_logo_black.svg" alt="Atlas Cloud" width="40%">
-</p>
-
-[Atlas Cloud](https://www.atlascloud.ai/?utm_source=github&utm_medium=link&utm_campaign=cloc)
-is a full-modal AI inference platform that gives developers a single AI API
-to access video generation, image generation, and LLM APIs. Instead of managing
-multiple vendor integrations, you connect once and get unified access to
-300+ curated models across all modalities.
-
 # Overview
 
 cloc counts blank lines, comment lines, and physical lines of source
