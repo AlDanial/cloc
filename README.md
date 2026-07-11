@@ -1270,7 +1270,7 @@ Pek                        (pek)
 Perl                       (ack, al, cpanfile, makefile.pl, perl, ph, plh, plx, pm, psgi, rexfile, pl, p6)
 Pest                       (pest)
 PHP                        (aw, ctp, phakefile, php, php3, php4, php5, php_cs, php_cs.dist, phps, phpt, phtml)
-PHP/Pascal/Fortran/Pawn/BitBake (inc)
+PHP/Pascal/Fortran/Pawn/BitBake/Assembly (inc)
 Pig Latin                  (pig)
 Pkl                        (pkl)
 PL/I                       (pl1)
@@ -1452,7 +1452,7 @@ These file extensions map to multiple languages:
 *   `fnc` files could be Oracle PL or SQL
 *   `for` files could be Fortran 77 or Forth
 *   `fs`  files could be F# or Forth
-*   `inc` files could be PHP, Pascal or BitBake
+*   `inc` files could be PHP, Pascal, Fortran, Pawn, BitBake or Assembly
 *   `itk` files could be Tcl or Tk
 *   `jl`  files could be Lisp or Julia
 *   `lit` files could be PL or M
