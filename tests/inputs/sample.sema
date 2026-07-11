@@ -1,0 +1,10 @@
+;; sample.sema — exercises cloc's Sema language filters.
+;; Sema is a Lisp dialect: `;` line comments and nestable `#| ... |#` blocks.
+
+#| Block comment
+   spanning multiple lines. |#
+
+(define (square x)
+  (* x x))              ; inline comment after code
+
+(println (square 7))
