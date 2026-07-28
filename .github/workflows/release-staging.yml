@@ -19,9 +19,12 @@ jobs:
       - name: Extract version from branch name
         id: get_version
         shell: pwsh
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          GH_REF: ${{ github.ref }}
         run: |
-          $branch = "${{ github.head_ref }}"
-          if (-not $branch) { $branch = "${{ github.ref }}" }
+          $branch = $env:HEAD_REF
+          if (-not $branch) { $branch = $env:GH_REF }
           if ($branch -match 'release-v(?<ver>[0-9]+\.[0-9]+)') {
             $ver = $Matches["ver"]
             echo "VERSION_NUM=$ver" >> $env:GITHUB_OUTPUT
