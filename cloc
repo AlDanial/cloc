@@ -828,6 +828,7 @@ my %Extension_Collision = (
     'MATLAB/Mathematica/Objective-C/MUMPS/Mercury'  => [ 'm'    ] ,
     'Pascal/Pawn'                                   => [ 'p'    ] ,
     'Pascal/Puppet'                                 => [ 'pp'   ] ,
+    'Perl/AL'                                       => [ 'al'   ] ,
     'Perl/Prolog'                                   => [ 'pl', 'PL'  ] ,
     'PHP/Pascal/Fortran/Pawn/BitBake/Assembly'      => [ 'inc'  ] ,
     'Raku/Prolog'                                   => [ 'p6', 'P6'  ] ,
@@ -5516,6 +5517,11 @@ sub print_language_info {                    # {{{1
         push @{$extensions{'Julia'}} , "jl";
         delete $extensions{'Lisp/Julia'};
     }
+    if (!$language or $language =~ /^(Perl|AL)$/i) {
+        push @{$extensions{'Perl'}}  , "al";
+        push @{$extensions{'AL'}}    , "al";
+        delete $extensions{'Perl/AL'};
+    }
     if (!$language or $language =~ /^(Perl|Prolog)$/i) {
         push @{$extensions{'Perl'}}  , "pl";
         push @{$extensions{'Prolog'}}, "pl";
@@ -6902,6 +6908,8 @@ sub classify_file {                          # {{{1
                 return Lisp_or_OpenCL($full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'Lisp/Julia') {
                 return Lisp_or_Julia( $full_file, $rh_Err, $raa_errors);
+            } elsif ($Language_by_Extension{$extension} eq 'Perl/AL') {
+                return Perl_or_AL($full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'Perl/Prolog') {
                 return Perl_or_Prolog($full_file, $rh_Err, $raa_errors);
             } elsif ($Language_by_Extension{$extension} eq 'Raku/Prolog') {
@@ -9382,7 +9390,7 @@ sub set_constants {                          # {{{1
             'ph'          => 'Perl'                  ,
             'makefile.pl' => 'Perl'                  ,
             'cpanfile'    => 'Perl'                  ,
-            'al'          => 'Perl'                  ,
+            'al'          => 'Perl/AL'               ,
             'ack'         => 'Perl'                  ,
             'perl'        => 'Perl'                  ,
             'pfo'         => 'Fortran 77'            ,
@@ -9959,6 +9967,11 @@ sub set_constants {                          # {{{1
 %{$rhaa_Filters_by_Language} = (            # {{{1
     '(unknown)'          => [ ],
     'ABAP'               => [   [ 'remove_matches'      , '^\*'    ], ],
+    'AL'                 => [
+                                [ 'rm_comments_in_strings', "'", '/*', '*/' ],
+                                [ 'rm_comments_in_strings', "'", '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'ActionScript'       => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
@@ -11098,6 +11111,7 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*//'  ],
                                 [ 'remove_inline'       , '//.*$'   ],
                             ],
+    'Perl/AL'            => [ [ 'die' ,          ], ], # never called
     'Perl/Prolog'        => [ [ 'die' ,          ], ], # never called
     'Pig Latin'          => [
                                 [ 'remove_matches'      , '^\s*--' ],
@@ -12049,6 +12063,7 @@ sub set_constants {                          # {{{1
     '4th generation default'       =>   4.00,
     '5th generation default'       =>  16.00,
     'ABAP'                         =>   5.00,
+    'AL'                           =>   1.00,
     'ActionScript'                 =>   1.36,
     'Activiti Business Process'    =>   2.00,
     'Ada'                          =>   0.52,
@@ -12500,6 +12515,7 @@ sub set_constants {                          # {{{1
     'Lisp/OpenCL'                     => 1.00,
     'PHP/Pascal/Fortran/Pawn/Bitbake/Assembly' => 1.00,
     'Pascal/Puppet'                   => 1.00,
+    'Perl/AL'                         => 1.00,
     'Perl/Prolog'                     => 1.00,
     'Raku/Prolog'                     => 1.00,
     'Verilog-SystemVerilog/Coq'    => 1.00,
@@ -12973,6 +12989,45 @@ sub Lisp_or_Julia {                          # {{{1
     }
 
     print "<- Lisp_or_Julia\n" if $opt_v > 2;
+    return $lang;
+} # 1}}}
+sub Perl_or_AL {                             # {{{1
+    my ($file        , # in
+        $rh_Err      , # in   hash of error codes
+        $raa_errors  , # out
+       ) = @_;
+
+    # .al is Perl's AutoLoader extension and also the extension of AL, the
+    # language of Microsoft Dynamics 365 Business Central.  AL sources declare
+    # an object as "<kind> <id> <name>" at the start of a line, or open with a
+    # namespace or using declaration; Perl AutoLoader chunks match neither.
+    # The match is case sensitive: AL tooling writes its keywords in lower
+    # case, while prose in Perl comments is usually capitalised.
+
+    print "-> Perl_or_AL\n" if $opt_v > 2;
+
+    my $lang = "Perl";
+    my $IN = open_file('<', $file, 1);
+    if (!defined $IN) {
+        push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
+        return $lang;
+    }
+    while (<$IN>) {
+        s/^\xef\xbb\xbf// if $. == 1;  # strip a UTF-8 BOM
+        if (m{^\s*(?:codeunit|page|pageextension|pagecustomization|table|
+                     tableextension|report|reportextension|xmlport|query|
+                     enum|enumextension|profile|profileextension|controladdin|
+                     interface|permissionset|permissionsetextension|
+                     entitlement)\b\s+(?:\d|"|[A-Z])}x or
+            m{^\s*dotnet\s*$}                          or
+            m{^\s*(?:namespace|using)\s+[\w.]+\s*;}) {
+            $lang = "AL";
+            last;
+        }
+    }
+    $IN->close;
+
+    print "<- Perl_or_AL($file, $lang)\n" if $opt_v > 2;
     return $lang;
 } # 1}}}
 sub Perl_or_Prolog {                         # {{{1
