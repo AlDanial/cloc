@@ -847,6 +847,7 @@ my %Extension_Collision = (
     'SKILL/.NET IL'                                 => [ 'il'   ] ,
     'Clojure/Cangjie'                               => [ 'cj'   ] ,
     'Unknown/BitBake'                               => [ 'conf' ] ,
+    'Windows INF/TNSDL'                             => [ 'inf' ] ,
 );
 my @Autogen_to_ignore = no_autogen_files($list_no_autogen);
 if ($opt_force_lang_def) {
@@ -5602,6 +5603,11 @@ sub print_language_info {                    # {{{1
         push @{$extensions{'Cangjie'}} , "cj";
         delete $extensions{'Clojure/Cangjie'};
     }
+    if (!$language or $language =~ /^(Windows INF|TNSDL)$/) {
+        push @{$extensions{'Windows INF'}} , "inf";
+        push @{$extensions{'TNSDL'}} , "inf";
+        delete $extensions{'Clojure/Cangjie'};
+    }
     printf "%-26s %s\n", "Language", "Extension(s)";
     printf "%-26s %s\n", "-" x 20, "-" x 40;
     if ($opt_explain) {
@@ -7002,6 +7008,8 @@ sub classify_file {                          # {{{1
             } elsif ($Language_by_Extension{$extension} eq 'Unknown/BitBake') {
                 my $lang_t_or_b = "";
                 return really_is_BitBake($full_file, $rh_Err, $raa_errors);
+            } elsif ($Language_by_Extension{$extension} eq 'Windows INF/TNSDL') {
+                return WinINF_or_TNSDL($full_file, $rh_Err, $raa_errors);
             } else {
                 return $Language_by_Extension{$extension};
             }
@@ -9665,7 +9673,7 @@ sub set_constants {                          # {{{1
             'in2'         => 'TNSDL'                 ,
             'in3'         => 'TNSDL'                 ,
             'in4'         => 'TNSDL'                 ,
-            'inf'         => 'TNSDL'                 ,
+            'inf'         => 'Windows INF/TNSDL'     ,
             'tpd'         => 'TITAN Project File Information',
             'ts'          => 'TypeScript/Qt Linguist',
             'cts'         => 'TypeScript'            ,
@@ -11767,6 +11775,9 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'Windows INF'        => [
+                                [ 'remove_matches'      , '^\s*;' ],
+                            ],
     'Windows Message File'  => [
                                 [ 'remove_matches'      , '^\s*;\s*//' ],
                                 [ 'call_regexp_common'  , 'C'          ],
@@ -12431,6 +12442,7 @@ sub set_constants {                          # {{{1
     'Web Services Description'     =>   1.00,
     'WebAssembly'                  =>   0.45,
     'WGSL'                         =>   2.50,
+    'Windows INF'                  =>   1.00,
     'Windows Message File'         =>   1.00,
     'Windows Resource File'        =>   1.00,
     'Windows Module Definition'    =>   1.00,
@@ -13618,6 +13630,40 @@ sub Clojure_or_Cangjie {                     # {{{1
         return "Clojure";
     } else {
         return "Cangjie";
+    }
+} # 1}}}
+sub WinINF_or_TNSDL {                        # {{{1
+    my ($file        , # in
+        $rh_Err      , # in   hash of error codes
+        $raa_errors  , # out
+       ) = @_;
+
+    print "-> WinINF_or_TNSDL($file)\n" if $opt_v > 2;
+
+    my $lang = undef;
+    my $IN = open_file('<', $file, 1);
+    if (!defined $IN) {
+        push @{$raa_errors}, [$rh_Err->{'Unable to read'} , $file];
+        return $lang;
+    }
+
+    my $windows_inf = 0;
+    my $tnsdl       = 0;
+    while (<$IN>) {
+        next if /^\s*$/;
+        if (/^\s*(;|\[\w+)/) {
+            $windows_inf += 50;
+        } elsif (/^(DCL|CONSTANT|STATE|ENDSTATE)\s/) {
+            $tnsdl += 5;
+        }
+    }
+    $IN->close;
+
+    print "<- WinINF_or_TNSDL($file: Windows INF=$windows_inf, TNSDL=$tnsdl\n" if $opt_v > 2;
+    if ($windows_inf > $tnsdl) {
+        return "Windows INF";
+    } else {
+        return "TNSDL";
     }
 } # 1}}}
 sub really_is_BitBake {                    # {{{1

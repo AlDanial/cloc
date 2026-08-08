@@ -1,0 +1,22 @@
+/*
+  https://en.wikipedia.org/wiki/TNSDL
+  https://www.wikiwand.com/en/TNSDL
+*/
+STATE idle COMMENT 'Idle state';
+  INPUT are_you_busy;
+    OUTPUT no TO SENDER;
+    NEXTSTATE -; /* No state change */
+  /* ... other input handlers */
+ENDSTATE idle;
+
+STATE *(idle) COMMENT 'Any state, except idle';
+  INPUT are_you_busy;
+    OUTPUT yes TO SENDER;
+    NEXTSTATE -; /* No state change */
+ENDSTATE *(idle);
+
+STATE * COMMENT 'Any state';
+  INPUT are_you_alive;
+    OUTPUT yes TO SENDER;
+    NEXTSTATE -; /* No state change */
+ENDSTATE *;

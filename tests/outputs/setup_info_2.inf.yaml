@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.11
+  elapsed_seconds    : 0.00471615791320801
+  n_files            : 1
+  n_lines            : 11
+  files_per_second   : 212.037005207017
+  lines_per_second   : 2332.40705727719
+  report_file        : ../outputs/setup_info_2.inf.yaml
+'Windows INF' :
+  nFiles: 1
+  blank: 2
+  comment: 4
+  code: 5
+SUM: 
+  blank: 2
+  comment: 4
+  code: 5
+  nFiles: 1

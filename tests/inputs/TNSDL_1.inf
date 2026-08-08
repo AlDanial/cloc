@@ -1,0 +1,33 @@
+/*
+  https://en.wikipedia.org/wiki/TNSDL
+  https://www.wikiwand.com/en/TNSDL
+*/
+DCL WITHWARMING /* Data to be live-migrated (on platforms supporting "warming") */
+  query_process pid; /* PID of query_signal sender */
+
+CONSTANT time_to_wait = 10; /* Timeout of database response */
+
+TIMER db_timeout_timer; /* Timer of database response */
+
+STATE idle; /* Idle state, wait for query signal */
+  INPUT query_signal(DCL input_data);
+    DCL
+      db_query db_query_type;     /* Local variable, stored on stack. */
+    TASK query_process := SENDER; /* Sender address saved to specific memory area, which is preserved even on software update.*/
+    TASK db_query.field1 := some_procedure(input_data),
+         db_query.field2 := input_data.field1;
+    OUTPUT db_request_signal(db_query) TO db_process; /* Send request to database process */
+    SET(NOW + time_to_wait, db_timeout_timer);        /* Start database response timer */
+    NEXTSTATE wait_db;                                /* Enter wait_db state where database response is expected */
+ENDSTATE idle;
+
+STATE wait_db;
+  INPUT db_response_signal(DCL answer_data);
+    RESET(db_timeout_timer) COMMENT 'Database answered in time';
+    OUTPUT answer_signal(answer_data.records) TO query_process;
+    NEXTSTATE idle;
+
+  INPUT db_timeout_timer; /* Timeout */
+    OUTPUT error_signal(error_constant) TO query_process;
+    NEXTSTATE idle;
+ENDSTATE wait_db;

@@ -1,0 +1,8 @@
+; https://learn.microsoft.com/en-us/windows-hardware/drivers/install/inf-ddinstall-hw-section
+
+[example_class_addreg]
+HKR,,,,%ClassName%
+HKR,,EnumPropPages32,,"ExampleBinary.Dll,ExamplePropPageProvider"
+HKR,,SilentInstall,,1
+HKR,,NoInstallClass,,1
+HKR,,Icon,,"101"

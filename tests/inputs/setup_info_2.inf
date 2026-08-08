@@ -1,0 +1,11 @@
+; https://learn.microsoft.com/en-us/windows-hardware/drivers/install/inf-models-section
+
+[Manufacturer]
+%StdMfg% = StdMfg,NTamd64         ; (Standard types)
+%MSMfg%  = MSMfg,NTamd64          ; Microsoft
+; ... %otherMfg% omitted here
+
+[StdMfg.NTamd64]  ; per-Manufacturer Models section 
+; Std serial mouse
+%*pnp0f0c.DeviceDesc%= Ser_Inst,*PNP0F0C,SERENUM\PNP0F0C,SERIAL_MOUSE
+; ... more StdMfg entries

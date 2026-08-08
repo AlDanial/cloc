@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.11
+  elapsed_seconds    : 0.00548791885375977
+  n_files            : 1
+  n_lines            : 22
+  files_per_second   : 182.218437744374
+  lines_per_second   : 4008.80563037623
+  report_file        : ../outputs/TNSDL_2.inf.yaml
+'TNSDL' :
+  nFiles: 1
+  blank: 2
+  comment: 5
+  code: 15
+SUM: 
+  blank: 2
+  comment: 5
+  code: 15
+  nFiles: 1
