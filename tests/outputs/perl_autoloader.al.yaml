@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.11
+  elapsed_seconds    : 0.0214300155639648
+  n_files            : 1
+  n_lines            : 20
+  files_per_second   : 46.6635218726358
+  lines_per_second   : 933.270437452717
+  report_file        : ../tests/outputs/perl_autoloader.al.yaml
+'Perl' :
+  nFiles: 1
+  blank: 4
+  comment: 5
+  code: 11
+SUM: 
+  blank: 4
+  comment: 5
+  code: 11
+  nFiles: 1

@@ -18,6 +18,16 @@ my @Tests = (
                     'args' => '../tests/inputs/Lookup.agda',
                 },
                 {
+                    'name' => 'AL',
+                    'ref'  => '../tests/outputs/AL.al.yaml',
+                    'args' => '../tests/inputs/AL.al',
+                },
+                {
+                    'name' => 'AL 2 (Perl AutoLoader, same extension)',
+                    'ref'  => '../tests/outputs/perl_autoloader.al.yaml',
+                    'args' => '../tests/inputs/perl_autoloader.al',
+                },
+                {
                     'name' => 'AnsProlog',
                     'ref'  => '../tests/outputs/AnsProlog.lp.yaml',
                     'args' => '../tests/inputs/AnsProlog.lp',
