@@ -997,6 +997,11 @@ Usage: cloc [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <report 
                              Only works with the '--fmt' option.
                              Sample values: '.', ',', '_', ' '
                              Synonym:  --ksep
+   --total                   Add a 'Total' column to the report equal to
+                             the sum of blank, comment, and code lines for
+                             each language (or file).  Applies to the text,
+                             Markdown, CSV, XML, YAML, and JSON reports.
+                             Ignored with --diff or --sql.
    --xml                     Write the results in XML.
    --xsl=<file>              Reference <file> as an XSL stylesheet within
                              the XML output.  If <file> is 1 (numeric one),
