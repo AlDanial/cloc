@@ -9606,6 +9606,7 @@ sub set_constants {                          # {{{1
             'e'           => 'Specman e'             ,
             'sql'         => 'SQL'                   ,
             'SQL'         => 'SQL'                   ,
+            'scp'         => 'SQL Stored Procedure'  ,
             'sproc.sql'   => 'SQL Stored Procedure'  ,
             'spoc.sql'    => 'SQL Stored Procedure'  ,
             'spc.sql'     => 'SQL Stored Procedure'  ,
