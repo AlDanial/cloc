@@ -1338,6 +1338,11 @@ my @Tests = (
                     'args' => '../tests/inputs/hello.sp',
                 },
                 {
+                    'name' => 'SQL Stored Procedure',
+                    'ref'  => '../tests/outputs/sample.scp.yaml',
+                    'args' => '../tests/inputs/sample.scp',
+                },
+                {
                     'name' => 'Solidity',
                     'ref'  => '../tests/outputs/solidity.sol.yaml',
                     'args' => '../tests/inputs/solidity.sol',

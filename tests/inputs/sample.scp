@@ -1,0 +1,16 @@
+/*
+** Script for Server TEST_ASE (Adaptive Server Enterprise/15.7)
+** Procedure(s)
+** STORED PROCEDURE: dbo.update_customer_status
+*/
+create proc dbo.update_customer_status
+    @customer_id int,
+    @new_status varchar(20)
+as
+begin
+    -- Persist the new status.
+    update customers
+       set status = @new_status
+     where id = @customer_id
+end
+go
