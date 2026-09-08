@@ -11216,6 +11216,8 @@ sub set_constants {                          # {{{1
     'QML'                => [
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'rm_comments_in_strings', "'", '/*', '*/' ],
+                                [ 'rm_comments_in_strings', "'", '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                                 [ 'remove_inline'       , '//.*$'  ],
                             ],
