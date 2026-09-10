@@ -1079,6 +1079,80 @@ foreach my $t (@Tests) {
     }
 }
 
+# --total: adds a Total column (sum of blank, comment, code) to each
+# language/file row and to the SUM row, across output styles.
+{
+    chdir("../tests/inputs/dd");
+    my $out_file = "$work_dir/total.yaml";
+    my $cmd = "$cloc --quiet --hide-rate --total --yaml --out $out_file .";
+    system($cmd);
+    chdir($work_dir);
+    my %total_counts = load_yaml($out_file);
+    unlink $out_file unless $Verbose;
+    my $ok_total = 1;
+    foreach my $lang (keys %total_counts) {
+        my %fields = %{$total_counts{$lang}};
+        next unless defined $fields{'code'};   # skip non-language sections
+        my $sum = $fields{'blank'} + $fields{'comment'} + $fields{'code'};
+        $ok_total = 0 if $fields{'total'} != $sum;
+    }
+    ok($ok_total, "--total yaml: every total equals blank+comment+code");
+}
+
+{
+    chdir("../tests/inputs/dd");
+    my $out_file = "$work_dir/total.txt";
+    system("$cloc --quiet --hide-rate --total --out $out_file .");
+    chdir($work_dir);
+    my $stdout = do { local (@ARGV, $/) = $out_file; <> } // "";
+    unlink $out_file unless $Verbose;
+    like($stdout, qr/\bTotal\s*$/m, "--total txt: Total column header present");
+    my $rows_ok = 1;
+    foreach my $line (split /\n/, $stdout) {
+        # data and SUM rows end with: blank comment code total
+        next unless $line =~ /(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s*$/;
+        my ($b, $c, $co, $t) = ($1, $2, $3, $4);
+        $rows_ok = 0 if $t != $b + $c + $co;
+    }
+    ok($rows_ok, "--total txt: row totals equal blank+comment+code");
+}
+
+{
+    chdir("../tests/inputs/dd");
+    my $out_file = "$work_dir/no_total.txt";
+    system("$cloc --quiet --hide-rate --out $out_file .");
+    chdir($work_dir);
+    my $stdout = do { local (@ARGV, $/) = $out_file; <> } // "";
+    unlink $out_file unless $Verbose;
+    unlike($stdout, qr/Total/, "default txt output has no Total column");
+}
+
+{
+    chdir("../tests/inputs/dd");
+    my $out_file = "$work_dir/total.json";
+    system("$cloc --quiet --hide-rate --total --json --out $out_file .");
+    chdir($work_dir);
+    my $stdout = do { local (@ARGV, $/) = $out_file; <> } // "";
+    unlink $out_file unless $Verbose;
+    like($stdout, qr/"total":\s*\d+/, "--total json: total field present");
+}
+
+{
+    chdir("../tests/inputs/dd");
+    my $f1 = "$work_dir/total_r1.txt";
+    my $f2 = "$work_dir/total_r2.txt";
+    system("$cloc --quiet --hide-rate --total --out $f1 .");
+    system("$cloc --quiet --hide-rate --total --out $f2 .");
+    my $sum_out = "$work_dir/total_sum.txt";
+    system("$cloc --quiet --hide-rate --sum-reports --total --out $sum_out $f1 $f2");
+    chdir($work_dir);
+    # --sum-reports writes two files: one by language, one by report file
+    my $stdout = do { local (@ARGV, $/) = "$sum_out.lang"; <> } // "";
+    unlink $f1, $f2, "$sum_out.lang", "$sum_out.file" unless $Verbose;
+    like($stdout, qr/^SUM:\s+\d+\s+\d+\s+\d+\s+\d+\s+\d+\s*$/m,
+         "--sum-reports can combine reports made with --total");
+}
+
 done_testing();
 print "Finished testing $cloc\n";
 

@@ -285,6 +285,7 @@ my (
     $opt_txt                  ,  # not associated with a command line option
     $opt_thousands_delimiter  ,
     $opt_show_errors          ,
+    $opt_total                ,
    );
 
 my $getopt_success = GetOptions(             # {{{1
@@ -398,6 +399,7 @@ my $getopt_success = GetOptions(             # {{{1
    "encoding=s"                              => \$opt_encoding            , # not production ready #880
    "ksep|thousands-delimiter=s"              => \$opt_thousands_delimiter ,
    "show-errors"                             => \$opt_show_errors         ,
+   "total"                                   => \$opt_total               ,
   );
 $opt_txt = 0;
 my $tmp_file_to_delete = "";
@@ -499,6 +501,7 @@ load_from_config_file($config_file,          # {{{2
                                                 \$opt_stat                ,
                                                 \$opt_thousands_delimiter ,
                                                 \$opt_show_errors         ,
+                                                \$opt_total               ,
 );  # 2}}} Not pretty.  Not at all.
 if ($opt_version) {
     printf "$VERSION\n";
@@ -666,6 +669,7 @@ if ($opt_sql_style) {
         die "'$opt_sql_style' is not a recognized SQL style.\n";
     }
 }
+$opt_total = 0 unless defined $opt_total;
 $opt_by_percent = '' unless defined $opt_by_percent;
 if ($opt_by_percent and $opt_by_percent !~ m/^(c|cm|cb|cmb|t)$/i) {
     die "--by-percent must be either 'c', 'cm', 'cb', 'cmb', or 't'\n";
@@ -2444,6 +2448,11 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
                              Only works with the '--fmt' option.
                              Sample values: '.', ',', '_', ' '
                              Synonym:  --ksep
+   --total                   Add a 'Total' column to the report equal to
+                             the sum of blank, comment, and code lines for
+                             each language (or file).  Applies to the text,
+                             Markdown, CSV, XML, YAML, and JSON reports.
+                             Ignored with --diff or --sql.
    --xml                     Write the results in XML.
    --xsl=<file>              Reference <file> as an XSL stylesheet within
                              the XML output.  If <file> is 1 (numeric one),
@@ -3451,6 +3460,7 @@ sub combine_results {                        # {{{1
                    (\d+)\s+         # blank
                    (\d+)\s+         # comments
                    (\d+)\s+         # code
+                   (?:\d+\s+)?      # total lines (only present with --total)
                    (                #    next four entries missing with -no3
                    x\s+             # x
                    \d+\.\d+\s+      # scale
@@ -3484,6 +3494,7 @@ sub combine_results {                        # {{{1
                    (\d+)\s+         # blank
                    (\d+)\s+         # comments
                    (\d+)\s+         # code
+                   (?:\d+\s+)?      # total lines (only present with --total)
                    (                #    next four entries missing with -no3
                    x\s+             # x
                    \d+\.\d+\s+      # scale
@@ -4713,6 +4724,17 @@ sub generate_report {                        # {{{1
        $Style = "xml" if $out_style eq "json";  # not a typo; just set to anything but txt
        $Style = "xml" if $out_style eq "csv" ;  # not a typo; just set to anything but txt
 
+    # append the --total column (sum of blank, comment, code) to a
+    # txt or xml data line; other output styles handle this inline
+    my $append_total = sub {
+        my ($line, $total) = @_;
+        return $line unless $opt_total;
+        # xml formats already end with a trailing space; txt formats do not
+        $line .= sprintf 'total="%d" '   , $total if $Style eq "xml";
+        $line .= sprintf " %${spacing_2}d", $total if $Style eq "txt";
+        return $line;
+    };
+
     my $hyphen_line = sprintf "%s", '-' x (79 + $column_1_offset);
        $hyphen_line = sprintf "%s", '-' x (68 + $column_1_offset)
             if (!$opt_sum_reports) and (!$opt_3) and (68 + $column_1_offset) > 79;
@@ -4779,6 +4801,7 @@ sub generate_report {                        # {{{1
             "blank${PCT_symbol}"   ,
             "comment${PCT_symbol}" ,
             "code${PCT_symbol}";
+        $data_line .= sprintf " %${spacing_2}s", "Total" if $opt_total;
         $data_line .= sprintf " %8s   %14s",
             "scale"         ,
             "3rd gen. equiv"
@@ -4812,6 +4835,7 @@ sub generate_report {                        # {{{1
             $header2 = "files${DELIM}language";
         }
         $header2 .= "${DELIM}blank${DELIM}comment${DELIM}code";
+        $header2 .= "${DELIM}total" if $opt_total;
         $header2 .= "${DELIM}scale${DELIM}3rd gen. equiv" if $opt_3;
         $header2 .= ${DELIM} . '"' . $header_line . '"';
         push @results, $header2;
@@ -4879,6 +4903,9 @@ sub generate_report {                        # {{{1
         }
         $data_line .= sprintf $Format{3}{$Style}  ,
                         $rhh_count->{$lang_or_file}{'nFiles'} unless $BY_FILE;
+        my $row_total = $rhh_count->{$lang_or_file}{'blank'}  +
+                        $rhh_count->{$lang_or_file}{'comment'}+
+                        $rhh_count->{$lang_or_file}{'code'}   ;
         if ($opt_by_percent) {
           my $DEN = compute_denominator($opt_by_percent       ,
                         $rhh_count->{$lang_or_file}{'code'}   ,
@@ -4903,6 +4930,7 @@ sub generate_report {                        # {{{1
               $rhh_count->{$lang_or_file}{'comment'},
               $rhh_count->{$lang_or_file}{'code'}   ;
         }
+        $data_line = $append_total->($data_line, $row_total);
         $data_line .= sprintf $Format{6}{$Style}  ,
             $factor                               ,
             $scaled if $opt_3;
@@ -4957,6 +4985,8 @@ sub generate_report {                        # {{{1
               push @results,"  ${Q}comment${Q}: " . $rhh_count->{$lang_or_file}{'comment'} . $C;
               push @results,"  ${Q}code${Q}: "    . $rhh_count->{$lang_or_file}{'code'}    . $C;
             }
+            push @results,"  ${Q}total${Q}: " . $row_total . $C
+                if $opt_total;
             push @results,"  ${Q}language${Q}: "  . $Q . $rhh_count->{$lang_or_file}{'lang'} . $Q . $C
                 if $BY_FILE;
             if ($opt_3) {
@@ -5011,6 +5041,7 @@ sub generate_report {                        # {{{1
                       $rhh_count->{$lang_or_file}{'comment'}. ${DELIM} .
                       $rhh_count->{$lang_or_file}{'code'};
             }
+            $str .= ${DELIM} . $row_total if $opt_total;
             $str .= $extra_3;
             push @results, $str;
 
@@ -5050,6 +5081,7 @@ sub generate_report {                        # {{{1
               $sum_comment ,
               $sum_code    ;
         }
+        $data_line = $append_total->($data_line, $sum_lines);
         $data_line .= sprintf $Format{'6'}{$Style},
             $avg_scale   ,
             $sum_scaled  if $opt_3;
@@ -5083,6 +5115,8 @@ sub generate_report {                        # {{{1
           push @results, "  ${Q}comment${Q}: ". $sum_comment . $C;
           push @results, "  ${Q}code${Q}: "   . $sum_code    . $C;
         }
+        push @results, "  ${Q}total${Q}: " . $sum_lines    . $C
+            if $opt_total;
         push @results, "  ${Q}nFiles${Q}: " . $sum_files   . $C;
         if ($opt_3) {
             push @results, "  ${Q}scaled${Q}: " . $sum_scaled . $C;
@@ -5124,6 +5158,7 @@ sub generate_report {                        # {{{1
             push @entries, $sum_comment;
             push @entries, $sum_code;
         }
+        push @entries, $sum_lines if $opt_total;
         if ($opt_3) {
             push @entries, $sum_scaled;
             push @entries, $avg_scale ;
@@ -5159,6 +5194,7 @@ sub generate_report {                        # {{{1
               $sum_comment ,
               $sum_code    ;
         }
+        $data_line = $append_total->($data_line, $sum_lines);
         $data_line .= sprintf $Format{'6'}{$Style},
             $avg_scale   ,
             $sum_scaled if $opt_3;
