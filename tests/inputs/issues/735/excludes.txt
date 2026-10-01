@@ -1,2 +1,0 @@
-dd/bb/cc/MoreTeapotsRenderer.cpp
-ignore_Fortran90.f90

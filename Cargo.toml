@@ -1,0 +1,30 @@
+[package]
+name = "rscloc"
+version = "0.1.0"
+edition = "2024"
+authors = ["Aditya Gupta <adityagupta2087@gmail.com>"]
+description = "A blazingly-fast parallel source line counter and statistics tool rewritten in Rust"
+repository = "https://github.com/aditya-gupta-dev/cloc-clone"
+
+[[bin]]
+name = "rscloc"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1.0"
+clap = { version = "4.5", features = ["derive"] }
+ignore = "0.4"
+memchr = "2.7"
+memmap2 = "0.9"
+rayon = "1.10"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0", features = ["preserve_order"] }
+serde_yaml = "0.9"
+xxhash-rust = { version = "0.8", features = ["xxh3"] }
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+strip = true

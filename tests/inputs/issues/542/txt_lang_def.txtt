@@ -1,4 +1,0 @@
-Text File
-    filter remove_matches .*
-    extension txtt
-    3rd_gen_scale 1.00

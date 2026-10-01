@@ -1,4 +1,0 @@
-// Comment
-
-int main() {}
-
