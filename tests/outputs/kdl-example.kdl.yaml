@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.11
+  elapsed_seconds    : 0.00833392143249512
+  n_files            : 1
+  n_lines            : 38
+  files_per_second   : 119.991531969675
+  lines_per_second   : 4559.67821484766
+  report_file        : tests/outputs/kdl-example.kdl.yaml
+'KDL' :
+  nFiles: 1
+  blank: 5
+  comment: 8
+  code: 25
+SUM: 
+  blank: 5
+  comment: 8
+  code: 25
+  nFiles: 1

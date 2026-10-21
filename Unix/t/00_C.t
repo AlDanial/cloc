@@ -330,6 +330,11 @@ my @Tests = (
                     'args' => '../tests/inputs/cucumber.feature',
                 },
                 {
+                    'name' => 'CUE',
+                    'ref'  => '../tests/outputs/cue-example.cue.yaml',
+                    'args' => '../tests/inputs/cue-example.cue',
+                },
+                {
                     'name' => 'C3',
                     'ref'  => '../tests/outputs/io.c3.yaml',
                     'args' => '../tests/inputs/io.c3',
@@ -745,6 +750,11 @@ my @Tests = (
                     'name' => 'Justfile',
                     'ref'  => '../tests/outputs/cross-platform.just.yaml',
                     'args' => '../tests/inputs/cross-platform.just',
+                },
+                {
+                    'name' => 'KDL',
+                    'ref'  => '../tests/outputs/kdl-example.kdl.yaml',
+                    'args' => '../tests/inputs/kdl-example.kdl',
                 },
                 {
                     'name' => 'kvlang',
@@ -1256,6 +1266,11 @@ my @Tests = (
                     'name' => 'RobotFramework',
                     'ref'  => '../tests/outputs/robotframework.robot.yaml',
                     'args' => '../tests/inputs/robotframework.robot',
+                },
+                {
+                    'name' => 'RON',
+                    'ref'  => '../tests/outputs/ron-example.ron.yaml',
+                    'args' => '../tests/inputs/ron-example.ron',
                 },
                 {
                     'name' => 'Rmd',
