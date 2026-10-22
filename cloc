@@ -9633,6 +9633,7 @@ sub set_constants {                          # {{{1
             'robot'       => 'RobotFramework'        ,
             'rc'          => 'Windows Resource File' ,
             'rc2'         => 'Windows Resource File' ,
+            'salam'       => 'Salam'                 ,
             'sas'         => 'SAS'                   ,
             'sass'        => 'Sass'                  ,
             'scss'        => 'SCSS'                  ,
@@ -11389,6 +11390,11 @@ sub set_constants {                          # {{{1
                                 [ 'rm_comments_in_strings', '"', '//', '' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
+    'Salam'              => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
+                            ],
     'SaltStack'          => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
@@ -12443,6 +12449,7 @@ sub set_constants {                          # {{{1
     'zsh'                          =>   3.81,
     'Fish Shell'                   =>   3.81,
     'C Shell'                      =>   3.81,
+    'Salam'                        =>   2.50,
     'SaltStack'                    =>   2.00,
     'SAS'                          =>   1.5 ,
     'Sass'                         =>   1.5 ,

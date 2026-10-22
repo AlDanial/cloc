@@ -1,0 +1,24 @@
+// Salam sample for cloc
+import std.io
+
+/* block
+   comment */
+struct Point:
+    pub x: int = 0
+    pub y: int = 0
+
+    pub func sum(): int:
+        ret this.x + this.y
+    end
+end
+
+func main: int:
+    p := Point { x = 1, y = 2 }
+    url := "http://salamlang.ir"
+
+    each i in [1, 2, 3]:
+        println i // inline
+    end
+    println url, p.sum()
+    ret 0
+end
