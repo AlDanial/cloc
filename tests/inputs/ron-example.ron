@@ -1,0 +1,28 @@
+// Source: https://github.com/ron-rs/ron/blob/052e4c00fdd75ae8e845c6065bbe59a160aa9ccb/README.md
+
+GameConfig( // optional struct name
+    window_size: (800, 600),
+    window_title: "PAC-MAN",
+    fullscreen: false,
+
+    mouse_sensitivity: 1.4,
+    key_bindings: {
+        "up": Up,
+        "down": Down,
+        "left": Left,
+        "right": Right,
+
+        // Uncomment to enable WASD controls
+        /*
+        "W": Up,
+        "S": Down,
+        "A": Left,
+        "D": Right,
+        */
+    },
+
+    difficulty_options: (
+        start_difficulty: Easy,
+        adaptive: false,
+    ),
+)

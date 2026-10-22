@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.11
+  elapsed_seconds    : 0.0109269618988037
+  n_files            : 1
+  n_lines            : 28
+  files_per_second   : 91.5167463070847
+  lines_per_second   : 2562.46889659837
+  report_file        : tests/outputs/ron-example.ron.yaml
+'RON' :
+  nFiles: 1
+  blank: 4
+  comment: 8
+  code: 16
+SUM: 
+  blank: 4
+  comment: 8
+  code: 16
+  nFiles: 1

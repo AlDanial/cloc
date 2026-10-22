@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.11
+  elapsed_seconds    : 0.00636816024780273
+  n_files            : 1
+  n_lines            : 33
+  files_per_second   : 157.031224260577
+  lines_per_second   : 5182.03040059903
+  report_file        : tests/outputs/cue-example.cue.yaml
+'CUE' :
+  nFiles: 1
+  blank: 6
+  comment: 7
+  code: 20
+SUM: 
+  blank: 6
+  comment: 7
+  code: 20
+  nFiles: 1

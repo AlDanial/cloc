@@ -9016,6 +9016,7 @@ sub set_constants {                          # {{{1
             'csv'         => "CSV"                   ,
             'cu'          => 'CUDA'                  ,
             'cuh'         => 'CUDA'                  , # CUDA header file
+            'cue'         => 'CUE'                   ,
             'c3'          => 'C3'                    ,
             'c3i'         => 'C3'                    ,
             'c3t'         => 'C3'                    ,
@@ -9274,6 +9275,7 @@ sub set_constants {                          # {{{1
             'junos'       => 'Juniper Junos'         ,
             'just'        => 'Justfile'              ,
             'vm'          => 'Velocity Template Language' ,
+            'kdl'         => 'KDL'                   ,
             'kv'          => 'kvlang'                ,
             'ksc'         => 'Kermit'                ,
             'ksh'         => 'Korn Shell'            ,
@@ -9508,6 +9510,7 @@ sub set_constants {                          # {{{1
             'pprx'        => 'Rexx'                  ,
             'rexx'        => 'Rexx'                  ,
             'rhtml'       => 'Ruby HTML'             ,
+            'ron'         => 'RON'                   ,
             'circom'      => 'Circom'                ,
             'cairo'       => 'Cairo'                 ,
             'clar'        => 'Clarity'                ,
@@ -10309,6 +10312,10 @@ sub set_constants {                          # {{{1
     'Cucumber'           => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                             ],
+    'CUE'                => [
+                                [ 'remove_matches'      , '^\s*//' ],
+                                [ 'remove_inline'       , '//.*$'  ],
+                            ],
     'C3'                 => [
                                 [ 'remove_matches'      , '^\s*//' ],
                                 [ 'rm_comments_in_strings', '"', '/*', '*/' ],
@@ -10810,6 +10817,12 @@ sub set_constants {                          # {{{1
     'Justfile'           => [
                                 [ 'remove_matches'      , '^\s*#'  ],
                                 [ 'remove_inline'       , '#.*$'   ],
+                            ],
+    'KDL'                => [
+                                [ 'remove_matches'        , '^\s*/-' ],
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'kvlang'             => [
                                 ["remove_matches", '^\s*#[^:]'],
@@ -11315,6 +11328,11 @@ sub set_constants {                          # {{{1
                                 [ 'remove_matches'      , '^\s*\*{3}\s+(Variables|Test\s+Cases|Settings|Keywords)\s+\*{3}' ] ,
                                 [ 'remove_matches'      , '^\s*\[(Documentation|Tags)\]' ],
                                 [ 'remove_inline'       , '#.*$'   ],
+                            ],
+    'RON'                => [
+                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
+                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'Ruby'               => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -12159,6 +12177,7 @@ sub set_constants {                          # {{{1
     'CSV'                          =>   0.1,
     'Cucumber'                     =>   3.00,
     'CUDA'                         =>   1.00,
+    'CUE'                          =>   2.50,
     'C3'                           =>   1.61,
     'D'                            =>   1.70,
     'Dafny'                        =>   3.00,
@@ -12278,6 +12297,7 @@ sub set_constants {                          # {{{1
     'JCL'                          =>   1.67,
     'Juniper Junos'                =>   2.00,
     'Justfile'                     =>   2.50,
+    'KDL'                          =>   2.50,
     'kvlang'                       =>   2.00,
     'Kermit'                       =>   2.00,
     'Korn Shell'                   =>   3.81,
@@ -12378,6 +12398,7 @@ sub set_constants {                          # {{{1
     'Rhai'                         =>   3.00,
     'Ring'                         =>   4.20,
     'RobotFramework'               =>   2.50,
+    'RON'                          =>   2.50,
     'Circom'                       =>   1.00,
     'Cairo'                        =>   1.00,
     'Clarity'                      =>   1.47,
