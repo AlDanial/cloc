@@ -1,5 +1,4 @@
 // Salam sample for cloc
-import std.io
 
 /* block
    comment */
@@ -12,12 +11,15 @@ struct Point:
     end
 end
 
-func main: int:
+func main:
     p := Point { x = 1, y = 2 }
     url := "http://salamlang.ir"
+    v := Vector {} as Vector<int>
+    v.push(1)
+    v.push(2)
 
-    each i in [1, 2, 3]:
-        println i // inline
+    each n in v:
+        println n // inline
     end
     println url, p.sum()
     ret 0

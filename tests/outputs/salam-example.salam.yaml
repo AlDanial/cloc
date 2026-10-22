@@ -3,19 +3,19 @@
 header : 
   cloc_url           : github.com/AlDanial/cloc
   cloc_version       : 2.11
-  elapsed_seconds    : 0.0181469917297363
+  elapsed_seconds    : 0.155432939529419
   n_files            : 1
-  n_lines            : 24
-  files_per_second   : 55.1055521980188
-  lines_per_second   : 1322.53325275245
+  n_lines            : 26
+  files_per_second   : 6.43364272095445
+  lines_per_second   : 167.274710744816
   report_file        : tests/outputs/salam-example.salam.yaml
 'Salam' :
   nFiles: 1
   blank: 4
   comment: 3
-  code: 17
+  code: 19
 SUM: 
   blank: 4
   comment: 3
-  code: 17
+  code: 19
   nFiles: 1
