@@ -6753,8 +6753,9 @@ sub open_file {                              # {{{1
             openL(\$fh, $mode, $filename);
         } elsif ($use_new_file) {
             return new IO::File $filename, $mode;
-        }
-        open($fh, $mode, $filename);
+        } else {
+			open($fh, $mode, $filename);
+		}
     }
     return $fh;
 } # 1}}}
