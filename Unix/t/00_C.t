@@ -1283,6 +1283,11 @@ my @Tests = (
                     'args' => '../tests/inputs/messages.rb',
                 },
                 {
+                    'name' => 'Salam',
+                    'ref'  => '../tests/outputs/salam-example.salam.yaml',
+                    'args' => '../tests/inputs/salam-example.salam',
+                },
+                {
                     'name' => 'SaltStack',
                     'ref'  => '../tests/outputs/certificates.sls.yaml',
                     'args' => '../tests/inputs/certificates.sls',

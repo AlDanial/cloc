@@ -1,0 +1,26 @@
+// Salam sample for cloc
+
+/* block
+   comment */
+struct Point:
+    pub x: int = 0
+    pub y: int = 0
+
+    pub func sum(): int:
+        ret this.x + this.y
+    end
+end
+
+func main:
+    p := Point { x = 1, y = 2 }
+    url := "http://salamlang.ir"
+    v := Vector {} as Vector<int>
+    v.push(1)
+    v.push(2)
+
+    each n in v:
+        println n // inline
+    end
+    println url, p.sum()
+    ret 0
+end

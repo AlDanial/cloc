@@ -1322,6 +1322,7 @@ Ruby                       (appraisals, berksfile, brewfile, builder, buildfile,
                             vagrantfile, watchr)
 Ruby HTML                  (rhtml)
 Rust                       (rs, rs.in)
+Salam                      (salam)
 SaltStack                  (sls)
 SAS                        (sas)
 Sass                       (sass)
