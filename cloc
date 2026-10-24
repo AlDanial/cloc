@@ -7602,7 +7602,7 @@ sub read_file  {                             # {{{1
     # Marks (http://en.wikipedia.org/wiki/Byte_Order_Mark)?
     # If yes, remove them.
     if (@lines) {
-        my @chrs   = split('', $lines[0]);
+        my @chrs   = split('', substr($lines[0], 0, 5));
         my $n_chrs = scalar @chrs;
         my ($n2, $n3, $n4, $n5) = ('', '', '', '');
         $n2 = sprintf("%x %x", map  ord, @chrs[0,1]) if $n_chrs >= 2;
