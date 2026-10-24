@@ -8036,6 +8036,117 @@ sub remove_between {                         # {{{1
     print "<- remove_between\n" if $opt_v > 2;
     return split("\n", $all_lines);
 } # 1}}}
+sub remove_swift_strings {                 # {{{1
+    # Removes all Swift string literals (regular, raw, multiline) from each line,
+    # replacing their contents with empty strings. This prevents the subsequent
+    # C++ comment regex from getting confused by /* or // inside strings.
+    # Uses a linear O(n) state machine instead of catastrophic backtracking regex.
+    my ($ra_lines, ) = @_;
+    print "-> remove_swift_strings\n" if $opt_v > 2;
+    my @save_lines = ();
+    foreach my $line (@{$ra_lines}) {
+        push @save_lines, _strip_swift_strings_from_line($line);
+    }
+    print "<- remove_swift_strings\n" if $opt_v > 2;
+    return @save_lines;
+} # 1}}}
+sub _strip_swift_strings_from_line {
+    my ($line) = @_;
+    my $result = '';
+    my $i = 0;
+    my $len = length($line);
+
+    while ($i < $len) {
+        my $ch = substr($line, $i, 1);
+
+        # Check for raw string: #"..."# or ##"..."## etc.
+        if ($ch eq '#') {
+            my $hash_start = $i;
+            my $hash_count = 0;
+            while ($i < $len && substr($line, $i, 1) eq '#') {
+                $hash_count++;
+                $i++;
+            }
+            if ($i < $len && substr($line, $i, 1) eq '"') {
+                # Found raw string opening: #" or ##" etc.
+                my $is_multiline = 0;
+                # Check for multiline raw string: #""" or ##""" etc.
+                if ($i + 2 < $len && substr($line, $i, 3) eq '"""') {
+                    $is_multiline = 1;
+                    $i += 3; # skip """
+                    my $closing = '"""' . ('#' x $hash_count);
+                    my $close_pos = index($line, $closing, $i);
+                    if ($close_pos >= 0) {
+                        $result .= '""';
+                        $i = $close_pos + length($closing);
+                    } else {
+                        # Unclosed multiline raw string — skip rest of line
+                        $result .= '""';
+                        $i = $len;
+                    }
+                } else {
+                    $i++; # skip opening "
+                    my $closing = '"' . ('#' x $hash_count);
+                    # Search for closing "# but be careful with \#(...) interpolation
+                    # In raw strings, \# is interpolation, not escape, so we just
+                    # look for literal closing sequence
+                    my $close_pos = index($line, $closing, $i);
+                    if ($close_pos >= 0) {
+                        $result .= '""';
+                        $i = $close_pos + length($closing);
+                    } else {
+                        # Not a raw string, just regular # characters before a string
+                        $result .= '#' x $hash_count;
+                    }
+                }
+                next;
+            } else {
+                # Regular # characters, not a raw string
+                $result .= '#' x $hash_count;
+                next;
+            }
+        }
+
+        # Check for multiline string: """..."""
+        if ($ch eq '"' && $i + 2 < $len && substr($line, $i, 3) eq '"""') {
+            $i += 3; # skip opening """
+            my $close_pos = index($line, '"""', $i);
+            if ($close_pos >= 0) {
+                $result .= '""';
+                $i = $close_pos + 3;
+            } else {
+                # Unclosed multiline string — skip rest of line
+                $result .= '""';
+                $i = $len;
+            }
+            next;
+        }
+
+        # Check for regular string: "..."
+        if ($ch eq '"') {
+            $i++; # skip opening "
+            # Find closing " accounting for \" escapes
+            while ($i < $len) {
+                my $c = substr($line, $i, 1);
+                if ($c eq '\\') {
+                    $i += 2; # skip escaped character
+                } elsif ($c eq '"') {
+                    $i++; # skip closing "
+                    last;
+                } else {
+                    $i++;
+                }
+            }
+            $result .= '""';
+            next;
+        }
+
+        # Regular character — keep it
+        $result .= $ch;
+        $i++;
+    }
+    return $result;
+}
 sub rm_comments_in_strings {                 # {{{1
     my ($ra_lines, $string_marker, $start_comment, $end_comment, $multiline_mode) = @_;
     $multiline_mode = 0 if not defined $multiline_mode;
@@ -11563,8 +11674,7 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'HTML'   ],
                             ],
     'Swift'              => [
-                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
-                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'remove_swift_strings' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'SWIG'               => [
