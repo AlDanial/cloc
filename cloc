@@ -7266,7 +7266,6 @@ sub call_counter {                           # {{{1
     } else {
         # regular text file
         @lines = read_file($file);
-        $ascii = join('', @lines);
     }
 
     # implement --perl-ignore-data here
@@ -8126,8 +8125,6 @@ sub remove_between_general {                 # {{{1
     print "-> remove_between_general(start=$start_marker, end=$end_marker)\n"
         if $opt_v > 2;
 
-    my $all_lines = join("", @{$ra_lines});
-
     my @save_lines = ();
     my $in_comment = 0;
     foreach (@{$ra_lines}) {
@@ -8162,8 +8159,6 @@ sub remove_between_regex   {                 # {{{1
     print "-> remove_between_regex(start=$start_RE, end=$end_RE)\n"
         if $opt_v > 2;
 
-    my $all_lines = join("", @{$ra_lines});
-
     my @save_lines = ();
     my $in_comment = 0;
     foreach (@{$ra_lines}) {
@@ -8197,8 +8192,6 @@ sub replace_regex  {                         # {{{1
     print "-> replace_regex(regex=$regex, replace=$replace)\n"
         if $opt_v > 2;
 
-    my $all_lines = join("", @{$ra_lines});
-
     my @save_lines = ();
     my $in_comment = 0;
     foreach (@{$ra_lines}) {
@@ -8221,8 +8214,6 @@ sub replace_between_regex  {                 # {{{1
 
     print "-> replace_between_regex(start=$start_RE, end=$end_RE, replace=$replace_RE)\n"
         if $opt_v > 2;
-
-    my $all_lines = join("", @{$ra_lines});
 
     my @save_lines = ();
     my $in_comment = 0;
@@ -14092,9 +14083,6 @@ sub array_diff {                             # {{{1
                 $rah_diff_L->[$n_sdiff]{type} = "code";
                 $rah_diff_R->[$n_sdiff]{type} = "code";
             }
-
-            my @chars_L = split '', $line_L;
-            my @chars_R = split '', $line_R;
 
             $rah_diff_L->[$n_sdiff]{desc} = "modified";
             $rah_diff_R->[$n_sdiff]{desc} = "modified";
