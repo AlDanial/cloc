@@ -13843,19 +13843,12 @@ sub xml_metachars {                          # {{{1
     # http://en.wikipedia.org/wiki/Character_encodings_in_HTML#XML_character_references
     my ($string, ) = shift @_;
 
-    my  @in_chars    = split(//, $string);
-    my  @out_chars   = ();
-    foreach my $c (@in_chars) {
-        if      ($c eq '&') { push @out_chars, '&amp;'
-        } elsif ($c eq '<') { push @out_chars, '&lt;'
-        } elsif ($c eq '>') { push @out_chars, '&gt;'
-        } elsif ($c eq '"') { push @out_chars, '&quot;'
-        } elsif ($c eq "'") { push @out_chars, '&apos;'
-        } else {
-            push @out_chars, $c;
-        }
-    }
-    return join "", @out_chars;
+    $string =~ s/&/&amp;/g;
+    $string =~ s/</&lt;/g;
+    $string =~ s/>/&gt;/g;
+    $string =~ s/"/&quot;/g;
+    $string =~ s/'/&apos;/g;
+    return $string;
 } # 1}}}
 sub html_metachars {                         # {{{1
     # Replace HTML metacharacters with their printable forms.
@@ -13864,20 +13857,10 @@ sub html_metachars {                         # {{{1
     # this subroutine proves to be too simplistic.
     my ($string, ) = shift @_;
 
-    my  @in_chars    = split(//, $string);
-    my  @out_chars   = ();
-    foreach my $c (@in_chars) {
-        if      ($c eq '<') {
-            push @out_chars, '&lt;'
-        } elsif ($c eq '>') {
-            push @out_chars, '&gt;'
-        } elsif ($c eq '&') {
-            push @out_chars, '&amp;'
-        } else {
-            push @out_chars, $c;
-        }
-    }
-    return join "", @out_chars;
+    $string =~ s/&/&amp;/g;
+    $string =~ s/</&lt;/g;
+    $string =~ s/>/&gt;/g;
+    return $string;
 } # 1}}}
 sub test_alg_diff {                          # {{{1
     my ($file_1 ,
