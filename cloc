@@ -7266,7 +7266,6 @@ sub call_counter {                           # {{{1
     } else {
         # regular text file
         @lines = read_file($file);
-        $ascii = join('', @lines);
     }
 
     # implement --perl-ignore-data here
@@ -7602,7 +7601,7 @@ sub read_file  {                             # {{{1
     # Marks (http://en.wikipedia.org/wiki/Byte_Order_Mark)?
     # If yes, remove them.
     if (@lines) {
-        my @chrs   = split('', $lines[0]);
+        my @chrs   = split('', substr($lines[0], 0, 5));
         my $n_chrs = scalar @chrs;
         my ($n2, $n3, $n4, $n5) = ('', '', '', '');
         $n2 = sprintf("%x %x", map  ord, @chrs[0,1]) if $n_chrs >= 2;
@@ -8126,8 +8125,6 @@ sub remove_between_general {                 # {{{1
     print "-> remove_between_general(start=$start_marker, end=$end_marker)\n"
         if $opt_v > 2;
 
-    my $all_lines = join("", @{$ra_lines});
-
     my @save_lines = ();
     my $in_comment = 0;
     foreach (@{$ra_lines}) {
@@ -8162,8 +8159,6 @@ sub remove_between_regex   {                 # {{{1
     print "-> remove_between_regex(start=$start_RE, end=$end_RE)\n"
         if $opt_v > 2;
 
-    my $all_lines = join("", @{$ra_lines});
-
     my @save_lines = ();
     my $in_comment = 0;
     foreach (@{$ra_lines}) {
@@ -8197,8 +8192,6 @@ sub replace_regex  {                         # {{{1
     print "-> replace_regex(regex=$regex, replace=$replace)\n"
         if $opt_v > 2;
 
-    my $all_lines = join("", @{$ra_lines});
-
     my @save_lines = ();
     my $in_comment = 0;
     foreach (@{$ra_lines}) {
@@ -8221,8 +8214,6 @@ sub replace_between_regex  {                 # {{{1
 
     print "-> replace_between_regex(start=$start_RE, end=$end_RE, replace=$replace_RE)\n"
         if $opt_v > 2;
-
-    my $all_lines = join("", @{$ra_lines});
 
     my @save_lines = ();
     my $in_comment = 0;
@@ -13843,19 +13834,12 @@ sub xml_metachars {                          # {{{1
     # http://en.wikipedia.org/wiki/Character_encodings_in_HTML#XML_character_references
     my ($string, ) = shift @_;
 
-    my  @in_chars    = split(//, $string);
-    my  @out_chars   = ();
-    foreach my $c (@in_chars) {
-        if      ($c eq '&') { push @out_chars, '&amp;'
-        } elsif ($c eq '<') { push @out_chars, '&lt;'
-        } elsif ($c eq '>') { push @out_chars, '&gt;'
-        } elsif ($c eq '"') { push @out_chars, '&quot;'
-        } elsif ($c eq "'") { push @out_chars, '&apos;'
-        } else {
-            push @out_chars, $c;
-        }
-    }
-    return join "", @out_chars;
+    $string =~ s/&/&amp;/g;
+    $string =~ s/</&lt;/g;
+    $string =~ s/>/&gt;/g;
+    $string =~ s/"/&quot;/g;
+    $string =~ s/'/&apos;/g;
+    return $string;
 } # 1}}}
 sub html_metachars {                         # {{{1
     # Replace HTML metacharacters with their printable forms.
@@ -13864,20 +13848,10 @@ sub html_metachars {                         # {{{1
     # this subroutine proves to be too simplistic.
     my ($string, ) = shift @_;
 
-    my  @in_chars    = split(//, $string);
-    my  @out_chars   = ();
-    foreach my $c (@in_chars) {
-        if      ($c eq '<') {
-            push @out_chars, '&lt;'
-        } elsif ($c eq '>') {
-            push @out_chars, '&gt;'
-        } elsif ($c eq '&') {
-            push @out_chars, '&amp;'
-        } else {
-            push @out_chars, $c;
-        }
-    }
-    return join "", @out_chars;
+    $string =~ s/&/&amp;/g;
+    $string =~ s/</&lt;/g;
+    $string =~ s/>/&gt;/g;
+    return $string;
 } # 1}}}
 sub test_alg_diff {                          # {{{1
     my ($file_1 ,
@@ -14109,9 +14083,6 @@ sub array_diff {                             # {{{1
                 $rah_diff_L->[$n_sdiff]{type} = "code";
                 $rah_diff_R->[$n_sdiff]{type} = "code";
             }
-
-            my @chars_L = split '', $line_L;
-            my @chars_R = split '', $line_R;
 
             $rah_diff_L->[$n_sdiff]{desc} = "modified";
             $rah_diff_R->[$n_sdiff]{desc} = "modified";
