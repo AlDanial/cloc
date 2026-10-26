@@ -938,6 +938,13 @@ my @Tests = (
                    'ref'  => '../tests/outputs/hello-0.0.0.gem.yaml',
                 },
 
+                {
+                   'name' => 'Swift regex bomb #998',
+                   'cd'   => '../tests/inputs/issues/998',
+                   'args' => 'nested_comments.swift',
+                   'ref'  => '../tests/outputs/issues/998/result.yaml',
+                },
+
             );
 
 my $ON_WINDOWS = 0;

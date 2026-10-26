@@ -2463,12 +2463,12 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
 ";
 }
 # 1}}}
-sub separate_thousands {
+sub separate_thousands {                     # {{{1
     my ($number, $separator,) = @_;
     while ($number =~ s/(\d+)(\d\d\d)/$1\=$2/) { };
     $number =~ s/=/${separator}/g;
     return $number;
-}
+} # 1}}}
 sub summary_cutoff_error {                   # {{{
     my ($parameter) = @_;
     print "-> summary_cutoff_is_ok($parameter)\n" if $opt_v > 2;
@@ -8035,7 +8035,7 @@ sub remove_between {                         # {{{1
     print "<- remove_between\n" if $opt_v > 2;
     return split("\n", $all_lines);
 } # 1}}}
-sub remove_swift_strings {                 # {{{1
+sub remove_swift_strings {                   # {{{1
     # Removes all Swift string literals (regular, raw, multiline) from each line,
     # replacing their contents with empty strings. This prevents the subsequent
     # C++ comment regex from getting confused by /* or // inside strings.
@@ -8049,7 +8049,7 @@ sub remove_swift_strings {                 # {{{1
     print "<- remove_swift_strings\n" if $opt_v > 2;
     return @save_lines;
 } # 1}}}
-sub _strip_swift_strings_from_line {
+sub _strip_swift_strings_from_line {         # {{{1
     my ($line) = @_;
     my $result = '';
     my $i = 0;
@@ -8145,7 +8145,7 @@ sub _strip_swift_strings_from_line {
         $i++;
     }
     return $result;
-}
+} # 1}}}
 sub rm_comments_in_strings {                 # {{{1
     my ($ra_lines, $string_marker, $start_comment, $end_comment, $multiline_mode) = @_;
     $multiline_mode = 0 if not defined $multiline_mode;
@@ -12710,8 +12710,8 @@ sub set_constants {                          # {{{1
             '.xz'      => 1 ,
             '.whl'     => 1 ,  # Python wheel files (zip)
             );
-# 1}}}
 } # end sub set_constants()
+# 1}}}
 sub check_scale_existence {                  # {{{1
     # do a few sanity checks
     my ($rhaa_Filters_by_Language,
@@ -16191,7 +16191,7 @@ sub print_format_n {                         # {{{1
     return @prt_lines;
     print "<- print_format_n()\n" if $opt_v > 2;
 } # 1}}}
-sub parse_ignore_regex {                              # {{{1
+sub parse_ignore_regex {                     # {{{1
     #
     # Convert the list of "language(s)|regex" into a hash
     #   $ignore_regex{language} = [list of regex]

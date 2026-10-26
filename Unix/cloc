@@ -2471,12 +2471,12 @@ Usage: $script [options] <file(s)/dir(s)/git hash(es)> | <set 1> <set 2> | <repo
 ";
 }
 # 1}}}
-sub separate_thousands {
+sub separate_thousands {                     # {{{1
     my ($number, $separator,) = @_;
     while ($number =~ s/(\d+)(\d\d\d)/$1\=$2/) { };
     $number =~ s/=/${separator}/g;
     return $number;
-}
+} # 1}}}
 sub summary_cutoff_error {                   # {{{
     my ($parameter) = @_;
     print "-> summary_cutoff_is_ok($parameter)\n" if $opt_v > 2;
@@ -7274,7 +7274,6 @@ sub call_counter {                           # {{{1
     } else {
         # regular text file
         @lines = read_file($file);
-        $ascii = join('', @lines);
     }
 
     # implement --perl-ignore-data here
@@ -7610,7 +7609,7 @@ sub read_file  {                             # {{{1
     # Marks (http://en.wikipedia.org/wiki/Byte_Order_Mark)?
     # If yes, remove them.
     if (@lines) {
-        my @chrs   = split('', $lines[0]);
+        my @chrs   = split('', substr($lines[0], 0, 5));
         my $n_chrs = scalar @chrs;
         my ($n2, $n3, $n4, $n5) = ('', '', '', '');
         $n2 = sprintf("%x %x", map  ord, @chrs[0,1]) if $n_chrs >= 2;
@@ -8044,6 +8043,117 @@ sub remove_between {                         # {{{1
     print "<- remove_between\n" if $opt_v > 2;
     return split("\n", $all_lines);
 } # 1}}}
+sub remove_swift_strings {                   # {{{1
+    # Removes all Swift string literals (regular, raw, multiline) from each line,
+    # replacing their contents with empty strings. This prevents the subsequent
+    # C++ comment regex from getting confused by /* or // inside strings.
+    # Uses a linear O(n) state machine instead of catastrophic backtracking regex.
+    my ($ra_lines, ) = @_;
+    print "-> remove_swift_strings\n" if $opt_v > 2;
+    my @save_lines = ();
+    foreach my $line (@{$ra_lines}) {
+        push @save_lines, _strip_swift_strings_from_line($line);
+    }
+    print "<- remove_swift_strings\n" if $opt_v > 2;
+    return @save_lines;
+} # 1}}}
+sub _strip_swift_strings_from_line {         # {{{1
+    my ($line) = @_;
+    my $result = '';
+    my $i = 0;
+    my $len = length($line);
+
+    while ($i < $len) {
+        my $ch = substr($line, $i, 1);
+
+        # Check for raw string: #"..."# or ##"..."## etc.
+        if ($ch eq '#') {
+            my $hash_start = $i;
+            my $hash_count = 0;
+            while ($i < $len && substr($line, $i, 1) eq '#') {
+                $hash_count++;
+                $i++;
+            }
+            if ($i < $len && substr($line, $i, 1) eq '"') {
+                # Found raw string opening: #" or ##" etc.
+                my $is_multiline = 0;
+                # Check for multiline raw string: #""" or ##""" etc.
+                if ($i + 2 < $len && substr($line, $i, 3) eq '"""') {
+                    $is_multiline = 1;
+                    $i += 3; # skip """
+                    my $closing = '"""' . ('#' x $hash_count);
+                    my $close_pos = index($line, $closing, $i);
+                    if ($close_pos >= 0) {
+                        $result .= '""';
+                        $i = $close_pos + length($closing);
+                    } else {
+                        # Unclosed multiline raw string — skip rest of line
+                        $result .= '""';
+                        $i = $len;
+                    }
+                } else {
+                    $i++; # skip opening "
+                    my $closing = '"' . ('#' x $hash_count);
+                    # Search for closing "# but be careful with \#(...) interpolation
+                    # In raw strings, \# is interpolation, not escape, so we just
+                    # look for literal closing sequence
+                    my $close_pos = index($line, $closing, $i);
+                    if ($close_pos >= 0) {
+                        $result .= '""';
+                        $i = $close_pos + length($closing);
+                    } else {
+                        # Not a raw string, just regular # characters before a string
+                        $result .= '#' x $hash_count;
+                    }
+                }
+                next;
+            } else {
+                # Regular # characters, not a raw string
+                $result .= '#' x $hash_count;
+                next;
+            }
+        }
+
+        # Check for multiline string: """..."""
+        if ($ch eq '"' && $i + 2 < $len && substr($line, $i, 3) eq '"""') {
+            $i += 3; # skip opening """
+            my $close_pos = index($line, '"""', $i);
+            if ($close_pos >= 0) {
+                $result .= '""';
+                $i = $close_pos + 3;
+            } else {
+                # Unclosed multiline string — skip rest of line
+                $result .= '""';
+                $i = $len;
+            }
+            next;
+        }
+
+        # Check for regular string: "..."
+        if ($ch eq '"') {
+            $i++; # skip opening "
+            # Find closing " accounting for \" escapes
+            while ($i < $len) {
+                my $c = substr($line, $i, 1);
+                if ($c eq '\\') {
+                    $i += 2; # skip escaped character
+                } elsif ($c eq '"') {
+                    $i++; # skip closing "
+                    last;
+                } else {
+                    $i++;
+                }
+            }
+            $result .= '""';
+            next;
+        }
+
+        # Regular character — keep it
+        $result .= $ch;
+        $i++;
+    }
+    return $result;
+} # 1}}}
 sub rm_comments_in_strings {                 # {{{1
     my ($ra_lines, $string_marker, $start_comment, $end_comment, $multiline_mode) = @_;
     $multiline_mode = 0 if not defined $multiline_mode;
@@ -8134,8 +8244,6 @@ sub remove_between_general {                 # {{{1
     print "-> remove_between_general(start=$start_marker, end=$end_marker)\n"
         if $opt_v > 2;
 
-    my $all_lines = join("", @{$ra_lines});
-
     my @save_lines = ();
     my $in_comment = 0;
     foreach (@{$ra_lines}) {
@@ -8170,8 +8278,6 @@ sub remove_between_regex   {                 # {{{1
     print "-> remove_between_regex(start=$start_RE, end=$end_RE)\n"
         if $opt_v > 2;
 
-    my $all_lines = join("", @{$ra_lines});
-
     my @save_lines = ();
     my $in_comment = 0;
     foreach (@{$ra_lines}) {
@@ -8205,8 +8311,6 @@ sub replace_regex  {                         # {{{1
     print "-> replace_regex(regex=$regex, replace=$replace)\n"
         if $opt_v > 2;
 
-    my $all_lines = join("", @{$ra_lines});
-
     my @save_lines = ();
     my $in_comment = 0;
     foreach (@{$ra_lines}) {
@@ -8229,8 +8333,6 @@ sub replace_between_regex  {                 # {{{1
 
     print "-> replace_between_regex(start=$start_RE, end=$end_RE, replace=$replace_RE)\n"
         if $opt_v > 2;
-
-    my $all_lines = join("", @{$ra_lines});
 
     my @save_lines = ();
     my $in_comment = 0;
@@ -11571,8 +11673,7 @@ sub set_constants {                          # {{{1
                                 [ 'call_regexp_common'  , 'HTML'   ],
                             ],
     'Swift'              => [
-                                [ 'rm_comments_in_strings', '"', '/*', '*/' ],
-                                [ 'rm_comments_in_strings', '"', '//', '' ],
+                                [ 'remove_swift_strings' ],
                                 [ 'call_regexp_common'  , 'C++'    ],
                             ],
     'SWIG'               => [
@@ -12617,8 +12718,8 @@ sub set_constants {                          # {{{1
             '.xz'      => 1 ,
             '.whl'     => 1 ,  # Python wheel files (zip)
             );
-# 1}}}
 } # end sub set_constants()
+# 1}}}
 sub check_scale_existence {                  # {{{1
     # do a few sanity checks
     my ($rhaa_Filters_by_Language,
@@ -13851,19 +13952,12 @@ sub xml_metachars {                          # {{{1
     # http://en.wikipedia.org/wiki/Character_encodings_in_HTML#XML_character_references
     my ($string, ) = shift @_;
 
-    my  @in_chars    = split(//, $string);
-    my  @out_chars   = ();
-    foreach my $c (@in_chars) {
-        if      ($c eq '&') { push @out_chars, '&amp;'
-        } elsif ($c eq '<') { push @out_chars, '&lt;'
-        } elsif ($c eq '>') { push @out_chars, '&gt;'
-        } elsif ($c eq '"') { push @out_chars, '&quot;'
-        } elsif ($c eq "'") { push @out_chars, '&apos;'
-        } else {
-            push @out_chars, $c;
-        }
-    }
-    return join "", @out_chars;
+    $string =~ s/&/&amp;/g;
+    $string =~ s/</&lt;/g;
+    $string =~ s/>/&gt;/g;
+    $string =~ s/"/&quot;/g;
+    $string =~ s/'/&apos;/g;
+    return $string;
 } # 1}}}
 sub html_metachars {                         # {{{1
     # Replace HTML metacharacters with their printable forms.
@@ -13872,20 +13966,10 @@ sub html_metachars {                         # {{{1
     # this subroutine proves to be too simplistic.
     my ($string, ) = shift @_;
 
-    my  @in_chars    = split(//, $string);
-    my  @out_chars   = ();
-    foreach my $c (@in_chars) {
-        if      ($c eq '<') {
-            push @out_chars, '&lt;'
-        } elsif ($c eq '>') {
-            push @out_chars, '&gt;'
-        } elsif ($c eq '&') {
-            push @out_chars, '&amp;'
-        } else {
-            push @out_chars, $c;
-        }
-    }
-    return join "", @out_chars;
+    $string =~ s/&/&amp;/g;
+    $string =~ s/</&lt;/g;
+    $string =~ s/>/&gt;/g;
+    return $string;
 } # 1}}}
 sub test_alg_diff {                          # {{{1
     my ($file_1 ,
@@ -14117,9 +14201,6 @@ sub array_diff {                             # {{{1
                 $rah_diff_L->[$n_sdiff]{type} = "code";
                 $rah_diff_R->[$n_sdiff]{type} = "code";
             }
-
-            my @chars_L = split '', $line_L;
-            my @chars_R = split '', $line_R;
 
             $rah_diff_L->[$n_sdiff]{desc} = "modified";
             $rah_diff_R->[$n_sdiff]{desc} = "modified";
@@ -16118,7 +16199,7 @@ sub print_format_n {                         # {{{1
     return @prt_lines;
     print "<- print_format_n()\n" if $opt_v > 2;
 } # 1}}}
-sub parse_ignore_regex {                              # {{{1
+sub parse_ignore_regex {                     # {{{1
     #
     # Convert the list of "language(s)|regex" into a hash
     #   $ignore_regex{language} = [list of regex]
