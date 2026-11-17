@@ -235,6 +235,11 @@ my @Tests = (
                     'args' => '../tests/inputs/iclean.icl',
                 },
                 {
+                    'name' => 'CLIPS',
+                    'ref'  => '../tests/outputs/CLIPS.clp.yaml',
+                    'args' => '../tests/inputs/CLIPS.clp',
+                },
+                {
                     'name' => 'COBOL',
                     'ref'  => '../tests/outputs/conditions.CBL.yaml',
                     'args' => '../tests/inputs/conditions.CBL',

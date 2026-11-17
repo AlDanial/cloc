@@ -1,0 +1,21 @@
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 2.12
+  elapsed_seconds    : 0.00399398803710938
+  n_files            : 1
+  n_lines            : 30
+  files_per_second   : 250.376313276027
+  lines_per_second   : 7511.2893982808
+  report_file        : tests/outputs/CLIPS.clp.yaml
+'CLIPS' :
+  nFiles: 1
+  blank: 8
+  comment: 5
+  code: 17
+SUM: 
+  blank: 8
+  comment: 5
+  code: 17
+  nFiles: 1
