@@ -29,7 +29,7 @@
 # <http://www.gnu.org/licenses/gpl.txt>.
 #
 # 1}}}
-my $VERSION = "2.12";  # odd number == beta; even number == stable
+my $VERSION = "2.13";  # odd number == beta; even number == stable
 my $URL     = "github.com/AlDanial/cloc";  # 'https://' pushes header too wide
 require 5.10.0;
 # use modules                                  {{{1
@@ -9123,6 +9123,7 @@ sub set_constants {                          # {{{1
             'clj'         => 'Clojure'               ,
             'cljs'        => 'ClojureScript'         ,
             'cljc'        => 'ClojureC'              ,
+            'clp'         => 'CLIPS'                 ,
             'cls'         => 'Visual Basic/TeX/Apex Class' ,
             'cmake.in'    => 'CMake'                 ,
             'CMakeLists.txt' => 'CMake'              ,
@@ -10347,6 +10348,11 @@ sub set_constants {                          # {{{1
                             ],
     'ClojureScript'      => [   [ 'remove_matches'      , '^\s*;'  ], ],
     'ClojureC'           => [   [ 'remove_matches'      , '^\s*;'  ], ],
+    'CLIPS'              => [
+                                [ 'rm_comments_in_strings', '"', ';', '', 1 ],
+                                [ 'remove_matches'      , '^\s*;'  ],
+                                [ 'remove_inline'       , ';.*$'   ],
+                            ],
     'Clojure/Cangjie'    => [ [ 'die' ,  ], ], # never called
     'CMake'              => [
                                 [ 'remove_matches'      , '^\s*#'  ],
@@ -12300,6 +12306,7 @@ sub set_constants {                          # {{{1
     'ColdFusion CFScript'          =>   4.00,
     'Chapel'                       =>   2.96,
     'Clean'                        =>   2.50,
+    'CLIPS'                        =>   1.25,
     'Clojure'                      =>   1.25,
     'ClojureScript'                =>   1.25,
     'ClojureC'                     =>   1.25,
